@@ -57,13 +57,13 @@ const DE_TARGETS: readonly string[] = [
   // خانه و وسایل
   'Haus', 'Hause', 'Wohnung', 'Zimmer', 'Küche', 'Bad', 'Tisch', 'Bett', 'Fenster', 'Tür', 'Buch', 'Telefon', 'Handy', 'Tasche', 'Schlüssel',
   // زمان
-  'Zeit', 'Tag', 'heute', 'morgen', 'Abend', 'Nacht', 'Woche', 'Wochenende', 'Montag', 'Samstag', 'Sonntag', 'Stunde', 'wann', 'früh', 'spät', 'jetzt', 'gestern',
+  'Zeit', 'Tag', 'heute', 'morgen', 'Abend', 'Woche', 'Wochenende', 'Montag', 'Samstag', 'Sonntag', 'Uhr', 'Monat', 'wann', 'früh', 'spät', 'jetzt', 'gestern',
   // مکان و پرسش
-  'wo', 'Wo', 'Woher', 'hier', 'dort', 'weit', 'nah', 'Zentrum', 'Stadt', 'Straße', 'Toilette', 'Platz',
+  'wo', 'Wo', 'Woher', 'hier', 'dort', 'weit', 'nah', 'Zentrum', 'Straße', 'Toilette', 'Platz',
   // رفت‌وآمد
   'Bahnhof', 'Zug', 'Bus', 'Flughafen', 'Auto', 'Fahrkarte', 'gehe', 'gehen',
   // کار، درس و پول
-  'arbeiten', 'arbeite', 'Büro', 'Schule', 'Unterricht', 'Lehrer', 'Frage', 'Deutsch', 'sprechen', 'verstehe', 'schreiben', 'lernt', 'Geld', 'kostet', 'teuer', 'bezahlen', 'kaufen',
+  'arbeiten', 'arbeite', 'Arbeit', 'Büro', 'Schule', 'Unterricht', 'Lehrer', 'Lehrerin', 'Frage', 'Satz', 'Deutsch', 'sprechen', 'verstehe', 'schreiben', 'lernt', 'Geld', 'kostet', 'teuer', 'bezahlen',
   // توصیف
   'gut', 'schön', 'neu', 'alt', 'groß', 'klein', 'lang', 'kalt', 'warm', 'müde', 'froh', 'krank', 'frei', 'Farbe', 'rot', 'blau', 'grün', 'gelb', 'schwarz', 'braun', 'hell',
   // پرسش‌های پرکاربرد
@@ -71,7 +71,7 @@ const DE_TARGETS: readonly string[] = [
   // نیاز و توانایی
   'brauche', 'Hilfe', 'helfen', 'kann', 'können', 'muss', 'mag', 'gern', 'natürlich', 'leider',
   // سلامت
-  'Arzt', 'Krankenhaus', 'Apotheke',
+  'Krankenhaus', 'Apotheke',
 ];
 
 /** The teaching order of the Russian core, written with the stress marks the course uses. */
@@ -81,27 +81,27 @@ const RU_TARGETS: readonly string[] = [
   // خودم و مخاطبم
   'я', 'ты', 'вы', 'мы', 'мой', 'и́мя', 'живу́',
   // عدد
-  'оди́н', 'два', 'три', 'четы́ре', 'пять', 'шесть', 'семь', 'во́семь', 'де́вять', 'де́сять',
+  'оди́н', 'два', 'три', 'пять', 'шесть', 'семь', 'де́вять', 'де́сять', 'два́дцать',
   // کافه و غذا
-  'вода́', 'чай', 'ко́фе', 'хлеб', 'молоко́', 'сыр', 'я́блоко', 'есть', 'пить', 'хочу́', 'вку́сно',
+  'вода́', 'чай', 'ко́фе', 'хлеб', 'молоко́', 'мя́со', 'о́вощи', 'фру́кты', 'горя́чий', 'есть', 'пить', 'хочу́', 'вку́сно',
   // خانواده
-  'семья́', 'мать', 'оте́ц', 'брат', 'сестра́', 'сын', 'дочь', 'друг', 'де́ти',
+  'семья́', 'мать', 'оте́ц', 'брат', 'сестра́', 'сын', 'дочь',
   // خانه و وسایل
-  'дом', 'кварти́ра', 'ко́мната', 'стол', 'стул', 'дверь', 'окно́', 'кни́га', 'телефо́н', 'су́мка', 'ключ',
+  'дом', 'кварти́ра', 'стол', 'окно́', 'кни́га', 'телефо́н', 'су́мка', 'ключ',
   // زمان
-  'вре́мя', 'день', 'сего́дня', 'за́втра', 'вчера́', 'у́тро', 'ве́чер', 'ночь', 'неде́ля', 'ме́сяц', 'час', 'сейча́с', 'когда́',
+  'вре́мя', 'день', 'сего́дня', 'за́втра', 'вчера́', 'у́тро', 'ве́чер', 'ночь', 'неде́ля', 'понеде́льник', 'вто́рник', 'воскресе́нье', 'ме́сяц', 'час', 'сейча́с', 'когда́',
   // مکان و پرسش
-  'где', 'что', 'кто', 'как', 'почему́', 'ско́лько', 'здесь', 'там', 'далеко́', 'ря́дом', 'го́род', 'у́лица', 'туале́т', 'ме́сто',
+  'где', 'что', 'кто', 'как', 'ско́лько', 'здесь', 'там', 'далеко́', 'ря́дом', 'го́род', 'туале́т', 'ме́сто', 'по́чта', 'магази́н',
   // رفت‌وآمد
-  'метро́', 'авто́бус', 'по́езд', 'такси́', 'биле́т', 'вокза́л',
+  'метро́', 'авто́бус', 'по́езд', 'такси́', 'биле́т', 'маши́на',
   // کار، درس و پول
-  'рабо́та', 'шко́ла', 'уро́к', 'учи́тель', 'вопро́с', 'язы́к', 'говори́ть', 'понима́ть', 'повтори́те', 'чита́ть', 'писа́ть', 'де́ньги', 'сто́ит', 'до́рого', 'плати́ть',
+  'рабо́та', 'шко́ла', 'уро́к', 'учи́тель', 'вопро́с', 'язы́к', 'письмо́', 'но́мер', 'компью́тер', 'повтори́те', 'сто́ит', 'до́рого',
   // توصیف
-  'хоро́ший', 'плохо́й', 'но́вый', 'ста́рый', 'большо́й', 'ма́ленький', 'краси́вый', 'вку́сный', 'холо́дно', 'тепло́', 'кра́сный', 'си́ний', 'зелёный', 'жёлтый', 'чёрный', 'бе́лый',
+  'хоро́ший', 'плохо́й', 'но́вый', 'большо́й', 'ма́ленький', 'краси́вый', 'холо́дно', 'тепло́', 'кра́сный', 'о́чень',
   // نیاز و توانایی
-  'ну́жно', 'мо́жно', 'могу́', 'помо́щь', 'помоги́те', 'не́льзя',
+  'ну́жно', 'мо́жно', 'могу́', 'помо́щь', 'помоги́те', 'спать', 'до́ма',
   // سلامت
-  'врач', 'апте́ка', 'больни́ца', 'бо́льно',
+  'врач', 'апте́ка', 'бо́льно',
 ];
 
 /** Short Persian cues; only for words whose form or register needs one. */
@@ -151,6 +151,67 @@ const RU_NOTES: Record<string, string> = {
   имя: 'خنثی است؛ در جمله «меня зовут» هم برای نام به کار می‌رود.',
 };
 
+/**
+ * Persian glosses for core words the course *uses* in a sentence but lists under another headword
+ * (for example «Straße» is taught inside «Die Straße ist ruhig.» while the vocabulary row of that
+ * sentence is «ruhig», and «четы́ре» is taught inside the number chain). The sentence, its Persian
+ * translation and its respelling still come from the course — only the word-level gloss is authored
+ * here, because the course has no row for that headword. A target still needs a real course sentence
+ * to be shown; a gloss alone never creates a card.
+ */
+const DE_CORE_GLOSS: Record<string, string> = {
+  tag: 'روز',
+  nacht: 'شب',
+  stunde: 'ساعت (یک ساعت زمان)',
+  stadt: 'شهر',
+  straße: 'خیابان',
+  schule: 'مدرسه',
+  kaufen: 'خریدن',
+  muss: 'باید',
+  arzt: 'پزشک',
+  uhr: 'ساعت (وسیله و ساعتِ روز)',
+  monat: 'ماه',
+  arbeit: 'کار',
+  lehrerin: 'معلم (زن)',
+  satz: 'جمله',
+};
+
+const RU_CORE_GLOSS: Record<string, string> = {
+  четыре: 'چهار',
+  восемь: 'هشت',
+  сыр: 'پنیر',
+  яблоко: 'سیب',
+  друг: 'دوست (مرد)',
+  дети: 'کودکان',
+  комната: 'اتاق',
+  стул: 'صندلی',
+  дверь: 'در',
+  окно: 'پنجره',
+  неделя: 'هفته',
+  почему: 'چرا',
+  улица: 'خیابان',
+  место: 'جا، مکان',
+  вокзал: 'ایستگاه قطار',
+  урок: 'درس',
+  язык: 'زبان',
+  говорить: 'صحبت کردن',
+  понимать: 'فهمیدن',
+  читать: 'خواندن',
+  писать: 'نوشتن',
+  деньги: 'پول',
+  платить: 'پرداختن',
+  новый: 'نو',
+  старый: 'قدیمی',
+  вкусный: 'خوشمزه',
+  синий: 'آبی',
+  зелёный: 'سبز',
+  жёлтый: 'زرد',
+  чёрный: 'سیاه',
+  белый: 'سفید',
+  нельзя: 'نمی‌شود، اجازه نیست',
+  больница: 'بیمارستان',
+};
+
 const fold = (value: string) => value
   .toLowerCase()
   .normalize('NFD')
@@ -159,6 +220,13 @@ const fold = (value: string) => value
   .replace(/[´`’'!?.,;:«»„“”¿¡…—–]/g, '')
   .replace(/\s+/g, ' ')
   .trim();
+
+/** The authored map is written with normal stress-free spelling, so compare it through `fold`. */
+function authoredGloss(glosses: Record<string, string>, key: string): string | undefined {
+  if (glosses[key]) return glosses[key];
+  for (const [word, gloss] of Object.entries(glosses)) if (fold(word) === key) return gloss;
+  return undefined;
+}
 
 type CourseSentence = { text: string; fa: string; pronunciation: string; vocabulary?: Array<{ word: string; meaning: string }> };
 type CourseLesson = { id: string; title: string; levelId: number; sentences: CourseSentence[]; learningMode?: string };
@@ -222,7 +290,12 @@ function glossFor(word: string, rows: Array<{ meaning: string; levelId: number }
     .sort((a, b) => b[1].count - a[1].count || a[1].levelId - b[1].levelId)[0][0];
 }
 
-function build(language: WordLabLanguageId, targets: readonly string[], notes: Record<string, string>): readonly CoreWord[] {
+function build(
+  language: WordLabLanguageId,
+  targets: readonly string[],
+  notes: Record<string, string>,
+  glosses: Record<string, string>,
+): readonly CoreWord[] {
   const all = courseLessons(language).filter(lesson => !isLabLesson(lesson.id));
   const beginner = all.filter(lesson => lesson.levelId <= MAX_LEVEL);
   const out: CoreWord[] = [];
@@ -242,7 +315,9 @@ function build(language: WordLabLanguageId, targets: readonly string[], notes: R
         }
       }
     }
-    const fa = glossFor(target, rows);
+    // The course's own gloss wins; a target the course only uses inside a sentence keeps the
+    // authored gloss above instead of disappearing from the lab.
+    const fa = glossFor(target, rows) ?? authoredGloss(glosses, key);
     if (!fa) continue;
     // …and the simplest beginner sentence that actually says it.
     let best: { lesson: CourseLesson; sentence: CourseSentence; score: number } | null = null;
@@ -276,8 +351,8 @@ function build(language: WordLabLanguageId, targets: readonly string[], notes: R
 }
 
 export const CORE_WORDS: Record<WordLabLanguageId, readonly CoreWord[]> = {
-  de: build('de', DE_TARGETS, DE_NOTES),
-  ru: build('ru', RU_TARGETS, RU_NOTES),
+  de: build('de', DE_TARGETS, DE_NOTES, DE_CORE_GLOSS),
+  ru: build('ru', RU_TARGETS, RU_NOTES, RU_CORE_GLOSS),
 };
 
 /** Targets the shipped course could not supply a full sentence for, listed for the verify script. */

@@ -248,8 +248,14 @@ export function spokenSentence(word: WordLabWord): string {
 
 /** The sentence card is only offered when there is a real sentence to say, not the bare word again. */
 export function hasSpokenSentence(word: WordLabWord): boolean {
-  return !!word.exampleTarget && normalizeWord(word.exampleTarget) !== normalizeWord(word.target)
-    && word.exampleTarget.replace(/[^\p{L}\p{N}]/gu, '').length > word.target.replace(/[^\p{L}\p{N}]/gu, '').length + 2;
+  if (!word.exampleTarget) return false;
+  if (normalizeWord(word.exampleTarget) === normalizeWord(word.target)) return false;
+  const exampleLength = word.exampleTarget.replace(/[^\p{L}\p{N}]/gu, '').length;
+  const targetLength = word.target.replace(/[^\p{L}\p{N}]/gu, '').length;
+  if (exampleLength > targetLength + 2) return true;
+  // A short but complete sentence such as «Я учи́тель.» still puts the word in use; the curated card
+  // must not fall back to the bare word, which teaches no sentence at all.
+  return word.curated === true && word.exampleTarget.trim().split(/\s+/).filter(Boolean).length >= 2;
 }
 
 /** A cue for the sentence itself: its Persian translation and, when available, its respelling. */

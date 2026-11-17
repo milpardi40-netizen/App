@@ -77,12 +77,13 @@ const read = file => readFileSync(path.join(root, file), 'utf8');
 // app/course/lesson.tsx is only a Suspense shell; the lesson logic lives in
 // components/EnglishLessonRoute.tsx. Keep reading the file that has the code.
 const lesson = read('components/EnglishLessonRoute.tsx');
-const emma = read('app/conversations/emma.tsx');
-const human = read('app/conversations/human/[conversationId].tsx');
-check(/if\s*\(!PAID_AI_ENABLED\)[\s\S]*?return;[\s\S]*?requestRecordingPermissionsAsync\(\)/.test(lesson), 'English lesson blocks before requesting the microphone permission');
-check(/disabled=\{!PAID_AI_ENABLED\s*\|\|\s*evaluatingSpeech\}/.test(lesson), 'English lesson record control is disabled by the policy flag');
-check(/if\s*\(!PAID_AI_ENABLED\)[\s\S]*?return;[\s\S]*?requestRecordingPermissionsAsync\(\)/.test(emma), 'Emma voice path blocks before requesting the microphone permission');
-check(/disabled=\{!PAID_AI_ENABLED\s*\|\|\s*thinking\s*\|\|\s*transcribing\}/.test(emma), 'Emma voice control is disabled by the policy flag');
+const emmaRoute = read('app/conversations/emma.tsx');
+const human = read('features/chat/screens/HumanConversation.tsx');
+check(/if\s*\([^)]*!\s*PAID_AI_ENABLED[^)]*\)[\s\S]*?return;[\s\S]*?requestRecordingPermissionsAsync\(\)/.test(lesson), 'English lesson blocks before requesting the microphone permission');
+check(/SpeakDrill/.test(lesson) && /SpeakCheck/.test(read('components/SpeakDrill.tsx')) && /ExpoSpeechRecognitionModule/.test(read('components/SpeakCheck.tsx')), 'the lesson speaking checkpoint scores on-device recognition instead of paid AI');
+check(/if\s*\(!ONLINE_AUDIO_ENABLED\)[\s\S]*?return;[\s\S]*?requestRecordingPermissionsAsync\(\)/.test(human), 'human voice path blocks before requesting the microphone permission');
+check(/disabled=\{sending\s*\|\|\s*!ONLINE_AUDIO_ENABLED\}/.test(human), 'human voice control is disabled by the online-audio policy flag');
+check(/Redirect/.test(emmaRoute) && !/PAID_AI_ENABLED/.test(emmaRoute), 'the retired AI voice chat route only forwards to the real conversation screens');
 check(/requestRecordingPermissionsAsync\(\)[\s\S]*?prepareToRecordAsync\(\)[\s\S]*?recorder\.record\(\)/.test(human), 'human voice messages request permission and start a real native recording');
 check(/recorder\.stop\(\)[\s\S]*?sendVoiceMessage\(conversationId,\s*recorder\.uri,\s*duration\)/.test(human), 'stopping a recording uploads and sends the real audio file');
 check(/disabled=\{sending\s*\|\|\s*!ONLINE_AUDIO_ENABLED\}/.test(human), 'human voice-message control remains protected by the explicit online-audio policy');
@@ -91,12 +92,12 @@ check(/playResponsiveSpeech\(\{\s*text,\s*locale:\s*'en-US',\s*rate(?:\s*,|\s*\}
 // KeyboardStickyView owns the complete keyboard-aware footer. Human chat may
 // render the coach, recording state, and audio notice before the composer, so
 // the composer is not necessarily its first child.
-const stickyComposer = /<KeyboardStickyView\b[^>]*>[\s\S]*?<View style=\{styles\.composer\}>[\s\S]*?<\/KeyboardStickyView>/;
-check(stickyComposer.test(human) && stickyComposer.test(emma),
-      'both chat composers animate as complete units with the keyboard');
-check(!/Platform\.OS === 'android' \? 'height'/.test(human) && !/Platform\.OS === 'android' \? 'height'/.test(emma),
+const stickyComposer = /<KeyboardAttachedView\b[^>]*>[\s\S]*?<View style=\{styles\.composer\}>[\s\S]*?<\/KeyboardAttachedView>/;
+check(stickyComposer.test(human),
+      'the chat composer animates as a complete unit with the keyboard');
+check(!/Platform\.OS === 'android' \? 'height'/.test(human),
   'Android avoids the double keyboard-height subtraction that clipped the composer');
-check(!/marginBottom:\s*100/.test(human) && !/marginBottom:\s*100/.test(emma), 'fixed chat offsets no longer fight keyboard and safe-area movement');
+check(!/marginBottom:\s*100/.test(human), 'fixed chat offsets no longer fight keyboard and safe-area movement');
 
 globalThis.fetch = originalFetch;
 console.log(`${checks} checks passed; paid-AI speech stays gated, real participant voice messaging is enabled, and chat composers follow the keyboard dynamically.`);

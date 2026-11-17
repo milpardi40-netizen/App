@@ -52,6 +52,6 @@ check(/from '\.\/languages\/registry'/.test(resume) && /LANGUAGE_IDS/.test(resum
 const layout = read('app/learn/[language]/_layout.tsx');
 check(/STATIC_ROUTE_LANGUAGES/.test(layout), 'static web routes come from the registry');
 const picker = read('app/languages.tsx');
-check(/startsFromZero/.test(picker) && !/=== 'de'/.test(picker), 'picker badges use registry flags instead of inline id lists');
+check(/startsFromZero: STARTS_FROM_ZERO\.has\(entry\.id\)/.test(read('lib/languages/catalog.ts')) && !/=== 'de'/.test(picker), 'picker flags come from the registry instead of inline id lists');
 
 console.log(`${checks} language-registry checks passed (single-entry language configuration).`);

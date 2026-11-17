@@ -69,6 +69,10 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const [error, setError] = useState('');
   const [voiceError, setVoiceError] = useState('');
   const playback = useRef(0);
+  /** Hand-off from the word to its sentence; any manual tap cancels it so nothing plays twice. */
+  const autoChain = useRef(0);
+  /** One automatic pass per card, even if the effect is re-run by a strict-mode render. */
+  const autoPlayed = useRef('');
 
   useEffect(() => {
     let alive = true;
@@ -80,11 +84,13 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
       setProgress(session.introduced);
       setQueue(session.queue);
       setIndex(0);
+      autoPlayed.current = '';
       setSessionInfo({ dueCount: session.dueCount, newCount: session.newCount });
       setPhase(session.queue.length ? 'intro' : 'done');
     })();
     return () => {
       alive = false;
+      autoChain.current += 1;
       playback.current += 1;
       void stopLabSpeech(language);
     };
@@ -109,6 +115,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const word = queue[index];
 
   const stopAll = useCallback(() => {
+    autoChain.current += 1;
     playback.current += 1;
     void stopLabSpeech(language);
   }, [language]);
@@ -190,10 +197,28 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     goNext();
   }, [word, progress, spoken, saving, language, goNext]);
 
-  const startLearning = () => {
-    setPhase('listen');
-    if (word) void playOnce(word);
-  };
+  /**
+   * Every time a card enters the listening step — the first card and every card after a rating —
+   * the phone speaks it once in one pass: the word and its Persian meaning, then the sentence that
+   * uses it, then the microphone opens. A tap on any control in between cancels the hand-off so a
+   * word is never played twice over itself.
+   */
+  useEffect(() => {
+    if (phase !== 'listen' || !word) return;
+    const card = `${word.id}:${index}`;
+    if (autoPlayed.current === card) return;
+    autoPlayed.current = card;
+    const token = ++autoChain.current;
+    void (async () => {
+      await playOnce(word);
+      if (autoChain.current !== token) return;
+      if (!hasSpokenSentence(word)) return;
+      setPhase('sentence');
+      await playSentence(word);
+    })();
+  }, [phase, word, index, playOnce, playSentence]);
+
+  const startLearning = () => setPhase('listen');
 
   /** Move from hearing the word to hearing its sentence, without the learner losing the word on screen. */
   const goToSentence = useCallback(() => {
@@ -249,7 +274,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
             <Text style={styles.wordFa}>{word.fa}</Text>
             <View style={styles.autoBox}>
               <Volume2 size={16} color={C.primary} />
-              <Text style={styles.autoText}>{languageName} یک بار، بعد فارسی — بدون تکرار</Text>
+              <Text style={styles.autoText}>واژه با {languageName}، بعد معنی فارسی — سپس جمله خودش پخش می‌شود</Text>
             </View>
             <View style={styles.voiceBox}>
               <Text style={styles.voiceLabel}>گوینده: {useRecorded ? 'صدای ضبط‌شده' : 'صدای گوشی'}</Text>
@@ -272,7 +297,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
             {word.note ? <Text style={styles.note}>{word.note}</Text> : null}
             {!!voiceError && <Text style={styles.hintWarm}>{voiceError}</Text>}
             <View style={styles.rowButtons}>
-              <Pressable accessibilityRole="button" onPress={() => void playOnce(word)} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
+              <Pressable accessibilityRole="button" onPress={() => { autoChain.current += 1; void playOnce(word); }} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
                 <RefreshCw size={14} color={C.primaryDark} /><Text style={styles.ghostText}>دوباره بشنو</Text>
               </Pressable>
               <Pressable accessibilityRole="button" onPress={goToSentence} style={({ pressed }) => [styles.primary, styles.grow, pressed && styles.pressed]}>

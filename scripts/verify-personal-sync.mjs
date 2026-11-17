@@ -43,6 +43,16 @@ const bundle = await esbuild.build({
           return structuredClone(globalThis.__englishExtras);
         }
       `,
+      'react-native': `
+        // Node-only harness: react-native ships Flow syntax that esbuild cannot parse.
+        export const Platform = { OS: 'web', select: options => options.web ?? options.default };
+        export const AppState = { currentState: 'active', addEventListener: () => ({ remove() {} }) };
+        export const NativeModules = {};
+        export const TurboModuleRegistry = { get: () => null, getEnforcing: () => null };
+        export const NativeEventEmitter = class { addListener() { return { remove() {} }; } removeAllListeners() {} };
+        export const DeviceEventEmitter = { addListener: () => ({ remove() {} }) };
+        export default {};
+      `,
       './languages/pronunciationProgress': `
         export async function mergeRemotePronunciationMarks(language, remote) { return globalThis.__mergePronunciation(language, remote); }
         export const loadPronunciationMarks = async language => globalThis.__pronunciationMarks[language];
@@ -122,6 +132,8 @@ globalThis.__mergePronunciation = (language, remote) => {
   return structuredClone(merged);
 };
 
+// Expo modules expect __DEV__ from the Metro runtime; Node has no such global.
+globalThis.__DEV__ = false;
 const app = await import(`${output}?run=${Date.now()}`);
 let checks = 0;
 const verify = (condition, message) => { assert.ok(condition, message); checks += 1; };
