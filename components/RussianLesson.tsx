@@ -1,5 +1,6 @@
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
+import { assessmentStyles } from '@/components/assessmentLayout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { FitScrollView, lessonScrollOffset } from '@/components/FitScrollView';
@@ -455,7 +456,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
 
 type LearningLessonVocabulary = RussianCourseLesson['sentences'][number]['vocabulary'][number];
 
-const styles = StyleSheet.create({
+// The «سنجش کوتاه» block below shares one centred, equal-card layout with every other language.
+const styles = { ...StyleSheet.create({
   root: { flex: 1, backgroundColor: Palette.canvas },
   bridgeSummary: { gap: 10, marginTop: 6 },
   bridgeSummaryTitle: { fontFamily: Typography.fontFamily, fontSize: 17, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
@@ -579,4 +581,4 @@ const styles = StyleSheet.create({
   replayText: { fontFamily: Typography.fontFamily, fontSize: 14, fontWeight: '400', color: Palette.primary, writingDirection: 'rtl' },
   nextButtonDisabled: { opacity: .45 },
   nextText: { fontFamily: Typography.boldFontFamily, fontSize: 14, fontWeight: '400', color: '#FFFFFF', writingDirection: 'rtl' },
-});
+}), ...assessmentStyles };

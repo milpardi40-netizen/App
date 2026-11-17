@@ -113,6 +113,7 @@ export function EnglishSupplementTask({
   lockAfterSave = false,
   deferFeedback = false,
   showExplanationOnCorrect = false,
+  centered = false,
 }: {
   task: Task;
   onResult?: (progress: SupplementProgress, correct: boolean) => void;
@@ -120,6 +121,8 @@ export function EnglishSupplementTask({
   lockAfterSave?: boolean;
   deferFeedback?: boolean;
   showExplanationOnCorrect?: boolean;
+  /** Assessment layout: centred copy, equal-height options, buttons that fill the card. */
+  centered?: boolean;
 }) {
   const [answer, setAnswer] = useState('');
   const [heard, setHeard] = useState(false);
@@ -179,19 +182,31 @@ export function EnglishSupplementTask({
   }
 
   const locked = busy || (lockAfterSave && result !== null);
-  return <View style={s.card}>
-    <View style={{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+  return <View style={[s.card, centered && assessment.taskCard]}>
+    <View style={{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: centered ? 'center' : 'space-between', gap: 12 }}>
       <Text style={s.eyebrow}>{SKILLS[task.skill]}</Text>
       {task.audio ? <View style={s.chip}><Text style={s.chipText}>استماع</Text></View> : null}
     </View>
-    {task.source ? <View style={{ backgroundColor: EnglishPalette.surfaceMuted, borderRadius: 12, padding: 12 }}><Text style={[s.english, contentDirection(task.source)]}>{task.source}</Text></View> : null}
-    <Text style={s.heading}>{task.prompt}</Text>
+    {task.source ? <View style={{ backgroundColor: EnglishPalette.surfaceMuted, borderRadius: 12, padding: 12 }}><Text style={[s.english, contentDirection(task.source), centered && assessment.center]}>{task.source}</Text></View> : null}
+    <Text style={[s.heading, centered && assessment.centerPrompt]}>{task.prompt}</Text>
     {task.audio ? <Pressable accessibilityRole="button" accessibilityLabel={playing ? 'در حال پخش فایل شنیداری' : heard ? 'پخش دوبارهٔ فایل شنیداری' : 'شنیدن فایل شنیداری سؤال'} accessibilityState={{ disabled: playing || busy }} disabled={playing || busy} style={[s.secondaryButton, (playing || busy) && s.disabled]} onPress={() => void listen()}><Text style={s.secondaryButtonText}>{playing ? 'در حال پخش…' : heard ? 'پخش دوباره' : 'شنیدن سؤال'}</Text></Pressable> : null}
     {task.options
-      ? task.options.map(option => <Pressable key={option} accessibilityRole="radio" accessibilityState={{ checked: answer === option, disabled: locked }} aria-checked={answer === option} disabled={locked} style={[s.input, { minHeight: 48, justifyContent: 'center', backgroundColor: answer === option ? EnglishPalette.primarySoft : EnglishPalette.surfaceMuted, borderColor: answer === option ? EnglishPalette.primary : EnglishPalette.border }]} onPress={() => { setAnswer(option); setResult(null); }}><Text style={[s.english, contentDirection(option)]}>{option}</Text></Pressable>)
-      : <TextInput accessibilityLabel={task.prompt} editable={!locked} style={[s.input, contentDirection(task.answers[0] ?? "")]} value={answer} onChangeText={value => { setAnswer(value); setResult(null); }} placeholder="پاسخ خود را بنویسید" placeholderTextColor={EnglishPalette.muted} autoCapitalize="none" autoCorrect={false} maxLength={500} />}
-    <Pressable accessibilityRole="button" accessibilityState={{ disabled: locked || !answer.trim() || (!!task.audio && !heard) }} disabled={locked || !answer.trim() || (!!task.audio && !heard)} style={[s.button, (locked || !answer.trim() || (!!task.audio && !heard)) && s.disabled]} onPress={() => void submit()}><Text style={s.buttonText}>{busy ? 'در حال ذخیره…' : 'بررسی پاسخ'}</Text></Pressable>
-    {result !== null && !deferFeedback ? <Text accessibilityLiveRegion="polite" style={result ? s.success : s.error}>{result ? `پاسخ درست ثبت شد.${showExplanationOnCorrect ? ` ${task.explanation}` : ''}` : `هنوز درست نیست. ${task.explanation} دوباره پاسخ دهید.`}</Text> : null}
-    {error ? <Text accessibilityLiveRegion="polite" style={s.error}>{error}</Text> : null}
+      ? task.options.map(option => <Pressable key={option} accessibilityRole="radio" accessibilityState={{ checked: answer === option, disabled: locked }} aria-checked={answer === option} disabled={locked} style={[s.input, { minHeight: 48, justifyContent: 'center', backgroundColor: answer === option ? EnglishPalette.primarySoft : EnglishPalette.surfaceMuted, borderColor: answer === option ? EnglishPalette.primary : EnglishPalette.border }, centered && assessment.option]} onPress={() => { setAnswer(option); setResult(null); }}><Text style={[s.english, contentDirection(option), centered && assessment.center]}>{option}</Text></Pressable>)
+      : <TextInput accessibilityLabel={task.prompt} editable={!locked} style={[s.input, contentDirection(task.answers[0] ?? ""), centered && assessment.center]} value={answer} onChangeText={value => { setAnswer(value); setResult(null); }} placeholder="پاسخ خود را بنویسید" placeholderTextColor={EnglishPalette.muted} autoCapitalize="none" autoCorrect={false} maxLength={500} />}
+    <Pressable accessibilityRole="button" accessibilityState={{ disabled: locked || !answer.trim() || (!!task.audio && !heard) }} disabled={locked || !answer.trim() || (!!task.audio && !heard)} style={[s.button, centered && assessment.button, (locked || !answer.trim() || (!!task.audio && !heard)) && s.disabled]} onPress={() => void submit()}><Text style={s.buttonText}>{busy ? 'در حال ذخیره…' : 'بررسی پاسخ'}</Text></Pressable>
+    {result !== null && !deferFeedback ? <Text accessibilityLiveRegion="polite" style={[result ? s.success : s.error, centered && assessment.center]}>{result ? `پاسخ درست ثبت شد.${showExplanationOnCorrect ? ` ${task.explanation}` : ''}` : `هنوز درست نیست. ${task.explanation} دوباره پاسخ دهید.`}</Text> : null}
+    {error ? <Text accessibilityLiveRegion="polite" style={[s.error, centered && assessment.center]}>{error}</Text> : null}
   </View>;
 }
+
+/**
+ * «سنجش کوتاه» layout: the task cards of every language share one centred column with equal-height
+ * options, so the assessment page looks the same whichever course it belongs to.
+ */
+const assessment = StyleSheet.create({
+  taskCard: { alignItems: 'stretch', padding: 16, gap: 11, minHeight: 148, justifyContent: 'center' },
+  centerPrompt: { textAlign: 'center' },
+  center: { textAlign: 'center' },
+  option: { alignItems: 'center', justifyContent: 'center' },
+  button: { alignSelf: 'stretch' },
+});

@@ -34,7 +34,7 @@ await esbuild.build({
   entryPoints: [path.join(root, 'lib/narration.ts')],
   bundle: true, format: 'esm', platform: 'node', outfile: narrationBundle, logLevel: 'silent',
 });
-const { narrationRate, narrationLocale, narrationLadder, recordedPlaybackRate, narrationLanguageOf, NARRATION_PACES } =
+const { narrationRate, narrationLocale, narrationLadder, recordedPlaybackRate, narrationLanguageOf, narrationPackTempo, NARRATION_PACES, ENGLISH_REFERENCE_LADDER } =
   await import(`file://${narrationBundle}`);
 
 const de = 'de-DE';
@@ -47,17 +47,23 @@ check(narrationRate('xx-XX', 'listen') === 1, 'an unknown language falls back to
 for (const [label, locale] of [['German', de], ['Russian', ru]]) {
   const ladder = narrationLadder(locale);
   check(NARRATION_PACES.every(pace => typeof ladder[pace] === 'number' && ladder[pace] > 0), `${label}: every pace is defined`);
-  check(ladder.slow < ladder.listen && ladder.listen < ladder.normal, `${label}: slow < listen < normal`);
+  check(ladder.slow < ladder.listen && ladder.listen <= ladder.normal, `${label}: slow < listen <= normal`);
   check(ladder.normal <= ladder.natural, `${label}: «natural» is never slower than «normal»`);
   // This is the harmony the order asked for: a word in the lab is read at exactly the pace of a lesson
   // line, and an example sentence only a touch slower — never with the lab's old private 0.72/0.68.
   check(ladder.word === ladder.listen, `${label}: the word lab reads words at the lesson's listening pace`);
+  // English is the reference model the order pointed at: same numbers, not merely similar ones.
+  for (const pace of NARRATION_PACES) {
+    check(ladder[pace] === ENGLISH_REFERENCE_LADDER[pace], `${label}: ${pace} pace matches the English reference (${ENGLISH_REFERENCE_LADDER[pace]})`);
+  }
   check(ladder.sentence < ladder.word && ladder.sentence > ladder.slow, `${label}: example sentences stay just under the word pace`);
 }
 
 // Recordings must land on the voice's own natural tempo at the language's reference pace.
-check(recordedPlaybackRate(de, 1) === 1, 'German recordings play at the pace the lesson asked for');
-check(recordedPlaybackRate(ru, 0.78) === 1, 'Russian recordings are calibrated to the voice at its 0.78 pace');
+// A recording plays at 1× exactly when the requested pace equals the tempo the pack was rendered at,
+// so the recorded narrator and the phone voice share one tempo.
+check(recordedPlaybackRate(de, narrationPackTempo(de)) === 1, 'German recordings play at the pace the lesson asked for');
+check(recordedPlaybackRate(ru, narrationPackTempo(ru)) === 1 && narrationPackTempo(ru) === 0.78, 'Russian recordings are calibrated to their 0.78 pack tempo');
 check(recordedPlaybackRate(ru, 1) > 1 && recordedPlaybackRate(de, 0.5) === 0.5, 'recordings and the voice scale together');
 check(recordedPlaybackRate(ru, 0) === recordedPlaybackRate(ru, 1) && recordedPlaybackRate(ru, 99) === 1.6
   && recordedPlaybackRate(de, 0.01) === 0.4, 'playback speed stays inside the engine-safe range');

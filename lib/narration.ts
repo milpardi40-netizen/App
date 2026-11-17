@@ -47,17 +47,24 @@ export const NARRATION_PACES: readonly NarrationPace[] = ['normal', 'listen', 'w
 type Ladder = Record<NarrationPace, number>;
 
 /**
- * German / French / Spanish: the engine's 1× is a comfortable classroom pace, so it is «معمولی».
- * A line is first read at 0.72, a single word at 0.72 and an example sentence at 0.68.
+ * English is the reference: its lesson reads a line and a word at the engine's natural 1×, replays at 1×,
+ * keeps one genuinely slow 0.5× for deliberate repetition, and uses 1.15× for conversational speed
+ * (see ENGLISH_*_SPEECH_RATE in lib/responsiveSpeech.ts). German and Russian follow that model.
  */
-const STARTER_LADDER: Ladder = { normal: 1, listen: 0.72, word: 0.72, sentence: 0.68, slow: 0.5, natural: 1.15 };
+export const ENGLISH_REFERENCE_LADDER: Ladder = { normal: 1, listen: 1, word: 1, sentence: 0.85, slow: 0.5, natural: 1.15 };
 
 /**
- * Russian / Turkish: the engine's 1× is too fast for learners, so «معمولی» is 0.85 and the first read
- * is 0.78. Words and example sentences follow the same ladder instead of the ad-hoc 0.72/0.68 they
- * used to have, so the narrator no longer speeds up when the learner opens the word lab.
+ * German / French / Spanish: words, first reads and replays now use the English pace (1×) instead of the
+ * old 0.72/0.68 crawl. Only the explicit «آهسته» button stays slow, exactly like English.
  */
-const CYRILLIC_LADDER: Ladder = { normal: 0.85, listen: 0.78, word: 0.78, sentence: 0.72, slow: 0.5, natural: 1 };
+const STARTER_LADDER: Ladder = { normal: 1, listen: 1, word: 1, sentence: 0.85, slow: 0.5, natural: 1.15 };
+
+/**
+ * Russian / Turkish: same model as English — 1× for words and lines (Russian used to be held back at
+ * 0.78, which is why it sounded sluggish next to the English course), 0.5× only for deliberate slowness,
+ * 1.15× for conversational speed.
+ */
+const CYRILLIC_LADDER: Ladder = { normal: 1, listen: 1, word: 1, sentence: 0.85, slow: 0.5, natural: 1.15 };
 
 const LADDERS: Record<NarrationLanguage, Ladder> = {
   de: STARTER_LADDER,
@@ -65,20 +72,27 @@ const LADDERS: Record<NarrationLanguage, Ladder> = {
   es: STARTER_LADDER,
   ru: CYRILLIC_LADDER,
   tr: CYRILLIC_LADDER,
-  // English keeps its own responsive engine (alternating 1× / 0.5×) in lib/responsiveSpeech.ts.
-  en: { normal: 1, listen: 1, word: 1, sentence: 0.5, slow: 0.5, natural: 1.15 },
+  // English speaks through lib/responsiveSpeech.ts with the same numbers as the reference ladder.
+  en: ENGLISH_REFERENCE_LADDER,
 };
+
 
 /**
  * Tempo a pre-rendered pack was rendered at, as a fraction of the engine's natural pace.
  *
  * The starter packs (German/French/Spanish) were rendered at natural speed, so a recording plays at
- * exactly the pace the lesson asked for. The Russian and Turkish packs were rendered at 0.78 tempo,
- * so their recordings are divided by it: `recordedPlaybackRate('ru-RU', 0.78)` is 1× and therefore
- * sounds exactly like the device voice reading at 0.78. Centralising it means a screen can no longer
- * drift away from the recording it replaces.
+ * exactly the pace the lesson asked for. The Russian and Turkish packs were rendered at 0.78 tempo, so
+ * their recordings are divided by it — the recorded voice and the phone voice then share one tempo at
+ * every pace (see `narrationPackTempo`). Centralising it means a screen can no longer drift away from
+ * the recording it replaces.
  */
 const PACK_TEMPO: Record<NarrationLanguage, number> = { en: 1, de: 1, fr: 1, es: 1, ru: 0.78, tr: 0.78 };
+
+/** The tempo a pre-rendered pack was rendered at for this language (1 = the engine's natural pace). */
+export function narrationPackTempo(locale: string): number {
+  const language = narrationLanguageOf(locale);
+  return language ? PACK_TEMPO[language] : 1;
+}
 
 const MIN_RATE = 0.4;
 const MAX_RATE = 1.6;

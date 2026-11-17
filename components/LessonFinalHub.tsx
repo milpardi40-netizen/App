@@ -3,6 +3,7 @@ import { type ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { CheckCircle2, ClipboardCheck, Mic2 } from 'lucide-react-native';
 import { Typography } from '@/lib/theme';
+import { ASSESSMENT_MAX_WIDTH } from '@/components/assessmentLayout';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 
 /**
@@ -37,7 +38,7 @@ export default function LessonFinalHub({ sections, only }: { sections: FinalSect
       </View>
       <Text style={styles.stageDesc}>{current.subtitle}</Text>
       <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        {current.render()}
+        <View style={styles.column}>{current.render()}</View>
       </ScrollView>
     </View>
   );
@@ -46,8 +47,10 @@ export default function LessonFinalHub({ sections, only }: { sections: FinalSect
 const styles = StyleSheet.create({
   wrap: { width: '100%', alignItems: 'center' },
   bigIcon: { width: 72, height: 72, borderRadius: 36, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF', alignItems: 'center', justifyContent: 'center', marginVertical: 18 },
-  titleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8, alignSelf: 'stretch' },
-  stageTitle: { fontFamily: Typography.boldFontFamily, fontSize: 25, lineHeight: 36, fontWeight: '400', color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
-  stageDesc: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.text, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch', lineHeight: 23, marginTop: 8 },
-  body: { width: '100%', paddingTop: 12, paddingBottom: 8 },
+  // Centred in every language: rounded icon, title and one line, then the assessment column.
+  titleRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, alignSelf: 'center', maxWidth: ASSESSMENT_MAX_WIDTH },
+  stageTitle: { fontFamily: Typography.boldFontFamily, fontSize: 25, lineHeight: 36, fontWeight: '400', color: Palette.ink, textAlign: 'center', writingDirection: 'rtl' },
+  stageDesc: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.text, textAlign: 'center', writingDirection: 'rtl', alignSelf: 'center', maxWidth: ASSESSMENT_MAX_WIDTH, lineHeight: 23, marginTop: 8 },
+  body: { width: '100%', alignItems: 'center', paddingTop: 12, paddingBottom: 8 },
+  column: { width: '100%', maxWidth: ASSESSMENT_MAX_WIDTH, alignSelf: 'center', alignItems: 'stretch' },
 });

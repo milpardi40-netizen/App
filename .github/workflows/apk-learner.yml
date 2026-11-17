@@ -91,6 +91,7 @@ jobs:
           npm run validate:english-lesson-flow
           npm run validate:speech-policy
           npm run validate:narration
+          npm run validate:assessment
           node scripts/verify-starter-speech.cjs
           node scripts/verify-new-language-samples.cjs
           npm run validate:pronunciation

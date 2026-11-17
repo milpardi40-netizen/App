@@ -6,6 +6,10 @@ import type { Task } from '@/lib/englishSupplement/content';
 import { EnglishSupplementTask, supplementStyles as s } from './EnglishSupplementTask';
 import { CORE_LESSON_EVIDENCE } from '@/lib/englishFoundationEvidence';
 import { loadStudy, recordLessonEvidence } from '@/lib/englishStudyState';
+import { StyleSheet } from 'react-native';
+import { Typography } from '@/lib/theme';
+import { EnglishPalette } from '@/components/EnglishSupplementTask';
+import { ASSESSMENT_MAX_WIDTH } from '@/components/assessmentLayout';
 
 /** Historical evidence is retained, but restarted attempts track their own checks. */
 export function EnglishLessonEvidence({ lesson, onPassed, attemptEvidence, onAttemptResult }: {
@@ -104,15 +108,25 @@ export function EnglishLessonEvidence({ lesson, onPassed, attemptEvidence, onAtt
     ? `برای پایان این درس، به هر ${tasks.length} سنجشِ مرتبط با هدف‌هایش درست پاسخ دهید. پاسخ نادرست را می‌توانید دوباره امتحان کنید؛ شنیداری پس از پخش کامل ثبت می‌شود. گفتار خودکار نمره‌گذاری نمی‌شود.`
     : 'برای ثبت پایان درس، یک سؤال شنیداری و یک پاسخ نوشتاری را درست انجام دهید. شنیدن بر اساس پایان پخش ثبت می‌شود، نه ارزیابی تلفظ شما.';
 
-  return <View style={{ width: '100%', marginTop: 20 }}>
-    <Text style={s.heading}>سنجش کوتاه پایان درس</Text>
-    <Text style={s.text}>{description}</Text>
-    {loading ? <Text style={s.text}>در حال بازیابی پاسخ‌های ذخیره‌شده…</Text> : null}
-    {!!loadError && <Text style={s.error}>{loadError}</Text>}
+  // Centred like the assessment page of every other language: one narrow column, centred copy, then
+  // equally sized task cards from the shared English supplement component.
+  return <View style={styles.column}>
+    <Text style={styles.heading}>سنجش کوتاه پایان درس</Text>
+    <Text style={styles.text}>{description}</Text>
+    {loading ? <Text style={styles.text}>در حال بازیابی پاسخ‌های ذخیره‌شده…</Text> : null}
+    {!!loadError && <Text accessibilityRole="alert" style={styles.error}>{loadError}</Text>}
     {!loading && !loadError && tasks.map(task => done[task.id]
-      ? <Text key={task.id} style={s.success}>{task.skill === 'listening' ? 'شنیداری' : task.skill === 'writing' ? 'نوشتاری' : task.skill === 'reading' ? 'درک مطلب' : 'واژگان و دستور'}: ثبت شد ✓</Text>
+      ? <Text key={task.id} style={styles.done}>{task.skill === 'listening' ? 'شنیداری' : task.skill === 'writing' ? 'نوشتاری' : task.skill === 'reading' ? 'درک مطلب' : 'واژگان و دستور'}: ثبت شد ✓</Text>
       : isCoreEvidence
-        ? <EnglishSupplementTask key={task.id} task={task} onSave={saveCoreLessonResult} />
-        : <EnglishSupplementTask key={task.id} task={task} onResult={(_progress, correct) => saveExistingResult(task, correct)} />)}
+        ? <EnglishSupplementTask key={task.id} task={task} centered onSave={saveCoreLessonResult} />
+        : <EnglishSupplementTask key={task.id} task={task} centered onResult={(_progress, correct) => saveExistingResult(task, correct)} />)}
   </View>;
 }
+
+const styles = StyleSheet.create({
+  column: { width: '100%', maxWidth: ASSESSMENT_MAX_WIDTH, alignSelf: 'center', alignItems: 'stretch', gap: 10, marginTop: 18 },
+  heading: { fontFamily: Typography.boldFontFamily, color: EnglishPalette.ink, fontSize: 19, lineHeight: 28, fontWeight: '400', textAlign: 'center', writingDirection: 'rtl' },
+  text: { fontFamily: Typography.fontFamily, color: EnglishPalette.text, fontSize: 14, lineHeight: 24, textAlign: 'center', writingDirection: 'rtl' },
+  done: { fontFamily: Typography.fontFamily, color: EnglishPalette.success, fontSize: 13, lineHeight: 22, textAlign: 'center', writingDirection: 'rtl', backgroundColor: EnglishPalette.successSoft, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 12 },
+  error: { fontFamily: Typography.fontFamily, color: EnglishPalette.danger, fontSize: 13, lineHeight: 22, textAlign: 'center', writingDirection: 'rtl' },
+});
