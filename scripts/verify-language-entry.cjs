@@ -20,7 +20,11 @@ const workflowFiles = [
   '.github/workflows/android-build.yml',
 ];
 
-check(/onPress=\{\(\) => router\.push\(language\.home as never\)\}/.test(languageScreen), 'language cards navigate directly to their existing home route');
+// The card still opens the language home route; the push is deferred one frame so the tap paints first.
+check(/onPress=\{\(\) => open\(language\.home\)\}/.test(languageScreen) && !/router\.push\(language\.home/.test(languageScreen),
+  'language cards navigate directly to their existing home route, through the deferred opener');
+check(/useOpeningNavigation\(\)/.test(languageScreen) && /OpeningOverlay visible=\{opening\}/.test(languageScreen),
+  'a language card answers the tap immediately instead of staying silent while the screen loads');
 check(/home: '\/lang'/.test(registry) && /home: '\/learn\/ru'/.test(registry), 'English and Russian cards keep the original course destinations');
 check(/LANGUAGE_REGISTRY\.map/.test(catalog) && !/id: 'ru'/.test(catalog), 'the catalog is generated from the single language registry instead of hard-coded entries');
 check(/زبان را از زندگی یاد بگیر/.test(languageScreen) && /کوتاه، شنیدنی، ماندگار/.test(languageScreen), 'language chooser follows the approved warm-journal copy');
@@ -41,6 +45,17 @@ check(!/placement/.test(resume), 'resume routing no longer recognizes an assessm
 for (const file of workflowFiles) {
   check(/npm run validate:language-entry/.test(read(file)), `${file} verifies the new language-entry behavior`);
   check(!/npm run validate:placement/.test(read(file)), `${file} no longer runs the removed quiz test`);
+}
+
+// Opening one language must never evaluate another language's course. Every language screen lives in its
+// own module under components/routes and the route files reach it through lazy(), so a card tap loads one
+// screen instead of all six courses.
+for (const route of ['index', 'library', 'lesson', 'review', 'studio', 'placement']) {
+  const file = `app/learn/[language]/${route}.tsx`;
+  const src = read(file);
+  check(/lazy\(/.test(src) && /@\/components\/routes\//.test(src), `${file} loads its screen lazily`);
+  check(!/from '@\/components\/(StarterHome|StarterLibrary|RussianHome|TurkishHome|RussianLesson|TurkishLesson)'/.test(src), `${file} does not pull a language screen in eagerly`);
+  check(!/from '@\/lib\/languages\/newCourses'/.test(src), `${file} does not pull the starter courses in eagerly`);
 }
 
 console.log(`${checks} language-entry removal and OTP-preservation checks passed.`);

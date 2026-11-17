@@ -445,7 +445,7 @@ check(/tr: require\('\.\.\/assets\/images\/language-tr-watercolor\.jpg'\)/.test(
 for (const [file, component] of [
   ['app/learn/[language]/index.tsx', 'TurkishHome'],
   ['app/learn/[language]/library.tsx', 'TurkishLibrary'],
-  ['app/learn/[language]/lesson.tsx', 'TurkishLesson'],
+  ['components/routes/TurkishLessonScreen.tsx', 'TurkishLesson'],
   ['app/learn/[language]/review.tsx', 'TurkishReview'],
   ['components/TurkishLesson.tsx', 'TurkishSentenceBuilder'],
   ['components/TurkishLesson.tsx', 'TurkishDialoguePractice'],

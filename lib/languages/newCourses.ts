@@ -36,7 +36,9 @@ import { GERMAN_PRE_A1 } from './germanPreA1';
 import { FRENCH_PRE_A1 } from './frenchPreA1';
 import { SPANISH_PRE_A1 } from './spanishPreA1';
 
-export type NewLanguageId = 'de' | 'fr' | 'es';
+import { isNewLanguage, type NewLanguageId } from './newLanguageIds';
+export { isNewLanguage };
+export type { NewLanguageId };
 export type StarterLesson = LearningLesson & { levelId: CourseLevelId; order: number; subtitle: string; learningMode?: FoundationMode };
 export type SentenceSeed = [string, string, string, string, string, string?];
 export type LessonSeed = { title: string; subtitle: string; situation: string; teachingFa: string; sentences: SentenceSeed[]; check: [string, number, string]; dialogue?: number[] };
@@ -113,7 +115,6 @@ const levelSeeds: Array<[CourseLevelId,string,string,string,string]> = [
  *     questions and answers those lessons actually need.
  * IDs and sentence indexes stay identical, so saved progress and review cards remain valid.
  */
-export function isNewLanguage(value: string | undefined): value is NewLanguageId { return value === 'de' || value === 'fr' || value === 'es'; }
 function buildFoundation(id: NewLanguageId, seed: FoundationSeed): StarterLesson {
   const lessonId = `${id}-foundation-${seed.id}`;
   const sentences = seed.rows.map(([text, fa, pronunciation], index) => ({
@@ -243,5 +244,25 @@ function buildCourse(id: NewLanguageId) {
   const progress = createCourseProgressStore({key:`sentence_course_progress_${id}_starter_v1`,lessons:orderedLessons,cloudSync:false,recordEstimatedTime:false,markVocabularyOnCompletion:false});
   return { id,...labels[id], lessons:orderedLessons,levels,progress,sessions:createStarterSessions(id,orderedLessons), home:`/learn/${id}` };
 }
-export const NEW_COURSES = {de:buildCourse('de'),fr:buildCourse('fr'),es:buildCourse('es')};
 export type StarterCourse = ReturnType<typeof buildCourse>;
+
+/**
+ * A course is built the first time it is opened, not when this module loads.
+ *
+ * Building German, French and Spanish together cost every language screen the work of the other two:
+ * a German lesson created the French and Spanish lesson objects, sentences, checks and review cards as
+ * well. The property getters keep `NEW_COURSES[language]` working and cache each course, so repeated
+ * reads return the same object. Enumerating the map (e.g. for lesson totals) still builds all three.
+ */
+const builtCourses: Partial<Record<NewLanguageId, StarterCourse>> = {};
+function courseFor(id: NewLanguageId): StarterCourse {
+  const cached = builtCourses[id];
+  if (cached) return cached;
+  const course = buildCourse(id);
+  builtCourses[id] = course;
+  return course;
+}
+export const NEW_COURSES = {} as Record<NewLanguageId, StarterCourse>;
+for (const id of ['de', 'fr', 'es'] as const) {
+  Object.defineProperty(NEW_COURSES, id, { get: () => courseFor(id), enumerable: true });
+}

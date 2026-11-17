@@ -130,9 +130,13 @@ const esbuild = require('esbuild');
     check(home.includes("id: heroLesson.id, fromStart: '1'") && home.includes('onPress={replayBeginnerLevel}') && home.includes("levelReplay: '1'"), `${lang}: current-lesson reset differs from non-destructive level replay`);
     check(library.includes('hasSavedSession ? saved.session : null') && library.includes('openLesson(item.id)'), `${lang}: library distinguishes absent sessions and resumes selected lesson`);
   }
-  const dynamicRoute = fs.readFileSync(path.join(root, 'app/learn/[language]/lesson.tsx'), 'utf8');
+  // The language screens moved into their own modules, so the reset signal is checked where it is read.
+  const newCourseScreen = fs.readFileSync(path.join(root, 'components/routes/NewCourseLessonScreen.tsx'), 'utf8');
+  const ruScreen = fs.readFileSync(path.join(root, 'components/routes/RussianLessonScreen.tsx'), 'utf8');
   const ruRoute = fs.readFileSync(path.join(root, 'app/learn/ru/lesson.tsx'), 'utf8');
-  check(dynamicRoute.includes("fromStart === '1' ? 'listen'") && dynamicRoute.includes("fromStart={fromStart === '1'}") && ruRoute.includes("fromStart={fromStart === '1'}"), 'all route variants pass the home reset signal');
+  check(newCourseScreen.includes("fromStart === '1' ? 'listen'") && newCourseScreen.includes("fromStart={fromStart === '1'}")
+    && ruScreen.includes("fromStart={fromStart === '1'}") && ruRoute.includes("fromStart={fromStart === '1'}"),
+    'all route variants pass the home reset signal');
   fs.rmSync(temp, { recursive: true, force: true });
   console.log(`${checks} non-English restart checks passed (native + web; DE/FR/ES/TR/RU).`);
 })().catch(error => { console.error(error); process.exitCode = 1; });

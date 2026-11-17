@@ -37,8 +37,9 @@ check(STATIC_ROUTE_LANGUAGES.length >= 1 && STATIC_ROUTE_LANGUAGES.every(id => L
 const catalog = read('lib/languages/catalog.ts');
 check(/LANGUAGE_REGISTRY\.map/.test(catalog), 'the picker catalog is generated from the registry');
 const lessonTotalsBlock = catalog.split('LESSON_TOTALS')[1] || '';
-const starterIds = (read('lib/languages/newCourses.ts').match(/NEW_COURSES\s*=\s*\{([^}]*)\}/) || [, ''])[1]
-  .split(',').map(part => part.split(':')[0].trim()).filter(Boolean);
+// The starter ids live in their own module now, so routing can know them without loading the courses.
+const starterIds = (read('lib/languages/newLanguageIds.ts').match(/NEW_LANGUAGE_IDS\s*=\s*\[([^\]]*)\]/) || [, ''])[1]
+  .split(',').map(part => part.replace(/['"\s]/g, '')).filter(Boolean);
 for (const id of LANGUAGE_IDS) {
   const covered = new RegExp(`\\b${id}:`).test(lessonTotalsBlock) || (/\.\.\.STARTER_COURSE_TOTALS/.test(lessonTotalsBlock) && starterIds.includes(id));
   check(covered, `lesson totals in the catalog cover language ${id}`);

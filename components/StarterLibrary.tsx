@@ -9,6 +9,8 @@ import { EnglishLevelRail, EnglishProgressTrack, EnglishSectionHeading, displayE
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { getA1Curriculum } from '@/lib/languages/a1Curriculum';
 import { afterPaint, whenIdle } from '@/lib/afterPaint';
+import OpeningOverlay from '@/components/OpeningOverlay';
+import { useOpeningNavigation } from '@/lib/useOpeningNavigation';
 import StarterA1Checkpoint from '@/components/StarterA1Checkpoint';
 import { getA2Curriculum } from '@/lib/languages/a2Curriculum';
 import { countA2GrammarPatterns } from '@/lib/languages/a2Grammar';
@@ -55,6 +57,8 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
   const {lessons, levels, progress: courseProgress} = course;
   const {loadStarterLessonSessionWithPresence} = course.sessions;
   const router = useRouter();
+  // Every card on this page answers the tap before the next screen is built.
+  const { opening, open } = useOpeningNavigation();
   const { level } = useLocalSearchParams<{ level?: string }>();
   const [hydrated, setHydrated] = useState(false);
   const [expandedGroup, setExpandedGroup] = useState(0);
@@ -63,7 +67,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
   const [error, setError] = useState('');
   const [retry, setRetry] = useState(0);
   /** The A1–B2 level pages list sixty topic cards or more; they arrive a frame later, see `afterPaint`. */
-  const [sectionsReady, setSectionsReady] = useState(false);
+  const [visibleSections, setVisibleSections] = useState(1);
   const scrollRef = useRef<ScrollView>(null);
   const pageRef = useRef<View>(null), workshopRef = useRef<View>(null), grammarRef = useRef<View>(null), studioRef = useRef<View>(null), serial = useRef(0);
   const [workshopRequest, setWorkshopRequest] = useState<{id:string;serial:number}|null>(null);
@@ -126,12 +130,10 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
   }, [retry, selectedLessons, lessons, courseProgress, loadStarterLessonSessionWithPresence]));
 
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
-  // The topic list of a level is the longest part of the page (B2 has 66 cards with their own practice
-  // buttons). Showing the first section at once and the rest right after the frame keeps the tap instant.
-  useEffect(() => {
-    setSectionsReady(false);
-    return afterPaint(() => setSectionsReady(true));
-  }, [selected?.id]);
+  // The topic list of a level is the longest part of the page (B2 lists 66 topics with their own practice
+  // buttons, around a thousand views). Painting one section per frame keeps the tap instant: the learner
+  // sees the first section at once and the rest follow within a few frames, instead of one long block.
+  useEffect(() => { setVisibleSections(1); }, [selected?.id]);
 
   const completedIds = progress?.completedLessonIds;
   const completedSet = useMemo(() => new Set(completedIds ?? []), [completedIds]);
@@ -187,10 +189,15 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
     : selected?.id === 3 ? getB1Curriculum(course.id)
     : selected?.id === 4 ? getB2Curriculum(course.id)
     : []), [course.id, selected?.id]);
-  const shownSections = sectionsReady ? curriculumSections : curriculumSections.slice(0, 1);
+  const shownSections = curriculumSections.slice(0, visibleSections);
+  // Reveal the remaining sections one per frame, and stop as soon as the page changes.
+  useEffect(() => {
+    if (visibleSections >= curriculumSections.length) return;
+    return afterPaint(() => setVisibleSections(count => count + 1), 90);
+  }, [visibleSections, curriculumSections.length]);
 
-  const openLevel = (levelId: StarterLevelId) => router.push(`${course.home}/library?level=${levelId}` as never);
-  const openLesson = (id: string) => router.push(`${course.home}/lesson?id=${encodeURIComponent(id)}` as never);
+  const openLevel = (levelId: StarterLevelId) => open(`${course.home}/library?level=${levelId}`);
+  const openLesson = (id: string) => open(`${course.home}/lesson?id=${encodeURIComponent(id)}`);
 
   return (
     <View style={styles.root}>
@@ -359,6 +366,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
           {!!error && <View style={styles.errorCard}><Text accessibilityRole="alert" style={styles.errorText}>{error}</Text><Pressable accessibilityRole="button" onPress={() => setRetry(value => value + 1)}><Text style={styles.retryText}>تلاش دوباره</Text></Pressable></View>}
         </View>
       </ScrollView>
+      <OpeningOverlay visible={opening} />
     </View>
   );
 }

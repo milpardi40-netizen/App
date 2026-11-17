@@ -5,6 +5,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
+import OpeningOverlay from '@/components/OpeningOverlay';
+import { useOpeningNavigation } from '@/lib/useOpeningNavigation';
 import DailyPlanCard from '@/components/DailyPlanCard';
 import { buildDailyPlan, type DailyPlanStep } from '@/lib/dailyPlan';
 import { getStudyStreak } from '@/lib/studyStreak';
@@ -142,12 +144,14 @@ export default function TurkishHome() {
     levelCounts[level.id] = { completed: lessons.filter(lesson => completedSet.has(lesson.id)).length, total: lessons.length };
   });
 
-  const openLevel = (levelId: TurkishLevelId) => router.push(`/learn/tr/library?level=${levelId}` as never);
+  const { opening, open } = useOpeningNavigation();
+  // The level card answers the tap at once; its library loads on the next frame.
+  const openLevel = (levelId: TurkishLevelId) => open(`/learn/tr/library?level=${levelId}`);
 
   // Level replay is temporary; only the same-lesson reset replaces a saved attempt.
   const replayBeginnerLevel = () => router.push({ pathname: '/learn/tr/lesson', params: { id: TURKISH_LESSONS[0].id, levelReplay: '1' } } as never);
   const openNextLesson = () => {
-    if (resumeLesson) router.push(`/learn/tr/lesson?id=${encodeURIComponent(resumeLesson.id)}` as never);
+    if (resumeLesson) open(`/learn/tr/lesson?id=${encodeURIComponent(resumeLesson.id)}`);
     else openLevel(3);
   };
 

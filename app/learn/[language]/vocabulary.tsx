@@ -1,5 +1,5 @@
 import { CoursePage } from '@/components/LanguageCourseUI';
-import { isNewLanguage } from '@/lib/languages/newCourses';
+import { isNewLanguage } from '@/lib/languages/newLanguageIds';
 import { useLocalSearchParams } from 'expo-router';
 import { Suspense, lazy } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';

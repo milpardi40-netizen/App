@@ -12,6 +12,9 @@ import { isLearnerRegistered } from '@/lib/registrationStatus';
 import { useCallback } from 'react';
 import { LANGUAGES } from '@/lib/languages/catalog';
 import { FEATURES, LANGUAGE_SCOPE, RUSSIAN_ONLY_BUILD } from '@/lib/features';
+import { prefetchLater } from '@/lib/afterPaint';
+import OpeningOverlay from '@/components/OpeningOverlay';
+import { useOpeningNavigation } from '@/lib/useOpeningNavigation';
 
 const palette = {
   canvas: '#F7F2E8',
@@ -45,12 +48,26 @@ const learningSteps = [
 
 export default function LanguagesHome() {
   const router = useRouter();
+  // Answer the tap at once: the pressed card and the overlay paint before the next screen loads.
+  const { opening, open } = useOpeningNavigation();
   const [openingSupport, setOpeningSupport] = useState(false);
   const { width } = useWindowDimensions();
   const compact = width < 680;
   const tiny = width < 370;
 
   useEffect(() => { void ensureOpenLearnerRegistered(); }, []);
+  // The next tap is almost always a language card: warm those screens while the learner reads the list,
+  // so opening a language only has to mount it. One module at a time, after the first paint.
+  useEffect(() => {
+    // One language at a time, with breathing room: the German/French/Spanish home first (three of the six
+    // cards), then the other two. Leaving the screen cancels whatever has not started yet.
+    const stops = [
+      prefetchLater([() => import('@/components/routes/NewCourseHomeScreen')], 900),
+      prefetchLater([() => import('@/components/RussianHome')], 2600),
+      prefetchLater([() => import('@/components/TurkishHome')], 4200),
+    ];
+    return () => stops.forEach(stop => stop());
+  }, []);
   const [registered, setRegistered] = useState(false);
   useFocusEffect(useCallback(() => {
     let active = true;
@@ -200,7 +217,7 @@ export default function LanguagesHome() {
                   accessibilityRole="button"
                   accessibilityLabel={`ورود به زبان ${language.name}`}
                   accessibilityHint="برای بازکردن دورهٔ این زبان انتخاب کنید"
-                  onPress={() => router.push(language.home as never)}
+                  onPress={() => open(language.home)}
                   style={({ pressed }) => [styles.languageCard, solo ? styles.languageCardSolo : wrap && styles.languageCardWrap, styles.languageCardRtl, language.id === 'en' ? styles.languageCardBase : styles.languageCardOther, pressed && styles.pressed]}
                 >
                   <ImageBackground
@@ -265,6 +282,7 @@ export default function LanguagesHome() {
           </View>
         </View>
       </ScrollView>
+      <OpeningOverlay visible={opening} />
     </View>
   );
 }

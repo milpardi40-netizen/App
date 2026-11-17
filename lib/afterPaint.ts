@@ -59,3 +59,29 @@ export function whenIdle(task: Task, fallbackDelay = 400): () => void {
     if (handle !== undefined) idleWindow.cancelIdleCallback?.(handle);
   };
 }
+
+/**
+ * Loads screen modules before they are needed.
+ *
+ * A learner reads the language chooser for a second or two before tapping a card, and the language home
+ * for another moment before tapping a level. Warming the module the next tap will open — on idle, one at
+ * a time — means the tap itself only has to mount a screen that is already in memory.
+ */
+export function prefetchLater(loaders: ReadonlyArray<() => Promise<unknown>>, delay = 900): () => void {
+  let cancelled = false;
+  const run = async () => {
+    for (const load of loaders) {
+      if (cancelled) return;
+      try {
+        await load();
+      } catch {
+        // A screen that cannot be loaded now is still loaded when it is opened; nothing to report here.
+      }
+    }
+  };
+  const stop = whenIdle(() => { void run(); }, delay);
+  return () => {
+    cancelled = true;
+    stop();
+  };
+}

@@ -3,7 +3,7 @@ import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import DailyPlanCard from '@/components/DailyPlanCard';
 import { buildDailyPlan, type DailyPlanStep } from '@/lib/dailyPlan';
 import { getStudyStreak } from '@/lib/studyStreak';
@@ -34,6 +34,8 @@ import LevelReadinessLine from '@/components/LevelReadinessLine';
 import PlacementCard from '@/components/PlacementCard';
 import { auditLessonsFromLearning, courseReadiness } from '@/lib/content/courseAudit';
 import { afterPaint } from '@/lib/afterPaint';
+import OpeningOverlay from '@/components/OpeningOverlay';
+import { useOpeningNavigation } from '@/lib/useOpeningNavigation';
 import type { CourseLevelId as StarterLevelId } from '@/lib/courseContent';
 import type { CourseProgress } from '@/lib/courseProgress';
 import { toPersianDigits as fa } from '@/lib/format';
@@ -91,7 +93,6 @@ export default function StarterHome({course}: {course: StarterCourse}) {
   const readiness = useMemo(() => courseReadiness(course.id as 'de' | 'fr' | 'es', auditLessonsFromLearning(course.lessons as ReadonlyArray<import('@/lib/languages/types').LearningLesson & { levelId: number }>)), [course]);
   const {lessons, levels, progress: courseProgress} = course;
   const {loadStarterLessonSessionWithPresence} = course.sessions;
-  const router = useRouter();
   const { width } = useWindowDimensions();
   const compact = width < 640;
   const [progress, setProgress] = useState<CourseProgress | null>(null);
@@ -102,6 +103,8 @@ export default function StarterHome({course}: {course: StarterCourse}) {
   const [retry, setRetry] = useState(0);
   const [hasStartedCourse, setHasStartedCourse] = useState(false);
   const [plan, setPlan] = useState<readonly DailyPlanStep[]>([]);
+  // A level card answers the tap immediately; its library loads on the next frame.
+  const { opening, open } = useOpeningNavigation();
 
   useFocusEffect(useCallback(() => {
     let alive = true;
@@ -175,12 +178,12 @@ export default function StarterHome({course}: {course: StarterCourse}) {
     levelCounts[level.id] = { completed: inLevel.filter(lesson => completedSet.has(lesson.id)).length, total: inLevel.length };
   });
 
-  const openLevel = (levelId: StarterLevelId) => router.push(`${course.home}/library?level=${levelId}` as never);
+  const openLevel = (levelId: StarterLevelId) => open(`${course.home}/library?level=${levelId}`);
 
   // Level replay is temporary; only the same-lesson reset replaces a saved attempt.
-  const replayBeginnerLevel = () => router.push({ pathname: `${course.home}/lesson`, params: { id: lessons[0].id, levelReplay: '1' } } as never);
+  const replayBeginnerLevel = () => open(`${course.home}/lesson?id=${encodeURIComponent(lessons[0].id)}&levelReplay=1`);
   const openNextLesson = () => {
-    if (resumeLesson) router.push(`${course.home}/lesson?id=${encodeURIComponent(resumeLesson.id)}` as never);
+    if (resumeLesson) open(`${course.home}/lesson?id=${encodeURIComponent(resumeLesson.id)}`);
     else openLevel(0);
   };
 
@@ -243,7 +246,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                 <Text style={styles.panelTitle}>سطح {course.name} خودت را انتخاب کن</Text>
                 <Text style={styles.panelHint}>از هر سطحی که درس دارد شروع کن.</Text>
               </View>
-              <Pressable accessibilityRole="button" style={styles.libraryLink} onPress={() => router.push(`${course.home}/library` as never)}>
+              <Pressable accessibilityRole="button" style={styles.libraryLink} onPress={() => open(`${course.home}/library`)}>
                 <Text style={styles.libraryLinkText}>کتابخانه</Text>
                 <ChevronLeft size={16} color={HomeColors.accent} />
               </Pressable>
@@ -321,20 +324,20 @@ export default function StarterHome({course}: {course: StarterCourse}) {
           {hasLegacyProgress && unfinishedFoundation ? <View style={starterOnlyStyles.foundationCard}>
             <Text style={starterOnlyStyles.foundationTitle}>درس‌های پایهٔ تازه اضافه شده‌اند</Text>
             <Text style={starterOnlyStyles.foundationText}>برای مرور صداها، واژه‌ها و عبارت‌های کوتاه می‌توانید از اینجا شروع کنید. درس و پیشرفت قبلی شما محفوظ است.</Text>
-            <Pressable accessibilityRole="button" accessibilityLabel="شروع درس‌های پایهٔ جدید" style={starterOnlyStyles.foundationButton} onPress={() => router.push(`${course.home}/lesson?id=${encodeURIComponent(unfinishedFoundation.id)}` as never)}><Text style={starterOnlyStyles.foundationButtonText}>دیدن درس‌های پایه</Text></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel="شروع درس‌های پایهٔ جدید" style={starterOnlyStyles.foundationButton} onPress={() => open(`${course.home}/lesson?id=${encodeURIComponent(unfinishedFoundation.id)}`)}><Text style={starterOnlyStyles.foundationButtonText}>دیدن درس‌های پایه</Text></Pressable>
           </View> : null}
 
-          <Pressable accessibilityRole="button" accessibilityLabel="نقشهٔ A1 این زبان" style={starterOnlyStyles.foundationCard} onPress={() => router.push(`${course.home}/library?level=1` as never)}>
+          <Pressable accessibilityRole="button" accessibilityLabel="نقشهٔ A1 این زبان" style={starterOnlyStyles.foundationCard} onPress={() => open(`${course.home}/library?level=1`)}>
             <Text style={starterOnlyStyles.foundationTitle}>نقشهٔ A1 · Foundation و Survival</Text>
             <Text style={starterOnlyStyles.foundationText}>۲۵ موضوع پایه و ۳۰ موضوع کاربردی؛ درس‌های مرتبط موجود و موضوعات در حال تدوین را ببینید.</Text>
           </Pressable>
 
-          <Pressable accessibilityRole="button" accessibilityLabel="نقشهٔ B1 این زبان" style={starterOnlyStyles.foundationCard} onPress={() => router.push(`${course.home}/library?level=3` as never)}>
+          <Pressable accessibilityRole="button" accessibilityLabel="نقشهٔ B1 این زبان" style={starterOnlyStyles.foundationCard} onPress={() => open(`${course.home}/library?level=3`)}>
             <Text style={starterOnlyStyles.foundationTitle}>نقشهٔ B1 · Foundation و Survival</Text>
             <Text style={starterOnlyStyles.foundationText}>۲۵ موضوع پایه و ۳۰ موقعیت کاربردی؛ ارتباط درس‌ها با موضوع‌ها جزئی است و به معنی پوشش کامل نیست.</Text>
           </Pressable>
 
-          <Pressable accessibilityRole="button" accessibilityLabel="نقشهٔ B2 این زبان" style={starterOnlyStyles.foundationCard} onPress={() => router.push(`${course.home}/library?level=4` as never)}>
+          <Pressable accessibilityRole="button" accessibilityLabel="نقشهٔ B2 این زبان" style={starterOnlyStyles.foundationCard} onPress={() => open(`${course.home}/library?level=4`)}>
             <Text style={starterOnlyStyles.foundationTitle}>نقشهٔ B2 · Foundation و Survival</Text>
             <Text style={starterOnlyStyles.foundationText}>۲۵ موضوع پایه و ۳۰ موقعیت پیشرفته؛ درس‌های مرتبط و سرفصل‌های در حال تدوین را ببینید.</Text>
           </Pressable>
@@ -410,7 +413,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
               accessibilityRole="button"
               accessibilityLabel="شروع از ابتدای این درس"
               style={({ pressed }) => [styles.startFromBeginningButton, pressed && styles.buttonPressed]}
-              onPress={() => router.push({ pathname: `${course.home}/lesson`, params: { id: heroLesson.id, fromStart: '1' } } as never)}
+              onPress={() => open(`${course.home}/lesson?id=${encodeURIComponent(heroLesson.id)}&fromStart=1`)}
             >
               <Volume2 size={17} color={HomeColors.accent} />
               <Text style={styles.startFromBeginningText}>شروع از ابتدا</Text>
@@ -429,7 +432,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
           {plan.length ? <View style={{ marginBottom: 12 }}>
             <DailyPlanCard
               steps={plan}
-              onOpen={step => router.push((step.id === 'lesson' ? `${course.home}/lesson${resumeLesson ? `?id=${resumeLesson.id}` : ''}` : step.route) as never)}
+              onOpen={step => open(step.id === 'lesson' ? `${course.home}/lesson${resumeLesson ? `?id=${encodeURIComponent(resumeLesson.id)}` : ''}` : step.route)}
             />
           </View> : null}
 
@@ -472,7 +475,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
               </View>
             </View>
             <View style={[styles.quickRow, compact && styles.quickRowCompact]}>
-              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => router.push(`${course.home}/review` as never)}>
+              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => open(`${course.home}/review`)}>
                 <View style={[styles.quickIcon, { backgroundColor: HomeColors.sageSoft }]}><RefreshCw size={18} color={HomeColors.sage} /></View>
                 <View style={styles.quickCopy}>
                   <Text style={styles.quickTitle}>مرور آموخته‌های این زبان</Text>
@@ -481,7 +484,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                 <ChevronLeft size={17} color={HomeColors.muted} />
               </Pressable>
               {course.id === 'de' ? (
-                <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => router.push(`${course.home}/vocabulary` as never)}>
+                <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => open(`${course.home}/vocabulary`)}>
                   <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><Sparkles size={18} color={HomeColors.accent} /></View>
                   <View style={styles.quickCopy}>
                     <Text style={styles.quickTitle}>واژه‌های آلمانی</Text>
@@ -490,7 +493,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                   <ChevronLeft size={17} color={HomeColors.muted} />
                 </Pressable>
               ) : null}
-              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => router.push(`${course.home}/studio` as never)}>
+              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => open(`${course.home}/studio`)}>
                 <View style={[styles.quickIcon, { backgroundColor: '#FEF3C7' }]}><Award size={18} color="#D97706" /></View>
                 <View style={styles.quickCopy}>
                   <Text style={styles.quickTitle}>آزمون و مسیر تکمیلی</Text>
@@ -498,7 +501,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                 </View>
                 <ChevronLeft size={17} color={HomeColors.muted} />
               </Pressable>
-              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => router.push(`${course.home}/library` as never)}>
+              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => open(`${course.home}/library`)}>
                 <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><MessageCircle size={18} color={HomeColors.accent} /></View>
                 <View style={styles.quickCopy}>
                   <Text style={styles.quickTitle}>کتابخانهٔ درس‌های این زبان</Text>
@@ -516,6 +519,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
         </View>
       </ScrollView>
       <StarterBottomNav course={course} />
+      <OpeningOverlay visible={opening} />
     </View>
   );
 }
