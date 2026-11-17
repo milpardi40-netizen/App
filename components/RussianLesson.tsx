@@ -28,7 +28,8 @@ import { bandReadinessForLevel } from '@/lib/content/readiness';
 
 import type { RussianLessonSession } from '@/lib/languages/russianStudyState';
 import { toPersianDigits as fa } from '@/lib/format';
-import { playRussianSpeech, stopRussianSpeech } from '@/lib/russianSpeech';
+import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
+import { narrationRate, type NarrationPace } from '@/lib/narration';
 import { Typography } from '@/lib/theme';
 import { shuffleChecks } from '@/lib/shuffleChecks';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
@@ -43,16 +44,15 @@ import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNav
 
 const stages = RUSSIAN_LESSON_STAGES;
 
-/** سرعت پخش: معمولی برای شنیدن خودکار و آهسته برای تکرار دقیق‌تر. */
-const NORMAL_SPEECH_RATE = 0.85;
-const SLOW_SPEECH_RATE = 0.5;
-/** سرعت طبیعی گفتار روزمره — برای گوشِ آماده. */
-const NATURAL_SPEECH_RATE = 1.0;
+/** سرعت‌ها از قرارداد مشترک روایت می‌آیند: یک صدا برای درس، سطح و واژه‌ها. */
 
 export default function RussianLesson({ lesson, fromStart = false }: { lesson: RussianCourseLesson; fromStart?: boolean }) {
   const router = useRouter();
   const { levelReplay } = useLocalSearchParams<{ levelReplay?: string }>();
   const courseLevel = RUSSIAN_LEVELS.find(item => item.id === lesson.levelId) ?? RUSSIAN_LEVELS[0];
+  const pace = (name: NarrationPace) => narrationRate('ru-RU', name);
+  // Warm the phone voice while the lesson paints, so the first sentence is not late.
+  useEffect(() => { warmRussianSpeech(); }, []);
   const [stage, setStage] = useState(0);
   const [sentenceIndex, setSentenceIndex] = useState(0);
 
@@ -184,7 +184,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
   }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
-  const speak = useCallback((text: string, rate = 0.78) => {
+  const speak = useCallback((text: string, rate = narrationRate('ru-RU', 'listen')) => {
     setSpeechError('');
     void playRussianSpeech(text, rate, () => setSpeechError('صدای روسی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.'));
   }, []);
@@ -192,7 +192,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   // Read the visible main sentence on entry, resume, and each sentence change.
   useEffect(() => {
     if (!sessionReady || stage !== 1 || !current) return;
-    speak(current.text, NORMAL_SPEECH_RATE);
+    speak(current.text, pace('normal'));
   }, [lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak]);
 
   const startCurrentLessonFromBeginning = () => {
@@ -209,7 +209,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
     setSessionError('');
     setLoadingRetry(value => value + 1);
   };
-  const selectSentence = (index: number, rate = 0.72) => {
+  const selectSentence = (index: number, rate = narrationRate('ru-RU', 'listen')) => {
     setSentenceIndex(index);
     setRevealed(false);
     setSpeechError('');
@@ -219,7 +219,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
   useEffect(() => {
     if (stage !== 2) return;
-    return autoRead(lesson.sentences.length, index => selectSentence(index, 0.72), undefined, 900);
+    return autoRead(lesson.sentences.length, index => selectSentence(index, pace('listen')), undefined, 900);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, lesson.id]);
 
@@ -246,7 +246,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       setSentenceIndex(0);
       setRevealed(false);
       // Main sentences are spoken by the effect; practice keeps its existing behavior.
-      if (nextStage === 3) speak(lesson.sentences[0].text, NORMAL_SPEECH_RATE);
+      if (nextStage === 3) speak(lesson.sentences[0].text, pace('normal'));
       else if (nextStage !== 1) void stopRussianSpeech();
       return;
     }
@@ -334,9 +334,9 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           </View>
           <PersianBridgeCard sentence={current} />
           <View style={styles.replayRow}>
-            <Pressable accessibilityRole="button" accessibilityLabel="پخش آهستهٔ جمله" style={styles.replayButton} onPress={() => speak(current.text, SLOW_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="پخش معمولی جمله" style={styles.replayButton} onPress={() => speak(current.text, NORMAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, NATURAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel="پخش آهستهٔ جمله" style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel="پخش معمولی جمله" style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, pace('natural'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
           </View>
           <SpeakCheck key={current.id} text={current.text} locale="ru-RU" accent={Palette.success} />
         </View>}

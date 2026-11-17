@@ -8,6 +8,7 @@ import { A2_CHECKPOINT } from '@/lib/languages/a2Checkpoint';
 import { A1_CHECKPOINT, type A1CheckpointProduction, type A1CheckpointQuestion } from '@/lib/languages/a1Checkpoint';
 import type { NewLanguageId } from '@/lib/languages/newCourses';
 import { playStarterSpeech, stopStarterSpeech } from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import { Typography } from '@/lib/theme';
 import { toPersianDigits as fa } from '@/lib/format';
 
@@ -48,7 +49,7 @@ export default function StarterA1Checkpoint({language,locale,level=1}:{language:
   const [speechError,setSpeechError]=useState('');
   const data=(level === 4 ? B2_CHECKPOINT : level === 3 ? B1_CHECKPOINT : level === 2 ? A2_CHECKPOINT : A1_CHECKPOINT)[language];
   useEffect(()=>()=>{void stopStarterSpeech();},[language]);
-  const speak=(text:string)=>{setSpeechError('');void playStarterSpeech(locale,text,0.7,()=>setSpeechError('پخش صدا در دسترس نیست؛ تنظیمات گفتار دستگاه را بررسی کنید.'),()=>setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد.'));};
+  const speak=(text:string)=>{setSpeechError('');void playStarterSpeech(locale, text, narrationRate(locale, 'listen'),()=>setSpeechError('پخش صدا در دسترس نیست؛ تنظیمات گفتار دستگاه را بررسی کنید.'),()=>setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد.'));};
   return <View style={s.card}>
     <Pressable accessibilityRole="button" accessibilityState={{expanded:open}} onPress={()=>{if(open) void stopStarterSpeech();setOpen(v=>!v);}} style={s.toggle}><Text style={s.title}>تمرین جمع‌بندی {level === 4 ? 'B2' : level === 3 ? 'B1' : `A${level}`}</Text><Text style={s.icon}>{open?'−':'+'}</Text></Pressable>
     {open && <>

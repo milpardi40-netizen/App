@@ -6,8 +6,9 @@ import { Check, ChevronLeft, RefreshCw, Sparkles, Volume2, ArrowRight, Play, Mic
 import SpeakCheck from '@/components/SpeakCheck';
 import { ReviewRatingGrid } from '@/components/ReviewRecall';
 import { speakPersian } from '@/lib/persianSpeech';
-import { playRussianSpeech, stopRussianSpeech } from '@/lib/russianSpeech';
-import { playStarterSpeech, stopStarterSpeech } from '@/lib/starterSpeech';
+import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
+import { playStarterSpeech, stopStarterSpeech, warmStarterSpeech } from '@/lib/starterSpeech';
+import { narrationRate, type NarrationPace } from '@/lib/narration';
 import { firstLetterHint, hasSpokenSentence, spokenSentence, spokenTarget, WORD_LAB_LOCALE, WORD_LAB_NAME, WORD_LAB_WORDS, type WordLabLanguage, type WordLabWord } from '@/lib/languages/wordLab';
 import { buildWordSession, loadWordProgress, rateWordCard, saveWordProgress, wordReason, wordStats, type WordProgress } from '@/lib/wordLabProgress';
 import { markPlanStep } from '@/lib/dailyPlan';
@@ -51,6 +52,8 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const router = useRouter();
   const words = WORD_LAB_WORDS[language];
   const locale = WORD_LAB_LOCALE[language];
+  // The word lab is part of the same narrator as the lesson: one pace ladder for the whole course.
+  const pace = useCallback((name: NarrationPace) => narrationRate(locale, name), [locale]);
   const languageName = WORD_LAB_NAME[language];
   const home = `/learn/${language}` as const;
 
@@ -97,6 +100,10 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   }, [language, reloadToken, words]);
 
   // Read the saved choice and follow later automatic switches, so the label always tells the truth.
+  useEffect(() => {
+    if (language === 'ru') warmRussianSpeech(); else warmStarterSpeech(locale);
+  }, [language, locale]);
+
   useEffect(() => {
     let alive = true;
     void prefersRecordedSpeech().then(value => { if (alive) setUseRecorded(value); });
@@ -158,7 +165,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   /** One pass only: target language, then Persian. The word is never played twice in a row. */
   const playOnce = useCallback(async (item: WordLabWord) => {
     const token = ++playback.current;
-    await sayTarget(item, 0.72);
+    await sayTarget(item, pace('word'));
     if (token !== playback.current) return;
     await new Promise<void>(resolve => { speakPersian(item.fa); setTimeout(resolve, Math.min(3200, 900 + item.fa.length * 90)); });
   }, [sayTarget]);
@@ -166,7 +173,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   /** Step 2: the sentence itself, once, followed by its Persian meaning. */
   const playSentence = useCallback(async (item: WordLabWord) => {
     const token = ++playback.current;
-    await saySentence(item, 0.68);
+    await saySentence(item, pace('sentence'));
     if (token !== playback.current) return;
     await new Promise<void>(resolve => { speakPersian(item.exampleFa); setTimeout(resolve, Math.min(3600, 900 + item.exampleFa.length * 90)); });
   }, [saySentence]);

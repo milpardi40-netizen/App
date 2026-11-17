@@ -11,6 +11,7 @@ import { getA1Curriculum } from '@/lib/languages/a1Curriculum';
 import { afterPaint, whenIdle } from '@/lib/afterPaint';
 import OpeningOverlay from '@/components/OpeningOverlay';
 import { useOpeningNavigation } from '@/lib/useOpeningNavigation';
+import { warmStarterSpeech } from '@/lib/starterSpeech';
 import StarterA1Checkpoint from '@/components/StarterA1Checkpoint';
 import { getA2Curriculum } from '@/lib/languages/a2Curriculum';
 import { countA2GrammarPatterns } from '@/lib/languages/a2Grammar';
@@ -134,6 +135,9 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
   // buttons, around a thousand views). Painting one section per frame keeps the tap instant: the learner
   // sees the first section at once and the rest follow within a few frames, instead of one long block.
   useEffect(() => { setVisibleSections(1); }, [selected?.id]);
+  // The level page is the screen learners practise from: start the engine here so the first card
+  // they tap already has a warm voice.
+  useEffect(() => { warmStarterSpeech(course.locale); }, [course.locale]);
 
   const completedIds = progress?.completedLessonIds;
   const completedSet = useMemo(() => new Set(completedIds ?? []), [completedIds]);

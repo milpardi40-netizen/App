@@ -4,6 +4,7 @@ import {Pressable,StyleSheet,View} from 'react-native';
 import {b2Workshops,type B2Workshop} from '@/lib/languages/b2Workshops';
 import type {NewLanguageId} from '@/lib/languages/newCourses';
 import {playStarterSpeech,stopStarterSpeech} from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import {Typography} from '@/lib/theme';
 import {toPersianDigits as fa} from '@/lib/format';
 import StarterPracticeDraft from '@/components/StarterPracticeDraft';
@@ -13,7 +14,7 @@ import {practiceDraftKey} from '@/lib/languages/localPracticeDraft';
 type Request={id:string;serial:number};
 function Exercise({task,locale,language,level}:{task:B2Workshop;locale:string;language:NewLanguageId;level:'b1'|'b2'}){
  const [answers,setAnswers]=useState<Record<number,number>>({}),[showText,setShowText]=useState(task.mode==='reading'),[showModel,setShowModel]=useState(false),[showSpoken,setShowSpoken]=useState(false),[error,setError]=useState('');
- const speak=(text:string)=>{setError('');void playStarterSpeech(locale,text,0.8,()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=(text:string)=>{setError('');void playStarterSpeech(locale, text, narrationRate(locale, 'listen'),()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  return <View style={s.detail}><Text style={s.heading}>{task.title} · {task.mode==='reading'?'خواندن':'شنیدن'}</Text>
   {task.mode==='listening'&&<><Text style={s.note}>ابتدا گوش کنید؛ در صورت نیاز متن را نمایش دهید. این متن ساختگی است و با صدای دستگاه خوانده می‌شود، نه صدای واقعی یا صدای جداگانهٔ گویندگان.</Text><Pressable accessibilityRole="button" accessibilityLabel={`پخش موقعیت ${task.title}`} onPress={()=>speak(task.text)} style={s.action}><Text style={s.actionText}>پخش متن موقعیت</Text></Pressable><Pressable accessibilityRole="button" accessibilityState={{expanded:showText}} onPress={()=>setShowText(v=>!v)} style={s.action}><Text style={s.actionText}>{showText?'پنهان کردن متن':'نمایش متن شنیداری'}</Text></Pressable></>}
   {task.mode==='reading'&&<><Pressable accessibilityRole="button" accessibilityLabel={`شنیدن متن خواندنی ${task.title}`} onPress={()=>speak(task.text)} style={s.action}><Text style={s.actionText}>شنیدن متن خواندنی</Text></Pressable></>}

@@ -4,12 +4,13 @@ import {Pressable,StyleSheet,View} from 'react-native';
 import {branchConversations,type BranchConversation} from '@/lib/languages/branchConversations';
 import type {NewLanguageId} from '@/lib/languages/newCourses';
 import {playStarterSpeech,stopStarterSpeech} from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import {Typography} from '@/lib/theme';
 import {toPersianDigits as fa} from '@/lib/format';
 function Conversation({task,language,locale}:{task:BranchConversation;language:NewLanguageId;locale:string}){
  const [nodeId,setNodeId]=useState('start'),[chosen,setChosen]=useState<number|null>(null),[history,setHistory]=useState<{message:string;response:string}[]>([]),[finished,setFinished]=useState(false),[error,setError]=useState('');
  const node=task.nodes.find(x=>x.id===nodeId);if(!node)return null;const selected=chosen===null?undefined:node.options[chosen];
- const speak=(text:string)=>{setError('');void playStarterSpeech(locale,text,0.85,()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=(text:string)=>{setError('');void playStarterSpeech(locale, text, narrationRate(locale, 'listen'),()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  const advance=()=>{if(!selected?.appropriate)return;setHistory(v=>[...v,{message:node.message[language],response:selected.text[language]}]);setChosen(null);if(selected.next)setNodeId(selected.next);else setFinished(true);};
  const reset=()=>{void stopStarterSpeech();setNodeId('start');setChosen(null);setHistory([]);setFinished(false);};
  return <View style={s.detail}><Text style={s.heading}>{task.title}</Text><Text style={s.body}>{task.opening}</Text>

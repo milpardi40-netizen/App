@@ -1,10 +1,11 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from 'expo-router';
 import { Brain, Check, CheckCircle2, Clock3, RefreshCw, Sparkles, Volume2 } from 'lucide-react-native';
-import * as Speech from 'expo-speech';
+import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
+import { narrationRate } from '@/lib/narration';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { RussianBottomNav } from '@/components/RussianBottomNav';
 import { RUSSIAN_LESSONS, russianProgress } from '@/lib/languages/russian';
@@ -13,7 +14,6 @@ import { toPersianDigits as fa } from '@/lib/format';
 import { ReviewRatingGrid, ReviewSpeakGate, reviewReason } from '@/components/ReviewRecall';
 import { Typography } from '@/lib/theme';
 import { markPlanStep } from '@/lib/dailyPlan';
-import { speechTagFor } from '@/lib/speechLanguage';
 
 function contentForCard(card: SentenceReviewCard) {
   const lesson = RUSSIAN_LESSONS.find(item => item.id === card.lessonId);
@@ -48,7 +48,7 @@ export default function RussianReview() {
 
   useFocusEffect(useCallback(() => {
     void load();
-    return () => { void Speech.stop(); };
+    return () => { void stopRussianSpeech(); };
   }, [load]));
 
   const currentCard = sessionCards[cardIndex];
@@ -70,7 +70,7 @@ export default function RussianReview() {
     setSaving(true);
     setError('');
     try {
-      void Speech.stop();
+      void stopRussianSpeech();
       await russianProgress.rateReviewCard(currentCard.id, rating);
       void markPlanStep('review').catch(() => undefined);
       if (cardIndex + 1 >= sessionCards.length) {
@@ -87,10 +87,13 @@ export default function RussianReview() {
     } finally { setSaving(false); }
   };
 
+  // Review is part of the same narrator as the lesson: same engine, same voice list, same fallbacks,
+  // same pace — instead of a bare Speech.speak() that bypassed all of it with a private 0.78.
+  useEffect(() => { warmRussianSpeech(); }, []);
+
   const speak = (text: string) => {
     setError('');
-    void Speech.stop();
-    Speech.speak(text, { language: speechTagFor('ru-RU'), rate: .78, onError: () => setError('صدای روسی دستگاه در دسترس نیست؛ جمله همچنان برای خواندن نمایش داده می‌شود.') });
+    void playRussianSpeech(text, narrationRate('ru-RU', 'normal'), () => setError('صدای روسی دستگاه در دسترس نیست؛ جمله همچنان برای خواندن نمایش داده می‌شود.'));
   };
 
   if (sessionActive && currentContent) {

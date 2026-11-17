@@ -1,7 +1,8 @@
 import * as Speech from 'expo-speech';
 import { playPreferredRecording, playFallbackRecording, noteSpeechSuccess } from '@/lib/content/speechFallback';
 import { speechTagFor } from './speechLanguage';
-import { voiceFor } from './voiceRotation';
+import { voiceFor, warmVoices } from './voiceRotation';
+import { recordedPlaybackRate } from './narration';
 
 // Serialize stop/start requests: an asynchronous stop must not cancel the next
 // sentence after it has started. Only the most recent request may speak.
@@ -13,15 +14,26 @@ function enqueue(operation: () => Promise<void>): Promise<void> {
   return queue;
 }
 
+const warmed = { value: false };
+
+/** Start the engine and its voice list while the lesson is still painting, so the first tap speaks. */
+export function warmRussianSpeech(): void {
+  if (warmed.value) return;
+  warmed.value = true;
+  warmVoices();
+  void Speech.stop().catch(() => undefined);
+}
+
 export function playRussianSpeech(text: string, rate: number, onError?: () => void, onDone?: () => void): Promise<void> {
   const request = ++requestId;
   return enqueue(async () => {
     if (request !== requestId) return;
     await Speech.stop().catch(() => undefined);
     if (request !== requestId) return;
-    // Content-pack recordings win over the device voice (same voice on every phone, no TTS dependency).
-    // Device TTS stays primary; recordings are used only on devices that opted in.
-    if (await playPreferredRecording(text, rate / 0.78)) { onDone?.(); return; }
+    // Device TTS stays primary; recordings are used only on devices that opted in, and at the tempo
+    // the shared narration contract defines for this language.
+    const recordedRate = recordedPlaybackRate('ru-RU', rate);
+    if (await playPreferredRecording(text, recordedRate)) { onDone?.(); return; }
     if (request !== requestId) return;
     const voice = await voiceFor('ru-RU', text).catch(() => undefined);
     if (request !== requestId) return;
@@ -37,13 +49,13 @@ export function playRussianSpeech(text: string, rate: number, onError?: () => vo
           onError: () => {
             if (request !== requestId) return;
             if (withVoice && voice) { say(false); return; }
-            void playFallbackRecording(text, rate / 0.78).then(ok => { if (request === requestId && !ok) onError?.(); });
+            void playFallbackRecording(text, recordedRate).then(ok => { if (request === requestId && !ok) onError?.(); });
           },
         });
       } catch {
         if (request !== requestId) return;
         if (withVoice && voice) { say(false); return; }
-        void playFallbackRecording(text, rate / 0.78).then(ok => { if (request === requestId && !ok) onError?.(); });
+        void playFallbackRecording(text, recordedRate).then(ok => { if (request === requestId && !ok) onError?.(); });
       }
     };
     say(true);

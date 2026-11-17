@@ -1,6 +1,7 @@
 import * as Speech from 'expo-speech';
 import { playPreferredRecording, playFallbackRecording, noteSpeechSuccess } from '@/lib/content/speechFallback';
 import { speechTagFor } from './speechLanguage';
+import { recordedPlaybackRate } from './narration';
 import { voiceFor } from './voiceRotation';
 
 // Serialize stop/start requests: an asynchronous stop must not cancel the next
@@ -21,7 +22,7 @@ export function playTurkishSpeech(text: string, rate: number, onError?: () => vo
     if (request !== requestId) return;
     // Content-pack recordings win over the device voice (same voice on every phone, no TTS dependency).
     // Device TTS stays primary; recordings are used only on devices that opted in.
-    if (await playPreferredRecording(text, rate / 0.78)) return;
+    if (await playPreferredRecording(text, recordedPlaybackRate('tr-TR', rate))) return;
     if (request !== requestId) return;
     const voice = await voiceFor('tr-TR', text).catch(() => undefined);
     if (request !== requestId) return;
@@ -37,13 +38,13 @@ export function playTurkishSpeech(text: string, rate: number, onError?: () => vo
           onError: () => {
             if (request !== requestId) return;
             if (withVoice && voice) { say(false); return; }
-            void playFallbackRecording(text, rate / 0.78).then(ok => { if (request === requestId && !ok) onError?.(); });
+            void playFallbackRecording(text, recordedPlaybackRate('tr-TR', rate)).then(ok => { if (request === requestId && !ok) onError?.(); });
           },
         });
       } catch {
         if (request !== requestId) return;
         if (withVoice && voice) { say(false); return; }
-        void playFallbackRecording(text, rate / 0.78).then(ok => { if (request === requestId && !ok) onError?.(); });
+        void playFallbackRecording(text, recordedPlaybackRate('tr-TR', rate)).then(ok => { if (request === requestId && !ok) onError?.(); });
       }
     };
     say(true);

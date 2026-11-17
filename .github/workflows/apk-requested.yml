@@ -209,7 +209,9 @@ jobs:
           echo "applicationId: $(grep -m1 applicationId android/app/build.gradle)"
       - &validate
         name: Verify the Firebase-free chat alert path
-        run: npm run validate:background-notifications
+        run: |
+          npm run validate:background-notifications
+          npm run validate:narration
       - &build
         name: Build the release APK
         run: |

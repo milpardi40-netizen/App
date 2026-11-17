@@ -4,12 +4,13 @@ import {Pressable,StyleSheet,View} from 'react-native';
 import {b2GrammarLab,type B2GrammarCard} from '@/lib/languages/b2GrammarLab';
 import type {NewLanguageId} from '@/lib/languages/newCourses';
 import {playStarterSpeech,stopStarterSpeech} from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import {Typography} from '@/lib/theme';
 
 type Request={id:string;serial:number};
 function Card({card,locale}:{card:B2GrammarCard;locale:string}){
  const [answer,setAnswer]=useState<number|null>(null),[error,setError]=useState('');
- const speak=(text:string)=>{setError('');void playStarterSpeech(locale,text,0.85,()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=(text:string)=>{setError('');void playStarterSpeech(locale, text, narrationRate(locale, 'listen'),()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  return <View style={s.detail}><Text style={s.heading}>{card.title}</Text><Text style={s.body}>{card.explanation}</Text><Text style={s.target}>{card.example}</Text><Text style={s.body}>{card.translation}</Text>
   <Pressable accessibilityRole="button" accessibilityLabel={`شنیدن مثال ${card.title}`} onPress={()=>speak(card.example)} style={s.action}><Text style={s.actionText}>شنیدن مثال</Text></Pressable>{!!error&&<Text accessibilityRole="alert" style={s.error}>{error}</Text>}
   <Text style={s.prompt}>{card.prompt}</Text>{card.choices.map((choice,i)=><Pressable key={choice} accessibilityRole="radio" accessibilityState={{checked:answer===i}} onPress={()=>setAnswer(i)} style={[s.choice,answer===i&&s.selected]}><Text style={s.target}>{choice}</Text></Pressable>)}

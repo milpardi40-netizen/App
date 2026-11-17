@@ -9,6 +9,7 @@ import { FOUNDATION_LANGUAGES, FOUNDATION_TOPICS, getFoundationGreetings, isFoun
 import { isNewLanguage } from '@/lib/languages/newCourses';
 import { isLanguageEnabled } from '@/lib/features';
 import { playStarterSpeech, stopStarterSpeech } from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 
@@ -46,7 +47,7 @@ export default function FoundationA1Route() {
       <View style={s.card}>
         <Text style={s.count}>{index < 15 ? 'نمونهٔ اصلی' : 'نمونهٔ تکمیلی'} · {fa(index+1)} از {fa(sentences.length)}</Text>
         <Text style={s.target}>{current.text}</Text><Text style={s.pronunciation}>{current.pronunciation}</Text><Text style={s.translation}>{current.fa}</Text>
-        <View style={s.actions}><Pressable accessibilityRole="button" style={s.secondary} onPress={()=>speak(.5)}><Text style={s.secondaryText}>پخش آهسته</Text></Pressable><Pressable accessibilityRole="button" style={s.secondary} onPress={()=>speak(1)}><Text style={s.secondaryText}>پخش معمولی</Text></Pressable></View>
+        <View style={s.actions}><Pressable accessibilityRole="button" style={s.secondary} onPress={()=>speak(narrationRate(course.locale,'slow'))}><Text style={s.secondaryText}>پخش آهسته</Text></Pressable><Pressable accessibilityRole="button" style={s.secondary} onPress={()=>speak(narrationRate(course.locale,'normal'))}><Text style={s.secondaryText}>پخش معمولی</Text></Pressable></View>
         {!!error && <Text accessibilityRole="alert" style={s.error}>{error}</Text>}
         <Text style={s.note}>صدا با موتور گفتار دستگاه ساخته می‌شود، نه فایل گویندهٔ ضبط‌شده. پس از شنیدن، جمله را تکرار کنید؛ صدای شما ارزیابی نمی‌شود.</Text>
         <View style={s.actions}><Pressable accessibilityRole="button" disabled={index===0} accessibilityState={{disabled:index===0}} style={[s.secondary,index===0&&s.disabled]} onPress={()=>{setIndex(index-1);setError('');void stopStarterSpeech();}}><Text style={s.secondaryText}>نمونهٔ قبلی</Text></Pressable><Pressable accessibilityRole="button" disabled={index===sentences.length-1} accessibilityState={{disabled:index===sentences.length-1}} style={[s.secondary,index===sentences.length-1&&s.disabled]} onPress={()=>{setIndex(index+1);setError('');void stopStarterSpeech();}}><Text style={s.secondaryText}>نمونهٔ بعدی</Text></Pressable></View>

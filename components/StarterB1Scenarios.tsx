@@ -2,6 +2,7 @@ import { LocalizedText as Text } from '@/components/LocalizedText';
 import {useEffect,useState} from 'react';
 import {Pressable,StyleSheet,View} from 'react-native';
 import {playStarterSpeech,stopStarterSpeech} from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import {b1Scenarios,type B1Scenario} from '@/lib/languages/b1Scenarios';
 import type {NewLanguageId} from '@/lib/languages/newCourses';
 import {Typography} from '@/lib/theme';
@@ -10,7 +11,7 @@ import StarterPracticeDraft from '@/components/StarterPracticeDraft';
 import {practiceDraftKey} from '@/lib/languages/localPracticeDraft';
 function Scenario({task,locale,language}:{task:B1Scenario;locale:string;language:NewLanguageId}){
  const [answers,setAnswers]=useState<Record<number,number>>({});const [showText,setShowText]=useState(task.mode==='reading');const [error,setError]=useState('');
- const speak=()=>{setError('');void playStarterSpeech(locale,task.text,0.8,()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=()=>{setError('');void playStarterSpeech(locale, task.text, narrationRate(locale, 'listen'),()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  return <View style={s.scenario}><Text style={s.heading}>{task.title} · {task.mode==='reading'?'خواندن':'شنیدن'}</Text>
   {task.mode==='listening'&&<><Pressable accessibilityRole="button" accessibilityLabel={`پخش متن ${task.title}`} onPress={speak} style={s.action}><Text style={s.actionText}>پخش پیام شنیداری</Text></Pressable><Pressable accessibilityRole="button" accessibilityState={{expanded:showText}} onPress={()=>setShowText(v=>!v)} style={s.action}><Text style={s.actionText}>{showText?'پنهان کردن متن':'نمایش متن پیام'}</Text></Pressable></>}
   {!!error&&<Text accessibilityRole="alert" style={s.error}>{error}</Text>}{showText&&<Text style={s.target}>{task.text}</Text>}

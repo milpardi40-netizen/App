@@ -1,6 +1,7 @@
 import * as Speech from 'expo-speech';
 import { playPreferredRecording, playFallbackRecording, noteSpeechSuccess } from '@/lib/content/speechFallback';
 import { speechTagFor } from './speechLanguage';
+import { recordedPlaybackRate } from './narration';
 
 let requestId = 0;
 let queue: Promise<void> = Promise.resolve();
@@ -48,6 +49,23 @@ async function findVoices(locale: string): Promise<VoiceCandidate[]> {
   return candidates;
 }
 
+const warmed = new Set<string>();
+
+/**
+ * Prepare the phone's engine before the learner taps.
+ *
+ * The first expo-speech request of a session pays the engine start-up and the voice-list round trip,
+ * which is exactly the delay a learner hears as "the voice is not ready" on the first card. Warming
+ * once per locale on screen entry keeps the first tap as fast as the second.
+ */
+export function warmStarterSpeech(locale: string): void {
+  const key = normalized(locale);
+  if (warmed.has(key)) return;
+  warmed.add(key);
+  void Speech.stop().catch(() => undefined);
+  void findVoices(locale).catch(() => undefined);
+}
+
 export function playStarterSpeech(locale: string, text: string, rate: number, onError?: () => void, onVoiceFallback?: () => void) {
   const request = ++requestId;
   queue = queue.catch(() => undefined).then(async () => {
@@ -55,12 +73,14 @@ export function playStarterSpeech(locale: string, text: string, rate: number, on
     await Speech.stop().catch(() => undefined);
     if (request !== requestId) return;
     // Device TTS stays primary; recordings are used only on devices that opted in.
-    if (await playPreferredRecording(text, rate)) return;
+    // Same tempo as the device voice: the shared contract owns the pack-tempo calibration.
+    const recordedRate = recordedPlaybackRate(locale, rate);
+    if (await playPreferredRecording(text, recordedRate)) return;
     if (request !== requestId) return;
     const candidates = await findVoices(locale);
     if (request !== requestId) return;
     const fail = () => {
-      void playFallbackRecording(text, rate).then(ok => { if (request === requestId && !ok) onError?.(); });
+      void playFallbackRecording(text, recordedRate).then(ok => { if (request === requestId && !ok) onError?.(); });
     };
     if (!candidates.length) { fail(); return; }
 

@@ -2,6 +2,7 @@ import { LocalizedText as Text } from '@/components/LocalizedText';
 import {useEffect,useState} from 'react';
 import {Pressable,StyleSheet,View} from 'react-native';
 import {playStarterSpeech,stopStarterSpeech} from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import type {NewLanguageId} from '@/lib/languages/newCourses';
 import type {B2Workshop} from '@/lib/languages/b2Workshops';
 import {practiceDraftKey} from '@/lib/languages/localPracticeDraft';
@@ -14,7 +15,7 @@ type Mode='listening'|'reading';
 function Receptive({tasks,mode,locale,language}:{tasks:readonly B2Workshop[];mode:Mode;locale:string;language:NewLanguageId}){
  const [answers,setAnswers]=useState<Record<string,number>>({}),[result,setResult]=useState<number|null>(null),[showText,setShowText]=useState<Record<string,boolean>>({}),[error,setError]=useState('');
  const total=tasks.length*2;const complete=tasks.every(task=>task.questions.slice(0,2).every((_,i)=>answers[`${task.id}-${i}`]!==undefined));
- const speak=(text:string)=>{setError('');void playStarterSpeech(locale,text,0.85,()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=(text:string)=>{setError('');void playStarterSpeech(locale, text, narrationRate(locale, 'listen'),()=>setError('پخش صدا در دسترس نیست؛ تنظیمات دستگاه را بررسی کنید.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  return <View style={s.section}><Text style={s.heading}>{mode==='listening'?'درک شنیداری':'درک خواندنی'}</Text>{tasks.map(task=><View key={task.id} style={s.task}><Text style={s.heading}>{task.title}</Text>
   {mode==='listening'&&<><Pressable accessibilityRole="button" accessibilityLabel={`پخش سنجش ${task.title}`} onPress={()=>speak(task.text)} style={s.action}><Text style={s.actionText}>پخش پیام</Text></Pressable><Pressable accessibilityRole="button" accessibilityState={{expanded:!!showText[task.id]}} onPress={()=>setShowText(v=>({...v,[task.id]:!v[task.id]}))} style={s.action}><Text style={s.actionText}>{showText[task.id]?'پنهان کردن متن':'نمایش متن'}</Text></Pressable></>}
   {(mode==='reading'||showText[task.id])&&<Text style={s.target}>{task.text}</Text>}
@@ -28,7 +29,7 @@ function WritingReflection(){
 }
 function Productive({tasks,level,language,locale,independent=false}:{tasks:readonly B2Workshop[];level:'b1'|'b2';language:NewLanguageId;locale:string;independent?:boolean}){
  const [spoken,setSpoken]=useState(false),[written,setWritten]=useState(false),[error,setError]=useState('');const oral=tasks[0],writtenTask=tasks[1];
- const speak=(text:string)=>{setError('');void playStarterSpeech(locale,text,0.85,()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=(text:string)=>{setError('');void playStarterSpeech(locale, text, narrationRate(locale, 'listen'),()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  return <View style={s.section}><Text style={s.heading}>گفتار</Text><Text style={s.body}>{oral.speaking}</Text><StarterOralSelfReview/>
  <Pressable accessibilityRole="button" accessibilityState={{expanded:spoken}} style={s.action} onPress={()=>setSpoken(v=>!v)}><Text style={s.actionText}>{spoken?'پنهان کردن نمونهٔ گفتار':'نمایش نمونهٔ گفتار'}</Text></Pressable>{spoken&&<><Text style={s.target}>{oral.spokenModel}</Text><Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونهٔ گفتار سنجش" style={s.action} onPress={()=>speak(oral.spokenModel)}><Text style={s.actionText}>شنیدن نمونه</Text></Pressable></>}
  {!!error&&<Text accessibilityRole="alert" style={s.error}>{error}</Text>}
