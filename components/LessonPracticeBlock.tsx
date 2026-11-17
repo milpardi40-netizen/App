@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet, TextInput, View } from 'react-native';
-import { LocalizedText as Text } from '@/components/LocalizedText';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { Check, CheckCircle2, Flame, Volume2, X, SkipForward } from 'lucide-react-native';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { Typography } from '@/lib/theme';
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   comboPill: { alignSelf: 'flex-end', flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, backgroundColor: '#FEF3C7', borderWidth: 1, borderColor: '#FCD34D' },
   comboText: { fontFamily: Typography.fontFamily, fontSize: 12, color: '#92400E' },
   kind: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.primaryDark, textAlign: 'right', writingDirection: 'rtl', marginTop: 2 },
-  foreignPrompt: { fontSize: 17, lineHeight: 28, color: Palette.ink, textAlign: 'center', writingDirection: 'ltr' },
+  foreignPrompt: { fontFamily: Typography.latinFontFamily, fontSize: 17, lineHeight: 28, color: Palette.ink, textAlign: 'center', writingDirection: 'ltr' },
   hint: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#8A929E', textAlign: 'right', writingDirection: 'rtl' },
   tfMeaning: { fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 26, color: Palette.ink, textAlign: 'center', writingDirection: 'rtl' },
   tfRow: { flexDirection: 'row-reverse', gap: 12, marginTop: 4 },
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   choice: { minHeight: 48, borderRadius: 12, borderWidth: 1, borderColor: Palette.border, backgroundColor: Palette.surfaceMuted, paddingHorizontal: 13, paddingVertical: 11, justifyContent: 'center' },
   choiceCorrect: { borderColor: Palette.success, backgroundColor: Palette.successSoft },
   choiceWrong: { borderColor: Palette.danger, backgroundColor: '#FDECEC' },
-  choiceForeign: { fontSize: 13, lineHeight: 21, color: Palette.ink, textAlign: 'right', writingDirection: 'ltr' },
+  choiceForeign: { fontFamily: Typography.latinFontFamily, fontSize: 13, lineHeight: 21, color: Palette.ink, textAlign: 'right', writingDirection: 'ltr' },
   choicePersian: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 21, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
   orderLine: { minHeight: 52, borderRadius: 12, borderWidth: 1, borderStyle: 'dashed', borderColor: Palette.border, padding: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 6, alignItems: 'center' },
   orderPlaceholder: { fontFamily: Typography.fontFamily, fontSize: 12, color: '#8A929E', writingDirection: 'rtl' },
@@ -275,20 +275,20 @@ const styles = StyleSheet.create({
   token: { borderRadius: 10, borderWidth: 1, borderColor: Palette.border, backgroundColor: Palette.surfaceMuted, paddingHorizontal: 10, paddingVertical: 7 },
   tokenPicked: { backgroundColor: Palette.primarySoft, borderColor: Palette.primary },
   tokenUsed: { backgroundColor: 'transparent', borderColor: 'transparent' },
-  tokenText: { fontSize: 13, lineHeight: 20, color: Palette.ink, writingDirection: 'ltr' },
+  tokenText: { fontFamily: Typography.latinFontFamily, fontSize: 13, lineHeight: 20, color: Palette.ink, writingDirection: 'ltr' },
   matchGrid: { flexDirection: 'row-reverse', gap: 8, flexWrap: 'wrap' },
   matchCol: { flex: 1, gap: 8, minWidth: 130 },
   matchCell: { minHeight: 56, borderRadius: 12, borderWidth: 1, borderColor: Palette.border, backgroundColor: Palette.surfaceMuted, paddingHorizontal: 10, paddingVertical: 8, justifyContent: 'center' },
   matchActive: { borderColor: Palette.primary, backgroundColor: Palette.primarySoft },
   writePrompt: { fontFamily: Typography.fontFamily, fontSize: 16, lineHeight: 26, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
-  writeInput: { minHeight: 52, borderRadius: 14, borderWidth: 1.5, borderColor: Palette.border, backgroundColor: Palette.surface, paddingHorizontal: 14, paddingVertical: 12, fontSize: 17, color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
+  writeInput: { fontFamily: Typography.latinFontFamily, minHeight: 52, borderRadius: 14, borderWidth: 1.5, borderColor: Palette.border, backgroundColor: Palette.surface, paddingHorizontal: 14, paddingVertical: 12, fontSize: 17, color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
   writeActions: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
   writeCheck: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 18, paddingVertical: 10, borderRadius: 999 },
   writeCheckText: { fontFamily: Typography.fontFamily, fontSize: 13, color: '#FFFFFF' },
   writeGiveUp: { paddingHorizontal: 10, paddingVertical: 10 },
   writeGiveUpText: { fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.text },
   writeResult: { gap: 4 },
-  writeLine: { fontSize: 17, lineHeight: 30, textAlign: 'left', writingDirection: 'ltr', color: Palette.ink },
+  writeLine: { fontFamily: Typography.latinFontFamily, fontSize: 17, lineHeight: 30, textAlign: 'left', writingDirection: 'ltr', color: Palette.ink },
   writeWord: { color: Palette.ink },
   writeWordOk: { backgroundColor: Palette.successSoft, color: Palette.success },
   writeWordTypo: { backgroundColor: '#FEF3C7', color: '#92400E' },
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   feedback: { borderRadius: 12, padding: 12, backgroundColor: Palette.surfaceMuted, gap: 5 },
   feedbackOk: { fontFamily: Typography.fontFamily, color: Palette.success, fontSize: 12, textAlign: 'right', writingDirection: 'rtl' },
   feedbackNo: { fontFamily: Typography.fontFamily, color: Palette.danger, fontSize: 12, textAlign: 'right', writingDirection: 'rtl', width: '100%' },
-  answerForeign: { fontSize: 13, lineHeight: 21, color: Palette.ink, textAlign: 'right', writingDirection: 'ltr' },
+  answerForeign: { fontFamily: Typography.latinFontFamily, fontSize: 13, lineHeight: 21, color: Palette.ink, textAlign: 'right', writingDirection: 'ltr' },
   answerFa: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#8A929E', textAlign: 'right', writingDirection: 'rtl' },
   feedbackActions: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 },
   listenAgain: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 999, borderWidth: 1, borderColor: Palette.border, backgroundColor: Palette.surface },

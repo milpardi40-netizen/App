@@ -33,6 +33,7 @@ import type { StarterCourse, StarterLesson } from '@/lib/languages/newCourses';
 import LevelReadinessLine from '@/components/LevelReadinessLine';
 import PlacementCard from '@/components/PlacementCard';
 import { auditLessonsFromLearning, courseReadiness } from '@/lib/content/courseAudit';
+import { afterPaint } from '@/lib/afterPaint';
 import type { CourseLevelId as StarterLevelId } from '@/lib/courseContent';
 import type { CourseProgress } from '@/lib/courseProgress';
 import { toPersianDigits as fa } from '@/lib/format';
@@ -104,33 +105,39 @@ export default function StarterHome({course}: {course: StarterCourse}) {
 
   useFocusEffect(useCallback(() => {
     let alive = true;
+    let stopDeferred: (() => void) | undefined;
     void getStudyStreak().then(value => { if (alive) setStreak(value); }).catch(() => undefined);
     void Promise.all([courseProgress.getCourseProgress(), courseProgress.getDueReviewCards()])
-      .then(async ([nextProgress, cards]) => {
+      .then(([nextProgress, cards]) => {
         if (!alive) return;
+        // Paint the hero, the levels and the roadmap first: the plan card and the resume flag need extra
+        // storage reads and a plan build, and waiting for them made the language open feel frozen.
         setProgress(nextProgress);
         setDueCount(cards.length);
         setError('');
-        const now = new Date();
-        const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        void buildDailyPlan({
-          lessonDone: nextProgress.lastActiveDate === todayKey && nextProgress.completedLessonIds.length > 0,
-          reviewsDue: cards.length,
-          lessonRoute: `${course.home}/lesson`,
-          reviewRoute: `${course.home}/review`,
-          speakRoute: `${course.home}/pronunciation`,
-        }).then(steps => { if (alive) setPlan(steps); }).catch(() => undefined);
-        const completed = new Set(nextProgress.completedLessonIds);
-        const currentLesson = lessons.find(lesson => lesson.id === nextProgress.currentLessonId && !completed.has(lesson.id))
-          ?? lessons.find(lesson => !completed.has(lesson.id));
-        const savedSession = currentLesson
-          ? await loadStarterLessonSessionWithPresence(currentLesson.id)
-          : null;
-        if (!alive) return;
-        setHasStartedCourse(nextProgress.completedLessonIds.length > 0 || !!savedSession?.hasSavedSession);
+        stopDeferred = afterPaint(() => {
+          const now = new Date();
+          const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+          void buildDailyPlan({
+            lessonDone: nextProgress.lastActiveDate === todayKey && nextProgress.completedLessonIds.length > 0,
+            reviewsDue: cards.length,
+            lessonRoute: `${course.home}/lesson`,
+            reviewRoute: `${course.home}/review`,
+            speakRoute: `${course.home}/pronunciation`,
+          }).then(steps => { if (alive) setPlan(steps); }).catch(() => undefined);
+          const completed = new Set(nextProgress.completedLessonIds);
+          const currentLesson = lessons.find(lesson => lesson.id === nextProgress.currentLessonId && !completed.has(lesson.id))
+            ?? lessons.find(lesson => !completed.has(lesson.id));
+          void Promise.resolve(currentLesson ? loadStarterLessonSessionWithPresence(currentLesson.id) : null)
+            .then(savedSession => {
+              if (!alive) return;
+              setHasStartedCourse(nextProgress.completedLessonIds.length > 0 || !!savedSession?.hasSavedSession);
+            })
+            .catch(() => undefined);
+        });
       })
       .catch(() => { if (alive) setError('پیشرفت این زبان خوانده نشد؛ اطلاعات قبلی تغییر نکرده است. دوباره تلاش کنید.'); });
-    return () => { alive = false; };
+    return () => { alive = false; stopDeferred?.(); };
   }, [retry]));
 
   const completedIds = progress?.completedLessonIds ?? [];
@@ -146,8 +153,19 @@ export default function StarterHome({course}: {course: StarterCourse}) {
   const levelLessons = lessons.filter(lesson => lesson.levelId === activeLevel.id);
   const levelCompleted = levelLessons.filter(lesson => completedSet.has(lesson.id)).length;
   const levelProgress = levelLessons.length ? (levelCompleted / levelLessons.length) * 100 : 0;
-  const sentenceCount = lessons.reduce((count, lesson) => count + lesson.sentences.length, 0);
-  const uniqueWords = new Set(lessons.flatMap(lesson => lesson.sentences.flatMap(sentence => sentence.vocabulary.map(item => item.word)))).size;
+  // One pass over the course, reused until the course object changes: this walked every sentence of the
+  // course on every render, including the renders the focus effect triggers a moment later.
+  const { sentenceCount, uniqueWords } = useMemo(() => {
+    let sentences = 0;
+    const words = new Set<string>();
+    for (const lesson of lessons) {
+      for (const sentence of lesson.sentences) {
+        sentences += 1;
+        for (const item of sentence.vocabulary) words.add(item.word);
+      }
+    }
+    return { sentenceCount: sentences, uniqueWords: words.size };
+  }, [lessons]);
   const firstSentence = heroLesson.sentences[0];
   const heroLessonOrder = Math.max(1, lessons.findIndex(lesson => lesson.id === heroLesson.id) + 1);
   const courseProgressPercent = lessons.length ? (completedCount / lessons.length) * 100 : 0;

@@ -21,12 +21,14 @@ assert.equal(themeFor('android').latinFontFamily, 'serif');
 assert.equal(themeFor('android').fontFamily, 'Beiruti');
 
 let state;
-const fakeReact = { ...React, useState: initial => [state === undefined ? (state = initial) : state, next => { state = next; }] };
-const native = { Text: 'NativeText', TextInput: 'NativeTextInput' };
+const fakeReact = { ...React, useState: initial => [state === undefined ? (state = initial) : state, next => { state = next; }], useContext: () => 1 };
+const native = { Text: 'NativeText', TextInput: 'NativeTextInput', StyleSheet: { flatten: value => [].concat(value).filter(Boolean) } };
 const { textScript, LocalizedText, LocalizedTextInput } = loadTsx('components/LocalizedText.tsx', name => {
   if (name === 'react') return fakeReact;
   if (name === 'react-native') return native;
   if (name === '@/lib/theme') return { Typography: themeFor('web') };
+  // The screen-level scale context lives in the scroll shell; the component only reads it.
+  if (name === '@/components/FitScrollView') return { TextScaleContext: { Provider: 'Provider', Consumer: 'Consumer', _currentValue: 1 } };
   return require(name);
 });
 
@@ -35,10 +37,11 @@ for (const text of ['English', 'Русский', 'İstanbul Türkçesi', 'Deutsc
 for (const text of ['۱۲۳', '12:30', '—', '1️⃣', 'ℹ️', '\uE001', '😀', '']) assert.equal(textScript(text), undefined, text);
 
 const fixedSize = { fontSize: 13, color: 'red', fontWeight: '700' };
+
 const fa = LocalizedText.render({ children: 'فارسی', style: fixedSize, accessibilityLabel: 'برچسب', selectable: true }, null);
 assert.equal(fa.props.children, 'فارسی');
 assert.equal(fa.props.style[0], fixedSize);
-assert.equal(fa.props.style[1].fontFamily, 'Beiruti');
+assert.equal(fa.props.style[1].fontFamily, 'Beiruti-Bold');
 assert.equal(fa.props.style[1].fontWeight, '400');
 assert.equal(fa.props.style[1].textAlign, 'right');
 assert.equal(fa.props.style[1].writingDirection, 'rtl');
@@ -50,14 +53,18 @@ for (const word of ['English', 'Русский', 'İstanbul', 'Français', 'Espa
   assert.equal(result.props.style[1].fontFamily, webFont);
   assert.equal(result.props.style[1].writingDirection, 'ltr');
   assert.equal(result.props.style[1].textAlign, 'left');
-  assert.equal(result.props.style[1].fontWeight, undefined);
+  assert.equal(result.props.style[1].fontWeight, '700');
   assert.equal(result.props.style[1].fontSize, undefined);
 }
-for (const symbol of ['—', '😀', '1️⃣', 'ℹ️', '\uE001', '۱۲۳', '']) {
+for (const symbol of ['—', '😀', '1️⃣', 'ℹ️', '\uE001', '']) {
   const result = LocalizedText.render({ children: symbol, style: fixedSize }, null);
   assert.equal(result.props.children, symbol);
   assert.equal(result.props.style[1], undefined, symbol);
 }
+// Persian digits get their own face so they match the Persian copy, without direction or alignment.
+const persianDigits = LocalizedText.render({ children: '۱۲۳', style: fixedSize }, null);
+assert.equal(persianDigits.props.style[1].fontFamily, 'Beiruti-Bold');
+assert.equal(persianDigits.props.style[1].writingDirection, undefined);
 const numeric = LocalizedText.render({ children: '12:30', style: fixedSize }, null);
 assert.equal(numeric.props.style[1].fontFamily, webFont);
 assert.equal(numeric.props.style[1].writingDirection, undefined);
@@ -74,7 +81,7 @@ function rawText(node) {
 }
 const mixedValue = 'سلام ((/həˈloʊ/!)) C1 и d’ici Français 🌍 1️⃣ ℹ️ \uE001، دنیا';
 const mixed = LocalizedText.render({ children: mixedValue, style: fixedSize, accessibilityRole: 'header', accessibilityLabel: 'عنوان' }, null);
-assert.equal(mixed.props.style[1].fontFamily, 'Beiruti');
+assert.equal(mixed.props.style[1].fontFamily, 'Beiruti-Bold');
 assert.equal(mixed.props.style[1].writingDirection, 'rtl');
 assert.equal(mixed.props.accessibilityRole, 'header');
 assert.equal(mixed.props.accessibilityLabel, 'عنوان');
@@ -104,7 +111,7 @@ assert(elements.some(element => element.type === native.Text && element.props.st
 const inputProps = { placeholder: 'فارسی', style: fixedSize, accessibilityLabel: 'نام', onChangeText: onPress };
 state = undefined;
 let input = LocalizedTextInput.render(inputProps, null);
-assert.equal(input.props.style[1].fontFamily, 'Beiruti');
+assert.equal(input.props.style[1].fontFamily, 'Beiruti-Bold');
 assert.equal(input.props.accessibilityLabel, 'نام');
 input.props.onChangeText('Français');
 input = LocalizedTextInput.render(inputProps, null);
@@ -112,7 +119,7 @@ assert.equal(input.props.style[1].fontFamily, webFont);
 assert.equal(input.props.style[1].writingDirection, 'ltr');
 input.props.onChangeText('متن English');
 input = LocalizedTextInput.render(inputProps, null);
-assert.equal(input.props.style[1].fontFamily, 'Beiruti');
+assert.equal(input.props.style[1].fontFamily, 'Beiruti-Bold');
 assert.equal(input.props.style[1].writingDirection, 'rtl');
 input = LocalizedTextInput.render({ ...inputProps, value: 'Русский' }, null);
 assert.equal(input.props.value, 'Русский');

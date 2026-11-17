@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   line: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
   lineSound: { width: 30, height: 30, borderRadius: 15, backgroundColor: Palette.surfaceMuted, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
   speaker: { fontFamily: Typography.fontFamily, fontSize: 11, color: Palette.muted, textAlign: 'left', writingDirection: 'ltr' },
-  lineText: { fontSize: 17, lineHeight: 27, color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
+  lineText: { fontFamily: Typography.latinFontFamily, fontSize: 17, lineHeight: 27, color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
   lineFa: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 22, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   playAll: { alignSelf: 'flex-start', flexDirection: 'row-reverse', alignItems: 'center', gap: 6, borderWidth: 1, borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 },
   playAllText: { fontFamily: Typography.fontFamily, fontSize: 12 },

@@ -1,7 +1,7 @@
-import { LocalizedText as Text } from '@/components/LocalizedText';
+import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, TextInput, View, type StyleProp, type TextStyle } from 'react-native';
+import { Platform, Pressable, StyleSheet, View, type StyleProp, type TextStyle } from 'react-native';
 import { Check, Mic2, PenLine, Volume2 } from 'lucide-react-native';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { Typography } from '@/lib/theme';
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   card: { borderRadius: 16, borderWidth: 1, borderColor: Palette.border, backgroundColor: Palette.surface, padding: 14, gap: 10 },
   sectionLabel: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   prompt: { fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 26, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
-  input: { minHeight: 120, borderRadius: 14, borderWidth: 1.5, borderColor: Palette.border, backgroundColor: Palette.surfaceMuted, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16, lineHeight: 24, color: Palette.ink, textAlign: 'left', writingDirection: 'ltr', textAlignVertical: 'top' },
+  input: { fontFamily: Typography.latinFontFamily, minHeight: 120, borderRadius: 14, borderWidth: 1.5, borderColor: Palette.border, backgroundColor: Palette.surfaceMuted, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16, lineHeight: 24, color: Palette.ink, textAlign: 'left', writingDirection: 'ltr', textAlignVertical: 'top' },
   meter: { gap: 6 },
   meterText: { fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   track: { height: 6, borderRadius: 3, backgroundColor: Palette.border, overflow: 'hidden', flexDirection: 'row-reverse' },

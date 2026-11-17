@@ -1,6 +1,6 @@
-import { LocalizedText as Text } from '@/components/LocalizedText';
+import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { Bug, CheckCircle2, Heart, Lightbulb, MessageSquareWarning, Send } from 'lucide-react-native';
 import { AppBottomNav } from '@/components/AppBottomNav';

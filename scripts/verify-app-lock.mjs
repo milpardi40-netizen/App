@@ -13,8 +13,12 @@ const appLock = read('lib/appLock.ts');
 const gate = read('components/AppLockGate.tsx');
 const settings = read('app/app-lock.tsx');
 const rootLayout = read('app/_layout.tsx');
-const humanChat = read('app/conversations/human/[conversationId].tsx');
-const emmaChat = read('app/conversations/emma.tsx');
+// The route files are thin switches: the learner build redirects, the admin build renders the chat
+// feature, so the deletion UI lives in the feature screen the route loads.
+const humanChat = read('features/chat/screens/HumanConversation.tsx');
+const contactsHome = read('features/chat/screens/ConversationsHome.tsx');
+const keyboardAttachment = read('components/KeyboardAttachedView.native.tsx');
+const emmaRoute = read('app/conversations/emma.tsx');
 const conversations = read('lib/conversations.ts');
 const migration = read('supabase/migrations/202610130001_user_chat_deletion.sql');
 
@@ -27,20 +31,23 @@ check(/nextFailures >= 5/.test(gate) && /30_000/.test(gate), 'pattern brute-forc
 check(/<AppLockGate>[\s\S]*?<Stack/.test(rootLayout), 'app lock guards the complete route stack');
 check(/savePattern\(pattern\)/.test(settings) && /setDeviceLockEnabled\(true\)/.test(settings), 'settings can independently enable pattern and phone lock');
 check(/deleteConversationForMe/.test(humanChat) && /confirmDeleteConversation/.test(humanChat), 'an open real-person chat can be deleted');
-check(/clearEmmaHistory/.test(emmaChat) && /confirmClearConversation/.test(emmaChat), 'the Emma chat history can be deleted');
+check(/deleteConversationForMe/.test(contactsHome), 'a contact and its conversation can be deleted from the chat list');
+check(/EmmaDisabled/.test(emmaRoute) && /<Redirect href=/.test(emmaRoute), 'the retired Emma coach route redirects instead of half-rendering');
 check(/hideConversationLocally/.test(conversations) && /\.from\('learning_contacts'\)[\s\S]*?\.delete\(\)/.test(conversations), 'contact deletion is immediate locally and RLS-protected remotely');
 check(/GRANT DELETE ON TABLE public\.learning_contacts TO authenticated/.test(migration), 'database migration grants the DELETE operation constrained by existing RLS');
+/** The chat composer rides on the shared keyboard attachment, which measures the real keyboard edge. */
 const composerFollowsKeyboard = file => {
-  const open = file.search(/<KeyboardStickyView\b[^>]*>/);
+  const open = file.search(/<KeyboardAttachedView\b[^>]*>/);
   if (open === -1) return false;
-  const tag = file.match(/<KeyboardStickyView\b[^>]*>/)[0];
-  const close = file.indexOf('</KeyboardStickyView>', open);
+  const tag = file.match(/<KeyboardAttachedView\b[^>]*>/)[0];
+  const close = file.indexOf('</KeyboardAttachedView>', open);
   if (close === -1) return false;
   const body = file.slice(open + tag.length, close);
-  return /offset=\{\{\s*closed:\s*0,\s*opened:\s*0\s*\}\}/.test(tag) && /styles\.composer/.test(body);
+  return /styles\.composer/.test(body) && /onLayout=/.test(tag);
 };
-check(composerFollowsKeyboard(humanChat) && composerFollowsKeyboard(emmaChat), 'both complete composers and their side buttons follow the keyboard animation');
-check(/composer:\s*\{\s*flexShrink:\s*0/.test(humanChat) && /composer:\s*\{\s*flexShrink:\s*0/.test(emmaChat), 'both composers remain fully visible during keyboard resize');
-check(!/marginBottom:\s*100/.test(humanChat) && !/marginBottom:\s*100/.test(emmaChat), 'no fixed composer offset fights keyboard movement');
+check(composerFollowsKeyboard(humanChat), 'the composer and its side buttons follow the keyboard animation');
+check(/keyboardDidShow/.test(keyboardAttachment) && /measureInWindow/.test(keyboardAttachment) && /Animated\.timing/.test(keyboardAttachment), 'the attachment measures the keyboard edge and animates the composer with it');
+check(/composer:\s*\{\s*flexShrink:\s*0/.test(humanChat), 'the composer stays fully visible during keyboard resize');
+check(!/marginBottom:\s*100/.test(humanChat), 'no fixed composer offset fights keyboard movement');
 
 console.log(`${checks} app-lock, deletion, and dynamic-keyboard checks passed.`);

@@ -8,6 +8,7 @@ import { BookOpen, Check, ChevronDown, ChevronLeft, ChevronUp, Clock3, Play, Spa
 import { EnglishLevelRail, EnglishProgressTrack, EnglishSectionHeading, displayEnglishModuleLabel, ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { getA1Curriculum } from '@/lib/languages/a1Curriculum';
+import { afterPaint, whenIdle } from '@/lib/afterPaint';
 import StarterA1Checkpoint from '@/components/StarterA1Checkpoint';
 import { getA2Curriculum } from '@/lib/languages/a2Curriculum';
 import { countA2GrammarPatterns } from '@/lib/languages/a2Grammar';
@@ -61,6 +62,8 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
   const [sessions, setSessions] = useState<Record<string, StarterLessonSession | null>>({});
   const [error, setError] = useState('');
   const [retry, setRetry] = useState(0);
+  /** The A1–B2 level pages list sixty topic cards or more; they arrive a frame later, see `afterPaint`. */
+  const [sectionsReady, setSectionsReady] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const pageRef = useRef<View>(null), workshopRef = useRef<View>(null), grammarRef = useRef<View>(null), studioRef = useRef<View>(null), serial = useRef(0);
   const [workshopRequest, setWorkshopRequest] = useState<{id:string;serial:number}|null>(null);
@@ -96,44 +99,95 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
 
   useFocusEffect(useCallback(() => {
     let alive = true;
-    void Promise.all([
-      courseProgress.getCourseProgress(),
-      Promise.all(lessons.map(async lesson => {
-        const saved = await loadStarterLessonSessionWithPresence(lesson.id);
-        return [lesson.id, saved.hasSavedSession ? saved.session : null] as const;
-      })),
-    ]).then(([nextProgress, nextSessions]) => {
-      if (!alive) return;
-      setProgress(nextProgress);
-      setSessions(Object.fromEntries(nextSessions));
-      setError('');
-    }).catch(() => { if (alive) setError('وضعیت ذخیره‌شده خوانده نشد؛ فهرست درس‌ها همچنان در دسترس است.'); });
-    return () => { alive = false; };
-  }, [retry]));
+    let stopBackfill: (() => void) | undefined;
+    // Only the level on screen needs its saved spots before it paints. Reading every lesson of the course
+    // (over two hundred in German) first made each level tap wait on the whole course; the other levels are
+    // filled in once the screen is idle, so their labels are just as correct a moment later.
+    const readSessions = (list: readonly StarterLesson[]) => Promise.all(list.map(async lesson => {
+      const saved = await loadStarterLessonSessionWithPresence(lesson.id);
+      return [lesson.id, saved.hasSavedSession ? saved.session : null] as const;
+    }));
+    const visible = selectedLessons;
+    void Promise.all([courseProgress.getCourseProgress(), readSessions(visible)])
+      .then(([nextProgress, nextSessions]) => {
+        if (!alive) return;
+        setProgress(nextProgress);
+        setSessions(Object.fromEntries(nextSessions));
+        setError('');
+        if (visible.length >= lessons.length) return;
+        stopBackfill = whenIdle(() => {
+          void readSessions(lessons).then(all => {
+            if (!alive) return;
+            setSessions(Object.fromEntries(all));
+          }).catch(() => undefined);
+        });
+      }).catch(() => { if (alive) setError('وضعیت ذخیره‌شده خوانده نشد؛ فهرست درس‌ها همچنان در دسترس است.'); });
+    return () => { alive = false; stopBackfill?.(); };
+  }, [retry, selectedLessons, lessons, courseProgress, loadStarterLessonSessionWithPresence]));
 
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
+  // The topic list of a level is the longest part of the page (B2 has 66 cards with their own practice
+  // buttons). Showing the first section at once and the rest right after the frame keeps the tap instant.
+  useEffect(() => {
+    setSectionsReady(false);
+    return afterPaint(() => setSectionsReady(true));
+  }, [selected?.id]);
 
-  const completedIds = progress?.completedLessonIds ?? [];
-  const levelStartLesson = selectedLessons.find(item => !completedIds.includes(item.id) && !!sessions[item.id])
-    ?? selectedLessons.find(item => !completedIds.includes(item.id))
+  const completedIds = progress?.completedLessonIds;
+  const completedSet = useMemo(() => new Set(completedIds ?? []), [completedIds]);
+  // One pass over the course, kept until the progress or the course changes: this used to re-filter every
+  // lesson for every level card, on every render.
+  const levelStats = useMemo(() => {
+    const stats = new Map<number, { total: number; completed: number; sentences: number }>();
+    for (const lesson of lessons) {
+      const entry = stats.get(lesson.levelId) ?? { total: 0, completed: 0, sentences: 0 };
+      entry.total += 1;
+      entry.sentences += lesson.sentences.length;
+      if (completedSet.has(lesson.id)) entry.completed += 1;
+      stats.set(lesson.levelId, entry);
+    }
+    return stats;
+  }, [lessons, completedSet]);
+  const courseTotals = useMemo(() => {
+    const words = new Set<string>();
+    let sentences = 0;
+    for (const lesson of lessons) {
+      for (const sentence of lesson.sentences) {
+        sentences += 1;
+        for (const item of sentence.vocabulary) words.add(item.word);
+      }
+    }
+    return { words: words.size, sentences };
+  }, [lessons]);
+  const levelStartLesson = selectedLessons.find(item => !completedSet.has(item.id) && !!sessions[item.id])
+    ?? selectedLessons.find(item => !completedSet.has(item.id))
     ?? selectedLessons[0];
-  const levelFullyCompleted = selectedLessons.length > 0 && selectedLessons.every(item => completedIds.includes(item.id));
+  const levelFullyCompleted = selectedLessons.length > 0 && selectedLessons.every(item => completedSet.has(item.id));
   const levelStartLabel = levelFullyCompleted ? (selected?.id === 1 || selected?.id === 2 || selected?.id === 3 || selected?.id === 4 ? 'بازبینی درس‌های موجود' : 'بازبینی این سطح') : levelStartLesson && sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
-  const firstUnfinished = lessons.find(item => !completedIds.includes(item.id)) ?? lessons[lessons.length - 1];
+  const firstUnfinished = lessons.find(item => !completedSet.has(item.id)) ?? lessons[lessons.length - 1];
   const activeLevelId = firstUnfinished.levelId;
-  const countFor = (levelId: StarterLevelId) => {
-    const inLevel = lessons.filter(item => item.levelId === levelId);
-    return { total: inLevel.length, completed: inLevel.filter(item => completedIds.includes(item.id)).length };
-  };
+  const countFor = (levelId: StarterLevelId) => levelStats.get(levelId) ?? { total: 0, completed: 0, sentences: 0 };
+  const selectedWords = useMemo(() => {
+    const words = new Set<string>();
+    for (const lesson of selectedLessons) for (const sentence of lesson.sentences) for (const item of sentence.vocabulary) words.add(item.word);
+    return words;
+  }, [selectedLessons]);
   const sentenceCount = selectedLessons.reduce((count, lesson) => count + lesson.sentences.length, 0);
-  const words = new Set(selectedLessons.flatMap(lesson => lesson.sentences.flatMap(sentence => sentence.vocabulary.map(item => item.word))));
-  const patternCount = selected?.id === 2
+  const words = selectedWords;
+  const patternCount = useMemo(() => (selected?.id === 2
     ? countA2GrammarPatterns(course.id, selectedLessons.map(lesson => lesson.id))
     : selected?.id === 3 ? countB1GrammarPatterns(course.id, selectedLessons.map(lesson => lesson.id))
     : selected?.id === 4 ? countB2GrammarPatterns(course.id, selectedLessons.map(lesson => lesson.id))
-    : selectedLessons.reduce((count, lesson) => count + lesson.sentences.filter(sentence => !!sentence.pattern).length, 0);
-  const allWords = new Set(lessons.flatMap(lesson => lesson.sentences.flatMap(sentence => sentence.vocabulary.map(item => item.word))));
-  const totalSentences = lessons.reduce((count, lesson) => count + lesson.sentences.length, 0);
+    : selectedLessons.reduce((count, lesson) => count + lesson.sentences.filter(sentence => !!sentence.pattern).length, 0)), [course.id, selected?.id, selectedLessons]);
+  const allWords = courseTotals.words;
+  const totalSentences = courseTotals.sentences;
+
+  const curriculumSections = useMemo(() => (selected?.id === 1 ? getA1Curriculum(course.id)
+    : selected?.id === 2 ? getA2Curriculum(course.id)
+    : selected?.id === 3 ? getB1Curriculum(course.id)
+    : selected?.id === 4 ? getB2Curriculum(course.id)
+    : []), [course.id, selected?.id]);
+  const shownSections = sectionsReady ? curriculumSections : curriculumSections.slice(0, 1);
 
   const openLevel = (levelId: StarterLevelId) => router.push(`${course.home}/library?level=${levelId}` as never);
   const openLesson = (id: string) => router.push(`${course.home}/lesson?id=${encodeURIComponent(id)}` as never);
@@ -156,7 +210,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
               <View style={styles.overviewMetrics}>
                 <View style={styles.overviewMetric}><Text style={styles.overviewMetricValue}>{fa(lessons.length)}</Text><Text style={styles.overviewMetricLabel}>درس موجود</Text></View><View style={styles.overviewMetricDivider} />
                 <View style={styles.overviewMetric}><Text style={styles.overviewMetricValue}>{fa(totalSentences)}</Text><Text style={styles.overviewMetricLabel}>نمونهٔ آموزشی</Text></View><View style={styles.overviewMetricDivider} />
-                <View style={styles.overviewMetric}><Text style={styles.overviewMetricValue}>{fa(allWords.size)}</Text><Text style={styles.overviewMetricLabel}>واژهٔ یکتا</Text></View>
+                <View style={styles.overviewMetric}><Text style={styles.overviewMetricValue}>{fa(allWords)}</Text><Text style={styles.overviewMetricLabel}>واژهٔ یکتا</Text></View>
               </View>
             </LinearGradient>
 
@@ -172,7 +226,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
             <View style={styles.levelList}>
               {levels.map(item => {
                 const stats = countFor(item.id);
-                const sentenceTotal = lessons.filter(lesson => lesson.levelId === item.id).reduce((count, lesson) => count + lesson.sentences.length, 0);
+                const sentenceTotal = countFor(item.id).sentences;
                 const pct = stats.total ? stats.completed / stats.total * 100 : 0;
                 return <Pressable key={item.id} accessibilityRole="button" accessibilityLabel={`فهرست درس‌های ${item.title}`} style={styles.levelOption} onPress={() => openLevel(item.id)}>
                   <LinearGradient colors={ENGLISH_LEVEL_GRADIENTS[item.id]} style={styles.levelOptionMark}><Text style={styles.levelOptionNumber}>{fa(Math.max(0, item.id))}</Text></LinearGradient>
@@ -231,7 +285,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
               {selected.id === 3 && <StarterB1Scenarios key={`${course.id}-b1-scenarios`} language={course.id} locale={course.locale} />}
               {selected.id === 3 && <StarterB2Workshops key={`${course.id}-b1-intensives`} language={course.id} locale={course.locale} request={null} level="b1" items={b1Intensive(course.id)}/>}
               <Text style={styles.focusDescription}>{selected.id === 1 ? 'نقشهٔ اختصاصی A1 این زبان دو بخش دارد. درس‌های موجود فقط پوشش بخشی از موضوع هستند؛ تکمیل یک درس به معنای تکمیل کل سرفصل یا سطح نیست.' : selected.id === 2 ? 'نقشهٔ اختصاصی A2 بر اساس سرفصل‌های درخواستی است؛ ارتباط یک درس با سرفصل به معنی پوشش کامل آن یا احراز سطح نیست.' : selected.id === 3 ? 'نقشهٔ B1 بر اساس سرفصل‌های درخواستی است؛ درس‌های موجود فقط بخشی از هر موضوع مرتبط را تمرین می‌دهند.' : 'نقشهٔ B2 بر اساس سرفصل‌های درخواستی است؛ پیوندها فقط تمرین مرتبط و جزئی را نشان می‌دهند و موضوع‌های بدون درس در حال تدوین‌اند.'}</Text>
-              {(selected.id === 1 ? getA1Curriculum(course.id) : selected.id === 2 ? getA2Curriculum(course.id) : selected.id === 3 ? getB1Curriculum(course.id) : getB2Curriculum(course.id)).map(section => <View key={section.id} style={styles.groupList}>
+              {shownSections.map(section => <View key={section.id} style={styles.groupList}>
                 <Text style={styles.lessonSectionTitle}>{section.title} · {fa(section.topics.length)} موضوع</Text>
                 {section.topics.map(topic => <View key={`${section.id}-${topic.number}`} style={styles.focusCard}>
                   <Text style={styles.topicTitle}>{fa(topic.number)}. {topic.title}</Text>
@@ -265,7 +319,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
             {selectedLessons.length ? <View style={styles.groupList}>{lessonGroups.map((group, index) => {
               const first = group.lessons[0];
               const last = group.lessons[group.lessons.length - 1];
-              const groupCompleted = group.lessons.filter(item => completedIds.includes(item.id)).length;
+              const groupCompleted = group.lessons.filter(item => completedSet.has(item.id)).length;
               const open = expandedGroup === index;
               return <View key={`${first.id}-${last.id}`} style={styles.group}>
                 <Pressable accessibilityRole="button" accessibilityState={{ expanded: open }} style={styles.groupHeader} onPress={() => setExpandedGroup(open ? -1 : index)}>
@@ -275,7 +329,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
                 </Pressable>
                 {open && <View style={styles.lessonList}>{group.lessons.map(item => {
                   const status = lessonStatus(item, progress, sessions);
-                  const complete = progress?.completedLessonIds.includes(item.id) ?? false;
+                  const complete = completedSet.has(item.id);
                   const resumable = !complete && status.startsWith('ادامه');
                   const sentence = item.sentences[0];
                   return <Pressable key={item.id} accessibilityRole="button" accessibilityLabel={`${selectedLessons.indexOf(item) + 1}. ${item.title}`} style={styles.lessonCard} onPress={() => openLesson(item.id)}>
