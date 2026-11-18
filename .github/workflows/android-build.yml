@@ -86,6 +86,7 @@ jobs:
           npm run validate:registration-admin
           npm run validate:narration
           npm run validate:assessment
+          npm run validate:progress
           npm run validate:language-entry
           npm run validate:personal-sync
           node scripts/verify-app-resume.cjs

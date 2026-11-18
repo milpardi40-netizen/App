@@ -204,7 +204,7 @@ export function EnglishSupplementTask({
  * options, so the assessment page looks the same whichever course it belongs to.
  */
 const assessment = StyleSheet.create({
-  taskCard: { alignItems: 'stretch', padding: 16, gap: 11, minHeight: 148, justifyContent: 'center' },
+  taskCard: { alignItems: 'stretch', padding: 16, gap: 10 },
   centerPrompt: { textAlign: 'center' },
   center: { textAlign: 'center' },
   option: { alignItems: 'center', justifyContent: 'center' },

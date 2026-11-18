@@ -14,9 +14,15 @@ import { Typography } from '@/lib/theme';
  */
 export const ASSESSMENT_MAX_WIDTH = 620;
 
-/** Height floor for one question card and for one choice, so the cards never look uneven. */
-export const ASSESSMENT_CARD_MIN_HEIGHT = 148;
+/**
+ * The answer rows are the equal-sized boxes: every choice has the same height in every language, so a
+ * stack of two-line Persian options and a stack of one-word Latin options line up the same way.
+ * A question itself is never padded out to a fixed height — that left short questions floating in
+ * empty cards with their text in the middle, which is what made the page look untidy.
+ */
 export const ASSESSMENT_CHOICE_MIN_HEIGHT = 48;
+/** Minimum height for the one framed surface that holds the questions. */
+export const ASSESSMENT_CARD_MIN_HEIGHT = 0;
 
 export const assessmentStyles = StyleSheet.create({
   /** Page column: centred, capped, equal gaps. */
@@ -27,38 +33,45 @@ export const assessmentStyles = StyleSheet.create({
     alignItems: 'stretch',
     gap: 14,
   },
-  /** Outer container of the assessment; the questions themselves are the cards. */
+  /**
+   * One framed surface holds the whole assessment. Every question used to be its own floating card,
+   * which read as a loose pile of tiles; the questions are now even sections of a single card.
+   */
   evidenceCard: {
     width: '100%',
     maxWidth: ASSESSMENT_MAX_WIDTH,
     alignSelf: 'center',
     marginTop: 18,
-    gap: 14,
-    padding: 0,
-    backgroundColor: 'transparent',
-  },
-  /** Every question is its own card, with the same floor height whatever its text length. */
-  question: {
-    width: '100%',
-    minHeight: ASSESSMENT_CARD_MIN_HEIGHT,
-    justifyContent: 'center',
-    gap: 11,
+    gap: 16,
     padding: 16,
-    borderRadius: 18,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: Palette.border,
     backgroundColor: Palette.surface,
     shadowColor: '#211A68',
-    shadowOpacity: 0.03,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 1,
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 2,
+  },
+  /**
+   * A question is an inset panel of that card: same padding, same radius, same gap for every question,
+   * and no forced height, so the stack is even without leaving empty space in short questions.
+   */
+  question: {
+    width: '100%',
+    gap: 9,
+    padding: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: Palette.border,
+    backgroundColor: Palette.surfaceMuted,
   },
   questionPrompt: {
     fontFamily: Typography.fontFamily,
     fontSize: 13,
     lineHeight: 24,
-    color: Palette.text,
+    color: Palette.ink,
     textAlign: 'center',
     writingDirection: 'rtl',
   },
@@ -67,12 +80,12 @@ export const assessmentStyles = StyleSheet.create({
     minHeight: ASSESSMENT_CHOICE_MIN_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 14,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: Palette.border,
-    backgroundColor: Palette.surfaceMuted,
+    backgroundColor: Palette.surface,
     paddingHorizontal: 14,
-    paddingVertical: 11,
+    paddingVertical: 10,
   },
   choiceSelected: { borderColor: Palette.primary, backgroundColor: Palette.primarySoft },
   choiceCorrect: { borderColor: Palette.success, backgroundColor: Palette.successSoft },
@@ -97,9 +110,11 @@ export const assessmentStyles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     gap: 6,
-    borderRadius: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Palette.border,
     padding: 12,
-    backgroundColor: Palette.surfaceMuted,
+    backgroundColor: Palette.surface,
   },
   feedbackTitle: {
     fontFamily: Typography.fontFamily,

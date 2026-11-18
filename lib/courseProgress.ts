@@ -208,6 +208,32 @@ async function writeRaw(value: string): Promise<void> {
   await AsyncStorage.setItem(KEY, value);
 }
 
+/** The device copy is the display source of truth; the account copy may only ever refine it. */
+async function readLocalProgress(): Promise<CourseProgress> {
+  try {
+    const raw = await readRaw();
+    return normalizeProgress(raw ? JSON.parse(raw) as Partial<CourseProgress> : {});
+  } catch {
+    return initialProgress();
+  }
+}
+
+/**
+ * Nothing that draws a progress line may wait on the account backend. A phone on a weak
+ * connection can leave `getSession()`/a select pending for minutes, which used to freeze the
+ * level card at "0 of 40" with an empty track even though the lessons were finished on the device.
+ */
+const CLOUD_READ_TIMEOUT_MS = 1200;
+const CLOUD_WRITE_TIMEOUT_MS = 8000;
+
+function bounded<T>(task: () => Promise<T>, ms: number): Promise<T | null> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return Promise.race([
+    task().catch(() => null),
+    new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), ms); }),
+  ]).finally(() => { if (timer) clearTimeout(timer); }) as Promise<T | null>;
+}
+
 function previousLocalDateKey(date = new Date()): string {
   const previous = new Date(date);
   previous.setDate(previous.getDate() - 1);
@@ -242,8 +268,9 @@ async function progressUserId(): Promise<string | null> {
   return session.session?.user.id ?? null;
 }
 
+/** Best-effort account copy. Bounded, because a stalled request must not hold a lesson or a screen. */
 async function uploadProgress(progress: CourseProgress): Promise<void> {
-  try {
+  await bounded(async () => {
     const userId = await progressUserId();
     if (!userId) return;
     await supabase.from('learning_progress').upsert({
@@ -251,54 +278,62 @@ async function uploadProgress(progress: CourseProgress): Promise<void> {
       progress,
       updated_at: progress.updatedAt,
     }, { onConflict: 'user_id' });
-  } catch {
-    // Local progress remains authoritative while offline and is retried later.
-  }
+  }, CLOUD_WRITE_TIMEOUT_MS).catch(() => null);
+  // Local progress remains authoritative while offline; the next save retries the upload.
 }
 
 async function saveProgress(progress: CourseProgress): Promise<CourseProgress> {
+  // Device first: lessons must be recorded even when the account backend is unreachable.
   await writeRaw(JSON.stringify(progress));
-  await uploadProgress(progress);
+  void uploadProgress(progress);
   void import('./personalLearningSync')
     .then(({ schedulePersonalLearningSync }) => schedulePersonalLearningSync())
     .catch(() => undefined);
   return progress;
 }
 
+/**
+ * Local progress answers immediately; the account copy is merged only if it arrives inside a short
+ * window. The previous implementation awaited the session and the row, so a slow network left the
+ * course map showing an empty progress line for lessons that were already finished.
+ */
 export async function getCourseProgress(): Promise<CourseProgress> {
-  try {
-    const raw = await readRaw();
-    let progress = normalizeProgress(raw ? JSON.parse(raw) as Partial<CourseProgress> : {});
+  const local = await readLocalProgress();
+  const account = await bounded(async () => {
     const userId = await progressUserId();
-    if (userId) {
-      const { data } = await supabase
-        .from('learning_progress')
-        .select('progress,updated_at')
-        .eq('user_id', userId)
-        .maybeSingle();
-      if (data?.progress) {
-        const remote = parseCourseProgressBackup(data.progress);
-        // A newly linked email account may already have progress from another
-        // device. Union completion/review evidence with this device instead of
-        // replacing one side based only on timestamps.
-        const merged = mergeSharedCourseProgress(progress, remote);
-        const changed = JSON.stringify(merged) !== JSON.stringify(remote);
-        progress = merged;
-        if (changed) await uploadProgress(progress);
-      } else {
-        await uploadProgress(progress);
-      }
-    }
-    await writeRaw(JSON.stringify(progress));
-    return progress;
-  } catch {
-    try {
-      const raw = await readRaw();
-      return normalizeProgress(raw ? JSON.parse(raw) as Partial<CourseProgress> : {});
-    } catch {
-      return initialProgress();
-    }
+    if (!userId) return { userId: null as string | null, remote: null as CourseProgress | null };
+    const { data } = await supabase
+      .from('learning_progress')
+      .select('progress,updated_at')
+      .eq('user_id', userId)
+      .maybeSingle();
+    return {
+      userId,
+      remote: data?.progress ? parseCourseProgressBackup(data.progress) : null,
+    };
+  }, CLOUD_READ_TIMEOUT_MS);
+
+  // No answer in time (or no session): the device copy is shown as it is.
+  if (!account || !account.userId) return local;
+
+  const remote = account.remote;
+  if (!remote) {
+    // First read for this account: publish what this device already knows, without blocking.
+    void uploadProgress(local);
+    return local;
   }
+
+  // A newly linked email account may already have progress from another device. Union
+  // completion/review evidence with this device instead of replacing one side by timestamp.
+  const merged = mergeSharedCourseProgress(local, remote);
+  const differsFromRemote = JSON.stringify(merged) !== JSON.stringify(remote);
+  try {
+    await writeRaw(JSON.stringify(merged));
+  } catch {
+    return local;
+  }
+  if (differsFromRemote) void uploadProgress(merged);
+  return merged;
 }
 
 /** Reset the resume point to a lesson without touching any content (used by "start over from the beginner level"). */

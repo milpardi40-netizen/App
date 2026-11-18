@@ -1,5 +1,6 @@
 name: Build requested APKs
 
+# rev 118: level progress line reads the device first (no blank track on a slow network); «سنجش کوتاه» back to one tidy card with equal answer rows
 # rev 117: Pre-A1 English rewritten (80 graded sentences, real dialogues, aimed beginner checks) + card/SpeakCheck display fixes
 # rev 116: six local learning events + simpler Russian word flow (auto RU→FA→RU)
 # rev 115: retention loop — daily study reminder, medals at lesson end, today plan, 10-sentence chunks
@@ -215,6 +216,7 @@ jobs:
           npm run validate:background-notifications
           npm run validate:narration
           npm run validate:assessment
+          npm run validate:progress
       - &build
         name: Build the release APK
         run: |

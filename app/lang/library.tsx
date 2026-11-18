@@ -1,9 +1,9 @@
 import { lessonUnit } from '@/lib/lessonUnits';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   BookOpen,
@@ -57,7 +57,8 @@ export default function EnglishLessonList() {
 
   useEffect(() => setHydrated(true), []);
   const selected = hydrated ? COURSE_LEVELS.find(item => String(item.id) === level) : undefined;
-  useEffect(() => {
+  // Re-read on every visit: a lesson finished moments ago must move this level's progress line.
+  useFocusEffect(useCallback(() => {
     let alive = true;
     void Promise.all([getCourseProgress(), loadStudy()]).then(([nextProgress, nextStudy]) => {
       if (alive) { setProgress(nextProgress); setStudy(nextStudy); }
@@ -65,7 +66,7 @@ export default function EnglishLessonList() {
       if (alive) setError('وضعیت ذخیره‌شده خوانده نشد؛ فهرست همچنان قابل استفاده است.');
     });
     return () => { alive = false; };
-  }, []);
+  }, []));
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
 
   const lessons = useMemo(() => selected ? SENTENCE_LESSONS.filter(item => item.levelId === selected.id) : [], [selected?.id]);

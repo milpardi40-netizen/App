@@ -1,0 +1,282 @@
+#!/usr/bin/env node
+/**
+ * Progress-display audit — "is the progress actually saved, and does the bar read it?"
+ *
+ * The level page prints `completed / lessons` and fills a track from the same numbers. That display is
+ * only as trustworthy as the read path, so this script drives the real stores in Node with an
+ * in-memory device storage and a fake account backend:
+ *
+ *   1. complete lessons → re-read → the ids are still there (the write reached the device),
+ *   2. the level metrics count them, so the bar has something to fill,
+ *   3. progress survives a restart (a second module instance reads the same device storage),
+ *   4. a slow or dead account backend never leaves the screen at zero (bounded, local-first read).
+ *
+ * Run: npm run validate:progress
+ */
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import esbuild from 'esbuild';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const cache = path.join(root, 'node_modules', '.cache', 'progress-audit');
+fs.mkdirSync(cache, { recursive: true });
+
+let checks = 0;
+const problems = [];
+function check(condition, message) {
+  if (!condition) problems.push(message);
+  else checks += 1;
+}
+
+/* ── fixtures: device storage + fake account backend ─────────────────────────────────────────── */
+
+process.env.EXPO_PUBLIC_SUPABASE_URL ||= 'https://audit.invalid';
+process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ||= 'audit';
+
+const deviceStorage = new Map();
+globalThis.__miloDeviceStorage = deviceStorage;
+
+const storageStub = `
+const store = globalThis.__miloDeviceStorage;
+const api = {
+  getItem: async key => (store.has(key) ? store.get(key) : null),
+  setItem: async (key, value) => { store.set(key, String(value)); },
+  removeItem: async key => { store.delete(key); },
+  multiGet: async keys => keys.map(key => [key, store.has(key) ? store.get(key) : null]),
+  multiSet: async pairs => { for (const [key, value] of pairs) store.set(key, String(value)); },
+  getAllKeys: async () => [...store.keys()],
+};
+module.exports = api;
+module.exports.default = api;
+`;
+
+const supabaseStub = `
+const mode = () => globalThis.__miloCloudMode || 'offline';
+const chain = {
+  select: () => chain,
+  eq: () => chain,
+  maybeSingle: async () => {
+    if (mode() === 'hang') return new Promise(() => {});
+    return { data: null, error: null };
+  },
+  upsert: async () => ({ data: null, error: null }),
+  update: () => chain,
+  insert: async () => ({ data: null, error: null }),
+  abortSignal: () => chain,
+  then: resolve => resolve({ data: null, error: null }),
+};
+const client = {
+  auth: {
+    getSession: async () => {
+      if (mode() === 'hang') return new Promise(() => {});
+      return { data: { session: null } };
+    },
+    signInAnonymously: async () => ({ data: { user: null }, error: { message: 'anonymous disabled' } }),
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
+  },
+  from: () => chain,
+  storage: { from: () => ({}) },
+  functions: { invoke: async () => ({ data: null }) },
+};
+module.exports = { createClient: () => client, default: { createClient: () => client } };
+`;
+
+const reactNativeStub = `
+const noop = () => {};
+module.exports = {
+  Platform: { OS: 'android', select: options => options.android ?? options.default },
+  StyleSheet: { create: value => value, flatten: value => value, hairlineWidth: 1 },
+  Dimensions: { get: () => ({ width: 390, height: 800 }) },
+  I18nManager: { isRTL: false },
+  Appearance: { getColorScheme: () => 'light' },
+  NativeModules: {},
+  TurboModuleRegistry: { get: () => null, getEnforcing: () => null },
+  NativeEventEmitter: class { addListener() { return { remove: noop }; } },
+  DeviceEventEmitter: { addListener: () => ({ remove: noop }), emit: noop },
+};
+`;
+
+const plugins = [{
+  name: 'progress-audit-stubs',
+  setup(build) {
+    const virtual = {
+      '@react-native-async-storage/async-storage': storageStub,
+      '@supabase/supabase-js': supabaseStub,
+      'react-native': reactNativeStub,
+    };
+    build.onResolve({ filter: /.*/ }, args => {
+      if (args.kind === 'entry-point') return null;
+      if (!args.path.startsWith('.') && !args.path.startsWith('/') && !args.path.startsWith('node:')) {
+        return { path: args.path, namespace: 'audit' };
+      }
+      return null;
+    });
+    build.onLoad({ filter: /.*/, namespace: 'audit' }, args => ({
+      contents: virtual[args.path] ?? 'module.exports = {};',
+      loader: 'js',
+    }));
+  },
+}];
+
+async function bundle(name) {
+  const outfile = path.join(cache, `${name}.cjs`);
+  await esbuild.build({
+    stdin: {
+      contents: `
+        export * as english from './lib/courseProgress';
+        export * as engine from './lib/englishLearningEngine';
+        export * as russian from './lib/languages/russian';
+        export * as content from './lib/courseContent';
+      `,
+      resolveDir: root,
+      sourcefile: 'progress-audit-entry.ts',
+      loader: 'ts',
+    },
+    bundle: true,
+    platform: 'node',
+    format: 'cjs',
+    outfile,
+    logLevel: 'silent',
+    plugins,
+    define: {
+      'process.env.EXPO_PUBLIC_SUPABASE_URL': '"https://audit.invalid"',
+      'process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY': '"audit"',
+      __DEV__: 'false',
+    },
+    jsx: 'automatic',
+  });
+  return outfile;
+}
+
+/** Load the bundle as a fresh module — the same app code on a new launch, sharing the device storage. */
+function launch(outfile) {
+  const source = fs.readFileSync(outfile, 'utf8');
+  const module = { exports: {} };
+  // The audit runs without account credentials; the bundled console notice about that is expected.
+  const { error, warn } = console;
+  const quiet = (write) => (...args) => {
+    if (String(args[0]).includes('[supabase]')) return;
+    write(...args);
+  };
+  console.error = quiet(error);
+  console.warn = quiet(warn);
+  try {
+    new Function('module', 'exports', 'require', '__filename', '__dirname', source)(
+      module, module.exports, () => ({}), outfile, path.dirname(outfile),
+    );
+  } finally {
+    console.error = error;
+    console.warn = warn;
+  }
+  return module.exports;
+}
+
+async function timed(task) {
+  const started = Date.now();
+  const value = await task;
+  return { value, ms: Date.now() - started };
+}
+
+/* ── run the audit ───────────────────────────────────────────────────────────────────────────── */
+
+const outfile = await bundle('progress');
+const first = launch(outfile);
+const { english, engine, russian, content } = first;
+
+const row = (label, detail) => console.log(`  ${label.padEnd(34)} ${detail}`);
+console.log('\nProgress display audit\n');
+
+/* 1 — English course, the level page in the report (lib/courseProgress.ts). */
+globalThis.__miloCloudMode = 'offline';
+
+const freshProgress = await english.getCourseProgress();
+check(Array.isArray(freshProgress.completedLessonIds), 'English: a fresh device reads a valid progress object');
+check(freshProgress.completedLessonIds.length === 0, 'English: a fresh device starts with nothing completed');
+row('English fresh device', `${freshProgress.completedLessonIds.length} completed · valid`);
+
+const levels = [...new Set(content.SENTENCE_LESSONS.map(lesson => lesson.levelId))].sort();
+const preA1 = content.SENTENCE_LESSONS.filter(lesson => lesson.levelId === levels[0]);
+check(preA1.length > 0, 'English: the first level has lessons to measure against');
+row('English first level', `${levels[0]} · ${preA1.length} lessons (matches the report's ۰ از ۴۰)`);
+
+const lesson = preA1[0];
+if (lesson) {
+  await english.completeSentenceLesson(lesson.id, preA1[1]?.id);
+  const after = await english.getCourseProgress();
+  check(after.completedLessonIds.includes(lesson.id), 'English: completing a lesson stores its id');
+  const metrics = engine.getEnglishLevelMetrics(lesson.levelId, after.completedLessonIds);
+  check(metrics.completedLessonCount === 1, 'English: the level metrics count the completed lesson');
+  const percent = Math.round((metrics.completedLessonCount / metrics.lessonCount) * 100);
+  check(percent > 0, 'English: the level progress bar receives a non-zero width');
+  row('English after one lesson', `${metrics.completedLessonCount}/${metrics.lessonCount} lessons · ${percent}% fill`);
+
+  /* 2 — restart: a new app launch must see the same progress. */
+  const relaunch = launch(outfile);
+  const persisted = await relaunch.english.getCourseProgress();
+  check(persisted.completedLessonIds.includes(lesson.id), 'English: progress survives a restart');
+  row('English after restart', persisted.completedLessonIds.includes(lesson.id) ? 'completed lesson restored' : 'LOST');
+
+  /* 3 — every level must have something to show once a lesson in it is completed. */
+  const lastLevel = levels[levels.length - 1];
+  const lastLesson = content.SENTENCE_LESSONS.find(item => item.levelId === lastLevel);
+  if (lastLesson) {
+    await relaunch.english.completeSentenceLesson(lastLesson.id);
+    const all = await relaunch.english.getCourseProgress();
+    const perLevel = levels.map(id => {
+      const m = engine.getEnglishLevelMetrics(id, all.completedLessonIds);
+      return `${id}:${m.completedLessonCount}/${m.lessonCount}`;
+    });
+    const expected = new Map(levels.map(id => [
+      id,
+      content.SENTENCE_LESSONS.filter(item => item.levelId === id && all.completedLessonIds.includes(item.id)).length,
+    ]));
+    check(levels.every(id => engine.getEnglishLevelMetrics(id, all.completedLessonIds).completedLessonCount === expected.get(id)),
+      'English: every level counts only its own completed lessons');
+    row('English per level', perLevel.join('  '));
+  }
+
+  /* 4 — a dead account backend must not hold the screen at zero. */
+  globalThis.__miloCloudMode = 'hang';
+  const hung = launch(outfile);
+  const bounded = await timed(Promise.race([
+    hung.english.getCourseProgress(),
+    new Promise(resolve => setTimeout(() => resolve('timeout'), 5000)),
+  ]));
+  const localDuringHang = bounded.value === 'timeout' ? null : bounded.value;
+  check(localDuringHang !== null, 'English: the level page reads local progress even when the account backend never answers');
+  check(!!localDuringHang && localDuringHang.completedLessonIds.includes(lesson.id),
+    'English: the local progress shown during a dead connection is the saved one');
+  check(bounded.ms < 3000, 'English: a dead connection resolves quickly instead of blocking the page');
+  row('English with dead backend', localDuringHang === null ? `BLOCKED >${bounded.ms}ms` : `${bounded.ms}ms · ${localDuringHang.completedLessonIds.length} completed shown`);
+  globalThis.__miloCloudMode = 'offline';
+}
+
+/* 5 — a per-language course (lib/languages/russian.ts) uses the local store: same round trip. */
+const ruLessons = russian.RUSSIAN_LESSONS ?? [];
+check(ruLessons.length > 0, 'Russian: the curriculum is available to the store');
+if (ruLessons[0]) {
+  const ruStore = russian.russianProgress;
+  await ruStore.completeSentenceLesson(ruLessons[0].id);
+  const ruAfter = await ruStore.getCourseProgress();
+  check(ruAfter.completedLessonIds.includes(ruLessons[0].id), 'Russian: completing a lesson stores its id');
+  const ruRelaunch = launch(outfile);
+  const ruPersisted = await ruRelaunch.russian.russianProgress.getCourseProgress();
+  check(ruPersisted.completedLessonIds.includes(ruLessons[0].id), 'Russian: progress survives a restart');
+  const readMs = (await timed(Promise.resolve(ruRelaunch.russian.russianProgress.getCourseProgress()))).ms;
+  row('Russian after restart', `${ruPersisted.completedLessonIds.length} completed · read ${readMs}ms`);
+}
+
+/* 6 — the level cards only ever read the store, never the network, for the local courses. */
+const ruSource = fs.readFileSync(path.join(root, 'lib/languages/russian.ts'), 'utf8');
+check(/createCourseProgressStore\(/.test(ruSource), 'Russian: progress comes from the shared local store');
+
+if (problems.length) {
+  console.error('\n✖ Progress display audit failed:');
+  for (const problem of problems) console.error(`  · ${problem}`);
+  console.error(`\n${checks} checks passed, ${problems.length} failed.\n`);
+  process.exit(1);
+}
+
+console.log(`\n✔ Progress is written to the device, survives a restart, and is displayed without waiting for the account backend (${checks} checks).\n`);

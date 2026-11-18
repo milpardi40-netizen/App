@@ -27,6 +27,7 @@
     "validate:speech-policy": "node scripts/verify-speech-policy.mjs",
     "validate:narration": "node scripts/verify-narration-contract.mjs",
     "validate:assessment": "node scripts/verify-assessment-layout.mjs",
+    "validate:progress": "node scripts/verify-progress-display.mjs",
     "validate:app-lock": "node scripts/verify-app-lock.mjs",
     "validate:typography": "node scripts/verify-typography-stability.mjs",
     "validate:chat-notifications": "node scripts/verify-chat-notifications.mjs",
