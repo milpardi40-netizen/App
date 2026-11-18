@@ -128,6 +128,8 @@ async function bundle(name) {
         export * as english from './lib/courseProgress';
         export * as engine from './lib/englishLearningEngine';
         export * as russian from './lib/languages/russian';
+        export * as turkish from './lib/languages/turkish';
+        export * as newCourses from './lib/languages/newCourses';
         export * as content from './lib/courseContent';
       `,
       resolveDir: root,
@@ -183,7 +185,7 @@ async function timed(task) {
 
 const outfile = await bundle('progress');
 const first = launch(outfile);
-const { english, engine, russian, content } = first;
+const { english, engine, russian, turkish, newCourses, content } = first;
 
 const row = (label, detail) => console.log(`  ${label.padEnd(34)} ${detail}`);
 console.log('\nProgress display audit\n');
@@ -253,24 +255,40 @@ if (lesson) {
   globalThis.__miloCloudMode = 'offline';
 }
 
-/* 5 — a per-language course (lib/languages/russian.ts) uses the local store: same round trip. */
-const ruLessons = russian.RUSSIAN_LESSONS ?? [];
-check(ruLessons.length > 0, 'Russian: the curriculum is available to the store');
-if (ruLessons[0]) {
-  const ruStore = russian.russianProgress;
-  await ruStore.completeSentenceLesson(ruLessons[0].id);
-  const ruAfter = await ruStore.getCourseProgress();
-  check(ruAfter.completedLessonIds.includes(ruLessons[0].id), 'Russian: completing a lesson stores its id');
-  const ruRelaunch = launch(outfile);
-  const ruPersisted = await ruRelaunch.russian.russianProgress.getCourseProgress();
-  check(ruPersisted.completedLessonIds.includes(ruLessons[0].id), 'Russian: progress survives a restart');
-  const readMs = (await timed(Promise.resolve(ruRelaunch.russian.russianProgress.getCourseProgress()))).ms;
-  row('Russian after restart', `${ruPersisted.completedLessonIds.length} completed · read ${readMs}ms`);
-}
+/* 5 — the per-language courses (lib/createCourseProgressStore.ts): same round trip in every language. */
+const languageCourses = [
+  ['Russian', russian.russianProgress, russian.RUSSIAN_LESSONS ?? []],
+  ['Turkish', turkish.turkishProgress, turkish.TURKISH_LESSONS ?? []],
+  ['German', newCourses.NEW_COURSES?.de?.progress, newCourses.NEW_COURSES?.de?.lessons ?? []],
+  ['French', newCourses.NEW_COURSES?.fr?.progress, newCourses.NEW_COURSES?.fr?.lessons ?? []],
+  ['Spanish', newCourses.NEW_COURSES?.es?.progress, newCourses.NEW_COURSES?.es?.lessons ?? []],
+];
 
-/* 6 — the level cards only ever read the store, never the network, for the local courses. */
-const ruSource = fs.readFileSync(path.join(root, 'lib/languages/russian.ts'), 'utf8');
-check(/createCourseProgressStore\(/.test(ruSource), 'Russian: progress comes from the shared local store');
+for (const [name, store, lessons] of languageCourses) {
+  check(!!store && lessons.length > 0, `${name}: the course exposes a progress store and a curriculum`);
+  if (!store || !lessons.length) continue;
+  const target = lessons[Math.min(1, lessons.length - 1)];
+  await store.completeSentenceLesson(target.id);
+  const after = await store.getCourseProgress();
+  check(after.completedLessonIds.includes(target.id), `${name}: completing a lesson stores its id`);
+  const relaunch = launch(outfile);
+  const relaunchStore = {
+    Russian: () => relaunch.russian.russianProgress,
+    Turkish: () => relaunch.turkish.turkishProgress,
+    German: () => relaunch.newCourses.NEW_COURSES.de.progress,
+    French: () => relaunch.newCourses.NEW_COURSES.fr.progress,
+    Spanish: () => relaunch.newCourses.NEW_COURSES.es.progress,
+  }[name]();
+  const persisted = await relaunchStore.getCourseProgress();
+  check(persisted.completedLessonIds.includes(target.id), `${name}: progress survives a restart`);
+  const timedRead = await timed(relaunchStore.getCourseProgress());
+  check(timedRead.ms < 300, `${name}: the level page reads its progress from the device (no network wait)`);
+  const level = target.levelId;
+  const inLevel = lessons.filter(item => item.levelId === level).length;
+  const doneInLevel = lessons.filter(item => item.levelId === level && persisted.completedLessonIds.includes(item.id)).length;
+  check(doneInLevel > 0 && inLevel > 0, `${name}: the level page can show a non-zero progress line`);
+  row(`${name} after restart`, `${timedRead.ms}ms · level ${level} ${doneInLevel}/${inLevel}`);
+}
 
 if (problems.length) {
   console.error('\n✖ Progress display audit failed:');
