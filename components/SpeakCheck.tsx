@@ -40,10 +40,20 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const finalRef = useRef('');
   /** Last transcript of any kind; some Android recognisers end without ever flagging a result as final. */
   const lastHeardRef = useRef('');
+  const settledRef = useRef(false);
   const targetRef = useRef(text);
   targetRef.current = text;
+  const onResultRef = useRef(onResult);
+  onResultRef.current = onResult;
 
-  useEffect(() => { setResult(null); setPartial(''); setError(''); finalRef.current = ''; lastHeardRef.current = ''; }, [text]);
+  useEffect(() => {
+    setResult(null);
+    setPartial('');
+    setError('');
+    finalRef.current = '';
+    lastHeardRef.current = '';
+    settledRef.current = false;
+  }, [text]);
   useEffect(() => () => { void ExpoSpeechRecognitionModule.abort?.(); }, []);
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
@@ -58,12 +68,16 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const finish = useCallback((heard: string) => {
     const scored = scoreSpeech(targetRef.current, heard);
     setResult(scored);
-    onResult?.(scored);
-  }, [onResult]);
+    onResultRef.current?.(scored);
+  }, []);
 
   const listeningRef = useRef(false);
   useEffect(() => { listeningRef.current = listening; }, [listening]);
-  useSpeechRecognitionEvent('start', () => { setListening(true); setError(''); });
+  useSpeechRecognitionEvent('start', () => {
+    listeningRef.current = true;
+    setListening(true);
+    setError('');
+  });
   useSpeechRecognitionEvent('result', event => {
     const alternatives = (event.results ?? []).map(item => item.transcript).filter(Boolean);
     const transcript = alternatives[0] ?? '';
@@ -73,16 +87,23 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     if (bestTranscript) lastHeardRef.current = bestTranscript;
     if (event.isFinal) {
       finalRef.current = bestTranscript;
-      // On some devices the final result arrives after «end»; score it now so the attempt is not lost.
-      if (!listeningRef.current) finish(bestTranscript);
+      // On some devices the final result arrives after «end»; score it now if «end» didn't already settle a transcript.
+      if (!listeningRef.current && !settledRef.current) {
+        if (bestTranscript) settledRef.current = true;
+        finish(bestTranscript);
+      }
     } else setPartial(transcript);
   });
   useSpeechRecognitionEvent('end', () => {
+    listeningRef.current = false;
     setListening(false);
     setPartial('');
-    finish(finalRef.current || lastHeardRef.current);
+    const heard = finalRef.current || lastHeardRef.current;
+    if (heard) settledRef.current = true;
+    finish(heard);
   });
   useSpeechRecognitionEvent('error', event => {
+    listeningRef.current = false;
     setListening(false);
     setPartial('');
     const code = event.error;
@@ -102,6 +123,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     setResult(null);
     finalRef.current = '';
     lastHeardRef.current = '';
+    settledRef.current = false;
     try {
       if (Platform.OS === 'web' && !ExpoSpeechRecognitionModule.isRecognitionAvailable()) {
         setError('مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.');

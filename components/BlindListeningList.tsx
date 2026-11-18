@@ -1,7 +1,7 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Check, Eye, EyeOff, Volume2, X } from 'lucide-react-native';
+import { Check, Eye, EyeOff, RotateCcw, Volume2, X } from 'lucide-react-native';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
@@ -12,6 +12,8 @@ interface Props {
   items: readonly Item[];
   activeIndex: number;
   onSelect: (index: number) => void;
+  onRestart?: () => void;
+  onActiveItemY?: (yInComponent: number) => void;
   accent?: string;
   /** Font style for the foreign-language text (e.g. Cyrillic serif). */
   foreignStyle?: object;
@@ -26,12 +28,30 @@ function seeded(seed: string) {
 
 /**
  * Listening stage with a «بدون متن» mode: the learner hears the sentence first, picks its meaning
- * from three Persian options, and only then sees the text. The classic list (text visible) is one tap away.
+ * from three Persian options, and only then sees the text. Includes auto-scroll tracking and
+ * a restart button to play from the beginning.
  */
-export default function BlindListeningList({ items, activeIndex, onSelect, accent = Palette.primary, foreignStyle, unitLabel = 'جمله' }: Props) {
+export default function BlindListeningList({ items, activeIndex, onSelect, onRestart, onActiveItemY, accent = Palette.primary, foreignStyle, unitLabel = 'جمله' }: Props) {
   const [blind, setBlind] = useState(items.length >= 3);
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  useEffect(() => { setAnswers({}); }, [items]);
+  const listOffsetRef = useRef(0);
+  const cardYsRef = useRef<Record<number, number>>({});
+  const hasScrolledRef = useRef(false);
+  const onActiveItemYRef = useRef(onActiveItemY);
+  onActiveItemYRef.current = onActiveItemY;
+
+  useEffect(() => {
+    setAnswers({});
+    cardYsRef.current = {};
+    hasScrolledRef.current = false;
+  }, [items]);
+
+  useEffect(() => {
+    if (activeIndex > 0) hasScrolledRef.current = true;
+    if (!hasScrolledRef.current && activeIndex === 0) return;
+    const cardY = cardYsRef.current[activeIndex];
+    if (cardY !== undefined) onActiveItemYRef.current?.(listOffsetRef.current + cardY);
+  }, [activeIndex]);
 
   const options = useMemo(() => {
     const random = seeded(items.map(item => item.id).join('|'));
@@ -48,6 +68,13 @@ export default function BlindListeningList({ items, activeIndex, onSelect, accen
   const correctCount = items.filter((item, index) => answers[item.id] !== undefined && options[index][answers[item.id]] === item.fa).length;
   const answeredCount = Object.keys(answers).length;
 
+  const handleRestart = () => {
+    hasScrolledRef.current = true;
+    const firstY = cardYsRef.current[0];
+    if (firstY !== undefined) onActiveItemYRef.current?.(listOffsetRef.current + firstY);
+    onRestart?.();
+  };
+
   return (
     <View style={styles.wrap}>
       <View style={styles.modeRow}>
@@ -55,17 +82,35 @@ export default function BlindListeningList({ items, activeIndex, onSelect, accen
           {blind ? <EyeOff size={15} color="#FFFFFF" /> : <Eye size={15} color={accent} />}
           <Text style={[styles.modeText, blind && { color: '#FFFFFF' }]}>{blind ? 'بدون متن · اول بشنو' : 'نمایش متن'}</Text>
         </Pressable>
-        {blind && answeredCount > 0 ? <Text style={styles.scoreText}>{fa(correctCount)} از {fa(answeredCount)} درست</Text> : null}
+        <View style={styles.modeRight}>
+          {blind && answeredCount > 0 ? <Text style={styles.scoreText}>{fa(correctCount)} از {fa(answeredCount)} درست</Text> : null}
+          {onRestart ? (
+            <Pressable accessibilityRole="button" accessibilityLabel="شروع مجدد گوش دادن" onPress={handleRestart} style={[styles.restartButton, { borderColor: accent }]}>
+              <RotateCcw size={14} color={accent} />
+              <Text keepColor style={[styles.restartText, { color: accent }]}>شروع مجدد</Text>
+            </Pressable>
+          ) : null}
+        </View>
       </View>
       {blind ? <Text style={styles.hint}>روی هر {unitLabel} بزن تا پخش شود؛ بعد معنی‌اش را از سه گزینه انتخاب کن. متن بعد از انتخاب ظاهر می‌شود.</Text> : null}
-      <View style={styles.list}>
+      <View style={styles.list} onLayout={event => { listOffsetRef.current = event.nativeEvent.layout.y; }}>
         {items.map((item, index) => {
           const active = index === activeIndex;
           const picked = answers[item.id];
           const revealed = !blind || picked !== undefined;
           const correct = picked !== undefined && options[index][picked] === item.fa;
           return (
-            <View key={item.id} style={[styles.card, active && { borderColor: accent, backgroundColor: '#F5F7FF' }]}>
+            <View
+              key={item.id}
+              onLayout={event => {
+                const y = event.nativeEvent.layout.y;
+                cardYsRef.current[index] = y;
+                if (index === activeIndex && (hasScrolledRef.current || activeIndex > 0)) {
+                  onActiveItemYRef.current?.(listOffsetRef.current + y);
+                }
+              }}
+              style={[styles.card, active && { borderColor: accent, backgroundColor: '#F5F7FF' }]}
+            >
               <Pressable accessibilityRole="button" accessibilityLabel={`پخش ${unitLabel} ${fa(index + 1)}`} accessibilityState={{ selected: active }} style={styles.row} onPress={() => onSelect(index)}>
                 <View style={[styles.number, active && { backgroundColor: accent }]}><Text style={[styles.numberText, active && { color: '#FFFFFF' }]}>{fa(index + 1)}</Text></View>
                 {revealed
@@ -98,9 +143,12 @@ export default function BlindListeningList({ items, activeIndex, onSelect, accen
 
 const styles = StyleSheet.create({
   wrap: { width: '100%', gap: 10 },
-  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
+  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
+  modeRight: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
   modeButton: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 7, borderRadius: 999, borderWidth: 1.5, borderColor: Palette.border, backgroundColor: Palette.surface },
   modeText: { fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.text },
+  restartButton: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, paddingHorizontal: 12, paddingVertical: 7, borderRadius: 999, borderWidth: 1.5, backgroundColor: Palette.surface },
+  restartText: { fontFamily: Typography.fontFamily, fontSize: 12, fontWeight: '700' },
   scoreText: { fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.primaryDark },
   hint: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: Palette.text, textAlign: 'right', writingDirection: 'rtl' },
   list: { gap: 8 },

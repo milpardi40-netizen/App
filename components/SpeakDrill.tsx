@@ -12,14 +12,14 @@ type Item = { id: string; text: string; fa?: string };
 export type SpeakDrillResult = { average: number; scores: Record<string, number> };
 type Props = { items: Item[]; locale: string; accent?: string; onSpeak?: (text: string) => void; /** Called once when the learner reaches the result page. */ onFinish?: (result: SpeakDrillResult) => void };
 
-const PASS_THRESHOLD = 85;
-const AUTO_ADVANCE_MS = 1100;
+const PASS_THRESHOLD = 70;
+const AUTO_ADVANCE_MS = 950;
 
 /**
  * «آزمون گفتاری» — a speaking checkpoint shared across all 6 languages:
- * the learner says every sentence of the lesson one by one, earns points and streak bonuses
- * when pronouncing accurately (≥ 85%), automatically advances to the next item on pass, and
- * sees a full score + points summary at the end.
+ * the learner says every phrase, sentence, or word one by one, earns points and streak
+ * bonuses on pass (≥ 70%), automatically advances to the next item, and sees a full
+ * score + points summary at the end.
  */
 export default function SpeakDrill({ items, locale, accent = Palette.primary, onSpeak, onFinish }: Props) {
   const [index, setIndex] = useState(0);
@@ -28,6 +28,12 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
   const [streak, setStreak] = useState(0);
   const [passNotice, setPassNotice] = useState<{ score: number; gained: number; last: boolean } | null>(null);
   const [done, setDone] = useState(false);
+
+  const itemsKey = useMemo(() => items.map(item => item.id).join('|'), [items]);
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+  const onFinishRef = useRef(onFinish);
+  onFinishRef.current = onFinish;
 
   const indexRef = useRef(0);
   const scoresRef = useRef<Record<string, number>>({});
@@ -45,6 +51,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
 
   useEffect(() => () => clearPendingAdvance(), [clearPendingAdvance]);
 
+  // Key reset on item IDs (not parent array identity) so parent re-renders never wipe progress or cancel auto-advance.
   useEffect(() => {
     clearPendingAdvance();
     indexRef.current = 0;
@@ -58,7 +65,79 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     setStreak(0);
     setPassNotice(null);
     setDone(false);
-  }, [items, clearPendingAdvance]);
+  }, [itemsKey, clearPendingAdvance]);
+
+  const completeQuiz = useCallback((latestScores: Record<string, number>) => {
+    clearPendingAdvance();
+    if (doneRef.current) return;
+    doneRef.current = true;
+    const list = itemsRef.current;
+    const filled: Record<string, number> = {};
+    for (const item of list) filled[item.id] = latestScores[item.id] ?? 0;
+    const values = list.map(item => latestScores[item.id]).filter((value): value is number => value !== undefined);
+    const finalAverage = values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : 0;
+    setPassNotice(null);
+    setDone(true);
+    onFinishRef.current?.({ average: finalAverage, scores: filled });
+  }, [clearPendingAdvance]);
+
+  const advanceFrom = useCallback((fromIndex: number, latestScores: Record<string, number>) => {
+    clearPendingAdvance();
+    if (doneRef.current || indexRef.current !== fromIndex) return;
+    const list = itemsRef.current;
+    if (fromIndex < list.length - 1) {
+      const nextIndex = fromIndex + 1;
+      indexRef.current = nextIndex;
+      setPassNotice(null);
+      setIndex(nextIndex);
+      return;
+    }
+    completeQuiz(latestScores);
+  }, [clearPendingAdvance, completeQuiz]);
+
+  const onResult = useCallback((result: SpeakCheckResult) => {
+    const activeIndex = indexRef.current;
+    const list = itemsRef.current;
+    const activeItem = list[activeIndex];
+    if (!activeItem || doneRef.current) return;
+
+    const updatedScores = {
+      ...scoresRef.current,
+      [activeItem.id]: Math.max(scoresRef.current[activeItem.id] ?? 0, result.score),
+    };
+    scoresRef.current = updatedScores;
+    setScores(updatedScores);
+
+    clearPendingAdvance();
+
+    if (result.score >= PASS_THRESHOLD) {
+      let gained = 0;
+      if (!awardedIdsRef.current.has(activeItem.id)) {
+        awardedIdsRef.current.add(activeItem.id);
+        const nextStreak = streakRef.current + 1;
+        streakRef.current = nextStreak;
+        setStreak(nextStreak);
+        const base = result.score >= 95 ? 15 : result.score >= 85 ? 12 : 10;
+        const bonus = nextStreak >= 2 ? 5 : 0;
+        gained = base + bonus;
+        setPoints(prev => prev + gained);
+      }
+
+      if (Platform.OS !== 'web') {
+        try { void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch { /* ignore */ }
+      }
+
+      const isLast = activeIndex >= list.length - 1;
+      setPassNotice({ score: result.score, gained, last: isLast });
+      advanceTimerRef.current = setTimeout(() => {
+        advanceFrom(activeIndex, scoresRef.current);
+      }, AUTO_ADVANCE_MS);
+    } else {
+      streakRef.current = 0;
+      setStreak(0);
+      setPassNotice(null);
+    }
+  }, [advanceFrom, clearPendingAdvance]);
 
   const current = items[index];
   const currentScore = current ? scores[current.id] : undefined;
@@ -73,32 +152,6 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
   }, [items, scores]);
 
   if (!items.length) return null;
-
-  const completeQuiz = (latestScores: Record<string, number>) => {
-    clearPendingAdvance();
-    if (doneRef.current) return;
-    doneRef.current = true;
-    const filled: Record<string, number> = {};
-    for (const item of items) filled[item.id] = latestScores[item.id] ?? 0;
-    const values = items.map(item => latestScores[item.id]).filter((value): value is number => value !== undefined);
-    const finalAverage = values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : 0;
-    setPassNotice(null);
-    setDone(true);
-    onFinish?.({ average: finalAverage, scores: filled });
-  };
-
-  const advanceFrom = (fromIndex: number, latestScores: Record<string, number>) => {
-    clearPendingAdvance();
-    if (doneRef.current || indexRef.current !== fromIndex) return;
-    if (fromIndex < items.length - 1) {
-      const nextIndex = fromIndex + 1;
-      indexRef.current = nextIndex;
-      setPassNotice(null);
-      setIndex(nextIndex);
-      return;
-    }
-    completeQuiz(latestScores);
-  };
 
   const restart = () => {
     clearPendingAdvance();
@@ -119,51 +172,8 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     advanceFrom(indexRef.current, scoresRef.current);
   };
 
-  const onResult = (result: SpeakCheckResult) => {
-    const activeIndex = indexRef.current;
-    const activeItem = items[activeIndex];
-    if (!activeItem || doneRef.current) return;
-
-    const updatedScores = {
-      ...scoresRef.current,
-      [activeItem.id]: Math.max(scoresRef.current[activeItem.id] ?? 0, result.score),
-    };
-    scoresRef.current = updatedScores;
-    setScores(updatedScores);
-
-    clearPendingAdvance();
-
-    if (result.score >= PASS_THRESHOLD) {
-      let gained = 0;
-      if (!awardedIdsRef.current.has(activeItem.id)) {
-        awardedIdsRef.current.add(activeItem.id);
-        const nextStreak = streakRef.current + 1;
-        streakRef.current = nextStreak;
-        setStreak(nextStreak);
-        const base = result.score >= 95 ? 15 : 10;
-        const bonus = nextStreak >= 2 ? 5 : 0;
-        gained = base + bonus;
-        setPoints(prev => prev + gained);
-      }
-
-      if (Platform.OS !== 'web') {
-        try { void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch { /* ignore */ }
-      }
-
-      const isLast = activeIndex >= items.length - 1;
-      setPassNotice({ score: result.score, gained, last: isLast });
-      advanceTimerRef.current = setTimeout(() => {
-        advanceFrom(activeIndex, scoresRef.current);
-      }, AUTO_ADVANCE_MS);
-    } else {
-      streakRef.current = 0;
-      setStreak(0);
-      setPassNotice(null);
-    }
-  };
-
   if (done) {
-    const color = average >= PASS_THRESHOLD ? '#15803D' : average >= 60 ? '#B45309' : '#B91C1C';
+    const color = average >= PASS_THRESHOLD ? '#15803D' : average >= 50 ? '#B45309' : '#B91C1C';
     return (
       <View style={styles.card}>
         <View style={styles.headRow}><Trophy size={20} color={accent} /><Text style={styles.title}>نتیجهٔ آزمون گفتاری</Text></View>
@@ -178,7 +188,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
             <Text keepColor style={styles.passedBadgeText}>{fa(passedCount)} از {fa(items.length)} قبول (≥{fa(PASS_THRESHOLD)}٪)</Text>
           </View>
         </View>
-        <Text style={styles.summary}>{average >= PASS_THRESHOLD ? 'روان، دقیق و مسلط!' : average >= 60 ? 'خوب؛ جمله‌های کم‌امتیاز را دوباره بگو.' : 'سایه‌خوانی را یک بار دیگر مرور کن.'}</Text>
+        <Text style={styles.summary}>{average >= PASS_THRESHOLD ? 'روان، دقیق و مسلط!' : average >= 50 ? 'خوب؛ جمله‌های کم‌امتیاز را دوباره بگو.' : 'سایه‌خوانی را یک بار دیگر مرور کن.'}</Text>
         <View style={styles.list}>{items.map((item, i) => {
           const value = scores[item.id] ?? 0;
           return <View key={item.id} style={styles.listRow}><Text keepColor style={[styles.listScore, { color: value >= PASS_THRESHOLD ? '#15803D' : value >= 50 ? '#B45309' : '#B91C1C' }]}>{fa(value)}٪</Text><Text style={styles.listText} numberOfLines={2}>{fa(i + 1)}. {item.text}</Text></View>;

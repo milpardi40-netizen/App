@@ -23,6 +23,8 @@ import { modeForLevel } from '@/components/LanguageDialoguePractice';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
+import { autoRead } from '@/lib/autoRead';
+import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
 import { clearTurkishLessonSession, loadTurkishLessonSessionWithPresence, saveTurkishLessonSession, resetTurkishLessonSession } from '@/lib/languages/turkishStudyState';
 import { TURKISH_LESSONS, TURKISH_LEVELS, TURKISH_LESSON_STAGES, turkishProgress, type TurkishCourseLesson } from '@/lib/languages/turkish';
 import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } from '@/lib/content/courseAudit';
@@ -222,6 +224,31 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
     speak(lesson.sentences[index].text, rate);
   };
 
+  const [listenRun, setListenRun] = useState(0);
+  const listenListOffsetRef = useRef(0);
+  const vocabListOffsetRef = useRef(0);
+  const vocabCardYsRef = useRef<Record<number, number>>({});
+  const scrollToContentY = useCallback((contentY: number) => {
+    const targetY = Math.max(0, lessonScrollOffset(contentOffsetRef.current + contentY - 16, Dimensions.get('window').width));
+    lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
+  }, []);
+  const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+
+  // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
+  useEffect(() => {
+    if (stage !== 2) return;
+    return autoRead(lesson.sentences.length, index => selectSentence(index, NORMAL_SPEECH_RATE), undefined, 900);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stage, lesson.id, listenRun]);
+
+  const restartListening = () => {
+    void stopTurkishSpeech();
+    setSentenceIndex(0);
+    setRevealed(false);
+    setSpeechError('');
+    setListenRun(n => n + 1);
+  };
+
   const goToPreviousSentence = () => {
     if (!sessionReady || saving || sessionError || stage !== 1 || sentenceIndex === 0) return;
     setSentenceIndex(previousSentenceIndex(sentenceIndex));
@@ -336,14 +363,35 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
             <Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unitLabel}`} style={styles.replayButton} onPress={() => speak(current.text, NORMAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
             <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, NATURAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
           </View>
-          <SpeakCheck key={current.id} text={current.text} locale="tr-TR" accent={Palette.success} />
+          <SpeakCheck
+            key={current.id}
+            text={current.text}
+            locale="tr-TR"
+            accent={Palette.success}
+            onResult={result => {
+              if (sentenceIndex < lesson.sentences.length - 1) {
+                scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
+              }
+            }}
+          />
         </View>}
 
         {stage === 2 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Headphones size={34} color={Palette.primary} /></View>
           <Text style={styles.stageTitle}>شنیدن {unitLabelPlural}</Text>
           {showHint && <Text style={styles.stageDesc}>{lesson.learningMode === 'words' ? 'هر واژه را گوش دهید و معنی‌اش را به یاد بیاورید.' : lesson.learningMode === 'chunks' ? 'هر ترکیب را گوش دهید و معنی‌اش را به یاد بیاورید.' : 'هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.'}</Text>}
-          <BlindListeningList items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} activeIndex={sentenceIndex} onSelect={selectSentence} accent={Palette.primary} foreignStyle={styles.listenTurkish} />
+          <View style={{ width: '100%' }} onLayout={event => { listenListOffsetRef.current = event.nativeEvent.layout.y; }}>
+            <BlindListeningList
+              items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}
+              activeIndex={sentenceIndex}
+              onSelect={selectSentence}
+              onRestart={restartListening}
+              onActiveItemY={yInList => scrollToContentY(listenListOffsetRef.current + yInList)}
+              accent={Palette.primary}
+              foreignStyle={styles.listenTurkish}
+              unitLabel={unitLabel}
+            />
+          </View>
           <View style={styles.shadowTip}><Headphones size={18} color={Palette.primary} /><Text style={styles.shadowText}>فعلاً فقط گوش دهید؛ مرحلهٔ بعد برای تکرار و سایه‌خوانی است.</Text></View>
         </View>}
 
@@ -356,7 +404,17 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
             <Text style={styles.speechSentence}>{current.text}</Text>
             <Pressable accessibilityRole="button" style={styles.playSlowButton} onPress={() => speak(current.text, .68)}><Volume2 size={18} color="#FFFFFF" /><Text style={styles.recordButtonText}>پخش آهستهٔ نمونه</Text></Pressable>
             <Text style={styles.speechHint}>پس از شنیدن، {unitLabel} را با صدای بلند تکرار کنید.</Text>
-            <SpeakCheck key={current.id} text={current.text} locale="tr-TR" accent={Palette.success} />
+            <SpeakCheck
+              key={current.id}
+              text={current.text}
+              locale="tr-TR"
+              accent={Palette.success}
+              onResult={result => {
+                if (sentenceIndex < lesson.sentences.length - 1) {
+                  scheduleOnPass(result, () => selectSentence(sentenceIndex + 1, .68));
+                }
+              }}
+            />
           </View>
           <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`${unitLabel} ${fa(index + 1)}`} onPress={() => selectSentence(index, .68)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
         </View>}
@@ -379,11 +437,21 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
           <Text style={styles.stageTitle}>{lesson.learningMode === 'words' ? 'مرور واژه‌های مستقل' : lesson.learningMode === 'chunks' ? 'واژگان در ترکیب‌ها' : 'واژگان از دل جمله‌ها'}</Text>
           {showHint && <Text style={styles.stageDesc}>{lesson.learningMode === 'words' ? 'هر واژه را با معنی و نقش واژگانی‌اش مرور کنید.' : lesson.learningMode === 'chunks' ? 'هر واژه را با معنی و ترکیبش مرور کنید.' : 'هر واژه را با معنی و جمله‌اش مرور کنید.'}</Text>}
-          <View style={styles.vocabList}>{vocabulary.map(({ word, sentence }) => <View key={`${word.word}-${sentence.id}`} style={styles.vocabCard}>
+          <View style={styles.vocabList} onLayout={event => { vocabListOffsetRef.current = event.nativeEvent.layout.y; }}>{vocabulary.map(({ word, sentence }, vocabIndex) => <View key={`${word.word}-${sentence.id}`} onLayout={event => { vocabCardYsRef.current[vocabIndex] = event.nativeEvent.layout.y; }} style={styles.vocabCard}>
             <View style={styles.vocabTop}><Text style={styles.vocabWord}>{word.word}</Text><Text style={styles.vocabMeaning}>{word.meaning}</Text></View>
             <Text style={styles.vocabExample}>{sentence.text}</Text><Text keepColor style={styles.vocabExampleFa}>{sentence.fa}</Text>
             <Pressable accessibilityRole="button" accessibilityLabel={`شنیدن مثال: ${sentence.text}`} style={styles.bubbleSound} onPress={() => speak(sentence.text)}><Volume2 size={16} color={Palette.primary} /></Pressable>
-            <SpeakCheck compact text={word.word} locale="tr-TR" accent={Palette.success} />
+            <SpeakCheck
+              compact
+              text={word.word}
+              locale="tr-TR"
+              accent={Palette.success}
+              onResult={result => {
+                if (vocabIndex < vocabulary.length - 1) {
+                  scheduleOnPass(result, () => scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0)));
+                }
+              }}
+            />
           </View>)}</View>
         </View>}
 
