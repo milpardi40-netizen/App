@@ -107,7 +107,7 @@
       "expo-background-task"
     ],
     "experiments": {
-      "baseUrl": "/App3",
+      "baseUrl": "/App",
       "typedRoutes": true
     },
     "extra": {

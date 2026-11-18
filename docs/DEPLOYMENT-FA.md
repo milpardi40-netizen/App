@@ -33,8 +33,8 @@ npm run build:web
 1. در GitHub به **Settings → Pages → Build and deployment** بروید و **Source** را روی **GitHub Actions** بگذارید.
 2. در **Settings → Actions → General → Workflow permissions** اجازهٔ اجرای workflowها را بررسی کنید. workflow برای انتشار Pages به `pages: write` و `id-token: write` نیاز دارد؛ مجوزهای تعریف‌شده در فایل را محدودتر/بیشتر از نیاز نکنید.
 3. پس از ادغام تغییر در `main`، **Actions → Deploy web to GitHub Pages** را باز کنید. باید مراحل نصب، `typecheck`، `validate:web-shell`، export و deploy همگی سبز شوند.
-4. URL منتشرشده را از لینک **github-pages** در workflow یا از **Settings → Pages** بردارید. مسیر پایهٔ Expo در `app.json` برابر `/App3` است؛ پسوند مسیر را در تنظیمات عوض نکنید مگر آنکه مقصد میزبانی و base path نیز تغییر کند.
-5. در مرورگر گوشی، مسیر `/App3/` را باز کنید. نمایش فارسی را از نظر RTL، اسکرول، ناچ/دوربین و safe area بالا و پایین، و ورود/اتصال Supabase را بررسی کنید.
+4. URL منتشرشده را از لینک **github-pages** در workflow یا از **Settings → Pages** بردارید. مسیر پایهٔ Expo در `app.json` برابر `/App` است؛ پسوند مسیر را در تنظیمات عوض نکنید مگر آنکه مقصد میزبانی و base path نیز تغییر کند.
+5. در مرورگر گوشی، مسیر `/App/` را باز کنید. نمایش فارسی را از نظر RTL، اسکرول، ناچ/دوربین و safe area بالا و پایین، و ورود/اتصال Supabase را بررسی کنید.
 
 برای انتشار rollback، یک commit سالم قبلی را با روش معمول Git به `main` برگردانید؛ push بعدی همان workflow را اجرا می‌کند. artifact `dist/` خروجی قابل بازسازی است و شامل داده‌های سرور یا secrets نیست.
 
@@ -73,7 +73,7 @@ npx eas-cli build --platform android --profile production
 | علامت | بررسی |
 |---|---|
 | Web workflow پیش از export متوقف می‌شود | `config/supabase.public.json`، `EXPO_PUBLIC_*` و خطای `typecheck`/`validate:web-shell` را بازبینی کنید. مقدار نمونه یا placeholder پذیرفته نمی‌شود. |
-| صفحه بعد از deploy در ریشه باز نمی‌شود | آدرس `/App3/` و مقدار `experiments.baseUrl` در `app.json` را بررسی کنید. |
+| صفحه بعد از deploy در ریشه باز نمی‌شود | آدرس `/App/` و مقدار `experiments.baseUrl` در `app.json` را بررسی کنید. |
 | نسخه وب چپ‌چین یا ناچ‌خورده است | نسخهٔ جدید واقعاً deploy شده باشد؛ سپس `dir="rtl"` در HTML، `direction: rtl` ریشه، `viewport-fit=cover` و safe-area گوشی را بررسی کنید. |
 | APK در Actions منتشر نشده است | اجرای workflow دستی artifact می‌سازد؛ انتشار GitHub Release فقط طبق شرط‌های push و متن `[apk-release]` فعال می‌شود. |
 | push token ثبت نمی‌شود | مقدار `EAS_PROJECT_ID` را در محیط build بررسی و مطمئن شوید `extra.eas.projectId` در config نهایی قرار می‌گیرد. |

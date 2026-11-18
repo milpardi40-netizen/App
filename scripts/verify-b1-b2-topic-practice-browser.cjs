@@ -2,7 +2,7 @@
 const {chromium}=require('playwright-core'),assert=require('node:assert/strict'),path=require('node:path');
 const {topicPracticePlan,getB1Curriculum,getB2Curriculum,b1UnitSkills,b2UnitSkills}=require(path.resolve('node_modules/.cache/b1-b2-topic-practice.cjs'));
 const {NEW_COURSES}=require(path.resolve('node_modules/.cache/b2-test.cjs'));
-const base=process.env.B1_BASE_URL||'http://localhost:8090/App3';
+const base=process.env.B1_BASE_URL||'http://localhost:8090/App';
 (async()=>{
  const binary=process.env.CHROME_BIN||await require('@sparticuz/chromium').default.executablePath(),args=process.env.CHROME_BIN?['--no-sandbox']:require('@sparticuz/chromium').default.args;
  const browser=await chromium.launch({executablePath:binary,args}),page=await browser.newPage({viewport:{width:320,height:650}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);

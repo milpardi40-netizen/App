@@ -15,7 +15,7 @@ import { Avatar, Banner, Button, Card, Chip, EmptyState, Field, ListRow, Loading
 type Source = 'upload' | 'link';
 
 /** GitHub repository that CI publishes every `milo-requested-N` release to. */
-const RELEASE_REPO = 'https://github.com/milanorezaee2/App3';
+const RELEASE_REPO = 'https://github.com/milpardi40-netizen/App';
 /** CI versionCode = 100 + run number, and the tag is `milo-requested-<run number>`. */
 const codeFromTag = (tag: string): number | null => { const m = /^milo-requested-(\d+)$/.exec(tag.trim()); return m ? 100 + Number(m[1]) : null; };
 const LEARNER_PACKAGES = APP_TARGETS.filter(t => t.package !== 'com.devicecontrol.miloadmin').map(t => t.package);

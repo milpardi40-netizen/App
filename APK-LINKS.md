@@ -1,17 +1,17 @@
 # Milo APKs — build #130 (versionCode 230 / 1.0.230)
 
-Release page: https://github.com/milanorezaee2/App3/releases/tag/milo-requested-130
+Release page: https://github.com/milpardi40-netizen/App/releases/tag/milo-requested-130
 
 این بیلد شامل بازنویسی کامل دورهٔ آلمانی Pre-A1 (۲۱ درس)، بازنویسی دورهٔ روسی Pre-A1 (۱۷ درس، بدون جملهٔ تکراری و بدون تک‌واژه)، «واژه‌ها»ی سه‌قدمی (واژه → جمله → گفتن جمله با صدای گوشی) و پیش‌فرض‌شدن صدای گوشی است. این بار بیلد ورود‌دار (`login.5update.apk`) هم ساخته شد.
 
 | فایل | زبان‌ها | ورود | حجم | لینک مستقیم |
 |---|---|---|---|---|
-| `5update.apk` | en, de, fr, tr, es | ندارد | ۴۱.۱ MB | https://github.com/milanorezaee2/App3/releases/download/milo-requested-130/5update.apk |
-| `2update.apk` | en, ru | ندارد | ۴۱.۱ MB | https://github.com/milanorezaee2/App3/releases/download/milo-requested-130/2update.apk |
-| `english.apk` | en | ندارد | ۴۱.۱ MB | https://github.com/milanorezaee2/App3/releases/download/milo-requested-130/english.apk |
-| `login.5update.apk` | en, de, fr, tr, es | دارد | ۴۱.۱ MB | https://github.com/milanorezaee2/App3/releases/download/milo-requested-130/login.5update.apk |
-| `AdminApp.apk` | en, tr (پنل مدیریت) | — | ۴۱.۰ MB | https://github.com/milanorezaee2/App3/releases/download/milo-requested-130/AdminApp.apk |
-| `AdminApp-web.zip` | پنل مدیریت وب | — | ۷.۸ MB | https://github.com/milanorezaee2/App3/releases/download/milo-requested-130/AdminApp-web.zip |
+| `5update.apk` | en, de, fr, tr, es | ندارد | ۴۱.۱ MB | https://github.com/milpardi40-netizen/App/releases/download/milo-requested-130/5update.apk |
+| `2update.apk` | en, ru | ندارد | ۴۱.۱ MB | https://github.com/milpardi40-netizen/App/releases/download/milo-requested-130/2update.apk |
+| `english.apk` | en | ندارد | ۴۱.۱ MB | https://github.com/milpardi40-netizen/App/releases/download/milo-requested-130/english.apk |
+| `login.5update.apk` | en, de, fr, tr, es | دارد | ۴۱.۱ MB | https://github.com/milpardi40-netizen/App/releases/download/milo-requested-130/login.5update.apk |
+| `AdminApp.apk` | en, tr (پنل مدیریت) | — | ۴۱.۰ MB | https://github.com/milpardi40-netizen/App/releases/download/milo-requested-130/AdminApp.apk |
+| `AdminApp-web.zip` | پنل مدیریت وب | — | ۷.۸ MB | https://github.com/milpardi40-netizen/App/releases/download/milo-requested-130/AdminApp-web.zip |
 
 ## SHA-256
 

@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const originalBase = require('./app.json').expo;
-// GitHub Pages keeps /App3; managed root-domain builds opt into a root URL.
+// GitHub Pages keeps /App; managed root-domain builds opt into a root URL.
 const rootBase = process.env.EXPO_PUBLIC_WEB_ROOT === 'true'
   ? { ...originalBase, experiments: { ...originalBase.experiments, baseUrl: '' } }
   : originalBase;

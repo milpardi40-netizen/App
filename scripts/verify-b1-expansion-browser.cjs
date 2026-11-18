@@ -3,7 +3,7 @@
  * B1_BASE_URL defaults to the local test preview; never used by app code. */
 const {chromium}=require('playwright-core'),assert=require('node:assert/strict'),path=require('node:path');
 const {NEW_COURSES,b1UnitSkills,b1GrammarPatterns,b1Scenarios}=require(path.resolve('node_modules/.cache/b1-audit.cjs'));
-const base=process.env.B1_BASE_URL||'http://localhost:8087/App3';
+const base=process.env.B1_BASE_URL||'http://localhost:8087/App';
 (async()=>{
  const executablePath=process.env.CHROME_BIN || await require('@sparticuz/chromium').default.executablePath();
  const args=process.env.CHROME_BIN?['--no-sandbox']:require('@sparticuz/chromium').default.args;

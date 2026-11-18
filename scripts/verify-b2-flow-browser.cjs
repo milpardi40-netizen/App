@@ -1,6 +1,6 @@
 /* Requires build:web:learner, verify-b2-curriculum, a preview server and Playwright/Chromium. */
 const {chromium}=require('playwright-core'),assert=require('node:assert/strict'),path=require('node:path');
-const base=process.env.B2_BASE_URL||'http://localhost:8087/App3';
+const base=process.env.B2_BASE_URL||'http://localhost:8087/App';
 const {NEW_COURSES,b2UnitSkills}=require(path.resolve('node_modules/.cache/b2-test.cjs'));
 (async()=>{const executablePath=process.env.CHROME_BIN||await require('@sparticuz/chromium').default.executablePath();const args=process.env.CHROME_BIN?['--no-sandbox']:require('@sparticuz/chromium').default.args;const b=await chromium.launch({executablePath,args}),p=await b.newPage({viewport:{width:320,height:650}}),errors=[];p.on('pageerror',e=>errors.push(e.message));p.setDefaultTimeout(15000);
 await p.addInitScript(()=>{window.SpeechSynthesisUtterance=class{constructor(t){this.text=t;this.rate=1;this.lang=''}};Object.defineProperty(speechSynthesis,'getVoices',{value:()=>[{lang:'de-DE',name:'de',voiceURI:'de'},{lang:'fr-FR',name:'fr',voiceURI:'fr'},{lang:'es-ES',name:'es',voiceURI:'es'}]});Object.defineProperty(speechSynthesis,'speak',{value:m=>{window.__speech={text:m.text,rate:m.rate,lang:m.lang};m.onstart?.({})}});Object.defineProperty(speechSynthesis,'cancel',{value:()=>{}})});

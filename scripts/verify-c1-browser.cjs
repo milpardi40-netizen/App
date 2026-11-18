@@ -1,7 +1,7 @@
 /* Run build:web and verify-c1-curriculum first, with a preview server on port 8090. */
 const {chromium}=require('playwright-core'),assert=require('node:assert/strict'),path=require('node:path');
 const {getC1Curriculum,c1DeepeningModules,c1FoundationTransfer,c1FoundationStudio,c1FoundationDiagnostics,c1FoundationRoleReview,c1FoundationRoleModels,getC1RhetoricPractice,getC1SurvivalListening,c1SurvivalDecisions,c1SurvivalConversations,c1SurvivalPartnerLines,c1ExamSources,c1ExamProduction}=require(path.resolve('node_modules/.cache/c1-curriculum-test.cjs'));
-const base=process.env.B1_BASE_URL||'http://localhost:8090/App3';
+const base=process.env.B1_BASE_URL||'http://localhost:8090/App';
 (async()=>{
  const binary=process.env.CHROME_BIN||await require('@sparticuz/chromium').default.executablePath(),args=process.env.CHROME_BIN?['--no-sandbox']:require('@sparticuz/chromium').default.args;
  const browser=await chromium.launch({executablePath:binary,args}),page=await browser.newPage({viewport:{width:320,height:650}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);

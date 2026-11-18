@@ -2,7 +2,7 @@
    Requires playwright-core and CHROME_BIN or @sparticuz/chromium. */
 const {chromium}=require('playwright-core'),assert=require('node:assert/strict'),path=require('node:path');
 const {NEW_COURSES,getB2Curriculum,b2UnitSkills,b2GrammarPatterns,countB2GrammarPatterns,B2_CHECKPOINT}=require(path.resolve('node_modules/.cache/b2-test.cjs'));
-const base=process.env.B2_BASE_URL||'http://localhost:8087/App3';
+const base=process.env.B2_BASE_URL||'http://localhost:8087/App';
 (async()=>{
  const executablePath=process.env.CHROME_BIN||await require('@sparticuz/chromium').default.executablePath();
  const args=process.env.CHROME_BIN?['--no-sandbox']:require('@sparticuz/chromium').default.args;

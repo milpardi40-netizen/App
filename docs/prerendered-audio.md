@@ -46,7 +46,7 @@
 یعنی ۳۴ باندل + ۲ فایل JSON بهجای ۱۵٬۲۴۳ شیء (سقف ریلیز ۱۰۰۰ asset است)، بدون سرویس پولی و
 بدون کلید service-role. اپ همان هاستی را استفاده میکند که APKها از آن دانلود میشوند؛ پس اگر APK میرسد،
 صدا هم میرسد. URL ثابت:
-`https://github.com/milanorezaee2/App3/releases/download/milo-content-v1/…`
+`https://github.com/milpardi40-netizen/App/releases/download/milo-content-v1/…`
 
 ### دستور production (همهاش داخل CI)
 
@@ -101,8 +101,8 @@ gh release upload milo-content-v1 --clobber content-packs/audio-bundles/*.mp3 �
 | ۱۵٬۲۴۳ فایل پراکنده | ۳۴ باندل ۲۱۶ MB / ۱۰٫۵ ساعت، seek دقیق بر اساس frame MP3 |
 
 - رندر CI: run `43768402464` ✓ (۴۹m۴۰s)، **۱۵٬۲۴۳/۱۵٬۲۴۳ جمله، صفر خطا**
-- ریلیز محتوا: `https://github.com/milanorezaee2/App3/releases/tag/milo-content-v1` (۳۶ asset)
-- APK: run `43773188983` ✓ → `https://github.com/milanorezaee2/App3/releases/tag/milo-requested-117`
+- ریلیز محتوا: `https://github.com/milpardi40-netizen/App/releases/tag/milo-content-v1` (۳۶ asset)
+- APK: run `43773188983` ✓ → `https://github.com/milpardi40-netizen/App/releases/tag/milo-requested-117`
 - بستهها به نسخهٔ v7/v6/v5 bump شدند، ۳۶/۳۶ ولیدیشن ✓، بازبینی زبانی ✓، حداقل readiness ۹۲٪، `tsc` ✓
 
 ## محدودیتهای باقیمانده

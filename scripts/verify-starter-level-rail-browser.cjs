@@ -1,7 +1,7 @@
 /* Run build:web and verify-new-language-samples.cjs first. */
 const {chromium}=require('playwright-core'),assert=require('node:assert/strict'),path=require('node:path');
 const {NEW_COURSES}=require(path.resolve('node_modules/.cache/new-language-samples.cjs'));
-const base=process.env.B1_BASE_URL||'http://localhost:8090/App3';
+const base=process.env.B1_BASE_URL||'http://localhost:8090/App';
 (async()=>{
  const binary=process.env.CHROME_BIN||await require('@sparticuz/chromium').default.executablePath();
  const args=process.env.CHROME_BIN?['--no-sandbox']:require('@sparticuz/chromium').default.args;

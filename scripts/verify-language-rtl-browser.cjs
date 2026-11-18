@@ -1,7 +1,7 @@
 /* Run build:web and serve:web, then use B1_BASE_URL if the preview differs from port 8090. */
 const { chromium } = require('playwright-core');
 const assert = require('node:assert/strict');
-const base = process.env.B1_BASE_URL || 'http://localhost:8090/App3';
+const base = process.env.B1_BASE_URL || 'http://localhost:8090/App';
 (async () => {
   const binary = process.env.CHROME_BIN || await require('@sparticuz/chromium').default.executablePath();
   const args = process.env.CHROME_BIN ? ['--no-sandbox'] : require('@sparticuz/chromium').default.args;
