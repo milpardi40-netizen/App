@@ -90,6 +90,10 @@ name: Build requested APKs
 on:
   workflow_dispatch:
     inputs:
+      retry_failed_run_id:
+        description: 'Optional: reuse an unpublished number from a failed run of this workflow on this branch'
+        required: false
+        type: string
       learner_login:
         description: 'Explicitly build an additional login-enabled learner APK'
         type: boolean
@@ -127,8 +131,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  release-number:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      sequence: ${{ steps.slot.outputs.sequence }}
+    steps:
+      - id: slot
+        name: Reserve an unused release number (never overwrite a published build)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RETRY_ID: ${{ inputs.retry_failed_run_id }}
+        run: |
+          sequence=$GITHUB_RUN_NUMBER
+          if [[ -n "$RETRY_ID" ]]; then
+            [[ "$RETRY_ID" =~ ^[1-9][0-9]*$ ]]
+            info=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RETRY_ID")
+            sequence=$(jq -er --arg ref "$GITHUB_REF_NAME" 'select(.path == ".github/workflows/apk-requested.yml" and .head_branch == $ref and .conclusion == "failure") | .run_number' <<< "$info")
+            (( sequence > 0 && sequence < GITHUB_RUN_NUMBER ))
+          fi
+          refs=$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/milo-requested-")
+          jq -e --argjson n "$sequence" 'all(.[] | .ref | capture("^refs/tags/milo-requested-(?<n>[0-9]+)$").n | tonumber; . < $n)' <<< "$refs" >/dev/null
+          echo "sequence=$sequence" >> "$GITHUB_OUTPUT"
+          echo "Android build $((100 + sequence)); tag milo-requested-$sequence"
+
   # ------------------------------------------------------------------ admin
   admin:
+    needs: release-number
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
@@ -160,6 +192,8 @@ jobs:
         run: npm ci --ignore-scripts
       - &settings
         name: Read the public app settings into the build environment
+        env:
+          RELEASE_SEQUENCE: ${{ needs.release-number.outputs.sequence }}
         shell: bash
         run: |
           node <<'NODE'
@@ -173,7 +207,7 @@ jobs:
           fs.appendFileSync(process.env.GITHUB_ENV,
             `EXPO_PUBLIC_SUPABASE_URL=${url}\nEXPO_PUBLIC_SUPABASE_ANON_KEY=${key}\n`);
           NODE
-          echo "MILO_VERSION_CODE=$((100 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
+          echo "MILO_VERSION_CODE=$((100 + RELEASE_SEQUENCE))" >> "$GITHUB_ENV"
       - &java
         name: Set up Java
         uses: actions/setup-java@v5
@@ -219,9 +253,21 @@ jobs:
           npm run validate:progress
       - &build
         name: Build the release APK
+        shell: bash
         run: |
           rm -rf "$TMPDIR/metro-cache" "$TMPDIR/react-native-packager-cache" node_modules/.cache
-          ( cd android && chmod +x gradlew && ./gradlew assembleRelease --no-daemon )
+          if ! ( cd android && chmod +x gradlew && ./gradlew assembleRelease --no-daemon --console=plain ) 2>&1 | tee "$RUNNER_TEMP/apk-gradle.log"; then
+            # Report a short compiler/configuration diagnostic even when archived job logs can't be opened.
+            python3 - <<'PY'
+          import os, pathlib, re
+          log = pathlib.Path(os.environ['RUNNER_TEMP'], 'apk-gradle.log').read_text(errors='replace')
+          detail = log.split('* What went wrong:')[-1].split('* Try:')[0].strip()[:1000]
+          errors = [line for line in log.splitlines() if line.startswith('e: ') or ' error:' in line.lower()]
+          msg = re.sub(r'https?://\S+', '[URL]', '\n'.join(errors[-4:] + [detail]))[:1800]
+          print('::error title=Android assembly::' + msg.replace('%', '%25').replace('\n', '%0A').replace('\r', '%0D'))
+          PY
+            exit 1
+          fi
           cp android/app/build/outputs/apk/release/app-release.apk "$APK_NAME"
       - &verify
         name: Verify this APK is the right flavour
@@ -260,6 +306,7 @@ jobs:
 
   # -------------------------------------------------- learner WITH login
   learner-login:
+    needs: release-number
     # Branch pushes (where workflow_dispatch is unavailable) build all three
     # requested flavours; manual runs still opt in explicitly.
     if: ${{ github.event_name == 'push' || inputs.learner_login }}
@@ -293,6 +340,7 @@ jobs:
 
   # --------------------------------- two-language (en, ru) learner WITH login
   learner-login-two:
+    needs: release-number
     if: ${{ github.event_name == 'push' || inputs.learner_login }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -325,6 +373,7 @@ jobs:
 
   # ----------------------------------------------- learner WITHOUT login
   learner-nologin:
+    needs: release-number
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
@@ -355,6 +404,7 @@ jobs:
 
   # ------------------------------------ five-language learner WITHOUT login
   learner-five-nologin:
+    needs: release-number
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
@@ -385,6 +435,7 @@ jobs:
       - *upload
 
   learner-english-nologin:
+    needs: release-number
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
@@ -416,6 +467,7 @@ jobs:
 
   # --------------------------------------------------- admin panel (web)
   admin-web:
+    needs: release-number
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
@@ -450,7 +502,7 @@ jobs:
 
   # Validate the distributed binaries, not the Gradle inputs or an emulator-only rebuild.
   verify-upgrades:
-    needs: [admin, learner-login, learner-login-two, learner-nologin, learner-five-nologin, learner-english-nologin]
+    needs: [release-number, admin, learner-login, learner-login-two, learner-nologin, learner-five-nologin, learner-english-nologin]
     if: ${{ always() && needs.admin.result == 'success' && needs.learner-nologin.result == 'success' && needs.learner-five-nologin.result == 'success' && needs.learner-english-nologin.result == 'success' && (needs.learner-login.result == 'success' || needs.learner-login.result == 'skipped') && (needs.learner-login-two.result == 'success' || needs.learner-login-two.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 35
@@ -469,6 +521,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           MILO_ANDROID_ABIS: ${{ inputs.abis || 'arm64-v8a,armeabi-v7a' }}
+          RELEASE_SEQUENCE: ${{ needs.release-number.outputs.sequence }}
           INCLUDE_LOGIN: ${{ (github.event_name == 'push' || inputs.learner_login) && 'true' || 'false' }}
         run: python3 .github/scripts/verify-apk-upgrades.py prepare
       - name: Enable KVM for the disposable emulator
@@ -495,10 +548,12 @@ jobs:
 
   # ----------------------------------------------------------- publish
   publish:
-    needs: [admin, admin-web, learner-login, learner-login-two, learner-nologin, learner-five-nologin, learner-english-nologin, verify-upgrades]
+    needs: [release-number, admin, admin-web, learner-login, learner-login-two, learner-nologin, learner-five-nologin, learner-english-nologin, verify-upgrades]
     if: ${{ always() && needs.verify-upgrades.result == 'success' && needs.admin-web.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      RELEASE_SEQUENCE: ${{ needs.release-number.outputs.sequence }}
     steps:
       - name: Read only the public connection config for release registration
         uses: actions/checkout@v5
@@ -514,14 +569,14 @@ jobs:
         run: |
           find out -type f | sort
           du -h out/*/*.apk
-          echo "MILO_VERSION_CODE=$((100 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
+          echo "MILO_VERSION_CODE=$((100 + RELEASE_SEQUENCE))" >> "$GITHUB_ENV"
 
       - name: Publish a downloadable release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: milo-requested-${{ github.run_number }}
+          tag_name: milo-requested-${{ env.RELEASE_SEQUENCE }}
           target_commitish: ${{ github.sha }}
-          name: 'Milo APKs #${{ github.run_number }}'
+          name: 'Milo APKs #${{ env.RELEASE_SEQUENCE }}'
           prerelease: true
           body: |
             Installable Android APKs, each built on its own clean runner.
@@ -548,7 +603,7 @@ jobs:
         if: ${{ needs.learner-five-nologin.result == 'success' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: milo-requested-${{ github.run_number }}
+          tag_name: milo-requested-${{ env.RELEASE_SEQUENCE }}
           files: |
             out/5update.apk/5update.apk
             out/5update.apk/5update.apk.sha256
@@ -560,7 +615,7 @@ jobs:
         if: ${{ needs.learner-english-nologin.result == 'success' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: milo-requested-${{ github.run_number }}
+          tag_name: milo-requested-${{ env.RELEASE_SEQUENCE }}
           files: |
             out/english.apk/english.apk
             out/english.apk/english.apk.sha256
@@ -572,7 +627,7 @@ jobs:
         if: ${{ needs.learner-login.result == 'success' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: milo-requested-${{ github.run_number }}
+          tag_name: milo-requested-${{ env.RELEASE_SEQUENCE }}
           files: |
             out/login.5update.apk/login.5update.apk
             out/login.5update.apk/login.5update.apk.sha256
@@ -584,7 +639,7 @@ jobs:
         if: ${{ needs.learner-login-two.result == 'success' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: milo-requested-${{ github.run_number }}
+          tag_name: milo-requested-${{ env.RELEASE_SEQUENCE }}
           files: |
             out/login.2update.apk/login.2update.apk
             out/login.2update.apk/login.2update.apk.sha256
@@ -596,7 +651,7 @@ jobs:
         if: ${{ needs.admin-web.result == 'success' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: milo-requested-${{ github.run_number }}
+          tag_name: milo-requested-${{ env.RELEASE_SEQUENCE }}
           files: |
             out/AdminApp-web.zip/AdminApp-web.zip
             out/AdminApp-web.zip/AdminApp-web.zip.sha256
@@ -614,12 +669,12 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          TAG: milo-requested-${{ github.run_number }}
+          TAG: milo-requested-${{ env.RELEASE_SEQUENCE }}
           NOTES: ${{ github.event.head_commit.message }}
         run: |
           if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then echo "SUPABASE_SERVICE_ROLE_KEY secret not set; skipping in-app update publish."; exit 0; fi
           URL="${SUPABASE_URL:-$(node -p "require('./config/supabase.public.json').EXPO_PUBLIC_SUPABASE_URL")}"
-          CODE=$((100 + GITHUB_RUN_NUMBER))
+          CODE=$((100 + RELEASE_SEQUENCE))
           FIRST_LINE="$(printf '%s' "$NOTES" | head -n 1 | cut -c1-300)"
           FIRST_LINE="${FIRST_LINE:-سازگاری نصب روی نسخهٔ قبلی بررسی شده است. برنامهٔ فعلی را حذف نکنید.}"
           rows=""
@@ -658,7 +713,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: milo-requested-${{ github.run_number }}
+          TAG: milo-requested-${{ env.RELEASE_SEQUENCE }}
         run: |
           python3 - <<'PY' > breakdown.md
           import zipfile, collections, os

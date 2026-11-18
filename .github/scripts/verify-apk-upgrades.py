@@ -20,8 +20,11 @@ PACKAGES = {
 PLAN = Path('upgrade-plan.json')
 
 
-def output(*args):
-    return subprocess.check_output(args, text=True).strip()
+def output(*args, timeout=180):
+    proc = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=timeout)
+    if proc.returncode:
+        raise RuntimeError(f'{Path(args[0]).name}: {proc.stdout[-1600:]}')
+    return proc.stdout.strip()
 
 
 def require(condition, message):
@@ -53,7 +56,7 @@ def inspect(file, pkg, code):
 
 
 def prepare():
-    repo, run = os.environ['GITHUB_REPOSITORY'], int(os.environ['GITHUB_RUN_NUMBER'])
+    repo, run = os.environ['GITHUB_REPOSITORY'], int(os.environ['RELEASE_SEQUENCE'])
     code = 100 + run
     # Retention keeps the last five requested releases. Don't use GitHub's /latest (a content pack).
     releases = json.loads(output('gh', 'api', f'repos/{repo}/releases?per_page=100'))
@@ -72,7 +75,7 @@ def prepare():
                 f'{file}: missing or damaged build artifact')
         sdk, abis, certs = inspect(file, pkg, code)
         require(abis == expected_abis, f'{file}: expected ABIs {expected_abis}, got {abis}')
-        subprocess.run([Path(os.environ['ANDROID_HOME']) / 'build-tools/36.0.0/zipalign', '-c', '-P', '16', '4', file], check=True)
+        output(Path(os.environ['ANDROID_HOME']) / 'build-tools/36.0.0/zipalign', '-c', '-P', '16', '4', file)
         # Check both upgrade paths for the affected five-language apps; the latest matching build for the others.
         count = 2 if name.endswith('5update.apk') else 1
         older = [(n, assets[name]) for n, assets in sorted(history, key=lambda h: -h[0]) if name in assets][:count]
@@ -81,7 +84,7 @@ def prepare():
             tag = f'milo-requested-{n}'
             directory = Path('baselines', tag)
             directory.mkdir(parents=True, exist_ok=True)
-            subprocess.run(['gh', 'release', 'download', tag, '--repo', repo, '--pattern', name, '--dir', directory], check=True)
+            output('gh', 'release', 'download', tag, '--repo', repo, '--pattern', name, '--dir', directory)
             old = directory / name
             require(old.stat().st_size == asset['size'] and 'sha256:' + digest(old) == asset['digest'],
                     f'{old}: not the bytes in the published release')
@@ -98,8 +101,8 @@ def smoke_test():
     adb = ['adb', '-e']
     shell = [*adb, 'shell']
     require(output(*shell, 'getprop', 'ro.kernel.qemu') == '1', 'A disposable Android emulator is required')
-    subprocess.run([*adb, 'root'], check=True)  # write a marker in the actual private app data directory
-    subprocess.run([*adb, 'wait-for-device'], check=True, timeout=60)
+    output(*adb, 'root')  # write a marker in the actual private app data directory
+    output(*adb, 'wait-for-device', timeout=60)
     require(output(*shell, 'id', '-u') == '0', 'Use a userdebug Google APIs image, not Google Play')
     api = output(*shell, 'getprop', 'ro.build.version.sdk')
     device_abis = output(*shell, 'getprop', 'ro.product.cpu.abilist')
@@ -110,14 +113,14 @@ def smoke_test():
         marker = f'/data/user/0/{pkg}/.milo-ci-upgrade'
         value = f"progress-fixture-{p['old_code']}"
         print(f"Testing {p['name']}: {p['old_code']} → {p['code']}", flush=True)
-        subprocess.run([*adb, 'install', '--no-streaming', p['old']], check=True)
-        subprocess.run([*shell, f"echo {value} > {marker}"], check=True)
+        output(*adb, 'install', '--no-streaming', p['old'])
+        output(*shell, f"echo {value} > {marker}")
         # This is the upgrade under test. No uninstall, clearing, downgrade flag, or re-signing.
-        subprocess.run([*adb, 'install', '--no-streaming', '-r', p['new']], check=True)
+        output(*adb, 'install', '--no-streaming', '-r', p['new'])
         require(re.search(rf"\bversionCode={p['code']}\b", output(*shell, 'dumpsys', 'package', pkg)), f'{pkg}: wrong installed version')
         require(output(*shell, 'cat', marker) == value, f'{pkg}: app-private data did not survive replacement')
         rows.append(f"| `{p['name']}` | {p['old_code']} → {p['code']} | {p['sdk']} | {', '.join(p['abis'])} | `{' / '.join(p['certs'])}` |")
-        subprocess.run([*adb, 'uninstall', pkg], check=True)  # only AFTER the assertion: reset this disposable fixture
+        output(*adb, 'uninstall', pkg)  # only AFTER the assertion: reset this disposable fixture
     report = f"### Android upgrade checks\n\nAndroid API {api} emulator: installed the official baseline, replaced it with the exact release APK and read back a marker in private app data. No uninstall or downgrade during replacement.\n\n"
     report += '| APK | In-place upgrade | minSdk | APK ABIs | Signer certificate SHA-256 |\n|---|---|---|---|---|\n' + '\n'.join(rows) + '\n'
     Path('upgrade-checks.md').write_text(report)
@@ -126,4 +129,9 @@ def smoke_test():
 
 
 if __name__ == '__main__':
-    {'prepare': prepare, 'install': smoke_test}[sys.argv[1]]()
+    try:
+        {'prepare': prepare, 'install': smoke_test}[sys.argv[1]]()
+    except (Exception, SystemExit) as error:
+        detail = re.sub(r'https?://\S+', '[URL]', str(error)).strip()[:1800]
+        print('::error title=APK upgrade verification::' + detail.replace('%', '%25').replace('\n', '%0A').replace('\r', '%0D'))
+        sys.exit(1)

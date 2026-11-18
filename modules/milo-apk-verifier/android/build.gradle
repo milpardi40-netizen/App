@@ -6,4 +6,9 @@ version = '1.0.0'
 
 android {
   namespace 'expo.modules.miloapkverifier'
+
+  defaultConfig {
+    versionCode 1
+    versionName '1.0.0' // Required by the Expo module Gradle publishing plugin.
+  }
 }
