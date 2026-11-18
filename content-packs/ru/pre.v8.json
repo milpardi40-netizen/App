@@ -437,14 +437,13 @@
   },
   {
    "id": "ru-pre-040",
-   "text": "Это так просто!",
-   "fa": "این خیلی ساده است!",
-   "pronunciation": "É-ta tak PRÓS-ta",
+   "text": "Это так близко!",
+   "fa": "این خیلی نزدیک است!",
+   "pronunciation": "É-ta tak BLÍS-ka",
    "pattern": "Это так <нареч.>!",
    "targetWords": [
     "так"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=51067&dur=1228"
+   ]
   },
   {
    "id": "ru-pre-041",
@@ -569,14 +568,13 @@
   },
   {
    "id": "ru-pre-052",
-   "text": "Если нет, то завтра.",
-   "fa": "اگر نه، پس فردا.",
-   "pronunciation": "YÉS-li nyet, to ZÁF-tra",
-   "pattern": "Если нет, то <когда>.",
+   "text": "Если не сегодня, то скоро.",
+   "fa": "اگر امروز نه، پس به‌زودی.",
+   "pronunciation": "YÉS-li ni si-VÓD-nya, to SKÓ-ra",
+   "pattern": "Если не <когда>, то <когда>.",
    "targetWords": [
     "если"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=66478&dur=1698"
+   ]
   },
   {
    "id": "ru-pre-053",
@@ -668,36 +666,33 @@
   },
   {
    "id": "ru-pre-061",
-   "text": "Я ещё не знаю.",
-   "fa": "هنوز نمی‌دانم.",
-   "pronunciation": "ya yi-SHCHÓ ni ZNÁ-yu",
-   "pattern": "Я ещё не <глагол>.",
+   "text": "Я ещё здесь.",
+   "fa": "من هنوز اینجا هستم.",
+   "pronunciation": "ya yi-SHCHÓ zdyes'",
+   "pattern": "Я ещё <где>.",
    "targetWords": [
     "еще"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=78442&dur=1254"
+   ]
   },
   {
    "id": "ru-pre-062",
-   "text": "Чай или кофе?",
-   "fa": "چای یا قهوه؟",
-   "pronunciation": "chay Í-li KÓ-fye",
+   "text": "Хлеб или сыр?",
+   "fa": "نان یا پنیر؟",
+   "pronunciation": "khlyep Í-li syr",
    "pattern": "<А> или <Б>?",
    "targetWords": [
     "или"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=79696&dur=1045"
+   ]
   },
   {
    "id": "ru-pre-063",
-   "text": "Сегодня или завтра?",
-   "fa": "امروز یا فردا؟",
-   "pronunciation": "si-VÓD-nya Í-li ZÁF-tra",
+   "text": "Утром или днём?",
+   "fa": "صبح یا در طول روز؟",
+   "pronunciation": "ÚT-ram Í-li dnyom",
    "pattern": "<А> или <Б>?",
    "targetWords": [
     "или"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=80741&dur=1384"
+   ]
   },
   {
    "id": "ru-pre-064",
@@ -767,14 +762,13 @@
   },
   {
    "id": "ru-pre-070",
-   "text": "Всё будет хорошо.",
-   "fa": "همه چیز خوب می‌شود.",
-   "pronunciation": "fsyo BÚ-dyet kha-ra-SHÓ",
-   "pattern": "Всё будет <нареч.>.",
+   "text": "Урок будет завтра.",
+   "fa": "کلاس فردا خواهد بود.",
+   "pronunciation": "u-RÓK BÚ-dyet ZÁF-tra",
+   "pattern": "<Что> будет <когда>.",
    "targetWords": [
     "будет"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=88943&dur=1306"
+   ]
   },
   {
    "id": "ru-pre-071",
@@ -789,14 +783,13 @@
   },
   {
    "id": "ru-pre-072",
-   "text": "Она тоже студентка.",
-   "fa": "او هم دانشجوست.",
-   "pronunciation": "a-NÁ TÓ-zhe stu-DYÉNT-ka",
-   "pattern": "Она тоже <кто>.",
+   "text": "Она дома.",
+   "fa": "او در خانه است.",
+   "pronunciation": "a-NÁ DÓ-ma",
+   "pattern": "Она <где>.",
    "targetWords": [
     "она"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=91555&dur=1358"
+   ]
   },
   {
    "id": "ru-pre-073",
@@ -833,14 +826,13 @@
   },
   {
    "id": "ru-pre-076",
-   "text": "Может быть, завтра.",
-   "fa": "شاید فردا.",
-   "pronunciation": "MÓ-zhet byt', ZÁF-tra",
+   "text": "Может быть, позже.",
+   "fa": "شاید بعداً.",
+   "pronunciation": "MÓ-zhet byt', PÓZ-zhe",
    "pattern": "Может быть, <когда>.",
    "targetWords": [
     "может"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=96544&dur=1489"
+   ]
   },
   {
    "id": "ru-pre-077",
@@ -888,14 +880,13 @@
   },
   {
    "id": "ru-pre-081",
-   "text": "Это очень просто.",
-   "fa": "این خیلی ساده است.",
-   "pronunciation": "É-ta Ó-chen' PRÓS-ta",
+   "text": "Это очень важно.",
+   "fa": "این خیلی مهم است.",
+   "pronunciation": "É-ta Ó-chen' VÁZH-na",
    "pattern": "Это очень <нареч.>.",
    "targetWords": [
     "очень"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=103519&dur=1202"
+   ]
   },
   {
    "id": "ru-pre-082",
@@ -1174,14 +1165,13 @@
   },
   {
    "id": "ru-pre-107",
-   "text": "Ну, как дела?",
-   "fa": "خب، چطوری؟",
-   "pronunciation": "nu, kak di-LÁ",
+   "text": "Ну, что дальше?",
+   "fa": "خب، بعدش چه؟",
+   "pronunciation": "nu, shto DÁL'-she",
    "pattern": "Ну, <вопрос>?",
    "targetWords": [
     "ну"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=137453&dur=1202"
+   ]
   },
   {
    "id": "ru-pre-108",
@@ -1218,14 +1208,13 @@
   },
   {
    "id": "ru-pre-111",
-   "text": "Сколько вам лет?",
-   "fa": "چند سالتان است؟",
-   "pronunciation": "SKÓL'-ka vam lyet",
-   "pattern": "Сколько вам лет?",
+   "text": "Ей десять лет.",
+   "fa": "او ده سال دارد.",
+   "pronunciation": "yey DYÉ-syat' lyet",
+   "pattern": "Ей <число> лет.",
    "targetWords": [
     "лет"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=142965&dur=1149"
+   ]
   },
   {
    "id": "ru-pre-112",
@@ -1306,14 +1295,13 @@
   },
   {
    "id": "ru-pre-119",
-   "text": "Он хороший человек.",
-   "fa": "او آدم خوبی است.",
-   "pronunciation": "on kha-RÓ-shiy chi-la-VYÉK",
+   "text": "Он добрый человек.",
+   "fa": "او آدم مهربانی است.",
+   "pronunciation": "on DÓB-ryy chi-la-VYÉK",
    "pattern": "Он <прил.> человек.",
    "targetWords": [
     "человек"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=152655&dur=1411"
+   ]
   },
   {
    "id": "ru-pre-120",
@@ -1405,14 +1393,13 @@
   },
   {
    "id": "ru-pre-128",
-   "text": "Теперь я понимаю.",
-   "fa": "حالا می‌فهمم.",
-   "pronunciation": "ti-PYÉR' ya pa-ni-MÁ-yu",
-   "pattern": "Теперь я <глагол>.",
+   "text": "Теперь всё ясно.",
+   "fa": "الان همه‌چیز روشن است.",
+   "pronunciation": "ti-PYÉR' fsyo YÁS-na",
+   "pattern": "Теперь всё <нареч.>.",
    "targetWords": [
     "теперь"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=164879&dur=1280"
+   ]
   },
   {
    "id": "ru-pre-129",
@@ -1471,14 +1458,13 @@
   },
   {
    "id": "ru-pre-134",
-   "text": "Мне надо идти.",
-   "fa": "باید بروم.",
-   "pronunciation": "mnye NÁ-da it-TÍ",
-   "pattern": "Мне надо <глагол>.",
+   "text": "Надо спешить.",
+   "fa": "باید عجله کرد.",
+   "pronunciation": "NÁ-da spi-SHÍT'",
+   "pattern": "Надо <глагол>.",
    "targetWords": [
     "надо"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=173394&dur=1019"
+   ]
   },
   {
    "id": "ru-pre-135",
@@ -1515,14 +1501,13 @@
   },
   {
    "id": "ru-pre-138",
-   "text": "Ему двадцать лет.",
-   "fa": "او بیست سال دارد.",
-   "pronunciation": "yi-MÚ DVÁ-tsat' lyet",
+   "text": "Ему пять лет.",
+   "fa": "او پنج سال دارد.",
+   "pronunciation": "yi-MÚ pyat' lyet",
    "pattern": "Ему <число> лет.",
    "targetWords": [
     "ему"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=178488&dur=1332"
+   ]
   },
   {
    "id": "ru-pre-139",
@@ -1746,14 +1731,13 @@
   },
   {
    "id": "ru-pre-159",
-   "text": "Здесь много людей.",
-   "fa": "اینجا آدم زیاد است.",
-   "pronunciation": "zdyes' MNÓ-ga lyu-DYÉY",
+   "text": "Здесь много цветов.",
+   "fa": "اینجا گل زیاد است.",
+   "pronunciation": "zdyes' MNÓ-ga tsvi-TÓF",
    "pattern": "Здесь много <род.>.",
    "targetWords": [
     "много"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=206099&dur=1384"
+   ]
   },
   {
    "id": "ru-pre-160",
@@ -1900,14 +1884,13 @@
   },
   {
    "id": "ru-pre-173",
-   "text": "Тогда до завтра!",
-   "fa": "پس تا فردا!",
-   "pronunciation": "tag-DÁ da ZÁF-tra",
+   "text": "Тогда до вечера!",
+   "fa": "پس تا عصر!",
+   "pronunciation": "tag-DÁ da VYÉ-chi-ra",
    "pattern": "Тогда до <когда>!",
    "targetWords": [
     "тогда"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=225665&dur=1280"
+   ]
   },
   {
    "id": "ru-pre-174",
