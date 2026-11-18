@@ -12,7 +12,7 @@ import { Typography } from '@/lib/theme';
  *
  * These are presentation values only: no question, choice, explanation or answer key is touched.
  */
-export const ASSESSMENT_MAX_WIDTH = 620;
+export const ASSESSMENT_MAX_WIDTH = 560;
 
 /**
  * The answer rows are the equal-sized boxes: every choice has the same height in every language, so a
@@ -31,6 +31,7 @@ export const assessmentStyles = StyleSheet.create({
     maxWidth: ASSESSMENT_MAX_WIDTH,
     alignSelf: 'center',
     alignItems: 'stretch',
+    minWidth: 0,
     gap: 14,
   },
   /**
@@ -41,6 +42,8 @@ export const assessmentStyles = StyleSheet.create({
     width: '100%',
     maxWidth: ASSESSMENT_MAX_WIDTH,
     alignSelf: 'center',
+    alignItems: 'stretch',
+    minWidth: 0,
     marginTop: 18,
     gap: 16,
     padding: 16,
@@ -60,6 +63,8 @@ export const assessmentStyles = StyleSheet.create({
    */
   question: {
     width: '100%',
+    alignSelf: 'stretch',
+    minWidth: 0,
     gap: 9,
     padding: 12,
     borderRadius: 14,
@@ -77,6 +82,8 @@ export const assessmentStyles = StyleSheet.create({
   },
   choice: {
     width: '100%',
+    alignSelf: 'stretch',
+    flexGrow: 0,
     minHeight: ASSESSMENT_CHOICE_MIN_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',

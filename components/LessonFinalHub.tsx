@@ -1,6 +1,6 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { type ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { CheckCircle2, ClipboardCheck, Mic2 } from 'lucide-react-native';
 import { Typography } from '@/lib/theme';
 import { ASSESSMENT_MAX_WIDTH } from '@/components/assessmentLayout';
@@ -37,9 +37,9 @@ export default function LessonFinalHub({ sections, only }: { sections: FinalSect
         {current.done ? <CheckCircle2 size={20} color={Palette.success} /> : null}
       </View>
       <Text style={styles.stageDesc}>{current.subtitle}</Text>
-      <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+      <View style={styles.body}>
         <View style={styles.column}>{current.render()}</View>
-      </ScrollView>
+      </View>
     </View>
   );
 }
@@ -52,5 +52,5 @@ const styles = StyleSheet.create({
   stageTitle: { fontFamily: Typography.boldFontFamily, fontSize: 25, lineHeight: 36, fontWeight: '400', color: Palette.ink, textAlign: 'center', writingDirection: 'rtl' },
   stageDesc: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.text, textAlign: 'center', writingDirection: 'rtl', alignSelf: 'center', maxWidth: ASSESSMENT_MAX_WIDTH, lineHeight: 23, marginTop: 8 },
   body: { width: '100%', alignItems: 'center', paddingTop: 12, paddingBottom: 8 },
-  column: { width: '100%', maxWidth: ASSESSMENT_MAX_WIDTH, alignSelf: 'center', alignItems: 'stretch' },
+  column: { width: '100%', maxWidth: ASSESSMENT_MAX_WIDTH, alignSelf: 'center', alignItems: 'stretch', minWidth: 0 },
 });

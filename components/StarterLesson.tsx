@@ -462,7 +462,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         {stage >= 8 && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale={course.locale} accent={Palette.success} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome(course.id, lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
-            { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند پرسش از همین درس؛ بدون نمره، با توضیح.', render: () => <>
+            { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند پرسش کوتاه از همین درس؛ هر پاسخ بازخورد روشن و کاربردی دارد.', render: () => <>
           {false ? null : <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>
               <Text style={styles.questionPrompt}>{fa(index + 1)}. {question.promptFa}</Text>
