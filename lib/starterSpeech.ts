@@ -1,4 +1,5 @@
 import * as Speech from './courseSpeech';
+import { stopRecorded } from '@/lib/content/packAudio';
 import { playPreferredRecording, playFallbackRecording, noteSpeechSuccess } from '@/lib/content/speechFallback';
 import { speechTagFor } from './speechLanguage';
 import { recordedPlaybackRate } from './narration';
@@ -66,7 +67,7 @@ export function warmStarterSpeech(locale: string): void {
   void findVoices(locale).catch(() => undefined);
 }
 
-export function playStarterSpeech(locale: string, text: string, rate: number, onError?: () => void, onVoiceFallback?: () => void) {
+export function playStarterSpeech(locale: string, text: string, rate: number, onError?: () => void, onVoiceFallback?: () => void, onDone?: () => void) {
   const request = ++requestId;
   queue = queue.catch(() => undefined).then(async () => {
     if (request !== requestId) return;
@@ -76,12 +77,12 @@ export function playStarterSpeech(locale: string, text: string, rate: number, on
     // Same tempo as the device voice: the shared contract owns the pack-tempo calibration.
     const lang = normalized(locale).split('-')[0] as 'de' | 'fr' | 'es' | 'en' | 'tr' | 'ru';
     const recordedRate = recordedPlaybackRate(locale, rate);
-    if (await playPreferredRecording(text, recordedRate, lang)) return;
+    if (await playPreferredRecording(text, recordedRate, lang, () => { if (request === requestId) onDone?.(); })) return;
     if (request !== requestId) return;
     const candidates = await findVoices(locale);
     if (request !== requestId) return;
     const fail = () => {
-      void playFallbackRecording(text, recordedRate, lang).then(ok => { if (request === requestId && !ok) onError?.(); });
+      void playFallbackRecording(text, recordedRate, lang, () => { if (request === requestId) onDone?.(); }).then(ok => { if (request === requestId && !ok) onError?.(); });
     };
     if (!candidates.length) { fail(); return; }
 
@@ -104,7 +105,7 @@ export function playStarterSpeech(locale: string, text: string, rate: number, on
           ...(candidate.voice ? { voice: candidate.voice } : {}),
           rate,
           onStart: () => { if (!failed && request === requestId && candidate.fallback) onVoiceFallback?.(); },
-          onDone: () => { if (!failed && request === requestId) noteSpeechSuccess(); },
+          onDone: () => { if (!failed && request === requestId) { noteSpeechSuccess(); onDone?.(); } },
           onError: retry,
         });
       } catch { retry(); }
@@ -115,6 +116,7 @@ export function playStarterSpeech(locale: string, text: string, rate: number, on
 }
 export function stopStarterSpeech() {
   const request = ++requestId;
+  stopRecorded();
   queue = queue.catch(() => undefined).then(async () => { if (request === requestId) await Speech.stop().catch(() => undefined); });
   return queue;
 }

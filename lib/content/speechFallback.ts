@@ -84,15 +84,15 @@ async function ensureIndexFor(text: string, language?: CourseLanguage): Promise<
 }
 
 /** Use a recording first, but ONLY on devices that opted in or were auto-switched. */
-export async function playPreferredRecording(text: string, rate: number, language?: CourseLanguage): Promise<boolean> {
+export async function playPreferredRecording(text: string, rate: number, language?: CourseLanguage, onDone?: () => void): Promise<boolean> {
   if (!(await prefersRecordedSpeech())) return false;
   await ensureIndexFor(text, language);
-  return tryPlayRecorded(text, rate);
+  return tryPlayRecorded(text, rate, onDone);
 }
 
 /** Last resort when the device engine failed: remember the failure and try the recording. */
-export async function playFallbackRecording(text: string, rate: number, language?: CourseLanguage): Promise<boolean> {
+export async function playFallbackRecording(text: string, rate: number, language?: CourseLanguage, onDone?: () => void): Promise<boolean> {
   await noteSpeechFailure();
   await ensureIndexFor(text, language);
-  return tryPlayRecorded(text, rate);
+  return tryPlayRecorded(text, rate, onDone);
 }

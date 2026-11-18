@@ -30,6 +30,8 @@ export function hasRecordedAudio(text: string): boolean { return recordings.has(
 
 let current: AudioPlayer | null = null;
 let segmentTimer: ReturnType<typeof setTimeout> | null = null;
+let finishSub: { remove(): void } | null = null;
+let activePlayId = 0;
 const downloads = new Map<string, Promise<string | null>>();
 
 // Older builds cached any non-empty response, including a 404 page. Recognize
@@ -89,11 +91,12 @@ async function waitUntilLoaded(player: AudioPlayer): Promise<boolean> {
   });
 }
 
-export async function tryPlayRecorded(text: string, rate = 1): Promise<boolean> {
+export async function tryPlayRecorded(text: string, rate = 1, onDone?: () => void): Promise<boolean> {
   const rec = recordings.get(key(text));
   if (!rec) return false;
   try {
     stopRecorded();
+    const playId = ++activePlayId;
     let uri: string;
     let segment: { startMs: number; durationMs: number } | null = null;
     if ('url' in rec) {
@@ -110,12 +113,26 @@ export async function tryPlayRecorded(text: string, rate = 1): Promise<boolean> 
     const player = createAudioPlayer({ uri }, { downloadFirst: Platform.OS === 'web' });
     current = player;
     if (!(await waitUntilLoaded(player))) return false;
+    if (playId !== activePlayId) return false;
     if (segment) await player.seekTo(segment.startMs / 1000);
+    if (playId !== activePlayId) return false;
     if (rate !== 1) player.setPlaybackRate(Math.max(0.5, Math.min(1.5, rate)));
+    let doneCalled = false;
+    const notifyDone = () => {
+      if (doneCalled || playId !== activePlayId) return;
+      doneCalled = true;
+      onDone?.();
+    };
+    finishSub = typeof player.addListener === 'function'
+      ? player.addListener('playbackStatusUpdate', status => {
+          if (status.didJustFinish) notifyDone();
+        })
+      : null;
     player.play();
     if (segment) {
       segmentTimer = setTimeout(() => {
         try { current?.pause(); } catch { /* already released */ }
+        notifyDone();
       }, Math.max(120, segment.durationMs / Math.max(0.5, rate)));
     }
     return true;
@@ -123,7 +140,10 @@ export async function tryPlayRecorded(text: string, rate = 1): Promise<boolean> 
 }
 
 export function stopRecorded(): void {
+  activePlayId += 1;
   if (segmentTimer) { clearTimeout(segmentTimer); segmentTimer = null; }
+  try { finishSub?.remove(); } catch { /* already released */ }
+  finishSub = null;
   try { current?.pause(); current?.remove(); } catch { /* already released */ }
   current = null;
 }

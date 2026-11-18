@@ -273,10 +273,30 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   }, []);
   const { scheduleOnPass } = useSpeakAutoAdvance(`${course.id}:${lesson.id}:${stage}:${sentenceIndex}`);
 
-  // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
+  // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
     if (stage !== 2) return;
-    return autoRead(lesson.sentences.length, index => selectSentence(index, pace('listen')), undefined, 900);
+    return autoRead(
+      lesson.sentences.length,
+      index => new Promise<void>(resolve => {
+        let settled = false;
+        const done = () => { if (!settled) { settled = true; resolve(); } };
+        setSentenceIndex(index);
+        setRevealed(false);
+        setSpeechError('');
+        void playStarterSpeech(
+          course.locale,
+          lesson.sentences[index].text,
+          pace('listen'),
+          () => { setSpeechError('پخش صدا ممکن نشد؛ موتور گفتار و بستهٔ صوتی این زبان را در تنظیمات دستگاه بررسی کنید.'); done(); },
+          () => setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد. تنظیمات گفتار دستگاه را بررسی کنید.'),
+          done,
+        ).catch(done);
+      }),
+      undefined,
+      850,
+      () => { void stopStarterSpeech(); },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, lesson.id, listenRun]);
 
@@ -426,6 +446,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
               activeIndex={sentenceIndex}
               onSelect={selectSentence}
               onRestart={restartListening}
+              restartSignal={listenRun}
               onActiveItemY={yInList => scrollToContentY(listenListOffsetRef.current + yInList)}
               accent={Palette.primary}
               foreignStyle={styles.listenTarget}

@@ -350,10 +350,33 @@ export default function SentenceLessonScreen() {
   }, []);
   const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
 
-  // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
+  // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
     if (stage !== 2) return;
-    return autoRead(lesson.sentences.length, index => selectListeningSentence(index), undefined, 900);
+    return autoRead(
+      lesson.sentences.length,
+      index => new Promise<void>(resolve => {
+        if (recorderState.isRecording || evaluatingSpeech) { resolve(); return; }
+        let settled = false;
+        const done = () => { if (!settled) { settled = true; resolve(); } };
+        setSentenceIndex(index);
+        setSpeechResult(null);
+        setSpeechError(null);
+        setAudioNotice('');
+        playResponsiveSpeech({
+          text: lesson.sentences[index].en,
+          locale: 'en-US',
+          onDone: done,
+          onError: () => {
+            setAudioNotice('پخش صدا ممکن نشد. صدای دستگاه و اجازهٔ پخش مرورگر را بررسی کنید.');
+            done();
+          },
+        });
+      }),
+      undefined,
+      850,
+      () => { void stopResponsiveSpeech(); },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, lesson.id, listenRun]);
 
@@ -523,6 +546,7 @@ export default function SentenceLessonScreen() {
                 activeIndex={sentenceIndex}
                 onSelect={selectListeningSentence}
                 onRestart={restartListening}
+                restartSignal={listenRun}
                 onActiveItemY={yInList => scrollToContentY(listenListOffsetRef.current + yInList)}
                 accent={Palette.primary}
                 foreignStyle={styles.listenEnglish}

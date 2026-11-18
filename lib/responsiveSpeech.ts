@@ -59,10 +59,9 @@ export function playResponsiveSpeech({
       if (currentRequest !== requestId) return;
       active = false;
       if (voice) { start(); return; }
-      void playFallbackRecording(text, selectedRate, 'en').then(ok => {
+      void playFallbackRecording(text, selectedRate, 'en', () => { if (currentRequest === requestId) onDone?.(); }).then(ok => {
         if (currentRequest !== requestId) return;
-        if (ok) onDone?.();
-        else onError?.();
+        if (!ok) onError?.();
       });
     };
     try {
@@ -88,9 +87,9 @@ export function playResponsiveSpeech({
 
   const begin = () => {
     // Device TTS stays primary; recordings are used only on devices that opted in.
-    void playPreferredRecording(text, selectedRate, 'en').catch(() => false).then(played => {
+    void playPreferredRecording(text, selectedRate, 'en', () => { if (currentRequest === requestId) onDone?.(); }).catch(() => false).then(played => {
       if (currentRequest !== requestId) return;
-      if (played) { onDone?.(); return; }
+      if (played) return;
       void voiceFor(locale, text).catch(() => undefined).then(voice => start(voice));
     });
   };

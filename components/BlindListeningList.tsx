@@ -13,6 +13,7 @@ interface Props {
   activeIndex: number;
   onSelect: (index: number) => void;
   onRestart?: () => void;
+  restartSignal?: number;
   onActiveItemY?: (yInComponent: number) => void;
   accent?: string;
   /** Font style for the foreign-language text (e.g. Cyrillic serif). */
@@ -31,12 +32,14 @@ function seeded(seed: string) {
  * from three Persian options, and only then sees the text. Includes auto-scroll tracking and
  * a restart button to play from the beginning.
  */
-export default function BlindListeningList({ items, activeIndex, onSelect, onRestart, onActiveItemY, accent = Palette.primary, foreignStyle, unitLabel = 'جمله' }: Props) {
+export default function BlindListeningList({ items, activeIndex, onSelect, onRestart, restartSignal = 0, onActiveItemY, accent = Palette.primary, foreignStyle, unitLabel = 'جمله' }: Props) {
   const [blind, setBlind] = useState(items.length >= 3);
   const [answers, setAnswers] = useState<Record<string, number>>({});
+  const itemsKey = useMemo(() => items.map(item => item.id).join('|'), [items]);
   const listOffsetRef = useRef(0);
   const cardYsRef = useRef<Record<number, number>>({});
   const hasScrolledRef = useRef(false);
+  const lastScrolledIndexRef = useRef(-1);
   const onActiveItemYRef = useRef(onActiveItemY);
   onActiveItemYRef.current = onActiveItemY;
 
@@ -44,17 +47,28 @@ export default function BlindListeningList({ items, activeIndex, onSelect, onRes
     setAnswers({});
     cardYsRef.current = {};
     hasScrolledRef.current = false;
-  }, [items]);
+    lastScrolledIndexRef.current = -1;
+  }, [itemsKey]);
+
+  useEffect(() => {
+    if (restartSignal > 0) {
+      hasScrolledRef.current = true;
+      lastScrolledIndexRef.current = -1;
+    }
+  }, [restartSignal]);
 
   useEffect(() => {
     if (activeIndex > 0) hasScrolledRef.current = true;
     if (!hasScrolledRef.current && activeIndex === 0) return;
     const cardY = cardYsRef.current[activeIndex];
-    if (cardY !== undefined) onActiveItemYRef.current?.(listOffsetRef.current + cardY);
-  }, [activeIndex]);
+    if (cardY !== undefined && lastScrolledIndexRef.current !== activeIndex) {
+      lastScrolledIndexRef.current = activeIndex;
+      onActiveItemYRef.current?.(listOffsetRef.current + cardY);
+    }
+  }, [activeIndex, restartSignal]);
 
   const options = useMemo(() => {
-    const random = seeded(items.map(item => item.id).join('|'));
+    const random = seeded(itemsKey);
     return items.map((item, index) => {
       const others = items.filter((_, i) => i !== index).map(other => other.fa).filter((value, i, all) => value !== item.fa && all.indexOf(value) === i);
       const picked: string[] = [];
@@ -63,13 +77,15 @@ export default function BlindListeningList({ items, activeIndex, onSelect, onRes
       for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
       return list;
     });
-  }, [items]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemsKey]);
 
   const correctCount = items.filter((item, index) => answers[item.id] !== undefined && options[index][answers[item.id]] === item.fa).length;
   const answeredCount = Object.keys(answers).length;
 
   const handleRestart = () => {
     hasScrolledRef.current = true;
+    lastScrolledIndexRef.current = 0;
     const firstY = cardYsRef.current[0];
     if (firstY !== undefined) onActiveItemYRef.current?.(listOffsetRef.current + firstY);
     onRestart?.();
@@ -105,7 +121,8 @@ export default function BlindListeningList({ items, activeIndex, onSelect, onRes
               onLayout={event => {
                 const y = event.nativeEvent.layout.y;
                 cardYsRef.current[index] = y;
-                if (index === activeIndex && (hasScrolledRef.current || activeIndex > 0)) {
+                if (index === activeIndex && (hasScrolledRef.current || activeIndex > 0) && lastScrolledIndexRef.current !== index) {
+                  lastScrolledIndexRef.current = index;
                   onActiveItemYRef.current?.(listOffsetRef.current + y);
                 }
               }}

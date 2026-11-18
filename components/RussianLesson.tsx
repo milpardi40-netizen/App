@@ -229,10 +229,28 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   }, []);
   const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
 
-  // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
+  // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
     if (stage !== 2) return;
-    return autoRead(lesson.sentences.length, index => selectSentence(index, pace('listen')), undefined, 900);
+    return autoRead(
+      lesson.sentences.length,
+      index => new Promise<void>(resolve => {
+        let settled = false;
+        const done = () => { if (!settled) { settled = true; resolve(); } };
+        setSentenceIndex(index);
+        setRevealed(false);
+        setSpeechError('');
+        void playRussianSpeech(
+          lesson.sentences[index].text,
+          pace('listen'),
+          () => { setSpeechError('صدای روسی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.'); done(); },
+          done,
+        ).catch(done);
+      }),
+      undefined,
+      850,
+      () => { void stopRussianSpeech(); },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, lesson.id, listenRun]);
 
@@ -382,6 +400,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
               activeIndex={sentenceIndex}
               onSelect={selectSentence}
               onRestart={restartListening}
+              restartSignal={listenRun}
               onActiveItemY={yInList => scrollToContentY(listenListOffsetRef.current + yInList)}
               accent={Palette.primary}
               foreignStyle={styles.listenRussian}

@@ -234,10 +234,28 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   }, []);
   const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
 
-  // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
+  // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
     if (stage !== 2) return;
-    return autoRead(lesson.sentences.length, index => selectSentence(index, NORMAL_SPEECH_RATE), undefined, 900);
+    return autoRead(
+      lesson.sentences.length,
+      index => new Promise<void>(resolve => {
+        let settled = false;
+        const done = () => { if (!settled) { settled = true; resolve(); } };
+        setSentenceIndex(index);
+        setRevealed(false);
+        setSpeechError('');
+        void playTurkishSpeech(
+          lesson.sentences[index].text,
+          NORMAL_SPEECH_RATE,
+          () => { setSpeechError('صدای ترکی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.'); done(); },
+          done,
+        ).catch(done);
+      }),
+      undefined,
+      850,
+      () => { void stopTurkishSpeech(); },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, lesson.id, listenRun]);
 
@@ -386,6 +404,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
               activeIndex={sentenceIndex}
               onSelect={selectSentence}
               onRestart={restartListening}
+              restartSignal={listenRun}
               onActiveItemY={yInList => scrollToContentY(listenListOffsetRef.current + yInList)}
               accent={Palette.primary}
               foreignStyle={styles.listenTurkish}
