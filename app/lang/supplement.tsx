@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { PageNavigation } from '@/components/PageNavigation';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { speechTagFor } from '@/lib/speechLanguage';
 import { ENGLISH_A1_COURSE_UNITS, ENGLISH_FOUNDATION_UNITS, ENGLISH_SUPPLEMENT, SKILLS, type EnglishUnitLevel, type Skill } from '@/lib/englishSupplement/content';
 import {

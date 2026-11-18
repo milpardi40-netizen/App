@@ -8,7 +8,7 @@ import { useFirstTimeHint } from '@/lib/useFirstTimeHint';
 import { GrammarNoteCard, GrammarPatternCard, GrammarStageHeader } from '@/components/GrammarUsage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { ArrowRight, Check, ChevronLeft, Headphones, MessageCircle, Mic2, RefreshCw, RotateCcw, Sparkles, Volume2 } from 'lucide-react-native';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
@@ -46,6 +46,8 @@ type StarterCourseLesson = StarterLesson;
 import type { StarterLessonSession } from '@/lib/languages/starterSessions';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playStarterSpeech, stopStarterSpeech, warmStarterSpeech } from '@/lib/starterSpeech';
+import { ensureRecordedAudio } from '@/lib/content/coreAudio';
+import type { CourseLanguage } from '@/lib/content/readiness';
 import { narrationRate, type NarrationPace } from '@/lib/narration';
 import { Typography } from '@/lib/theme';
 import { shuffleChecks } from '@/lib/shuffleChecks';
@@ -76,7 +78,10 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const pace = (name: NarrationPace) => narrationRate(course.locale, name);
   // Start the phone's engine (and its voice list) while the lesson paints: the first sentence plays
   // as fast as the ones after it.
-  useEffect(() => { warmStarterSpeech(course.locale); }, [course.locale]);
+  useEffect(() => {
+    warmStarterSpeech(course.locale);
+    void ensureRecordedAudio(course.locale.split('-')[0].toLowerCase() as CourseLanguage);
+  }, [course.locale]);
   const foundation = !!lesson.learningMode;
   const a1 = lesson.levelId === 1 || lesson.levelId === 2 || lesson.levelId === 3 || lesson.levelId === 4;
   const unit = lesson.learningMode === 'chunks' ? 'عبارت' : foundation ? 'واژه' : 'جمله';

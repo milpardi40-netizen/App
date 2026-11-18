@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
 import { Mic2, RefreshCw, Square, Volume2 } from 'lucide-react-native';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { toPersianDigits as fa } from '@/lib/format';
 import { scoreSpeech, tokens, type SpeakCheckResult, type SpeakWordState } from '@/lib/speechScore';
 export { scoreSpeech, type SpeakCheckResult, type SpeakWordState };

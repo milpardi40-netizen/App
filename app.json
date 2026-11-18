@@ -35,6 +35,7 @@
       "./plugins/withStableLayoutDirection",
       "./plugins/withLightTextTheme",
       "./plugins/withAndroidAbis",
+      "./plugins/withReliableAndroidSpeech",
       "expo-font",
       [
         "expo-notifications",

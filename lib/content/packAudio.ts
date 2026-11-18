@@ -32,23 +32,39 @@ let current: AudioPlayer | null = null;
 let segmentTimer: ReturnType<typeof setTimeout> | null = null;
 const downloads = new Map<string, Promise<string | null>>();
 
+// Older builds cached any non-empty response, including a 404 page. Recognize
+// the ID3 tag or MPEG frame sync before trusting either an old or a new file.
+async function isMp3(uri: string): Promise<boolean> {
+  const info = await FileSystem.getInfoAsync(uri);
+  if (!info.exists || info.isDirectory || info.size < 3) return false;
+  const head = await FileSystem.readAsStringAsync(uri, {
+    encoding: FileSystem.EncodingType.Base64, position: 0, length: 3,
+  });
+  return head === 'SUQz' || head.startsWith('/+') || head.startsWith('//');
+}
+
 /** Download a bundle once and keep it in the app cache (offline after the first play). */
 async function cachedBundle(file: string): Promise<string | null> {
   const cached = downloads.get(file);
   if (cached) return cached;
   const task = (async () => {
-    const dir = `${FileSystem.cacheDirectory ?? ''}milo-audio/`;
+    if (!FileSystem.cacheDirectory) return null;
+    const dir = `${FileSystem.cacheDirectory}milo-audio/`;
     const target = `${dir}${file}`;
+    const partial = `${target}.part`;
     try {
       await FileSystem.makeDirectoryAsync(dir, { intermediates: true }).catch(() => undefined);
-      const info = await FileSystem.getInfoAsync(target);
-      if (info.exists && 'size' in info && typeof info.size === 'number' && info.size > 0) return target;
-      const result = await FileSystem.downloadAsync(`${RELEASE_BASE}/${file}`, target);
-      return result?.uri ?? target;
+      if (await isMp3(target)) return target;
+      await FileSystem.deleteAsync(target, { idempotent: true });
+      const result = await FileSystem.downloadAsync(`${RELEASE_BASE}/${file}`, partial);
+      if (result.status !== 200 || !(await isMp3(partial))) return null;
+      await FileSystem.moveAsync({ from: partial, to: target });
+      return target;
     } catch { return null; }
+    finally { await FileSystem.deleteAsync(partial, { idempotent: true }).catch(() => undefined); }
   })();
   downloads.set(file, task);
-  task.then(local => { if (!local) downloads.delete(file); });
+  void task.then(() => downloads.delete(file)); // OS may evict the cached file between plays.
   return task;
 }
 

@@ -58,6 +58,7 @@ import { CORE_LESSON_EVIDENCE, isCoreLessonEvidenceComplete } from '@/lib/englis
 import { useEnglishStudyTimer } from '@/components/useEnglishStudyTimer';
 import { PAID_AI_ENABLED, PAID_AI_DISABLED_MESSAGE } from '@/lib/paidAI';
 import { ENGLISH_NATURAL_SPEECH_RATE, ENGLISH_NORMAL_SPEECH_RATE, ENGLISH_SLOW_SPEECH_RATE, playResponsiveSpeech, stopResponsiveSpeech, warmSpeech } from '@/lib/responsiveSpeech';
+import { ensureRecordedAudio } from '@/lib/content/coreAudio';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
 import { B1_INDEPENDENT_UNITS } from '@/lib/courseContentB1Independent';
 import { B2_UPPER_INTERMEDIATE_UNITS } from '@/lib/courseContentB2UpperIntermediate';
@@ -227,7 +228,7 @@ export default function SentenceLessonScreen() {
     ?? C1_ADVANCED_UNITS.find(unit => unit.id === lesson.id)?.topics.map(topic => topic[0]);
   const c1Unit = C1_ADVANCED_UNITS.find(unit => unit.id === lesson.id);
 
-  useEffect(() => warmSpeech('en-US'), []);
+  useEffect(() => { warmSpeech('en-US'); void ensureRecordedAudio('en'); }, []);
 
   useFocusEffect(useCallback(() => () => { void stopResponsiveSpeech(); }, []));
 

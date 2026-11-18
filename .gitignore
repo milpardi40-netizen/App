@@ -56,3 +56,9 @@ scripts/content/.stubs/
 content-packs/audio/
 content-packs/audio-bundles/
 content-packs/packs-all.json
+content-packs/core-audio/
+content-packs/core-bundles/
+content-packs/core-audio-index.json
+
+# Web-only speech engine, copied from the pinned npm dependency at export time
+/public/narration/engine/

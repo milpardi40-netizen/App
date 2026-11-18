@@ -5,7 +5,7 @@ import { LocalizedText as Text } from '@/components/LocalizedText';
 
 import React from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { speechTagFor } from '@/lib/speechLanguage';
 import {
   Volume2,

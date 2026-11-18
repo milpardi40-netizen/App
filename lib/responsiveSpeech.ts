@@ -1,4 +1,4 @@
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
 import { voiceFor } from './voiceRotation';
 import { speechTagFor } from './speechLanguage';
 import { stopRecorded } from '@/lib/content/packAudio';
@@ -59,8 +59,10 @@ export function playResponsiveSpeech({
       if (currentRequest !== requestId) return;
       active = false;
       if (voice) { start(); return; }
-      void playFallbackRecording(text, selectedRate).then(ok => {
-        if (currentRequest === requestId && !ok) onError?.();
+      void playFallbackRecording(text, selectedRate, 'en').then(ok => {
+        if (currentRequest !== requestId) return;
+        if (ok) onDone?.();
+        else onError?.();
       });
     };
     try {
@@ -86,8 +88,9 @@ export function playResponsiveSpeech({
 
   const begin = () => {
     // Device TTS stays primary; recordings are used only on devices that opted in.
-    void playPreferredRecording(text, selectedRate).catch(() => false).then(played => {
-      if (currentRequest !== requestId || played) return;
+    void playPreferredRecording(text, selectedRate, 'en').catch(() => false).then(played => {
+      if (currentRequest !== requestId) return;
+      if (played) { onDone?.(); return; }
       void voiceFor(locale, text).catch(() => undefined).then(voice => start(voice));
     });
   };

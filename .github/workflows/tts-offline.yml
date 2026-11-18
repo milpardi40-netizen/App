@@ -62,6 +62,8 @@ jobs:
           echo "Rendering scope=$SCOPE engine=$ENGINE"
       - name: Install offline TTS dependencies
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq espeak-ng
           npm ci --ignore-scripts --no-audit --no-fund
           npm i --no-save --no-audit --no-fund espeak-ng@1.0.2 lamejs@1.2.1 tsx@4
       - name: Optional Piper neural voices (public models, no token)
@@ -106,6 +108,10 @@ jobs:
           node scripts/content/finalizeAudioPacks.mjs
           NODE_OPTIONS="--require ./scripts/content/shim.cjs" node_modules/.bin/tsx scripts/content/genPackCoverage.ts --write
           node scripts/content/buildContentRelease.mjs
+      - name: Render and bundle core lesson audio (all 6 languages)
+        run: |
+          set -e
+          node scripts/content/renderCoreAudio.mjs --workers 8
       - name: Publish bundles + packs as GitHub release assets (no secret required)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -114,10 +120,10 @@ jobs:
           set -e
           gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
             gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "Milo content packs and offline speech" \
-              --notes "Versioned content packs and concatenated eSpeak NG audio bundles. Public, key-free hosting."
+              --notes "Versioned content packs, core lesson audio and concatenated eSpeak NG audio bundles. Public, key-free hosting."
           gh release upload "$TAG" --repo "$GITHUB_REPOSITORY" --clobber \
-            content-packs/audio-bundles/*.mp3 content-packs/packs-all.json content-packs/manifest.json
-          echo "Published $(find content-packs/audio-bundles -name '*.mp3' | wc -l) bundles + packs-all.json + manifest.json"
+            content-packs/audio-bundles/*.mp3 content-packs/core-bundles/*.mp3 content-packs/core-audio-index.json content-packs/packs-all.json content-packs/manifest.json
+          echo "Published $(find content-packs/audio-bundles content-packs/core-bundles -name '*.mp3' | wc -l) bundles + core-audio-index.json + packs-all.json + manifest.json"
       - name: Mirror to Supabase Storage when the optional secret exists
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

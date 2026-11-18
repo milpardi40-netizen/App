@@ -1,4 +1,4 @@
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
 
 const wait = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
 

@@ -8,7 +8,7 @@ import { I18nManager, Image, Platform, StyleSheet, Text, TextInput, View } from 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { MiloLogoMotion } from '@/components/MiloLogoMotion';
 import { KeyboardProvider } from '@/components/KeyboardRuntime';
-import { createAudioPlayer } from 'expo-audio';
+import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 // Imported from per-weight subpaths on purpose: the package root `require()`s
 // every weight at load time, so Metro bundled all 27 font files (7.0 MB) even
 // though only these 7 are used. Subpath imports keep only these (1.5 MB).
@@ -107,6 +107,12 @@ function CompanionRuntime() {
  */
 export default function RootLayout() {
   useFrameworkReady();
+  useEffect(() => {
+    // Use the media output for lessons even before the first microphone exercise.
+    if (Platform.OS === 'ios') {
+      void setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true }).catch(() => undefined);
+    }
+  }, []);
   // Six local events only: no network, no SDK, no token. They turn «is this fun?» into a number.
   useEffect(() => {
     initAnalytics();

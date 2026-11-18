@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
 import { speechTagFor } from './speechLanguage';
 
 // Pure episode model lives in englishPodcastEpisodes.ts so Node scripts can reuse it.

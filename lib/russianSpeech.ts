@@ -1,4 +1,4 @@
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
 import { playPreferredRecording, playFallbackRecording, noteSpeechSuccess } from '@/lib/content/speechFallback';
 import { speechTagFor } from './speechLanguage';
 import { voiceFor, warmVoices } from './voiceRotation';
@@ -33,7 +33,7 @@ export function playRussianSpeech(text: string, rate: number, onError?: () => vo
     // Device TTS stays primary; recordings are used only on devices that opted in, and at the tempo
     // the shared narration contract defines for this language.
     const recordedRate = recordedPlaybackRate('ru-RU', rate);
-    if (await playPreferredRecording(text, recordedRate)) { onDone?.(); return; }
+    if (await playPreferredRecording(text, recordedRate, 'ru')) { onDone?.(); return; }
     if (request !== requestId) return;
     const voice = await voiceFor('ru-RU', text).catch(() => undefined);
     if (request !== requestId) return;
@@ -49,13 +49,13 @@ export function playRussianSpeech(text: string, rate: number, onError?: () => vo
           onError: () => {
             if (request !== requestId) return;
             if (withVoice && voice) { say(false); return; }
-            void playFallbackRecording(text, recordedRate).then(ok => { if (request === requestId && !ok) onError?.(); });
+            void playFallbackRecording(text, recordedRate, 'ru').then(ok => { if (request === requestId) { if (ok) onDone?.(); else onError?.(); } });
           },
         });
       } catch {
         if (request !== requestId) return;
         if (withVoice && voice) { say(false); return; }
-        void playFallbackRecording(text, recordedRate).then(ok => { if (request === requestId && !ok) onError?.(); });
+        void playFallbackRecording(text, recordedRate, 'ru').then(ok => { if (request === requestId) { if (ok) onDone?.(); else onError?.(); } });
       }
     };
     say(true);

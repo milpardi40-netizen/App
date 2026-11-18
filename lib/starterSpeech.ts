@@ -1,4 +1,4 @@
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
 import { playPreferredRecording, playFallbackRecording, noteSpeechSuccess } from '@/lib/content/speechFallback';
 import { speechTagFor } from './speechLanguage';
 import { recordedPlaybackRate } from './narration';
@@ -74,13 +74,14 @@ export function playStarterSpeech(locale: string, text: string, rate: number, on
     if (request !== requestId) return;
     // Device TTS stays primary; recordings are used only on devices that opted in.
     // Same tempo as the device voice: the shared contract owns the pack-tempo calibration.
+    const lang = normalized(locale).split('-')[0] as 'de' | 'fr' | 'es' | 'en' | 'tr' | 'ru';
     const recordedRate = recordedPlaybackRate(locale, rate);
-    if (await playPreferredRecording(text, recordedRate)) return;
+    if (await playPreferredRecording(text, recordedRate, lang)) return;
     if (request !== requestId) return;
     const candidates = await findVoices(locale);
     if (request !== requestId) return;
     const fail = () => {
-      void playFallbackRecording(text, recordedRate).then(ok => { if (request === requestId && !ok) onError?.(); });
+      void playFallbackRecording(text, recordedRate, lang).then(ok => { if (request === requestId && !ok) onError?.(); });
     };
     if (!candidates.length) { fail(); return; }
 

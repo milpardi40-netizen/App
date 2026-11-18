@@ -1,4 +1,4 @@
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
 import { speechTagFor } from './speechLanguage';
 
 /**

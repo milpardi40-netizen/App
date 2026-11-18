@@ -8,7 +8,7 @@ import { useFirstTimeHint } from '@/lib/useFirstTimeHint';
 import { GrammarNoteCard, GrammarPatternCard, GrammarStageHeader } from '@/components/GrammarUsage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { ArrowRight, Check, ChevronLeft, Headphones, MessageCircle, Mic2, RefreshCw, RotateCcw, Sparkles, Volume2 } from 'lucide-react-native';
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
 import ProductionTask from '@/components/ProductionTask';
@@ -30,6 +30,7 @@ import { bandReadinessForLevel } from '@/lib/content/readiness';
 import type { RussianLessonSession } from '@/lib/languages/russianStudyState';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
+import { ensureRecordedAudio } from '@/lib/content/coreAudio';
 import { narrationRate, type NarrationPace } from '@/lib/narration';
 import { Typography } from '@/lib/theme';
 import { shuffleChecks } from '@/lib/shuffleChecks';
@@ -53,7 +54,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const courseLevel = RUSSIAN_LEVELS.find(item => item.id === lesson.levelId) ?? RUSSIAN_LEVELS[0];
   const pace = (name: NarrationPace) => narrationRate('ru-RU', name);
   // Warm the phone voice while the lesson paints, so the first sentence is not late.
-  useEffect(() => { warmRussianSpeech(); }, []);
+  useEffect(() => { warmRussianSpeech(); void ensureRecordedAudio('ru'); }, []);
   const [stage, setStage] = useState(0);
   const [sentenceIndex, setSentenceIndex] = useState(0);
 

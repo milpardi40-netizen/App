@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { tryPlayRecorded } from './packAudio';
+import { ensureRecordedAudio, loadCoreAudio } from './coreAudio';
+import { hasRecordedAudio, tryPlayRecorded } from './packAudio';
+import type { CourseLanguage } from './readiness';
 
 /**
  * Per-device speech fallback.
@@ -71,14 +73,26 @@ export async function noteSpeechFailure(): Promise<void> {
   }
 }
 
+async function ensureIndexFor(text: string, language?: CourseLanguage): Promise<void> {
+  if (!language || hasRecordedAudio(text)) return;
+  await loadCoreAudio(language).catch(() => undefined);
+  if (!hasRecordedAudio(text)) {
+    await ensureRecordedAudio(language).catch(() => undefined);
+  } else {
+    void ensureRecordedAudio(language).catch(() => undefined);
+  }
+}
+
 /** Use a recording first, but ONLY on devices that opted in or were auto-switched. */
-export async function playPreferredRecording(text: string, rate: number): Promise<boolean> {
+export async function playPreferredRecording(text: string, rate: number, language?: CourseLanguage): Promise<boolean> {
   if (!(await prefersRecordedSpeech())) return false;
+  await ensureIndexFor(text, language);
   return tryPlayRecorded(text, rate);
 }
 
 /** Last resort when the device engine failed: remember the failure and try the recording. */
-export async function playFallbackRecording(text: string, rate: number): Promise<boolean> {
+export async function playFallbackRecording(text: string, rate: number, language?: CourseLanguage): Promise<boolean> {
   await noteSpeechFailure();
+  await ensureIndexFor(text, language);
   return tryPlayRecorded(text, rate);
 }

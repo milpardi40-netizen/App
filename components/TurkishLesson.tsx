@@ -8,7 +8,7 @@ import { useFirstTimeHint } from '@/lib/useFirstTimeHint';
 import { GrammarNoteCard, GrammarPatternCard, GrammarStageHeader } from '@/components/GrammarUsage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { ArrowRight, Check, ChevronLeft, Headphones, MessageCircle, Mic2, RefreshCw, RotateCcw, Sparkles, Volume2 } from 'lucide-react-native';
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
 import ProductionTask from '@/components/ProductionTask';
@@ -31,6 +31,7 @@ import { bandReadinessForLevel } from '@/lib/content/readiness';
 import type { TurkishLessonSession } from '@/lib/languages/turkishStudyState';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playTurkishSpeech, stopTurkishSpeech } from '@/lib/turkishSpeech';
+import { ensureRecordedAudio } from '@/lib/content/coreAudio';
 import { Typography } from '@/lib/theme';
 import { shuffleChecks } from '@/lib/shuffleChecks';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
@@ -52,6 +53,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   const router = useRouter();
   const { levelReplay } = useLocalSearchParams<{ levelReplay?: string }>();
   const courseLevel = TURKISH_LEVELS.find(item => item.id === lesson.levelId) ?? TURKISH_LEVELS[0];
+  useEffect(() => { void ensureRecordedAudio('tr'); }, []);
   const [stage, setStage] = useState(0);
   const [sentenceIndex, setSentenceIndex] = useState(0);
 

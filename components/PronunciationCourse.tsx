@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import type { ViewStyle } from 'react-native';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { speechTagFor } from '@/lib/speechLanguage';
 import { ArrowLeft, ChevronLeft, ChevronRight, RotateCcw, Volume2 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
