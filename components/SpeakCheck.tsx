@@ -1,4 +1,5 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
+import { Typography } from '@/lib/theme';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   hint: { fontSize: 12.5, lineHeight: 20, color: '#475569', textAlign: 'center' },
   wordsRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6, marginTop: 2, width: '100%' },
   // «Thank» and «you.» must each stay whole: the chip may move to the next line, its letters may not.
-  word: { fontSize: 17, lineHeight: 24, fontWeight: '700', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, overflow: 'hidden', writingDirection: 'ltr', textAlign: 'left', flexShrink: 0 },
+  word: { fontFamily: Typography.latinFontFamily, fontSize: 17, lineHeight: 24, fontWeight: '700', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, overflow: 'hidden', writingDirection: 'ltr', textAlign: 'left', flexShrink: 0 },
   wordOk: { color: '#15803D', backgroundColor: '#DCFCE7' },
   wordMiss: { color: '#B91C1C', backgroundColor: '#FEE2E2' },
   wordNear: { color: '#B45309', backgroundColor: '#FEF3C7' },

@@ -33,8 +33,12 @@ import { labLessonsOf } from '../content/labLessons';
 import type { LabLesson } from '../content/labLessonTypes';
 import { STARTER_FOUNDATIONS, type FoundationMode, type FoundationSeed } from './starterFoundations';
 import { GERMAN_PRE_A1 } from './germanPreA1';
+import { FRENCH_PRE_A1 } from './frenchPreA1';
+import { SPANISH_PRE_A1 } from './spanishPreA1';
 
-export type NewLanguageId = 'de' | 'fr' | 'es';
+import { isNewLanguage, type NewLanguageId } from './newLanguageIds';
+export { isNewLanguage };
+export type { NewLanguageId };
 export type StarterLesson = LearningLesson & { levelId: CourseLevelId; order: number; subtitle: string; learningMode?: FoundationMode };
 export type SentenceSeed = [string, string, string, string, string, string?];
 export type LessonSeed = { title: string; subtitle: string; situation: string; teachingFa: string; sentences: SentenceSeed[]; check: [string, number, string]; dialogue?: number[] };
@@ -111,7 +115,6 @@ const levelSeeds: Array<[CourseLevelId,string,string,string,string]> = [
  *     questions and answers those lessons actually need.
  * IDs and sentence indexes stay identical, so saved progress and review cards remain valid.
  */
-export function isNewLanguage(value: string | undefined): value is NewLanguageId { return value === 'de' || value === 'fr' || value === 'es'; }
 function buildFoundation(id: NewLanguageId, seed: FoundationSeed): StarterLesson {
   const lessonId = `${id}-foundation-${seed.id}`;
   const sentences = seed.rows.map(([text, fa, pronunciation], index) => ({
@@ -184,9 +187,17 @@ function buildCourse(id: NewLanguageId) {
   // Only their presentation order changes; returning learners keep their saved
   // current lesson and may optionally visit the new foundations.
   const legacyOrder = [11, 1, 3, 4, 5, 2, 7, 6, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
-  const preA1: StarterLesson[] = id === 'de'
-    ? [...STARTER_FOUNDATIONS[id].map(seed => buildFoundation(id, seed)), ...GERMAN_PRE_A1]
-    : [...STARTER_FOUNDATIONS[id].map(seed => buildFoundation(id, seed)), ...legacyOrder.map(number => legacy[number - 1])];
+  // German, French and Spanish are authored as one whole Pre-A1 ladder each; the seed batches below
+  // stay as the fallback and keep every published ID reachable.
+  const authoredPreA1: Partial<Record<NewLanguageId, readonly StarterLesson[]>> = {
+    de: GERMAN_PRE_A1,
+    fr: FRENCH_PRE_A1,
+    es: SPANISH_PRE_A1,
+  };
+  const preA1: StarterLesson[] = [
+    ...STARTER_FOUNDATIONS[id].map(seed => buildFoundation(id, seed)),
+    ...(authoredPreA1[id] ?? legacyOrder.map(number => legacy[number - 1])),
+  ];
   const lessons: StarterLesson[] = [
     ...preA1,
     buildA1(id, A1_GREETINGS[id]),
@@ -233,5 +244,25 @@ function buildCourse(id: NewLanguageId) {
   const progress = createCourseProgressStore({key:`sentence_course_progress_${id}_starter_v1`,lessons:orderedLessons,cloudSync:false,recordEstimatedTime:false,markVocabularyOnCompletion:false});
   return { id,...labels[id], lessons:orderedLessons,levels,progress,sessions:createStarterSessions(id,orderedLessons), home:`/learn/${id}` };
 }
-export const NEW_COURSES = {de:buildCourse('de'),fr:buildCourse('fr'),es:buildCourse('es')};
 export type StarterCourse = ReturnType<typeof buildCourse>;
+
+/**
+ * A course is built the first time it is opened, not when this module loads.
+ *
+ * Building German, French and Spanish together cost every language screen the work of the other two:
+ * a German lesson created the French and Spanish lesson objects, sentences, checks and review cards as
+ * well. The property getters keep `NEW_COURSES[language]` working and cache each course, so repeated
+ * reads return the same object. Enumerating the map (e.g. for lesson totals) still builds all three.
+ */
+const builtCourses: Partial<Record<NewLanguageId, StarterCourse>> = {};
+function courseFor(id: NewLanguageId): StarterCourse {
+  const cached = builtCourses[id];
+  if (cached) return cached;
+  const course = buildCourse(id);
+  builtCourses[id] = course;
+  return course;
+}
+export const NEW_COURSES = {} as Record<NewLanguageId, StarterCourse>;
+for (const id of ['de', 'fr', 'es'] as const) {
+  Object.defineProperty(NEW_COURSES, id, { get: () => courseFor(id), enumerable: true });
+}

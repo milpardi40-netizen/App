@@ -14,15 +14,16 @@ import { COURSE_LEVELS, SENTENCE_LESSONS } from '@/lib/courseContent';
 import { getCourseProgress, setCurrentLesson as setEnglishCurrentLesson } from '@/lib/courseProgress';
 import PlacementTest, { type PlacementConfig } from '@/components/PlacementTest';
 import { playResponsiveSpeech, stopResponsiveSpeech } from '@/lib/responsiveSpeech';
+import { narrationRate } from '@/lib/narration';
 
 /** Per-course wiring for the shared end-of-level exam + daily supplement screen. */
 const RUSSIAN: LevelStudioConfig = {
   courseId: 'ru', nameFa: 'روسی', levels: RUSSIAN_LEVELS, lessons: RUSSIAN_LESSONS, progress: russianProgress,
-  speak: text => { void playRussianSpeech(text, 0.85, () => undefined); }, stopSpeech: () => { void stopRussianSpeech(); }, BottomNav: RussianBottomNav,
+  speak: text => { void playRussianSpeech(text, narrationRate('ru-RU', 'listen'), () => undefined); }, stopSpeech: () => { void stopRussianSpeech(); }, BottomNav: RussianBottomNav,
 };
 const TURKISH: LevelStudioConfig = {
   courseId: 'tr', nameFa: 'ترکی', levels: TURKISH_LEVELS, lessons: TURKISH_LESSONS, progress: turkishProgress,
-  speak: text => { void playTurkishSpeech(text, 0.85, () => undefined); }, stopSpeech: () => { void stopTurkishSpeech(); }, BottomNav: TurkishBottomNav,
+  speak: text => { void playTurkishSpeech(text, narrationRate('tr-TR', 'listen'), () => undefined); }, stopSpeech: () => { void stopTurkishSpeech(); }, BottomNav: TurkishBottomNav,
 };
 
 /** English sentences use `en` instead of `text`; adapt once so the shared studio can read them. */
@@ -38,7 +39,7 @@ export function TurkishLevelStudio() { return <LanguageLevelStudio config={TURKI
 export function StarterLevelStudio({ course }: { course: StarterCourse }) {
   const config = useMemo<LevelStudioConfig>(() => ({
     courseId: course.id, nameFa: course.name, levels: course.levels, lessons: course.lessons, progress: course.progress,
-    speak: text => { void playStarterSpeech(course.locale, text, 0.85, () => undefined); }, stopSpeech: () => { void stopStarterSpeech(); },
+    speak: text => { void playStarterSpeech(course.locale, text, narrationRate(course.locale, 'listen'), () => undefined); }, stopSpeech: () => { void stopStarterSpeech(); },
     BottomNav: () => <StarterBottomNav course={course} />,
   }), [course]);
   return <LanguageLevelStudio config={config} />;
@@ -51,7 +52,7 @@ export function TurkishPlacement() { return <PlacementTest config={{ ...TURKISH,
 export function StarterPlacement({ course }: { course: StarterCourse }) {
   const config = useMemo<PlacementConfig>(() => ({
     courseId: course.id, nameFa: course.name, levels: course.levels, lessons: course.lessons, progress: course.progress,
-    speak: text => { void playStarterSpeech(course.locale, text, 0.85, () => undefined); }, stopSpeech: () => { void stopStarterSpeech(); },
+    speak: text => { void playStarterSpeech(course.locale, text, narrationRate(course.locale, 'listen'), () => undefined); }, stopSpeech: () => { void stopStarterSpeech(); },
     BottomNav: () => <StarterBottomNav course={course} />, setCurrentLesson: course.progress.setCurrentLesson, homeHref: `/learn/${course.id}`,
   }), [course]);
   return <PlacementTest config={config} />;

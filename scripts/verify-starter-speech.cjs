@@ -7,8 +7,12 @@ const tick = () => new Promise(resolve => setImmediate(resolve));
   await esbuild.build({entryPoints:['lib/starterSpeech.ts'], bundle:true, platform:'node', format:'cjs', outfile:output, plugins:[{name:'speech-test-stubs', setup(b) {
     b.onResolve({filter:/^expo-speech$/}, () => ({path:'speech', namespace:'stub'}));
     b.onResolve({filter:/^react-native$/}, () => ({path:'platform', namespace:'stub'}));
-    b.onLoad({filter:/.*/, namespace:'stub'}, args => ({loader:'js', contents:args.path === 'platform' ? 'export const Platform={get OS(){return globalThis.__os}};' : `export const getAvailableVoicesAsync=()=>globalThis.__getVoices(); export const stop=async()=>{globalThis.__stops++}; export const speak=(text,options)=>globalThis.__spoken.push({text,...options});`}));
+    // Recorded-audio helpers pull in expo-audio; this test covers spoken playback only.
+    b.onResolve({filter:/content\/speechFallback$/}, () => ({path:'fallback', namespace:'stub'}));
+    b.onLoad({filter:/.*/, namespace:'stub'}, args => ({loader:'js', contents:args.path === 'fallback' ? 'export const playPreferredRecording=async()=>false; export const playFallbackRecording=async()=>false; export const noteSpeechSuccess=()=>{}; export const noteSpeechFailure=()=>{};' : args.path === 'platform' ? 'export const Platform={get OS(){return globalThis.__os}}; export const PixelRatio={get:()=>1,getFontScale:()=>1}; export const NativeModules={}; export const TurboModuleRegistry={get:()=>null,getEnforcing:()=>null}; export const NativeEventEmitter=class{addListener(){return{remove(){}}}}; export const DeviceEventEmitter={addListener:()=>({remove(){}})}; export const StyleSheet={create:v=>v,flatten:v=>v,hairlineWidth:1}; export const Text=function(){}; export const View=function(){}; export const AppRegistry={registerComponent(){}}; export const LogBox={ignoreLogs(){}}; export const Dimensions={get:()=>({width:390,height:800})}; export default {};' : `export const getAvailableVoicesAsync=()=>globalThis.__getVoices(); export const stop=async()=>{globalThis.__stops++}; export const speak=(text,options)=>globalThis.__spoken.push({text,...options});`}));
   }}]});
+  globalThis.__DEV__ = false;
+  globalThis.expo = globalThis.expo || { modules: new Proxy({}, { get: () => ({}), has: () => true }), NativeModule: class {}, SharedObject: class {}, SharedRef: class {}, EventEmitter: class { addListener() { return { remove() {} }; } removeAllListeners() {} } };
   const {playStarterSpeech, stopStarterSpeech} = require(output);
   global.__os = 'android'; global.__stops = 0; global.__spoken = [];
   let voices = [

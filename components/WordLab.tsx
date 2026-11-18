@@ -6,8 +6,9 @@ import { Check, ChevronLeft, RefreshCw, Sparkles, Volume2, ArrowRight, Play, Mic
 import SpeakCheck from '@/components/SpeakCheck';
 import { ReviewRatingGrid } from '@/components/ReviewRecall';
 import { speakPersian } from '@/lib/persianSpeech';
-import { playRussianSpeech, stopRussianSpeech } from '@/lib/russianSpeech';
-import { playStarterSpeech, stopStarterSpeech } from '@/lib/starterSpeech';
+import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
+import { playStarterSpeech, stopStarterSpeech, warmStarterSpeech } from '@/lib/starterSpeech';
+import { narrationRate, type NarrationPace } from '@/lib/narration';
 import { firstLetterHint, hasSpokenSentence, spokenSentence, spokenTarget, WORD_LAB_LOCALE, WORD_LAB_NAME, WORD_LAB_WORDS, type WordLabLanguage, type WordLabWord } from '@/lib/languages/wordLab';
 import { buildWordSession, loadWordProgress, rateWordCard, saveWordProgress, wordReason, wordStats, type WordProgress } from '@/lib/wordLabProgress';
 import { markPlanStep } from '@/lib/dailyPlan';
@@ -51,6 +52,8 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const router = useRouter();
   const words = WORD_LAB_WORDS[language];
   const locale = WORD_LAB_LOCALE[language];
+  // The word lab is part of the same narrator as the lesson: one pace ladder for the whole course.
+  const pace = useCallback((name: NarrationPace) => narrationRate(locale, name), [locale]);
   const languageName = WORD_LAB_NAME[language];
   const home = `/learn/${language}` as const;
 
@@ -69,6 +72,10 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const [error, setError] = useState('');
   const [voiceError, setVoiceError] = useState('');
   const playback = useRef(0);
+  /** Hand-off from the word to its sentence; any manual tap cancels it so nothing plays twice. */
+  const autoChain = useRef(0);
+  /** One automatic pass per card, even if the effect is re-run by a strict-mode render. */
+  const autoPlayed = useRef('');
 
   useEffect(() => {
     let alive = true;
@@ -80,17 +87,23 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
       setProgress(session.introduced);
       setQueue(session.queue);
       setIndex(0);
+      autoPlayed.current = '';
       setSessionInfo({ dueCount: session.dueCount, newCount: session.newCount });
       setPhase(session.queue.length ? 'intro' : 'done');
     })();
     return () => {
       alive = false;
+      autoChain.current += 1;
       playback.current += 1;
       void stopLabSpeech(language);
     };
   }, [language, reloadToken, words]);
 
   // Read the saved choice and follow later automatic switches, so the label always tells the truth.
+  useEffect(() => {
+    if (language === 'ru') warmRussianSpeech(); else warmStarterSpeech(locale);
+  }, [language, locale]);
+
   useEffect(() => {
     let alive = true;
     void prefersRecordedSpeech().then(value => { if (alive) setUseRecorded(value); });
@@ -109,6 +122,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const word = queue[index];
 
   const stopAll = useCallback(() => {
+    autoChain.current += 1;
     playback.current += 1;
     void stopLabSpeech(language);
   }, [language]);
@@ -151,7 +165,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   /** One pass only: target language, then Persian. The word is never played twice in a row. */
   const playOnce = useCallback(async (item: WordLabWord) => {
     const token = ++playback.current;
-    await sayTarget(item, 0.72);
+    await sayTarget(item, pace('word'));
     if (token !== playback.current) return;
     await new Promise<void>(resolve => { speakPersian(item.fa); setTimeout(resolve, Math.min(3200, 900 + item.fa.length * 90)); });
   }, [sayTarget]);
@@ -159,7 +173,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   /** Step 2: the sentence itself, once, followed by its Persian meaning. */
   const playSentence = useCallback(async (item: WordLabWord) => {
     const token = ++playback.current;
-    await saySentence(item, 0.68);
+    await saySentence(item, pace('sentence'));
     if (token !== playback.current) return;
     await new Promise<void>(resolve => { speakPersian(item.exampleFa); setTimeout(resolve, Math.min(3600, 900 + item.exampleFa.length * 90)); });
   }, [saySentence]);
@@ -190,10 +204,28 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     goNext();
   }, [word, progress, spoken, saving, language, goNext]);
 
-  const startLearning = () => {
-    setPhase('listen');
-    if (word) void playOnce(word);
-  };
+  /**
+   * Every time a card enters the listening step — the first card and every card after a rating —
+   * the phone speaks it once in one pass: the word and its Persian meaning, then the sentence that
+   * uses it, then the microphone opens. A tap on any control in between cancels the hand-off so a
+   * word is never played twice over itself.
+   */
+  useEffect(() => {
+    if (phase !== 'listen' || !word) return;
+    const card = `${word.id}:${index}`;
+    if (autoPlayed.current === card) return;
+    autoPlayed.current = card;
+    const token = ++autoChain.current;
+    void (async () => {
+      await playOnce(word);
+      if (autoChain.current !== token) return;
+      if (!hasSpokenSentence(word)) return;
+      setPhase('sentence');
+      await playSentence(word);
+    })();
+  }, [phase, word, index, playOnce, playSentence]);
+
+  const startLearning = () => setPhase('listen');
 
   /** Move from hearing the word to hearing its sentence, without the learner losing the word on screen. */
   const goToSentence = useCallback(() => {
@@ -249,7 +281,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
             <Text style={styles.wordFa}>{word.fa}</Text>
             <View style={styles.autoBox}>
               <Volume2 size={16} color={C.primary} />
-              <Text style={styles.autoText}>{languageName} یک بار، بعد فارسی — بدون تکرار</Text>
+              <Text style={styles.autoText}>واژه با {languageName}، بعد معنی فارسی — سپس جمله خودش پخش می‌شود</Text>
             </View>
             <View style={styles.voiceBox}>
               <Text style={styles.voiceLabel}>گوینده: {useRecorded ? 'صدای ضبط‌شده' : 'صدای گوشی'}</Text>
@@ -272,7 +304,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
             {word.note ? <Text style={styles.note}>{word.note}</Text> : null}
             {!!voiceError && <Text style={styles.hintWarm}>{voiceError}</Text>}
             <View style={styles.rowButtons}>
-              <Pressable accessibilityRole="button" onPress={() => void playOnce(word)} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
+              <Pressable accessibilityRole="button" onPress={() => { autoChain.current += 1; void playOnce(word); }} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
                 <RefreshCw size={14} color={C.primaryDark} /><Text style={styles.ghostText}>دوباره بشنو</Text>
               </Pressable>
               <Pressable accessibilityRole="button" onPress={goToSentence} style={({ pressed }) => [styles.primary, styles.grow, pressed && styles.pressed]}>

@@ -37,8 +37,9 @@ check(STATIC_ROUTE_LANGUAGES.length >= 1 && STATIC_ROUTE_LANGUAGES.every(id => L
 const catalog = read('lib/languages/catalog.ts');
 check(/LANGUAGE_REGISTRY\.map/.test(catalog), 'the picker catalog is generated from the registry');
 const lessonTotalsBlock = catalog.split('LESSON_TOTALS')[1] || '';
-const starterIds = (read('lib/languages/newCourses.ts').match(/NEW_COURSES\s*=\s*\{([^}]*)\}/) || [, ''])[1]
-  .split(',').map(part => part.split(':')[0].trim()).filter(Boolean);
+// The starter ids live in their own module now, so routing can know them without loading the courses.
+const starterIds = (read('lib/languages/newLanguageIds.ts').match(/NEW_LANGUAGE_IDS\s*=\s*\[([^\]]*)\]/) || [, ''])[1]
+  .split(',').map(part => part.replace(/['"\s]/g, '')).filter(Boolean);
 for (const id of LANGUAGE_IDS) {
   const covered = new RegExp(`\\b${id}:`).test(lessonTotalsBlock) || (/\.\.\.STARTER_COURSE_TOTALS/.test(lessonTotalsBlock) && starterIds.includes(id));
   check(covered, `lesson totals in the catalog cover language ${id}`);
@@ -52,6 +53,6 @@ check(/from '\.\/languages\/registry'/.test(resume) && /LANGUAGE_IDS/.test(resum
 const layout = read('app/learn/[language]/_layout.tsx');
 check(/STATIC_ROUTE_LANGUAGES/.test(layout), 'static web routes come from the registry');
 const picker = read('app/languages.tsx');
-check(/startsFromZero/.test(picker) && !/=== 'de'/.test(picker), 'picker badges use registry flags instead of inline id lists');
+check(/startsFromZero: STARTS_FROM_ZERO\.has\(entry\.id\)/.test(read('lib/languages/catalog.ts')) && !/=== 'de'/.test(picker), 'picker flags come from the registry instead of inline id lists');
 
 console.log(`${checks} language-registry checks passed (single-entry language configuration).`);

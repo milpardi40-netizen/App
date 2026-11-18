@@ -12,6 +12,7 @@ import {b1UnitSkills,b1GrammarPatterns} from '@/lib/languages/b1Units';
 import {b2UnitSkills,b2GrammarPatterns} from '@/lib/languages/b2Units';
 import type {NewLanguageId,StarterLesson} from '@/lib/languages/newCourses';
 import {playStarterSpeech,stopStarterSpeech} from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import {Typography} from '@/lib/theme';
 
 type Props={level:'b1'|'b2';section:'foundation'|'survival';number:number;title:string;language:NewLanguageId;locale:string;lessons:StarterLesson[]};
@@ -22,7 +23,7 @@ function Practice({level,section,number,title,language,locale,lessons}:Props){
  const lesson=lessons.find(item=>item.id===lessonId);
  const skills=lesson?(level==='b1'?b1UnitSkills(language):b2UnitSkills(language))[lesson.id]??[]:[];
  const patterns=lesson?(level==='b1'?b1GrammarPatterns(language,lesson.id):b2GrammarPatterns(language,lesson.id)):[];
- const speak=(text:string,rate=0.85)=>{setError('');void playStarterSpeech(locale,text,rate,()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=(text:string,rate=narrationRate(locale,'listen'))=>{setError('');void playStarterSpeech(locale,text,rate,()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  const deepening=topicDeepening(level,section,number);
  return <View style={s.detail}>
   {deepening&&<StarterTopicDeepening item={deepening} language={language} onSpeak={speak}/>}

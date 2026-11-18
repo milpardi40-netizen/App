@@ -27,7 +27,7 @@ const variant = () => {
   const admin = process.env.MILO_ADMIN_APP === 'true' || process.env.EXPO_PUBLIC_MILO_ADMIN_APP === 'true';
   if (admin) return 'admin';
   if (process.env.EXPO_PUBLIC_RUSSIAN_ONLY === 'true') return 'russian';
-  if (process.env.EXPO_PUBLIC_LEARNER_LOGIN === 'true') return 'login';
+  if (process.env.EXPO_PUBLIC_LEARNER_TWO_LOGIN === 'true' || process.env.EXPO_PUBLIC_LEARNER_LOGIN === 'true') return 'login';
   return 'learner';
 };
 
@@ -56,6 +56,18 @@ const build = () => {
         ...base.ios,
         bundleIdentifier: 'com.devicecontrol.milorussian',
       },
+    };
+  }
+  // Two-language learner app (English + Russian) WITH the same login flow. It is its own package so it
+  // can be installed next to the five-language app instead of replacing it.
+  if (!admin && process.env.EXPO_PUBLIC_LEARNER_TWO_LOGIN === 'true') {
+    return {
+      ...base,
+      name: 'MiloLang 2',
+      slug: 'milo-lang-two',
+      scheme: 'milolang2',
+      android: { ...base.android, package: 'com.devicecontrol.milolang2' },
+      ios: { ...base.ios, bundleIdentifier: 'com.devicecontrol.milolang2' },
     };
   }
   const learnerLogin = process.env.EXPO_PUBLIC_LEARNER_LOGIN === 'true';

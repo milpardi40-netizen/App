@@ -12,7 +12,16 @@ const loginFlow = gate + loginUi;
 const registration = read('lib/userRegistration.ts');
 const layout = read('app/_layout.tsx');
 const migration = read('supabase/migrations/202610140002_registered_users_admin.sql');
-const admin = read('app/admin/index.tsx');
+// The management panel was split into features/admin: routes are thin re-exports,
+// so the UI assertions read the screen modules that actually render it.
+const admin = [
+  read('features/admin/Shell.tsx'),
+  read('features/admin/api.ts'),
+  read('features/admin/store.tsx'),
+  read('features/admin/screens/Dashboard.tsx'),
+  read('features/admin/screens/Users.tsx'),
+].join('\n');
+const adminUsers = read('features/admin/screens/Users.tsx');
 const adminApi = read('lib/educationAdmin.ts');
 const appConfig = read('app.config.js');
 const workflow = read('.github/workflows/android-build.yml');
@@ -34,36 +43,38 @@ check(/app_user_profiles/.test(migration) && /ENABLE ROW LEVEL SECURITY/.test(mi
 check(/user_id = auth\.uid\(\)/.test(migration), 'learners can only access their own profile');
 check(/admin_registered_users/.test(migration) && /is_education_admin/.test(migration), 'the registered-user directory verifies server-side manager authorization');
 check(/education_admins_single_owner_idx/.test(migration), 'the database enforces one operational manager');
-check(/registeredUsers/.test(admin) && /کاربران ثبت‌شده/.test(admin), 'the management UI lists registered learners');
-check(/LinearGradient/.test(admin) && /sidebarMobile/.test(admin) && /mobileNavItem/.test(admin) && /navTextActive/.test(admin), 'the management UI keeps a polished responsive sidebar on mobile');
+check(/کاربران ثبت‌شده/.test(read('features/admin/screens/Dashboard.tsx')) && /fetchUsers/.test(admin) && /حساب ثبت‌شده/.test(adminUsers), 'the management UI lists registered learners');
+check(/wide && \(/.test(admin) && /s\.sidebar/.test(admin) && /bottomNav/.test(admin) && /navTextActive/.test(admin), 'the management UI keeps a sidebar on wide screens and its phone navigation bar');
 check(!/flexDirection:\s*'column'\s*}\]}[^\n]*sidebar/.test(admin), 'the management navigation does not collapse into top tabs');
-check(/sidebarMobile:\{width:90/.test(admin) && /statNumber:\{fontFamily:'Beiruti',fontSize:16/.test(admin) && /borderRadius:15,padding:12,gap:10/.test(admin), 'all management tabs keep a compact mobile density and smaller Beiruti numbers');
-check(/admin_registered_users/.test(adminApi), 'the management client loads the protected directory RPC');
+check(/sidebar: \{ width: 250/.test(admin) && /bottomText: \{ fontFamily: T\.font\.fa, fontSize: 10/.test(admin) && /size: \{ xs: 11, sm: 12, md: 14/.test(read('features/admin/theme.ts')), 'the management shell keeps a compact density and small Beiruti type');
+check(/admin_users_overview/.test(read('features/admin/api.ts')) && /CREATE FUNCTION public\.admin_users_overview/.test(read('supabase/migrations/202611130001_admin_panel_v2.sql')), 'the management client loads the protected directory RPC');
 check(/com\.devicecontrol\.miloadmin/.test(appConfig) && /com\.devicecontrol\.companion/.test(read('app.json')), 'learner and management APKs have separate Android package IDs');
 check(/MiloAdmin\.apk/.test(workflow) && /MiloMultilang\.apk/.test(workflow), 'CI builds and publishes both standalone APKs');
 check(/EXPO_PUBLIC_MILO_ADMIN_APP/.test(read('app/index.tsx')), 'the management APK boots directly into its protected panel');
-check(/پیام‌های خصوصی/.test(loginFlow) && /پیام‌های خصوصی/.test(admin), 'both apps disclose and preserve private-message boundaries');
+check(/پیام‌های خصوصی/.test(loginFlow) && /registered_at/.test(adminUsers) && /last_seen_at/.test(adminUsers) && !/message_body|last_message_preview/.test(adminUsers), 'the learner gate discloses private-message boundaries and the learner directory stays account/activity-only');
 check(/learnerLogin: process\.env\.EXPO_PUBLIC_LEARNER_LOGIN === 'true'/.test(read('lib/features.ts'))
   && /IS_ADMIN_APP \|\| !FEATURES\.learnerLogin/.test(gate)
   && /if \(BYPASS_GATE\) return;/.test(gate), 'the gate is skipped unless learner login is explicitly enabled, without changing admin authorization');
 check(/learner_login:[\s\S]*?default: false/.test(workflow)
   && /github\.event_name == 'workflow_dispatch' && inputs\.learner_login/.test(workflow)
   && /EXPO_PUBLIC_LEARNER_LOGIN=true/.test(workflow), 'CI builds an optional learner login APK only when manually requested');
-check(/FEATURES\.learnerLogin && <Pressable[^\n]*personal-sync/.test(read('app/lang/index.tsx'))
-  && /if \(!FEATURES\.learnerLogin\) return <Redirect href=\{'\/languages'/.test(read('app/personal-sync.tsx')), 'open builds hide the account entry and redirect direct account links');
+check(/ProfileEnabledScreen local=\{!FEATURES\.learnerLogin\}/.test(read('app/profile.tsx'))
+  && !/personal-sync/.test(read('app/lang/index.tsx'))
+  && /if \(!FEATURES\.learnerLogin\) return <Redirect href=\{'\/languages'/.test(read('app/personal-sync.tsx')), 'open builds show the device-local profile and redirect direct account links');
 check(Object.values(JSON.parse(read('eas.json')).build).every(profile => profile.env.EXPO_PUBLIC_LEARNER_LOGIN === 'false')
   && /EXPO_PUBLIC_LEARNER_LOGIN=false/.test(read('.env.example')), 'all EAS profiles and the documented example default to no learner login');
 check(/learner_login:[\s\S]*?default: false/.test(read('.github/workflows/apk-requested.yml'))
-  && /github\.event_name == 'workflow_dispatch' && inputs\.learner_login/.test(read('.github/workflows/apk-requested.yml'))
+  && /github\.event_name == 'push' \|\| inputs\.learner_login/.test(read('.github/workflows/apk-requested.yml'))
   && /EXPO_PUBLIC_LEARNER_LOGIN: 'false'/.test(read('.github/workflows/apk-learner.yml'))
   && /EXPO_PUBLIC_LEARNER_LOGIN: 'false'/.test(read('.github/workflows/deploy.yml')), 'ordinary APK and web CI builds are open and the alternate login job is opt-in');
-check(/com\.devicecontrol\.milomultilang/.test(appConfig) && /name: 'MiloMultiLanguage Admin'/.test(appConfig), 'login APK keeps its own package and management branding includes MiloMultiLanguage');
+const appConfigJs = read('app.config.js');
+check(/com\.devicecontrol\.milomultilang/.test(appConfigJs) && /name: 'Admin App'/.test(appConfigJs) && /com\.devicecontrol\.miloadmin/.test(appConfigJs), 'login APK keeps its own package and the management build keeps its own isolated package and branding');
 check(/is_education_admin/.test(read('supabase/functions/admin-delete-user/index.ts')) && /deleteUser\(/.test(read('supabase/functions/admin-delete-user/index.ts')), 'account deletion is manager-only and runs on the server');
-check(/deleteRegisteredUser/.test(read('app/admin/index.tsx')) && /downloadRegisteredUsers/.test(read('app/admin/index.tsx')), 'manager app can delete users and export users');
+check(/deleteRegisteredUser/.test(read('features/admin/api.ts')) && /downloadRegisteredUsers/.test(adminUsers), 'manager app can delete users and export users');
 check(/MANAGEMENT_BUILD \? adminClient\(\) : supabase/.test(read('lib/conversations.ts')), 'the manager APK sends chat as the manager, not an anonymous learner');
 check(/Intentionally silent/.test(read('lib/responsiveSpeech.ts')) && !/Speech\.speak\(locale/.test(read('lib/responsiveSpeech.ts')), 'startup warm-up never speaks words aloud');
 check(/welcome-chime\.wav/.test(read('app/_layout.tsx')), 'the original startup sound is kept');
-check(/ensureSupportConversation/.test(read('app/languages.tsx')) && /ensureSupportConversation/.test(read('app/conversations/index.tsx')), 'learners reach the manager through the support button');
+check(/ensureSupportConversation/.test(read('app/feedback.tsx')) && /ensureSupportConversation/.test(read('features/chat/screens/ConversationsHome.tsx')), 'learners reach the manager through the support button');
 check(/MiloLogoMotion/.test(read('app/_layout.tsx')) && /MiloLanguageBrand/.test(read('app/languages.tsx')) && /Milo/.test(read('components/MiloLanguageBrand.tsx')), 'startup branding remains while the language home uses the selected Milo wordmark');
 check(/welcome-voice\.wav/.test(read('app/languages.tsx')) && /welcome-chime\.wav/.test(read('app/_layout.tsx')), 'Welcome plays on the main screen and the startup sound is kept');
 console.log(`${count} registration and private management checks passed.`);

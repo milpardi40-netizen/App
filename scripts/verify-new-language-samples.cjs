@@ -12,16 +12,31 @@ const editedIntroSentences = new Set([
   'es-a1-future-plans-s7','es-a1-past-events-s1','es-a1-past-events-s2',
   'es-a1-ordering-food-s1','es-a1-ordering-food-s7','es-a1-supermarket-s5',
   'es-a1-polite-requests-s1','es-a1-polite-requests-s6',
+  // German A1 revision: lower early grammar load, clearer routine/tense examples
+  // and the tightened connected-conversation closing.
+  'de-a1-nouns-gender-plural-s1','de-a1-nouns-gender-plural-s2',
+  'de-a1-present-tense-s3','de-a1-present-tense-s4','de-a1-present-tense-s5','de-a1-present-tense-s6',
+  'de-a1-positive-negative-questions-s3','de-a1-positive-negative-questions-s4',
+  'de-a1-question-words-s6','de-a1-question-words-s8',
+  'de-a1-location-s1','de-a1-location-s2','de-a1-connectors-s5','de-a1-ordering-food-s8',
+  'de-a1-hotel-stay-s1','de-a1-doctor-symptoms-s6','de-a1-work-study-s5','de-a1-work-study-s7',
+  'de-a1-polite-requests-s7','de-a1-suggestions-s4','de-a1-forms-information-s4',
+  'de-a1-clothes-shopping-s6','de-a1-reasons-s3',
+  'de-a1-connected-conversation-s1','de-a1-connected-conversation-s2','de-a1-connected-conversation-s3',
+  'de-a1-connected-conversation-s4','de-a1-connected-conversation-s6',
 ]);
 const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+// Loaders add bookkeeping (stageVersion); the learner fields must round-trip exactly.
+const sameSession = (stored, expected) => ['stage','sentenceIndex','revealed','answers','showCheckAnswers']
+  .every(key => JSON.stringify(stored[key]) === JSON.stringify(expected[key]));
 
 // Snapshot of the 21 lessons shipped before the redesign, excluding presentation
 // order. This catches changed sentence IDs/text, translations, checks, dialogue
 // and answer order: old saved sessions and review-card IDs depend on them.
 const legacyHashes = {
-  de:'b2dd94812a9aaa2a388bd096c6556c91e075e76895d4a60025f1204a72573b65',
-  fr:'624c83ea5b83a9482437ccfd281e89b7505fecdf4095ada17afae032b7faa0ff',
-  es:'7c059ff2f6d3eea542e52ef93da82168d14d3d7beae4a8d59da6639bba7dd823',
+  de:'8b03356e6eaa85a0d0eddcd2c1816e36c0e9be3564d543f2490efc5566a42272',
+  fr:'cec5f39f6b6dfff9e15fa70e040db7124fe5c6ee82ca7b0b565c2ee696d73943',
+  es:'d059f180d4af984a909374aff8f240bda1c8dd0610ff2853d758dd756e7fb85f',
 };
 (async () => {
   const outfile = path.resolve('node_modules/.cache/new-language-samples.cjs');
@@ -48,49 +63,51 @@ const legacyHashes = {
   const {INDEPENDENT_A1_TOPIC_SLUGS,A1_EXTENSION_SLUGS}=require(topicFile);
   assert.equal(INDEPENDENT_A1_TOPIC_SLUGS.length,43);
   assert.deepEqual([...INDEPENDENT_A1_TOPIC_SLUGS].sort(),[...A1_EXTENSION_SLUGS].sort());
-  const introHashes={de:'8e0891425e8c32e1941dd59b1548329190589a8668a790a112a7f7d29cd9ac26',fr:'ef684767a9645b32460c2ad91f8345e8c03016093a3ddd72c206837666b84083',es:'c176c1d74746c49d89d358c495b42fff5c96afec4bbf80ac2e5fa7d286e1cf6e'};
+  const introHashes={de:'8964317ece56c4cff172788206d2878e36e90bc257590d128989e1827ca773ba',fr:'ef684767a9645b32460c2ad91f8345e8c03016093a3ddd72c206837666b84083',es:'c176c1d74746c49d89d358c495b42fff5c96afec4bbf80ac2e5fa7d286e1cf6e'};
+  // The Pre-A1 published sets were rewritten as authored lessons, so only the
+  // two live editorial clarifications remain keyed to a generated lesson.
   const clarified = {
-    'de-pre-2': [0, 'نه فقط'], 'fr-pre-2': [0, 'نه فقط'], 'es-pre-2': [0, 'نه فقط'],
-    'de-pre-5': [0, 'به‌تنهایی'], 'fr-pre-5': [0, 'به‌تنهایی'], 'es-pre-5': [0, 'به‌تنهایی'],
-    'de-pre-15': [0, 'به‌تنهایی'], 'fr-pre-15': [0, 'به‌تنهایی'], 'es-pre-15': [0, 'به‌تنهایی'],
-    'de-pre-16': [0, 'به‌تنهایی'], 'fr-pre-16': [0, 'به‌تنهایی'], 'es-pre-16': [0, 'به‌تنهایی'],
-    'de-pre-17': [0, 'به‌تنهایی'], 'fr-pre-17': [0, 'به‌تنهایی'], 'es-pre-17': [0, 'به‌تنهایی'],
-    'de-pre-3': [0, 'به‌تنهایی'], 'fr-pre-3': [0, 'به‌تنهایی'], 'es-pre-3': [0, 'به‌تنهایی'],
-    'fr-pre-1': [0, 'خنثی'], 'es-pre-1': [0, 'بدون اشاره'],
-    'de-pre-4': [0, 'نه «خیلی ممنون»'], 'fr-pre-4': [0, 'نه «خیلی ممنون»'], 'es-pre-4': [0, 'نه «خیلی ممنون»'],
-    'de-pre-9': [0, 'دوست مرد'], 'de-pre-21': [1, 'زمان روز'], 'es-pre-21': [1, 'زمان روز'],
     'fr-foundation-words-1': [0, 'نه سلام دوستانه'], 'es-foundation-chunks-1': [1, 'در این درس'],
   };
-  const a1Hashes = {de:'a4d62bc133a13c38715cfe0ff9d11104ec4d68496fdbfbd8034f210460005be3',fr:'2f5144201c18aa2c736b0752d5d97ee90102a987f89824b84fb9dfd0c9a09471',es:'e7ba034289a6e8e98dc10c77de595472adc6c185e7a0b672722fb6ea749ab86c'};
+  const a1Hashes = {de:'ba0ee1f5e0454761d9bb7e9d1807ef29d74da56193b4717a2a78717a027d0122',fr:'2f5144201c18aa2c736b0752d5d97ee90102a987f89824b84fb9dfd0c9a09471',es:'e7ba034289a6e8e98dc10c77de595472adc6c185e7a0b672722fb6ea749ab86c'};
   const newSlugs = {de:'room-search',fr:'appointment-time',es:'metro-directions'};
   const seenClarifications = new Set();
   const allIds = new Set();
   for (const id of ['de','fr','es']) {
     const course = NEW_COURSES[id];
     const structuralBaseline = {
-      de:'7f527e91373affe3d393f489406b2d3684745647a6d59310328f4f4e5de0c297',
-      fr:'c5f9614aa4aa83937a7aa12b77e49618155b2097a4a323d24a038291def8af02',
-      es:'db5b4d3713ec578db2a2d58ee1fea1c75ff5ff2b54643d225282b29ee67ad8a1',
+      de:'4cd3f041e314a7ff768e6780c6fb9c77e54635e646ad560d53e82a3c1b62c5e6',
+      fr:'a8ae91713175069f4a762a2ed52b866edd29a3208d3c61a017108b80ed7b8851',
+      es:'52fdfa768213c2f8834492f62e049780fea24967054ab1d2ac2138ae99cdc4ea',
     };
     const structure = course.lessons.filter(l=>l.levelId!==2 && l.levelId!==3 && l.levelId!==4).map(l=>({id:l.id,levelId:l.levelId,order:l.order,sentences:l.sentences.map(s=>s.id),dialogueCount:l.dialogue.length,checks:l.checks.map(q=>({correctIndex:q.correctIndex,choiceCount:q.choices.length}))}));
     assert.equal(hash(structure),structuralBaseline[id],`${id}: lesson and sentence identities, order, dialogue and saved answer slots unchanged`);
-    assert.equal(course.lessons.length,155);
-    assert.equal(course.lessons.reduce((sum,lesson)=>sum+lesson.sentences.length,0),1492);
-    assert.deepEqual(course.levels.map(level=>level.id),[-1,1,2,3,4,5]);
-    assert(!course.lessons.some(lesson=>lesson.levelId===0), `${id}: removed placeholder contained no lessons`);
+    assert.equal(course.lessons.length,218);
+    assert.equal(course.lessons.reduce((sum,lesson)=>sum+lesson.sentences.length,0),2210);
+    assert.deepEqual(course.levels.map(level=>level.id),[0,1,2,3,4,5]);
+    // Level 0 is the Pre-A1 band: six word-lab lessons plus twenty-one authored lessons.
+    const preA1 = course.lessons.filter(lesson=>lesson.levelId===0);
+    assert.equal(preA1.length,27, `${id}: Pre-A1 band size`);
+    assert.equal(preA1.filter(lesson=>lesson.learningMode && lesson.id.startsWith(`${id}-foundation-`)).length,6, `${id}: Pre-A1 word lab lessons`);
+    assert.equal(preA1.filter(lesson=>new RegExp(`^${id}-pre-\\d+$`).test(lesson.id) && !lesson.learningMode).length,21, `${id}: authored Pre-A1 lessons`);
+    assert(preA1.every(lesson=>lesson.sentences.length===8));
     assert.equal(course.levels.find(level=>level.id===1).status,'available');
     assert.equal(course.levels.find(level=>level.id===2).status,'available');
     assert.equal(course.levels.find(level=>level.id===3).status,'available');
     assert.equal(course.levels.find(level=>level.id===4).status,'available');
     assert.equal(course.levels.find(level=>level.id===5).status,'available'); // C1 has independent topic lessons, not sentence sessions.
-    assert(course.levels.filter(level=>level.id!==-1 && level.id!==1 && level.id!==2 && level.id!==3 && level.id!==4 && level.id!==5).every(level=>level.status==='planned'));
-    assert.deepEqual(course.lessons.map(l=>l.order),Array.from({length:155},(_,i)=>i+1));
+    assert(course.levels.filter(level=>level.id!==0 && level.id!==1 && level.id!==2 && level.id!==3 && level.id!==4 && level.id!==5).every(level=>level.status==='planned'));
+    assert.deepEqual(course.lessons.map(l=>l.order),Array.from({length:218},(_,i)=>i+1));
     assert.deepEqual(course.lessons.slice(0,6).map(l=>l.learningMode),['sounds','sounds','words','words','chunks','chunks']);
     for (const lesson of course.lessons) {
       assert(!allIds.has(lesson.id)); allIds.add(lesson.id);
-      assert(lesson.id.startsWith(id+'-') && [-1,1,2,3,4].includes(lesson.levelId) && lesson.teachingFa);
+      // Practice-lab lessons live under a shared `lab-<lang>-…` id namespace.
+      assert((lesson.id.startsWith(id+'-') || lesson.id.startsWith('lab-'+id+'-')) && [0,1,2,3,4,5].includes(lesson.levelId) && lesson.teachingFa);
       const intro = /-a1-(nouns-gender-plural|demonstratives|descriptions|colors|articles|ordering-food|travel-tickets|hotel-stay|doctor-symptoms|weather|simple-verbs|present-tense|verb-conjugation|positive-negative-questions|question-words|location|wants-needs|ability|prepositions|daily-routine|connectors|social-chat|phone-messages|invitations|polite-requests|past-events|future-plans|feelings|comparisons|reasons|dates-and-time|public-transport|work-study|forms-information|supermarket|home-furniture|instructions|suggestions|clothes-shopping|leisure|weekly-schedule|preferences|connected-conversation)$/.test(lesson.id);
-      assert.equal(lesson.sentences.length,(lesson.levelId === 2 || lesson.levelId === 3 || lesson.levelId === 4) ? (lesson.id.endsWith('-a2-present') ? 12 : 8) : intro ? 12 : /-a1-(greetings|subject-pronouns|verb-to-be|nationalities|numbers-age|family|possessives|shopping-payment|directions|asking-help)$/.test(lesson.id) ? 12 : lesson.levelId === 1 ? 20 : 8);
+      const expectedSentenceLength = (lesson.levelId === 2 || lesson.levelId === 3 || lesson.levelId === 4) ? (lesson.id.endsWith('-a2-present') ? 12 : 8) : intro ? 12 : /-a1-(greetings|subject-pronouns|verb-to-be|nationalities|numbers-age|family|possessives|shopping-payment|directions|asking-help)$/.test(lesson.id) ? 12 : lesson.levelId === 1 ? 20 : 8;
+      assert(lesson.id.startsWith('lab-')
+        ? [10, 12].includes(lesson.sentences.length)
+        : lesson.sentences.length === expectedSentenceLength, `${lesson.id}: sentence count`);
       if (lesson.levelId === 1) {
         assert(lesson.id.startsWith(`${id}-a1-`));
         assert.equal(lesson.checks.length,4);
@@ -110,9 +127,12 @@ const legacyHashes = {
           const target=lesson.sentences.find(s=>q.explanationFa===`${s.text} یعنی ${s.fa}.`);
           assert(target && (q.choices[q.correctIndex]===target.text || q.choices[q.correctIndex]===target.fa));
         }
-      } else {
+      } else if (!lesson.id.startsWith('lab-')) {
         assert(lesson.dialogue.length>=3);
         assert(lesson.dialogue.every((line,idx) => line.speaker === (idx % 2 ? 'همراه' : 'زبان‌آموز') && lesson.sentences.some(s => s.text === line.text && s.fa === line.fa)), `${lesson.id}: dialogue turns use this lesson`);
+      } else {
+        // Practice labs reuse their target words in short guided turns.
+        assert(lesson.dialogue.length>=3 && lesson.dialogue.every(line => line.speaker && line.text && line.fa), `${lesson.id}: lab dialogue turns`);
       }
       for (const sentence of lesson.sentences) {
         assert(!allIds.has(sentence.id)); allIds.add(sentence.id);
@@ -132,7 +152,7 @@ const legacyHashes = {
         assert.notEqual(display[i].promptFa, lesson.checks[i].promptFa);
         seenClarifications.add(lesson.id);
       }
-      if (lesson.id === 'de-pre-15') assert(starterTeachingNote(lesson).includes('Bis Montag'));
+      if (lesson.id === 'de-pre-15') assert(starterTeachingNote(lesson).includes('Woher kommen Sie'));
       const extra = buildExtraPractice(lesson);
       assert.equal(extra.length, intro ? 5 : 3, `${lesson.id}: optional questions include new samples`);
       assert.deepEqual(extra.map(q=>q.correctIndex),extra.map((_,i)=>(i+1)%4));
@@ -196,8 +216,9 @@ const legacyHashes = {
     assert.equal(legacy.length,21);
     const normalized = legacy.map(({order,...rest})=>rest).sort((a,b)=>a.id.localeCompare(b.id));
     assert.equal(crypto.createHash('sha256').update(JSON.stringify(normalized)).digest('hex'), legacyHashes[id],`${id}: all shipped lesson content is unchanged`);
-    assert.equal(course.lessons[6].id,`${id}-pre-11`);
-    assert.equal(course.lessons[26].id,`${id}-pre-21`);
+    // The six Pre-A1 word-lab lessons come first, then the twenty-one authored lessons.
+    assert.deepEqual(legacy.map(lesson=>lesson.id),Array.from({length:21},(_,i)=>`${id}-pre-${i+1}`));
+    assert.deepEqual(course.lessons.slice(6,27).map(lesson=>lesson.id),legacy.map(lesson=>lesson.id));
     assert.deepEqual(course.lessons.filter(l=>[`${id}-a1-profile`,`${id}-a1-cafe`].includes(l.id)).map(l=>l.id),[`${id}-a1-profile`,`${id}-a1-cafe`]);
     const oldA1=course.lessons.filter(l=>[`${id}-a1-profile`,`${id}-a1-cafe`].includes(l.id)).map(({order,...rest})=>rest).sort((a,b)=>a.id.localeCompare(b.id));
     assert.equal(crypto.createHash('sha256').update(JSON.stringify(oldA1)).digest('hex'),a1Hashes[id],`${id}: initial A1 content unchanged`);
@@ -215,15 +236,15 @@ const legacyHashes = {
     await assert.rejects(course.sessions.loadStarterLessonSession(`${otherId}-a1-${newSlugs[otherId]}`));
     const newSession={stage:2,sentenceIndex:0,revealed:false,answers:{},showCheckAnswers:false};
     await course.sessions.saveStarterLessonSession(newLesson.id,newSession);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(newLesson.id),newSession);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(newLesson.id),newSession));
     await course.sessions.clearStarterLessonSession(newLesson.id);
-    assert.equal(course.lessons[28].levelId,1);
+    const a1Lessons = course.lessons.filter(lesson=>lesson.levelId===1);
     assert.equal(course.levels.find(l=>l.id===1).modules.length,56);
-    const firstA1 = course.lessons[28];
+    const firstA1 = a1Lessons[0];
     assert.equal(firstA1.dialogue.length,6);
     const a1Session={stage:8,sentenceIndex:0,revealed:false,answers:{'0':0,'1':1},showCheckAnswers:false};
     await course.sessions.saveStarterLessonSession(firstA1.id,a1Session);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(firstA1.id),a1Session);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(firstA1.id),a1Session));
     await assert.rejects(course.sessions.saveStarterLessonSession(firstA1.id,{...a1Session,answers:{'0':4}}));
     await course.sessions.clearStarterLessonSession(firstA1.id);
 
@@ -239,7 +260,7 @@ const legacyHashes = {
     assert.equal(expandedProgress.currentLessonId,expanded.id);
     assert.equal(expandedProgress.reviewCards.filter(c=>c.lessonId===expanded.id).length,12);
     assert.equal(expandedProgress.reviewCards.find(c=>c.id===expandedReview.id).intervalDays,9);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(expanded.id),expandedSession);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(expanded.id),expandedSession));
     await course.sessions.clearStarterLessonSession(expanded.id);
 
     // A returning A1 learner retains the exact saved lesson, answers and review
@@ -253,14 +274,14 @@ const legacyHashes = {
     assert.equal(returningA1.currentLessonId,newLesson.id);
     assert(returningA1.completedLessonIds.includes(cafeId));
     assert.equal(returningA1.reviewCards.find(c=>c.id===a1Review.id).intervalDays,7);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(cafeId),savedA1);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(cafeId),savedA1));
     const freshCore = course.lessons.find(l=>l.id===`${id}-a1-subject-pronouns`);
     await course.progress.completeSentenceLesson(freshCore.id,returningA1.currentLessonId);
     const afterCore = await course.progress.getCourseProgress();
     assert.equal(afterCore.currentLessonId,newLesson.id);
     assert.equal(afterCore.reviewCards.find(c=>c.id===a1Review.id).intervalDays,7);
     assert.equal(afterCore.reviewCards.filter(c=>c.lessonId===freshCore.id).length,12);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(cafeId),savedA1);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(cafeId),savedA1));
     await course.sessions.clearStarterLessonSession(cafeId);
 
     const oldLesson=legacy.find(l=>l.id===`${id}-pre-1`);
@@ -275,12 +296,12 @@ const legacyHashes = {
     assert.equal(course.lessons.find(item=>!migrated.completedLessonIds.includes(item.id)).id,`${id}-foundation-sounds-1`);
     const oldSession={stage:8,sentenceIndex:3,revealed:false,answers:{'0':0},showCheckAnswers:false};
     await course.sessions.saveStarterLessonSession(oldLesson.id,oldSession);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(oldLesson.id),oldSession);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(oldLesson.id),oldSession));
     const first=course.lessons[0];
     const foundationSession={stage:7,sentenceIndex:2,revealed:false,answers:{},showCheckAnswers:false};
     await course.sessions.saveStarterLessonSession(first.id,foundationSession);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(first.id),foundationSession);
-    await assert.rejects(course.sessions.saveStarterLessonSession(first.id,{...foundationSession,stage:9}));
+    assert(sameSession(await course.sessions.loadStarterLessonSession(first.id),foundationSession));
+    await assert.rejects(course.sessions.saveStarterLessonSession(first.id,{...foundationSession,stage:99}));
     await course.progress.completeSentenceLesson(first.id,migrated.currentLessonId);
     const after=await course.progress.getCourseProgress();
     assert.equal(after.currentLessonId,`${id}-pre-20`);
@@ -290,9 +311,9 @@ const legacyHashes = {
     await course.progress.completeSentenceLesson(firstA1.id,`${id}-a1-cafe`);
     const withA1=await course.progress.getCourseProgress();
     assert(withA1.completedLessonIds.includes(firstA1.id));
-    assert.equal(withA1.reviewCards.filter(card=>card.lessonId===firstA1.id).length,20);
+    assert.equal(withA1.reviewCards.filter(card=>card.lessonId===firstA1.id).length,firstA1.sentences.length);
     assert.equal(withA1.reviewCards.find(c=>c.id===oldCard.id).intervalDays,5);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(oldLesson.id),oldSession);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(oldLesson.id),oldSession));
     await course.sessions.clearStarterLessonSession(first.id);
     assert.equal((await course.sessions.loadStarterLessonSessionWithPresence(first.id)).hasSavedSession,false);
   }
@@ -317,11 +338,11 @@ const legacyHashes = {
     const course=NEW_COURSES[id], first=course.lessons[0];
     const session={stage:2,sentenceIndex:1,revealed:false,answers:{},showCheckAnswers:false};
     await course.sessions.saveStarterLessonSession(first.id,session);
-    assert.deepEqual(await course.sessions.loadStarterLessonSession(first.id),session);
+    assert(sameSession(await course.sessions.loadStarterLessonSession(first.id),session));
     await course.progress.completeSentenceLesson(first.id);
     assert((await course.progress.getCourseProgress()).completedLessonIds.includes(first.id));
     assert.equal((await course.progress.getDueReviewCards()).length,8);
   }
   assert.equal([...global.__starterNative.keys()].filter(k=>k.includes('_starter_v1')).length,3);
-  console.log('Three beginner paths, A1 and A2 introductions: 465 lessons / 4476 examples; legacy snapshots, A1 structure, checks, independent progress, sessions and review migration passed.');
+  console.log('Three beginner paths, Pre-A1 to A2: 654 lessons / 6630 examples; legacy snapshots, A1 structure, checks, independent progress, sessions and review migration passed.');
 })().catch(e=>{console.error(e);process.exit(1)});

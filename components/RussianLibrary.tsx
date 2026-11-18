@@ -12,6 +12,7 @@ import type { CourseProgress } from '@/lib/courseProgress';
 import { loadRussianLessonSessionWithPresence, type RussianLessonSession } from '@/lib/languages/russianStudyState';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
+import { warmRussianSpeech } from '@/lib/russianSpeech';
 
 const LESSONS_PER_GROUP = 10;
 
@@ -35,6 +36,8 @@ export default function RussianLibrary() {
   const [retry, setRetry] = useState(0);
 
   useEffect(() => setHydrated(true), []);
+  // Warm the phone voice while the level map paints, so the first practice card speaks at once.
+  useEffect(() => { warmRussianSpeech(); }, []);
   const selected = hydrated ? RUSSIAN_LEVELS.find(item => String(item.id) === String(level)) : undefined;
   const selectedLessons = useMemo(() => selected ? RUSSIAN_LESSONS.filter(item => item.levelId === selected.id) : [], [selected?.id]);
   const lessonGroups = useMemo(() => {

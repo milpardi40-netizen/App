@@ -1,5 +1,6 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useMemo, useState } from 'react';
+import { narrationRate } from '@/lib/narration';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from 'expo-router';
@@ -88,7 +89,7 @@ export default function StarterReview({course}: {course: StarterCourse}) {
 
   const speak = (text: string) => {
     setError('');
-    void playStarterSpeech(course.locale, text, 1, () => setError('صدای این زبان در دسترس نیست؛ تنظیمات گفتار دستگاه را بررسی کنید.'), () => setError('صدای منطقه‌ای تأیید نشد؛ لهجه ممکن است متفاوت باشد.'));
+    void playStarterSpeech(course.locale, text, narrationRate(course.locale, 'normal'), () => setError('صدای این زبان در دسترس نیست؛ تنظیمات گفتار دستگاه را بررسی کنید.'), () => setError('صدای منطقه‌ای تأیید نشد؛ لهجه ممکن است متفاوت باشد.'));
   };
 
   if (sessionActive && currentContent) {

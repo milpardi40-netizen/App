@@ -22,7 +22,7 @@ const pkg = JSON.parse(read('package.json'));
 check(pkg.dependencies['@expo-google-fonts/inter'], 'bundled Inter dependency is declared');
 check(pkg.dependencies['@expo-google-fonts/beiruti'], 'bundled open-source Beiruti dependency is declared');
 check(/Inter_400Regular[\s\S]*Inter_600SemiBold[\s\S]*Inter_800ExtraBold/.test(layout), 'regular, semibold and extrabold Inter faces are bundled');
-check(/Beiruti:[\s\S]*Beiruti_400Regular[\s\S]*'Beiruti-Black': Beiruti_900Black/.test(layout), 'Beiruti regular through black faces are bundled locally');
+check(/Beiruti:[\s\S]*Beiruti_500Medium[\s\S]*'Beiruti-Bold': Beiruti_700Bold[\s\S]*'Beiruti-Black': Beiruti_900Black/.test(layout), 'Beiruti medium through black faces are bundled locally');
 check(/fontFamily:\s*'Beiruti'/.test(theme) && /numberFontFamily:\s*'Beiruti'/.test(theme), 'Persian copy and Persian digits use Beiruti');
 check(/I18nManager\.allowRTL\(false\)/.test(entry) && /I18nManager\.forceRTL\(false\)/.test(entry)
   && !/I18nManager\.(?:allowRTL|forceRTL)\(true\)/.test(entry + layout),
@@ -39,15 +39,17 @@ for (const file of [...walk('app'), ...walk('components')]) {
   lines.forEach((line, index) => {
     if (!line.includes("writingDirection: 'ltr'") && !line.includes("writingDirection:'ltr'")) return;
     const nearby = lines.slice(Math.max(0, index - 14), index + 1).join('\n');
-    if (!line.includes('fontFamily') && !nearby.includes('fontFamily: Typography.latinFontFamily') && !nearby.includes('fontFamily: Typography.numberFontFamily')) {
+    if (!line.includes('fontFamily') && !nearby.includes('fontFamily: Typography.latinFontFamily') && !nearby.includes('fontFamily: Typography.numberFontFamily') && !nearby.includes('...latinFont')) {
       missing.push(`${file}:${index + 1}`);
     }
   });
 }
 check(missing.length === 0, `every explicit LTR style has an explicit font (${missing.join(', ')})`);
 
-const emma = read('app/conversations/emma.tsx');
-const human = read('app/conversations/human/[conversationId].tsx');
+// The route files are thin switches now; the chat screen itself lives in the chat feature, and the
+// retired Emma coach is a redirect.
+const human = read('features/chat/screens/HumanConversation.tsx');
+const keyboardAttachment = read('components/KeyboardAttachedView.native.tsx');
 const personalSync = read('app/personal-sync.tsx');
 const appConfig = read('app.json');
 const androidSmoke = read('.github/scripts/android-emulator-smoke-test.sh');
@@ -56,13 +58,12 @@ check(/companionenglish:\/\/\/conversations\/emma/.test(androidSmoke)
   && /mInputShown=true/.test(androidSmoke)
   && /Composer is clipped/.test(androidSmoke),
   'Android release smoke test opens the real keyboard and rejects a clipped composer');
-check(/messages:\s*\{\s*flex:\s*1,\s*minHeight:\s*0/.test(emma) && /messages:\s*\{\s*flex:\s*1,\s*minHeight:\s*0/.test(human), 'message lists yield all resized height to the composer');
-check(/KeyboardAvoidingView style=\{styles\.root\} behavior="height" enabled/.test(emma)
-  && /KeyboardAvoidingView style=\{styles\.root\} behavior="height" enabled/.test(human)
-  && /<View style=\{styles\.composer\}>/.test(emma)
-  && /<View style=\{styles\.composer\}>/.test(human), 'both complete composers and their side buttons are inside the UI-thread keyboard avoiding root');
-check(/composer:\s*\{\s*flexShrink:\s*0,\s*minHeight:\s*64,\s*overflow:\s*'visible'/.test(emma)
-  && /composer:\s*\{\s*flexShrink:\s*0,\s*minHeight:\s*64,\s*overflow:\s*'visible'/.test(human), 'chat composers retain their full visible height during resize');
+check(/messages:\s*\{\s*flex:\s*1,\s*minHeight:\s*0/.test(human), 'the message list yields all resized height to the composer');
+check(/<KeyboardAttachedView[\s\S]*?<View style=\{styles\.composer\}>/.test(human), 'the complete composer and its side buttons ride on the keyboard attachment');
+check(/composer:\s*\{\s*flexShrink:\s*0,\s*minHeight:\s*64,\s*overflow:\s*'visible'/.test(human), 'the chat composer retains its full visible height during resize');
+check(/keyboardDidShow/.test(keyboardAttachment) && /measureInWindow/.test(keyboardAttachment)
+  && /Animated\.timing\(translate, \{ toValue: rounded, duration: 140, useNativeDriver: true \}\)/.test(keyboardAttachment),
+  'the attachment measures the keyboard edge and animates the composer on the UI thread');
 check((human.match(/containsRtlScript/g) || []).length >= 4
   && /rtlText:\s*\{\s*fontFamily:\s*Typography\.fontFamily/.test(human)
   && /ltrText:\s*\{\s*fontFamily:\s*Typography\.latinFontFamily/.test(human),
@@ -70,7 +71,7 @@ check((human.match(/containsRtlScript/g) || []).length >= 4
 check((personalSync.match(/fontFamily:\s*Typography\.fontFamily/g) || []).length >= 18
   && (personalSync.match(/fontFamily:\s*Typography\.latinFontFamily/g) || []).length >= 3,
   'personal sync Persian UI and Latin account fields both use shared fonts');
-check(!/Platform\.OS === 'android' \? 'height'/.test(emma) && !/Platform\.OS === 'android' \? 'height'/.test(human), 'Android native adjustResize is not double-applied');
-check(/automaticallyAdjustKeyboardInsets=\{Platform\.OS === 'ios'\}/.test(emma)
-  && /automaticallyAdjustKeyboardInsets=\{Platform\.OS === 'ios'\}/.test(human), 'iOS scroll insets track the keyboard');
+check(!/Platform\.OS === 'android' \? 'height'/.test(human), 'Android native adjustResize is not double-applied');
+check(/EmmaDisabled/.test(read('app/conversations/emma.tsx')) && /<Redirect href=/.test(read('app/conversations/emma.tsx')), 'the retired Emma coach route redirects instead of rendering a broken composer');
+check(/automaticallyAdjustKeyboardInsets=\{Platform\.OS === 'ios'\}/.test(human), 'iOS scroll insets track the keyboard');
 console.log(`${checks} typography and keyboard-stability checks passed.`);

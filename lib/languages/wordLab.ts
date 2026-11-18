@@ -47,9 +47,18 @@ function usableWord(word: string, fa: string): boolean {
   return clean.length >= 2 && !GENERIC_GLOSS.test(fa);
 }
 
-/** Fold stress marks, case and punctuation so «э́то» and «это» are one card. */
+/**
+ * Fold stress marks, case and punctuation so «э́то» and «это» are one card.
+ *
+ * The lab folds the same spellings again and again — the 8 000-word frequency list, the word of every
+ * course sentence, the same word in several lessons — so the result is cached. Folding is pure: the same
+ * input always gives the same string.
+ */
+const normalized = new Map<string, string>();
 export function normalizeWord(word: string): string {
-  return word
+  const cached = normalized.get(word);
+  if (cached !== undefined) return cached;
+  const next = word
     .toLowerCase()
     .normalize('NFD')
     .replace(/\p{M}/gu, '')
@@ -57,14 +66,23 @@ export function normalizeWord(word: string): string {
     .replace(/[´`’'!?.,;:«»„“”¿¡]/g, '')
     .replace(/[^\p{L}\p{N}\s-]/gu, '')
     .trim();
+  normalized.set(word, next);
+  return next;
 }
 
-const RU_RANK = new Map<string, number>(
-  (ruFrequency as readonly string[]).map((word, index) => [normalizeWord(word), index + 1]),
-);
-const DE_RANK = new Map<string, number>(
-  (deFrequency as readonly string[]).map((word, index) => [normalizeWord(word), index + 1]),
-);
+/**
+ * The frequency index is built the first time a language needs it: normalising both 8 000-word lists at
+ * import time delayed every screen that merely imported the lab.
+ */
+const ranks: Partial<Record<WordLabLanguage, Map<string, number>>> = {};
+function rankFor(language: WordLabLanguage): Map<string, number> {
+  const cached = ranks[language];
+  if (cached) return cached;
+  const list = (language === 'ru' ? ruFrequency : deFrequency) as readonly string[];
+  const rank = new Map<string, number>(list.map((word, index) => [normalizeWord(word), index + 1]));
+  ranks[language] = rank;
+  return rank;
+}
 
 const RU_NOTES: Record<string, string> = {
   привет: 'دوستانه است؛ در موقعیت رسمی به‌جایش «Здра́вствуйте» بگو.',
@@ -128,7 +146,7 @@ interface Candidate {
 }
 
 function collect(language: WordLabLanguage): Candidate[] {
-  const rank = language === 'ru' ? RU_RANK : DE_RANK;
+  const rank = rankFor(language);
   const out: Candidate[] = [];
   if (language === 'ru') {
     for (const lesson of RUSSIAN_LESSONS) {
@@ -168,7 +186,7 @@ function collect(language: WordLabLanguage): Candidate[] {
 }
 
 function buildLab(language: WordLabLanguage): readonly WordLabWord[] {
-  const rank = language === 'ru' ? RU_RANK : DE_RANK;
+  const rank = rankFor(language);
   return collect(language).map((candidate, index) => {
     const key = normalizeWord(candidate.target);
     return {
@@ -215,10 +233,24 @@ function withCore(language: WordLabLanguage, words: readonly WordLabWord[]): rea
   return [...coreCards, ...rest];
 }
 
-export const WORD_LAB_WORDS: Record<WordLabLanguage, readonly WordLabWord[]> = {
-  ru: withCore('ru', buildLab('ru')),
-  de: withCore('de', buildLab('de')),
-};
+/**
+ * Each language is built the first time it is opened, not when this module loads. German holds ~900
+ * cards and Russian ~1 300; building both at import made the whole app wait for the lab, and opening a
+ * language froze the JS thread for seconds. The property getters keep the `WORD_LAB_WORDS[language]`
+ * shape every caller already uses, and a language is cached so repeated reads stay referentially equal.
+ */
+const builtLabs: Partial<Record<WordLabLanguage, readonly WordLabWord[]>> = {};
+function labFor(language: WordLabLanguage): readonly WordLabWord[] {
+  const cached = builtLabs[language];
+  if (cached) return cached;
+  const lab = withCore(language, buildLab(language));
+  builtLabs[language] = lab;
+  return lab;
+}
+export const WORD_LAB_WORDS: Record<WordLabLanguage, readonly WordLabWord[]> = {} as Record<WordLabLanguage, readonly WordLabWord[]>;
+for (const language of ['de', 'ru'] as const) {
+  Object.defineProperty(WORD_LAB_WORDS, language, { get: () => labFor(language), enumerable: true });
+}
 
 export const WORD_LAB_LOCALE: Record<WordLabLanguage, string> = { ru: 'ru-RU', de: 'de-DE' };
 export const WORD_LAB_NAME: Record<WordLabLanguage, string> = { ru: 'روسی', de: 'آلمانی' };
@@ -248,8 +280,14 @@ export function spokenSentence(word: WordLabWord): string {
 
 /** The sentence card is only offered when there is a real sentence to say, not the bare word again. */
 export function hasSpokenSentence(word: WordLabWord): boolean {
-  return !!word.exampleTarget && normalizeWord(word.exampleTarget) !== normalizeWord(word.target)
-    && word.exampleTarget.replace(/[^\p{L}\p{N}]/gu, '').length > word.target.replace(/[^\p{L}\p{N}]/gu, '').length + 2;
+  if (!word.exampleTarget) return false;
+  if (normalizeWord(word.exampleTarget) === normalizeWord(word.target)) return false;
+  const exampleLength = word.exampleTarget.replace(/[^\p{L}\p{N}]/gu, '').length;
+  const targetLength = word.target.replace(/[^\p{L}\p{N}]/gu, '').length;
+  if (exampleLength > targetLength + 2) return true;
+  // A short but complete sentence such as «Я учи́тель.» still puts the word in use; the curated card
+  // must not fall back to the bare word, which teaches no sentence at all.
+  return word.curated === true && word.exampleTarget.trim().split(/\s+/).filter(Boolean).length >= 2;
 }
 
 /** A cue for the sentence itself: its Persian translation and, when available, its respelling. */

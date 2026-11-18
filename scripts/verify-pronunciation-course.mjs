@@ -94,7 +94,8 @@ verify(!/getUserMedia|Speech\.requestPermissions|Speech\.Recording|navigator\.me
 verify(readFileSync(path.join(root, 'app/lang/index.tsx'), 'utf8').includes("'/learn/en/pronunciation'"), 'English home links to its pronunciation course');
 verify(readFileSync(path.join(root, 'components/AppBottomNav.tsx'), 'utf8').includes("'/learn/en/pronunciation'"), 'English navigation includes the pronunciation course');
 verify(readFileSync(path.join(root, 'components/RussianBottomNav.tsx'), 'utf8').includes("'/learn/ru/pronunciation'"), 'Russian navigation includes pronunciation');
-verify(readFileSync(path.join(root, 'components/RussianBottomNav.tsx'), 'utf8').includes("'/conversations'"), 'Russian navigation opens real contact conversations');
+verify(readFileSync(path.join(root, 'components/RussianBottomNav.tsx'), 'utf8').includes("'/feedback'")
+  && readFileSync(path.join(root, 'app/feedback.tsx'), 'utf8').includes('ensureSupportConversation'), 'Russian navigation opens real contact conversations');
 const route = readFileSync(path.join(root, 'app/learn/[language]/pronunciation.tsx'), 'utf8');
 verify(!/StarterPronunciation/.test(route) && /isPronunciationLanguage/.test(route), 'one shared workshop serves every language, including the starter courses');
 const nav = readFileSync(path.join(root, 'components/StarterBottomNav.tsx'), 'utf8');

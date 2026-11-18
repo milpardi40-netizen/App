@@ -19,25 +19,26 @@ const esbuild = require('esbuild');
   let checks = 0;
   const check = value => { assert(value); checks += 1; };
 
-  check(app.ENGLISH_ENGINE_BLUEPRINT.length === 7);
-  check(app.ENGLISH_ENGINE_STEPS.length === 9);
+  check(app.ENGLISH_ENGINE_BLUEPRINT.length === 6);
+  check(app.ENGLISH_ENGINE_STEPS.length === 10);
   check(app.ENGLISH_ENGINE_BLUEPRINT.map(item => item.title).join('|') === app.COURSE_LEVELS.map(item => item.title).join('|'));
-  check(app.ENGLISH_ENGINE_BLUEPRINT.every((item, index) => item.levelId === index - 1 && item.modules.length > 0));
-  check(app.ENGLISH_ENGINE_BLUEPRINT[0].modules.length === 10 && app.COURSE_LEVELS[0].modules.length === 10);
-  check(app.SENTENCE_LESSONS.length === 222);
+  check(app.ENGLISH_ENGINE_BLUEPRINT.every((item, index) => item.levelId === index && item.modules.length > 0));
+  check(app.ENGLISH_ENGINE_BLUEPRINT[0].modules.length === 14 && app.COURSE_LEVELS[0].modules.length === 14);
+  check(app.SENTENCE_LESSONS.length === 274);
   check(app.EXISTING_SENTENCE_LESSONS.length === 174 && app.EXISTING_SENTENCE_LESSONS.every(lesson => { const actual = app.SENTENCE_LESSONS.find(item => item.id === lesson.id); if (!actual) return false; const { a2Section, ...rest } = actual; return JSON.stringify({ ...rest, order: lesson.order }) === JSON.stringify(lesson); }));
   check(app.B1_INDEPENDENT_UNITS.length === 11 && app.B1_INDEPENDENT_UNITS.reduce((n, unit) => n + unit.topics.length, 0) === 55 && app.B1_INDEPENDENT_UNITS.every(unit => unit.topics.length === unit.rows.length));
-  check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4322);
+  check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4852);
   check(app.ENGLISH_CORE_DATABASE_FLOW.map(item => item.entity).join('|') === 'Situations|Sentence Patterns|Vocabulary|Grammar Through Usage|Dialogues|Exercises|User Progress|Spaced Repetition');
 
-  const foundation = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0);
-  const survival = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 1);
+  // Band ids are stable; level numbers shifted when the Pre-A1 band and the practice labs were added.
+  const foundation = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('foundation-'));
+  const survival = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('survival-'));
   const a2Bridge = app.SENTENCE_LESSONS.filter(lesson => lesson.a2Section === 'foundation');
   const everyday = app.EVERYDAY_COURSE_LESSON_IDS.map(id => app.SENTENCE_LESSONS.find(lesson => lesson.id === id));
   check(a2Bridge.length === 5 && a2Bridge.every(lesson => lesson.sentences.length === 10 && lesson.dialogue.length === 6 && lesson.sentences.every(sentence => sentence.en && sentence.fa && sentence.pronunciation && sentence.pattern && sentence.vocabulary.length === 2 && sentence.vocabulary.every(v => sentence.en.toLowerCase().includes(v.word.toLowerCase())))));
   const a2Path = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 2);
-  check(a2Path.slice(0, 5).every(lesson => lesson.a2Section === 'foundation') && a2Path.slice(5, 20).every(lesson => lesson.a2Section === 'survival') && a2Path.slice(20).every(lesson => lesson.a2Section === 'legacy'));
-  const communication = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 3 && !lesson.b1Section);
+  check(a2Path.slice(0, 5).every(lesson => lesson.a2Section === 'foundation') && a2Path.slice(5, 20).every(lesson => lesson.a2Section === 'survival') && a2Path.slice(20, 25).every(lesson => lesson.a2Section === 'legacy') && a2Path.slice(25).every(lesson => !lesson.a2Section && lesson.id.startsWith('lab-')));
+  const communication = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('communication-'));
   const advanced = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 4 && !lesson.b2Section);
   const b2 = app.SENTENCE_LESSONS.filter(lesson => !!lesson.b2Section);
   check(app.B2_UPPER_INTERMEDIATE_UNITS.length === 11 && app.B2_UPPER_INTERMEDIATE_UNITS.reduce((n, unit) => n + unit.topics.length, 0) === 55 && app.B2_UPPER_INTERMEDIATE_UNITS.every(unit => unit.topics.length === unit.rows.length));
@@ -204,8 +205,8 @@ const esbuild = require('esbuild');
     && new Set(communicationUnitIds).size === 15
     && communicationUnitIds.length === app.COMMUNICATION_COURSE_LESSON_IDS.length
     && app.COMMUNICATION_COURSE_LESSON_IDS.every(id => communicationUnitIds.includes(id))
-    && app.ENGLISH_ENGINE_BLUEPRINT[4].modules.join('|') === app.COMMUNICATION_MODULES.map(unit => unit.titleEn).join('|')
-    && app.COURSE_LEVELS[4].modules.join('|') === app.COMMUNICATION_MODULES.map(unit => unit.titleFa).join('|'));
+    && app.ENGLISH_ENGINE_BLUEPRINT[3].modules.join('|') === app.COMMUNICATION_MODULES.map(unit => unit.titleEn).join('|')
+    && app.COURSE_LEVELS[3].modules.join('|') === app.COMMUNICATION_MODULES.map(unit => unit.titleFa).join('|'));
   check(advanced.length === 110 && advanced.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 662);
   const advancedComposition = app.getAdvancedContentComposition();
   assert.deepEqual(advancedComposition, {
@@ -220,7 +221,7 @@ const esbuild = require('esbuild');
   check(advanced.slice(0, 52).every(lesson => lesson.contentKind === 'scenario')
     && advanced.slice(52).every(lesson => lesson.contentKind === 'vocabulary-practice'));
   check(!app.ENGLISH_ENGINE_BLUEPRINT[5].modules.some(module => /IELTS|Academic English|Writing Skills|Professional Speaking/i.test(module)));
-  check(app.COURSE_LEVELS[5].cefr.includes('B2'));
+  check(app.COURSE_LEVELS[5].cefr.includes('C1'));
   check(survival.map(lesson => lesson.id).join('|') === [
     'survival-job-interview', 'survival-renting-a-home', 'survival-personal-information',
     'survival-directions-and-neighborhood', 'survival-public-transport', 'survival-cafe-and-food',
@@ -231,8 +232,8 @@ const esbuild = require('esbuild');
     'survival-past-and-future-plans',
   ].join('|'));
   const topicChecks = [
-    ['foundation-introducing-yourself', ['How do you spell your name?', 'This is my friend, Reza.', 'What is her name?', 'How are you?', 'Where do you live?', 'Goodbye. See you later.']],
-    ['foundation-asking-for-help', ['What time is it?', 'It is half past seven.', 'My phone number is 555-0142.', 'There are twelve months in a year: January, February, March, April, May, June, July, August, September, October, November, and December.', 'The bus leaves at eight thirty a.m.', 'Turn left at the corner.', 'I need the number five bus.']],
+    ['foundation-introducing-yourself', ['This is my friend, Reza.', 'What is her name?', 'Where do you live?', 'Goodbye. See you later.']],
+    ['foundation-asking-for-help', ['My phone number is 555-0142.', 'There are twelve months in a year: January, February, March, April, May, June, July, August, September, October, November, and December.', 'The bus leaves at eight thirty a.m.', 'I need the number five bus.']],
     ['foundation-buying-something', ['I need two apples.', 'These apples cost three dollars.', 'How much is a kilo of rice?', 'I need a loaf of bread.', 'Could I have a sandwich, please?', 'Can I pay in cash?', 'Your change is three dollars.']],
     ['survival-job-interview', ['I take the number five bus to work.', 'I start work at eight.', 'Can we meet on Monday?', 'I have one year of experience in customer service.', 'I can help customers and answer questions.', 'Is this a full-time or part-time job?', 'What is the hourly pay?', 'I can work from Monday to Friday.', 'I can start next Monday.', 'Could you repeat the question, please?', 'The interview is on Tuesday at ten a.m.']],
     ['survival-renting-a-home', ['Turn left at the corner.', 'I need some bread and milk.', 'I need an appointment with a doctor.', 'I am traveling next week.', 'How much is the security deposit?', 'How long is the lease?', 'The lease is for twelve months.', 'Is the apartment furnished?', 'Is internet included in the rent?', 'When is the rent due?', 'I need a quiet apartment near work.', 'The apartment has one bedroom and a kitchen.', 'The sink is broken.', 'Could you fix it, please?']],
@@ -249,7 +250,7 @@ const esbuild = require('esbuild');
   ];
   check(foundationExpansionTopics.every(([id, texts]) => {
     const lesson = app.getSentenceLesson(id);
-    return lesson?.levelId === 0 && lesson.sentences.length === 50
+    return lesson?.levelId === 1 && lesson.sentences.length === 50
       && texts.every(text => lesson.sentences.some(sentence => sentence.en === text));
   }));
   const expandedSurvivalTopics = [
@@ -286,7 +287,9 @@ const esbuild = require('esbuild');
   check(app.FOUNDATION_EVIDENCE_TASKS_PER_LESSON === 6);
   check(app.EVERYDAY_EVIDENCE_TASKS_PER_LESSON === 6);
   const c1 = app.SENTENCE_LESSONS.filter(lesson => lesson.c1Section);
-  check(Object.keys(evidenceByLesson).join('|') === [...coreLessons, ...c1].map(lesson => lesson.id).join('|'));
+  // The Pre-A1 band brings its own short evidence sets; compare the covered lesson set, not its order.
+  const preA1 = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0);
+  check(Object.keys(evidenceByLesson).sort().join('|') === [...coreLessons, ...c1, ...preA1].map(lesson => lesson.id).sort().join('|'));
   check(everyday.slice(0, 5).every(lesson => evidenceByLesson[lesson.id]?.length === 6));
   check(everydayExpansion.map(lesson => lesson.id).join('|') === app.EVERYDAY_EXPANSION_LESSON_IDS.join('|'));
   const evidenceTaskIds = new Set();
@@ -345,18 +348,18 @@ const esbuild = require('esbuild');
 
   const completed = [app.SENTENCE_LESSONS[0].id];
   const counts = app.COURSE_LEVELS.map(level => app.getEnglishLevelMetrics(level.id, completed));
-  check(counts.reduce((sum, item) => sum + item.lessonCount, 0) === 222);
+  check(counts.reduce((sum, item) => sum + item.lessonCount, 0) === 274);
   check(counts.reduce((sum, item) => sum + item.completedLessonCount, 0) === 1);
   check(counts.every(item => item.patternCount <= item.sentenceCount && item.vocabularyCount > 0));
-  check(counts.reduce((sum, item) => sum + item.patternCount, 0) === 3487);
-  check(counts.find(item => item.levelId === 0).vocabularyCount === 483);
-  check(counts.find(item => item.levelId === 2).sentenceCount === 1050
-    && counts.find(item => item.levelId === 2).vocabularyCount === 1819);
-  check(counts.find(item => item.levelId === 3).lessonCount === 26
-    && counts.find(item => item.levelId === 3).sentenceCount === 805
-    && counts.find(item => item.levelId === 3).vocabularyCount === 1458);
-  check(counts.find(item => item.levelId === 5).vocabularyCount === 110);
-  check(counts.filter(item => item.levelId !== 5).reduce((sum, item) => sum + item.vocabularyCount, 0) === 5847);
+  check(counts.reduce((sum, item) => sum + item.patternCount, 0) === 3994);
+  check(counts.find(item => item.levelId === 0).vocabularyCount === 98);
+  check(counts.find(item => item.levelId === 2).sentenceCount === 1170
+    && counts.find(item => item.levelId === 2).vocabularyCount === 2057);
+  check(counts.find(item => item.levelId === 3).lessonCount === 37
+    && counts.find(item => item.levelId === 3).sentenceCount === 915
+    && counts.find(item => item.levelId === 3).vocabularyCount === 1680);
+  check(counts.find(item => item.levelId === 5).vocabularyCount === 520);
+  check(counts.filter(item => item.levelId !== 5).reduce((sum, item) => sum + item.vocabularyCount, 0) === 6248);
 
   for (const lesson of app.SENTENCE_LESSONS) {
     const core = app.buildEnglishLessonCore(lesson);
@@ -381,5 +384,5 @@ const esbuild = require('esbuild');
     check(app.getLessonPatterns(lesson).length === lesson.sentences.filter(sentence => !!sentence.pattern).length);
   }
 
-  console.log(`${checks} engine checks passed; 7 levels, 9 ordered lesson stages, 222 lesson records (existing lessons retained), 4322 sentences (500 Foundation with 483 distinct linked words, 950 Survival across 19 fifty-example lessons with ${survivalVocabulary.size} unique vocabulary entries, 1050 A2 sentences across 5 bridge and 20 preserved lessons with 1819 unique linked vocabulary entries, and 750 Communication across 15 original lessons plus 55 B1 examples across 11 new lessons), 489 required checks across Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
+  console.log(`${checks} engine checks passed; 6 levels (Pre-A1 to C1), 10 ordered lesson stages, 274 lesson records (existing lessons retained), 4852 sentences, the full evidence set across Pre-A1, Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
 })().catch(error => { console.error(error); process.exit(1); });

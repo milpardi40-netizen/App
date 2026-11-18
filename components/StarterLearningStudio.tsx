@@ -5,13 +5,14 @@ import {learningStudio,type StudioTask} from '@/lib/languages/learningStudio';
 import {practiceDraftKey} from '@/lib/languages/localPracticeDraft';
 import type {NewLanguageId} from '@/lib/languages/newCourses';
 import {playStarterSpeech,stopStarterSpeech} from '@/lib/starterSpeech';
+import { narrationRate } from '@/lib/narration';
 import {Typography} from '@/lib/theme';
 import StarterPracticeDraft from '@/components/StarterPracticeDraft';
 import StarterOralSelfReview from '@/components/StarterOralSelfReview';
 import {toPersianDigits as fa} from '@/lib/format';
 function Exercise({task,language,locale}:{task:StudioTask;language:NewLanguageId;locale:string}){
  const [answers,setAnswers]=useState<Record<number,number>>({}),[grammarAnswer,setGrammarAnswer]=useState<number|null>(null),[showModel,setShowModel]=useState(false),[error,setError]=useState('');const grammar=task.grammar[language];
- const speak=(text:string)=>{setError('');void playStarterSpeech(locale,text,0.85,()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
+ const speak=(text:string)=>{setError('');void playStarterSpeech(locale, text, narrationRate(locale, 'listen'),()=>setError('پخش صدا در دسترس نیست.'),()=>setError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است متفاوت باشد.'));};
  return <View style={s.detail}><Text style={s.heading}>{task.title}</Text><Text style={s.target}>{task.text[language]}</Text><Pressable accessibilityRole="button" accessibilityLabel={`شنیدن متن استودیو ${task.title}`} onPress={()=>speak(task.text[language])} style={s.action}><Text style={s.actionText}>پخش متن با صدای دستگاه</Text></Pressable>{!!error&&<Text accessibilityRole="alert" style={s.error}>{error}</Text>}
  {task.questions.map((q,i)=><View key={i} style={s.question}><Text style={s.prompt}>{fa(i+1)}. {q.prompt}</Text>{q.choices.map((c,j)=><Pressable key={j} accessibilityRole="radio" accessibilityState={{checked:answers[i]===j}} onPress={()=>setAnswers(v=>({...v,[i]:j}))} style={[s.choice,answers[i]===j&&s.selected]}><Text style={s.body}>{c}</Text></Pressable>)}{answers[i]!==undefined&&<><Text accessibilityLiveRegion="polite" style={answers[i]===q.correctIndex?s.good:s.error}>{answers[i]===q.correctIndex?`درست است. ${q.explanation}`:'این پاسخ مناسب نیست؛ دوباره امتحان کنید.'}</Text>{answers[i]===q.correctIndex&&<Text style={s.target}>شاهد: {q.evidence[language]}</Text>}</>}</View>)}
  <Text style={s.heading}>عبارت در بافت</Text>{task.phrases[language].map(p=><View style={s.subcard} key={p.text}><Text style={s.target}>{p.text}</Text><Text style={s.body}>{p.meaning} · {p.note}</Text><Pressable accessibilityRole="button" accessibilityLabel={`شنیدن عبارت ${p.text}`} onPress={()=>speak(p.text)} style={s.action}><Text style={s.actionText}>شنیدن عبارت</Text></Pressable></View>)}

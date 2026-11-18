@@ -84,6 +84,8 @@ jobs:
           npm run typecheck
           npm run validate:hygiene
           npm run validate:registration-admin
+          npm run validate:narration
+          npm run validate:assessment
           npm run validate:language-entry
           npm run validate:personal-sync
           node scripts/verify-app-resume.cjs

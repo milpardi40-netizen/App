@@ -1,5 +1,6 @@
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
+import { assessmentStyles } from '@/components/assessmentLayout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { FitScrollView, lessonScrollOffset } from '@/components/FitScrollView';
@@ -44,7 +45,8 @@ import { ENGLISH_ENGINE_STEPS } from '@/lib/englishLearningEngine';
 type StarterCourseLesson = StarterLesson;
 import type { StarterLessonSession } from '@/lib/languages/starterSessions';
 import { toPersianDigits as fa } from '@/lib/format';
-import { playStarterSpeech, stopStarterSpeech } from '@/lib/starterSpeech';
+import { playStarterSpeech, stopStarterSpeech, warmStarterSpeech } from '@/lib/starterSpeech';
+import { narrationRate, type NarrationPace } from '@/lib/narration';
 import { Typography } from '@/lib/theme';
 import { shuffleChecks } from '@/lib/shuffleChecks';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
@@ -67,13 +69,14 @@ const foundationStageNames: Record<number, { labelFa: string; labelEn: string }>
   8: {labelFa:'مرور', labelEn:'Review'},
 };
 
-/** سرعت پخش: معمولی برای شنیدن خودکار و آهسته برای تکرار دقیق‌تر. */
-const NORMAL_SPEECH_RATE = 1;
-const SLOW_SPEECH_RATE = 0.5;
-const NATURAL_SPEECH_RATE = 1.15;
+/** سرعت‌ها از قرارداد مشترک روایت می‌آیند تا درس، سطح و واژه‌ها یک صدای واحد داشته باشند. */
 
 export default function StarterLessonView({ course, lesson, fromStart }: { course: StarterCourse; lesson: StarterCourseLesson; fromStart?: 'listen' | 'restart' }) {
   const {lessons, levels, progress: courseProgress} = course;
+  const pace = (name: NarrationPace) => narrationRate(course.locale, name);
+  // Start the phone's engine (and its voice list) while the lesson paints: the first sentence plays
+  // as fast as the ones after it.
+  useEffect(() => { warmStarterSpeech(course.locale); }, [course.locale]);
   const foundation = !!lesson.learningMode;
   const a1 = lesson.levelId === 1 || lesson.levelId === 2 || lesson.levelId === 3 || lesson.levelId === 4;
   const unit = lesson.learningMode === 'chunks' ? 'عبارت' : foundation ? 'واژه' : 'جمله';
@@ -222,7 +225,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
   }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
-  const speak = useCallback((text: string, rate = NORMAL_SPEECH_RATE) => {
+  const speak = useCallback((text: string, rate = narrationRate(course.locale, 'normal')) => {
     setSpeechError('');
     void playStarterSpeech(course.locale, text, rate, () => setSpeechError('پخش صدا ممکن نشد؛ موتور گفتار و بستهٔ صوتی این زبان را در تنظیمات دستگاه بررسی کنید.'), () => setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد. تنظیمات گفتار دستگاه را بررسی کنید.'));
   }, [course.locale]);
@@ -230,7 +233,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   // Read the visible main sentence on entry, resume, and each sentence change.
   useEffect(() => {
     if (!sessionReady || stage !== 1 || !current) return;
-    speak(current.text, NORMAL_SPEECH_RATE);
+    speak(current.text, pace('normal'));
   }, [lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak]);
 
   const startCurrentLessonFromBeginning = () => {
@@ -247,7 +250,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     setSessionError('');
     setLoadingRetry(value => value + 1);
   };
-  const selectSentence = (index: number, rate = 0.72) => {
+  const selectSentence = (index: number, rate = narrationRate(course.locale, 'listen')) => {
     setSentenceIndex(index);
     setRevealed(false);
     setSpeechError('');
@@ -257,7 +260,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
   useEffect(() => {
     if (stage !== 2) return;
-    return autoRead(lesson.sentences.length, index => selectSentence(index, 0.72), undefined, 900);
+    return autoRead(lesson.sentences.length, index => selectSentence(index, pace('listen')), undefined, 900);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, lesson.id]);
 
@@ -284,7 +287,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       setSentenceIndex(0);
       setRevealed(false);
       // Main sentences are spoken by the effect; practice keeps its existing behavior.
-      if (nextStage === 3) speak(lesson.sentences[0].text, NORMAL_SPEECH_RATE);
+      if (nextStage === 3) speak(lesson.sentences[0].text, pace('normal'));
       else if (nextStage !== 1) void stopStarterSpeech();
       return;
     }
@@ -372,9 +375,9 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           </View>
           {bridgeLanguage ? <PersianBridgeCard sentence={current} language={bridgeLanguage} /> : null}
           <View style={styles.replayRow}>
-            <Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, SLOW_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, NORMAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, NATURAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, pace('natural'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
           </View>
           <SpeakCheck key={current.id} text={current.text} locale={course.locale} accent={Palette.success} />
         </View>}
@@ -395,7 +398,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           <View style={styles.speechPractice}>
             <Text style={styles.speechTitle}>{unit} انتخاب‌شده</Text>
             <Text style={styles.speechSentence}>{current.text}</Text>
-            <View style={styles.replayRow}><Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, SLOW_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable><Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, NORMAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable></View>
+            <View style={styles.replayRow}><Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable><Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable></View>
             <Text style={styles.speechHint}>پس از شنیدن، {unit} را با صدای بلند تکرار کنید.</Text>
             <SpeakCheck key={current.id} text={current.text} locale={course.locale} accent={Palette.success} />
           </View>
@@ -517,7 +520,8 @@ function PracticeNavigation({ index, count, onChange }: { index: number; count: 
 
 type LearningLessonVocabulary = StarterCourseLesson['sentences'][number]['vocabulary'][number];
 
-const styles = StyleSheet.create({
+// The «سنجش کوتاه» block below shares one centred, equal-card layout with every other language.
+const styles = { ...StyleSheet.create({
   root: { flex: 1, backgroundColor: Palette.canvas },
   lessonScroll: { flex: 1, minHeight: 0 },
   lessonScrollContent: { paddingBottom: 28 },
@@ -646,4 +650,4 @@ const styles = StyleSheet.create({
   replayText: { fontFamily: Typography.fontFamily, fontSize: 14, fontWeight: '400', color: Palette.primary, writingDirection: 'rtl' },
   nextButtonDisabled: { opacity: .45 },
   nextText: { fontFamily: Typography.boldFontFamily, fontSize: 14, fontWeight: '400', color: '#FFFFFF', writingDirection: 'rtl' },
-});
+}), ...assessmentStyles };

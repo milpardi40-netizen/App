@@ -7,6 +7,8 @@ name: Build requested APKs
 # rev 113: per-device recorded-audio fallback + key-free release-hosted bundles
 # rev 76: page-targeted pop-ups (any number per page) with a redesigned card
 # rev 75: learner pop-ups checked on every launch and return (1-min quiet period)
+# rev 76: add a two-language (en, ru) learner APK WITH login (login.2update.apk).
+# rev 75: narration contract for de/ru; centred «سنجش کوتاه» page in all six languages.
 # rev 74: new English-only no-login APK (english.apk)
 # rev 73: drop stale chat deep links on relaunch; French card first
 # rev 72: launcher icon 2048px source, sharpened and colour-boosted
@@ -209,7 +211,10 @@ jobs:
           echo "applicationId: $(grep -m1 applicationId android/app/build.gradle)"
       - &validate
         name: Verify the Firebase-free chat alert path
-        run: npm run validate:background-notifications
+        run: |
+          npm run validate:background-notifications
+          npm run validate:narration
+          npm run validate:assessment
       - &build
         name: Build the release APK
         run: |
@@ -271,6 +276,38 @@ jobs:
       EXPECTED_PACKAGE: 'com.devicecontrol.milomultilang'
       EXPECTED_SCOPE: ${{ inputs.language_scope_login || 'en,de,fr,tr,es' }}
       APK_NAME: 'login.5update.apk'
+    steps:
+      - *checkout
+      - *node
+      - *install
+      - *settings
+      - *java
+      - *sdk
+      - *prebuild
+      - *validate
+      - *build
+      - *verify
+      - *upload
+
+  # --------------------------------- two-language (en, ru) learner WITH login
+  learner-login-two:
+    if: ${{ github.event_name == 'push' || inputs.learner_login }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+      NODE_OPTIONS: '--max-old-space-size=8192'
+      EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID || 'be0e368c-0d94-4e95-b4f4-d757fa7beb42' }}
+      MILO_ANDROID_ABIS: ${{ inputs.abis || 'arm64-v8a' }}
+      EXPO_PUBLIC_MILO_ADMIN_APP: 'false'
+      EXPO_PUBLIC_ENABLE_EDUCATION_ADMIN: 'false'
+      EXPO_PUBLIC_LEARNER_LOGIN: 'true'
+      EXPO_PUBLIC_LEARNER_TWO_LOGIN: 'true'
+      EXPO_PUBLIC_LANGUAGE_SCOPE: 'en,ru'
+      EXPECTED_PACKAGE: 'com.devicecontrol.milolang2'
+      EXPECTED_SCOPE: 'en,ru'
+      APK_NAME: 'login.2update.apk'
     steps:
       - *checkout
       - *node
@@ -411,8 +448,8 @@ jobs:
 
   # ----------------------------------------------------------- publish
   publish:
-    needs: [admin, admin-web, learner-login, learner-nologin, learner-five-nologin, learner-english-nologin]
-    if: ${{ always() && needs.admin.result == 'success' && needs.learner-nologin.result == 'success' && (needs.learner-login.result == 'success' || needs.learner-login.result == 'skipped') }}
+    needs: [admin, admin-web, learner-login, learner-login-two, learner-nologin, learner-five-nologin, learner-english-nologin]
+    if: ${{ always() && needs.admin.result == 'success' && needs.learner-nologin.result == 'success' && (needs.learner-login.result == 'success' || needs.learner-login.result == 'skipped') && (needs.learner-login-two.result == 'success' || needs.learner-login-two.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -443,6 +480,7 @@ jobs:
             - `AdminApp-web.zip` — the same management panel as a static website (unzip and serve the folder)
             - `login.5update.apk` — MiloMultiLanguage WITH login, package `com.devicecontrol.milomultilang`, languages ${{ inputs.language_scope_login || 'en,de,fr,tr,es' }}
             - `2update.apk` — MiloMultiLanguage WITHOUT login, package `com.devicecontrol.companion`, languages en, ru
+            - `login.2update.apk` — two-language MiloLang WITH login, package `com.devicecontrol.milolang2`, languages en, ru
             - `5update.apk` — five-language MiloMultiLanguage WITHOUT login, package `com.devicecontrol.milofive`, languages en, de, fr, tr, es
             - `english.apk` — English-only MiloLang WITHOUT login, package `com.devicecontrol.miloenglish`, language en
           files: |
@@ -486,6 +524,18 @@ jobs:
           files: |
             out/login.5update.apk/login.5update.apk
             out/login.5update.apk/login.5update.apk.sha256
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Add the two-language (en, ru) login APK to the release
+        if: ${{ needs.learner-login-two.result == 'success' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: milo-requested-${{ github.run_number }}
+          files: |
+            out/login.2update.apk/login.2update.apk
+            out/login.2update.apk/login.2update.apk.sha256
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -574,6 +624,7 @@ jobs:
           com.devicecontrol.milomultilang|login.5update.apk
           com.devicecontrol.miloenglish|english.apk
           com.devicecontrol.companion|2update.apk
+          com.devicecontrol.milolang2|login.2update.apk
           com.devicecontrol.miloadmin|AdminApp.apk
           LIST
           body="[${rows%,}]"

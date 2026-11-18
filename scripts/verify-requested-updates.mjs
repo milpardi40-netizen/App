@@ -18,14 +18,14 @@ const admin = read('app/admin/index.tsx');
 const migration = read('supabase/migrations/202610190001_multi_contact_chat_moderation.sql');
 const copySql = read('supabase/SETUP-MULTI-CONTACT-ADMIN-ONCE.sql');
 
-verify(ruNav.includes("'/learn/ru/pronunciation'") && ruNav.includes("'/conversations'"), 'Russian navigation links to pronunciation and real conversations');
+verify(ruNav.includes("'/learn/ru/pronunciation'") && ruNav.includes("'/feedback'") && /ensureSupportConversation/.test(read('app/feedback.tsx')), 'Russian navigation links to pronunciation and real conversations');
 verify(/flexDirection: 'row-reverse'/.test(navShell), 'Russian navigation remains RTL');
 verify(logo.includes("const SUBTITLE = 'MULTILANGUAGE'"), 'startup logo displays the full MiloMultiLanguage wordmark');
 verify(/}, 3400\)/.test(root), 'startup wordmark remains visible until its animation completes');
 verify(/"name": "MiloMultiLanguage"/.test(appConfig), 'application display name uses the full brand');
 verify(/admin \? '\/admin' : '\/languages'/.test(entry), 'fresh learner and admin launches go to their home screens');
 verify(!/AsyncStorage\.clear\(/.test(root + conversations), 'normal startup and chat changes do not clear saved learner progress');
-verify(invite.includes('ساخت کد دعوت برای مخاطب دیگر'), 'invite UI allows creating additional contact codes');
+verify(read('features/chat/screens/InviteContact.tsx').includes('ساخت کد دعوت برای مخاطب دیگر'), 'invite UI allows creating additional contact codes');
 const inviteFn = migration.slice(migration.indexOf('FUNCTION public.create_contact_invite'), migration.indexOf('FUNCTION public.claim_contact_invite'));
 verify(!/UPDATE public\.contact_invites SET status = 'revoked'/.test(inviteFn), 'creating a new invite no longer revokes earlier pending invitations');
 verify(/CREATE TABLE IF NOT EXISTS public\.user_chat_access/.test(migration) && /ENABLE ROW LEVEL SECURITY/.test(migration), 'chat access controls are stored behind RLS');
@@ -34,7 +34,7 @@ verify(/NOT EXISTS \(SELECT 1 FROM public\.user_chat_access/.test(migration), 'b
 verify(/CREATE OR REPLACE FUNCTION public\.admin_set_chat_access[\s\S]*?IF NOT public\.is_education_admin\(\)/.test(migration), 'only an education admin can block or restore chat access');
 verify(/CREATE OR REPLACE FUNCTION public\.admin_set_conversation_deleted[\s\S]*?IF NOT public\.is_education_admin\(\)/.test(migration), 'only an education admin can hide or restore conversations');
 verify(/deleted_at timestamptz/.test(migration) && !/DELETE FROM public\.messages/.test(migration), 'conversation deletion is recoverable and does not erase message rows');
-verify(/setChatUserBlocked/.test(admin) && /setChatConversationDeleted/.test(admin), 'admin panel exposes block/allow and hide/restore actions');
+verify(/setUserBlocked/.test(read('features/admin/screens/Users.tsx')) && /setConversationHidden/.test(read('features/admin/screens/Chats.tsx')) && /blockConversationMembers/.test(read('features/admin/screens/Chats.tsx')), 'admin panel exposes block/allow and hide/restore actions');
 verify(migration.trim() === copySql.trim(), 'dashboard copy/paste SQL matches the deployable migration exactly');
 
 console.log(`${checks} requested-update and moderation checks passed.`);

@@ -57,13 +57,13 @@ const DE_TARGETS: readonly string[] = [
   // خانه و وسایل
   'Haus', 'Hause', 'Wohnung', 'Zimmer', 'Küche', 'Bad', 'Tisch', 'Bett', 'Fenster', 'Tür', 'Buch', 'Telefon', 'Handy', 'Tasche', 'Schlüssel',
   // زمان
-  'Zeit', 'Tag', 'heute', 'morgen', 'Abend', 'Nacht', 'Woche', 'Wochenende', 'Montag', 'Samstag', 'Sonntag', 'Stunde', 'wann', 'früh', 'spät', 'jetzt', 'gestern',
+  'Zeit', 'Tag', 'heute', 'morgen', 'Abend', 'Woche', 'Wochenende', 'Montag', 'Samstag', 'Sonntag', 'Uhr', 'Monat', 'wann', 'früh', 'spät', 'jetzt', 'gestern',
   // مکان و پرسش
-  'wo', 'Wo', 'Woher', 'hier', 'dort', 'weit', 'nah', 'Zentrum', 'Stadt', 'Straße', 'Toilette', 'Platz',
+  'wo', 'Wo', 'Woher', 'hier', 'dort', 'weit', 'nah', 'Zentrum', 'Straße', 'Toilette', 'Platz',
   // رفت‌وآمد
   'Bahnhof', 'Zug', 'Bus', 'Flughafen', 'Auto', 'Fahrkarte', 'gehe', 'gehen',
   // کار، درس و پول
-  'arbeiten', 'arbeite', 'Büro', 'Schule', 'Unterricht', 'Lehrer', 'Frage', 'Deutsch', 'sprechen', 'verstehe', 'schreiben', 'lernt', 'Geld', 'kostet', 'teuer', 'bezahlen', 'kaufen',
+  'arbeiten', 'arbeite', 'Arbeit', 'Büro', 'Schule', 'Unterricht', 'Lehrer', 'Lehrerin', 'Frage', 'Satz', 'Deutsch', 'sprechen', 'verstehe', 'schreiben', 'lernt', 'Geld', 'kostet', 'teuer', 'bezahlen',
   // توصیف
   'gut', 'schön', 'neu', 'alt', 'groß', 'klein', 'lang', 'kalt', 'warm', 'müde', 'froh', 'krank', 'frei', 'Farbe', 'rot', 'blau', 'grün', 'gelb', 'schwarz', 'braun', 'hell',
   // پرسش‌های پرکاربرد
@@ -71,7 +71,7 @@ const DE_TARGETS: readonly string[] = [
   // نیاز و توانایی
   'brauche', 'Hilfe', 'helfen', 'kann', 'können', 'muss', 'mag', 'gern', 'natürlich', 'leider',
   // سلامت
-  'Arzt', 'Krankenhaus', 'Apotheke',
+  'Krankenhaus', 'Apotheke',
 ];
 
 /** The teaching order of the Russian core, written with the stress marks the course uses. */
@@ -81,27 +81,27 @@ const RU_TARGETS: readonly string[] = [
   // خودم و مخاطبم
   'я', 'ты', 'вы', 'мы', 'мой', 'и́мя', 'живу́',
   // عدد
-  'оди́н', 'два', 'три', 'четы́ре', 'пять', 'шесть', 'семь', 'во́семь', 'де́вять', 'де́сять',
+  'оди́н', 'два', 'три', 'пять', 'шесть', 'семь', 'де́вять', 'де́сять', 'два́дцать',
   // کافه و غذا
-  'вода́', 'чай', 'ко́фе', 'хлеб', 'молоко́', 'сыр', 'я́блоко', 'есть', 'пить', 'хочу́', 'вку́сно',
+  'вода́', 'чай', 'ко́фе', 'хлеб', 'молоко́', 'мя́со', 'о́вощи', 'фру́кты', 'горя́чий', 'есть', 'пить', 'хочу́', 'вку́сно',
   // خانواده
-  'семья́', 'мать', 'оте́ц', 'брат', 'сестра́', 'сын', 'дочь', 'друг', 'де́ти',
+  'семья́', 'мать', 'оте́ц', 'брат', 'сестра́', 'сын', 'дочь',
   // خانه و وسایل
-  'дом', 'кварти́ра', 'ко́мната', 'стол', 'стул', 'дверь', 'окно́', 'кни́га', 'телефо́н', 'су́мка', 'ключ',
+  'дом', 'кварти́ра', 'стол', 'окно́', 'кни́га', 'телефо́н', 'су́мка', 'ключ',
   // زمان
-  'вре́мя', 'день', 'сего́дня', 'за́втра', 'вчера́', 'у́тро', 'ве́чер', 'ночь', 'неде́ля', 'ме́сяц', 'час', 'сейча́с', 'когда́',
+  'вре́мя', 'день', 'сего́дня', 'за́втра', 'вчера́', 'у́тро', 'ве́чер', 'ночь', 'неде́ля', 'понеде́льник', 'вто́рник', 'воскресе́нье', 'ме́сяц', 'час', 'сейча́с', 'когда́',
   // مکان و پرسش
-  'где', 'что', 'кто', 'как', 'почему́', 'ско́лько', 'здесь', 'там', 'далеко́', 'ря́дом', 'го́род', 'у́лица', 'туале́т', 'ме́сто',
+  'где', 'что', 'кто', 'как', 'ско́лько', 'здесь', 'там', 'далеко́', 'ря́дом', 'го́род', 'туале́т', 'ме́сто', 'по́чта', 'магази́н',
   // رفت‌وآمد
-  'метро́', 'авто́бус', 'по́езд', 'такси́', 'биле́т', 'вокза́л',
+  'метро́', 'авто́бус', 'по́езд', 'такси́', 'биле́т', 'маши́на',
   // کار، درس و پول
-  'рабо́та', 'шко́ла', 'уро́к', 'учи́тель', 'вопро́с', 'язы́к', 'говори́ть', 'понима́ть', 'повтори́те', 'чита́ть', 'писа́ть', 'де́ньги', 'сто́ит', 'до́рого', 'плати́ть',
+  'рабо́та', 'шко́ла', 'уро́к', 'учи́тель', 'вопро́с', 'язы́к', 'письмо́', 'но́мер', 'компью́тер', 'повтори́те', 'сто́ит', 'до́рого',
   // توصیف
-  'хоро́ший', 'плохо́й', 'но́вый', 'ста́рый', 'большо́й', 'ма́ленький', 'краси́вый', 'вку́сный', 'холо́дно', 'тепло́', 'кра́сный', 'си́ний', 'зелёный', 'жёлтый', 'чёрный', 'бе́лый',
+  'хоро́ший', 'плохо́й', 'но́вый', 'большо́й', 'ма́ленький', 'краси́вый', 'холо́дно', 'тепло́', 'кра́сный', 'о́чень',
   // نیاز و توانایی
-  'ну́жно', 'мо́жно', 'могу́', 'помо́щь', 'помоги́те', 'не́льзя',
+  'ну́жно', 'мо́жно', 'могу́', 'помо́щь', 'помоги́те', 'спать', 'до́ма',
   // سلامت
-  'врач', 'апте́ка', 'больни́ца', 'бо́льно',
+  'врач', 'апте́ка', 'бо́льно',
 ];
 
 /** Short Persian cues; only for words whose form or register needs one. */
@@ -151,14 +151,103 @@ const RU_NOTES: Record<string, string> = {
   имя: 'خنثی است؛ در جمله «меня зовут» هم برای نام به کار می‌رود.',
 };
 
-const fold = (value: string) => value
-  .toLowerCase()
-  .normalize('NFD')
-  .replace(/\p{M}/gu, '')
-  .replace(/ё/g, 'е')
-  .replace(/[´`’'!?.,;:«»„“”¿¡…—–]/g, '')
-  .replace(/\s+/g, ' ')
-  .trim();
+/**
+ * Persian glosses for core words the course *uses* in a sentence but lists under another headword
+ * (for example «Straße» is taught inside «Die Straße ist ruhig.» while the vocabulary row of that
+ * sentence is «ruhig», and «четы́ре» is taught inside the number chain). The sentence, its Persian
+ * translation and its respelling still come from the course — only the word-level gloss is authored
+ * here, because the course has no row for that headword. A target still needs a real course sentence
+ * to be shown; a gloss alone never creates a card.
+ */
+const DE_CORE_GLOSS: Record<string, string> = {
+  tag: 'روز',
+  nacht: 'شب',
+  stunde: 'ساعت (یک ساعت زمان)',
+  stadt: 'شهر',
+  straße: 'خیابان',
+  schule: 'مدرسه',
+  kaufen: 'خریدن',
+  muss: 'باید',
+  arzt: 'پزشک',
+  uhr: 'ساعت (وسیله و ساعتِ روز)',
+  monat: 'ماه',
+  arbeit: 'کار',
+  lehrerin: 'معلم (زن)',
+  satz: 'جمله',
+};
+
+const RU_CORE_GLOSS: Record<string, string> = {
+  четыре: 'چهار',
+  восемь: 'هشت',
+  сыр: 'پنیر',
+  яблоко: 'سیب',
+  друг: 'دوست (مرد)',
+  дети: 'کودکان',
+  комната: 'اتاق',
+  стул: 'صندلی',
+  дверь: 'در',
+  окно: 'پنجره',
+  неделя: 'هفته',
+  почему: 'چرا',
+  улица: 'خیابان',
+  место: 'جا، مکان',
+  вокзал: 'ایستگاه قطار',
+  урок: 'درس',
+  язык: 'زبان',
+  говорить: 'صحبت کردن',
+  понимать: 'فهمیدن',
+  читать: 'خواندن',
+  писать: 'نوشتن',
+  деньги: 'پول',
+  платить: 'پرداختن',
+  новый: 'نو',
+  старый: 'قدیمی',
+  вкусный: 'خوشمزه',
+  синий: 'آبی',
+  зелёный: 'سبز',
+  жёлтый: 'زرد',
+  чёрный: 'سیاه',
+  белый: 'سفید',
+  нельзя: 'نمی‌شود، اجازه نیست',
+  больница: 'بیمارستان',
+};
+
+/**
+ * One string is folded many times while the lab is built — once per target for every course sentence —
+ * so the result is cached. `fold` is pure, and a course only holds a few thousand distinct strings.
+ */
+const folded = new Map<string, string>();
+const fold = (value: string): string => {
+  const cached = folded.get(value);
+  if (cached !== undefined) return cached;
+  const next = value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .replace(/ё/g, 'е')
+    .replace(/[´`’'!?.,;:«»„“”¿¡…—–]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  folded.set(value, next);
+  return next;
+};
+
+/** The authored map is written with normal stress-free spelling, so compare it through `fold`. */
+const foldedGlossIndex = new WeakMap<Record<string, string>, Map<string, string>>();
+function authoredGloss(glosses: Record<string, string>, key: string): string | undefined {
+  if (glosses[key]) return glosses[key];
+  let index = foldedGlossIndex.get(glosses);
+  if (!index) {
+    index = new Map<string, string>();
+    // The first entry with a given folded spelling wins, exactly like the linear scan this replaces.
+    for (const [word, gloss] of Object.entries(glosses)) {
+      const foldedWord = fold(word);
+      if (!index.has(foldedWord)) index.set(foldedWord, gloss);
+    }
+    foldedGlossIndex.set(glosses, index);
+  }
+  return index.get(key);
+}
 
 type CourseSentence = { text: string; fa: string; pronunciation: string; vocabulary?: Array<{ word: string; meaning: string }> };
 type CourseLesson = { id: string; title: string; levelId: number; sentences: CourseSentence[]; learningMode?: string };
@@ -175,41 +264,81 @@ const isLabLesson = (id: string) => id.startsWith('lab-');
 const MAX_LEVEL = 1;
 
 /**
- * How well the sentence says the word: 0 = the word stands there as its own token, 1 = only an
- * inflected form of it («Schulen», «во́ду»), `null` = the sentence does not really say it. Matching a
- * prefix without a word boundary is not allowed, so «Küche» never matches «Kuchen» and «Tür» never
- * matches «Türkei».
+ * A course sentence with everything the matcher asks about worked out once: the lab used to fold every
+ * sentence again for every one of the ~160 target words, which made opening the lab take seconds on a
+ * phone. The strings are the same; they are just measured once instead of once per target.
  */
-function matchQuality(sentence: CourseSentence, word: string): 0 | null {
-  const text = sentence.text.trim();
-  if (/[«»]/.test(text)) return null;
-  if (fold(text) === fold(word)) return null;
-  const tokens = text.replace(/[!?.,;:]/g, ' ').split(/\s+/).filter(Boolean);
-  if (tokens.length < 2) return null;
-  const needle = fold(word);
-  if (!needle) return null;
+type PreparedSentence = {
+  lesson: CourseLesson;
+  sentence: CourseSentence;
+  /** `fold(sentence.text)` — the frame of comparison for one target. */
+  key: string;
+  /** Folded words of the sentence, punctuation-stripped the same way the scan always was. */
+  tokens: Set<string>;
+  /** Folded vocabulary words, so «does this sentence teach the word?» is a set lookup. */
+  vocabulary: Set<string>;
+  wordCount: number;
+  /** A quoted word list or a one-word card is never an example the learner can say back. */
+  usable: boolean;
+};
+
+function prepareSentences(lessons: readonly CourseLesson[]): PreparedSentence[] {
+  const prepared: PreparedSentence[] = [];
+  for (const lesson of lessons) {
+    for (const sentence of lesson.sentences) {
+      const text = sentence.text.trim();
+      const tokens = text.replace(/[!?.,;:]/g, ' ').split(/\s+/).filter(Boolean);
+      prepared.push({
+        lesson,
+        sentence,
+        key: fold(text),
+        tokens: new Set(tokens.map(token => fold(token))),
+        vocabulary: new Set((sentence.vocabulary ?? []).map(item => fold(item.word))),
+        wordCount: text.split(/\s+/).length,
+        usable: tokens.length >= 2 && !/[«»]/.test(text),
+      });
+    }
+  }
+  return prepared;
+}
+
+/** Word-boundary test for a multi-word target such as «Guten Tag»; built once per target. */
+const phraseTests = new Map<string, RegExp>();
+function phraseTest(needle: string): RegExp {
+  let test = phraseTests.get(needle);
+  if (!test) {
+    const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    test = new RegExp(`(^|\\s)${escaped}(\\s|$)`, 'u');
+    phraseTests.set(needle, test);
+  }
+  return test;
+}
+
+/**
+ * How well the sentence says the word: 0 = the word stands there as its own token, `null` = the
+ * sentence does not really say it. Matching a prefix without a word boundary is not allowed, so
+ * «Küche» never matches «Kuchen» and «Tür» never matches «Türkei».
+ */
+function matchQuality(sentence: PreparedSentence, needle: string): 0 | null {
+  if (!sentence.usable || !needle || sentence.key === needle) return null;
   // Exact token (or exact multi-word phrase) only: the target list names the form the course actually
   // writes, so a prefix can never turn «Küche» into «Kuchen» or «Tür» into «Türkei».
-  if (needle.includes(' ')) {
-    const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    return new RegExp(`(^|\\s)${escaped}(\\s|$)`, 'u').test(fold(text)) ? 0 : null;
-  }
-  return tokens.some(token => fold(token) === needle) ? 0 : null;
+  if (needle.includes(' ')) return phraseTest(needle).test(sentence.key) ? 0 : null;
+  return sentence.tokens.has(needle) ? 0 : null;
 }
 
 /** Shortest, earliest, clearest sentence wins: it is the one a beginner can repeat. */
-function sentenceScore(lesson: CourseLesson, sentence: CourseSentence, teachesHere: boolean): number {
-  const words = sentence.text.trim().split(/\s+/).length;
+function sentenceScore(sentence: PreparedSentence, teachesHere: boolean): number {
   // A word list card («Guten Tag») is not an example the learner can say back; a real sentence always wins.
-  const wordList = lesson.learningMode ? 300 : 0;
-  return lesson.levelId * 1000 + wordList + words * 3 + (teachesHere ? 0 : 500);
+  const wordList = sentence.lesson.learningMode ? 300 : 0;
+  return sentence.lesson.levelId * 1000 + wordList + sentence.wordCount * 3 + (teachesHere ? 0 : 500);
 }
 
 /**
  * The Persian gloss is the meaning the course itself repeats most often for this word (earliest level
  * wins ties), so «Hallo» is 「سلام」 and not the one-off telephone 「الو」.
  */
-function glossFor(word: string, rows: Array<{ meaning: string; levelId: number }>): string | null {
+function glossFor(rows: ReadonlyArray<{ meaning: string; levelId: number }>): string | null {
   if (!rows.length) return null;
   const tally = new Map<string, { count: number; levelId: number }>();
   for (const row of rows) {
@@ -222,51 +351,61 @@ function glossFor(word: string, rows: Array<{ meaning: string; levelId: number }
     .sort((a, b) => b[1].count - a[1].count || a[1].levelId - b[1].levelId)[0][0];
 }
 
-function build(language: WordLabLanguageId, targets: readonly string[], notes: Record<string, string>): readonly CoreWord[] {
+function build(
+  language: WordLabLanguageId,
+  targets: readonly string[],
+  notes: Record<string, string>,
+  glosses: Record<string, string>,
+): readonly CoreWord[] {
   const all = courseLessons(language).filter(lesson => !isLabLesson(lesson.id));
-  const beginner = all.filter(lesson => lesson.levelId <= MAX_LEVEL);
+  const beginner = prepareSentences(all.filter(lesson => lesson.levelId <= MAX_LEVEL));
+  // Every meaning the course ever gives each word, indexed in one pass instead of rescanning the whole
+  // course for every target. Rows keep the course order, so the tally is unchanged.
+  const meanings = new Map<string, Array<{ meaning: string; levelId: number }>>();
+  for (const lesson of all) {
+    for (const sentence of lesson.sentences) {
+      for (const item of sentence.vocabulary ?? []) {
+        const key = fold(item.word);
+        const rows = meanings.get(key);
+        if (rows) rows.push({ meaning: item.meaning, levelId: lesson.levelId });
+        else meanings.set(key, [{ meaning: item.meaning, levelId: lesson.levelId }]);
+      }
+    }
+  }
   const out: CoreWord[] = [];
   // Each example should teach one word: two cards sharing a sentence make the second one noise. A reused
   // sentence is allowed only when nothing else exists for that word, so it costs the price of a fallback.
   const usedSentences = new Set<string>();
+  const emitted = new Set<string>();
 
   for (const target of targets) {
     const key = fold(target);
     if (!key) continue;
-    // Every meaning the course ever gives this exact word…
-    const rows: Array<{ meaning: string; levelId: number }> = [];
-    for (const lesson of all) {
-      for (const sentence of lesson.sentences) {
-        for (const item of sentence.vocabulary ?? []) {
-          if (fold(item.word) === key) rows.push({ meaning: item.meaning, levelId: lesson.levelId });
-        }
-      }
-    }
-    const fa = glossFor(target, rows);
+    // The course's own gloss wins; a target the course only uses inside a sentence keeps the
+    // authored gloss above instead of disappearing from the lab.
+    const fa = glossFor(meanings.get(key) ?? []) ?? authoredGloss(glosses, key);
     if (!fa) continue;
     // …and the simplest beginner sentence that actually says it.
-    let best: { lesson: CourseLesson; sentence: CourseSentence; score: number } | null = null;
-    for (const lesson of beginner) {
-      for (const sentence of lesson.sentences) {
-        if (matchQuality(sentence, target) === null) continue;
-        const teachesItHere = (sentence.vocabulary ?? []).some(item => fold(item.word) === key);
-        const score = sentenceScore(lesson, sentence, teachesItHere)
-          + (usedSentences.has(fold(sentence.text)) ? 900 : 0);
-        if (!best || score < best.score) best = { lesson, sentence, score };
-      }
+    let best: { sentence: PreparedSentence; score: number } | null = null;
+    for (const sentence of beginner) {
+      if (matchQuality(sentence, key) === null) continue;
+      const score = sentenceScore(sentence, sentence.vocabulary.has(key))
+        + (usedSentences.has(sentence.key) ? 900 : 0);
+      if (!best || score < best.score) best = { sentence, score };
     }
     if (!best) continue;
-    if (out.some(word => fold(word.target) === key)) continue;
-    usedSentences.add(fold(best.sentence.text));
+    if (emitted.has(key)) continue;
+    emitted.add(key);
+    usedSentences.add(best.sentence.key);
     out.push({
       id: `${language}-core-${key.replace(/\s+/g, '-')}`,
       target,
       fa,
-      sentence: best.sentence.text,
-      sentenceFa: best.sentence.fa,
-      sentencePronunciation: best.sentence.pronunciation,
-      lessonTitle: best.lesson.title,
-      levelId: best.lesson.levelId,
+      sentence: best.sentence.sentence.text,
+      sentenceFa: best.sentence.sentence.fa,
+      sentencePronunciation: best.sentence.sentence.pronunciation,
+      lessonTitle: best.sentence.lesson.title,
+      levelId: best.sentence.lesson.levelId,
       note: notes[key] ?? '',
       order: out.length + 1,
     });
@@ -276,8 +415,8 @@ function build(language: WordLabLanguageId, targets: readonly string[], notes: R
 }
 
 export const CORE_WORDS: Record<WordLabLanguageId, readonly CoreWord[]> = {
-  de: build('de', DE_TARGETS, DE_NOTES),
-  ru: build('ru', RU_TARGETS, RU_NOTES),
+  de: build('de', DE_TARGETS, DE_NOTES, DE_CORE_GLOSS),
+  ru: build('ru', RU_TARGETS, RU_NOTES, RU_CORE_GLOSS),
 };
 
 /** Targets the shipped course could not supply a full sentence for, listed for the verify script. */

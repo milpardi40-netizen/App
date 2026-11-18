@@ -12,6 +12,7 @@ import { toPersianDigits as fa } from '@/lib/format';
 import { ReviewRatingGrid, ReviewSpeakGate, reviewReason } from '@/components/ReviewRecall';
 import { Typography } from '@/lib/theme';
 import { playTurkishSpeech, stopTurkishSpeech } from '@/lib/turkishSpeech';
+import { narrationRate } from '@/lib/narration';
 
 function contentForCard(card: SentenceReviewCard) {
   const lesson = TURKISH_LESSONS.find(item => item.id === card.lessonId);
@@ -86,7 +87,7 @@ export default function TurkishReview() {
 
   const speak = (text: string) => {
     setError('');
-    void playTurkishSpeech(text, 0.78, () => setError('صدای ترکی دستگاه در دسترس نیست؛ جمله همچنان برای خواندن نمایش داده می‌شود.'));
+    void playTurkishSpeech(text, narrationRate('tr-TR', 'normal'), () => setError('صدای ترکی دستگاه در دسترس نیست؛ جمله همچنان برای خواندن نمایش داده می‌شود.'));
   };
 
   if (sessionActive && currentContent) {

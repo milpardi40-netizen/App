@@ -29,11 +29,15 @@ const {
 const tagged = SENTENCE_LESSONS.flatMap(lesson => lesson.sentences
   .flatMap(sentence => sentence.vocabulary.filter(item => item.essential504).map(item => item.word)));
 const lessonRecords = SENTENCE_LESSONS.map(({ id, order }) => ({ id, order }));
-const foundation = SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0);
-const survival = SENTENCE_LESSONS.filter(lesson => lesson.levelId === 1);
+// Bands are keyed by their stable id prefixes: the Pre-A1 band (level 0) and the
+// practice "lab" lessons were added later, so a level number no longer identifies
+// the original fifty-sentence cohorts.
+const preA1 = SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0);
+const foundation = SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('foundation-'));
+const survival = SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('survival-'));
 const a2Bridge = SENTENCE_LESSONS.filter(lesson => lesson.a2Section === 'foundation');
 const everyday = EVERYDAY_COURSE_LESSON_IDS.map(id => SENTENCE_LESSONS.find(lesson => lesson.id === id));
-const communication = SENTENCE_LESSONS.filter(lesson => lesson.levelId === 3 && !lesson.b1Section);
+const communication = SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('communication-'));
 const sentenceCount = SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0);
 const foundationSentenceCount = foundation.reduce((sum, lesson) => sum + lesson.sentences.length, 0);
 const survivalSentenceCount = survival.reduce((sum, lesson) => sum + lesson.sentences.length, 0);
@@ -54,7 +58,7 @@ const duplicateLessonIds = [...new Set(lessonRecords.map(lesson => lesson.id)
 const duplicateOrders = [...new Set(lessonRecords.map(lesson => lesson.order)
   .filter((order, index, orders) => orders.indexOf(order) !== index))];
 const lessonOrders = lessonRecords.map(lesson => lesson.order).sort((a, b) => a - b);
-const expectedOrders = Array.from({ length: 222 }, (_, index) => index + 1);
+const expectedOrders = Array.from({ length: lessonRecords.length }, (_, index) => index + 1);
 const hasExactOrders = JSON.stringify(lessonOrders) === JSON.stringify(expectedOrders);
 const activeSentencesById = new Map(SENTENCE_LESSONS.flatMap(lesson => lesson.sentences.map(sentence => [sentence.id, sentence])));
 const reviewedEditorialExamples = [
@@ -148,7 +152,8 @@ const communicationModulesAreComplete = COMMUNICATION_MODULES.length === 8
       && lesson.unitTitleEn === unit.titleEn;
   });
 
-console.log(`Lessons: ${lessonRecords.length}/222; sentences: ${sentenceCount}/4322`);
+console.log(`Lessons: ${lessonRecords.length}/274; sentences: ${sentenceCount}/4852`);
+console.log(`Pre-A1: ${preA1.length}/14 lessons of eight sentences`);
 console.log(`Foundation: ${foundation.length}/10 lessons; ${foundationSentenceCount}/500 sentences`);
 console.log(`Survival: ${survival.length}/19 lessons; ${survivalSentenceCount}/950 sentences; ${survivalVocabulary.size} unique vocabulary entries`);
 console.log(`Everyday: ${everyday.length}/20 lessons; ${everydaySentenceCount}/1000 sentences; ${everydayVocabulary.size} linked vocabulary phrases`);
@@ -165,10 +170,14 @@ if (outside.length) problems.push(`Words outside canonical list: ${outside.join(
 if (!sameWords(missing, intentionallyRemoved)) problems.push(`Unexpected change to canonical coverage: ${missing.join(', ')}`);
 if (duplicateLessonIds.length) problems.push(`Duplicate lesson IDs: ${duplicateLessonIds.join(', ')}`);
 if (duplicateOrders.length) problems.push(`Duplicate lesson orders: ${duplicateOrders.join(', ')}`);
-if (!hasExactOrders) problems.push('Lesson orders must be exactly 1 through 222.');
+if (!hasExactOrders) problems.push(`Lesson orders must be exactly 1 through ${lessonRecords.length}.`);
 if (tagged.length !== canonical.length - intentionallyRemoved.length) problems.push(`Unexpected number of tagged canonical words: ${tagged.length}.`);
-if (lessonRecords.length !== 222) problems.push(`Expected exactly 222 lessons, found ${lessonRecords.length}.`);
-if (sentenceCount !== 4322) problems.push(`Expected 4322 active sentence examples, found ${sentenceCount}.`);
+if (lessonRecords.length !== 274) problems.push(`Expected exactly 274 lessons, found ${lessonRecords.length}.`);
+if (sentenceCount !== 4852) problems.push(`Expected 4852 active sentence examples, found ${sentenceCount}.`);
+if (preA1.length !== 14 || preA1.some(lesson => lesson.sentences.length !== 8
+  || lesson.sentences.some?.(sentence => !sentence.fa || !sentence.pronunciation || !sentence.vocabulary.length))) {
+  problems.push('The Pre-A1 band must contain fourteen eight-sentence lessons with complete translations, pronunciation and vocabulary.');
+}
 if (foundation.length !== 10 || foundationSentenceCount !== 500
   || foundation.some(lesson => lesson.sentences.length !== 50)) {
   problems.push('Foundation must contain ten lessons with exactly fifty sentences each.');
