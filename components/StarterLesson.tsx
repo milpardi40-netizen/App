@@ -462,7 +462,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         {stage >= 8 && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale={course.locale} accent={Palette.success} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome(course.id, lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
-            { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند پرسش کوتاه از همین درس؛ هر پاسخ بازخورد روشن و کاربردی دارد.', render: () => <>
+            { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
           {false ? null : <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>
               <Text style={styles.questionPrompt}>{fa(index + 1)}. {question.promptFa}</Text>
@@ -475,7 +475,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
                 </Pressable>;
               })}
               {(answers[String(index)] !== undefined || (!a1 && showCheckAnswers)) && <View style={styles.feedbackBox}>
-                <Text style={(!a1 && showCheckAnswers) || answers[String(index)] === question.correctIndex ? styles.feedbackTitle : styles.feedbackError}>{!a1 && showCheckAnswers && answers[String(index)] !== question.correctIndex ? `پاسخ نمونه: ${question.choices[question.correctIndex]}` : answers[String(index)] === question.correctIndex ? 'پاسخ مناسب است.' : 'این بار درست نبود؛ دوباره تلاش کنید.'}</Text>
+                <Text style={(!a1 && showCheckAnswers) || answers[String(index)] === question.correctIndex ? styles.feedbackTitle : styles.feedbackError}>{!a1 && showCheckAnswers && answers[String(index)] !== question.correctIndex ? `پاسخ نمونه: ${question.choices[question.correctIndex]}` : answers[String(index)] === question.correctIndex ? 'درست است.' : 'دوباره تلاش کنید.'}</Text>
                 {(!a1 || answers[String(index)] === question.correctIndex) && <Text style={styles.feedbackText}>{question.explanationFa}</Text>}
                 {answers[String(index)] !== undefined && answers[String(index)] !== question.correctIndex && (a1 || !showCheckAnswers) ? <Pressable accessibilityRole="button" style={styles.retryAnswer} onPress={() => setAnswers(value => { const nextAnswers = { ...value }; delete nextAnswers[String(index)]; return nextAnswers; })}><Text style={styles.retryAnswerText}>دوباره امتحان کن</Text></Pressable> : null}
               </View>}

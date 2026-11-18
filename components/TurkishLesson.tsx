@@ -420,7 +420,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
         {stage >= 8 && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="tr-TR" accent={Palette.success} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('tr', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
-            { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند پرسش از همین درس؛ بدون نمره، با توضیح.', render: () => <>
+            { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
           {false ? null : <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>
               <Text style={styles.questionPrompt}>{fa(index + 1)}. {question.promptFa}</Text>
@@ -433,7 +433,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
                 </Pressable>;
               })}
               {(answers[String(index)] !== undefined || showCheckAnswers) && <View style={styles.feedbackBox}>
-                <Text style={showCheckAnswers || answers[String(index)] === question.correctIndex ? styles.feedbackTitle : styles.feedbackError}>{showCheckAnswers && answers[String(index)] !== question.correctIndex ? `پاسخ نمونه: ${question.choices[question.correctIndex]}` : answers[String(index)] === question.correctIndex ? 'پاسخ مناسب است.' : 'این بار درست نبود؛ دوباره تلاش کنید.'}</Text>
+                <Text style={showCheckAnswers || answers[String(index)] === question.correctIndex ? styles.feedbackTitle : styles.feedbackError}>{showCheckAnswers && answers[String(index)] !== question.correctIndex ? `پاسخ نمونه: ${question.choices[question.correctIndex]}` : answers[String(index)] === question.correctIndex ? 'درست است.' : 'دوباره تلاش کنید.'}</Text>
                 <Text style={styles.feedbackText}>{question.explanationFa}</Text>
                 {answers[String(index)] !== undefined && answers[String(index)] !== question.correctIndex && !showCheckAnswers ? <Pressable accessibilityRole="button" style={styles.retryAnswer} onPress={() => setAnswers(value => { const nextAnswers = { ...value }; delete nextAnswers[String(index)]; return nextAnswers; })}><Text style={styles.retryAnswerText}>دوباره امتحان کن</Text></Pressable> : null}
               </View>}
