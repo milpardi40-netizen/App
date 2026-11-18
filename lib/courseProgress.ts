@@ -1,3 +1,5 @@
+import { addRating, validHistory, type RatingHistory } from './reviewHistory';
+import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { EVERYDAY_EXPANSION_LESSON_IDS, FOUNDATION_EXPANSION_LESSON_IDS, SENTENCE_LESSONS, SURVIVAL_EXPANSION_LESSON_IDS } from './courseContent';
@@ -21,11 +23,13 @@ export interface SentenceReviewCard {
   repetitions: number;
   lapses: number;
   lastReviewedAt?: string;
+  ratingHistory?: RatingHistory;
 }
 
 export interface CourseProgress {
   completedLessonIds: string[];
   currentLessonId: string;
+  resumeUpdatedAt?: string;
   /** Kept for backward compatibility with early preview installs. */
   reviewSentenceIds: string[];
   reviewCards: SentenceReviewCard[];
@@ -71,6 +75,7 @@ function currentLessonAfterCurriculumExpansion(value: Partial<CourseProgress>, c
   const storedId = typeof value.currentLessonId === 'string' && SENTENCE_LESSONS.some(lesson => lesson.id === value.currentLessonId)
     ? value.currentLessonId
     : base.currentLessonId;
+  if (value.resumeUpdatedAt && Number.isFinite(Date.parse(value.resumeUpdatedAt))) return storedId;
   const storedIndex = SENTENCE_LESSONS.findIndex(lesson => lesson.id === storedId);
   const lastOriginalFoundationIndex = SENTENCE_LESSONS.findIndex(lesson => lesson.id === 'foundation-buying-something');
   const firstUnfinishedFoundation = FOUNDATION_EXPANSION_LESSON_IDS.find(id => !completedLessonIds.includes(id));
@@ -186,7 +191,8 @@ export function parseCourseProgressBackup(value: unknown): CourseProgress {
         || typeof card.ease !== 'number' || !Number.isFinite(card.ease) || card.ease < 1.3 || card.ease > 3
         || !Number.isInteger(card.repetitions) || (card.repetitions as number) < 0
         || !Number.isInteger(card.lapses) || (card.lapses as number) < 0
-        || (card.lastReviewedAt !== undefined && (typeof card.lastReviewedAt !== 'string' || !Number.isFinite(Date.parse(card.lastReviewedAt))));
+        || !validHistory(card.ratingHistory as RatingHistory | undefined)
+      || (card.lastReviewedAt !== undefined && (typeof card.lastReviewedAt !== 'string' || !Number.isFinite(Date.parse(card.lastReviewedAt))));
     })))) {
     throw new Error('پیشرفت انگلیسی در فایل پشتیبان معتبر نیست؛ دادهٔ فعلی تغییر نکرد.');
   }
@@ -209,13 +215,19 @@ async function writeRaw(value: string): Promise<void> {
 }
 
 /** The device copy is the display source of truth; the account copy may only ever refine it. */
-async function readLocalProgress(): Promise<CourseProgress> {
-  try {
-    const raw = await readRaw();
-    return normalizeProgress(raw ? JSON.parse(raw) as Partial<CourseProgress> : {});
-  } catch {
-    return initialProgress();
-  }
+export async function readLocalProgress(): Promise<CourseProgress> {
+  const raw = await readRaw();
+  const parsed = raw === null ? {} : JSON.parse(raw);
+  if (!isRecord(parsed)) throw new Error('پیشرفت ذخیره‌شده خوانده نشد.');
+  return normalizeProgress(parsed);
+}
+
+let courseQueue: Promise<unknown> = Promise.resolve();
+/** Local read/modify/write only. Never hold the device lock waiting for the network. */
+export function withCourseProgressLock<T>(job: () => Promise<T>): Promise<T> {
+  const result = courseQueue.then(job);
+  courseQueue = result.catch(() => undefined);
+  return result;
 }
 
 /**
@@ -268,24 +280,21 @@ async function progressUserId(): Promise<string | null> {
   return session.session?.user.id ?? null;
 }
 
-/** Best-effort account copy. Bounded, because a stalled request must not hold a lesson or a screen. */
-async function uploadProgress(progress: CourseProgress): Promise<void> {
+/** Update only the row version actually read. A racing write is re-merged on the next sync. */
+async function publishMerged(userId: string, previousVersion: string | null, progress: CourseProgress) {
   await bounded(async () => {
-    const userId = await progressUserId();
-    if (!userId) return;
-    await supabase.from('learning_progress').upsert({
-      user_id: userId,
-      progress,
-      updated_at: progress.updatedAt,
-    }, { onConflict: 'user_id' });
-  }, CLOUD_WRITE_TIMEOUT_MS).catch(() => null);
-  // Local progress remains authoritative while offline; the next save retries the upload.
+    const updated_at = new Date(Math.max(Date.now(), (Date.parse(previousVersion ?? '') || 0) + 1)).toISOString();
+    if (previousVersion) await supabase.from('learning_progress').update({ progress, updated_at })
+      .eq('user_id', userId).eq('updated_at', previousVersion);
+    else await supabase.from('learning_progress').insert({ user_id: userId, progress, updated_at });
+  }, CLOUD_WRITE_TIMEOUT_MS);
 }
 
 async function saveProgress(progress: CourseProgress): Promise<CourseProgress> {
   // Device first: lessons must be recorded even when the account backend is unreachable.
   await writeRaw(JSON.stringify(progress));
-  void uploadProgress(progress);
+  notifyLearningChange();
+  void getCourseProgress().catch(() => undefined);
   void import('./personalLearningSync')
     .then(({ schedulePersonalLearningSync }) => schedulePersonalLearningSync())
     .catch(() => undefined);
@@ -301,14 +310,15 @@ export async function getCourseProgress(): Promise<CourseProgress> {
   const local = await readLocalProgress();
   const account = await bounded(async () => {
     const userId = await progressUserId();
-    if (!userId) return { userId: null as string | null, remote: null as CourseProgress | null };
-    const { data } = await supabase
+    if (!userId) return null;
+    const { data, error } = await supabase
       .from('learning_progress')
       .select('progress,updated_at')
       .eq('user_id', userId)
       .maybeSingle();
+    if (error) return null;
     return {
-      userId,
+      userId, version: data?.updated_at ?? null,
       remote: data?.progress ? parseCourseProgressBackup(data.progress) : null,
     };
   }, CLOUD_READ_TIMEOUT_MS);
@@ -319,53 +329,60 @@ export async function getCourseProgress(): Promise<CourseProgress> {
   const remote = account.remote;
   if (!remote) {
     // First read for this account: publish what this device already knows, without blocking.
-    void uploadProgress(local);
+    void publishMerged(account.userId, account.version, local);
     return local;
   }
 
   // A newly linked email account may already have progress from another device. Union
   // completion/review evidence with this device instead of replacing one side by timestamp.
-  const merged = mergeSharedCourseProgress(local, remote);
-  const differsFromRemote = JSON.stringify(merged) !== JSON.stringify(remote);
-  try {
-    await writeRaw(JSON.stringify(merged));
-  } catch {
-    return local;
-  }
-  if (differsFromRemote) void uploadProgress(merged);
-  return merged;
+  return withCourseProgressLock(async () => {
+    const latest = await readLocalProgress();
+    const merged = mergeSharedCourseProgress(latest, remote);
+    if (JSON.stringify(merged) !== JSON.stringify(latest)) {
+      await writeRaw(JSON.stringify(merged));
+      notifyLearningChange();
+    }
+    if (JSON.stringify(merged) !== JSON.stringify(remote)) void publishMerged(account.userId, account.version, merged);
+    return merged;
+  });
 }
 
 /** Reset the resume point to a lesson without touching any content (used by "start over from the beginner level"). */
 export async function setCurrentLesson(lessonId: string): Promise<CourseProgress> {
-  if (!SENTENCE_LESSONS.some(lesson => lesson.id === lessonId)) throw new Error('Unknown lesson for this course');
-  const current = await getCourseProgress();
-  return saveProgress({ ...current, currentLessonId: lessonId });
+  return withCourseProgressLock(async () => {
+    if (!SENTENCE_LESSONS.some(lesson => lesson.id === lessonId)) throw new Error('Unknown lesson for this course');
+    const current = await readLocalProgress();
+    return saveProgress({ ...current, currentLessonId: lessonId, resumeUpdatedAt: positionTimestamp(), updatedAt: new Date().toISOString() });
+  });
 }
 
 export async function completeSentenceLesson(lessonId: string, nextLessonId?: string): Promise<CourseProgress> {
-  const current = await getCourseProgress();
-  const cardMap = new Map(current.reviewCards.map((card) => [card.id, card]));
-  cardsForLesson(lessonId).forEach((card) => {
-    if (!cardMap.has(card.id)) cardMap.set(card.id, card);
+  return withCourseProgressLock(async () => {
+    if (!SENTENCE_LESSONS.some(l => l.id === lessonId)) throw new Error('Unknown lesson for this course');
+    const current = await readLocalProgress();
+    const cardMap = new Map(current.reviewCards.map((card) => [card.id, card]));
+    cardsForLesson(lessonId).forEach((card) => {
+      if (!cardMap.has(card.id)) cardMap.set(card.id, card);
+    });
+    const completedLessonIds = Array.from(new Set([...current.completedLessonIds, lessonId]));
+    const completedSet = new Set(completedLessonIds);
+    const currentIndex = SENTENCE_LESSONS.findIndex(lesson => lesson.id === current.currentLessonId);
+    const requestedNextIndex = nextLessonId ? SENTENCE_LESSONS.findIndex(lesson => lesson.id === nextLessonId) : -1;
+    const advancesPath = requestedNextIndex > currentIndex;
+    const nextUncompletedLesson = advancesPath
+      ? SENTENCE_LESSONS.slice(requestedNextIndex).find(lesson => !completedSet.has(lesson.id))
+      : undefined;
+    const next = addDailyActivity({
+      ...current,
+      completedLessonIds,
+      reviewCards: Array.from(cardMap.values()),
+      // Historical coverage is retained, but page completion is not evidence of word mastery.
+      learnedEssential504Words: current.learnedEssential504Words,
+      ...(advancesPath ? { resumeUpdatedAt: positionTimestamp() } : {}),
+      currentLessonId: advancesPath ? nextUncompletedLesson?.id ?? nextLessonId! : current.currentLessonId,
+    }, 0);
+    return saveProgress(next);
   });
-  const completedLessonIds = Array.from(new Set([...current.completedLessonIds, lessonId]));
-  const completedSet = new Set(completedLessonIds);
-  const currentIndex = SENTENCE_LESSONS.findIndex(lesson => lesson.id === current.currentLessonId);
-  const requestedNextIndex = nextLessonId ? SENTENCE_LESSONS.findIndex(lesson => lesson.id === nextLessonId) : -1;
-  const advancesPath = requestedNextIndex > currentIndex;
-  const nextUncompletedLesson = advancesPath
-    ? SENTENCE_LESSONS.slice(requestedNextIndex).find(lesson => !completedSet.has(lesson.id))
-    : undefined;
-  const next = addDailyActivity({
-    ...current,
-    completedLessonIds,
-    reviewCards: Array.from(cardMap.values()),
-    // Historical coverage is retained, but page completion is not evidence of word mastery.
-    learnedEssential504Words: current.learnedEssential504Words,
-    currentLessonId: advancesPath ? nextUncompletedLesson?.id ?? nextLessonId! : current.currentLessonId,
-  }, 0);
-  return saveProgress(next);
 }
 
 export async function getDueReviewCards(now = new Date()): Promise<SentenceReviewCard[]> {
@@ -383,65 +400,70 @@ export async function rateReviewCard(
   rating: ReviewRating,
   now = new Date(),
 ): Promise<SentenceReviewCard | null> {
-  const progress = await getCourseProgress();
-  const card = progress.reviewCards.find((item) => item.id === cardId);
-  if (!card) return null;
+  return withCourseProgressLock(async () => {
+    const progress = await readLocalProgress();
+    const card = progress.reviewCards.find((item) => item.id === cardId);
+    if (!card) return null;
 
-  let intervalDays = card.intervalDays;
-  let ease = card.ease;
-  let repetitions = card.repetitions + 1;
-  let lapses = card.lapses;
-  let dueInMs: number;
+    let intervalDays = card.intervalDays;
+    let ease = card.ease;
+    let repetitions = card.repetitions + 1;
+    let lapses = card.lapses;
+    let dueInMs: number;
 
-  if (rating === 'again') {
-    intervalDays = 0;
-    ease = Math.max(1.3, ease - 0.2);
-    repetitions = 0;
-    lapses += 1;
-    dueInMs = 10 * MINUTE;
-  } else if (rating === 'hard') {
-    intervalDays = intervalDays < 1 ? 1 : Math.max(1, Math.ceil(intervalDays * 1.2));
-    ease = Math.max(1.3, ease - 0.1);
-    dueInMs = intervalDays * DAY;
-  } else if (rating === 'easy') {
-    intervalDays = intervalDays < 1 ? 4 : Math.max(4, Math.round(intervalDays * (ease + 0.35)));
-    ease = Math.min(3, ease + 0.1);
-    dueInMs = intervalDays * DAY;
-  } else {
-    intervalDays = card.repetitions === 0 ? 1 : card.repetitions === 1 ? 3 : Math.max(3, Math.round(intervalDays * ease));
-    dueInMs = intervalDays * DAY;
-  }
+    if (rating === 'again') {
+      intervalDays = 0;
+      ease = Math.max(1.3, ease - 0.2);
+      repetitions = 0;
+      lapses += 1;
+      dueInMs = 10 * MINUTE;
+    } else if (rating === 'hard') {
+      intervalDays = intervalDays < 1 ? 1 : Math.max(1, Math.ceil(intervalDays * 1.2));
+      ease = Math.max(1.3, ease - 0.1);
+      dueInMs = intervalDays * DAY;
+    } else if (rating === 'easy') {
+      intervalDays = intervalDays < 1 ? 4 : Math.max(4, Math.round(intervalDays * (ease + 0.35)));
+      ease = Math.min(3, ease + 0.1);
+      dueInMs = intervalDays * DAY;
+    } else {
+      intervalDays = card.repetitions === 0 ? 1 : card.repetitions === 1 ? 3 : Math.max(3, Math.round(intervalDays * ease));
+      dueInMs = intervalDays * DAY;
+    }
 
-  const updated: SentenceReviewCard = {
-    ...card,
-    intervalDays,
-    ease,
-    repetitions,
-    lapses,
-    lastReviewedAt: now.toISOString(),
-    dueAt: new Date(now.getTime() + dueInMs).toISOString(),
-  };
-  const next = addDailyActivity({
-    ...progress,
-    reviewCards: progress.reviewCards.map((item) => item.id === cardId ? updated : item),
-  }, 0, now);
-  await saveProgress(next);
-  return updated;
+    const updated: SentenceReviewCard = {
+      ...card,
+      intervalDays,
+      ease,
+      repetitions,
+      lapses,
+      lastReviewedAt: now.toISOString(),
+      ratingHistory: addRating(card, now),
+      dueAt: new Date(now.getTime() + dueInMs).toISOString(),
+    };
+    const next = addDailyActivity({
+      ...progress,
+      reviewCards: progress.reviewCards.map((item) => item.id === cardId ? updated : item),
+    }, 0, now);
+    await saveProgress(next);
+    return updated;
+  });
 }
 
 export async function addSentenceToReview(sentenceId: string, lessonId?: string): Promise<void> {
-  const lesson = lessonId
-    ? SENTENCE_LESSONS.find((item) => item.id === lessonId)
-    : SENTENCE_LESSONS.find((item) => item.sentences.some((sentence) => sentence.id === sentenceId));
-  if (!lesson) return;
-  const current = await getCourseProgress();
-  const id = reviewCardId(lesson.id, sentenceId);
-  if (current.reviewCards.some((card) => card.id === id)) return;
-  const card = cardsForLesson(lesson.id).find((item) => item.id === id);
-  if (!card) return;
-  await saveProgress({
-    ...current,
-    reviewCards: [...current.reviewCards, card],
-    updatedAt: new Date().toISOString(),
+  return withCourseProgressLock(async () => {
+    const lesson = lessonId
+      ? SENTENCE_LESSONS.find((item) => item.id === lessonId)
+      : SENTENCE_LESSONS.find((item) => item.sentences.some((sentence) => sentence.id === sentenceId));
+    if (!lesson) return;
+    const current = await readLocalProgress();
+    const id = reviewCardId(lesson.id, sentenceId);
+    if (current.reviewCards.some((card) => card.id === id)) return;
+    const card = cardsForLesson(lesson.id).find((item) => item.id === id);
+    if (!card) return;
+    await saveProgress({
+      ...current,
+      reviewCards: [...current.reviewCards, card],
+      updatedAt: new Date().toISOString(),
+    });
   });
 }

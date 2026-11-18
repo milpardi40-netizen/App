@@ -1,3 +1,6 @@
+import { addPracticeActivity } from '@/lib/practiceActivity';
+import { localDay } from '@/lib/reviewHistory';
+import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { lessonUnit } from '@/lib/lessonUnits';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
@@ -132,7 +135,7 @@ export default function SentenceLessonScreen() {
   const resettingRef = useRef(false);
   const screenRun = useRef(0);
   const [audioNotice, setAudioNotice] = useState('');
-  const timer=useEnglishStudyTimer(sessionReady && !resetting && !!getSentenceLesson(id || ''));
+  const timer=useEnglishStudyTimer(sessionReady && !resetting && !celebration && !chunkCelebration && !!getSentenceLesson(id || ''));
   useEffect(() => {
     let alive = true;
     const run = ++screenRun.current;
@@ -186,7 +189,7 @@ export default function SentenceLessonScreen() {
     let currentSave = true;
     const run = screenRun.current;
     if (sessionReady && loadedLesson.current === lesson.id && !completing.current && !resettingRef.current && !sessionError) {
-      void saveLessonSession(lesson.id, { stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence })
+      void saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence })
         .then(() => { if (currentSave && screenRun.current === run) setSessionError(''); })
         .catch(() => { if (currentSave && screenRun.current === run) setSessionError('جلسه ذخیره نشد؛ درس را دوباره باز کنید.'); });
     }
@@ -324,7 +327,10 @@ export default function SentenceLessonScreen() {
       setEvaluatingSpeech(true);
       setSpeechError(null);
       const result = await evaluateSpokenSentence(recorder.uri, current.en);
-      if (screenRun.current === run) setSpeechResult(result);
+      if (screenRun.current === run) {
+        setSpeechResult(result);
+        if (result.recognized.trim()) void addPracticeActivity('en', localDay(), { spoken: 1, scoreSum: result.score }).catch(() => undefined);
+      }
     } catch (cause) {
       if (screenRun.current === run) setSpeechError(cause instanceof Error && cause.message !== 'Recording URI is missing' ? cause.message : 'صدای شما بررسی نشد. دوباره تلاش کنید.');
     } finally {
@@ -420,7 +426,7 @@ export default function SentenceLessonScreen() {
       const weak = weakSpokenSentences(speakResult.current ? { ...speakResult.current, at: '' } : null);
       for (const sentenceId of weak) await addSentenceToReview(sentenceId, lesson.id).catch(() => undefined);
 
-    await saveLessonSession(lesson.id, { stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence });
+    await saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence });
     void stopResponsiveSpeech();
     const streak = await recordStudyDay();
     trackLessonCompleted('en', lesson.id);

@@ -1,3 +1,4 @@
+import { notifyLearningChange } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Platform} from 'react-native';
 
@@ -16,6 +17,7 @@ async function write(key:string,value:string|null):Promise<void>{
   if(typeof window==='undefined')throw new Error('ذخیره‌سازی در دسترس نیست.');
   if(value===null)window.localStorage.removeItem(key);else window.localStorage.setItem(key,value);
  }else if(value===null)await AsyncStorage.removeItem(key);else await AsyncStorage.setItem(key,value);
+ notifyLearningChange();
 }
 export async function loadPracticeDraft(key:string):Promise<string|null>{
  const raw=await read(key);if(raw===null)return null;
@@ -30,3 +32,10 @@ export async function savePracticeDraft(key:string,text:string):Promise<void>{
  await write(key,JSON.stringify({schema:1,text}));
 }
 export async function removePracticeDraft(key:string):Promise<void>{await loadPracticeDraft(key);await write(key,null);}
+
+/** Only count keys: a profile should never copy or expose the contents of private drafts. */
+export async function countPracticeDrafts(language: string): Promise<number> {
+ if (!['de','fr','es'].includes(language)) return 0;
+ const keys = Platform.OS === 'web' ? (typeof window === 'undefined' ? [] : Object.keys(window.localStorage)) : await AsyncStorage.getAllKeys();
+ return keys.filter(key => key.startsWith(`${prefix}${language}:`)).length;
+}

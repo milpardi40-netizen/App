@@ -86,7 +86,7 @@ module.exports = { createClient: () => client, default: { createClient: () => cl
 const reactNativeStub = `
 const noop = () => {};
 module.exports = {
-  Platform: { OS: 'android', select: options => options.android ?? options.default },
+  Platform: { get OS() { return globalThis.__miloPlatform ?? 'android'; }, select: options => options.android ?? options.default },
   StyleSheet: { create: value => value, flatten: value => value, hairlineWidth: 1 },
   Dimensions: { get: () => ({ width: 390, height: 800 }) },
   I18nManager: { isRTL: false },
@@ -125,6 +125,18 @@ async function bundle(name) {
   await esbuild.build({
     stdin: {
       contents: `
+        export { loadCourseSnapshot } from './lib/courseSnapshot';
+        export { formatPercent } from './lib/levelProgress';
+        export * as profile from './lib/learnerProfile';
+        export * as practice from './lib/practiceActivity';
+        export * as history from './lib/reviewHistory';
+        export * as calendar from './lib/activityCalendar';
+        export * as study from './lib/englishStudyState';
+        export * as ruSessions from './lib/languages/russianStudyState';
+        export * as trSessions from './lib/languages/turkishStudyState';
+        export * as chunks from './lib/lessonChunks';
+        export { recordObjectiveCheck } from './lib/lessonOutcomes';
+        export { saveLevelAssessment } from './lib/levelAssessment';
         export * as english from './lib/courseProgress';
         export * as engine from './lib/englishLearningEngine';
         export * as russian from './lib/languages/russian';
@@ -145,6 +157,8 @@ async function bundle(name) {
     define: {
       'process.env.EXPO_PUBLIC_SUPABASE_URL': '"https://audit.invalid"',
       'process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY': '"audit"',
+      // Test every course irrespective of which scoped APK is building this gate.
+      'process.env.EXPO_PUBLIC_LANGUAGE_SCOPE': '"en,ru,tr,de,fr,es"',
       __DEV__: 'false',
     },
     jsx: 'automatic',
@@ -201,7 +215,7 @@ row('English fresh device', `${freshProgress.completedLessonIds.length} complete
 const levels = [...new Set(content.SENTENCE_LESSONS.map(lesson => lesson.levelId))].sort();
 const preA1 = content.SENTENCE_LESSONS.filter(lesson => lesson.levelId === levels[0]);
 check(preA1.length > 0, 'English: the first level has lessons to measure against');
-row('English first level', `${levels[0]} · ${preA1.length} lessons (matches the report's ۰ از ۴۰)`);
+row('English first level', `${levels[0]} · ${preA1.length} lessons in the shipped curriculum`);
 
 const lesson = preA1[0];
 if (lesson) {
@@ -288,6 +302,77 @@ for (const [name, store, lessons] of languageCourses) {
   const doneInLevel = lessons.filter(item => item.levelId === level && persisted.completedLessonIds.includes(item.id)).length;
   check(doneInLevel > 0 && inLevel > 0, `${name}: the level page can show a non-zero progress line`);
   row(`${name} after restart`, `${timedRead.ms}ms · level ${level} ${doneInLevel}/${inLevel}`);
+}
+
+// Drive the same view model as the map and profile, not a test-only count of IDs.
+const must = Object.fromEntries(['equal','ok','notEqual','deepEqual'].map(key => [key,(...args) => { assert[key](...args); checks++; }]));
+for (const os of ['android', 'web']) {
+  deviceStorage.clear(); globalThis.__miloPlatform = os;
+  const webStorage = new Map();
+  globalThis.window = { localStorage: { getItem: k => webStorage.get(k) ?? null, setItem: (k,v) => webStorage.set(k, String(v)), removeItem: k => webStorage.delete(k) } };
+  const app = launch(outfile);
+  const today = app.history.localDay(), yesterday = app.calendar.dayOffset(today, -1);
+  const ready = await app.profile.loadLearnerProfileSummary();
+  must.equal(ready.activeLanguages, 0); must.equal(ready.reviewsDone, 0); must.equal(ready.languages.length, 6);
+  const suites = [
+    ['en', app.english, app.study.saveLessonSession], ['ru', app.russian.russianProgress, app.ruSessions.saveRussianLessonSession],
+    ['tr', app.turkish.turkishProgress, app.trSessions.saveTurkishLessonSession],
+    ...['de', 'fr', 'es'].map(id => [id, app.newCourses.NEW_COURSES[id].progress, app.newCourses.NEW_COURSES[id].sessions.saveStarterLessonSession]),
+  ];
+  for (const [id, store, save] of suites) {
+    let snap = await app.loadCourseSnapshot(id);
+    must.equal(snap.course.completed, 0); must.equal(snap.course.percent, 0);
+    must.equal(snap.levelDefinitions.length, 6);
+    const a = snap.lessons[0], c1 = snap.lessons.find(l => l.levelId === 5);
+    const intro = { stageVersion: 2, stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false, evidencePassed: false };
+    await save(a.id, intro); must.equal((await app.loadCourseSnapshot(id)).course.percent, 0);
+    await save(a.id, { ...intro, stage: 1, sentenceIndex: 1 });
+    snap = await app.loadCourseSnapshot(id);
+    const t = snap.levels[a.levelId];
+    must.equal(t.completed, 0); must.equal(t.partial, 1);
+    must.ok(Math.abs(t.percent - 100 * (1 + 1/a.sentences.length) / (10 * t.total)) < 1e-9);
+    must.notEqual(app.formatPercent(t.percent), '۰٪');
+    await save(c1.id, { ...intro, stage: 9 });
+    const restored = await launch(outfile).loadCourseSnapshot(id);
+    must.equal(restored.sessions[c1.id].stage, 9); must.equal(restored.current.id, c1.id); must.equal(restored.levels[5].partial, 1);
+    await store.completeSentenceLesson(a.id); await store.completeSentenceLesson(a.id); // replay
+    snap = await app.loadCourseSnapshot(id); must.equal(snap.course.completed, 1); must.equal(snap.course.partial, 1);
+    must.equal(snap.validCards.length, a.sentences.length);
+    // Both writes must survive, including a lapse. Adding due cards is not a performed review.
+    await Promise.all([store.rateReviewCard(snap.validCards[0].id, 'good'), store.rateReviewCard(snap.validCards[0].id, 'again')]);
+    snap = await app.loadCourseSnapshot(id);
+    const card = snap.validCards[0]; must.equal(card.repetitions, 0); must.equal(app.history.datedRatings(app.history.ratingsOf(card))[today], 2);
+    const due = snap.validCards.filter(c => Date.parse(c.dueAt) <= Date.now()).length; must.equal(due, a.sentences.length - 1);
+    await app.practice.addPracticeActivity(id, today, { spoken: 2, scoreSum: 110 });
+    await app.recordObjectiveCheck(id, 'test-only', 1, 2);
+    if (id !== 'en') { await app.practice.addPracticeActivity(id, yesterday, { ms: 60000 }); await app.saveLevelAssessment(id, 5, 75); }
+    else { await app.study.addStudyTime(today, 6000); await app.study.addStudyTime(today, 4000); }
+  }
+  const p = await launch(outfile).profile.loadLearnerProfileSummary();
+  must.deepEqual(p.unavailable, []); must.equal(p.activeLanguages, 6); must.equal(p.completedLessons, 6);
+  must.equal(p.reviewsDone, 12); must.equal(p.reviewLowerBound, false);
+  must.equal(p.currentStreak, 2); must.equal(p.week.at(-1).reviews, 12);
+  must.ok(Math.abs(p.totalMinutes - (5 + 1/6)) < 1e-6); must.equal(p.todayMinutes, 1/6);
+  for (const l of p.languages) {
+    must.equal(l.partial, 1); must.equal(l.completedLessons, 1); must.equal(l.speaking.average, 55); must.equal(l.speaking.drillAverage, null);
+    must.equal(l.assessment.answered, 2); must.equal(l.assessment.correct, 1);
+    must.equal(l.levels[5].exam?.last ?? null, l.id === 'en' ? null : 75);
+  }
+  const long = app.content.SENTENCE_LESSONS.find(l => l.sentences.length >= 30);
+  await app.chunks.markChunkDone(long.id, 1); await app.chunks.markChunkDone(long.id, 1);
+  const chunked = await app.loadCourseSnapshot('en'); must.equal(chunked.course.partial, 2);
+  // One malformed individual position must not erase a second valid one or the completion store.
+  const disk = os === 'web' ? webStorage : deviceStorage, key = app.ruSessions.RUSSIAN_STUDY_STORAGE_KEY;
+  const bad = JSON.parse(disk.get(key)); bad.sessions[app.russian.RUSSIAN_LESSONS[1].id] = {stage:'invalid'}; disk.set(key, JSON.stringify(bad));
+  const damaged = await app.loadCourseSnapshot('ru'); must.equal(damaged.unreadable, true); must.equal(damaged.course.completed, 1); must.equal(damaged.course.partial, 1);
+  // Offline devices rate the same card on the same day: union distinct ratings, don't count a backup twice.
+  const seed = { repetitions: 0, lapses: 0 }, otherProcess = launch(outfile);
+  const a = { ...seed, ratingHistory: app.history.addRating(seed, new Date()) }, b = { ...seed, ratingHistory: otherProcess.history.addRating(seed, new Date()) };
+  const merged = app.history.withMergedRatings(a,b); must.equal(app.history.datedRatings(merged.ratingHistory)[today],2);
+  must.deepEqual(app.history.withMergedRatings(merged,a),merged);
+  const legacy = app.history.ratingsOf({ repetitions: 2, lapses: 1, lastReviewedAt: new Date().toISOString() });
+  must.equal(legacy.lowerBound, true); must.equal(legacy.undated, 2);
+  row(`${os}: six live profiles`, `${p.completedLessons} complete · 6 partial · ${p.reviewsDone} actual ratings · ${p.currentStreak} dated days`);
 }
 
 if (problems.length) {

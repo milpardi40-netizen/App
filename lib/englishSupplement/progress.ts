@@ -1,3 +1,4 @@
+import { notifyLearningChange } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import {
@@ -93,6 +94,7 @@ function update(mutate: (p: SupplementProgress) => void, sync = true): Promise<S
       if (typeof window === 'undefined') throw Error('ذخیره‌سازی در دسترس نیست.');
       window.localStorage.setItem(SUPPLEMENT_KEY, raw);
     } else await AsyncStorage.setItem(SUPPLEMENT_KEY, raw);
+    notifyLearningChange();
     if (sync) scheduleAccountSync();
     return p;
   });

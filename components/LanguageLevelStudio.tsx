@@ -1,3 +1,9 @@
+import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
+import { progressLabel } from '@/lib/levelProgress';
+import { addPracticeActivity } from '@/lib/practiceActivity';
+import { localDay } from '@/lib/reviewHistory';
+import type { LanguageId } from '@/lib/languages/registry';
+import { ProgressTrack } from './ProgressTrack';
 import { usePackPool } from '@/lib/content/usePackVariations';
 import { asLessonSentences } from '@/lib/content/packs';
 import { LocalizedText as Text } from '@/components/LocalizedText';
@@ -24,7 +30,7 @@ type StudioLesson = Pick<LearningLesson, 'id' | 'title' | 'sentences'> & { level
 
 export interface LevelStudioConfig {
   /** Storage namespace, e.g. 'ru', 'tr', 'de'. */
-  courseId: string;
+  courseId: LanguageId;
   /** Persian course name used in headings, e.g. 'روسی'. */
   nameFa: string;
   levels: readonly StudioLevel[];
@@ -41,23 +47,22 @@ export interface LevelStudioConfig {
  * per level, an end-of-level exam (scored, pass mark) and a daily supplementary round.
  */
 export default function LanguageLevelStudio({ config }: { config: LevelStudioConfig }): ReactElement {
-  const { courseId, nameFa, levels, lessons: allLessons, progress, speak: speakText, stopSpeech, BottomNav } = config;
+  const { courseId, nameFa, levels, lessons: allLessons, speak: speakText, stopSpeech, BottomNav } = config;
   const router = useRouter();
   const { level, mode } = useLocalSearchParams<{ level?: string; mode?: Mode }>();
-  const [completed, setCompleted] = useState<Set<string>>(new Set());
+  const { data: snapshot } = useCourseSnapshot(courseId);
   const [records, setRecords] = useState<LevelAssessmentState>({});
   const [running, setRunning] = useState<{ levelId: LevelId; mode: Mode; attempt: number } | null>(null);
   const [result, setResult] = useState<{ levelId: LevelId; mode: Mode; stats: PracticeStats; percent: number } | null>(null);
 
   useFocusEffect(useCallback(() => {
     let alive = true;
-    void Promise.all([progress.getCourseProgress(), loadLevelAssessments(courseId)]).then(([progress, state]) => {
+    void loadLevelAssessments(courseId).then(state => {
       if (!alive) return;
-      setCompleted(new Set(progress.completedLessonIds));
       setRecords(state);
     });
     return () => { alive = false; stopSpeech(); };
-  }, [progress, courseId, stopSpeech]));
+  }, [courseId, stopSpeech]));
 
   useEffect(() => {
     const levelId = Number(level) as LevelId;
@@ -79,12 +84,13 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
   const speak = useCallback((text: string) => speakText(text), [speakText]);
 
   const finish = useCallback(async (stats: PracticeStats) => {
-    if (!running) return;
-    const percent = stats.total > 0 ? Math.round((stats.firstTryCorrect / stats.total) * 100) : 0;
+    if (!running || !stats.total) return;
+    const percent = Math.round((stats.firstTryCorrect / stats.total) * 100);
     if (running.mode === 'exam') {
       const record = await saveLevelAssessment(courseId, running.levelId, percent);
       setRecords(value => ({ ...value, [running.levelId]: record }));
     }
+    if (running.mode !== 'exam') void addPracticeActivity(courseId, localDay(), { rounds: 1 }).catch(() => undefined);
     setResult({ levelId: running.levelId, mode: running.mode, stats, percent });
     setRunning(null);
   }, [running, courseId]);
@@ -124,7 +130,7 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
         </View> : null}
         {levels.map(levelMeta => {
           const lessons = allLessons.filter(lesson => lesson.levelId === levelMeta.id);
-          const done = lessons.filter(lesson => completed.has(lesson.id)).length;
+          const done = snapshot?.levels[levelMeta.id]?.completed ?? 0;
           const record = records[levelMeta.id];
           const passed = !!record?.passedAt;
           const ready = done >= Math.ceil(lessons.length * 0.5);
@@ -132,9 +138,10 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
             <View key={levelMeta.id} style={styles.levelCard}>
               <LinearGradient colors={ENGLISH_LEVEL_GRADIENTS[levelMeta.id]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} style={styles.levelStripe} />
               <View style={styles.levelHead}>
-                <View style={styles.levelCopy}><Text style={styles.levelTitle}>{levelMeta.title}</Text><Text style={styles.levelMeta}>{levelMeta.cefr} · {fa(done)} از {fa(lessons.length)} درس</Text></View>
+                <View style={styles.levelCopy}><Text style={styles.levelTitle}>{levelMeta.title}</Text><Text style={styles.levelMeta}>{levelMeta.cefr} · {progressLabel(snapshot?.levels[levelMeta.id])}</Text></View>
                 {passed ? <View style={styles.badge}><Award size={14} color="#92400E" /><Text style={styles.badgeText}>قبول · {fa(record!.bestPercent)}٪</Text></View> : record ? <View style={[styles.badge, styles.badgeMuted]}><Text style={styles.badgeMutedText}>آخرین: {fa(record.lastPercent)}٪</Text></View> : null}
               </View>
+              <ProgressTrack value={snapshot?.levels[levelMeta.id]?.percent ?? 0} height={5} />
               <Pressable accessibilityRole="button" disabled={done === 0} onPress={() => start(levelMeta.id, 'warmup')} style={[styles.action, styles.actionWarmup, done === 0 && styles.actionDisabled]}>
                 <Flame size={16} color="#B45309" />
                 <Text style={[styles.actionText, { color: '#B45309' }]}>{done === lessons.length ? 'گرم‌کردن کامل سطح' : `گرم‌کردن کامل سطح (${fa(lessons.length)} درس)`}</Text>

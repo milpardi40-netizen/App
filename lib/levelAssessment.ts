@@ -1,3 +1,4 @@
+import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { buildLessonPractice, WARM_UP_KINDS, type PracticeItem } from './lessonPractice';
 import type { LearningLesson } from './languages/types';
@@ -25,7 +26,7 @@ export async function saveLevelAssessment(courseId: string, levelId: LevelId, pe
     bestPercent: Math.max(previous?.bestPercent ?? 0, percent), lastPercent: percent, attempts: (previous?.attempts ?? 0) + 1, lastAt: now,
     passedAt: previous?.passedAt ?? (percent >= ASSESSMENT_PASS_PERCENT ? now : undefined),
   };
-  try { await AsyncStorage.setItem(keyFor(courseId), JSON.stringify({ ...state, [levelId]: record })); } catch { /* local only */ }
+  try { await AsyncStorage.setItem(keyFor(courseId), JSON.stringify({ ...state, [levelId]: record })); notifyLearningChange(); } catch { /* local only */ }
   return record;
 }
 

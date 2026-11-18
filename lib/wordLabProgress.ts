@@ -1,3 +1,5 @@
+import { addRating, type RatingHistory } from './reviewHistory';
+import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import type { ReviewRating } from './courseProgress';
@@ -27,6 +29,7 @@ export interface WordCard {
   listened: number;
   introducedAt: string;
   lastReviewedAt?: string;
+  ratingHistory?: RatingHistory;
 }
 
 export interface WordProgress {
@@ -87,6 +90,7 @@ export async function saveWordProgress(language: WordLabLanguage, progress: Word
     const raw = JSON.stringify(progress);
     if (Platform.OS === 'web') window.localStorage.setItem(vocabStorageKey(language), raw);
     else await AsyncStorage.setItem(vocabStorageKey(language), raw);
+    notifyLearningChange();
   } catch {
     /* Local-only progress; a storage failure must never block the drill. */
   }
@@ -205,6 +209,7 @@ export function rateWordCard(
     listened: current.listened + 1,
     spokenSuccess: current.spokenSuccess + (spoken && rating !== 'again' ? 1 : 0),
     lastReviewedAt: now.toISOString(),
+    ratingHistory: addRating(current, now),
     dueAt: new Date(now.getTime() + dueInMs).toISOString(),
   };
   return { cards: { ...progress.cards, [id]: card } };

@@ -1,3 +1,6 @@
+import { isLanguageId } from '@/lib/languages/registry';
+import { localDay } from '@/lib/reviewHistory';
+import { addPracticeActivity } from '@/lib/practiceActivity';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { Typography } from '@/lib/theme';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -27,12 +30,16 @@ type Props = {
   autoStart?: boolean;
 };
 
+let micOwner: symbol | null = null;
+
 /**
  * «بگو» — the learner says the sentence aloud; the device speech recogniser transcribes it and
  * each expected word is shown green (heard) or red (missed) together with a percentage.
  * Works on Android/iOS through the native recogniser and on web through the browser's Web Speech API.
  */
 export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false }: Props) {
+  const owner = useRef(Symbol('practice'));
+  const generation = useRef(0);
   const [listening, setListening] = useState(false);
   const [partial, setPartial] = useState('');
   const [result, setResult] = useState<SpeakCheckResult | null>(null);
@@ -54,7 +61,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     lastHeardRef.current = '';
     settledRef.current = false;
   }, [text]);
-  useEffect(() => () => { void ExpoSpeechRecognitionModule.abort?.(); }, []);
+  useEffect(() => () => { generation.current++; if (micOwner === owner.current) { micOwner = null; void ExpoSpeechRecognitionModule.abort?.(); } }, [text]);
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
   const startRef = useRef<null | (() => Promise<void>)>(null);
@@ -68,17 +75,22 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const finish = useCallback((heard: string) => {
     const scored = scoreSpeech(targetRef.current, heard);
     setResult(scored);
+    if (!heard.trim()) return;
+    const id = locale.split('-')[0];
+    if (isLanguageId(id)) void addPracticeActivity(id, localDay(), { spoken: 1, scoreSum: scored.score }).catch(() => undefined);
     onResultRef.current?.(scored);
-  }, []);
+  }, [locale]);
 
   const listeningRef = useRef(false);
   useEffect(() => { listeningRef.current = listening; }, [listening]);
   useSpeechRecognitionEvent('start', () => {
+    if (micOwner !== owner.current) return;
     listeningRef.current = true;
     setListening(true);
     setError('');
   });
   useSpeechRecognitionEvent('result', event => {
+    if (micOwner !== owner.current || settledRef.current) return;
     const alternatives = (event.results ?? []).map(item => item.transcript).filter(Boolean);
     const transcript = alternatives[0] ?? '';
     // Pick the alternative that matches the target best; recognisers rank homophones arbitrarily.
@@ -89,24 +101,31 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       finalRef.current = bestTranscript;
       // On some devices the final result arrives after «end»; score it now if «end» didn't already settle a transcript.
       if (!listeningRef.current && !settledRef.current) {
-        if (bestTranscript) settledRef.current = true;
+        if (bestTranscript) { settledRef.current = true; micOwner = null; }
         finish(bestTranscript);
       }
     } else setPartial(transcript);
   });
   useSpeechRecognitionEvent('end', () => {
+    if (micOwner !== owner.current || settledRef.current) return;
     listeningRef.current = false;
     setListening(false);
     setPartial('');
     const heard = finalRef.current || lastHeardRef.current;
-    if (heard) settledRef.current = true;
+    if (heard) { settledRef.current = true; micOwner = null; }
+    else { // Some Android recognisers deliver their final transcript just after end.
+      const token = generation.current;
+      setTimeout(() => { if (generation.current === token && micOwner === owner.current) micOwner = null; }, 250);
+    }
     finish(heard);
   });
   useSpeechRecognitionEvent('error', event => {
+    if (micOwner !== owner.current || settledRef.current) return;
     listeningRef.current = false;
     setListening(false);
     setPartial('');
     const code = event.error;
+    settledRef.current = true; micOwner = null;
     if (code === 'no-speech') { finish(''); return; }
     if (code === 'aborted') return;
     setError(code === 'not-allowed' || code === 'service-not-allowed'
@@ -124,15 +143,20 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     finalRef.current = '';
     lastHeardRef.current = '';
     settledRef.current = false;
+    const token = ++generation.current;
     try {
       if (Platform.OS === 'web' && !ExpoSpeechRecognitionModule.isRecognitionAvailable()) {
         setError('مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.');
         return;
       }
       const permission = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+      if (token !== generation.current) return;
+      if (micOwner && micOwner !== owner.current) { setError('ابتدا تمرین گفتاری فعال را پایان دهید.'); return; }
       if (!permission.granted) { setError('برای تمرین گفتاری، اجازهٔ میکروفن لازم است.'); return; }
+      micOwner = owner.current;
       ExpoSpeechRecognitionModule.start({ lang: locale, interimResults: true, continuous: false, maxAlternatives: 5, contextualStrings: [text], requiresOnDeviceRecognition: false, addsPunctuation: false });
     } catch {
+      if (micOwner === owner.current) micOwner = null;
       setError('تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
     }
   }, [locale, text]);
@@ -153,7 +177,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         </View>
       ) : null}
       {listening && partial ? <Text keepColor style={styles.partial}>{partial}</Text> : null}
-      {result ? <View style={styles.scoreRow}><Text style={styles.scoreLabel}>امتیاز</Text><Text keepColor style={[styles.scoreValue, { color: result.score >= 70 ? '#15803D' : result.score >= 40 ? '#B45309' : '#B91C1C' }]}>{fa(result.score)}٪</Text></View> : null}
+      {result?.heard ? <View style={styles.scoreRow}><Text style={styles.scoreLabel}>امتیاز</Text><Text keepColor style={[styles.scoreValue, { color: result.score >= 70 ? '#15803D' : result.score >= 40 ? '#B45309' : '#B91C1C' }]}>{fa(result.score)}٪</Text></View> : null}
       {/* When the recogniser heard nothing, a percentage would be a fake zero. Say it plainly instead. */}
       {result && !result.heard ? <Text style={styles.hint}>چیزی شنیده نشد. ابتدا نمونه را گوش بده و یک بار دیگر بگو.</Text> : null}
       {result && result.heard ? <Text style={styles.heard}>شنیده شد: <Text keepColor style={styles.heardText}>{result.heard}</Text></Text> : null}

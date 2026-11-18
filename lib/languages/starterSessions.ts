@@ -1,3 +1,4 @@
+import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import type { StarterLesson, NewLanguageId } from './newCourses';
@@ -8,6 +9,7 @@ import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
 
 export interface StarterLessonSession {
   stage: number;
+  updatedAt?: string;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
   stageVersion?: number;
   sentenceIndex: number;
@@ -79,6 +81,7 @@ function readSession(lessonId: string, value: unknown): StarterLessonSession {
   }
   return {
     stage,
+    ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,
     sentenceIndex: Math.min(Math.max(0, session.sentenceIndex!), lesson.sentences.length - 1),
     revealed: session.revealed,
@@ -109,12 +112,26 @@ function validateSession(lessonId: string, value: unknown): StarterLessonSession
   }
   return {
     stage,
+    ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,
     sentenceIndex: session.sentenceIndex!,
     revealed: session.revealed,
     answers,
     showCheckAnswers: session.showCheckAnswers,
   };
+}
+
+function loadStarterPositions() {
+  return serial(async () => {
+    const state = parseState(await readRaw());
+    const sessions: Record<string, StarterLessonSession> = {};
+    let unreadable = false;
+    for (const [id, raw] of Object.entries(state.sessions)) {
+      if (!lessons.some(lesson => lesson.id === id)) continue; // retired lesson
+      try { sessions[id] = readSession(id, raw); } catch { unreadable = true; }
+    }
+    return { sessions, unreadable };
+  });
 }
 
 function loadStarterLessonSessionWithPresence(lessonId: string): Promise<{ session: StarterLessonSession; hasSavedSession: boolean }> {
@@ -141,7 +158,8 @@ function saveStarterLessonSession(lessonId: string, value: StarterLessonSession)
   return serial(async () => {
     const safe = validateSession(lessonId, value);
     const state = parseState(await readRaw());
-    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: safe } }));
+    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, updatedAt: positionTimestamp() } } }));
+    notifyLearningChange();
   });
 }
 
@@ -162,8 +180,9 @@ function clearStarterLessonSession(lessonId: string): Promise<void> {
     else if (Platform.OS === 'web') {
       if (typeof window !== 'undefined') window.localStorage.removeItem(storageKey);
     } else await AsyncStorage.removeItem(storageKey);
+    notifyLearningChange();
   });
 }
 
-return { loadStarterLessonSessionWithPresence, loadStarterLessonSession, saveStarterLessonSession, resetStarterLessonSession, clearStarterLessonSession };
+return { loadStarterPositions, loadStarterLessonSessionWithPresence, loadStarterLessonSession, saveStarterLessonSession, resetStarterLessonSession, clearStarterLessonSession };
 }

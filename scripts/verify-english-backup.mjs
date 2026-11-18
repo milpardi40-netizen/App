@@ -22,7 +22,8 @@ const stubs = path.join(root, 'scripts', 'test-stubs');
 const bundle = await esbuild.build({
   entryPoints: [entry], bundle: true, write: false, format: 'esm', platform: 'node', target: 'node22', logLevel: 'silent',
   plugins: [{ name: 'offline-storage-stubs', setup(build) {
-    build.onResolve({ filter: /^react-native$/ }, () => ({ path: path.join(stubs, 'react-native.js') }));
+    build.onResolve({filter:/personalLearningSync$/}, () => ({path:path.resolve('scripts/test-stubs/offline-sync.cjs')}));
+      build.onResolve({ filter: /^react-native$/ }, () => ({ path: path.join(stubs, 'react-native.js') }));
     build.onResolve({ filter: /^@react-native-async-storage\/async-storage$/ }, () => ({ path: path.join(stubs, 'async-storage.js') }));
     build.onResolve({ filter: /^\.\/supabase$/, namespace: 'file' }, () => ({ path: 'backup-supabase', namespace: 'backup-stub' }));
     build.onLoad({ filter: /.*/, namespace: 'backup-stub' }, () => ({ contents: `

@@ -1,3 +1,4 @@
+import { recordObjectiveCheck } from '@/lib/lessonOutcomes';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -12,7 +13,7 @@ import { narrationRate } from '@/lib/narration';
 import { Typography } from '@/lib/theme';
 import { toPersianDigits as fa } from '@/lib/format';
 
-function Comprehension({task, index, speak}: {task:A1CheckpointQuestion; index:number; speak:(text:string)=>void}) {
+function Comprehension({task, index, speak, onAnswer}: {onAnswer:(correct:boolean)=>void; task:A1CheckpointQuestion; index:number; speak:(text:string)=>void}) {
   const [answer,setAnswer] = useState<number|null>(null);
   const [showText,setShowText] = useState(false);
   const listening = task.kind === 'listening';
@@ -24,7 +25,7 @@ function Comprehension({task, index, speak}: {task:A1CheckpointQuestion; index:n
       {showText && <Text style={s.target}>{task.text}</Text>}
     </> : <Text style={s.target}>{task.text}</Text>}
     <Text style={s.question}>{task.question}</Text>
-    {task.choices.map((choice,i)=><Pressable key={choice} accessibilityRole="radio" accessibilityState={{checked:answer===i}} onPress={()=>setAnswer(i)} style={[s.choice,answer===i && s.selected]}><Text style={s.choiceText}>{choice}</Text></Pressable>)}
+    {task.choices.map((choice,i)=><Pressable key={choice} accessibilityRole="radio" accessibilityState={{checked:answer===i}} onPress={()=>{setAnswer(i);onAnswer(i===task.correctIndex);}} style={[s.choice,answer===i && s.selected]}><Text style={s.choiceText}>{choice}</Text></Pressable>)}
     {answer!==null && <Text accessibilityLiveRegion="polite" style={s.feedback}>{answer===task.correctIndex ? `درست است. ${task.explanation}` : 'این پاسخ مناسب نیست؛ دوباره امتحان کنید.'}</Text>}
   </View>;
 }
@@ -56,7 +57,7 @@ export default function StarterA1Checkpoint({language,locale,level=1}:{language:
       <Text style={s.description}>پیام‌های تازه را گوش کنید یا بخوانید، سپس گفتار و نوشتن را تمرین کنید.</Text>
       {!!speechError && <Text accessibilityRole="alert" style={s.error}>{speechError}</Text>}
       <Text style={s.section}>شنیدن و خواندن</Text>
-      {data.questions.map((task,i)=><Comprehension key={`${language}-q${i}`} task={task} index={i} speak={speak}/>)}
+      {data.questions.map((task,i)=><Comprehension key={`${language}-q${i}`} task={task} index={i} speak={speak} onAnswer={correct=>recordObjectiveCheck(language,`checkpoint:${level}:${i}`,Number(correct),1)}/>)}
       <Text style={s.section}>گفتار</Text>
       <Text style={s.description}>پاسخ را بلند بگویید؛ سپس نمونه را بشنوید. گفتار ضبط یا به‌صورت خودکار ارزیابی نمی‌شود.</Text>
       {data.speaking.map((task,i)=><Production key={`${language}-s${i}`} task={task} index={i} kind="speaking" speak={speak}/>)}

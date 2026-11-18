@@ -19,18 +19,7 @@ export function displayEnglishModuleLabel(label: string) {
   return label.replace(/^(?:first\s+)?[0-9۰-۹٠-٩]+\+?\s+/i, '').trim();
 }
 
-export function EnglishProgressTrack({ value, color = Palette.primary, height = 8, trackColor = '#E7EAF2' }: { value: number; color?: string; height?: number; trackColor?: string }) {
-  const percentage = Math.max(0, Math.min(100, value));
-  return (
-    <View
-      accessibilityRole="progressbar"
-      accessibilityValue={{ min: 0, max: 100, now: percentage }}
-      style={[styles.progressTrack, { height, backgroundColor: trackColor }]}
-    >
-      <View style={[styles.progressFill, { width: `${percentage}%`, backgroundColor: color }]} />
-    </View>
-  );
-}
+export { ProgressTrack as EnglishProgressTrack } from './ProgressTrack';
 
 export function EnglishLevelRail<T extends CourseLevelId = CourseLevelId>({
   activeLevelId,
@@ -62,14 +51,13 @@ export function EnglishLevelRail<T extends CourseLevelId = CourseLevelId>({
   const { width } = useWindowDimensions();
   const narrow = width < 360;
   const resolvedLevels = levels ?? COURSE_LEVELS as unknown as ReadonlyArray<{ id: T; title: string; cefr: string }>;
-  const activeIndex = resolvedLevels.findIndex(level => level.id === activeLevelId);
   return (
     <View style={[styles.rail, direction === 'rtl' && styles.railRtl, narrow && styles.railCompact]}>
       {resolvedLevels.map((level, index, allLevels) => {
         const count = counts?.[level.id];
         const done = !!count && count.total > 0 && count.completed === count.total;
         const active = level.id === activeLevelId;
-        const reached = activeIndex >= 0 && index < activeIndex;
+        const reached = done;
         return (
           <View key={level.id} style={[styles.railItem, direction === 'rtl' && styles.railItemRtl, narrow && styles.railItemCompact]}>
             <Pressable
@@ -117,8 +105,6 @@ export function EnglishSectionHeading({
 }
 
 const styles = StyleSheet.create({
-  progressTrack: { width: '100%', borderRadius: 999, overflow: 'hidden', backgroundColor: '#E7EAF2' },
-  progressFill: { height: '100%', borderRadius: 999, alignSelf: 'flex-start' },
   rail: { width: '100%', flexDirection: 'row', alignItems: 'flex-start', paddingHorizontal: 2 },
   railRtl: { flexDirection: 'row-reverse' },
   railCompact: { flexWrap: 'wrap', rowGap: 8 },

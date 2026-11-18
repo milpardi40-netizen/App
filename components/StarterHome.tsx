@@ -1,12 +1,11 @@
+import { useCourseHome } from '@/hooks/useCourseHome';
+import { progressLabel, formatPercent } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useFocusEffect } from 'expo-router';
 import DailyPlanCard from '@/components/DailyPlanCard';
-import { buildDailyPlan, type DailyPlanStep } from '@/lib/dailyPlan';
-import { getStudyStreak } from '@/lib/studyStreak';
 import {
   BookOpen,
   Check,
@@ -33,11 +32,9 @@ import type { StarterCourse, StarterLesson } from '@/lib/languages/newCourses';
 import LevelReadinessLine from '@/components/LevelReadinessLine';
 import PlacementCard from '@/components/PlacementCard';
 import { auditLessonsFromLearning, courseReadiness } from '@/lib/content/courseAudit';
-import { afterPaint } from '@/lib/afterPaint';
 import OpeningOverlay from '@/components/OpeningOverlay';
 import { useOpeningNavigation } from '@/lib/useOpeningNavigation';
 import type { CourseLevelId as StarterLevelId } from '@/lib/courseContent';
-import type { CourseProgress } from '@/lib/courseProgress';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 
@@ -91,71 +88,25 @@ const COURSE_WELCOME: Record<string, { title: string; text: string }> = {
 
 export default function StarterHome({course}: {course: StarterCourse}) {
   const readiness = useMemo(() => courseReadiness(course.id as 'de' | 'fr' | 'es', auditLessonsFromLearning(course.lessons as ReadonlyArray<import('@/lib/languages/types').LearningLesson & { levelId: number }>)), [course]);
-  const {lessons, levels, progress: courseProgress} = course;
-  const {loadStarterLessonSessionWithPresence} = course.sessions;
+  const {lessons, levels} = course;
   const { width } = useWindowDimensions();
   const compact = width < 640;
-  const [progress, setProgress] = useState<CourseProgress | null>(null);
-  const [dueCount, setDueCount] = useState(0);
-  const [streak, setStreak] = useState(0);
+  const { snapshot, progress, dueCount, streak, plan, hasStartedCourse, error, retry } = useCourseHome(course.id);
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [error, setError] = useState('');
-  const [retry, setRetry] = useState(0);
-  const [hasStartedCourse, setHasStartedCourse] = useState(false);
-  const [plan, setPlan] = useState<readonly DailyPlanStep[]>([]);
-  // A level card answers the tap immediately; its library loads on the next frame.
   const { opening, open } = useOpeningNavigation();
-
-  useFocusEffect(useCallback(() => {
-    let alive = true;
-    let stopDeferred: (() => void) | undefined;
-    void getStudyStreak().then(value => { if (alive) setStreak(value); }).catch(() => undefined);
-    void Promise.all([courseProgress.getCourseProgress(), courseProgress.getDueReviewCards()])
-      .then(([nextProgress, cards]) => {
-        if (!alive) return;
-        // Paint the hero, the levels and the roadmap first: the plan card and the resume flag need extra
-        // storage reads and a plan build, and waiting for them made the language open feel frozen.
-        setProgress(nextProgress);
-        setDueCount(cards.length);
-        setError('');
-        stopDeferred = afterPaint(() => {
-          const now = new Date();
-          const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-          void buildDailyPlan({
-            lessonDone: nextProgress.lastActiveDate === todayKey && nextProgress.completedLessonIds.length > 0,
-            reviewsDue: cards.length,
-            lessonRoute: `${course.home}/lesson`,
-            reviewRoute: `${course.home}/review`,
-            speakRoute: `${course.home}/pronunciation`,
-          }).then(steps => { if (alive) setPlan(steps); }).catch(() => undefined);
-          const completed = new Set(nextProgress.completedLessonIds);
-          const currentLesson = lessons.find(lesson => lesson.id === nextProgress.currentLessonId && !completed.has(lesson.id))
-            ?? lessons.find(lesson => !completed.has(lesson.id));
-          void Promise.resolve(currentLesson ? loadStarterLessonSessionWithPresence(currentLesson.id) : null)
-            .then(savedSession => {
-              if (!alive) return;
-              setHasStartedCourse(nextProgress.completedLessonIds.length > 0 || !!savedSession?.hasSavedSession);
-            })
-            .catch(() => undefined);
-        });
-      })
-      .catch(() => { if (alive) setError('پیشرفت این زبان خوانده نشد؛ اطلاعات قبلی تغییر نکرده است. دوباره تلاش کنید.'); });
-    return () => { alive = false; stopDeferred?.(); };
-  }, [retry]));
-
   const completedIds = progress?.completedLessonIds ?? [];
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const nextLesson = lessons.find(lesson => !completedSet.has(lesson.id));
-  const savedCurrentLesson = lessons.find(lesson => lesson.id === progress?.currentLessonId && !completedSet.has(lesson.id));
+  const savedCurrentLesson = lessons.find(lesson => lesson.id === snapshot?.current?.id);
   const resumeLesson = savedCurrentLesson ?? nextLesson;
   const unfinishedFoundation = lessons.find(lesson => !!lesson.learningMode && !completedSet.has(lesson.id));
   const hasLegacyProgress = !!progress && (progress.completedLessonIds.some(id => id.startsWith(`${course.id}-pre-`)) || progress.currentLessonId.startsWith(`${course.id}-pre-`));
   const heroLesson = resumeLesson ?? lessons[lessons.length - 1];
   const activeLevel = levels.find(level => level.id === (resumeLesson?.levelId ?? heroLesson.levelId)) ?? levels[0];
-  const completedCount = lessons.filter(lesson => completedSet.has(lesson.id)).length;
+  const completedCount = snapshot?.course.completed ?? 0;
   const levelLessons = lessons.filter(lesson => lesson.levelId === activeLevel.id);
-  const levelCompleted = levelLessons.filter(lesson => completedSet.has(lesson.id)).length;
-  const levelProgress = levelLessons.length ? (levelCompleted / levelLessons.length) * 100 : 0;
+  const levelCompleted = snapshot?.levels[activeLevel.id]?.completed ?? 0;
+  const levelProgress = snapshot?.levels[activeLevel.id]?.percent ?? 0;
   // One pass over the course, reused until the course object changes: this walked every sentence of the
   // course on every render, including the renders the focus effect triggers a moment later.
   const { sentenceCount, uniqueWords } = useMemo(() => {
@@ -171,12 +122,8 @@ export default function StarterHome({course}: {course: StarterCourse}) {
   }, [lessons]);
   const firstSentence = heroLesson.sentences[0];
   const heroLessonOrder = Math.max(1, lessons.findIndex(lesson => lesson.id === heroLesson.id) + 1);
-  const courseProgressPercent = lessons.length ? (completedCount / lessons.length) * 100 : 0;
-  const levelCounts = {} as Partial<Record<StarterLevelId, { completed: number; total: number }>>;
-  levels.forEach(level => {
-    const inLevel = lessons.filter(lesson => lesson.levelId === level.id);
-    levelCounts[level.id] = { completed: inLevel.filter(lesson => completedSet.has(lesson.id)).length, total: inLevel.length };
-  });
+  const courseProgressPercent = snapshot?.course.percent ?? 0;
+  const levelCounts = snapshot?.levels ?? {};
 
   const openLevel = (levelId: StarterLevelId) => open(`${course.home}/library?level=${levelId}`);
 
@@ -240,7 +187,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
           </LinearGradient>
 
           <View style={styles.pathPanel}>
-            <Text style={styles.panelHint}>درس‌های Pre-A1، A1، A2 و درس‌های مقدماتی B1 و B2 در دسترس‌اند؛ درس‌های مرتبط لزوماً همهٔ بخش‌های هر سرفصل را پوشش نمی‌دهند.{course.id === 'es' ? ' گونهٔ اسپانیای اسپانیا مبناست.' : ''}</Text>
+            <Text style={styles.panelHint}>درس‌های مسیر از Pre-A1 تا C1 در دسترس‌اند؛ درس‌های مرتبط لزوماً همهٔ بخش‌های هر سرفصل را پوشش نمی‌دهند.{course.id === 'es' ? ' گونهٔ اسپانیای اسپانیا مبناست.' : ''}</Text>
             <View style={styles.panelHeadingRow}>
               <View style={styles.panelHeadingText}>
                 <Text style={styles.panelTitle}>سطح {course.name} خودت را انتخاب کن</Text>
@@ -253,7 +200,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
             </View>
 
             <View style={styles.railWrap}>
-              <EnglishLevelRail activeLevelId={activeLevel.id} counts={{...levelCounts, 2: undefined}} levels={levels} accessibilityLabelPrefix="فهرست درس‌های" direction="rtl" displayNumber={id => Math.max(0, id)} onSelect={openLevel} />
+              <EnglishLevelRail activeLevelId={activeLevel.id} counts={levelCounts} levels={levels} accessibilityLabelPrefix="فهرست درس‌های" direction="rtl" displayNumber={id => Math.max(0, id)} onSelect={openLevel} />
             </View>
 
             <View style={styles.currentLevelCard}>
@@ -283,7 +230,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
               <View style={styles.fullRoadmap}>
                 {levels.map(level => {
                   const count = levelCounts[level.id] ?? { completed: 0, total: 0 };
-                  const passed = level.id !== 2 && level.id !== 3 && level.id !== 4 && count.total > 0 && count.completed === count.total;
+                  const passed = count.total > 0 && count.completed === count.total;
                   return (
                     <Pressable
                       key={level.id}
@@ -301,7 +248,8 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                           <Text style={[styles.levelCefr, { color: level.color }]}>{level.cefr}</Text>
                         </View>
                         <Text style={styles.levelDesc} numberOfLines={1}>{level.description}</Text>
-                        <Text style={styles.levelStats}>{fa(count.completed)} از {fa(count.total)} درس · {level.status === 'planned' ? 'در نقشهٔ آینده' : 'محتوای موجود'}</Text>
+                        <Text style={styles.levelStats}>{progressLabel(snapshot?.levels[level.id])} · {level.status === 'planned' ? 'در نقشهٔ آینده' : 'محتوای موجود'}</Text>
+                        <EnglishProgressTrack value={count.percent ?? 0} color={level.color} height={5} />
                         <LevelReadinessLine course={readiness} levelId={level.id} color={level.color} />
                       </View>
                       <ChevronLeft size={18} color={HomeColors.muted} />
@@ -315,7 +263,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
           {!!error && (
             <View style={starterOnlyStyles.errorCard}>
               <Text accessibilityRole="alert" style={starterOnlyStyles.errorText}>{error}</Text>
-              <Pressable accessibilityRole="button" onPress={() => setRetry(value => value + 1)}>
+              <Pressable accessibilityRole="button" onPress={retry}>
                 <Text style={starterOnlyStyles.retryText}>تلاش دوباره</Text>
               </Pressable>
             </View>
@@ -386,7 +334,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
             <View style={styles.levelProgressBlock}>
               <View style={styles.levelProgressMeta}>
                 <Text style={styles.levelProgressLabel}>پیشرفت درس‌های موجود در {activeLevel.title}</Text>
-                <Text style={styles.levelProgressValue}>{fa(levelCompleted)} از {fa(levelLessons.length)} درس</Text>
+                <Text style={styles.levelProgressValue}>{progressLabel(snapshot?.levels[activeLevel.id])}</Text>
               </View>
               <EnglishProgressTrack value={levelProgress} color={activeLevel.color} height={7} />
             </View>
@@ -456,7 +404,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                 <Text style={styles.todayLabel}>درس‌های تکمیل‌شده در مسیر این زبان</Text>
               </View>
               <View style={styles.todayPercentPill}>
-                <Text style={styles.todayPercentText}>{fa(Math.round(courseProgressPercent))}٪</Text>
+                <Text style={styles.todayPercentText}>{formatPercent(courseProgressPercent)}</Text>
               </View>
             </View>
             <View style={styles.todayProgressTrack}>

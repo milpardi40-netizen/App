@@ -1,3 +1,5 @@
+import { withMergedRatings, addRating, validHistory, type RatingHistory } from './reviewHistory';
+import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { supabase } from './supabase';
@@ -17,11 +19,13 @@ export interface SentenceReviewCard {
   repetitions: number;
   lapses: number;
   lastReviewedAt?: string;
+  ratingHistory?: RatingHistory;
 }
 
 export interface CourseProgress {
   completedLessonIds: string[];
   currentLessonId: string;
+  resumeUpdatedAt?: string;
   /** Kept for backward compatibility with early preview installs. */
   reviewSentenceIds: string[];
   reviewCards: SentenceReviewCard[];
@@ -115,6 +119,7 @@ function normalizeProgress(value: Partial<CourseProgress>): CourseProgress {
   return {
     ...base,
     dailyGoalMinutes: Number.isFinite(value.dailyGoalMinutes)&&value.dailyGoalMinutes!>0?Math.min(1440,value.dailyGoalMinutes!):base.dailyGoalMinutes,
+    ...(typeof value.resumeUpdatedAt === 'string' && Number.isFinite(Date.parse(value.resumeUpdatedAt)) ? { resumeUpdatedAt: value.resumeUpdatedAt } : {}),
     currentLessonId: SENTENCE_LESSONS.some(l=>l.id===value.currentLessonId)?value.currentLessonId!:base.currentLessonId,
     updatedAt: typeof value.updatedAt==='string'&&Number.isFinite(Date.parse(value.updatedAt))?value.updatedAt:base.updatedAt,
     completedLessonIds,
@@ -198,6 +203,7 @@ async function saveProgress(progress: CourseProgress): Promise<CourseProgress> {
   const old=await readRaw();
   if(old!==null){normalizeProgress(JSON.parse(old));if(Platform.OS==='web')window.localStorage.setItem(KEY+'_backup_v1',old);else await AsyncStorage.setItem(KEY+'_backup_v1',old);}
   await writeRaw(JSON.stringify(progress));
+  notifyLearningChange();
   if (!options.explicitCloudSync) await uploadProgress(progress);
   try { options.afterLocalSave?.(); } catch { /* Local progress is already safely stored. */ }
   return progress;
@@ -261,6 +267,7 @@ async function completeSentenceLesson(lessonId: string, nextLessonId?: string): 
         ...(options.markVocabularyOnCompletion===false?[]:getEssential504WordsForLesson(lessonId)),
       ]),
     ),
+    ...(nextLessonId && nextLessonId !== current.currentLessonId ? { resumeUpdatedAt: positionTimestamp() } : {}),
     currentLessonId: nextLessonId ?? current.currentLessonId,
   }, 8);
   return saveProgress(next);
@@ -317,6 +324,7 @@ async function rateReviewCard(
     repetitions,
     lapses,
     lastReviewedAt: now.toISOString(),
+    ratingHistory: addRating(card, now),
     dueAt: new Date(now.getTime() + dueInMs).toISOString(),
   };
   const next = addDailyActivity({
@@ -371,6 +379,7 @@ function validBackup(value: unknown): value is { schema: 1; courseKey: string; p
       || !Number.isFinite(card.ease) || card.ease! < 1.3 || card.ease! > 3
       || !Number.isInteger(card.repetitions) || card.repetitions! < 0
       || !Number.isInteger(card.lapses) || card.lapses! < 0
+      || !validHistory(card.ratingHistory as RatingHistory | undefined)
       || (card.lastReviewedAt !== undefined && (typeof card.lastReviewedAt !== 'string' || !Number.isFinite(Date.parse(card.lastReviewedAt))))) return false;
     cardIds.add(card.id);
   }
@@ -394,6 +403,7 @@ async function restoreProgressText(text: string): Promise<CourseProgress> {
   const next = current ? mergeCourseProgress(current, restored) : restored;
   next.updatedAt = new Date().toISOString();
   await writeRaw(JSON.stringify(next));
+  notifyLearningChange();
   try { options.afterLocalSave?.(); } catch { /* The local restore is already safely stored. */ }
   return next;
 }
@@ -412,7 +422,7 @@ async function mergeRemoteProgress(value: unknown): Promise<CourseProgress> {
 }
 
 return { getCourseProgress, syncCourseProgress, mergeRemoteProgress,
- setCurrentLesson:async(id:string)=>{ if(!SENTENCE_LESSONS.some(l=>l.id===id)) throw new Error('Unknown lesson for this language'); const current=await getCourseProgress(); return serial(()=>saveProgress({...current,currentLessonId:id})); },
+ setCurrentLesson:async(id:string)=>{ if(!SENTENCE_LESSONS.some(l=>l.id===id)) throw new Error('Unknown lesson for this language'); return serial(async()=>saveProgress({...await getCourseProgress(),currentLessonId:id,resumeUpdatedAt:positionTimestamp(),updatedAt:new Date().toISOString()})); },
  completeSentenceLesson:(id:string,next?:string)=>serial(()=>completeSentenceLesson(id,next)),
  getDueReviewCards, rateReviewCard:(id:string,rating:ReviewRating,now?:Date)=>serial(()=>rateReviewCard(id,rating,now)),
  addSentenceToReview:(id:string,lesson?:string)=>serial(()=>addSentenceToReview(id,lesson)),
@@ -428,7 +438,9 @@ export function mergeCourseProgress(a:CourseProgress,b:CourseProgress):CoursePro
  const newer=difference>0?a:difference<0?b:JSON.stringify(a)>=JSON.stringify(b)?a:b;
  const cards=new Map<string,SentenceReviewCard>();
  for(const card of [...a.reviewCards,...b.reviewCards]){const prev=cards.get(card.id);const time=(x:SentenceReviewCard)=>Date.parse(x.lastReviewedAt??'1970-01-01')||0;
-  if(!prev||time(card)>time(prev)||(time(card)===time(prev)&&JSON.stringify(card)>JSON.stringify(prev)))cards.set(card.id,card);
+  if (!prev) { cards.set(card.id, card); continue; }
+  const latest = time(card) > time(prev) || (time(card) === time(prev) && JSON.stringify(card) > JSON.stringify(prev));
+  cards.set(card.id, latest ? withMergedRatings(card, prev) : withMergedRatings(prev, card));
  }
  return {...newer,completedLessonIds:[...new Set([...a.completedLessonIds,...b.completedLessonIds])].sort(),reviewSentenceIds:[...new Set([...a.reviewSentenceIds,...b.reviewSentenceIds])].sort(),learnedEssential504Words:[...new Set([...a.learnedEssential504Words,...b.learnedEssential504Words])].sort(),reviewCards:[...cards.values()].sort((x,y)=>x.id.localeCompare(y.id)),totalMinutes:Math.max(a.totalMinutes,b.totalMinutes),longestStreak:Math.max(a.longestStreak,b.longestStreak)};
 }

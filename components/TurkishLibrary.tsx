@@ -1,15 +1,16 @@
+import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
+import { progressLabel, type PositionMap } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BookOpen, Check, ChevronDown, ChevronLeft, ChevronUp, Clock3, Play, Sparkles, Volume2 } from 'lucide-react-native';
 import { EnglishLevelRail, EnglishProgressTrack, EnglishSectionHeading, displayEnglishModuleLabel, ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
-import { TURKISH_LEVELS, TURKISH_LESSONS, turkishProgress, type TurkishLevelId } from '@/lib/languages/turkish';
+import { TURKISH_LEVELS, TURKISH_LESSONS, type TurkishLevelId } from '@/lib/languages/turkish';
 import type { CourseProgress } from '@/lib/courseProgress';
-import { loadTurkishLessonSessionWithPresence, type TurkishLessonSession } from '@/lib/languages/turkishStudyState';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 
@@ -19,7 +20,7 @@ function lessonUnitLabel(mode: 'words' | 'chunks' | 'sentences') {
   return mode === 'words' ? 'واژه' : mode === 'chunks' ? 'ترکیب' : 'جمله';
 }
 
-function lessonStatus(lessonId: string, progress: CourseProgress | null, sessions: Record<string, TurkishLessonSession | null>) {
+function lessonStatus(lessonId: string, progress: CourseProgress | null, sessions: PositionMap) {
   const session = sessions[lessonId];
   if (progress?.completedLessonIds.includes(lessonId)) return session ? 'تکمیل‌شده · ادامهٔ مرور' : 'تکمیل‌شده · قابل مرور';
   if (session) {
@@ -33,10 +34,10 @@ export default function TurkishLibrary() {
   const { level } = useLocalSearchParams<{ level?: string }>();
   const [hydrated, setHydrated] = useState(false);
   const [expandedGroup, setExpandedGroup] = useState(0);
-  const [progress, setProgress] = useState<CourseProgress | null>(null);
-  const [sessions, setSessions] = useState<Record<string, TurkishLessonSession | null>>({});
-  const [error, setError] = useState('');
-  const [retry, setRetry] = useState(0);
+  const { data: snapshot, failed, retry } = useCourseSnapshot('tr');
+  const progress = snapshot?.progress ?? null;
+  const sessions = snapshot?.sessions ?? {};
+  const error = failed || snapshot?.unreadable ? 'بخشی از سابقه خوانده نشد؛ اطلاعات ذخیره‌شده تغییر نکرده‌اند.' : '';
 
   useEffect(() => setHydrated(true), []);
   const selected = hydrated ? TURKISH_LEVELS.find(item => String(item.id) === String(level)) : undefined;
@@ -47,37 +48,20 @@ export default function TurkishLibrary() {
     return groups;
   }, [selectedLessons]);
 
-  useFocusEffect(useCallback(() => {
-    let alive = true;
-    void Promise.all([
-      turkishProgress.getCourseProgress(),
-      Promise.all(TURKISH_LESSONS.map(async lesson => {
-        const saved = await loadTurkishLessonSessionWithPresence(lesson.id);
-        return [lesson.id, saved.hasSavedSession ? saved.session : null] as const;
-      })),
-    ]).then(([nextProgress, nextSessions]) => {
-      if (!alive) return;
-      setProgress(nextProgress);
-      setSessions(Object.fromEntries(nextSessions));
-      setError('');
-    }).catch(() => { if (alive) setError('وضعیت ذخیره‌شده خوانده نشد؛ فهرست درس‌ها همچنان در دسترس است.'); });
-    return () => { alive = false; };
-  }, [retry]));
+
 
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
 
   const completedIds = progress?.completedLessonIds ?? [];
-  const levelStartLesson = selectedLessons.find(item => !completedIds.includes(item.id) && !!sessions[item.id])
+  const levelStartLesson = selectedLessons.find(item => item.id === snapshot?.current?.id && !!sessions[item.id])
+    ?? selectedLessons.find(item => !completedIds.includes(item.id) && !!sessions[item.id])
     ?? selectedLessons.find(item => !completedIds.includes(item.id))
     ?? selectedLessons[0];
   const levelFullyCompleted = selectedLessons.length > 0 && selectedLessons.every(item => completedIds.includes(item.id));
   const levelStartLabel = levelFullyCompleted ? 'بازبینی این سطح' : levelStartLesson && sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
   const firstUnfinished = TURKISH_LESSONS.find(item => !completedIds.includes(item.id)) ?? TURKISH_LESSONS[TURKISH_LESSONS.length - 1];
-  const activeLevelId = firstUnfinished.levelId;
-  const countFor = (levelId: TurkishLevelId) => {
-    const lessons = TURKISH_LESSONS.filter(item => item.levelId === levelId);
-    return { total: lessons.length, completed: lessons.filter(item => completedIds.includes(item.id)).length };
-  };
+  const activeLevelId = (snapshot?.current?.levelId ?? firstUnfinished.levelId) as TurkishLevelId;
+  const countFor = (id: TurkishLevelId) => snapshot?.levels[id] ?? { completed: 0, total: TURKISH_LESSONS.filter(item => item.levelId === id).length };
   const sentenceCount = selectedLessons.reduce((count, lesson) => count + lesson.sentences.length, 0);
   const selectedUnitLabel = selected?.id === 0 ? 'واحد آموزشی' : 'جمله';
   const words = new Set(selectedLessons.flatMap(lesson => lesson.sentences.flatMap(sentence => sentence.vocabulary.map(item => item.word))));
@@ -123,13 +107,13 @@ export default function TurkishLibrary() {
               {TURKISH_LEVELS.map(item => {
                 const stats = countFor(item.id);
                 const sentenceTotal = TURKISH_LESSONS.filter(lesson => lesson.levelId === item.id).reduce((count, lesson) => count + lesson.sentences.length, 0);
-                const pct = stats.total ? stats.completed / stats.total * 100 : 0;
+                const pct = snapshot?.levels[item.id]?.percent ?? 0;
                 return <Pressable key={item.id} accessibilityRole="button" accessibilityLabel={`فهرست درس‌های ${item.title}`} style={styles.levelOption} onPress={() => openLevel(item.id)}>
                   <LinearGradient colors={ENGLISH_LEVEL_GRADIENTS[item.id]} style={styles.levelOptionMark}><Text style={styles.levelOptionNumber}>{fa(item.id)}</Text></LinearGradient>
                   <View style={styles.levelOptionContent}>
                     <View style={styles.levelOptionTitleRow}><Text style={styles.levelOptionTitle}>{item.title}</Text><Text style={[styles.levelOptionBand, { color: item.color }]}>{item.cefr}</Text></View>
                     <Text style={styles.levelOptionDescription}>{item.description || 'در نقشهٔ آیندهٔ دوره'}</Text>
-                    <View style={styles.levelOptionMeta}><Text style={styles.levelOptionMetaText}>{fa(stats.total)} درس</Text><View style={styles.metaDot} /><Text style={styles.levelOptionMetaText}>{fa(sentenceTotal)} {item.id === 0 ? 'مورد آموزشی' : 'جمله'}</Text><View style={styles.metaDot} /><Text style={styles.levelOptionMetaText}>{item.status === 'planned' ? 'در نقشهٔ آینده' : `${fa(stats.completed)} تکمیل`}</Text></View>
+                    <View style={styles.levelOptionMeta}><Text style={styles.levelOptionMetaText}>{progressLabel(snapshot?.levels[item.id])}</Text><View style={styles.metaDot} /><Text style={styles.levelOptionMetaText}>{fa(sentenceTotal)} {item.id === 0 ? 'مورد آموزشی' : 'جمله'}</Text></View>
                     <EnglishProgressTrack value={pct} color={item.color} height={5} />
                   </View>
                   <ChevronLeft size={19} color={Palette.muted} />
@@ -147,8 +131,8 @@ export default function TurkishLibrary() {
               <View style={styles.levelHeroTop}><View style={styles.levelHeroTag}><Text style={styles.levelHeroTagText}>LEVEL {selected.id}</Text></View><Text style={styles.levelHeroBand}>{selected.cefr}</Text></View>
               <Text style={styles.selectedTitle}>{selected.title}</Text>
               <Text style={styles.selectedDescription}>{selected.description || 'درس‌های این سطح در آینده اضافه می‌شوند.'}</Text>
-              <View style={styles.selectedProgressHeading}><Text style={styles.selectedProgressLabel}>پیشرفت این سطح</Text><Text style={styles.selectedProgressValue}>{fa(countFor(selected.id).completed)} از {fa(selectedLessons.length)} درس</Text></View>
-              <View style={styles.selectedProgressTrack}><View style={[styles.selectedProgressFill, { width: `${selectedLessons.length ? countFor(selected.id).completed / selectedLessons.length * 100 : 0}%` }]} /></View>
+              <View style={styles.selectedProgressHeading}><Text style={styles.selectedProgressLabel}>پیشرفت این سطح</Text><Text style={styles.selectedProgressValue}>{progressLabel(snapshot?.levels[selected.id])}</Text></View>
+              <EnglishProgressTrack value={snapshot?.levels[selected.id]?.percent ?? 0} color="#B8F28F" trackColor="rgba(255,255,255,0.22)" height={7} />
               <View style={styles.metricGrid}>
                 <View style={styles.heroMetric}><Text style={styles.heroMetricValue}>{fa(sentenceCount)}</Text><Text style={styles.heroMetricLabel}>{selectedUnitLabel}</Text></View><View style={styles.heroMetricDivider} />
                 <View style={styles.heroMetric}><Text style={styles.heroMetricValue}>{fa(patternCount)}</Text><Text style={styles.heroMetricLabel}>الگوی ثبت‌شده</Text></View><View style={styles.heroMetricDivider} />
@@ -214,7 +198,7 @@ export default function TurkishLibrary() {
               <Text style={styles.emptyDescription}>به‌زودی اضافه می‌شود.</Text>
             </View>}
           </>}
-          {!!error && <View style={styles.errorCard}><Text accessibilityRole="alert" style={styles.errorText}>{error}</Text><Pressable accessibilityRole="button" onPress={() => setRetry(value => value + 1)}><Text style={styles.retryText}>تلاش دوباره</Text></Pressable></View>}
+          {!!error && <View style={styles.errorCard}><Text accessibilityRole="alert" style={styles.errorText}>{error}</Text><Pressable accessibilityRole="button" onPress={retry}><Text style={styles.retryText}>تلاش دوباره</Text></Pressable></View>}
         </View>
       </ScrollView>
     </View>
@@ -273,8 +257,6 @@ const styles = StyleSheet.create({
   selectedProgressHeading: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
   selectedProgressLabel: { fontFamily: Typography.fontFamily, color: '#DCE0FF', fontSize: 10, writingDirection: 'rtl' },
   selectedProgressValue: { fontFamily: Typography.numberFontFamily, color: '#FFFFFF', fontSize: 10, fontWeight: '400', writingDirection: 'rtl' },
-  selectedProgressTrack: { height: 7, borderRadius: 999, overflow: 'hidden', backgroundColor: 'rgba(255,255,255,0.22)' },
-  selectedProgressFill: { height: '100%', alignSelf: 'flex-end', borderRadius: 999, backgroundColor: '#B8F28F' },
   levelStartButton: { minHeight: 48, marginTop: 5, paddingHorizontal: 15, borderRadius: 15, backgroundColor: '#FFFFFF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 9 },
   levelStartBeginningButton: { minHeight: 48, marginTop: 8, paddingHorizontal: 15, borderRadius: 15, backgroundColor: '#F5F2FF', borderWidth: 1, borderColor: '#D8D2FF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 9 },
   levelStartButtonDisabled: { opacity: 0.55 },

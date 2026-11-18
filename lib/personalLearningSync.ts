@@ -1,3 +1,4 @@
+import { notifyLearningChange } from './learningChanges';
 import { supabase } from './supabase';
 import { getCourseProgress } from './courseProgress';
 import { FEATURES } from './features';
@@ -180,7 +181,10 @@ async function performSync(): Promise<PersonalSyncResult> {
 
 let serialQueue: Promise<unknown> = Promise.resolve();
 export function syncPersonalLearningData(): Promise<PersonalSyncResult> {
-  const job = serialQueue.then(performSync, performSync);
+  const job = serialQueue.then(performSync, performSync).then(result => {
+    if (result.status === 'synced') notifyLearningChange();
+    return result;
+  });
   serialQueue = job.catch(() => undefined);
   return job;
 }

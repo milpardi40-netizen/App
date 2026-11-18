@@ -1,3 +1,5 @@
+import { useStudyTimer } from '@/components/useEnglishStudyTimer';
+import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
 import { assessmentStyles } from '@/components/assessmentLayout';
@@ -225,7 +227,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: StarterLessonSession = { stage, sentenceIndex, revealed, answers, showCheckAnswers };
+    const nextSession: StarterLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveStarterLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
@@ -348,7 +350,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       await courseProgress.completeSentenceLesson(lesson.id, progressTarget);
       const weak = weakSpokenSentences(speakResult.current ? { ...speakResult.current, at: '' } : null);
       for (const sentenceId of weak) await courseProgress.addSentenceToReview(sentenceId, lesson.id).catch(() => undefined);
-      const assessmentTotal = checks.length; const assessmentCorrect = checks.filter((question, index) => answers[String(index)] === question.correctIndex).length;
+      const assessmentTotal = checks.filter((_, index) => answers[String(index)] !== undefined).length; const assessmentCorrect = checks.filter((question, index) => answers[String(index)] === question.correctIndex).length;
       if (assessmentTotal) void saveLessonOutcome(course.id, lesson.id, { assessment: { correct: assessmentCorrect, total: assessmentTotal, at: new Date().toISOString() } });
 
       if (!preserveExistingSession.current) await clearStarterLessonSession(lesson.id);
@@ -372,10 +374,11 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     }
   };
 
+  const timer = useStudyTimer(sessionReady && !celebration, course.id);
   if (!sessionReady) return <View style={styles.root}><View style={styles.loadingCard}><ActivityIndicator color={Palette.primary} /><Text accessibilityRole={sessionError ? 'alert' : undefined} style={styles.loadingText}>{sessionError || 'در حال بازیابی جلسهٔ این زبان…'}</Text>{sessionError ? <Pressable accessibilityRole="button" style={styles.loadingButton} onPress={() => setLoadingRetry(value => value + 1)}><Text style={styles.loadingButtonText}>تلاش دوباره</Text></Pressable> : null}{sessionError ? <Pressable accessibilityRole="button" style={styles.loadingButton} onPress={() => router.back()}><Text style={styles.loadingButtonText}>بازگشت</Text></Pressable> : null}</View></View>;
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} onTouchStart={timer.interact}>
       <FitScrollView ref={lessonScrollRef} variant={stage === 6 ? 'classic' : 'default'} onLayout={event => setViewportHeight(event.nativeEvent.layout.height)} style={styles.lessonScroll} contentContainerStyle={styles.lessonScrollContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
       <View onLayout={event => { const h = event.nativeEvent.layout.height; contentOffsetRef.current = h; setHeaderSpacer(Math.round(h)); }}>
       <View style={styles.brandRow}><MiloGlobeHeadphoneMark size={48} /><Pressable accessibilityRole="button" accessibilityLabel="بازگشت" style={styles.back} onPress={() => router.back()}><ArrowRight size={19} color="#4F438D" strokeWidth={2.4} /></Pressable></View>
@@ -396,7 +399,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         <View style={styles.stepSegments}>{stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}</View>
       </View>
 
-      {!!(sessionError || speechError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || speechError}</Text>}
+      {!!(sessionError || speechError || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || speechError || timer.error}</Text>}
       </View>
       <View style={styles.content} onLayout={event => setStageHeight(Math.round(event.nativeEvent.layout.height))}>
         {stage === 0 && <View style={styles.centerStage}>

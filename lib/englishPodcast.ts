@@ -1,3 +1,4 @@
+import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import * as Speech from './courseSpeech';
@@ -56,7 +57,7 @@ export function savePodcastProgress(episodeId: string, update: Partial<EpisodePr
   const run = async () => {
     const state = await loadPodcastProgress();
     const previous = state.episodes[episodeId] ?? { segmentIndex: 0, completed: false, updatedAt: new Date().toISOString() };
-    const merged = { ...previous, ...update, updatedAt: new Date().toISOString() };
+    const merged = { ...previous, ...update, completed: previous.completed || !!update.completed, updatedAt: new Date().toISOString() };
     // Keep the best quiz result.
     if (update.quizScore !== undefined && previous.quizScore !== undefined && previous.quizTotal === update.quizTotal && previous.quizScore > update.quizScore) {
       merged.quizScore = previous.quizScore;
@@ -64,6 +65,7 @@ export function savePodcastProgress(episodeId: string, update: Partial<EpisodePr
     state.episodes[episodeId] = merged;
     state.lastEpisodeId = episodeId;
     await writeRaw(JSON.stringify(state));
+    notifyLearningChange();
     return state;
   };
   const next = queue.then(run, run);

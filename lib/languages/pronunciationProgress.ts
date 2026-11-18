@@ -1,3 +1,4 @@
+import { notifyLearningChange } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { pronunciationUnits, type PronunciationLanguage } from './pronunciationCourse';
@@ -136,7 +137,7 @@ function serialWrite<T>(language: PronunciationLanguage, job: () => Promise<T>):
 
 function persist(language: PronunciationLanguage, marks: PronunciationMarks) {
   const stored: StoredPronunciationProgress = { schemaVersion: 2, language, marks };
-  return writeRaw(language, JSON.stringify(stored));
+  return writeRaw(language, JSON.stringify(stored)).then(notifyLearningChange);
 }
 
 function scheduleAccountSync() {

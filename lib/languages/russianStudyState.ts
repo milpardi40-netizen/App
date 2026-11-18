@@ -1,3 +1,4 @@
+import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
@@ -7,6 +8,7 @@ export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
 
 export interface RussianLessonSession {
   stage: number;
+  updatedAt?: string;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
   stageVersion?: number;
   sentenceIndex: number;
@@ -69,12 +71,26 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
   }
   return {
     stage,
+    ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,
     sentenceIndex: session.sentenceIndex!,
     revealed: session.revealed,
     answers,
     showCheckAnswers: session.showCheckAnswers,
   };
+}
+
+export function loadRussianPositions() {
+  return serial(async () => {
+    const state = parseState(await readRaw());
+    const sessions: Record<string, RussianLessonSession> = {};
+    let unreadable = false;
+    for (const [id, raw] of Object.entries(state.sessions)) {
+      if (!RUSSIAN_LESSONS.some(lesson => lesson.id === id)) continue; // retired lesson
+      try { sessions[id] = validateSession(id, raw); } catch { unreadable = true; }
+    }
+    return { sessions, unreadable };
+  });
 }
 
 export function loadRussianLessonSessionWithPresence(lessonId: string): Promise<{ session: RussianLessonSession; hasSavedSession: boolean }> {
@@ -101,7 +117,8 @@ export function saveRussianLessonSession(lessonId: string, value: RussianLessonS
   return serial(async () => {
     const safe = validateSession(lessonId, value);
     const state = parseState(await readRaw());
-    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: safe } }));
+    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, updatedAt: positionTimestamp() } } }));
+    notifyLearningChange();
   });
 }
 
@@ -122,5 +139,6 @@ export function clearRussianLessonSession(lessonId: string): Promise<void> {
     else if (Platform.OS === 'web') {
       if (typeof window !== 'undefined') window.localStorage.removeItem(RUSSIAN_STUDY_STORAGE_KEY);
     } else await AsyncStorage.removeItem(RUSSIAN_STUDY_STORAGE_KEY);
+    notifyLearningChange();
   });
 }

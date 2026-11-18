@@ -9,7 +9,7 @@ import { Typography } from '@/lib/theme';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 
 type Item = { id: string; text: string; fa?: string };
-export type SpeakDrillResult = { average: number; scores: Record<string, number> };
+export type SpeakDrillResult = { points?: number; average: number; scores: Record<string, number> };
 type Props = { items: Item[]; locale: string; accent?: string; onSpeak?: (text: string) => void; /** Called once when the learner reaches the result page. */ onFinish?: (result: SpeakDrillResult) => void };
 
 const PASS_THRESHOLD = 70;
@@ -37,6 +37,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
 
   const indexRef = useRef(0);
   const scoresRef = useRef<Record<string, number>>({});
+  const pointsRef = useRef(0);
   const streakRef = useRef(0);
   const awardedIdsRef = useRef<Set<string>>(new Set());
   const doneRef = useRef(false);
@@ -61,6 +62,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     doneRef.current = false;
     setIndex(0);
     setScores({});
+    pointsRef.current = 0;
     setPoints(0);
     setStreak(0);
     setPassNotice(null);
@@ -72,13 +74,11 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     if (doneRef.current) return;
     doneRef.current = true;
     const list = itemsRef.current;
-    const filled: Record<string, number> = {};
-    for (const item of list) filled[item.id] = latestScores[item.id] ?? 0;
     const values = list.map(item => latestScores[item.id]).filter((value): value is number => value !== undefined);
     const finalAverage = values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : 0;
     setPassNotice(null);
     setDone(true);
-    onFinishRef.current?.({ average: finalAverage, scores: filled });
+    if (values.length) onFinishRef.current?.({ average: finalAverage, scores: { ...latestScores }, points: pointsRef.current });
   }, [clearPendingAdvance]);
 
   const advanceFrom = useCallback((fromIndex: number, latestScores: Record<string, number>) => {
@@ -99,7 +99,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     const activeIndex = indexRef.current;
     const list = itemsRef.current;
     const activeItem = list[activeIndex];
-    if (!activeItem || doneRef.current) return;
+    if (!result.heard || !activeItem || doneRef.current) return;
 
     const updatedScores = {
       ...scoresRef.current,
@@ -120,7 +120,8 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
         const base = result.score >= 95 ? 15 : result.score >= 85 ? 12 : 10;
         const bonus = nextStreak >= 2 ? 5 : 0;
         gained = base + bonus;
-        setPoints(prev => prev + gained);
+        pointsRef.current += gained;
+        setPoints(pointsRef.current);
       }
 
       if (Platform.OS !== 'web') {
@@ -162,6 +163,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     doneRef.current = false;
     setIndex(0);
     setScores({});
+    pointsRef.current = 0;
     setPoints(0);
     setStreak(0);
     setPassNotice(null);
@@ -177,7 +179,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     return (
       <View style={styles.card}>
         <View style={styles.headRow}><Trophy size={20} color={accent} /><Text style={styles.title}>نتیجهٔ آزمون گفتاری</Text></View>
-        <Text keepColor style={[styles.bigScore, { color }]}>{fa(average)}٪</Text>
+        <Text keepColor style={[styles.bigScore, { color }]}>{Object.keys(scores).length ? `${fa(average)}٪` : 'بدون پاسخ'}</Text>
         <View style={styles.summaryBadges}>
           <View style={styles.pointsBadge}>
             <Sparkles size={14} color="#B45309" />
@@ -191,7 +193,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
         <Text style={styles.summary}>{average >= PASS_THRESHOLD ? 'روان، دقیق و مسلط!' : average >= 50 ? 'خوب؛ جمله‌های کم‌امتیاز را دوباره بگو.' : 'سایه‌خوانی را یک بار دیگر مرور کن.'}</Text>
         <View style={styles.list}>{items.map((item, i) => {
           const value = scores[item.id] ?? 0;
-          return <View key={item.id} style={styles.listRow}><Text keepColor style={[styles.listScore, { color: value >= PASS_THRESHOLD ? '#15803D' : value >= 50 ? '#B45309' : '#B91C1C' }]}>{fa(value)}٪</Text><Text style={styles.listText} numberOfLines={2}>{fa(i + 1)}. {item.text}</Text></View>;
+          return <View key={item.id} style={styles.listRow}><Text keepColor style={[styles.listScore, { color: value >= PASS_THRESHOLD ? '#15803D' : value >= 50 ? '#B45309' : '#B91C1C' }]}>{scores[item.id] === undefined ? '—' : `${fa(value)}٪`}</Text><Text style={styles.listText} numberOfLines={2}>{fa(i + 1)}. {item.text}</Text></View>;
         })}</View>
         <Pressable accessibilityRole="button" style={[styles.button, { backgroundColor: accent }]} onPress={restart}><RotateCcw size={16} color="#FFFFFF" /><Text keepColor style={styles.buttonText}>آزمون دوباره</Text></Pressable>
       </View>

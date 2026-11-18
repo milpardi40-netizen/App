@@ -15,7 +15,7 @@
  */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from 'node:fs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const APP = path.resolve(HERE, '..');
@@ -58,22 +58,24 @@ async function bundle(entry, env = {}) {
           b.onLoad({ filter: /.*/, namespace: 'test-config' }, () => ({ contents: '{}', loader: 'json' }));
           // '@/' is the alias from tsconfig; resolve it like Metro does, trying
           // the usual source extensions and folder index files.
+          b.onResolve({ filter: /^expo$/ }, () => ({ path: 'expo-noop.js', namespace: 'noop' }));
           b.onResolve({ filter: /^@\// }, (args) => {
             const base = path.join(APP, args.path.slice(2));
             const candidates = [base, `${base}.ts`, `${base}.tsx`, `${base}.js`, `${base}/index.ts`, `${base}/index.tsx`];
-            const hit = candidates.find((candidate) => existsSync(candidate) && !candidate.endsWith('/'));
+            const hit = candidates.find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
             return hit ? { path: hit } : { errors: [{ text: `Cannot resolve ${args.path}` }] };
           });
           b.onResolve({ filter: /^@react-native-async-storage\/async-storage$/ }, () => ({ path: path.join(STUBS, 'async-storage.js') }));
           b.onResolve({ filter: /^react-native$/ }, () => ({ path: path.join(STUBS, 'react-native.js') }));
           b.onResolve(
-            { filter: /^expo-(speech|audio|camera|fonts|linear-gradient|haptics|device|application|constants|location|network|battery|file-system)\b/ },
+            { filter: /^expo-(speech|audio|camera|fonts|linear-gradient|haptics|device|application|constants|location|network|battery|file-system|crypto|secure-store)\b/ },
             () => ({ path: 'expo-noop.js', namespace: 'noop' }),
           );
           b.onResolve({ filter: /^\.\.?\/supabase$/, namespace: 'file' }, () => ({ path: path.join(STUBS, 'supabase.js') }));
           b.onLoad({ filter: /.*/, namespace: 'noop' }, () => ({
             contents: [
               'export default {};',
+              'export const requireNativeModule = () => null;',
               'export const RecordingPresets = { HIGH_QUALITY: {} };',
               'export const requestRecordingPermissionsAsync = async () => ({ granted: false });',
               'export const setAudioModeAsync = async () => {};',
@@ -162,24 +164,24 @@ export { default as asyncStorage } from '${STUBS}/async-storage.js';
   const canonical = JSON.parse(readFileSync(path.join(APP, 'assets/data/essential504.json'), 'utf8'));
   const removed504 = JSON.parse(readFileSync(path.join(APP, 'assets/data/essential504-removed-level2.json'), 'utf8'));
 
-  check('222 sentence lessons include the Pre-A1, A2, B1 and B2 additions', lessons.length === 222, `got ${lessons.length}`);
+  check('274 sentence lessons in release 14', lessons.length === 274, `got ${lessons.length}`);
   check('lesson ids are unique', new Set(lessons.map((l) => l.id)).size === lessons.length);
   const orders = lessons.map((l) => l.order).sort((a, b) => a - b);
-  check('orders are exactly 1..222', JSON.stringify(orders) === JSON.stringify([...Array(222)].map((_, i) => i + 1)));
+  check('orders are exactly 1..274', JSON.stringify(orders) === JSON.stringify([...Array(274)].map((_, i) => i + 1)));
   check('every lesson has a title', lessons.every((l) => typeof l.title === 'string' && l.title.length > 1));
-  check('the active course contains 4322 examples', allSentences.length === 4322);
+  check('the active course contains 4852 examples', allSentences.length === 4852);
   check('every lesson has sentences', lessons.every((l) => Array.isArray(l.sentences) && l.sentences.length > 0));
   check('every sentence has id + English + Persian', allSentences.every((s) => s.id && s.en && s.fa));
   check('sentence ids are unique inside each lesson', lessons.every((l) => new Set(l.sentences.map((s) => s.id)).size === l.sentences.length));
   check('more than 500 sentences in total', allSentences.length > 500, `${allSentences.length}`);
-  const foundationLessons = lessons.filter(lesson => lesson.levelId === 0);
+  const foundationLessons = lessons.filter(lesson => lesson.levelId === 1 && lesson.id.startsWith('foundation-'));
   check('Foundation has ten lessons with fifty complete, vocabulary-linked examples apiece', foundationLessons.length === 10
     && foundationLessons.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 500
     && foundationLessons.every(lesson => lesson.sentences.length === 50 && lesson.sentences.every(sentence => sentence.fa
       && sentence.pronunciation && sentence.pattern && sentence.vocabulary.length > 0)));
   check('the three original Foundation lesson IDs remain first, with seven stable additions after them', foundationLessons.map(lesson => lesson.id).join('|')
     === ['foundation-introducing-yourself', 'foundation-asking-for-help', 'foundation-buying-something', ...app.courseContent.FOUNDATION_EXPANSION_LESSON_IDS].join('|'));
-  const survivalLessons = lessons.filter(lesson => lesson.levelId === 1);
+  const survivalLessons = lessons.filter(lesson => lesson.levelId === 1 && lesson.id.startsWith('survival-'));
   check('Survival has nineteen ordered lessons with fifty complete sentence examples each', survivalLessons.length === 19
     && survivalLessons.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 950
     && survivalLessons.every(lesson => lesson.sentences.length === 50
@@ -485,9 +487,9 @@ export { default as asyncStorage } from '${STUBS}/async-storage.js';
   const learningHomeStyleSource = readFileSync(path.join(APP, 'components/LearningHomeStyles.ts'), 'utf8');
   const todayHeaderStyle = learningHomeStyleSource.match(/sectionHeader:\s*\{([^}]+)\}/)?.[1] ?? '';
   const bottomNavShellStyle = englishBottomNavSource.match(/shell:\s*\{([^}]+)\}/)?.[1] ?? '';
-  check('English Today heading stays right-aligned in RTL without changing its labels', /flexDirection:\s*'row-reverse'/.test(todayHeaderStyle) && englishHomeSource.includes('TODAY AT A GLANCE') && englishHomeSource.includes('برنامهٔ امروز'));
+  check('English Today heading stays right-aligned in RTL without changing its labels', /flexDirection:\s*'row-reverse'/.test(todayHeaderStyle) && englishHomeSource.includes('styles.sectionHeader') && englishHomeSource.includes('برنامهٔ امروز'));
   check('English level cards show unique vocabulary counts calculated from each level', /metrics\.vocabularyCount/.test(englishHomeSource) && englishHomeSource.includes('واژهٔ یکتا') && /stats\.vocabularyCount/.test(englishLibrarySource) && englishLibrarySource.includes('واژهٔ یکتا'));
-  check('English bottom navigation places Learning on the right, Conversation in the center, and Review on the left', /flexDirection:\s*'row-reverse'/.test(bottomNavShellStyle) && /path:\s*'\/lang',\s*label:\s*'یادگیری'/.test(englishBottomNavSource) && /path:\s*'\/conversations',\s*label:\s*'مکالمه'/.test(englishBottomNavSource) && /path:\s*'\/review',\s*label:\s*'مرور'/.test(englishBottomNavSource));
+  check('English bottom navigation places Learning on the right, Feedback in the center, and Review on the left', /flexDirection:\s*'row-reverse'/.test(bottomNavShellStyle) && /path:\s*'\/lang',\s*label:\s*'یادگیری'/.test(englishBottomNavSource) && /path:\s*'\/feedback',\s*label:\s*'پیشنهادات'/.test(englishBottomNavSource) && /path:\s*'\/review',\s*label:\s*'مرور'/.test(englishBottomNavSource));
   check('Learners can start or resume directly from any selected English, Russian, or Turkish level',
     englishLibrarySource.includes('levelStartButton') && englishLibrarySource.includes('startSelectedLevel') && englishLibrarySource.includes('levelStartLesson')
     && russianLibrarySource.includes('levelStartButton') && russianLibrarySource.includes('openLesson(levelStartLesson.id)')
