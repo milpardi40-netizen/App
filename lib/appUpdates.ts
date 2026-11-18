@@ -4,6 +4,7 @@
  * cache and hands it to the system installer.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { requireNativeModule } from 'expo';
 import * as Application from 'expo-application';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as IntentLauncher from 'expo-intent-launcher';
@@ -87,32 +88,69 @@ export async function skipUpdate(release: AppRelease): Promise<void> {
 
 export type DownloadProgress = (fraction: number) => void;
 
-/** Downloads the APK to the cache and opens the Android package installer. */
+const archiveErrors: Record<string, string> = {
+  invalid: 'فایل دانلودشده یک APK قابل‌خواندن نیست. لینک و فایل انتشار را بررسی کنید.',
+  digest: 'فایل دانلودشده با فایل منتشرشده یکسان نیست. دوباره دانلود کنید.',
+  package: 'این فایل برای گونهٔ دیگری از MiloLang است. برنامهٔ فعلی را حذف نکنید.',
+  version: 'شمارهٔ ساخت داخل فایل با نسخهٔ پیشنهادی مطابقت ندارد یا از نسخهٔ نصب‌شده جدیدتر نیست.',
+  signer: 'امضای این فایل با برنامهٔ نصب‌شده یکسان نیست. برنامه را حذف نکنید؛ فایل هم‌امضا لازم است.',
+  abi: 'این فایل برای پردازندهٔ گوشی شما ساخته نشده است.',
+  sdk: 'این نسخه به اندروید جدیدتری نیاز دارد.',
+};
+
+type ApkVerifier = { check(uri: string, expectedCode: number, expectedSha256: string | null): Promise<string> };
+let installing = false; // The launch sheet and profile card share one private download target.
+
+/** Only a verified APK of this installed app may be handed to PackageInstaller. */
 export async function downloadAndInstall(release: AppRelease, onProgress?: DownloadProgress): Promise<void> {
   if (Platform.OS !== 'android') throw new Error('نصب به‌روزرسانی فقط روی اندروید پشتیبانی می‌شود.');
+  if (installing) throw new Error('یک به‌روزرسانی در حال انجام است.');
+  if (!Number.isSafeInteger(release.version_code) || release.version_code <= installedVersion().code) throw new Error(archiveErrors.version);
+  if (!/^https:\/\//i.test(release.download_url)) throw new Error('لینک امن دانلود به‌روزرسانی معتبر نیست.');
+  const hash = release.sha256?.trim().replace(/^sha256:/i, '') ?? null;
+  if (hash !== null && !/^[a-f\d]{64}$/i.test(hash)) throw new Error('اثر انگشت فایل در اطلاعات انتشار معتبر نیست.');
+  if (!FileSystem.cacheDirectory) throw new Error('فضای موقت دانلود در دسترس نیست.');
   const directory = `${FileSystem.cacheDirectory}updates/`;
-  await FileSystem.makeDirectoryAsync(directory, { intermediates: true }).catch(() => undefined);
   const target = `${directory}milo-update-${release.version_code}.apk`;
-  await FileSystem.deleteAsync(target, { idempotent: true }).catch(() => undefined);
-  const download = FileSystem.createDownloadResumable(release.download_url, target, {}, progress => {
-    if (!onProgress || !progress.totalBytesExpectedToWrite) return;
-    onProgress(Math.min(1, progress.totalBytesWritten / progress.totalBytesExpectedToWrite));
-  });
-  const result = await download.downloadAsync();
-  if (!result || (result.status && result.status >= 400)) throw new Error('دانلود فایل به‌روزرسانی ناموفق بود.');
-  const info = await FileSystem.getInfoAsync(target);
-  if (!info.exists || (release.file_size && info.size && Math.abs(info.size - release.file_size) > 1024)) {
-    throw new Error('فایل دانلودشده ناقص است؛ دوباره تلاش کنید.');
+  installing = true;
+  let handedOff = false;
+  try {
+    await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+    await FileSystem.deleteAsync(target, { idempotent: true });
+    const download = FileSystem.createDownloadResumable(release.download_url, target, {}, progress => {
+      if (progress.totalBytesExpectedToWrite > 0) onProgress?.(Math.min(1, progress.totalBytesWritten / progress.totalBytesExpectedToWrite));
+    });
+    const result = await download.downloadAsync();
+    if (result?.status !== 200) throw new Error('فایل کامل از سرور دریافت نشد؛ دوباره تلاش کنید.');
+    const info = await FileSystem.getInfoAsync(target);
+    // Legacy admin uploads sometimes report size 0 for «unknown». A real file can never be empty.
+    if (!info.exists || info.isDirectory || !info.size || (release.file_size && info.size !== release.file_size)) {
+      throw new Error('حجم فایل دانلودشده درست نیست؛ دوباره تلاش کنید.');
+    }
+    const verdict = await requireNativeModule<ApkVerifier>('MiloApkVerifier').check(target, release.version_code, hash);
+    if (verdict !== 'ok') throw new Error(archiveErrors[verdict] || archiveErrors.invalid);
+    const contentUri = await FileSystem.getContentUriAsync(target);
+    onProgress?.(1);
+    // Store notes before opening the installer: an accepted upgrade kills this process.
+    await AsyncStorage.setItem(PENDING_INSTALL_KEY, JSON.stringify({ version_code: release.version_code, version_name: release.version_name, release_notes: release.release_notes || '' })).catch(() => undefined);
+    handedOff = true;
+    const response = await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+      data: contentUri,
+      type: 'application/vnd.android.package-archive',
+      // Expo uses startActivityForResult; keep the installer in this task with a read-only URI grant.
+      flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
+      extra: { 'android.intent.extra.RETURN_RESULT': true },
+    });
+    // Some OEM installers return a PackageManager error. Don't infer one from a cancellation.
+    const code = (response.extra as Record<string, unknown> | undefined)?.['android.intent.extra.INSTALL_RESULT'];
+    if (typeof code === 'number' && code < 0) throw new Error(`اندروید نصب را نپذیرفت (کد ${code}). برای پیگیری این کد را بفرستید؛ برنامه را حذف نکنید.`);
+  } catch (cause) {
+    if (handedOff) await AsyncStorage.removeItem(PENDING_INSTALL_KEY).catch(() => undefined);
+    await FileSystem.deleteAsync(target, { idempotent: true }).catch(() => undefined);
+    throw cause;
+  } finally {
+    installing = false;
   }
-  onProgress?.(1);
-  // Remembered so the next launch can show «what changed» for this release.
-  await AsyncStorage.setItem(PENDING_INSTALL_KEY, JSON.stringify({ version_code: release.version_code, version_name: release.version_name, release_notes: release.release_notes || '' })).catch(() => undefined);
-  const contentUri = await FileSystem.getContentUriAsync(target);
-  await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
-    data: contentUri,
-    type: 'application/vnd.android.package-archive',
-    flags: 1 | 268435456, // FLAG_GRANT_READ_URI_PERMISSION | FLAG_ACTIVITY_NEW_TASK
-  });
 }
 
 export function formatSize(bytes: number | null | undefined): string {
