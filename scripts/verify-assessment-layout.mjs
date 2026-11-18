@@ -31,11 +31,11 @@ check(/choice:\s*\{[\s\S]*?minHeight: ASSESSMENT_CHOICE_MIN_HEIGHT/.test(layout)
 const questionBlock = /question:\s*\{([\s\S]*?)\n  \},/.exec(layout)?.[1] ?? '';
 check(!!questionBlock, 'the question panel is part of the shared layout');
 check(!/minHeight/.test(questionBlock), 'a question is never padded out to a fixed height (no empty cards)');
-check(/padding: 12/.test(questionBlock) && /borderRadius: 14/.test(questionBlock) && /borderWidth: 1/.test(questionBlock),
-  'every question panel has the same padding, radius and border');
-check(/backgroundColor: Palette\.surfaceMuted/.test(questionBlock), 'question panels are inset into the one assessment card');
+check(/padding: 14/.test(questionBlock) && /borderRadius: 18/.test(questionBlock) && /borderWidth: 1/.test(questionBlock),
+  'every question panel has the same premium padding, radius and border');
+check(/backgroundColor: '#FBFBFF'/.test(questionBlock), 'question panels are inset into the one assessment card');
 const cardBlock = /evidenceCard:\s*\{([\s\S]*?)\n  \},/.exec(layout)?.[1] ?? '';
-check(/backgroundColor: Palette\.surface/.test(cardBlock) && /padding: 16/.test(cardBlock) && /borderWidth: 1/.test(cardBlock),
+check(/backgroundColor: Palette\.surface/.test(cardBlock) && /padding: 14/.test(cardBlock) && /borderWidth: 1/.test(cardBlock),
   'the assessment is one framed card, not a pile of floating tiles');
 
 /* ── every language uses it ───────────────────────────────────────────────────────────────────── */

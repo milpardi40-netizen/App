@@ -465,13 +465,14 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
             { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
           {false ? null : <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>
-              <Text style={styles.questionPrompt}>{fa(index + 1)}. {question.promptFa}</Text>
+              <View style={styles.questionHeader}><View style={styles.questionBadge}><Text style={styles.questionBadgeText}>سؤال {fa(index + 1)}</Text></View><View style={styles.questionRule} /></View>
+              <Text style={styles.questionPrompt}>{question.promptFa}</Text>
               {question.choices.map((choice, choiceIndex) => {
                 const selected = answers[String(index)] === choiceIndex;
                 const shownCorrect = !a1 && showCheckAnswers && choiceIndex === question.correctIndex;
                 const locked = answers[String(index)] === question.correctIndex || (!a1 && showCheckAnswers);
                 return <Pressable key={`${index}-${choiceIndex}`} accessibilityRole="radio" accessibilityState={{ checked: selected || shownCorrect, disabled: locked }} disabled={locked} onPress={() => setAnswers(value => ({ ...value, [String(index)]: choiceIndex }))} style={[styles.choice, (selected || shownCorrect) && styles.choiceSelected, shownCorrect && styles.choiceCorrect]}>
-                  <Text style={/[A-Za-zÀ-ÿ]/.test(choice) ? styles.choiceTarget : styles.choicePersian}>{choice}</Text>
+                  <View style={[styles.choiceIndicator, (selected || shownCorrect) && styles.choiceIndicatorActive]}><Text style={styles.choiceIndicatorText}>{selected || shownCorrect ? '✓' : ''}</Text></View><Text style={[ /[A-Za-zÀ-ÿ]/.test(choice) ? styles.choiceTarget : styles.choicePersian, styles.choiceLabel ]}>{choice}</Text>
                 </Pressable>;
               })}
               {(answers[String(index)] !== undefined || (!a1 && showCheckAnswers)) && <View style={styles.feedbackBox}>
