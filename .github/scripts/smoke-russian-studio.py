@@ -78,7 +78,7 @@ for _ in range(6):
     locate('موقعیت بعدی',tap=True)
     time.sleep(.5)
 # The 7th scene's title is at the top even if the previous Next button was at the bottom.
-locate('چای می‌خواهم یا آب؟')
+locate('چای یا آب؟')
 locate('من شروع می‌کنم',tap=True)
 locate(('دسترسی میکروفون یا تشخیص گفتار داده نشد', 'تشخیص گفتار روسی در این دستگاه', 'میکروفون در دسترس نیست'),deny_dialog=True)
 locate('تمرین بدون میکروفون',tap=True)

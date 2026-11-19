@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const es = require('esbuild');
 (async () => {
-  const modules = ['russian', 'russianPreA1', 'russianStudyState', 'russianExchange', 'russianExchangeAlternatives', 'russianGrammar/catalog', 'russianGrammar/units', 'russianStarterRounds'];
+  const modules = ['russian', 'russianPreA1', 'russianStudyState', 'russianExchange', 'russianGrammar/catalog', 'russianGrammar/units', 'russianStarterRounds'];
   const result = await es.build({ stdin: { contents: modules.map(m => `export * from './lib/languages/${m}'`).join(';'), resolveDir: process.cwd() },
     platform: 'node', format: 'cjs', bundle: true, write: false, plugins: [{ name: 'local-stores', setup(b) {
       b.onResolve({filter:/^react-native$/}, () => ({ path: path.resolve('scripts/test-stubs/react-native.js') }));
@@ -35,24 +35,29 @@ const es = require('esbuild');
       }
     }
   }
-  assert.equal(Object.keys(x.ALTERNATE_REPLIES).length,lessons.filter(l=>l.levelId>0&&!l.id.startsWith('lab-')).length);
   let paths = 0;
   for (const l of lessons) for (const starter of ['learner','partner']) {
     const scene = x.exchangeForLesson(l);
+    const allowed = new Set([...l.sentences, ...l.dialogue].map(line=>line.text+'|'+line.fa));
     function visit(picks) {
       const path={starter,picks}, view=x.exchangeView(scene,path); assert(x.validExchangePath(scene,path));
-      assert.equal(view.history.length,2*picks.length + Number(starter==='partner'));
+      assert(view.history.every(h => allowed.has(h.line.text+'|'+h.line.fa)), `Out-of-lesson model in ${l.id}`);
       if (view.history.length) assert.equal(view.history[0].who,starter);
       for(let i=1;i<view.history.length;i++) assert.notEqual(view.history[i].who,view.history[i-1].who);
-      assert.equal(view.complete,picks.length === 2);
-      if(view.complete) { paths++; return; }
-      assert(view.options.length>=2); assert.equal(new Set(view.options.map(m=>x.plainRussian(m.reply.text))).size,view.options.length,l.id);
-      view.options.forEach((m,i)=>{ assert.equal(x.matchExchangeReply(m.say.text, view.options),i,`${l.id}: ${m.say.text}`); const n=x.exchangeView(scene,{starter,picks:[...picks,i]}); assert.equal(n.history.at(-1).line.text,m.reply.text); visit([...picks,i]); });
+
+      if(view.complete) {
+        paths++;
+        if(l.levelId===1) assert.deepEqual(view.history.map(h=>h.line.text),l.dialogue.map(d=>d.text));
+        return;
+      }
+      assert(view.options.every(m => x.replyPhrases(m.say).every(t=>allowed.has(t+'|'+m.say.fa))));
+      assert(view.options.length>=1); assert.equal(new Set(view.options.map(m=>x.plainRussian(m.reply?.text ?? m.say.text))).size,view.options.length,l.id);
+      view.options.forEach((m,i)=>{ assert.equal(x.matchExchangeReply(m.say.text, view.options),i,`${l.id}: ${m.say.text}`); const n=x.exchangeView(scene,{starter,picks:[...picks,i]}); assert.equal(n.history.at(-1).line.text,m.reply?.text ?? m.say.text); visit([...picks,i]); });
     }
     visit([]); assert.equal(x.exchangeView(scene,{starter,picks:[15]}),null);
   }
   const l=lessons.find(l=>l.id==='ru-pre-this-is'), scene=x.exchangeForLesson(l), turn=x.exchangeView(scene,{starter:'partner',picks:[]});
-  for(const [text,i] of [['хочу чай',0],['воду, пожалуйста!',1],['не хочу чай',-1],['чай или воду',-1],['',-1]]) assert.equal(x.matchExchangeReply(text,turn.options),i);
+  for(const [text,i] of [['я хочу чай',0],['Я хочу воду!',1],['можно воду',-1],['не хочу чай',-1],['чай или воду',-1],['',-1]]) assert.equal(x.matchExchangeReply(text,turn.options),i);
   assert(x.exchangeView(scene,{starter:'learner',picks:[0]}).history.at(-1).line.text.includes('чай'));
   assert(x.exchangeView(scene,{starter:'learner',picks:[1]}).history.at(-1).line.text.includes('вода́'));
   assert(!x.validExchangePath(scene,{starter:'partner',picks:[1],said:{0:'я не хочу воду'}}));
@@ -68,8 +73,12 @@ const es = require('esbuild');
     const other=lessons.find(l=>l.levelId===5).id;
     storage.set(key,JSON.stringify({schema:1,sessions:{[l.id]:old,[other]:old}})); storage.set('sentence_course_progress_ru_v2','existing-completions-and-cards');
     const loaded=await x.loadRussianPositions(); assert(!loaded.unreadable); assert.deepEqual(loaded.sessions[l.id].answers,{}); assert.equal(loaded.sessions[l.id].showCheckAnswers,false); assert.equal(loaded.sessions[l.id].sentenceIndex,5); assert.equal(loaded.sessions[l.id].stage,9); assert.deepEqual(loaded.sessions[other].answers,old.answers);
+    const beginner=lessons.find(l=>l.levelId===1).id;
+    storage.set(key,JSON.stringify({schema:1,sessions:{[beginner]:{...old,stage:10,answers:{0:3},exchange:{starter:'partner',picks:[0]}}}}));
+    const migrated=await x.loadRussianLessonSession(beginner);
+    assert.equal(migrated.stage,10);assert.deepEqual(migrated.answers,{});assert.equal(migrated.exchange,undefined);
     storage.set(key,JSON.stringify({schema:1,sessions:{[l.id]:{...old,stage:10,stageVersion:undefined}}})); assert.equal((await x.loadRussianLessonSession(l.id)).stage,9);
-    const exchange={starter:'partner',picks:[1],said:{0:'хочу воду'}};
+    const exchange={starter:'partner',picks:[1],said:{0:'я хочу воду'}};
     await x.saveRussianLessonSession(l.id,{...old,stage:10,exchange});
     const saved=await x.loadRussianLessonSession(l.id); assert.deepEqual(saved.exchange,exchange); assert.deepEqual(saved.answers,old.answers); assert(saved.showCheckAnswers);
     await x.resetRussianLessonSession(l.id); assert.equal((await x.loadRussianLessonSession(l.id)).exchange,undefined); assert.equal(storage.get('sentence_course_progress_ru_v2'),'existing-completions-and-cards');

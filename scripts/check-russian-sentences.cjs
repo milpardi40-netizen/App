@@ -1,40 +1,11 @@
-// Structural check for every Russian sentence (all content files).
-// Run: node scripts/check-russian-sentences.cjs
-const fs = require('fs');
-const path = require('path');
-
-const dir = path.join(__dirname, '..', 'lib', 'languages');
-const files = [
-  'russian.ts',
-  'russianLevel1Extension.ts',
-  'russianSurvivalExtension.ts',
-  'russianEverydayPartA.ts',
-  'russianEverydayPartB.ts',
-];
-const source = files.map(f => fs.readFileSync(path.join(dir, f), 'utf8')).join('\n');
-
-const re = /\b(?:sentence|s|everydaySentence)\('([^']+)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)'/g;
-let m;
-let count = 0;
-const problems = [];
+// Check the shipped curriculum rather than guessing which source files or builders it uses.
+const {execFileSync} = require('node:child_process');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const db = JSON.parse(execFileSync(process.execPath,[path.resolve(__dirname,'content/russian-grammar/export-corpus.cjs'),'--sentences'],{encoding:'utf8'}));
 const seen = new Set();
-while ((m = re.exec(source))) {
-  count++;
-  const [, id, text, fa, pron] = m;
-  const issues = [];
-  if (seen.has(id)) issues.push('duplicate-id');
-  seen.add(id);
-  if (!/[А-Яа-яЁё]/.test(text)) issues.push('text-not-cyrillic');
-  if (!fa.trim()) issues.push('no-persian-meaning');
-  if (!pron.trim()) issues.push('no-pronunciation');
-  if (/[А-Яа-яЁё]/.test(pron)) issues.push('pronunciation-has-cyrillic');
-  if (/[A-Za-z]/.test(pron)) issues.push('pronunciation-has-latin');
-  if (issues.length) problems.push(`${id}: ${issues.join(', ')} | ${text}`);
+for(const {id,text,fa,pronunciation} of db) {
+  assert(!seen.has(id), id); seen.add(id);
+  assert(/[А-ЯЁа-яё]/.test(text) && fa.trim() && pronunciation?.trim() && (id.startsWith('lab-') || !/[А-ЯЁа-яёA-Za-z]/.test(pronunciation)), `${id}: ${text} / ${pronunciation}`);
 }
-
-console.log(`checked ${count} Russian sentences`);
-if (problems.length) {
-  console.error(problems.join('\n'));
-  process.exit(1);
-}
-console.log('no structural issues');
+console.log(`Validated IDs, Russian, translations and pronunciations for ${db.length} shipped sentences.`);

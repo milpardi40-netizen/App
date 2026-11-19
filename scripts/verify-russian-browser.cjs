@@ -30,7 +30,7 @@ const assert = require('node:assert/strict');
       localStorage.setItem('ru-seeded','1');
       localStorage.setItem('milo_local_profile_v1', JSON.stringify({ fullName: 'Local Test', email:'local@example.test', code:'123456', createdAt:new Date().toISOString() }));
       const old = { stageVersion:2, stage:9, sentenceIndex:0,revealed:false,answers:{0:2},showCheckAnswers:true };
-      localStorage.setItem('russian_lesson_sessions_v1',JSON.stringify({schema:1,sessions:{'ru-pre-this-is':old,'ru-pre-hello':{...old,stage:6},'ru-c1-certainty-evidence':old}}));
+      localStorage.setItem('russian_lesson_sessions_v1',JSON.stringify({schema:1,sessions:{'ru-pre-this-is':old,'ru-l1-greetings':old,'ru-pre-hello':{...old,stage:6},'ru-c1-certainty-evidence':old}}));
     });
     // OS boundary fixture only. Exercise the shipped Expo Web Speech adapter, real screen,
     // resolver and storage. Explicitly clock the end of TTS and ASR independently.
@@ -62,28 +62,35 @@ const assert = require('node:assert/strict');
     await text('Я хочу́ чай.'); await click('مثال بعدی'); await text('Ты хо́чешь чай?'); await click('نوبت تو'); await click('хо́чешь'); await text('درست است');
     await click('بازگشت به فهرست کارگاه'); await click('واژه‌نامهٔ فعل'); await page.getByLabel('جست‌وجوی فعل').fill('хочу');
     await click('хотеть · خواستن'); await text('اول خودِ فعل'); await page.reload(); await page.getByRole('button',{name:'تمرین «خواندن»',exact:true}).waitFor();
-    await page.goto(`${base}/learn/ru/lesson?id=ru-pre-hello`); await click('فعل و ضمیر همین درس'); await text('مثال‌ها و ساخت‌های مرتبط با «اولین سلام»'); await page.goBack(); await page.getByRole('button',{name:'فعل و ضمیر همین درس'}).waitFor();
+    await page.goto(`${base}/learn/ru/lesson?id=ru-pre-hello`); await click('فعل و ضمیر همین درس'); await text('مثال‌ها و ساخت‌های مرتبط با «دو جور سلام»'); await page.goBack(); await page.getByRole('button',{name:'فعل و ضمیر همین درس'}).waitFor();
     console.log('PASS basic-to-C1 tutor, actual examples, retry, independent marks, pronouns, inflected search and lesson entry.');
     const mic = () => page.waitForFunction(()=>!!qa.mic), voiced = line => page.waitForFunction(l=>qa.utterance?.text===l,line);
     const finish=()=>page.evaluate(()=>qa.finish()), say=async v=>{await mic();await page.evaluate(v=>{qa.say(v,true);qa.end();},v);};
-    await page.goto(`${base}/learn/ru`); await click('اتاق مکالمهٔ روسی'); await text('اولین سلام'); assert.equal(await page.evaluate(()=>qa.starts),0);
+    await page.goto(`${base}/learn/ru`); await click('اتاق مکالمهٔ روسی'); await text('دو جور سلام'); assert.equal(await page.evaluate(()=>qa.starts),0);
     await click('من شروع می‌کنم');await say('привет');await voiced('Приве́т, А́нна!'); await finish();await mic();await click('مکث مکالمه');assert(!await page.evaluate(()=>qa.mic));
-    await click('موقعیت بعدی'); await text('اسم من، اسم تو');assert(!await page.evaluate(()=>qa.mic));
+    await click('موقعیت بعدی'); await text('کارتِ نام من');assert(!await page.evaluate(()=>qa.mic));
     assert(!await page.evaluate(()=>JSON.parse(localStorage.getItem('sentence_course_progress_ru_v2')||'{}').completedLessonIds?.length));
     await page.goto(`${base}/learn/ru/lesson?id=ru-pre-this-is`); await click('ادامه'); await click('هم‌صحبت شروع کنه');
     await voiced('Что ты хо́чешь?'); assert(!await page.evaluate(()=>qa.mic)); await finish(); await mic();
     await page.evaluate(()=>qa.say('я хочу чай',false)); assert.equal(await page.evaluate(()=>qa.lines.length),1);
-    await say('воду'); await voiced('Вот твоя́ вода́.'); await text('воду'); await shot('voice'); await page.reload(); await text('Вот твоя́ вода́.'); assert.equal(await page.evaluate(()=>qa.starts),0);
+    await say('я хочу воду'); await voiced('Вот твоя́ вода́.'); await text('я хочу воду'); await shot('voice'); await page.reload(); await text('Вот твоя́ вода́.'); assert.equal(await page.evaluate(()=>qa.starts),0);
     const done=page.getByRole('button',{name:'پایان درس',exact:true}); assert.equal(await done.count(),0);
-    await click('ادامهٔ مکالمهٔ صوتی'); await voiced('Вот твоя́ вода́.'); await finish(); await say('а ты хочешь воду'); await voiced('Нет, я хочу́ чай.');assert(await done.isDisabled());await finish();await page.waitForFunction(()=>!document.querySelector('[aria-label="پایان درس"]')?.disabled);await page.getByText('گفت‌وگو کامل شد',{exact:true}).filter({visible:true}).first().waitFor(); assert(await done.isEnabled());
-    await click('عوض کردن شروع‌کننده'); await click('من شروع می‌کنم'); await say('я не хочу чай'); await voiced('Повтори́, пожа́луйста.');await finish();await say('чай'); await voiced('Вот твой чай.');await finish();
+    await click('ادامهٔ مکالمهٔ صوتی'); await voiced('Вот твоя́ вода́.'); await finish(); await say('спасибо'); await voiced('Пожа́луйста!');assert(await done.isDisabled());await finish();await page.waitForFunction(()=>!document.querySelector('[aria-label="پایان درس"]')?.disabled);await page.getByText('گفت‌وگو کامل شد',{exact:true}).filter({visible:true}).first().waitFor(); assert(await done.isEnabled());
+    await click('عوض کردن شروع‌کننده'); await click('من شروع می‌کنم'); await say('я не хочу чай'); await voiced('Я хочу́ чай.');await finish();await say('я хочу чай'); await voiced('Вот твой чай.');await finish();
     await say('спасибо');await voiced('Пожа́луйста!');await finish();await click('پایان درس');await page.waitForFunction(()=>JSON.parse(localStorage.getItem('sentence_course_progress_ru_v2')||'{}').completedLessonIds?.includes('ru-pre-this-is'));
     assert(!await page.evaluate(()=>JSON.parse(localStorage.getItem('russian_lesson_sessions_v1')).sessions['ru-pre-this-is']));
     console.log('PASS home rehearsal, no auto mic on entry/reload, both voice starters, water/tea, pause, spoken clarification, saved finale and gated completion.');
     await page.goto(`${base}/learn/ru/lesson?id=ru-c1-certainty-evidence`); await click('ادامه'); await page.evaluate(()=>qa.deny=true); await click('من شروع می‌کنم');
     await page.getByText(/^دسترسی میکروفون یا تشخیص گفتار داده نشد/).waitFor();await click('تمرین بدون میکروفون');await click('عوض کردن شروع‌کننده');await click('هم‌صحبت شروع کنه');
-    const input=page.getByLabel('پاسخ من به روسی');await input.fill('не знаю');await click('فرستادن پاسخ');await page.getByText(/^منظورت روشن نشد/).waitFor();await input.fill('нет выборка слишком мала');await click('فرستادن پاسخ');
-    await text('Тогда отдельно укажем размер выборки.');await text('нет выборка слишком мала');
+    const input=page.getByLabel('پاسخ من به روسی');await input.fill('не знаю');await click('فرستادن پاسخ');await page.getByText(/^منظورت روشن نشد/).waitFor();await input.fill('нет они указывают на возможную связь но другие объяснения не исключены');await click('فرستادن پاسخ');
+    await text('Тогда́ в вы́воде ну́жно сохрани́ть э́ту огово́рку.');await text('нет они указывают на возможную связь но другие объяснения не исключены');
+    await page.goto(`${base}/learn/ru/lesson?id=ru-l1-greetings`); await click('ادامه'); await click('هم‌صحبت شروع کنه');
+    await voiced('До́брое у́тро! Я на уро́к.'); await finish();
+    for(const [answer,reply] of [['вы в первую группу','Да. Где наш класс?'],['вот эта дверь','Здесь мо́жно сесть?'],['да это место свободно','А где учи́тель?']]) {
+      await say(answer); await voiced(reply); await finish();
+    }
+    await say('он уже в классе'); await page.getByText('گفت‌وگو کامل شد',{exact:true}).first().waitFor();
+    assert(await page.getByRole('button',{name:'پایان درس',exact:true}).isEnabled());
     await page.goto(`${base}/lang`); await page.waitForURL('**/languages'); await page.getByRole('button',{name:'ورود به زبان روسی', exact:true}).waitFor(); assert.equal(await page.getByRole('button',{name:/^ورود به زبان /}).count(),1);
     assert.deepEqual(errors,[]); console.log('PASS advanced authored intent, unknown-input clarification and Russian-only route guard.');
   } finally { await browser.close(); }

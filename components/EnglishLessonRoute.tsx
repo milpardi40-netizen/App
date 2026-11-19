@@ -1,3 +1,4 @@
+import {LessonGenderCard, SentenceGenderLabel} from './LessonGenderCard';
 import { addPracticeActivity } from '@/lib/practiceActivity';
 import { localDay } from '@/lib/reviewHistory';
 import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
@@ -517,6 +518,7 @@ export default function SentenceLessonScreen() {
               <Pressable accessibilityRole="button" accessibilityLabel={`پخش نمونهٔ صوتی جمله: ${current.en}`} accessibilityHint="فقط نمونهٔ گفتاری پخش می‌شود؛ میکروفن فعال نیست." style={styles.soundButton} onPress={() => speak(current.en, ENGLISH_NORMAL_SPEECH_RATE)}>
                 <Volume2 size={25} color={Colors.onColor} />
               </Pressable>
+              <SentenceGenderLabel language="en" text={current.en} />
               <Text style={styles.english}>{current.en}</Text>
               {/* Respelling sits under the sentence as ONE RTL line, so the phrase stays
                   readable as a single Persian text instead of a centred, wrapped fragment. */}
@@ -652,6 +654,7 @@ export default function SentenceLessonScreen() {
         {stage === 6 && (
           <View style={styles.grammarStage}>
             <GrammarStageHeader title="دستور در کاربرد" description={showHint ? (lesson.b2Section || lesson.c1Section) ? 'نکته‌ها را بخوانید و الگوها را مرور کنید.' : 'الگوی هر جمله را ببینید و مثالش را بشنوید.' : undefined} />
+            <LessonGenderCard language="en" lesson={lesson} speak={speak} />
             {B2_GUIDANCE[lesson.id]?.map((note, index) => <GrammarNoteCard key={`${lesson.id}-guide-${index}`} title={lessonTopics?.[index] ?? ''} text={note} />)}
             {c1Unit?.topics.map((topic, index) => <GrammarNoteCard key={`${lesson.id}-c1-guide-${index}`} title={topic[0]} text={topic[5]} />)}
             {grammarPatterns.length ? grammarPatterns.map((item, index) => (

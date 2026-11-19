@@ -219,27 +219,12 @@ const esbuild = require('esbuild');
     ...Array.from({ length: 168 }, (_, i) => `ru2-${String(i + 1).padStart(2, '0')}`),
   ];
   check('A1 sentence IDs and sequence remain stable', a1.flatMap(lesson => lesson.sentences.map(sentence => sentence.id)).join('|') === expectedA1SentenceIds.join('|'));
-  const a1Sentence = id => a1.flatMap(lesson => lesson.sentences).find(sentence => sentence.id === id);
-  const examples = {
-    'ru1-14': 'Я рад', 'ru1-17': 'Мери́м', 'ru1-23': 'иране́ц', 'ru1-59': 'кни́гу', 'ru1-61': 'столе́', 'ru1-63': 'ко́мнате', 'ru1-171': 'шко́ле', 'ru1-131': 'но́вое окно́', 'ru1-132': 'но́вые столы́',
-    'ru1-199': 'тебя́', 'ru1-214': 'но́мер телефо́на', 'ru1-174': 'по́чта',
-    'ru2-52': 'температу́ра', 'ru2-98': 'регистра́ция', 'ru2-103': 'поса́дку', 'ru2-110': 'заброни́рован', 'ru2-123': 'врачу́', 'ru2-142': 'но́мер телефо́на',
-    'ru2-146': 'бу́ду гуля́ть', 'ru2-152': 'гуля́ла', 'ru2-161': 'Како́е',
-  };
-  check('edited A1 includes representative identity, grammar and survival examples', Object.entries(examples).every(([id, fragment]) => a1Sentence(id)?.text.includes(fragment)));
-  check('edited A1 pronunciation, vocabulary and Persian translations remain present', Object.keys(examples).every(id => {
-    const item = a1Sentence(id);
-    return item?.fa && item.pronunciation && item.vocabulary.every(word => word.word && word.meaning);
-  }));
-  const alphabetNotes = a1.slice(0, 4).map(lesson => lesson.teachingFa);
-  const alphabetGroups = [app.RUSSIAN_ALPHABET.slice(0, 8), app.RUSSIAN_ALPHABET.slice(8, 16), app.RUSSIAN_ALPHABET.slice(16, 24), app.RUSSIAN_ALPHABET.slice(24)];
-  check('Cyrillic uppercase and lowercase are introduced in four ordered groups', alphabetGroups.every((group, i) => group.every(letter => alphabetNotes[i].includes(`${letter} ${letter.toLocaleLowerCase('ru-RU')}`))));
-  check('pronunciation notes introduce stress, soft sign and ё in context', alphabetNotes[0].includes('تکیه') && alphabetNotes[3].includes('день')
-    && a1.find(lesson => lesson.id === 'ru-l1-colors').teachingFa.includes('ё') && a1Sentence('ru1-84').text.includes('ё'));
-  const noteFor = id => a1.find(lesson => lesson.id === id).teachingFa;
-  check('A1 case contrasts use short contextual examples', noteFor('ru-l1-objects-this-is').includes('книга به книгу')
-    && noteFor('ru-l1-numbers-family').includes('есть брат') && noteFor('ru-l1-numbers-family').includes('нет брата')
-    && noteFor('ru-l1-places').includes('в школе') && noteFor('ru-l1-places').includes('в школу'));
+  const preLines = new Set(lessonsByLevel[0].flatMap(l => l.sentences.map(s => normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
+  const shared = a1.flatMap(l => l.sentences.filter(s => preLines.has(normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
+  check('A1 does not reteach the starter utterance list or the alphabet', !shared.length && a1.every(l => !l.teachingFa.includes('الفبا')));
+  check('A1 rehearses the complete local scene rather than isolated word lists', a1.every(l => l.dialogue.length === 8 && l.dialogue.every((d,i) => d.text === l.sentences[i].text && d.fa === l.sentences[i].fa)));
+  check('A1 exit tasks have unique situations, evidence and a productive reply', new Set(a1.map(l=>l.checks[0].promptFa)).size===49 && a1.every(l => l.checks[1].choices[l.checks[1].correctIndex] === l.dialogue[7].text));
+  check('A1 vocabulary remains anchored to the exact spoken line', a1.every(l=>l.sentences.every(s=>s.vocabulary.every(v=>s.text.includes(v.word) && v.meaning))));
   // In-place A2 revisions must keep the review-card and session addresses stable.
   const a2 = app.RUSSIAN_LESSONS.filter(lesson => lesson.id.startsWith('ru-l3-'));
   const a2Sentences = a2.flatMap(lesson => lesson.sentences);
@@ -281,7 +266,7 @@ const esbuild = require('esbuild');
   check('A2 shopping spelling correction preserves the saved answer slot', shoppingCheck.correctIndex === 0
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
   const datesCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-l2-months-dates').checks[0];
-  check('date-question spelling fix preserves the original answer slot', datesCheck.correctIndex === 0 && datesCheck.choices[0] === 'Како́е сего́дня число́?');
+  check('A1 date correction checks the final date, not the misprinted ticket', datesCheck.choices[datesCheck.correctIndex] === 'پنجم مه');
   check('Russian preserves the ten saved stage indexes and appends its own final exchange', app.RUSSIAN_LESSON_STAGES.length === 11
     && app.RUSSIAN_LESSON_STAGES[10].id === 'turn-exchange' && app.RUSSIAN_LESSON_STAGES.slice(0, 10).every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa

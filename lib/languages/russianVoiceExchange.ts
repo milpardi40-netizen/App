@@ -17,7 +17,6 @@ export interface TurnAudio {
   listen(signal: AbortSignal, hints: string[], onLive: (partial: string) => void): Promise<string>;
   say(text: string, signal: AbortSignal): Promise<void>;
 }
-export const clarify = 'Повтори́, пожа́луйста.';
 export function requireActive(signal: AbortSignal) {
   if (signal.aborted) throw new Error('cancelled');
 }
@@ -67,14 +66,14 @@ export async function runVoiceExchange(
         });
         return;
       }
-      await say(clarify, 'منظورت روشن نشد؛ هم‌صحبت از تو می‌خواهد دوباره بگویی.', heard);
+      await say(view.options[0].say.text, 'نمونهٔ همین نوبت را دوباره بشنو و پاسخ بده.', heard);
       continue;
     }
     misses = 0;
     const choice = view.options[i];
     path = takeTurn(path, i, heard);
     publish(path); // Save accepted words even if playback is interrupted or the app is closed.
-    await say(choice.reply.text);
+    if (choice.reply) await say(choice.reply.text);
     view = exchangeView(scene, path);
   }
   requireActive(signal);
