@@ -500,7 +500,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <View style={styles.bigIcon}><MessageCircle size={34} color={Palette.primary} /></View>
           <Text style={styles.stageTitle}>مکالمهٔ هدایت‌شده</Text>
           {showHint && <Text style={styles.stageDesc}>نقش خود را بگویید، سپس نمونه را بشنوید.</Text>}
-          {focused && <RussianDialoguePractice key={lesson.id} dialogue={lesson.dialogue} sentences={lesson.sentences} onSpeak={speak} locale="ru-RU" defaultMode={modeForLevel(lesson.levelId)} />}
+          {focused && <RussianDialoguePractice key={lesson.id} sentences={lesson.sentences} onSpeak={speak} locale="ru-RU" defaultMode={modeForLevel(lesson.levelId)} />}
           {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
         </View>}
 

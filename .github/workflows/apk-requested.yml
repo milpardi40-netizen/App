@@ -146,14 +146,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RETRY_ID: ${{ inputs.retry_failed_run_id }}
         run: |
-          sequence=$GITHUB_RUN_NUMBER
+          refs=$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/milo-requested-")
           if [[ -n "$RETRY_ID" ]]; then
             [[ "$RETRY_ID" =~ ^[1-9][0-9]*$ ]]
             info=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RETRY_ID")
             sequence=$(jq -er --arg ref "$GITHUB_REF_NAME" 'select(.path == ".github/workflows/apk-requested.yml" and .head_branch == $ref and .conclusion == "failure") | .run_number' <<< "$info")
             (( sequence > 0 && sequence < GITHUB_RUN_NUMBER ))
+          else
+            sequence=$GITHUB_RUN_NUMBER
+            max_tag=$(jq -r '[.[] | .ref | capture("^refs/tags/milo-requested-(?<n>[0-9]+)$").n | tonumber] | max // 0' <<< "$refs")
+            if (( sequence <= max_tag )); then sequence=$((max_tag + 1)); fi
           fi
-          refs=$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/milo-requested-")
           jq -e --argjson n "$sequence" 'all(.[] | .ref | capture("^refs/tags/milo-requested-(?<n>[0-9]+)$").n | tonumber; . < $n)' <<< "$refs" >/dev/null
           echo "sequence=$sequence" >> "$GITHUB_OUTPUT"
           echo "Android build $((100 + sequence)); tag milo-requested-$sequence"

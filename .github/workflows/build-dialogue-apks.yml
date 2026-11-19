@@ -1,0 +1,190 @@
+name: Build requested English-Russian and English APKs
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: dialogue-apks-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Verify every English and Russian lesson rehearsal
+        run: |
+          npm run typecheck
+          npm run validate:content
+          npm run validate:english-engine
+          npm run validate:russian
+  reserve:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      sequence: ${{ steps.slot.outputs.sequence }}
+      version_code: ${{ steps.slot.outputs.version_code }}
+    steps:
+      - id: slot
+        name: Reserve a unique release number across learner builds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          latest_run=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/apk-requested.yml/runs?branch=main&per_page=100" --jq '[.workflow_runs[].run_number] | max // 0')
+          refs=$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/milo-requested-")
+          latest_tag=$(jq -r '[.[] | .ref | capture("^refs/tags/milo-requested-(?<n>[0-9]+)$").n | tonumber] | max // 0' <<< "$refs")
+          sequence=$latest_run
+          if (( sequence <= latest_tag )); then sequence=$((latest_tag + 1)); fi
+          version_code=$((100 + sequence))
+          echo "sequence=$sequence" >> "$GITHUB_OUTPUT"
+          echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
+          echo "Reserved release milo-requested-$sequence (Android versionCode $version_code)."
+  build:
+    needs: reserve
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - flavor: english-russian
+            apk_name: 2update.apk
+            language_scope: en,ru
+            expected_package: com.devicecontrol.companion
+            english_only: 'false'
+          - flavor: english-only
+            apk_name: english.apk
+            language_scope: en
+            expected_package: com.devicecontrol.miloenglish
+            english_only: 'true'
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+      NODE_OPTIONS: '--max-old-space-size=8192'
+      EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID || 'be0e368c-0d94-4e95-b4f4-d757fa7beb42' }}
+      MILO_ANDROID_ABIS: 'arm64-v8a,armeabi-v7a'
+      MILO_VERSION_CODE: ${{ needs.reserve.outputs.version_code }}
+      EXPO_PUBLIC_MILO_ADMIN_APP: 'false'
+      EXPO_PUBLIC_ENABLE_EDUCATION_ADMIN: 'false'
+      EXPO_PUBLIC_LEARNER_LOGIN: 'false'
+      EXPO_PUBLIC_LEARNER_ENGLISH_NOLOGIN: ${{ matrix.english_only }}
+      EXPO_PUBLIC_LANGUAGE_SCOPE: ${{ matrix.language_scope }}
+      APK_NAME: ${{ matrix.apk_name }}
+      EXPECTED_PACKAGE: ${{ matrix.expected_package }}
+      EXPECTED_SCOPE: ${{ matrix.language_scope }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Load public connection settings
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const config = JSON.parse(fs.readFileSync('config/supabase.public.json', 'utf8'));
+          const url = String(config.EXPO_PUBLIC_SUPABASE_URL || '').trim();
+          const key = String(config.EXPO_PUBLIC_SUPABASE_ANON_KEY || '').trim();
+          if (!/^https:\/\//.test(url) || !key || key.startsWith('sb_secret_')) {
+            throw new Error('The public app connection settings are missing or invalid.');
+          }
+          fs.appendFileSync(process.env.GITHUB_ENV, `EXPO_PUBLIC_SUPABASE_URL=${url}\nEXPO_PUBLIC_SUPABASE_ANON_KEY=${key}\n`);
+          NODE
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Prepare the Android SDK
+        shell: bash
+        run: |
+          SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          if [[ ! -d "$SDK_ROOT" ]]; then
+            echo "Android SDK directory was not found at $SDK_ROOT."; exit 1
+          fi
+          echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
+          SDKMANAGER="$(find "$SDK_ROOT" -type f -name sdkmanager -print -quit 2>/dev/null || true)"
+          if [[ ! -d "$SDK_ROOT/platforms/android-36" || ! -d "$SDK_ROOT/build-tools/36.0.0" ]]; then
+            if [[ -z "$SDKMANAGER" ]]; then echo "Android SDK 36 and sdkmanager are required."; exit 1; fi
+            yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
+            "$SDKMANAGER" --sdk_root="$SDK_ROOT" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          fi
+      - name: Generate the native Android project
+        run: npx expo prebuild --platform android --no-install --non-interactive
+      - name: Build the standalone APK
+        shell: bash
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --console=plain
+          cd ..
+          cp android/app/build/outputs/apk/release/app-release.apk "$APK_NAME"
+      - name: Verify package, language scope, signature, and standalone bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK_ID=$("$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$APK_NAME" | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
+          test "$APK_ID" = "$EXPECTED_PACKAGE" || { echo "Wrong package: $APK_ID"; exit 1; }
+          python3 - <<'PY'
+          import os, sys, zipfile
+          apk = os.environ['APK_NAME']
+          expected_scope = os.environ['EXPECTED_SCOPE']
+          with zipfile.ZipFile(apk) as archive:
+              names = set(archive.namelist())
+              required = {'AndroidManifest.xml', 'assets/index.android.bundle'}
+              if not required.issubset(names) or not any(name.endswith('classes.dex') for name in names):
+                  sys.exit(f'{apk}: standalone APK structure is incomplete')
+              text = archive.read('assets/index.android.bundle').decode('utf-8', 'ignore')
+          if expected_scope not in text:
+              sys.exit(f'{apk}: expected language scope {expected_scope!r} is absent')
+          print(f'{apk}: package={os.environ["EXPECTED_PACKAGE"]}, scope={expected_scope}; standalone bundle verified')
+          PY
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose "$APK_NAME"
+          sha256sum "$APK_NAME"
+          ls -lh "$APK_NAME"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.apk_name }}
+          path: ${{ matrix.apk_name }}
+          if-no-files-found: error
+          retention-days: 30
+  publish:
+    needs: [reserve, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '*.apk'
+          path: out
+          merge-multiple: true
+      - name: Publish exactly the two requested APKs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: milo-requested-${{ needs.reserve.outputs.sequence }}
+          VERSION_CODE: ${{ needs.reserve.outputs.version_code }}
+        run: |
+          test -s out/2update.apk
+          test -s out/english.apk
+          test "$(find out -maxdepth 1 -type f -name '*.apk' | wc -l)" -eq 2
+          cat > release-notes.md <<NOTES
+          Only the two requested learner APKs. Android versionCode: $VERSION_CODE.
+
+          - 2update.apk: English + Russian, no login.
+          - english.apk: English only, no login.
+          NOTES
+          gh release create "$RELEASE_TAG" out/2update.apk out/english.apk \
+            --title "Requested English-Russian and English APKs" \
+            --notes-file release-notes.md

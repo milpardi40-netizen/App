@@ -7,7 +7,7 @@ const esbuild = require('esbuild');
   const output = path.resolve('node_modules/.cache/english-learning-engine-test.cjs');
   await esbuild.build({
     stdin: {
-      contents: "export * from './lib/courseContent'; export * from './lib/courseContentB1Independent'; export * from './lib/courseContentB2UpperIntermediate'; export * from './lib/courseContentB2Expansion'; export * from './lib/englishB2Practice'; export * from './lib/englishB2Scenarios'; export * from './lib/courseContentC1Advanced'; export * from './lib/englishC1Practice'; export * from './lib/englishC1Reading'; export * from './lib/englishC1ExtendedModels'; export * from './lib/englishC1AppliedAssessment'; export * from './lib/courseContentA2Foundation'; export * from './lib/englishLearningEngine'; export * from './lib/englishFoundationEvidence'; export { isCorrect } from './lib/englishSupplement/content';",
+      contents: "export * from './lib/courseContent'; export * from './lib/courseContentB1Independent'; export * from './lib/courseContentB2UpperIntermediate'; export * from './lib/courseContentB2Expansion'; export * from './lib/englishB2Practice'; export * from './lib/englishB2Scenarios'; export * from './lib/courseContentC1Advanced'; export * from './lib/englishC1Practice'; export * from './lib/englishC1Reading'; export * from './lib/englishC1ExtendedModels'; export * from './lib/englishC1AppliedAssessment'; export * from './lib/courseContentA2Foundation'; export * from './lib/englishLearningEngine'; export * from './lib/englishFoundationEvidence'; export * from './lib/lessonSentenceDialogue'; export { isCorrect } from './lib/englishSupplement/content';",
       resolveDir: process.cwd(),
     },
     bundle: true,
@@ -32,8 +32,20 @@ const esbuild = require('esbuild');
   // The lesson conversation is rendered from the exact source sentence list; the UI must not
   // synthesize branch lines or fall back to a dialogue from another content layer.
   const englishDialoguePractice = require('node:fs').readFileSync('components/EnglishDialoguePractice.tsx', 'utf8');
-  check(englishDialoguePractice.includes('localScriptOnly'));
+  const englishLessonRoute = require('node:fs').readFileSync('components/EnglishLessonRoute.tsx', 'utf8');
+  check(englishDialoguePractice.includes('lessonSentenceDialogue') && englishDialoguePractice.includes('localScriptOnly'));
   check(!englishDialoguePractice.includes('branchPool={pool}'));
+  check(englishLessonRoute.includes('<EnglishDialoguePractice key={lesson.id} sentences={lesson.sentences}')
+    && !englishLessonRoute.includes('<EnglishDialoguePractice key={lesson.id} dialogue={lesson.dialogue}'));
+  for (const lesson of app.SENTENCE_LESSONS) {
+    const rehearsal = app.lessonSentenceDialogue(lesson.sentences, sentence => sentence.en, { partner: 'طرف مقابل', learner: 'شما' });
+    assert.deepEqual(rehearsal, lesson.sentences.map((sentence, index) => ({
+      speaker: index % 2 === 0 ? 'طرف مقابل' : 'شما',
+      text: sentence.en,
+      fa: sentence.fa,
+    })), `English rehearsal must include only this lesson's exact sentences: ${lesson.id}`);
+    checks += 1;
+  }
 
   // Band ids are stable; level numbers shifted when the Pre-A1 band and the practice labs were added.
   const foundation = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('foundation-'));

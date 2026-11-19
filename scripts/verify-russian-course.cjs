@@ -14,6 +14,7 @@ const esbuild = require('esbuild');
         "export * from './lib/englishLessonNavigation';",
         "export * from './lib/courseContent';",
         "export * from './lib/englishLearningEngine';",
+        "export * from './lib/lessonSentenceDialogue';",
       ].join('\n'),
       resolveDir: process.cwd(),
     },
@@ -219,6 +220,21 @@ const esbuild = require('esbuild');
     ...Array.from({ length: 168 }, (_, i) => `ru2-${String(i + 1).padStart(2, '0')}`),
   ];
   check('A1 sentence IDs and sequence remain stable', a1.flatMap(lesson => lesson.sentences.map(sentence => sentence.id)).join('|') === expectedA1SentenceIds.join('|'));
+  const russianDialoguePractice = fs.readFileSync('components/RussianDialoguePractice.tsx', 'utf8');
+  const russianLessonRoute = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
+  check('Russian conversation is fed only the current lesson sentence list', russianDialoguePractice.includes('lessonSentenceDialogue')
+    && russianDialoguePractice.includes('localScriptOnly')
+    && russianLessonRoute.includes('<RussianDialoguePractice key={lesson.id} sentences={lesson.sentences}')
+    && !russianLessonRoute.includes('<RussianDialoguePractice key={lesson.id} dialogue={lesson.dialogue}'));
+  for (const lesson of app.RUSSIAN_LESSONS) {
+    const rehearsal = app.lessonSentenceDialogue(lesson.sentences, sentence => sentence.text, { partner: 'هم‌صحبت', learner: 'زبان‌آموز' });
+    assert.deepEqual(rehearsal, lesson.sentences.map((sentence, index) => ({
+      speaker: index % 2 === 0 ? 'هم‌صحبت' : 'زبان‌آموز',
+      text: sentence.text,
+      fa: sentence.fa,
+    })), `Russian rehearsal must include only this lesson's exact sentences: ${lesson.id}`);
+    checks.push(`Russian rehearsal: ${lesson.id}`);
+  }
   const preLines = new Set(lessonsByLevel[0].flatMap(l => l.sentences.map(s => normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   const shared = a1.flatMap(l => l.sentences.filter(s => preLines.has(normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   check('A1 does not reteach the starter utterance list or the alphabet', !shared.length && a1.every(l => !l.teachingFa.includes('الفبا')));
