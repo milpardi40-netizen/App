@@ -12,6 +12,7 @@ export interface RussianLessonSession {
   stage: number;
   updatedAt?: string;
   checksRevision?: string;
+  exchangeRevision?: number;
   exchange?: ExchangePath;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
   stageVersion?: number;
@@ -65,12 +66,12 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     throw new Error('وضعیت ذخیره‌شدهٔ درس روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   // Validate the stored shape even for retired questions, but never grade a previous meaning.
-  const retiredChecks = lesson.levelId === 0 && session.checksRevision !== STARTER_CHECKS_REVISION;
+  const retiredChecks = lesson.levelId <= 1 && session.checksRevision !== STARTER_CHECKS_REVISION;
   const answers: Record<string, number> = {};
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
     const check = lesson.checks?.[checkIndex];
-    if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) {
+    if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= (retiredChecks ? 4 : check.choices.length)) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
     if (!retiredChecks) answers[key] = answer!;
@@ -84,7 +85,7 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     answers,
     showCheckAnswers: !retiredChecks && session.showCheckAnswers,
     // A stale conversation path restarts only the exchange, never the whole lesson.
-    ...(stage === 10 && session.exchange && validExchangePath(exchangeForLesson(lesson), session.exchange) ? { exchange: session.exchange } : {}),
+    ...(stage === 10 && session.exchangeRevision === 2 && session.exchange && validExchangePath(exchangeForLesson(lesson), session.exchange) ? { exchangeRevision: 2, exchange: session.exchange } : {}),
   };
 }
 
@@ -124,9 +125,9 @@ function serial<T>(job: () => Promise<T>): Promise<T> {
 export function saveRussianLessonSession(lessonId: string, value: RussianLessonSession): Promise<void> {
   return serial(async () => {
     // New writes come from the current UI. Migration applies on read of old persisted attempts.
-    const safe = validateSession(lessonId, { ...value, checksRevision: STARTER_CHECKS_REVISION });
+    const safe = validateSession(lessonId, { ...value, exchangeRevision: 2, checksRevision: STARTER_CHECKS_REVISION });
     const state = parseState(await readRaw());
-    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, ...(lessonId.startsWith('ru-pre-') ? { checksRevision: STARTER_CHECKS_REVISION } : {}), updatedAt: positionTimestamp() } } }));
+    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, checksRevision: STARTER_CHECKS_REVISION, updatedAt: positionTimestamp() } } }));
     notifyLearningChange();
   });
 }

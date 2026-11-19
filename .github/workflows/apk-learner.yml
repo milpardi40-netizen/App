@@ -87,6 +87,8 @@ jobs:
           npm run validate:hygiene
           npm run validate:content
           npm run validate:russian
+          node scripts/verify-lesson-gender.cjs
+          node scripts/verify-russian-redesign.cjs
           npm run validate:english-engine
           npm run validate:english-lesson-flow
           npm run validate:speech-policy
@@ -128,6 +130,9 @@ jobs:
             yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
             "$SDKMANAGER" --sdk_root="$SDK_ROOT" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
           fi
+
+      - name: Set the learner build version
+        run: echo "MILO_VERSION_CODE=$((122 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
 
       - name: Generate the native Android project
         run: npx expo prebuild --platform android --no-install --non-interactive

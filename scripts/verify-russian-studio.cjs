@@ -73,6 +73,7 @@ const flush = () => new Promise((r) => setImmediate(r));
     'languages/russian',
     'languages/russianExchange',
     'languages/russianVoiceExchange',
+    'languages/russianShadowRoom',
     'languages/russianGrammar/catalog',
     'languages/russianGrammar/marks',
     'languages/russianGrammar/trails',
@@ -117,6 +118,8 @@ const flush = () => new Promise((r) => setImmediate(r));
     for (let b = 0; b < 6; b++) {
       const samples = x.studyExamples(v, b);
       assert(samples.length > 0);
+      const voiceCards = x.verbVoiceCards(v, b);
+      assert(voiceCards.length && voiceCards.every(card => card.text.includes(' ') && card.fa && x.gapFor(card.text, card.form).includes('____')), `${v.lemma} lacks a contextual voice model at band ${b}`);
       bands++;
       for (const s of samples) {
         assert(s.fa && s.source && x.gapFor(s.text, s.form).includes('____'), `${v.lemma}:${s.text}`);
@@ -167,14 +170,14 @@ const flush = () => new Promise((r) => setImmediate(r));
   assert.equal(starts[0].recordingOptions.persist, false);
   result('я хочу чай', false);
   assert.equal(saved.length, 0);
-  result('вода');
+  result('я хочу воду');
   result('чай');
   await flush();
   assert.equal(saved.length, 0, 'wait for native end');
   end();
   await flush();
   assert.equal(speech.text, 'Вот твоя́ вода́.');
-  assert.equal(saved.at(-1).said[0], 'вода');
+  assert.equal(saved.at(-1).said[0], 'я хочу воду');
   assert(!recording);
   done();
   await flush();
@@ -199,7 +202,7 @@ const flush = () => new Promise((r) => setImmediate(r));
   result('я не хочу чай');
   end();
   await flush();
-  assert.equal(speech.text, x.clarify);
+  assert.equal(speech.text, scene.partnerFirst[0].say.text);
   assert.equal(saved.length, count);
   done();
   await flush();
@@ -286,7 +289,7 @@ const flush = () => new Promise((r) => setImmediate(r));
   await assert.rejects(job, /پخش نشد/);
   assert(!recording);
   assert.equal(saved.length, count);
-  const resumed = { starter: 'partner', picks: [0], said: { 0: 'чай' } };
+  const resumed = { starter: 'partner', picks: [0], said: { 0: 'я хочу чай' } };
   job = begin(resumed, true);
   await flush();
   assert.equal(speech.text, 'Вот твой чай.');
@@ -297,8 +300,22 @@ const flush = () => new Promise((r) => setImmediate(r));
   await flush();
   done();
   await job;
-  assert.equal(saved.at(-1).said[0], 'чай');
+  assert.equal(saved.at(-1).said[0], 'я хочу чай');
   assert.equal(saved.at(-1).picks.length, 2);
+  const card = x.verbVoiceCards(verb, 0)[0];
+  const answers = [], phases = [], ctrl = new AbortController();
+  const guide = x.shadowCards([card, card], 0, x.russianTurnAudio, ctrl.signal, phase => phases.push(phase), line => answers.push(line));
+  for (const spokenLine of [card.lemma, card.text, 'Повтори́те предложе́ние.']) {
+    await flush(); assert.equal(speech.text, spokenLine); assert(!recording); done();
+  }
+  await flush(); assert(recording); result('вода', false); assert(!answers.length);
+  result('вода'); end(); await flush(); assert.equal(speech.text, card.lemma); assert.deepEqual(answers, ['вода']);
+  ctrl.abort(); await assert.rejects(guide); assert(!recording && !speech);
+  assert.deepEqual(phases.slice(0,5), ['verb','sentence','prompt','ready','listen']);
+  assert(x.reviewLine('Я хочу́ чай.', 'я хочу чай').matched);
+  assert(x.reviewLine('Я хочу́ чай.', 'чай хочу я').order);
+  assert.deepEqual(x.reviewLine('Я хочу́ чай.', 'я хочу воду'), {missing:['чай'],extra:['воду'],order:false,matched:false});
+  console.log(`PASS independent narrator for ${x.VERBS.length} verbs, three sequential prompts, final-only recognition, cancellation and word-level feedback.`);
   for (const list of subs.values()) assert.equal(list.size, 0);
   console.log(
     'PASS two hands-free starters, conditional replies, late/duplicate/interim events, one spoken clarification, silence, permission denial, busy abort drain, background cancellation, TTS error, final stop and path resume.',

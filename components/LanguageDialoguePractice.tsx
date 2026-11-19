@@ -120,7 +120,7 @@ function choiceBranch(lines: readonly DialogueLine[], myRole: string, locale: st
   return out;
 }
 
-export default function LanguageDialoguePractice({ dialogue, onSpeak, languageLabel, locale, productive = false, defaultMode = 'guide', branchPool, fixedRole, autoPlayPartner = false }: {
+export default function LanguageDialoguePractice({ dialogue, onSpeak, languageLabel, locale, productive = false, defaultMode = 'guide', branchPool, fixedRole, localScriptOnly = false, autoPlayPartner = false }: {
   dialogue: LearningLesson['dialogue'];
   onSpeak: (text: string) => void;
   /** Course name in Persian, e.g. "روسی" or "ترکی". Used in the recall hint. */
@@ -134,6 +134,8 @@ export default function LanguageDialoguePractice({ dialogue, onSpeak, languageLa
   branchPool?: readonly PoolSentence[];
   /** When set, the learner always plays this speaker and the role switcher is hidden (English). */
   fixedRole?: string;
+  /** Keep rehearsals on the supplied source lines, including on restart. */
+  localScriptOnly?: boolean;
   /** Speak the partner's line automatically when it appears (English behaviour). */
   autoPlayPartner?: boolean;
 }) {
@@ -145,9 +147,9 @@ export default function LanguageDialoguePractice({ dialogue, onSpeak, languageLa
   const [myRole, setMyRole] = useState(fixedRole ?? speakers[0]);
   const baseDialogue = dialogue;
   const [chosen, setChosen] = useState<number | null>(null);
-  const lines = useMemo(() => choiceBranch(branchPool ? branchDialogue(baseDialogue as DialogueLine[], branchPool, myRole, variant) : [...(baseDialogue as DialogueLine[])], myRole, locale, variant, chosen), [baseDialogue, branchPool, myRole, variant, locale, chosen]);
+  const lines = useMemo(() => localScriptOnly ? baseDialogue as DialogueLine[] : choiceBranch(branchPool ? branchDialogue(baseDialogue as DialogueLine[], branchPool, myRole, variant) : [...(baseDialogue as DialogueLine[])], myRole, locale, variant, chosen), [baseDialogue, branchPool, myRole, variant, locale, chosen, localScriptOnly]);
   const hasBranch = lines.some(line => line.branch);
-  const canBranch = (!!branchPool && branchDialogue(baseDialogue as DialogueLine[], branchPool, myRole, 1).some(line => line.branch)) || choiceBranch(baseDialogue as DialogueLine[], myRole, locale, 1, null).some(line => line.branch);
+  const canBranch = !localScriptOnly && ((!!branchPool && branchDialogue(baseDialogue as DialogueLine[], branchPool, myRole, 1).some(line => line.branch)) || choiceBranch(baseDialogue as DialogueLine[], myRole, locale, 1, null).some(line => line.branch));
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const current = lines[index];

@@ -36,7 +36,7 @@ def locate(label, *, tap=False, deny_dialog=False):
     # Search in both directions because a screen can keep its offset across a turn.
     targets = [clean(s) for s in ((label,) if isinstance(label,str) else label)]
     visible = []
-    for attempt in range(14):
+    for attempt in range(36):
         try:
             shell('uiautomator', 'dump', '/sdcard/ru-studio.xml')
             root = ET.fromstring(adb('exec-out','cat','/sdcard/ru-studio.xml'))
@@ -60,23 +60,17 @@ def locate(label, *, tap=False, deny_dialog=False):
         except (ET.ParseError, subprocess.SubprocessError):
             pass  # first dump can race a permission view or navigation transition
         if attempt >= 2:
-            y1,y2 = (.76,.34) if attempt < 8 else (.34,.76)
+            y1,y2 = (.76,.34) if attempt < 19 else (.34,.76)
             shell('input','swipe',str(w//2),str(int(h*y1)),str(w//2),str(int(h*y2)),'360')
         time.sleep(.35)
     raise AssertionError(f'Missing {label!r}. Last visible labels: {visible[:12]} / {visible[-16:]}')
 
 # Start as a learner would: do not depend on how an OEM re-delivers VIEW to a warm task.
 locate('ورود به زبان روسی',tap=True)
-locate('فعل و ضمیر',tap=True)
-locate('شروع با «خواستن»',tap=True)
-locate('دیدن مثال',tap=True)
-locate('Я хочу чай')
-# A system recognizer or Russian acoustic model is not guaranteed on google_apis images.
-# Exercise the explicitly denied/offline fallback, not a fictitious successful voice recognition.
-# API 30 has no compatible `pm set-permission-flags` command. Respond to Android's
-# own permission prompt instead. No permission grant or synthetic voice service.
-# Return from the example to the workshop, and from the workshop to the actual home card.
-locate('بازگشت به فهرست کارگاه',tap=True)
+locate('اتاق آموزش افعال',tap=True)
+locate('خواستن، خواندن و گفتن',tap=True)
+locate('شروع تمرین صوتی')
+locate('رد کردن تمرین فعل',tap=True)
 locate('بازگشت به صفحهٔ قبل',tap=True)
 locate('اتاق مکالمهٔ روسی',tap=True)
 # The free room starts at hello; advance the same six scene controls the learner sees.
@@ -84,7 +78,7 @@ for _ in range(6):
     locate('موقعیت بعدی',tap=True)
     time.sleep(.5)
 # The 7th scene's title is at the top even if the previous Next button was at the bottom.
-locate('چای می‌خواهم یا آب؟')
+locate('چای یا آب؟')
 locate('من شروع می‌کنم',tap=True)
 locate(('دسترسی میکروفون یا تشخیص گفتار داده نشد', 'تشخیص گفتار روسی در این دستگاه', 'میکروفون در دسترس نیست'),deny_dialog=True)
 locate('تمرین بدون میکروفون',tap=True)

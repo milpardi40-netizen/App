@@ -23,7 +23,7 @@ meanings = dict(line.split('|') for line in (base/'meanings.txt').read_text().sp
 # Contextual homographs and non-verbs in frequency lists («Мерим» is a name, «-нибудь» a suffix).
 def lemma(word, context):
     w = strip(word)
-    if w in {'нибудь','врачем','мерим','авать','е','суть'}: return None
+    if w in {'амири','нибудь','врачем','мерим','авать','е','суть'}: return None
     if w == 'есть':
         return 'есть' if re.search(r'(люблю|хочу|буд[уе]\w*|можно|пора) есть(?! ли)', context) else 'быть'
     if w in {'нашли','нашёл','нашел'}: return 'найти'
@@ -66,7 +66,8 @@ for i, band in enumerate(['pre','A1','A2','B1','B2','C1']):
 # Authored context for words that otherwise occur only as isolated frequency tokens/grammar notes.
 for line in (base/'examples.txt').read_text().splitlines():
     if not line or line.startswith('#'): continue
-    key, word, text, fa = line.split('|')
+    key, word, text, fa, *band = line.split('|')
+    if band: levels.setdefault(key, int(band[0]))
     assert key in meanings and strip(word) in [strip(x) for x in words.findall(text)], line
     forms[key].add(strip(word))
     candidates[key].append((-1, levels.get(key, 1), text, fa, word))

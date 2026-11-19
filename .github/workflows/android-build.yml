@@ -7,6 +7,10 @@ on:
         description: 'Build only the Russian learner APK (MiloRussian.apk) and publish it as a release'
         type: boolean
         default: false
+      artifact_only:
+        description: 'Deliver the verified Russian APK as a build artifact without publishing an update'
+        type: boolean
+        default: false
       learner_login:
         description: 'Explicitly build an additional login-enabled learner APK'
         type: boolean
@@ -274,7 +278,7 @@ jobs:
           script: bash .github/scripts/smoke-russian-apk.sh
 
       - name: Publish Russian-only APK release
-        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}
+        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' && !inputs.artifact_only }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: milo-russian-${{ github.run_number }}
@@ -290,7 +294,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Register only the Russian package when in-app publishing is configured
-        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}
+        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' && !inputs.artifact_only }}
         env:
           GH_TOKEN: ${{ github.token }}
           SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

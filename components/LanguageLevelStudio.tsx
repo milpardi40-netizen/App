@@ -75,13 +75,14 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
   }, [level, mode]);
 
   const russianStarter = courseId === 'ru' && running?.levelId === 0;
-  const packPool = usePackPool(courseId, !russianStarter && running?.mode === 'practice' ? running.levelId : null);
+  const authoredBeginnerBand = courseId === 'ru' && running != null && running.levelId <= 1;
+  const packPool = usePackPool(courseId, !authoredBeginnerBand && running?.mode === 'practice' ? running.levelId : null);
   const pool = useMemo(() => {
     if (!running) return null;
     const base = levelPool(courseId, allLessons, running.levelId);
     // Daily supplement draws from shipped sentences plus the level's content pack; exams stay on shipped content.
-    return !russianStarter && packPool.length ? { ...base, sentences: [...base.sentences, ...asLessonSentences(packPool)] } : base;
-  }, [running, courseId, allLessons, packPool, russianStarter]);
+    return !authoredBeginnerBand && packPool.length ? { ...base, sentences: [...base.sentences, ...asLessonSentences(packPool)] } : base;
+  }, [running, courseId, allLessons, packPool, authoredBeginnerBand]);
   const items = useMemo(() => running && pool && russianStarter ? russianStarterRound(allLessons, running.mode, running.mode === 'exam' ? running.attempt : localDay()) : running && pool ? (running.mode === 'exam' ? buildLevelExam(pool, running.attempt) : running.mode === 'warmup' ? buildLevelWarmUp(allLessons, running.levelId) : buildLevelSupplement(pool, running.levelId)) : [], [running, pool, allLessons, russianStarter]);
   const speak = useCallback((text: string) => speakText(text), [speakText]);
 

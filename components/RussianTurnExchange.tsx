@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { AppState, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import {
@@ -44,10 +44,12 @@ export default function RussianTurnExchange({
   path,
   change,
   practice = false,
-  onFinalAudio,
+  finish,
+  locked,
 }: {
   practice?: boolean;
-  onFinalAudio?: (playing: boolean) => void;
+  finish?: () => void;
+  locked?: boolean;
   lesson: RussianCourseLesson;
   path: ExchangePath | null;
   change: (p: ExchangePath | null) => void;
@@ -59,12 +61,14 @@ export default function RussianTurnExchange({
     [voice, setVoice] = useState<VoiceState>(idle),
     [help, setHelp] = useState(false),
     [draft, setDraft] = useState('');
-  // Save the accepted turn immediately, but let the final spoken reply finish before the lesson closes.
-  const playingLast = !!view?.complete && voice.phase === 'speaking';
-  useEffect(() => {
-    onFinalAudio?.(playingLast);
-    return () => onFinalAudio?.(false);
-  }, [playingLast, onFinalAudio]);
+  const [repairs, setRepairs] = useState<{ heard: string; example: string }[]>([]);
+  function noteRepair(heard: string, example: string) {
+    setRepairs((rows) =>
+      rows.some((row) => row.heard === heard && row.example === example)
+        ? rows
+        : [...rows, { heard, example }],
+    );
+  }
   const owner = useRef<AbortController | null>(null);
   const cancel = useCallback(() => {
     owner.current?.abort();
@@ -120,6 +124,7 @@ export default function RussianTurnExchange({
         change(accepted);
       },
       setVoice,
+      noteRepair,
     ).catch((e) => {
       if (!c.signal.aborted) setVoice({ phase: 'paused', note: problem(e) });
     });
@@ -128,6 +133,7 @@ export default function RussianTurnExchange({
     const p: ExchangePath = { starter, picks: [] };
     setHelp(false);
     setDraft('');
+    setRepairs([]);
     change(p);
     if (!manual) startVoice(p, starter === 'partner');
     else if (starter === 'partner') preview(scene.opening.text);
@@ -138,11 +144,13 @@ export default function RussianTurnExchange({
     change(takeTurn(path, i, original));
     setHelp(false);
     setDraft('');
-    preview(view.options[i].reply.text);
+    const reply = view.options[i].reply;
+    if (reply) preview(reply.text); else pause();
   }
   function submit() {
     const i = view ? matchExchangeReply(draft, view.options) : -1;
     if (i < 0) {
+      if (draft.trim() && view?.options[0]) noteRepair(draft.trim(), view.options[0].say.text);
       setVoice({ phase: 'paused', note: 'منظورت روشن نشد. پاسخ یکی از مسیرهای همین نوبت را بگو یا بنویس.' });
       return;
     }
@@ -156,16 +164,26 @@ export default function RussianTurnExchange({
   }
   const busy = ['listening', 'preparing', 'speaking'].includes(voice.phase),
     live = voice.phase === 'listening';
-  const StatusIcon = live ? Mic : voice.phase === 'speaking' ? AudioLines : view?.complete ? Check : Headphones;
+  const StatusIcon = live
+    ? Mic
+    : voice.phase === 'speaking'
+      ? AudioLines
+      : view?.complete
+        ? Check
+        : Headphones;
   return (
     <Paper>
-      <Text keepColor style={ss.kicker}>
-        {practice ? 'تمرین آزاد' : 'پایان درس'} / اتاق مکالمه
-      </Text>
-      <Text accessibilityRole="header" keepColor style={ss.title}>
-        مکالمهٔ نوبتی
-      </Text>
-      <Text style={ss.copy}>{lesson.situation}</Text>
+      <View style={[ss.hero, { backgroundColor: '#143F3C' }]}>
+        <Text keepColor style={ss.heroKicker}>
+          {practice ? 'تمرین آزاد' : 'پس از آزمون گفتاری'} / نقش‌آفرینی روسی
+        </Text>
+        <Text keepColor accessibilityRole="header" style={ss.heroTitle}>
+          {lesson.title}
+        </Text>
+        <Text keepColor style={ss.heroCopy}>
+          {lesson.situation}
+        </Text>
+      </View>
       {!path || !view ? (
         <>
           <View style={[ss.note, { backgroundColor: studio.mint }]}>
@@ -175,7 +193,7 @@ export default function RussianTurnExchange({
             <Text style={ss.copy}>
               {manual
                 ? 'می‌توانی جواب را انتخاب کنی یا بنویسی؛ هم‌صحبت جواب همان را می‌دهد.'
-                : 'وقتی نوبت تو شد، به روسی بگو و مکث کن. لازم نیست «ارسال» بزنی؛ هم‌صحبت جوابت را می‌گوید و دوباره گوش می‌دهد.'}
+                : 'وقتی نوبت تو شد، عبارت همان درس را بگو و مکث کن. لازم نیست «ارسال» بزنی؛ هم‌صحبت جوابت را می‌گوید و دوباره گوش می‌دهد.'}
             </Text>
           </View>
           {beginner && !manual && (
@@ -186,7 +204,9 @@ export default function RussianTurnExchange({
               </Text>
               <Text style={ss.small}>
                 {scene.learnerFirst[0].say.fa}
-                {scene.learnerFirst[0].say.pronunciation ? ` · ${scene.learnerFirst[0].say.pronunciation}` : ''}
+                {scene.learnerFirst[0].say.pronunciation
+                  ? ` · ${scene.learnerFirst[0].say.pronunciation}`
+                  : ''}
               </Text>
               <PlayLine text={scene.learnerFirst[0].say.text} speak={preview} label="اول نمونه را بشنو" />
             </View>
@@ -220,7 +240,7 @@ export default function RussianTurnExchange({
               <StatusIcon size={25} color={studio.leaf} />
               <View style={ss.flex}>
                 <Text keepColor style={ss.kicker}>
-                  {view.complete ? 'پایان دو نوبت' : `نوبت تو · ${fa(path.picks.length + 1)} از ۲`}
+                  {view.complete ? 'گفت‌وگو به پایان رسید' : `نوبت تو · ${fa(path.picks.length + 1)}`}
                 </Text>
                 <Text accessibilityLiveRegion="polite" keepColor style={ss.subhead}>
                   {voice.phase === 'speaking'
@@ -257,7 +277,7 @@ export default function RussianTurnExchange({
                 )
               ))}
           </View>
-          {view.history.map(({ who, line }, i) => (
+          {view.history.map(({ who, line, heard }, i) => (
             <View
               key={`${path.starter}:${i}`}
               style={[
@@ -272,16 +292,18 @@ export default function RussianTurnExchange({
                 {who === 'learner' ? 'تو گفتی' : 'هم‌صحبت'}
               </Text>
               <Text keepColor style={ss.ru}>
-                {line.text}
+                {heard ?? line.text}
               </Text>
               {(beginner || help) && <Text style={ss.small}>{line.fa}</Text>}
-              {(!busy || manual || view.complete) && <PlayLine text={line.text} speak={preview} label="بازپخش" />}
+              {(!busy || manual || view.complete) && (
+                <PlayLine text={line.text} speak={preview} label="بازپخش" />
+              )}
             </View>
           ))}
           {!view.complete && (
             <>
               <Text keepColor style={ss.subhead}>
-                {beginner ? 'در این نوبت می‌توانی بگویی' : 'یکی از این منظورها را به روسی بگو'}
+                {beginner ? 'در این نوبت می‌توانی بگویی' : 'عبارت این نوبت را از درس به یاد بیاور'}
               </Text>
               {view.options.map((m, i) => (
                 <View key={`${path.picks.length}:${i}`} style={ss.note}>
@@ -301,13 +323,16 @@ export default function RussianTurnExchange({
                 </View>
               ))}
               {!beginner && (
-                <StudioButton label={help ? 'بستن راهنما' : 'نمایش نمونهٔ روسی'} onPress={() => setHelp(!help)} />
+                <StudioButton
+                  label={help ? 'بستن راهنما' : 'نمایش نمونهٔ روسی'}
+                  onPress={() => setHelp(!help)}
+                />
               )}
               {manual && (
                 <>
                   <TextInput
                     accessibilityLabel="پاسخ من به روسی"
-                    placeholder="Ответ по-русски…"
+                    placeholder="پاسخت را به روسی بنویس…"
                     autoCapitalize="none"
                     value={draft}
                     maxLength={350}
@@ -319,6 +344,31 @@ export default function RussianTurnExchange({
                 </>
               )}
             </>
+          )}
+          {view.complete && (
+            <View style={ss.note}>
+              <Text keepColor style={ss.subhead}>
+                مرور گفت‌وگو
+              </Text>
+              <Text style={ss.copy}>
+                گفت‌وگوی همین درس را کامل کردی.{' '}
+                {repairs.length
+                  ? 'برای پاسخ‌هایی که منظورشان روشن نشد، این نمونه‌ها را مرور کن.'
+                  : 'در صورت نیاز، پاسخ‌های همین موقعیت را دوباره بشنو.'}
+              </Text>
+              {repairs.map(({ heard, example }) => (
+                <View key={`${heard}:${example}`} style={ss.sample}>
+                  <Text style={ss.small}>پاسخ ثبت‌شده</Text>
+                  <Text keepColor style={ss.ru}>
+                    {heard}
+                  </Text>
+                  <Text style={ss.small}>یک پاسخ مناسب در آن نوبت</Text>
+                  <Text keepColor style={ss.ru}>
+                    {example}
+                  </Text>
+                </View>
+              ))}
+            </View>
           )}
           <StudioButton
             icon={RotateCcw}
@@ -342,6 +392,17 @@ export default function RussianTurnExchange({
           icon={manual ? Play : Keyboard}
           label={manual ? 'مکالمه با میکروفون' : 'تمرین بدون میکروفون'}
           onPress={swapMode}
+        />
+      )}
+      {finish && (
+        <StudioButton
+          kind={view?.complete ? 'primary' : 'subtle'}
+          disabled={locked || (!!view?.complete && voice.phase === 'speaking')}
+          label={view?.complete ? 'پایان درس' : 'رد کردن مکالمه و پایان درس'}
+          onPress={() => {
+            pause();
+            finish();
+          }}
         />
       )}
     </Paper>

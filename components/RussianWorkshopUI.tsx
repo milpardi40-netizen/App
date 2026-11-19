@@ -13,14 +13,20 @@ export function Hear({ text, speak }: { text: string; speak: (s: string) => void
 }
 export function Panel({ children }: { children: ReactNode }) { return <View style={w.panel}>{children}</View>; }
 export function GrammarLink({ fromLesson, onPress }: { fromLesson?: boolean; onPress: () => void }) {
-  return <Pressable accessibilityRole="button" accessibilityLabel={fromLesson ? 'فعل و ضمیر همین درس' : 'فعل و ضمیر'} onPress={onPress} style={w.link}>
-    <View style={w.icon}><BookOpen size={23} color={blue} /></View><View style={{ flex: 1, gap: 2 }}><Text style={w.kicker}>کارگاه روسی</Text><Text style={w.title}>{fromLesson ? 'فعل و ضمیر همین درس' : 'فعل و ضمیر'}</Text><Text style={w.copy}>{fromLesson ? 'شکل واژه را در همین موقعیت ببین و تمرین کن.' : 'از خواستن و خواندن شروع کن: اول خودِ فعل، بعد یک مثال و یک تمرین.'}</Text></View><ChevronLeft size={19} color={blue}/>
+  return <Pressable accessibilityRole="button" accessibilityLabel={fromLesson ? 'فعل و ضمیر همین درس' : 'اتاق آموزش افعال'} onPress={onPress} style={w.link}>
+    <View style={w.icon}><BookOpen size={23} color={blue} /></View><View style={{ flex: 1, gap: 2 }}><Text style={w.kicker}>کارگاه ۰۱  /  دفتر زبان</Text><Text style={w.title}>{fromLesson ? 'فعل و ضمیر همین درس' : 'اتاق آموزش افعال'}</Text><Text style={w.copy}>{fromLesson ? 'شکل واژه را در همین موقعیت ببین و تمرین کن.' : 'مصدر را بشناس، شکل آن را در جمله ببین و با راوی تمرین کن.'}</Text></View><ChevronLeft size={19} color={blue}/>
   </Pressable>;
 }
 export function VoiceRoomLink({ fromLesson, onPress }: { fromLesson?: boolean; onPress: () => void }) {
   const title = fromLesson ? 'مکالمهٔ صوتی همین درس' : 'اتاق مکالمهٔ روسی';
-  return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={[w.link,{backgroundColor:'#EAF3E6',borderColor:'#CDDCC8'}]}>
-    <View style={[w.icon,{backgroundColor:'#D7E9CF'}]}><Mic size={23} color="#246456"/></View><View style={{flex:1,gap:2}}><Text style={w.kicker}>تمرین آزاد · میکروفون</Text><Text style={w.title}>{title}</Text><Text style={w.copy}>{fromLesson ? 'همین موقعیت را با صدا و جواب خودکار تمرین کن.' : 'از یک سلام شروع کن. تو بگو و جواب هم‌صحبت را بشنو.'}</Text></View><ChevronLeft size={19} color="#246456"/>
+  return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={({pressed}) => [w.link,{backgroundColor:'#123E39',borderColor:'#123E39',opacity:pressed ? .88 : 1}]}>
+    <View style={[w.icon,{backgroundColor:'#D6E99C'}]}><Mic size={23} color="#16483E"/></View>
+    <View style={{flex:1,gap:3}}>
+      <Text keepColor style={[w.kicker,{color:'#D6E99C'}]}>کارگاه ۰۲  /  استودیوی گفتار</Text>
+      <Text keepColor style={[w.title,{color:'#FFFFFF'}]}>{title}</Text>
+      <Text keepColor style={[w.copy,{color:'#E0EEE7'}]}>در نقش یکی از دو نفر، گفت‌وگوی هر درس را با پاسخ خودت پیش ببر.</Text>
+    </View>
+    <ChevronLeft size={19} color="#D6E99C"/>
   </Pressable>;
 }
 export const w = StyleSheet.create({
