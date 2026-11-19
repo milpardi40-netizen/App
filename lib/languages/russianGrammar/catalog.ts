@@ -11,17 +11,17 @@ export function relatedUnits(lesson: LearningLesson & { levelId: number }) {
   const rank = (u: GrammarUnit) => tokens(u.forms).filter(f => words.has(f)).length + (u.id === 'want' && lessonVerbs(lesson.id).includes('хотеть') ? 5 : 0);
   return GRAMMAR_UNITS.filter(u => u.level <= Math.max(1, lesson.levelId) && rank(u) > 0).sort((a,b) => rank(b) - rank(a)).slice(0, 4);
 }
+export function lessonExample(verb: Verb, lesson?: LearningLesson) {
+  if (!lesson) return;
+  const ref = (index.references as Record<string, Record<string, string[]>>)[lesson.id]?.[verb.lemma];
+  if (!ref) return;
+  const [key, form] = ref;
+  const s = key.startsWith('d:') ? lesson.dialogue[Number(key.slice(2))] : lesson.sentences.find(s => s.id === key);
+  if (s) return { text: s.text, fa: s.fa, form };
+}
 export function verbExamples(verb: Verb, lesson?: LearningLesson) {
-  const examples = [...verb.examples];
-  if (lesson && lessonVerbs(lesson.id).includes(verb.lemma)) {
-    const ref = (index.references as Record<string, Record<string, string[]>>)[lesson.id]?.[verb.lemma];
-    if (ref) {
-      const [key, form] = ref;
-      const sample = key.startsWith('d:') ? lesson.dialogue[Number(key.slice(2))] : lesson.sentences.find(s => s.id === key);
-      if (sample) examples.unshift({ text: sample.text, fa: sample.fa, form });
-    }
-  }
-  return [...new Map(examples.map(s => [s.text, s])).values()];
+  const local = lessonExample(verb, lesson);
+  return [...new Map((local ? [local, ...verb.examples] : verb.examples).map(s => [s.text, s])).values()];
 }
 export function gapFor(text: string, form: string) {
   // Whole tokens only: «я» inside a word is not a pronoun and «ел» inside «делал» isn't «ate».

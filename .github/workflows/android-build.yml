@@ -103,6 +103,7 @@ jobs:
         run: |
           npm run validate:russian
           node scripts/verify-russian-redesign.cjs
+          node scripts/verify-russian-studio.cjs
           node scripts/verify-russian-speech-flow.cjs
           node scripts/verify-nonenglish-restart.cjs
           tags=$(gh api --paginate "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/milo-russian-")
@@ -300,7 +301,7 @@ jobs:
             url=${SUPABASE_URL:-$(node -p "require('./config/supabase.public.json').EXPO_PUBLIC_SUPABASE_URL")}
             row=$(jq -n --argjson code "$MILO_VERSION_CODE" --arg sha "$(cut -d' ' -f1 MiloRussian.apk.sha256)" \
               --arg url "https://github.com/$GITHUB_REPOSITORY/releases/download/$tag/MiloRussian.apk" --argjson size "$(stat -c %s MiloRussian.apk)" \
-              '{package_name:"com.devicecontrol.milorussian",platform:"android",version_name:("1.0."+($code|tostring)),version_code:$code,download_url:$url,file_size:$size,sha256:$sha,release_notes:"درس‌های آغازین، فعل و ضمیر و مکالمهٔ نوبتی روسی",published:true,mandatory:false}')
+              '{package_name:"com.devicecontrol.milorussian",platform:"android",version_name:("1.0."+($code|tostring)),version_code:$code,download_url:$url,file_size:$size,sha256:$sha,release_notes:"آموزش گام‌به‌گام فعل‌ها و مکالمهٔ روسی با میکروفون و پاسخ خودکار",published:true,mandatory:false}')
             curl --silent --show-error --fail -o /dev/null -X POST "$url/rest/v1/app_releases?on_conflict=package_name,platform,version_code" \
               -H "apikey: $SERVICE_KEY" -H "Authorization: Bearer $SERVICE_KEY" -H 'Content-Type: application/json' \
               -H 'Prefer: resolution=merge-duplicates,return=minimal' --data "$row"

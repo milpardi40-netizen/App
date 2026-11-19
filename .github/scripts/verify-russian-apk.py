@@ -16,6 +16,8 @@ checks.require(sdk == 24 and set(abis) == {'armeabi-v7a', 'arm64-v8a', 'x86', 'x
 checks.require(certs == ['fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c'], 'Release signature changed; do not publish')
 tools = Path(os.environ['ANDROID_HOME']) / 'build-tools/36.0.0'
 checks.output(tools/'zipalign', '-c', '-P', '16', '4', file)
+permissions = checks.output(tools/'aapt', 'dump', 'permissions', file)
+checks.require('android.permission.RECORD_AUDIO' in permissions, 'Microphone permission missing from packaged app')
 previous = os.environ.get('PREVIOUS_RUSSIAN_TAG', '')
 if previous:
     checks.require(re.fullmatch('milo-russian-[0-9]+', previous), 'Invalid previous Russian release')
@@ -30,7 +32,8 @@ sha = checks.digest(file)
 Path('MiloRussian.apk.sha256').write_text(f'{sha}  {file.name}\n')
 Path('russian-release.md').write_text(f'''فقط نسخهٔ مستقل روسی · **1.0.{code}** (Android versionCode {code})
 
-۱۷ درس آغازین تازه، کارگاه «فعل و ضمیر» و مکالمهٔ نوبتی در پایان همهٔ درس‌های روسی.
+کارگاه «از فعل تا جمله»: اول مصدر و معنی، بعد مثال و تمرین سطح‌بندی‌شده.
+اتاق مکالمه از اولین سلام: تو یا هم‌صحبت شروع کنید. پس از اجازهٔ میکروفون، پاسخِ روشن بدون دکمهٔ ارسال به جواب صوتی همان نوبت می‌رسد. حالت بدون میکروفون هم در دسترس است.
 
 Android package: `{package}` · بدون ورود · Android 7+ · ARM و x86 (۳۲ و ۶۴ بیت)
 

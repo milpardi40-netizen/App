@@ -19,6 +19,7 @@ adb shell am start -W -n "$pkg/.MainActivity"
 for i in {1..30}; do
   if adb shell uiautomator dump /sdcard/ru-window.xml >/dev/null 2>&1 && adb shell cat /sdcard/ru-window.xml | grep -E 'روسی|Русский|انتخاب زبان|زبان را از زندگی یاد بگیر' >/dev/null; then
     echo 'Verified standalone learner launch on an API 30 emulator.' >> russian-release.md
+    python3 .github/scripts/smoke-russian-studio.py
     exit 0
   fi
   sleep 2

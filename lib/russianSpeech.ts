@@ -27,6 +27,8 @@ export function warmRussianSpeech(): void {
 
 export function playRussianSpeech(text: string, rate: number, onError?: () => void, onDone?: () => void): Promise<void> {
   const request = ++requestId;
+  stopRecorded();
+  const current = () => request === requestId;
   return enqueue(async () => {
     if (request !== requestId) return;
     await Speech.stop().catch(() => undefined);
@@ -34,7 +36,7 @@ export function playRussianSpeech(text: string, rate: number, onError?: () => vo
     // Device TTS stays primary; recordings are used only on devices that opted in, and at the tempo
     // the shared narration contract defines for this language.
     const recordedRate = recordedPlaybackRate('ru-RU', rate);
-    if (await playPreferredRecording(text, recordedRate, 'ru', () => { if (request === requestId) onDone?.(); })) return;
+    if (await playPreferredRecording(text, recordedRate, 'ru', () => { if (request === requestId) onDone?.(); }, current)) return;
     if (request !== requestId) return;
     const voice = await voiceFor('ru-RU', text).catch(() => undefined);
     if (request !== requestId) return;
@@ -50,13 +52,13 @@ export function playRussianSpeech(text: string, rate: number, onError?: () => vo
           onError: () => {
             if (request !== requestId) return;
             if (withVoice && voice) { say(false); return; }
-            void playFallbackRecording(text, recordedRate, 'ru', () => { if (request === requestId) onDone?.(); }).then(ok => { if (request === requestId && !ok) onError?.(); });
+            void playFallbackRecording(text, recordedRate, 'ru', () => { if (request === requestId) onDone?.(); }, current).then(ok => { if (current() && !ok) onError?.(); }).catch(() => { if (current()) onError?.(); });
           },
         });
       } catch {
         if (request !== requestId) return;
         if (withVoice && voice) { say(false); return; }
-        void playFallbackRecording(text, recordedRate, 'ru', () => { if (request === requestId) onDone?.(); }).then(ok => { if (request === requestId && !ok) onError?.(); });
+        void playFallbackRecording(text, recordedRate, 'ru', () => { if (request === requestId) onDone?.(); }, current).then(ok => { if (current() && !ok) onError?.(); }).catch(() => { if (current()) onError?.(); });
       }
     };
     say(true);

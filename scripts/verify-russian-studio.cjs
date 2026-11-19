@@ -1,0 +1,275 @@
+#!/usr/bin/env node
+// Compiled app content and actual duplex/audio adapters. Only OS events, speakers and disk are faked.
+const { build } = require('esbuild');
+const assert = require('node:assert/strict');
+const flush = () => new Promise((r) => setImmediate(r));
+(async () => {
+  const subs = new Map(),
+    starts = [],
+    spoken = [],
+    photos = [],
+    saved = [],
+    disk = new Map();
+  const emit = (type, value) => [...(subs.get(type) || [])].forEach((fn) => fn(value));
+  let available = true,
+    grant = true,
+    request = async () => ({ granted: grant }),
+    recording = false,
+    speech = null,
+    abortEnds = true;
+  global.mic = {
+    isRecognitionAvailable: () => available,
+    getPermissionsAsync: async () => ({ granted: grant, canAskAgain: true }),
+    requestPermissionsAsync: () => request(),
+    addListener(type, fn) {
+      if (!subs.has(type)) subs.set(type, new Set());
+      subs.get(type).add(fn);
+      return { remove: () => subs.get(type).delete(fn) };
+    },
+    start(options) {
+      assert(!recording && !speech, 'microphone overlapped another turn');
+      recording = true;
+      starts.push(options);
+      emit('start');
+    },
+    abort() {
+      recording = false;
+      if (abortEnds) emit('end');
+    },
+  };
+  const end = () => {
+      recording = false;
+      emit('end');
+    },
+    result = (text, final = true) => emit('result', { isFinal: final, results: [{ transcript: text }] });
+  global.stopTTS = async () => {
+    speech = null;
+  };
+  global.tts = async (text, rate, fail, done) => {
+    assert(!recording && !speech, 'audible reply overlapped mic');
+    speech = { text, fail, done };
+    spoken.push(text);
+  };
+  global.storage = { getItem: async (k) => disk.get(k) ?? null, setItem: async (k, v) => disk.set(k, v) };
+  const stubs = {
+    'expo-speech-recognition': 'export const ExpoSpeechRecognitionModule=globalThis.mic',
+    './russianSpeech': 'export const playRussianSpeech=globalThis.tts, stopRussianSpeech=globalThis.stopTTS',
+    '@react-native-async-storage/async-storage': 'export default globalThis.storage',
+  };
+  const exports = [
+    'languages/russian',
+    'languages/russianExchange',
+    'languages/russianVoiceExchange',
+    'languages/russianGrammar/catalog',
+    'languages/russianGrammar/marks',
+    'languages/russianGrammar/trails',
+    'languages/russianGrammar/verbLesson',
+    'russianTurnAudio',
+  ];
+  const {
+    outputFiles: [out],
+  } = await build({
+    stdin: { contents: exports.map((f) => `export * from './lib/${f}'`).join(';'), resolveDir: process.cwd() },
+    bundle: true,
+    format: 'cjs',
+    platform: 'node',
+    write: false,
+    plugins: [
+      {
+        name: 'device',
+        setup(b) {
+          b.onResolve({ filter: /.*/ }, ({ path }) =>
+            stubs[path] || path.endsWith('createCourseProgressStore') ? { path, namespace: 'os' } : undefined,
+          );
+          b.onLoad({ filter: /.*/, namespace: 'os' }, ({ path }) => ({
+            contents: stubs[path] || 'export const createCourseProgressStore=()=>({})',
+          }));
+        },
+      },
+    ],
+  });
+  const mod = { exports: {} };
+  new Function('module', 'exports', out.text)(mod, mod.exports);
+  const x = mod.exports;
+  assert.equal(x.VERB_TRAILS.length, 6);
+  assert.equal(x.VERB_TRAILS[0].lemma, 'хотеть');
+  for (const t of x.VERB_TRAILS) {
+    assert(x.VERBS.some((v) => v.lemma === t.lemma));
+    assert.equal(t.rungs.length, 6);
+    assert.equal(new Set(t.rungs.map((r) => r.text)).size, 6);
+  }
+  let bands = 0,
+    drills = 0;
+  for (const v of x.VERBS)
+    for (let b = 0; b < 6; b++) {
+      const samples = x.studyExamples(v, b);
+      assert(samples.length > 0);
+      bands++;
+      for (const s of samples) {
+        assert(s.fa && s.source && x.gapFor(s.text, s.form).includes('____'), `${v.lemma}:${s.text}`);
+        const c = x.drillFor(v, s, b);
+        assert(c.prompt && c.why && c.answer);
+        if (c.write) assert(b === 5 && c.cue.includes('____'));
+        else {
+          assert(c.choices.length >= 2 && c.choices.includes(c.answer));
+          assert.equal(new Set(c.choices.map(x.normalize)).size, c.choices.length);
+        }
+        drills++;
+      }
+    }
+  const lesson = x.findRussianLesson('ru-pre-this-is'),
+    verb = x.VERBS.find((v) => v.lemma === 'хотеть');
+  assert.equal(x.studyExamples(verb, 0, lesson)[0].source, 'از همین درس');
+  await Promise.all([x.markPractised('хотеть', 0), x.markPractised('читать', 4), x.markPractised('хотеть', 0)]);
+  assert.deepEqual(await x.readMarks(), ['хотеть:0', 'читать:4']);
+  console.log(
+    `PASS six authored spiral trails, ${bands} verb/level views and ${drills} drills; contextual priority and independent durable workshop marks.`,
+  );
+  const scene = x.exchangeForLesson(lesson),
+    p = { starter: 'learner', picks: [] };
+  let c;
+  const begin = (path = p, replay = path.starter === 'partner') => {
+    c = new AbortController();
+    return x.runVoiceExchange(
+      scene,
+      path,
+      replay,
+      x.russianTurnAudio,
+      c.signal,
+      (v) => saved.push(v),
+      (v) => photos.push(v),
+    );
+  };
+  const done = () => {
+    const s = speech;
+    assert(s);
+    speech = null;
+    s.done();
+  };
+  let job = begin();
+  await flush();
+  assert(recording);
+  assert.deepEqual(spoken, []);
+  assert.equal(starts[0].lang, 'ru-RU');
+  assert.equal(starts[0].recordingOptions.persist, false);
+  result('я хочу чай', false);
+  assert.equal(saved.length, 0);
+  result('вода');
+  result('чай');
+  await flush();
+  assert.equal(saved.length, 0, 'wait for native end');
+  end();
+  await flush();
+  assert.equal(speech.text, 'Вот твоя́ вода́.');
+  assert.equal(saved.at(-1).said[0], 'вода');
+  assert(!recording);
+  done();
+  await flush();
+  assert(recording);
+  end();
+  result('спасибо');
+  await flush();
+  assert.equal(speech.text, 'Пожа́луйста!');
+  done();
+  await job;
+  assert.equal(starts.length, 2);
+  assert.equal(photos.at(-1).phase, 'done');
+  assert(x.validExchangePath(scene, saved.at(-1)));
+  const count = saved.length;
+  job = begin({ starter: 'partner', picks: [] });
+  await flush();
+  assert.equal(speech.text, scene.opening.text);
+  assert(!recording);
+  const stale = speech.done;
+  done();
+  await flush();
+  result('я не хочу чай');
+  end();
+  await flush();
+  assert.equal(speech.text, x.clarify);
+  assert.equal(saved.length, count);
+  done();
+  await flush();
+  result('чай или воду');
+  end();
+  await job;
+  assert.equal(photos.at(-1).phase, 'paused');
+  assert.equal(saved.length, count);
+  // No interim-only commits; no accidental retry loop on silence, denied permission, or unavailable engines.
+  job = begin();
+  await flush();
+  result('чай', false);
+  end();
+  await assert.rejects(job, /صدای روشنی/);
+  assert.equal(saved.length, count);
+  grant = false;
+  await assert.rejects(begin(), /دسترسی/);
+  assert(!recording);
+  available = false;
+  await assert.rejects(begin(), /در دسترس نیست/);
+  available = true;
+  let answerPerm;
+  request = () =>
+    new Promise((r) => {
+      answerPerm = r;
+    });
+  job = begin();
+  await flush();
+  c.abort();
+  answerPerm({ granted: true });
+  await assert.rejects(job, /cancelled/);
+  assert(!recording);
+  grant = true;
+  job = begin({ starter: 'partner', picks: [] });
+  await flush();
+  c.abort();
+  stale();
+  await assert.rejects(job, /cancelled/);
+  assert(!recording);
+  job = begin();
+  await flush();
+  abortEnds = false;
+  c.abort();
+  const stopped = assert.rejects(job, /cancelled/);
+  const before = starts.length;
+  const newer = begin();
+  await flush();
+  assert.equal(starts.length, before, 'wait for abort end');
+  result('чай');
+  end();
+  await stopped;
+  await flush();
+  assert.equal(starts.length, before + 1);
+  assert.equal(saved.length, count);
+  abortEnds = true;
+  emit('error', { error: 'network' });
+  end();
+  await assert.rejects(newer, /شبکه/);
+  job = begin({ starter: 'partner', picks: [] });
+  await flush();
+  speech.fail();
+  speech = null;
+  await assert.rejects(job, /پخش نشد/);
+  assert(!recording);
+  assert.equal(saved.length, count);
+  const resumed = { starter: 'partner', picks: [0], said: { 0: 'чай' } };
+  job = begin(resumed, true);
+  await flush();
+  assert.equal(speech.text, 'Вот твой чай.');
+  done();
+  await flush();
+  result('спасибо');
+  end();
+  await flush();
+  done();
+  await job;
+  assert.equal(saved.at(-1).said[0], 'чай');
+  assert.equal(saved.at(-1).picks.length, 2);
+  for (const list of subs.values()) assert.equal(list.size, 0);
+  console.log(
+    'PASS two hands-free starters, conditional replies, late/duplicate/interim events, one spoken clarification, silence, permission denial, busy abort drain, background cancellation, TTS error, final stop and path resume.',
+  );
+})().catch((e) => {
+  console.error(e);
+  process.exitCode = 1;
+});

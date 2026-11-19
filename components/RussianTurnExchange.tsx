@@ -1,65 +1,349 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
-import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AppState, View } from 'react-native';
+import { useFocusEffect } from 'expo-router';
+import {
+  AudioLines,
+  Check,
+  Headphones,
+  Keyboard,
+  Mic,
+  Pause,
+  Play,
+  RotateCcw,
+  UserRound,
+} from 'lucide-react-native';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from './LocalizedText';
-import { Action, Hear, Panel, w } from './RussianWorkshopUI';
+import { Entry, Paper, PlayLine, ss, studio, StudioButton } from './RussianStudioUI';
 import type { RussianCourseLesson } from '@/lib/languages/russian';
-import { exchangeForLesson, exchangeView, matchExchangeReply, type ExchangePath } from '@/lib/languages/russianExchange';
+import {
+  exchangeForLesson,
+  exchangeView,
+  matchExchangeReply,
+  takeTurn,
+  type ExchangePath,
+} from '@/lib/languages/russianExchange';
+import { runVoiceExchange, type VoiceState } from '@/lib/languages/russianVoiceExchange';
+import { russianTurnAudio as audio } from '@/lib/russianTurnAudio';
 import { stopRussianSpeech } from '@/lib/russianSpeech';
+import { toPersianDigits as fa } from '@/lib/format';
 
-/** Dictation is opt-in, editable before sending, and never required. No recording upload. */
-function Dictate({ onDraft, onNotice }: { onDraft: (t: string) => void; onNotice: (t: string) => void }) {
-  const [busy, setBusy] = useState(false), live = useRef(true), owning = useRef(false);
-  useEffect(() => { live.current = true; return () => { live.current = false; if (owning.current) { owning.current = false; ExpoSpeechRecognitionModule.abort(); } }; }, []);
-  useSpeechRecognitionEvent('result', event => { if (owning.current && event.results[0]?.transcript) onDraft(event.results[0].transcript); });
-  useSpeechRecognitionEvent('end', () => { owning.current = false; if (live.current) setBusy(false); });
-  useSpeechRecognitionEvent('error', () => { if (owning.current) { owning.current = false; setBusy(false); onNotice('صدا تشخیص داده نشد. می‌توانی بنویسی یا نمونه را انتخاب کنی.'); } });
-  async function start() {
-    if (busy) { if (owning.current) ExpoSpeechRecognitionModule.stop(); return; }
-    setBusy(true);
-    try {
-      await stopRussianSpeech();
-      if (!live.current) return;
-      const { granted } = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
-      if (!live.current) return;
-      if (!granted) throw new Error('unavailable');
-      owning.current = true;
-      ExpoSpeechRecognitionModule.start({ lang: 'ru-RU', interimResults: true, continuous: false, maxAlternatives: 1 });
-    } catch { owning.current = false; if (live.current) { setBusy(false); onNotice('میکروفن یا تشخیص روسی در دسترس نیست. نوشتن و انتخاب نمونه همچنان ممکن است.'); } }
-  }
-  return <Action label={busy ? 'پایان دیکته' : 'با میکروفن بگو'} onPress={() => { void start(); }} />;
-}
-export default function RussianTurnExchange({ lesson, path, change, speak }: { lesson: RussianCourseLesson; path: ExchangePath | null; change: (p: ExchangePath | null) => void; speak: (t: string) => void }) {
+const idle: VoiceState = { phase: 'paused' };
+const phaseName = {
+  preparing: 'در حال آماده‌کردن میکروفون',
+  listening: 'نوبت توست؛ دارم گوش می‌دهم',
+  speaking: 'هم‌صحبت دارد حرف می‌زند',
+  paused: 'میکروفون بسته است',
+  done: 'گفت‌وگو کامل شد',
+};
+const problem = (e: unknown) =>
+  e instanceof Error && /[\u0600-\u06ff]/.test(e.message)
+    ? e.message
+    : 'صدا در دسترس نیست. دوباره امتحان کن یا بدون میکروفون ادامه بده.';
+export default function RussianTurnExchange({
+  lesson,
+  path,
+  change,
+  practice = false,
+  onFinalAudio,
+}: {
+  practice?: boolean;
+  onFinalAudio?: (playing: boolean) => void;
+  lesson: RussianCourseLesson;
+  path: ExchangePath | null;
+  change: (p: ExchangePath | null) => void;
+}) {
   const scene = useMemo(() => exchangeForLesson(lesson), [lesson]);
-  const current = path ? exchangeView(scene, path) : null;
-  const beginner = lesson.levelId <= 1, advanced = lesson.levelId >= 3;
-  const [help, setHelp] = useState(false), [draft, setDraft] = useState(''), [notice, setNotice] = useState('');
-  const clear = () => { setDraft(''); setNotice(''); setHelp(false); };
-  const begin = (starter: ExchangePath['starter']) => { clear(); change({ starter, picks: [] }); if (starter === 'partner') speak(scene.opening.text); };
-  const send = (index: number, original?: string) => {
-    if (!path || !current?.options[index]) return;
-    const choice = current.options[index];
-    change({ ...path, picks: [...path.picks, index], ...(original ? { said: { ...path.said, [path.picks.length]: original } } : {}) });
-    clear(); speak(choice.reply.text);
-  };
-  const submit = () => {
-    const index = current ? matchExchangeReply(draft, current.options) : -1;
-    if (index < 0) { setNotice('منظورت روشن نشد. این تمرین چند مسیر مشخص دارد؛ پاسخ را دقیق‌تر بگو یا از نمونه‌های همین نوبت کمک بگیر.'); return; }
-    send(index, draft.trim());
-  };
-  return <Panel><Text style={w.kicker}>پایان درس · تمرین دونفره</Text><Text accessibilityRole="header" style={w.title}>مکالمهٔ نوبتی</Text><Text style={w.copy}>{lesson.situation}</Text>
-    {!path || !current ? <><Text style={w.copy}>چه کسی شروع کند؟</Text><View style={w.row}><Action label="من شروع می‌کنم" onPress={() => begin('learner')}/><Action label="هم‌صحبت شروع کنه" onPress={() => begin('partner')}/></View></> : <>
-      {current.history.map(({ who, line }, i) => <View key={i} style={[w.sample, who === 'learner' && { backgroundColor: '#EEF6EE' }]}><Text style={w.kicker}>{who === 'learner' ? 'من' : 'هم‌صحبت'}</Text><Text style={w.ru}>{line.text}</Text>{(beginner || help) && <Text style={w.copy}>{line.fa}</Text>}<Hear text={line.text} speak={speak}/></View>)}
-      {current.complete ? <Text accessibilityLiveRegion="polite" style={w.copy}>گفت‌وگو کامل شد. می‌توانی درس را تمام کنی یا با شروع‌کنندهٔ دیگر تمرین کنی.</Text> : <>
-        <Text style={w.title}>{!current.history.length ? 'اولین حرف با توست' : 'حالا نوبت توست'}</Text>
-        {advanced && !help && <Text style={w.copy}>یکی از این منظورها را به روسی بیان کن: {current.options.map(m => m.say.fa).join(' / ')}</Text>}
-        {(beginner || !advanced || help) && current.options.map((m,i) => <View key={`${path.picks.length}:${i}`} style={w.sample}><View style={w.row}><Hear text={m.say.text} speak={speak}/><View style={{ flex: 1 }}><Text style={w.ru}>{m.say.text}</Text></View></View>{(beginner || help) && <Text style={w.copy}>{m.say.fa}</Text>}<Action label={`بگو: ${m.say.text}`} onPress={() => send(i)} /></View>)}
-        {(!beginner || help) && <><TextInput accessibilityLabel="پاسخ من به روسی" placeholder="Ответ по-русски…" value={draft} maxLength={350} onChangeText={setDraft} onSubmitEditing={submit} style={[w.input,{ writingDirection: 'ltr', textAlign: 'left' }]} />
-          <View style={w.row}><Dictate key={`${path.starter}:${path.picks.length}`} onDraft={setDraft} onNotice={setNotice}/><Action label="فرستادن پاسخ" muted={!draft.trim()} onPress={submit}/></View></>}
-        <Action label={help ? 'بستن راهنما' : beginner ? 'می‌خواهم خودم بگویم' : 'نمونه و معنی این نوبت'} onPress={() => setHelp(!help)} />
-        {!!notice && <Text accessibilityLiveRegion="polite" style={w.copy}>{notice}</Text>}
-      </>}
-      <Action label="عوض کردن شروع‌کننده" onPress={() => { void stopRussianSpeech(); clear(); change(null); }}/>
-    </>}
-  </Panel>;
+  const view = path ? exchangeView(scene, path) : null,
+    beginner = lesson.levelId <= 1;
+  const [manual, setManual] = useState(false),
+    [voice, setVoice] = useState<VoiceState>(idle),
+    [help, setHelp] = useState(false),
+    [draft, setDraft] = useState('');
+  // Save the accepted turn immediately, but let the final spoken reply finish before the lesson closes.
+  const playingLast = !!view?.complete && voice.phase === 'speaking';
+  useEffect(() => {
+    onFinalAudio?.(playingLast);
+    return () => onFinalAudio?.(false);
+  }, [playingLast, onFinalAudio]);
+  const owner = useRef<AbortController | null>(null);
+  const cancel = useCallback(() => {
+    owner.current?.abort();
+    owner.current = null;
+    void stopRussianSpeech().catch(() => {});
+  }, []);
+  const pause = useCallback(() => {
+    cancel();
+    setVoice(idle);
+  }, [cancel]);
+  useFocusEffect(
+    useCallback(() => {
+      const app = AppState.addEventListener('change', (state) => {
+        if (state === 'background') pause();
+      });
+      return () => {
+        app.remove();
+        pause();
+      }; // no automatic microphone on focus, mount, or restored progress
+    }, [pause]),
+  );
+  function own() {
+    cancel();
+    const c = new AbortController();
+    owner.current = c;
+    return c;
+  }
+  function preview(text: string) {
+    const c = own();
+    setVoice({ phase: 'speaking' });
+    void audio
+      .say(text, c.signal)
+      .then(() => {
+        if (!c.signal.aborted) setVoice(idle);
+      })
+      .catch((e) => {
+        if (!c.signal.aborted) setVoice({ phase: 'paused', note: problem(e) });
+      });
+  }
+  function startVoice(p: ExchangePath, replay: boolean) {
+    const c = own();
+    setVoice({ phase: 'preparing' });
+    setDraft('');
+    void runVoiceExchange(
+      scene,
+      p,
+      replay,
+      audio,
+      c.signal,
+      (accepted) => {
+        setHelp(false);
+        setDraft('');
+        change(accepted);
+      },
+      setVoice,
+    ).catch((e) => {
+      if (!c.signal.aborted) setVoice({ phase: 'paused', note: problem(e) });
+    });
+  }
+  function begin(starter: ExchangePath['starter']) {
+    const p: ExchangePath = { starter, picks: [] };
+    setHelp(false);
+    setDraft('');
+    change(p);
+    if (!manual) startVoice(p, starter === 'partner');
+    else if (starter === 'partner') preview(scene.opening.text);
+    else pause();
+  }
+  function send(i: number, original?: string) {
+    if (!path || !view?.options[i]) return;
+    change(takeTurn(path, i, original));
+    setHelp(false);
+    setDraft('');
+    preview(view.options[i].reply.text);
+  }
+  function submit() {
+    const i = view ? matchExchangeReply(draft, view.options) : -1;
+    if (i < 0) {
+      setVoice({ phase: 'paused', note: 'منظورت روشن نشد. پاسخ یکی از مسیرهای همین نوبت را بگو یا بنویس.' });
+      return;
+    }
+    send(i, draft);
+  }
+  function swapMode() {
+    pause();
+    setManual(!manual);
+    setDraft('');
+    if (manual && path && !view?.complete) startVoice(path, true);
+  }
+  const busy = ['listening', 'preparing', 'speaking'].includes(voice.phase),
+    live = voice.phase === 'listening';
+  const StatusIcon = live ? Mic : voice.phase === 'speaking' ? AudioLines : view?.complete ? Check : Headphones;
+  return (
+    <Paper>
+      <Text keepColor style={ss.kicker}>
+        {practice ? 'تمرین آزاد' : 'پایان درس'} / اتاق مکالمه
+      </Text>
+      <Text accessibilityRole="header" keepColor style={ss.title}>
+        مکالمهٔ نوبتی
+      </Text>
+      <Text style={ss.copy}>{lesson.situation}</Text>
+      {!path || !view ? (
+        <>
+          <View style={[ss.note, { backgroundColor: studio.mint }]}>
+            <Text keepColor style={ss.subhead}>
+              {manual ? 'تمرین بدون میکروفون' : 'یک بار شروع کن، بعد فقط حرف بزن'}
+            </Text>
+            <Text style={ss.copy}>
+              {manual
+                ? 'می‌توانی جواب را انتخاب کنی یا بنویسی؛ هم‌صحبت جواب همان را می‌دهد.'
+                : 'وقتی نوبت تو شد، به روسی بگو و مکث کن. لازم نیست «ارسال» بزنی؛ هم‌صحبت جوابت را می‌گوید و دوباره گوش می‌دهد.'}
+            </Text>
+          </View>
+          {beginner && !manual && (
+            <View style={ss.sample}>
+              <Text style={ss.kicker}>برای شروع، همین را هم می‌توانی بگویی</Text>
+              <Text keepColor style={ss.ru}>
+                {scene.learnerFirst[0].say.text}
+              </Text>
+              <Text style={ss.small}>
+                {scene.learnerFirst[0].say.fa}
+                {scene.learnerFirst[0].say.pronunciation ? ` · ${scene.learnerFirst[0].say.pronunciation}` : ''}
+              </Text>
+              <PlayLine text={scene.learnerFirst[0].say.text} speak={preview} label="اول نمونه را بشنو" />
+            </View>
+          )}
+          <Text keepColor style={ss.subhead}>
+            چه کسی شروع کند؟
+          </Text>
+          <Entry
+            icon={manual ? UserRound : Mic}
+            title="من شروع می‌کنم"
+            sub={manual ? 'اول جواب من' : 'میکروفون باز می‌شود؛ اول تو بگو'}
+            onPress={() => begin('learner')}
+          />
+          <Entry
+            icon={Headphones}
+            title="هم‌صحبت شروع کنه"
+            sub={manual ? 'اول صدای هم‌صحبت' : 'اول گوش کن، بعد با میکروفون جواب بده'}
+            onPress={() => begin('partner')}
+          />
+          {!manual && (
+            <Text style={ss.small}>
+              با شروع مکالمهٔ صوتی، اجازهٔ میکروفون لازم است. برنامه فایل صدایت را نگه نمی‌دارد؛ تشخیص گفتارِ
+              دستگاه ممکن است به اینترنت نیاز داشته باشد.
+            </Text>
+          )}
+        </>
+      ) : (
+        <>
+          <View style={[ss.note, { backgroundColor: live ? studio.mint : studio.paper }]}>
+            <View style={ss.inline}>
+              <StatusIcon size={25} color={studio.leaf} />
+              <View style={ss.flex}>
+                <Text keepColor style={ss.kicker}>
+                  {view.complete ? 'پایان دو نوبت' : `نوبت تو · ${fa(path.picks.length + 1)} از ۲`}
+                </Text>
+                <Text accessibilityLiveRegion="polite" keepColor style={ss.subhead}>
+                  {voice.phase === 'speaking'
+                    ? phaseName.speaking
+                    : view.complete
+                      ? phaseName.done
+                      : manual
+                        ? 'پاسخ با نوشتن یا انتخاب'
+                        : phaseName[voice.phase]}
+                </Text>
+              </View>
+            </View>
+            {!!voice.note && (
+              <Text accessibilityLiveRegion="polite" style={ss.copy}>
+                {voice.note}
+              </Text>
+            )}
+            {!!voice.heard && (
+              <Text keepColor style={ss.ru}>
+                {voice.heard}
+              </Text>
+            )}
+            {!manual &&
+              (busy ? (
+                <StudioButton label="مکث مکالمه" icon={Pause} onPress={pause} />
+              ) : (
+                !view.complete && (
+                  <StudioButton
+                    label="ادامهٔ مکالمهٔ صوتی"
+                    kind="primary"
+                    icon={Mic}
+                    onPress={() => startVoice(path, true)}
+                  />
+                )
+              ))}
+          </View>
+          {view.history.map(({ who, line }, i) => (
+            <View
+              key={`${path.starter}:${i}`}
+              style={[
+                ss.sample,
+                {
+                  backgroundColor: who === 'learner' ? '#F1F3E8' : '#FAEEE5',
+                  borderLeftColor: who === 'learner' ? '#85A475' : '#C58259',
+                },
+              ]}
+            >
+              <Text keepColor style={ss.kicker}>
+                {who === 'learner' ? 'تو گفتی' : 'هم‌صحبت'}
+              </Text>
+              <Text keepColor style={ss.ru}>
+                {line.text}
+              </Text>
+              {(beginner || help) && <Text style={ss.small}>{line.fa}</Text>}
+              {(!busy || manual || view.complete) && <PlayLine text={line.text} speak={preview} label="بازپخش" />}
+            </View>
+          ))}
+          {!view.complete && (
+            <>
+              <Text keepColor style={ss.subhead}>
+                {beginner ? 'در این نوبت می‌توانی بگویی' : 'یکی از این منظورها را به روسی بگو'}
+              </Text>
+              {view.options.map((m, i) => (
+                <View key={`${path.picks.length}:${i}`} style={ss.note}>
+                  {(beginner || help || lesson.levelId === 2) && (
+                    <Text keepColor style={ss.ru}>
+                      {m.say.text}
+                    </Text>
+                  )}
+                  <Text style={ss.copy}>{m.say.fa}</Text>
+                  {beginner && !!m.say.pronunciation && <Text style={ss.small}>{m.say.pronunciation}</Text>}
+                  {(beginner || help) && (!busy || manual) && (
+                    <PlayLine text={m.say.text} speak={preview} label="شنیدن نمونه" />
+                  )}
+                  {manual && (beginner || help || lesson.levelId === 2) && (
+                    <StudioButton label={`بگو: ${m.say.text}`} onPress={() => send(i)} />
+                  )}
+                </View>
+              ))}
+              {!beginner && (
+                <StudioButton label={help ? 'بستن راهنما' : 'نمایش نمونهٔ روسی'} onPress={() => setHelp(!help)} />
+              )}
+              {manual && (
+                <>
+                  <TextInput
+                    accessibilityLabel="پاسخ من به روسی"
+                    placeholder="Ответ по-русски…"
+                    autoCapitalize="none"
+                    value={draft}
+                    maxLength={350}
+                    onChangeText={setDraft}
+                    onSubmitEditing={submit}
+                    style={ss.input}
+                  />
+                  <StudioButton label="فرستادن پاسخ" disabled={!draft.trim()} onPress={submit} />
+                </>
+              )}
+            </>
+          )}
+          <StudioButton
+            icon={RotateCcw}
+            label="عوض کردن شروع‌کننده"
+            onPress={() => {
+              pause();
+              setHelp(false);
+              setDraft('');
+              change(null);
+            }}
+          />
+        </>
+      )}
+      {!view && !!voice.note && (
+        <Text accessibilityLiveRegion="polite" style={ss.copy}>
+          {voice.note}
+        </Text>
+      )}
+      {!view?.complete && (
+        <StudioButton
+          icon={manual ? Play : Keyboard}
+          label={manual ? 'مکالمه با میکروفون' : 'تمرین بدون میکروفون'}
+          onPress={swapMode}
+        />
+      )}
+    </Paper>
+  );
 }

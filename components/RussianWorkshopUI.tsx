@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { BookOpen, ChevronLeft, Volume2 } from 'lucide-react-native';
+import { BookOpen, ChevronLeft, Mic, Volume2 } from 'lucide-react-native';
 import { LocalizedText as Text } from './LocalizedText';
 import { Typography } from '@/lib/theme';
 
@@ -14,7 +14,13 @@ export function Hear({ text, speak }: { text: string; speak: (s: string) => void
 export function Panel({ children }: { children: ReactNode }) { return <View style={w.panel}>{children}</View>; }
 export function GrammarLink({ fromLesson, onPress }: { fromLesson?: boolean; onPress: () => void }) {
   return <Pressable accessibilityRole="button" accessibilityLabel={fromLesson ? 'فعل و ضمیر همین درس' : 'فعل و ضمیر'} onPress={onPress} style={w.link}>
-    <View style={w.icon}><BookOpen size={23} color={blue} /></View><View style={{ flex: 1, gap: 2 }}><Text style={w.kicker}>کارگاه روسی</Text><Text style={w.title}>{fromLesson ? 'فعل و ضمیر همین درس' : 'فعل و ضمیر'}</Text><Text style={w.copy}>{fromLesson ? 'شکل واژه را در همین موقعیت ببین و تمرین کن.' : 'از «من می‌خواهم» تا ارجاع در یک استدلال؛ با صدا و تمرین.'}</Text></View><ChevronLeft size={19} color={blue}/>
+    <View style={w.icon}><BookOpen size={23} color={blue} /></View><View style={{ flex: 1, gap: 2 }}><Text style={w.kicker}>کارگاه روسی</Text><Text style={w.title}>{fromLesson ? 'فعل و ضمیر همین درس' : 'فعل و ضمیر'}</Text><Text style={w.copy}>{fromLesson ? 'شکل واژه را در همین موقعیت ببین و تمرین کن.' : 'از خواستن و خواندن شروع کن: اول خودِ فعل، بعد یک مثال و یک تمرین.'}</Text></View><ChevronLeft size={19} color={blue}/>
+  </Pressable>;
+}
+export function VoiceRoomLink({ fromLesson, onPress }: { fromLesson?: boolean; onPress: () => void }) {
+  const title = fromLesson ? 'مکالمهٔ صوتی همین درس' : 'اتاق مکالمهٔ روسی';
+  return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={[w.link,{backgroundColor:'#EAF3E6',borderColor:'#CDDCC8'}]}>
+    <View style={[w.icon,{backgroundColor:'#D7E9CF'}]}><Mic size={23} color="#246456"/></View><View style={{flex:1,gap:2}}><Text style={w.kicker}>تمرین آزاد · میکروفون</Text><Text style={w.title}>{title}</Text><Text style={w.copy}>{fromLesson ? 'همین موقعیت را با صدا و جواب خودکار تمرین کن.' : 'از یک سلام شروع کن. تو بگو و جواب هم‌صحبت را بشنو.'}</Text></View><ChevronLeft size={19} color="#246456"/>
   </Pressable>;
 }
 export const w = StyleSheet.create({

@@ -77,12 +77,21 @@ export function validExchangePath(scene: Exchange, raw: unknown): raw is Exchang
 }
 export const plainRussian = (s: string) => s.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim().replace(/\s+/g, ' ');
 const politeForm = (s: string) => plainRussian(s).replace(/(?:^| )пожалуйста(?= |$)/g, ' ').trim().replace(/\s+/g, ' ');
+// Explicit short spoken equivalents. Don't accept arbitrary substrings or silently drop negation.
+const SPOKEN: Record<string, string[]> = {
+  'я хочу чай': ['чай', 'хочу чай', 'мне чай', 'можно чай'],
+  'я хочу воду': ['воду', 'вода', 'хочу воду', 'мне воду', 'можно воду'],
+  'это кот': ['кот'], 'это дом': ['дом'], 'я анна': ['анна', 'меня зовут анна'], 'я нина': ['нина', 'меня зовут нина'],
+  'один': ['1'], 'два': ['2'], 'три': ['3'], 'четыре': ['4'], 'пять': ['5'], 'подъезд один': ['подъезд 1'], 'подъезд два': ['подъезд 2'],
+};
+export const replyPhrases = (say: Line) => [say.text, ...(say.aliases ?? []), ...(SPOKEN[plainRussian(say.text)] ?? [])];
 /** Never guess from a single overlapping word (e.g. «не хочу чай» is NOT «хочу чай»). */
 export function matchExchangeReply(input: string, options: readonly Move[]) {
   const typed = plainRussian(input), polite = politeForm(input);
   if (!typed) return -1;
-  const hits = options.map(({ say }, i) => [say.text, ...(say.aliases ?? []),
-    ...(/^я хочу (чай|воду)$/.test(plainRussian(say.text)) ? [plainRussian(say.text).slice(2), plainRussian(say.text).slice(7)] : []),
-  ].some(text => plainRussian(text) === typed || (polite && politeForm(text) === polite)) ? i : -1).filter(i => i >= 0);
+  const hits = options.map(({ say }, i) => replyPhrases(say).some(text => plainRussian(text) === typed || (polite && politeForm(text) === polite)) ? i : -1).filter(i => i >= 0);
   return hits.length === 1 ? hits[0] : -1;
+}
+export function takeTurn(path: ExchangePath, index: number, original?: string): ExchangePath {
+  return { ...path, picks: [...path.picks, index], ...(original ? { said: { ...path.said, [path.picks.length]: original.trim() } } : {}) };
 }

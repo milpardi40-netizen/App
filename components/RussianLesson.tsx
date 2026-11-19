@@ -10,6 +10,7 @@ import { useFirstTimeHint } from '@/lib/useFirstTimeHint';
 import { GrammarNoteCard, GrammarPatternCard, GrammarStageHeader } from '@/components/GrammarUsage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useIsFocused } from '@react-navigation/native';
 import * as Speech from '@/lib/courseSpeech';
 import { ArrowRight, Check, ChevronLeft, Headphones, MessageCircle, Mic2, RefreshCw, RotateCcw, Sparkles, Volume2 } from 'lucide-react-native';
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
@@ -23,7 +24,7 @@ import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
 import RussianSentenceBuilder from '@/components/RussianSentenceBuilder';
-import { GrammarLink, Hear } from '@/components/RussianWorkshopUI';
+import { VoiceRoomLink, GrammarLink, Hear } from '@/components/RussianWorkshopUI';
 import RussianStarterReading, { ListenCue } from '@/components/RussianStarterReading';
 import RussianTurnExchange from '@/components/RussianTurnExchange';
 import { exchangeForLesson, exchangeView, type ExchangePath } from '@/lib/languages/russianExchange';
@@ -58,6 +59,7 @@ const stages = RUSSIAN_LESSON_STAGES;
 
 export default function RussianLesson({ lesson, fromStart = false }: { lesson: RussianCourseLesson; fromStart?: boolean }) {
   const router = useRouter();
+  const focused = useIsFocused();
   const { levelReplay } = useLocalSearchParams<{ levelReplay?: string }>();
   const courseLevel = RUSSIAN_LEVELS.find(item => item.id === lesson.levelId) ?? RUSSIAN_LEVELS[0];
   const pace = (name: NarrationPace) => narrationRate('ru-RU', name);
@@ -65,6 +67,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   useEffect(() => { warmRussianSpeech(); void ensureRecordedAudio('ru'); }, []);
   const starter = starterStep(lesson.id);
   const [exchange, setExchange] = useState<ExchangePath | null>(null);
+  const [finalAudioPlaying, setFinalAudioPlaying] = useState(false);
   const exchangeDone = useMemo(() => !!exchange && !!exchangeView(exchangeForLesson(lesson), exchange)?.complete, [lesson, exchange]);
   const [stage, setStage] = useState(0);
   const [sentenceIndex, setSentenceIndex] = useState(0);
@@ -282,7 +285,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   };
 
   const next = async () => {
-    if (!sessionReady || sessionError || completing.current || saving || (stage === 10 && !exchangeDone)) return;
+    if (!sessionReady || sessionError || completing.current || saving || (stage === 10 && (!exchangeDone || finalAudioPlaying))) return;
     setCompletionError('');
     if (stage === 1 && sentenceIndex < lesson.sentences.length - 1) {
       const nextIndex = sentenceIndex + 1;
@@ -496,7 +499,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <View style={styles.bigIcon}><MessageCircle size={34} color={Palette.primary} /></View>
           <Text style={styles.stageTitle}>مکالمهٔ هدایت‌شده</Text>
           {showHint && <Text style={styles.stageDesc}>نقش خود را بگویید، سپس نمونه را بشنوید.</Text>}
-          <RussianDialoguePractice key={lesson.id} dialogue={lesson.dialogue} onSpeak={speak} locale="ru-RU" branchPool={lesson.sentences} defaultMode={modeForLevel(lesson.levelId)} />
+          <VoiceRoomLink fromLesson onPress={() => { void stopRussianSpeech(); router.push({ pathname: '/learn/ru/conversation', params: { lessonId: lesson.id } } as never); }} />
+          {focused && <RussianDialoguePractice key={lesson.id} dialogue={lesson.dialogue} onSpeak={speak} locale="ru-RU" branchPool={lesson.sentences} defaultMode={modeForLevel(lesson.levelId)} />}
           {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
         </View>}
 
@@ -529,7 +533,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           ]; return <>{stage === 8 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 9 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
 
-        {stage === 10 && <RussianTurnExchange lesson={lesson} path={exchange} change={setExchange} speak={speak}/>}
+        {stage === 10 && <RussianTurnExchange key={lesson.id} lesson={lesson} path={exchange} change={setExchange} onFinalAudio={setFinalAudioPlaying}/>}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
@@ -542,7 +546,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && styles.nextButtonDisabled]}>
             <Text style={styles.previousButtonText}>جمله قبلی</Text>
           </Pressable>}
-          <Pressable accessibilityRole="button" disabled={saving || !!sessionError || (stage === 10 && !exchangeDone)} style={[styles.nextButton, (saving || (stage === 10 && !exchangeDone)) && styles.nextButtonDisabled]} onPress={() => void next()}>
+          <Pressable accessibilityRole="button" disabled={saving || !!sessionError || (stage === 10 && (!exchangeDone || finalAudioPlaying))} style={[styles.nextButton, (saving || (stage === 10 && (!exchangeDone || finalAudioPlaying))) && styles.nextButtonDisabled]} onPress={() => void next()}>
             <Text style={styles.nextText}>{saving ? 'در حال ذخیره…' : stage === stages.length - 1 ? 'پایان درس' : stage === 1 && sentenceIndex < lesson.sentences.length - 1 ? 'جملهٔ بعدی' : 'ادامه'}</Text>
             {stage === stages.length - 1 ? <Check size={20} color="#FFFFFF" /> : <ChevronLeft size={20} color="#FFFFFF" />}
           </Pressable>

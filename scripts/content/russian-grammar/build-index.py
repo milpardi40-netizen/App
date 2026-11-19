@@ -89,3 +89,14 @@ output = Path('lib/languages/russianGrammar/verbs.generated.json')
 encode = lambda x: json.dumps(x, ensure_ascii=False, separators=(',',':'))
 output.write_text('{"verbs":[\n'+',\n'.join(map(encode, verbs))+'\n],"byLesson":{\n'+',\n'.join(encode(k)+':'+encode(v) for k,v in by_lesson.items())+'\n},"references":{\n'+',\n'.join(encode(k)+':'+encode(v) for k,v in references.items())+'\n}}\n')
 print(f'{len(verbs)} reviewed verb entries; {len(by_lesson)} lesson links; {sum(len(v["examples"]) for v in verbs)} contextual examples')
+
+# Preserve the original dictionary and its review links. This companion index chooses ONE
+# attested, translated utterance per available band. A missing band is not a CEFR label.
+by_band = {}
+for k in active:
+    seen = {}
+    for rank, lv, text, fa, word in sorted(candidates[k], key=lambda c: (int(len(words.findall(c[2])) < 2), c[0], len(c[2]))):
+        seen.setdefault(lv, [text, fa, word])
+    by_band[k] = seen
+output.with_name('examplesByBand.generated.json').write_text('{\n'+',\n'.join(encode(k)+':'+encode(by_band[k]) for k in sorted(by_band))+'\n}\n')
+print(f'{sum(map(len,by_band.values()))} attested verb/band examples')
