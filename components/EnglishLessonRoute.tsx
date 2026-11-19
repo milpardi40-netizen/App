@@ -88,6 +88,7 @@ export default function SentenceLessonScreen() {
   const [completionError, setCompletionError] = useState('');
   const [saving, setSaving] = useState(false);
   const [stage, setStage] = useState(0);
+  const [expandedConversationExtrasFor, setExpandedConversationExtrasFor] = useState<string | null>(null);
   const progressPercent = Math.round(((stage + 1) / stages.length) * 100);
 
   const [sentenceIndex, setSentenceIndex] = useState(0);
@@ -499,7 +500,7 @@ export default function SentenceLessonScreen() {
             <View style={styles.bigIcon}><Sparkles size={34} color={Colors.accent[400]} /></View>
             <Text style={styles.stageTitle}>{lesson.title}</Text>
             <Text style={styles.situation}>{lesson.situation}</Text>
-            {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.dialogue.map(line => ({ speaker: line.speaker === 'learner' ? 'You' : 'Partner', text: line.text, fa: line.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Colors.primary[500]} /> : null}
+            {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.sentences.map((sentence, index) => ({ speaker: index % 2 ? 'You' : 'Partner', text: sentence.en, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Colors.primary[500]} /> : null}
             {lesson.teachingFa ? <View style={styles.teachingCard}>
               <Text style={styles.teachingTitle}>چطور این درس را یاد بگیریم</Text>
               {lesson.teachingFa.split('\n').map(line => <Text key={line} style={styles.teachingLine}>{line}</Text>)}
@@ -673,10 +674,17 @@ export default function SentenceLessonScreen() {
             <Text style={styles.stageTitle}>Conversation Practice · مکالمهٔ هدایت‌شده</Text>
             {showHint && <Text style={styles.stageDesc}>نقش خود را بگویید، سپس نمونه را بشنوید.</Text>}
             <EnglishDialoguePractice key={lesson.id} sentences={lesson.sentences} defaultMode={modeForLevel(lesson.levelId)} />
-            {lesson.c1Section && <EnglishB2Scenario key={lesson.id} lessonId={lesson.id} speak={speak} scenario={C1_SCENARIOS[lesson.id]} />}
-            {lesson.c1Section && <EnglishC1ExtendedModel key={`${lesson.id}-extended`} lessonId={lesson.id} speak={speak} />}
-            {lesson.b2Section && <EnglishB2Scenario key={lesson.id} lessonId={lesson.id} speak={speak} />}
-            {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} explicit={B2_PRODUCTION[lesson.id]} examples={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Colors.primary[500]} /> : null}
+            {(lesson.c1Section || lesson.b2Section || lesson.levelId >= 3) && <>
+              <Pressable accessibilityRole="button" accessibilityLabel={expandedConversationExtrasFor === lesson.id ? 'بستن تمرین‌های تکمیلی' : 'نمایش تمرین‌های تکمیلی'} onPress={() => setExpandedConversationExtrasFor(current => current === lesson.id ? null : lesson.id)} style={styles.optionalConversationToggle}>
+                <Text style={styles.optionalConversationToggleText}>{expandedConversationExtrasFor === lesson.id ? 'بستن تمرین‌های تکمیلی' : 'تمرین‌های اختیاری · جدا از مکالمهٔ همین درس'}</Text>
+              </Pressable>
+              {expandedConversationExtrasFor === lesson.id && <View style={styles.optionalConversationExtras}>
+                {lesson.c1Section && <EnglishB2Scenario key={lesson.id} lessonId={lesson.id} speak={speak} scenario={C1_SCENARIOS[lesson.id]} />}
+                {lesson.c1Section && <EnglishC1ExtendedModel key={`${lesson.id}-extended`} lessonId={lesson.id} speak={speak} />}
+                {lesson.b2Section && <EnglishB2Scenario key={lesson.id} lessonId={lesson.id} speak={speak} />}
+                {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} explicit={B2_PRODUCTION[lesson.id]} examples={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Colors.primary[500]} /> : null}
+              </View>}
+            </>}
           </View>
         )}
 
@@ -800,6 +808,9 @@ const styles = StyleSheet.create({
   stageEyebrow: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs + 2, fontWeight: '400', color: Palette.primary, marginBottom: 4, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch' },
   stageTitle: { fontFamily: Typography.fontFamily, fontSize: 27, lineHeight: 36, fontWeight: '400', color: Palette.ink, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch' },
   stageDesc: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm + 2, fontWeight: '400', color: Palette.text, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch', lineHeight: 23, marginTop: Spacing.sm },
+  optionalConversationToggle: { alignSelf: 'stretch', minHeight: 44, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Palette.border, borderRadius: Radius.lg, backgroundColor: Palette.surface, paddingHorizontal: Spacing.md, marginTop: Spacing.md },
+  optionalConversationToggleText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Palette.primaryDark, textAlign: 'center', writingDirection: 'rtl' },
+  optionalConversationExtras: { width: '100%', gap: Spacing.md, marginTop: Spacing.md },
   situation: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md + 2, fontWeight: '400', color: Palette.text, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch', lineHeight: 27, marginTop: Spacing.md },
   promiseCard: { width: '100%', borderRadius: Radius.xl, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF', padding: Spacing.lg, marginTop: Spacing.xl },
   teachingCard: { width: '100%', borderRadius: Radius.xl, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Palette.border, padding: Spacing.lg, marginTop: Spacing.lg },

@@ -226,6 +226,16 @@ const esbuild = require('esbuild');
     && russianDialoguePractice.includes('localScriptOnly')
     && russianLessonRoute.includes('<RussianDialoguePractice key={lesson.id} sentences={lesson.sentences}')
     && !russianLessonRoute.includes('<RussianDialoguePractice key={lesson.id} dialogue={lesson.dialogue}'));
+  const russianConversationRoom = fs.readFileSync('app/learn/ru/conversation.tsx', 'utf8');
+  check('Russian free-conversation room uses the same exact lesson sentence list, not the legacy exchange', russianConversationRoom.includes('<RussianDialoguePractice')
+    && russianConversationRoom.includes('sentences={lesson.sentences}') && russianConversationRoom.includes('modeForLevel(lesson.levelId)')
+    && !russianConversationRoom.includes('RussianTurnExchange') && !russianConversationRoom.includes('lesson.dialogue'));
+  check('Russian finale and advanced reading preview also use the exact lesson sentences', russianLessonRoute.includes('stage === 10 && <View')
+    && russianLessonRoute.includes('key={`${lesson.id}-final`} sentences={lesson.sentences}')
+    && russianLessonRoute.includes('lines={lesson.sentences.map((sentence, index)')
+    && !russianLessonRoute.includes('<RussianTurnExchange') && !russianLessonRoute.includes('lines={lesson.dialogue}'));
+  check('Russian production exercise is explicitly optional and hidden outside the exact dialogue by default', russianLessonRoute.includes('expandedProductionFor === lesson.id ? <ProductionTask')
+    && russianLessonRoute.includes('تمرین تکمیلی اختیاری · جدا از مکالمهٔ همین درس'));
   for (const lesson of app.RUSSIAN_LESSONS) {
     const rehearsal = app.lessonSentenceDialogue(lesson.sentences, sentence => sentence.text, { partner: 'هم‌صحبت', learner: 'زبان‌آموز' });
     assert.deepEqual(rehearsal, lesson.sentences.map((sentence, index) => ({

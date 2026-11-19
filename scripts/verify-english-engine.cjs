@@ -37,6 +37,10 @@ const esbuild = require('esbuild');
   check(!englishDialoguePractice.includes('branchPool={pool}'));
   check(englishLessonRoute.includes('<EnglishDialoguePractice key={lesson.id} sentences={lesson.sentences}')
     && !englishLessonRoute.includes('<EnglishDialoguePractice key={lesson.id} dialogue={lesson.dialogue}'));
+  check(englishLessonRoute.includes('lines={lesson.sentences.map((sentence, index)')
+    && !englishLessonRoute.includes('lines={lesson.dialogue'));
+  check(englishLessonRoute.includes('expandedConversationExtrasFor === lesson.id && <View')
+    && englishLessonRoute.includes('تمرین‌های اختیاری · جدا از مکالمهٔ همین درس'));
   for (const lesson of app.SENTENCE_LESSONS) {
     const rehearsal = app.lessonSentenceDialogue(lesson.sentences, sentence => sentence.en, { partner: 'طرف مقابل', learner: 'شما' });
     assert.deepEqual(rehearsal, lesson.sentences.map((sentence, index) => ({

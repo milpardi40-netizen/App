@@ -33,6 +33,7 @@ jobs:
     outputs:
       sequence: ${{ steps.slot.outputs.sequence }}
       version_code: ${{ steps.slot.outputs.version_code }}
+      latest_tag: ${{ steps.slot.outputs.latest_tag }}
     steps:
       - id: slot
         name: Reserve a unique release number across learner builds
@@ -48,6 +49,7 @@ jobs:
           version_code=$((100 + sequence))
           echo "sequence=$sequence" >> "$GITHUB_OUTPUT"
           echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
+          echo "latest_tag=$latest_tag" >> "$GITHUB_OUTPUT"
           echo "Reserved release milo-requested-$sequence (Android versionCode $version_code)."
   build:
     needs: reserve
@@ -82,6 +84,7 @@ jobs:
       APK_NAME: ${{ matrix.apk_name }}
       EXPECTED_PACKAGE: ${{ matrix.expected_package }}
       EXPECTED_SCOPE: ${{ matrix.language_scope }}
+      BASELINE_RELEASE_TAG: milo-requested-${{ needs.reserve.outputs.latest_tag }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -150,11 +153,39 @@ jobs:
               text = archive.read('assets/index.android.bundle').decode('utf-8', 'ignore')
           if expected_scope not in text:
               sys.exit(f'{apk}: expected language scope {expected_scope!r} is absent')
+          markers = ['تمرین‌های اختیاری · جدا از مکالمهٔ همین درس']
+          if os.environ['EXPECTED_PACKAGE'] == 'com.devicecontrol.companion':
+              markers.append('مکالمهٔ پایانی همین درس')
+          missing = [marker for marker in markers if marker not in text]
+          if missing:
+              sys.exit(f'{apk}: required lesson-sentence dialogue marker(s) absent from native bundle: {missing}')
           print(f'{apk}: package={os.environ["EXPECTED_PACKAGE"]}, scope={expected_scope}; standalone bundle verified')
           PY
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose "$APK_NAME"
           sha256sum "$APK_NAME"
           ls -lh "$APK_NAME"
+      - name: Verify in-place update compatibility with the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p baseline
+          gh release download "$BASELINE_RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern "$APK_NAME" --dir baseline
+          AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
+          APKSIGNER="$ANDROID_HOME/build-tools/36.0.0/apksigner"
+          old="baseline/$APK_NAME"
+          old_package=$("$AAPT" dump badging "$old" | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
+          new_package=$("$AAPT" dump badging "$APK_NAME" | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
+          old_code=$("$AAPT" dump badging "$old" | sed -n "s/^package: .*versionCode='\([^']*\)'.*/\1/p" | head -1)
+          new_code=$("$AAPT" dump badging "$APK_NAME" | sed -n "s/^package: .*versionCode='\([^']*\)'.*/\1/p" | head -1)
+          certs() { "$APKSIGNER" verify --print-certs "$1" | awk '/Signer #[0-9]+ certificate SHA-256 digest:/ {print tolower($NF)}' | sort; }
+          old_certs=$(certs "$old")
+          new_certs=$(certs "$APK_NAME")
+          [[ "$old_package" == "$EXPECTED_PACKAGE" && "$new_package" == "$EXPECTED_PACKAGE" ]] || { echo "Package changed: $old_package → $new_package"; exit 1; }
+          [[ "$new_code" =~ ^[0-9]+$ && "$old_code" =~ ^[0-9]+$ && "$new_code" -gt "$old_code" ]] || { echo "Version code is not a valid upgrade: $old_code → $new_code"; exit 1; }
+          [[ -n "$old_certs" && "$old_certs" == "$new_certs" ]] || { echo "APK signer changed; Android cannot update the installed app in place."; exit 1; }
+          echo "$APK_NAME: package $new_package, versionCode $old_code → $new_code, signer continuity verified."
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.apk_name }}
