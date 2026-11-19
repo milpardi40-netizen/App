@@ -29,6 +29,11 @@ const esbuild = require('esbuild');
   check(app.B1_INDEPENDENT_UNITS.length === 11 && app.B1_INDEPENDENT_UNITS.reduce((n, unit) => n + unit.topics.length, 0) === 55 && app.B1_INDEPENDENT_UNITS.every(unit => unit.topics.length === unit.rows.length));
   check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4852);
   check(app.ENGLISH_CORE_DATABASE_FLOW.map(item => item.entity).join('|') === 'Situations|Sentence Patterns|Vocabulary|Grammar Through Usage|Dialogues|Exercises|User Progress|Spaced Repetition');
+  // The lesson conversation is rendered from the exact source sentence list; the UI must not
+  // synthesize branch lines or fall back to a dialogue from another content layer.
+  const englishDialoguePractice = require('node:fs').readFileSync('components/EnglishDialoguePractice.tsx', 'utf8');
+  check(englishDialoguePractice.includes('localScriptOnly'));
+  check(!englishDialoguePractice.includes('branchPool={pool}'));
 
   // Band ids are stable; level numbers shifted when the Pre-A1 band and the practice labs were added.
   const foundation = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('foundation-'));

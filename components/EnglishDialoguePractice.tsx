@@ -13,16 +13,15 @@ const PARTNER = 'طرف مقابل';
  */
 export function EnglishDialoguePractice({ dialogue, sentences, defaultMode = 'guide' }: {
   dialogue: SentenceLesson['dialogue'];
-  sentences?: ReadonlyArray<{ en: string; fa: string }>;
+  sentences: ReadonlyArray<{ en: string; fa: string }>;
   defaultMode?: DialogueMode;
 }) {
-  // The final conversation is a controlled recycle of this lesson only: no cross-lesson
-  // filler is introduced, and every displayed line is one of the lesson's source sentences.
-  const lines = useMemo(() => (sentences?.length ? sentences : dialogue.map(line => ({ en: line.text, fa: line.fa }))).map((line, index) => ({
+  // The final conversation is an exact lesson rehearsal: one line per source sentence,
+  // with no generated follow-ups, branches, or cross-lesson filler.
+  const lines = useMemo(() => sentences.map((line, index) => ({
     speaker: index % 2 === 0 ? PARTNER : LEARNER, text: line.en, fa: line.fa,
   })), [dialogue, sentences]);
-  const pool = useMemo(() => sentences?.map(sentence => ({ text: sentence.en, fa: sentence.fa })), [sentences]);
   useEffect(() => () => { void stopResponsiveSpeech(); }, []);
   const speak = (text: string) => playResponsiveSpeech({ text, locale: 'en-US', rate: 0.76 });
-  return <LanguageDialoguePractice dialogue={lines} onSpeak={speak} languageLabel="انگلیسی" locale="en-US" productive defaultMode={defaultMode} branchPool={pool} fixedRole={LEARNER} autoPlayPartner />;
+  return <LanguageDialoguePractice dialogue={lines} onSpeak={speak} languageLabel="انگلیسی" locale="en-US" productive defaultMode={defaultMode} localScriptOnly fixedRole={LEARNER} autoPlayPartner />;
 }
