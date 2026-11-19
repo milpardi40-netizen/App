@@ -12,7 +12,7 @@ import { toPersianDigits as fa } from '@/lib/format';
 
 function MarkedLine({ text, form }: { text: string; form: string }) {
   return (
-    <Text keepColor style={ss.ru}>
+    <Text keepColor accessibilityLabel={text} style={ss.ru}>
       {text.split(/([А-Яа-яЁё\u0301]+)/).map((token, i) =>
         normalize(token) === normalize(form) ? (
           <Text key={i} keepColor style={{ backgroundColor: '#D8E999', color: studio.ink }}>

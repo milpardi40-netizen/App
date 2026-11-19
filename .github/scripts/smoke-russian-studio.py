@@ -2,27 +2,36 @@
 from pathlib import Path
 import re
 import subprocess
+import sys
 import time
 import unicodedata
 import xml.etree.ElementTree as ET
 
 PKG = 'com.devicecontrol.milorussian'
 
+def annotation(level, text):
+    message = str(text).replace('%', '%25').replace('\n', '%0A').replace('\r', '%0D')
+    print(f'::{level} title=Russian native learner journey::{message}', flush=True)
+
+def report(exc, value, tb):
+    annotation('error', str(value)[:2800])
+    sys.__excepthook__(exc, value, tb)
+sys.excepthook = report
+
 def adb(*args):
-    return subprocess.check_output(['adb', *args], text=True, timeout=25).strip()
+    return subprocess.check_output(['adb', *args], text=True, timeout=30).strip()
 
 def shell(*args):
     return adb('shell', *args)
 
-def open_page(page):
-    shell('am', 'start', '-W', '-n', PKG+'/.MainActivity', '-a', 'android.intent.action.VIEW', '-d', 'milorussian://learn/ru/'+page)
-
+shell('wm','size','720x1600')
+shell('wm','density','220')
 w, h = map(int, re.findall(r'(\d+)x(\d+)', shell('wm', 'size'))[-1])
 
 def clean(s):
-    return unicodedata.normalize('NFC', s).replace('\u0301','').replace('\u200e','').replace('\u200f','')
+    return ' '.join(''.join(c for c in unicodedata.normalize('NFC',s) if c != '\u0301' and unicodedata.category(c) != 'Cf').split())
 
-def locate(label, *, tap=False):
+def locate(label, *, tap=False, deny_dialog=False):
     # Accessibility tree (not screen pixels or assumptions about the OEM font size).
     # Search in both directions because a screen can keep its offset across a turn.
     target = clean(label)
@@ -35,7 +44,8 @@ def locate(label, *, tap=False):
             for node in root.iter('node'):
                 texts = [clean(node.get(k,'')) for k in ('text','content-desc')]
                 visible.extend(t for t in texts if t)
-                if not any(target in t for t in texts):
+                deny = deny_dialog and node.get('resource-id','').endswith(':id/permission_deny_button')
+                if not deny and not any((target == t if tap else target in t) for t in texts):
                     continue
                 bounds = list(map(int, re.findall(r'-?\d+',node.get('bounds',''))))
                 if len(bounds) != 4: continue
@@ -43,7 +53,9 @@ def locate(label, *, tap=False):
                 if not (x2>x1 and min(y2,h)>max(y1,0)): continue
                 if tap:
                     shell('input','tap',str((x1+x2)//2),str((max(0,y1)+min(y2,h))//2))
-                print(('Tapped' if tap else 'Rendered')+': '+label, flush=True)
+                if deny:
+                    break  # let the OS finish closing its permission prompt and inspect the app again
+                annotation('notice', ('Tapped' if tap else 'Rendered')+': '+label)
                 return
         except (ET.ParseError, subprocess.SubprocessError):
             pass  # first dump can race a permission view or navigation transition
@@ -51,18 +63,28 @@ def locate(label, *, tap=False):
             y1,y2 = (.76,.34) if attempt < 8 else (.34,.76)
             shell('input','swipe',str(w//2),str(int(h*y1)),str(w//2),str(int(h*y2)),'360')
         time.sleep(.35)
-    raise AssertionError(f'Missing {label!r} on the installed APK. Last visible labels: {visible[-25:]}')
+    raise AssertionError(f'Missing {label!r}. Last visible labels: {visible[:12]} / {visible[-16:]}')
 
-open_page('grammar')
+# Start as a learner would: do not depend on how an OEM re-delivers VIEW to a warm task.
+locate('ورود به زبان روسی',tap=True)
+locate('فعل و ضمیر',tap=True)
 locate('شروع با «خواستن»',tap=True)
 locate('دیدن مثال',tap=True)
 locate('Я хочу чай')
 # A system recognizer or Russian acoustic model is not guaranteed on google_apis images.
 # Exercise the explicitly denied/offline fallback, not a fictitious successful voice recognition.
-shell('pm','set-permission-flags',PKG,'android.permission.RECORD_AUDIO','user-set','user-fixed')
-open_page('conversation?lessonId=ru-pre-this-is')
+shell('pm','set-permission-flags','--user','0',PKG,'android.permission.RECORD_AUDIO','user-set','user-fixed')
+# Return from the example to the workshop, and from the workshop to the actual home card.
+locate('بازگشت به فهرست کارگاه',tap=True)
+locate('بازگشت به صفحهٔ قبل',tap=True)
+locate('اتاق مکالمهٔ روسی',tap=True)
+# The free room starts at hello; advance the same six scene controls the learner sees.
+for _ in range(6):
+    locate('موقعیت بعدی',tap=True)
+    time.sleep(.5)
+locate('چای می‌خواهم یا آب؟')
 locate('من شروع می‌کنم',tap=True)
-locate('تمرین بدون میکروفون',tap=True)
+locate('تمرین بدون میکروفون',tap=True,deny_dialog=True)
 locate('بگو: Я хочу воду.',tap=True)
 locate('Вот твоя вода')
 with Path('russian-release.md').open('a') as f:
