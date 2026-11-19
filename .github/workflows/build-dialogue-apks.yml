@@ -150,13 +150,16 @@ jobs:
               required = {'AndroidManifest.xml', 'assets/index.android.bundle'}
               if not required.issubset(names) or not any(name.endswith('classes.dex') for name in names):
                   sys.exit(f'{apk}: standalone APK structure is incomplete')
-              text = archive.read('assets/index.android.bundle').decode('utf-8', 'ignore')
+              bundle = archive.read('assets/index.android.bundle')
+              text = bundle.decode('utf-8', 'ignore')
           if expected_scope not in text:
               sys.exit(f'{apk}: expected language scope {expected_scope!r} is absent')
           markers = ['تمرین‌های اختیاری · جدا از مکالمهٔ همین درس']
           if os.environ['EXPECTED_PACKAGE'] == 'com.devicecontrol.companion':
               markers.append('مکالمهٔ پایانی همین درس')
-          missing = [marker for marker in markers if marker not in text]
+          def encoded_forms(marker):
+              return (marker.encode('utf-8'), marker.encode('unicode_escape'), marker.encode('utf-16le'), marker.encode('utf-16be'))
+          missing = [marker for marker in markers if not any(form in bundle for form in encoded_forms(marker))]
           if missing:
               sys.exit(f'{apk}: required lesson-sentence dialogue marker(s) absent from native bundle: {missing}')
           print(f'{apk}: package={os.environ["EXPECTED_PACKAGE"]}, scope={expected_scope}; standalone bundle verified')
