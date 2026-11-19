@@ -41,7 +41,7 @@ export const RUSSIAN_LESSON_STAGES = [
   { id: 'conversation', labelFa: 'مکالمه', labelEn: 'Conversation Practice' },
   { id: 'short-assessment', labelFa: 'سنجش کوتاه', labelEn: 'Short Assessment' },
   { id: 'speaking-check', labelFa: 'آزمون گفتاری', labelEn: 'Speaking Check' },
-  { id: 'turn-exchange', labelFa: 'مکالمهٔ نوبتی', labelEn: 'Turn-taking Exchange' },
+  { id: 'turn-exchange', labelFa: 'اتاق مکالمه', labelEn: 'Guided Speaking Room' },
 ] as const;
 
 const sentence = (

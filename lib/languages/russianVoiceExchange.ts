@@ -31,6 +31,7 @@ export async function runVoiceExchange(
   signal: AbortSignal,
   publish: (path: ExchangePath) => void,
   state: (v: VoiceState) => void,
+  onRepair?: (heard: string, example: string) => void,
 ) {
   let path = start;
   let view = exchangeView(scene, path);
@@ -57,6 +58,7 @@ export async function runVoiceExchange(
     requireActive(signal);
     const i = heard.length <= 350 ? matchExchangeReply(heard, view.options) : -1;
     if (i < 0) {
+      if (view.options[0]) onRepair?.(heard, view.options[0].say.text);
       if (++misses > 1) {
         state({
           phase: 'paused',

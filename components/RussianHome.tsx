@@ -162,8 +162,6 @@ export default function RussianHome() {
             </View>
           </LinearGradient>
 
-          <GrammarLink onPress={() => open('/learn/ru/grammar')} />
-          <VoiceRoomLink onPress={() => open('/learn/ru/conversation')} />
           <View style={styles.pathPanel}>
             <View style={styles.panelHeadingRow}>
               <View style={styles.panelHeadingText}>
@@ -417,6 +415,11 @@ export default function RussianHome() {
           <View style={styles.noteCard}>
             <Sparkles size={16} color={HomeColors.accent} />
             <Text style={styles.noteText}>هر روز، یک قدم کوچک.</Text>
+          </View>
+          <View style={styles.pathPanel}>
+            <Text style={styles.panelTitle}>اتاق‌های تمرین روسی</Text>
+            <GrammarLink onPress={() => open('/learn/ru/verbs')} />
+            <VoiceRoomLink onPress={() => open('/learn/ru/conversation')} />
           </View>
         </View>
       </ScrollView>
