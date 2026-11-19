@@ -12,7 +12,7 @@ function dateKey(date = new Date()): string {
 }
 function yesterdayKey(): string { const d = new Date(); d.setDate(d.getDate() - 1); return dateKey(d); }
 
-async function read(): Promise<StreakRecord> {
+export async function loadCompletionStreak(): Promise<StreakRecord> {
   try {
     const raw = await AsyncStorage.getItem(KEY);
     const value = raw ? JSON.parse(raw) as Partial<StreakRecord> : null;
@@ -23,14 +23,14 @@ async function read(): Promise<StreakRecord> {
 
 /** Current streak as the user should see it today (0 once a day has been missed). */
 export async function getStudyStreak(): Promise<number> {
-  const record = await read();
+  const record = await loadCompletionStreak();
   const today = dateKey();
   return record.lastDate === today || record.lastDate === yesterdayKey() ? record.count : 0;
 }
 
 /** Call after a lesson is completed. Returns the streak after today is counted. */
 export async function recordStudyDay(): Promise<{ count: number; extendedToday: boolean }> {
-  const record = await read();
+  const record = await loadCompletionStreak();
   const today = dateKey();
   if (record.lastDate === today) return { count: record.count, extendedToday: false };
   const count = record.lastDate === yesterdayKey() ? record.count + 1 : 1;

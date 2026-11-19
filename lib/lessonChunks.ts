@@ -1,3 +1,4 @@
+import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
@@ -38,15 +39,13 @@ export function lessonChunks(lessonId: string, sentenceCount: number, completedC
   return { total, current: total, size: CHUNK_SIZE, chunked: true, start: (total - 1) * CHUNK_SIZE, end: sentenceCount };
 }
 
+export async function loadChunkMap(): Promise<Record<string, number[]>> {
+  const raw = await AsyncStorage.getItem(DONE_KEY);
+  const parsed = raw ? JSON.parse(raw) : {};
+  return Object.fromEntries(Object.entries(parsed).filter((entry): entry is [string, number[]] => Array.isArray(entry[1])));
+}
 export async function loadCompletedChunks(lessonId: string): Promise<number[]> {
-  try {
-    const raw = await AsyncStorage.getItem(DONE_KEY);
-    const parsed = raw ? JSON.parse(raw) as Record<string, unknown> : {};
-    const value = parsed[lessonId];
-    return Array.isArray(value) ? value.filter((item): item is number => typeof item === 'number' && Number.isInteger(item) && item > 0) : [];
-  } catch {
-    return [];
-  }
+  return (await loadChunkMap().catch(() => ({} as Record<string, number[]>)))[lessonId] ?? [];
 }
 
 export async function markChunkDone(lessonId: string, chunk: number): Promise<number[]> {
@@ -56,6 +55,7 @@ export async function markChunkDone(lessonId: string, chunk: number): Promise<nu
     const raw = await AsyncStorage.getItem(DONE_KEY);
     const parsed = raw ? JSON.parse(raw) as Record<string, unknown> : {};
     await AsyncStorage.setItem(DONE_KEY, JSON.stringify({ ...parsed, [lessonId]: next }));
+    notifyLearningChange();
   } catch {
     /* Local only; losing a chunk marker must never block the lesson. */
   }

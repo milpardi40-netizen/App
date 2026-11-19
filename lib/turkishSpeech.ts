@@ -1,4 +1,5 @@
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
+import { stopRecorded } from '@/lib/content/packAudio';
 import { playPreferredRecording, playFallbackRecording, noteSpeechSuccess } from '@/lib/content/speechFallback';
 import { speechTagFor } from './speechLanguage';
 import { recordedPlaybackRate } from './narration';
@@ -14,7 +15,7 @@ function enqueue(operation: () => Promise<void>): Promise<void> {
   return queue;
 }
 
-export function playTurkishSpeech(text: string, rate: number, onError?: () => void): Promise<void> {
+export function playTurkishSpeech(text: string, rate: number, onError?: () => void, onDone?: () => void): Promise<void> {
   const request = ++requestId;
   return enqueue(async () => {
     if (request !== requestId) return;
@@ -22,7 +23,7 @@ export function playTurkishSpeech(text: string, rate: number, onError?: () => vo
     if (request !== requestId) return;
     // Content-pack recordings win over the device voice (same voice on every phone, no TTS dependency).
     // Device TTS stays primary; recordings are used only on devices that opted in.
-    if (await playPreferredRecording(text, recordedPlaybackRate('tr-TR', rate))) return;
+    if (await playPreferredRecording(text, recordedPlaybackRate('tr-TR', rate), 'tr', () => { if (request === requestId) onDone?.(); })) return;
     if (request !== requestId) return;
     const voice = await voiceFor('tr-TR', text).catch(() => undefined);
     if (request !== requestId) return;
@@ -32,19 +33,19 @@ export function playTurkishSpeech(text: string, rate: number, onError?: () => vo
           language: speechTagFor('tr-TR'),
           ...(withVoice && voice ? { voice } : {}),
           rate,
-          onDone: () => { if (request === requestId) noteSpeechSuccess(); },
+          onDone: () => { if (request === requestId) { noteSpeechSuccess(); onDone?.(); } },
           // A rotated voice that fails to start falls back to the device default once,
           // then to a recording on devices whose engine is unreliable.
           onError: () => {
             if (request !== requestId) return;
             if (withVoice && voice) { say(false); return; }
-            void playFallbackRecording(text, recordedPlaybackRate('tr-TR', rate)).then(ok => { if (request === requestId && !ok) onError?.(); });
+            void playFallbackRecording(text, recordedPlaybackRate('tr-TR', rate), 'tr', () => { if (request === requestId) onDone?.(); }).then(ok => { if (request === requestId && !ok) onError?.(); });
           },
         });
       } catch {
         if (request !== requestId) return;
         if (withVoice && voice) { say(false); return; }
-        void playFallbackRecording(text, recordedPlaybackRate('tr-TR', rate)).then(ok => { if (request === requestId && !ok) onError?.(); });
+        void playFallbackRecording(text, recordedPlaybackRate('tr-TR', rate), 'tr', () => { if (request === requestId) onDone?.(); }).then(ok => { if (request === requestId && !ok) onError?.(); });
       }
     };
     say(true);
@@ -53,6 +54,7 @@ export function playTurkishSpeech(text: string, rate: number, onError?: () => vo
 
 export function stopTurkishSpeech(): Promise<void> {
   const request = ++requestId;
+  stopRecorded();
   return enqueue(async () => {
     if (request !== requestId) return;
     await Speech.stop().catch(() => undefined);

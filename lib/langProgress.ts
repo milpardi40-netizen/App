@@ -1,3 +1,4 @@
+import { notifyLearningChange } from './learningChanges';
 // Local progress engine for the English-learning mini-app.
 // Everything is stored on the device itself (no server needed) so the app
 // works fully offline and never touches app 1's data.
@@ -43,10 +44,17 @@ export async function loadProgress(): Promise<ProgressState> {
   return cache;
 }
 
+/** Profile reads storage afresh (including edits from another browser tab). */
+export async function readVocabularySnapshot(): Promise<ProgressState> {
+  const raw = await AsyncStorage.getItem(KEY);
+  return raw === null ? { ...EMPTY, mastery: {}, daily: {} } : JSON.parse(raw);
+}
+
 async function persist(): Promise<void> {
   if (!cache) return;
   try {
     await AsyncStorage.setItem(KEY, JSON.stringify(cache));
+    notifyLearningChange();
   } catch {
     // storage unavailable — keep the in-memory copy so the session still works
   }

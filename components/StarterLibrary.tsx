@@ -1,8 +1,10 @@
+import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
+import { progressLabel, type PositionMap } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BookOpen, Check, ChevronDown, ChevronLeft, ChevronUp, Clock3, Play, Sparkles, Volume2 } from 'lucide-react-native';
 import { EnglishLevelRail, EnglishProgressTrack, EnglishSectionHeading, displayEnglishModuleLabel, ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
@@ -37,14 +39,13 @@ import {b2GrammarLinks,b2WorkshopLinks} from '@/lib/languages/b2PracticeLinks';
 import type { StarterCourse, StarterLesson } from '@/lib/languages/newCourses';
 import type { CourseLevelId as StarterLevelId } from '@/lib/courseContent';
 import type { CourseProgress } from '@/lib/courseProgress';
-import type { StarterLessonSession } from '@/lib/languages/starterSessions';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 
 const LESSONS_PER_GROUP = 10;
 const groupLabels = { sounds:'صدا و نوشتار', words:'واژه‌های مستقل', chunks:'عبارت‌های کوتاه', sentences:'جمله، گفت‌وگو و مرور' } as const;
 
-function lessonStatus(lesson: StarterLesson, progress: CourseProgress | null, sessions: Record<string, StarterLessonSession | null>) {
+function lessonStatus(lesson: StarterLesson, progress: CourseProgress | null, sessions: PositionMap) {
   const lessonId = lesson.id;
   const session = sessions[lessonId];
   if (progress?.completedLessonIds.includes(lessonId)) return session ? 'تکمیل‌شده · ادامهٔ مرور' : 'تکمیل‌شده · قابل مرور';
@@ -55,18 +56,17 @@ function lessonStatus(lesson: StarterLesson, progress: CourseProgress | null, se
 }
 
 export default function StarterLibrary({course}: {course: StarterCourse}) {
-  const {lessons, levels, progress: courseProgress} = course;
-  const {loadStarterLessonSessionWithPresence} = course.sessions;
+  const {lessons, levels} = course;
   const router = useRouter();
   // Every card on this page answers the tap before the next screen is built.
   const { opening, open } = useOpeningNavigation();
   const { level } = useLocalSearchParams<{ level?: string }>();
   const [hydrated, setHydrated] = useState(false);
   const [expandedGroup, setExpandedGroup] = useState(0);
-  const [progress, setProgress] = useState<CourseProgress | null>(null);
-  const [sessions, setSessions] = useState<Record<string, StarterLessonSession | null>>({});
-  const [error, setError] = useState('');
-  const [retry, setRetry] = useState(0);
+  const { data: snapshot, failed, retry } = useCourseSnapshot(course.id);
+  const progress = snapshot?.progress ?? null;
+  const sessions = snapshot?.sessions ?? {};
+  const error = failed || snapshot?.unreadable ? 'بخشی از سابقه خوانده نشد؛ اطلاعات ذخیره‌شده تغییر نکرده‌اند.' : '';
   /** The A1–B2 level pages list sixty topic cards or more; they arrive a frame later, see `afterPaint`. */
   const [visibleSections, setVisibleSections] = useState(1);
   const scrollRef = useRef<ScrollView>(null);
@@ -102,33 +102,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
     return groups;
   }, [selectedLessons]);
 
-  useFocusEffect(useCallback(() => {
-    let alive = true;
-    let stopBackfill: (() => void) | undefined;
-    // Only the level on screen needs its saved spots before it paints. Reading every lesson of the course
-    // (over two hundred in German) first made each level tap wait on the whole course; the other levels are
-    // filled in once the screen is idle, so their labels are just as correct a moment later.
-    const readSessions = (list: readonly StarterLesson[]) => Promise.all(list.map(async lesson => {
-      const saved = await loadStarterLessonSessionWithPresence(lesson.id);
-      return [lesson.id, saved.hasSavedSession ? saved.session : null] as const;
-    }));
-    const visible = selectedLessons;
-    void Promise.all([courseProgress.getCourseProgress(), readSessions(visible)])
-      .then(([nextProgress, nextSessions]) => {
-        if (!alive) return;
-        setProgress(nextProgress);
-        setSessions(Object.fromEntries(nextSessions));
-        setError('');
-        if (visible.length >= lessons.length) return;
-        stopBackfill = whenIdle(() => {
-          void readSessions(lessons).then(all => {
-            if (!alive) return;
-            setSessions(Object.fromEntries(all));
-          }).catch(() => undefined);
-        });
-      }).catch(() => { if (alive) setError('وضعیت ذخیره‌شده خوانده نشد؛ فهرست درس‌ها همچنان در دسترس است.'); });
-    return () => { alive = false; stopBackfill?.(); };
-  }, [retry, selectedLessons, lessons, courseProgress, loadStarterLessonSessionWithPresence]));
+
 
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
   // The topic list of a level is the longest part of the page (B2 lists 66 topics with their own practice
@@ -165,13 +139,14 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
     }
     return { words: words.size, sentences };
   }, [lessons]);
-  const levelStartLesson = selectedLessons.find(item => !completedSet.has(item.id) && !!sessions[item.id])
+  const levelStartLesson = selectedLessons.find(item => item.id === snapshot?.current?.id && !!sessions[item.id])
+    ?? selectedLessons.find(item => !completedSet.has(item.id) && !!sessions[item.id])
     ?? selectedLessons.find(item => !completedSet.has(item.id))
     ?? selectedLessons[0];
   const levelFullyCompleted = selectedLessons.length > 0 && selectedLessons.every(item => completedSet.has(item.id));
   const levelStartLabel = levelFullyCompleted ? (selected?.id === 1 || selected?.id === 2 || selected?.id === 3 || selected?.id === 4 ? 'بازبینی درس‌های موجود' : 'بازبینی این سطح') : levelStartLesson && sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
   const firstUnfinished = lessons.find(item => !completedSet.has(item.id)) ?? lessons[lessons.length - 1];
-  const activeLevelId = firstUnfinished.levelId;
+  const activeLevelId = (snapshot?.current?.levelId ?? firstUnfinished.levelId) as StarterLevelId;
   const countFor = (levelId: StarterLevelId) => levelStats.get(levelId) ?? { total: 0, completed: 0, sentences: 0 };
   const selectedWords = useMemo(() => {
     const words = new Set<string>();
@@ -228,7 +203,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
             <View style={styles.levelRailCard}>
               <EnglishSectionHeading eyebrow="YOUR CURRENT STEP" title="پیشرفت در سطح‌ها" detail="این برچسب‌ها نقشهٔ آموزشی داخلی‌اند و گواهی یا ارزیابی رسمی سطح نیستند." />
               <View style={styles.railWrap}>
-                <EnglishLevelRail activeLevelId={activeLevelId} counts={Object.fromEntries(levels.filter(item => item.id !== 2 && item.id !== 3 && item.id !== 4 && item.id !== 5).map(item => [item.id, countFor(item.id)]))} levels={levels} displayNumber={id => Math.max(0, id)} onSelect={openLevel} />
+                <EnglishLevelRail activeLevelId={activeLevelId} counts={snapshot?.levels} levels={levels} displayNumber={id => Math.max(0, id)} onSelect={openLevel} />
               </View>
               <Text style={styles.railCurrent}>اکنون · {levels.find(item => item.id === activeLevelId)?.title} · سطح {fa(Math.max(0, activeLevelId))}</Text>
             </View>
@@ -238,14 +213,14 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
               {levels.map(item => {
                 const stats = countFor(item.id);
                 const sentenceTotal = countFor(item.id).sentences;
-                const pct = stats.total ? stats.completed / stats.total * 100 : 0;
+                const pct = snapshot?.levels[item.id]?.percent ?? 0;
                 return <Pressable key={item.id} accessibilityRole="button" accessibilityLabel={`فهرست درس‌های ${item.title}`} style={styles.levelOption} onPress={() => openLevel(item.id)}>
                   <LinearGradient colors={ENGLISH_LEVEL_GRADIENTS[item.id]} style={styles.levelOptionMark}><Text style={styles.levelOptionNumber}>{fa(Math.max(0, item.id))}</Text></LinearGradient>
                   <View style={styles.levelOptionContent}>
                     <View style={styles.levelOptionTitleRow}><Text style={styles.levelOptionTitle}>{item.title}</Text><Text style={[styles.levelOptionBand, { color: item.color }]}>{item.cefr}</Text></View>
                     <Text style={styles.levelOptionDescription}>{item.description}</Text>
-                    <View style={styles.levelOptionMeta}><Text style={styles.levelOptionMetaText}>{item.id === 5 ? `${fa(c1DeepeningModules.length)} درس موضوعی مستقل` : `${fa(stats.total)} درس`}</Text><View style={styles.metaDot} /><Text style={styles.levelOptionMetaText}>{item.id === 5 ? '۵۵ سرفصل' : `${fa(sentenceTotal)} نمونه`}</Text><View style={styles.metaDot} /><Text style={styles.levelOptionMetaText}>{item.id === 5 ? 'تمرین چهار مهارت' : item.status === 'planned' ? 'در نقشهٔ آینده' : `${fa(stats.completed)} تکمیل`}</Text></View>
-                    {item.id !== 5 && <EnglishProgressTrack value={pct} color={item.color} height={5} />}
+                    <View style={styles.levelOptionMeta}><Text style={styles.levelOptionMetaText}>{progressLabel(snapshot?.levels[item.id])}</Text><View style={styles.metaDot} /><Text style={styles.levelOptionMetaText}>{item.id === 5 ? `${fa(c1DeepeningModules.length)} درس موضوعی مستقل` : `${fa(sentenceTotal)} نمونه`}</Text></View>
+                    <EnglishProgressTrack value={pct} color={item.color} height={5} />
                   </View>
                   <ChevronLeft size={19} color={Palette.muted} />
                 </Pressable>;
@@ -261,8 +236,8 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
               <View style={styles.levelHeroTop}><View style={styles.levelHeroTag}><Text style={styles.levelHeroTagText}>{selected.id === 0 ? 'PRE-A1' : `LEVEL ${selected.id}`} </Text></View><Text style={styles.levelHeroBand}>{selected.cefr}</Text></View>
               <Text style={styles.selectedTitle}>{selected.title}</Text>
               <Text style={styles.selectedDescription}>{selected.description}</Text>
-              {selected.id !== 5 && <><View style={styles.selectedProgressHeading}><Text style={styles.selectedProgressLabel}>{selected.id === 1 || selected.id === 2 || selected.id === 3 || selected.id === 4 ? 'پیشرفت درس‌های موجود' : 'پیشرفت این سطح'}</Text><Text style={styles.selectedProgressValue}>{fa(countFor(selected.id).completed)} از {fa(selectedLessons.length)} درس</Text></View>
-              <View style={styles.selectedProgressTrack}><View style={[styles.selectedProgressFill, { width: `${selectedLessons.length ? countFor(selected.id).completed / selectedLessons.length * 100 : 0}%` }]} /></View>
+              <View style={styles.selectedProgressHeading}><Text style={styles.selectedProgressLabel}>{selected.id >= 1 ? 'پیشرفت درس‌های مسیر' : 'پیشرفت این سطح'}</Text><Text style={styles.selectedProgressValue}>{progressLabel(snapshot?.levels[selected.id])}</Text></View>
+              <EnglishProgressTrack value={snapshot?.levels[selected.id]?.percent ?? 0} color="#B8F28F" trackColor="rgba(255,255,255,0.22)" height={7} />
               <View style={styles.metricGrid}>
                 <View style={styles.heroMetric}><Text style={styles.heroMetricValue}>{fa(sentenceCount)}</Text><Text style={styles.heroMetricLabel}>نمونه</Text></View><View style={styles.heroMetricDivider} />
                 <View style={styles.heroMetric}><Text style={styles.heroMetricValue}>{fa(patternCount)}</Text><Text style={styles.heroMetricLabel}>{selected.id === 2 || selected.id === 3 || selected.id === 4 ? 'الگوی متمایز' : 'جمله با الگو'}</Text></View><View style={styles.heroMetricDivider} />
@@ -278,10 +253,10 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
                 <Text style={styles.levelStartButtonText}>شروع از ابتدا</Text>
                 <ChevronLeft size={18} color={selected.color} />
               </Pressable>
-              </>}
             </LinearGradient>
 
-            {selected.id === 5 ? <StarterC1Curriculum key={course.id} language={course.id} locale={course.locale}/> : selected.id === 1 || selected.id === 2 || selected.id === 3 || selected.id === 4 ? <View style={styles.groupList}>
+            {selected.id === 5 && <StarterC1Curriculum key={course.id} language={course.id} locale={course.locale}/>}
+            {selected.id === 1 || selected.id === 2 || selected.id === 3 || selected.id === 4 ? <View style={styles.groupList}>
               {selected.id === 4 && <>
                 <View ref={grammarRef} collapsable={false}><StarterB2GrammarLab key={`${course.id}-b2-grammar`} language={course.id} locale={course.locale} request={grammarRequest}/></View>
                 <View ref={workshopRef} collapsable={false}><StarterB2Workshops key={`${course.id}-b2-workshops`} language={course.id} locale={course.locale} request={workshopRequest}/></View>
@@ -317,13 +292,12 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
                   })}
                 </View>)}
               </View>)}
-            </View> : <>
-            <View style={styles.focusCard}>
+            </View> : <View style={styles.focusCard}>
               <View style={styles.focusHeadingRow}><View style={styles.focusIcon}><Sparkles size={17} color={Palette.primary} /></View><View style={styles.focusHeadingCopy}><Text style={styles.focusTitle}>موضوعات این سطح</Text></View></View>
               <Text style={styles.focusDescription}>{selected.description}</Text>
               <View style={styles.moduleGrid}>{selected.modules.map((module, index) => <View key={`${index}-${module}`} style={styles.moduleChip}><View style={[styles.moduleDot, { backgroundColor: selected.color }]} /><Text style={styles.moduleText}>{displayEnglishModuleLabel(module)}</Text></View>)}</View>
               <Text style={styles.focusFootnote}>{selected.status === 'planned' ? 'این سطح بخشی از نقشهٔ آینده است؛ تا زمان تدوین، درس یا جمله‌ای به شمار محتوای موجود اضافه نمی‌شود.' : `این سطح شامل ${fa(selected.modules.length)} درس است؛ این نقشه سنجش رسمی CEFR نیست.`}</Text>
-            </View>
+            </View>}
 
             <View style={styles.lessonSectionHeading}><View><Text style={styles.lessonSectionTitle}>درس‌ها، به ترتیب</Text></View><View style={styles.lessonCountPill}><BookOpen size={13} color={Palette.primary} /><Text style={styles.lessonCountText}>{fa(selectedLessons.length)} درس</Text></View></View>
 
@@ -365,9 +339,8 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
               <Text style={styles.emptyTitle}>درس‌های این سطح هنوز تدوین نشده‌اند</Text>
               <Text style={styles.emptyDescription}>به‌زودی اضافه می‌شود.</Text>
             </View>}
-            </>}
           </>}
-          {!!error && <View style={styles.errorCard}><Text accessibilityRole="alert" style={styles.errorText}>{error}</Text><Pressable accessibilityRole="button" onPress={() => setRetry(value => value + 1)}><Text style={styles.retryText}>تلاش دوباره</Text></Pressable></View>}
+          {!!error && <View style={styles.errorCard}><Text accessibilityRole="alert" style={styles.errorText}>{error}</Text><Pressable accessibilityRole="button" onPress={retry}><Text style={styles.retryText}>تلاش دوباره</Text></Pressable></View>}
         </View>
       </ScrollView>
       <OpeningOverlay visible={opening} />
@@ -432,8 +405,6 @@ const styles = StyleSheet.create({
   selectedProgressHeading: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
   selectedProgressLabel: { fontFamily: Typography.fontFamily, color: '#DCE0FF', fontSize: 10, writingDirection: 'rtl' },
   selectedProgressValue: { fontFamily: Typography.numberFontFamily, color: '#FFFFFF', fontSize: 10, fontWeight: '400', writingDirection: 'rtl' },
-  selectedProgressTrack: { height: 7, borderRadius: 999, overflow: 'hidden', backgroundColor: 'rgba(255,255,255,0.22)' },
-  selectedProgressFill: { height: '100%', alignSelf: 'flex-end', borderRadius: 999, backgroundColor: '#B8F28F' },
   levelStartButton: { minHeight: 48, marginTop: 5, paddingHorizontal: 15, borderRadius: 15, backgroundColor: '#FFFFFF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 9 },
   levelStartBeginningButton: { minHeight: 48, marginTop: 8, paddingHorizontal: 15, borderRadius: 15, backgroundColor: '#F5F2FF', borderWidth: 1, borderColor: '#D8D2FF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 9 },
   levelStartButtonDisabled: { opacity: 0.55 },

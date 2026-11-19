@@ -1,16 +1,21 @@
-import type { CourseProgress, SentenceReviewCard } from './courseProgress';
-import { getCourseProgress as getEnglishProgress } from './courseProgress';
-import { COURSE_LEVELS, SENTENCE_LESSONS } from './courseContent';
-import { loadStudy } from './englishStudyState';
-import { loadProgress as loadEnglishVocabulary } from './langProgress';
+import type { SentenceReviewCard } from './courseProgress';
+import { readVocabularySnapshot as loadEnglishVocabulary } from './langProgress';
 import { LANGUAGE_REGISTRY, type LanguageId } from './languages/registry';
 import { isLanguageEnabled } from './features';
-import { NEW_COURSES, isNewLanguage } from './languages/newCourses';
-import { RUSSIAN_LESSONS, RUSSIAN_LEVELS, russianProgress } from './languages/russian';
-import { TURKISH_LESSONS, TURKISH_LEVELS, turkishProgress } from './languages/turkish';
-
-type LessonLike = { id: string; title: string; levelId: number };
-type LevelLike = { id: number; title: string; cefr: string };
+import { loadCourseSnapshot } from './courseSnapshot';
+import { loadPracticeDays } from './practiceActivity';
+import { loadLessonOutcomes } from './lessonOutcomes';
+import { loadLearningEvents } from './learningAnalytics';
+import { loadCompletionStreak } from './studyStreak';
+import { addStreakDays, calendarStreak, dayOffset, noteDate } from './activityCalendar';
+import { datedRatings, localDay, ratingsOf } from './reviewHistory';
+import { loadWordProgress, isWordMastered } from './wordLabProgress';
+import { loadLevelAssessments } from './levelAssessment';
+import { loadPlacement } from './placement';
+import { loadPronunciationMarks } from './languages/pronunciationProgress';
+import { loadSupplement, assessmentScore } from './englishSupplement/progress';
+import { loadPodcastProgress, getPodcastEpisode } from './englishPodcast';
+import { countPracticeDrafts } from './languages/localPracticeDraft';
 
 export interface LevelBreakdown {
   id: number;
@@ -19,7 +24,9 @@ export interface LevelBreakdown {
   completed: number;
   total: number;
   percent: number;
-  state: 'done' | 'active' | 'locked' | 'idle';
+  partial: number;
+  exam: { attempts: number; last: number; best: number } | null;
+  state: 'done' | 'active' | 'idle';
 }
 
 export interface ReviewBreakdown {
@@ -48,6 +55,20 @@ export interface LanguageProfileStat {
   currentLevelTitle: string | null;
   currentLevelCefr: string | null;
   levels: LevelBreakdown[];
+  partial: number;
+  reviewsDone: number;
+  reviewLowerBound: boolean;
+  wordDeck: { seen: number; mastered: number; due: number; reviews: number };
+  speaking: { attempts: number; average: number | null; drills: number; drillAverage: number | null; legacyBest: number | null; points: number };
+  assessment: { correct: number; answered: number; legacyCorrect: number };
+  placement: string | null;
+  pronunciation: { practiced: number; review: number };
+  extraPractice: number;
+  drafts: number;
+  podcast: { completed: number; started: number; quizCorrect: number; quizTotal: number };
+  supplementExams: number;
+  legacyMinutes: number;
+  unreadable: boolean;
   reviews: ReviewBreakdown;
   currentStreak: number;
   longestStreak: number;
@@ -73,10 +94,12 @@ export interface WeekDay {
   minutes: number;
   reviews: number;
   isToday: boolean;
+  active: boolean;
 }
 
 export interface LearnerProfileSummary {
   languages: LanguageProfileStat[];
+  unavailable: string[];
   activeLanguages: number;
   completedLessons: number;
   totalLessons: number;
@@ -86,6 +109,9 @@ export interface LearnerProfileSummary {
   longestStreak: number;
   currentStreak: number;
   reviewsTotal: number;
+  reviewsDone: number;
+  reviewLowerBound: boolean;
+  nextReview: { route: string; language: string } | null;
   reviewsDueNow: number;
   reviewsMastered: number;
   vocabulary: { seen: number; mastered: number; totalReviews: number; xp: number };
@@ -97,23 +123,6 @@ export interface LearnerProfileSummary {
 }
 
 const WEEKDAY_SHORT = ['ی', 'د', 'س', 'چ', 'پ', 'ج', 'ش']; // Sunday-first to match Date#getDay
-
-const localDateKey = (date = new Date()) =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-
-type Source = { id: LanguageId; lessons: readonly LessonLike[]; levels: readonly LevelLike[]; read: () => Promise<CourseProgress> };
-
-function sources(): Source[] {
-  const list: Source[] = [
-    { id: 'en', lessons: SENTENCE_LESSONS, levels: COURSE_LEVELS, read: getEnglishProgress },
-    { id: 'ru', lessons: RUSSIAN_LESSONS, levels: RUSSIAN_LEVELS, read: russianProgress.getCourseProgress },
-    { id: 'tr', lessons: TURKISH_LESSONS, levels: TURKISH_LEVELS, read: turkishProgress.getCourseProgress },
-  ];
-  for (const id of ['de', 'fr', 'es'] as const) {
-    if (isNewLanguage(id)) list.push({ id, lessons: NEW_COURSES[id].lessons, levels: NEW_COURSES[id].levels, read: NEW_COURSES[id].progress.getCourseProgress });
-  }
-  return list.filter(item => isLanguageEnabled(item.id));
-}
 
 function summarizeReviews(cards: SentenceReviewCard[], now: Date): ReviewBreakdown {
   const endOfDay = new Date(now); endOfDay.setHours(23, 59, 59, 999);
@@ -131,20 +140,6 @@ function summarizeReviews(cards: SentenceReviewCard[], now: Date): ReviewBreakdo
   return { total: cards.length, dueNow, dueToday, learning, maturing, mastered, lapses, averageEase: easeCount ? easeSum / easeCount : null, lastReviewedAt: last };
 }
 
-function breakdownLevels(lessons: readonly LessonLike[], levels: readonly LevelLike[], completed: Set<string>, currentLessonId: string): LevelBreakdown[] {
-  const currentLevel = lessons.find(lesson => lesson.id === currentLessonId)?.levelId;
-  const out: LevelBreakdown[] = [];
-  for (const level of levels) {
-    const own = lessons.filter(lesson => lesson.levelId === level.id);
-    if (!own.length) continue;
-    const done = own.filter(lesson => completed.has(lesson.id)).length;
-    const percent = Math.round((done / own.length) * 100);
-    const state: LevelBreakdown['state'] = done === own.length ? 'done' : level.id === currentLevel || done > 0 ? 'active' : 'idle';
-    out.push({ id: level.id, title: level.title, cefr: level.cefr, completed: done, total: own.length, percent, state });
-  }
-  return out;
-}
-
 const LEVEL_STEPS: Array<[number, string]> = [[0, 'تازه‌کار'], [5, 'نوآموز'], [15, 'پیگیر'], [40, 'مستمر'], [80, 'حرفه‌ای'], [150, 'استاد']];
 
 /** Learner rank derived from finished lessons across every language (motivational, not a certificate). */
@@ -159,7 +154,7 @@ export function learnerLevel(completedLessons: number): LearnerProfileSummary['l
 
 function buildAchievements(s: Omit<LearnerProfileSummary, 'achievements'>): Achievement[] {
   const make = (id: string, title: string, description: string, value: number, target: number, unit: string): Achievement => ({
-    id, title, description, earned: value >= target, progress: Math.min(1, target ? value / target : 1), detail: `${Math.min(value, target)} از ${target} ${unit}`,
+    id, title, description, earned: value >= target, progress: Math.min(1, target ? value / target : 1), detail: `${Math.floor(Math.min(value, target))} از ${target} ${unit}`,
   });
   return [
     make('first-lesson', 'اولین قدم', 'نخستین درس را تمام کردید', s.completedLessons, 1, 'درس'),
@@ -177,91 +172,152 @@ function buildAchievements(s: Omit<LearnerProfileSummary, 'achievements'>): Achi
   ];
 }
 
+/** A snapshot of the same device stores that the lessons, exams and review queues actually write. */
 export async function loadLearnerProfileSummary(now = new Date()): Promise<LearnerProfileSummary> {
-  const languages: LanguageProfileStat[] = [];
-  const today = localDateKey(now);
-  for (const item of sources()) {
-    const entry = LANGUAGE_REGISTRY.find(language => language.id === item.id);
-    if (!entry) continue;
-    let progress: CourseProgress | null = null;
-    try { progress = await item.read(); } catch { progress = null; }
-    const completed = new Set(progress?.completedLessonIds ?? []);
-    const currentLesson = item.lessons.find(lesson => lesson.id === progress?.currentLessonId) ?? null;
-    const currentLevel = currentLesson ? item.levels.find(level => level.id === currentLesson.levelId) ?? null : null;
-    const reviews = summarizeReviews(progress?.reviewCards ?? [], now);
-    const totalMinutes = progress?.totalMinutes ?? 0;
-    const started = completed.size > 0 || totalMinutes > 0 || reviews.total > 0 || !!progress?.lastActiveDate;
-    languages.push({
-      id: item.id,
-      name: entry.name,
-      nativeName: entry.nativeName,
-      accent: entry.accent,
-      home: entry.home,
-      started,
-      completedLessons: completed.size,
-      totalLessons: item.lessons.length,
-      percent: item.lessons.length ? Math.round((completed.size / item.lessons.length) * 100) : 0,
-      currentLessonTitle: currentLesson?.title ?? null,
-      currentLevelTitle: currentLevel?.title ?? null,
-      currentLevelCefr: currentLevel?.cefr ?? null,
-      levels: breakdownLevels(item.lessons, item.levels, completed, progress?.currentLessonId ?? ''),
-      reviews,
-      currentStreak: progress?.currentStreak ?? 0,
-      longestStreak: progress?.longestStreak ?? 0,
-      totalMinutes,
-      todayMinutes: progress?.activityDate === today ? progress?.todayMinutes ?? 0 : 0,
-      dailyGoalMinutes: progress?.dailyGoalMinutes ?? 10,
-      lastActiveDate: progress?.lastActiveDate ?? null,
-      updatedAt: progress?.updatedAt ?? null,
-    });
-  }
-
-  // Week + 30-day activity: English measured study time plus vocabulary reviews per day.
-  let studyDays: Record<string, number> = {};
-  let vocab = { seen: 0, mastered: 0, totalReviews: 0, xp: 0 };
-  let daily: Record<string, { reviewed: number; xp: number }> = {};
-  try { studyDays = (await loadStudy()).days; } catch { studyDays = {}; }
-  try {
-    const p = await loadEnglishVocabulary();
-    daily = p.daily;
-    let seen = 0, mastered = 0;
-    for (const v of Object.values(p.mastery)) { if (v >= 1) seen += 1; if (v >= 2) mastered += 1; }
-    vocab = { seen, mastered, totalReviews: p.totalReviews, xp: p.xp };
-  } catch { /* vocabulary store unavailable */ }
-
-  const week: WeekDay[] = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(now); d.setDate(d.getDate() - i);
-    const key = localDateKey(d);
-    const minutes = Math.round((studyDays[key] ?? 0) / 60000) + (i === 0 ? languages.filter(l => l.id !== 'en').reduce((sum, l) => sum + l.todayMinutes, 0) : 0);
-    week.push({ key, weekdayShort: WEEKDAY_SHORT[d.getDay()], minutes, reviews: daily[key]?.reviewed ?? 0, isToday: i === 0 });
-  }
-  const activeKeys = new Set<string>();
-  for (let i = 0; i < 30; i++) {
-    const d = new Date(now); d.setDate(d.getDate() - i);
-    const key = localDateKey(d);
-    if ((studyDays[key] ?? 0) > 0 || (daily[key]?.reviewed ?? 0) > 0 || languages.some(l => l.lastActiveDate === key)) activeKeys.add(key);
-  }
-
-  const completedLessons = languages.reduce((sum, item) => sum + item.completedLessons, 0);
+  const today = localDay(now);
+  const [outcomes, events, globalStreak, vocabulary] = await Promise.all([
+    loadLessonOutcomes(), loadLearningEvents(), loadCompletionStreak(), loadEnglishVocabulary(),
+  ]);
+  const vocab = { seen: Object.keys(vocabulary.mastery).length, mastered: Object.values(vocabulary.mastery).filter(n => n >= 2).length,
+    totalReviews: vocabulary.totalReviews, xp: vocabulary.xp };
+  const allDays = new Set<string>(), weekMs: Record<string, number> = {}, dailyReviews: Record<string, number> = {};
+  addStreakDays(allDays, globalStreak.lastDate, globalStreak.count);
+  const entries = LANGUAGE_REGISTRY.filter(entry => isLanguageEnabled(entry.id));
+  const rows = await Promise.allSettled(entries.map(async (entry): Promise<LanguageProfileStat> => {
+    const id = entry.id;
+    const [snap, practice, exams, placed, marks, words, drafts] = await Promise.all([
+      loadCourseSnapshot(id), loadPracticeDays(id), loadLevelAssessments(id), loadPlacement(id), loadPronunciationMarks(id),
+      id === 'ru' || id === 'de' ? loadWordProgress(id) : { cards: {} }, countPracticeDrafts(id),
+    ]);
+    const { progress, current } = snap;
+    const currentLevel = snap.levelDefinitions.find(l => l.id === current?.levelId);
+    const days = new Set<string>();
+    addStreakDays(days, progress.lastActiveDate, progress.currentStreak);
+    for (const session of Object.values(snap.sessions)) noteDate(days, session.updatedAt);
+    for (const event of events) if (event.course === id && event.name !== 'session_abandoned') noteDate(days, event.at);
+    const reviews = summarizeReviews(snap.validCards, now);
+    let reviewsDone = 0, reviewLowerBound = false;
+    function addReviewDay(day: string, n: number) {
+      if (n > 0) { days.add(day); dailyReviews[day] = (dailyReviews[day] ?? 0) + n; }
+    }
+    for (const card of snap.validCards) {
+      const h = ratingsOf(card);
+      reviewsDone += h.undated; reviewLowerBound ||= h.lowerBound;
+      for (const [day, n] of Object.entries(datedRatings(h))) { reviewsDone += n; addReviewDay(day, n); }
+    }
+    const wordDeck = { seen: 0, mastered: 0, due: 0, reviews: 0 };
+    if ((id === 'ru' || id === 'de') && Object.keys(words.cards).length) {
+      const { WORD_LAB_WORDS } = await import('./languages/wordLab');
+      for (const word of WORD_LAB_WORDS[id]) {
+        const c = (words.cards as import('./wordLabProgress').WordProgress['cards'])[word.id]; if (!c) continue;
+        wordDeck.seen++; wordDeck.mastered += Number(isWordMastered(c));
+        wordDeck.due += Number(Date.parse(c.dueAt) <= now.getTime()); wordDeck.reviews += c.listened;
+        noteDate(days, c.introducedAt); noteDate(days, c.lastReviewedAt);
+        for (const [day, n] of Object.entries(datedRatings(ratingsOf(c)))) addReviewDay(day, n);
+      }
+    }
+    reviewsDone += wordDeck.reviews;
+    const assessment = { correct: 0, answered: 0, legacyCorrect: 0 };
+    const podcastStats = { completed: 0, started: 0, quizCorrect: 0, quizTotal: 0 };
+    let supplementExams = 0;
+    if (id === 'en') {
+      const [supplement, podcast] = await Promise.all([loadSupplement(), loadPodcastProgress()]);
+      for (const [day, stat] of Object.entries(vocabulary.daily)) { days.add(day); reviewsDone += stat.reviewed; addReviewDay(day, stat.reviewed); }
+      for (const [episodeId, e] of Object.entries(podcast.episodes)) {
+        if (!getPodcastEpisode(episodeId)) continue;
+        noteDate(days, e.updatedAt); podcastStats.started++; podcastStats.completed += Number(e.completed);
+        if (e.quizTotal && typeof e.quizScore === 'number') { podcastStats.quizCorrect += e.quizScore; podcastStats.quizTotal += e.quizTotal; }
+      }
+      // Includes the legacy listening/writing checks saved by EnglishSupplementTask.
+      for (const result of [...snap.lessons.flatMap(l => Object.values(snap.study?.lessonEvidence[l.id] ?? {})), ...Object.values(supplement.evidence)]) {
+        assessment.answered++; assessment.correct += Number(result.correct);
+      }
+      for (const attempt of supplement.assessmentAttempts) {
+        noteDate(days, attempt.completedAt ?? attempt.startedAt);
+        if (!attempt.completedAt) continue;
+        const score = assessmentScore(attempt); supplementExams++; assessment.correct += score.correct; assessment.answered += score.total;
+      }
+    }
+    // Latest answer to each objective checkpoint; revisions never create a fictitious extra question.
+    for (const [key, result] of Object.entries(outcomes)) if (key.startsWith(`${id}:extra:`) && result.assessment?.total) {
+      assessment.correct += result.assessment.correct; assessment.answered += result.assessment.total; noteDate(days, result.assessment.at);
+    }
+    let spoken = 0, scoreSum = 0, drills = 0, drillSum = 0, points = 0, extraPractice = 0;
+    let legacyBest: number | null = null;
+    for (const lesson of snap.lessons) {
+      const outcome = outcomes[`${id}:${lesson.id}`];
+      const scores = outcome?.speaking ? lesson.sentences.map(sentence => outcome?.speaking?.scores?.[sentence.id]).filter((n): n is number => typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= 100) : [];
+      if (outcome?.speaking && !outcome.speaking.attemptedOnly && scores.includes(0)) {
+        // Older versions padded skips with zeros. A positive score is real, the denominator is unknown.
+        const best = Math.max(...scores);
+        if (best > 0) legacyBest = Math.max(legacyBest ?? 0, best);
+      } else if (outcome?.speaking && scores.length) {
+        // Historic drill averages included skipped phrases as zero. Only submitted scores are evidence.
+        drills++; drillSum += scores.reduce((a, b) => a + b, 0) / scores.length; points += outcome.speaking.points ?? 0; noteDate(days, outcome.speaking.at);
+      }
+      // A current set of submitted answers supersedes (does not add to) the last saved short check.
+      const answers = snap.sessions[lesson.id]?.answers;
+      const submitted = answers && Object.keys(answers).length ? (snap.answerKey?.(lesson.id) ?? []).flatMap((correct, i) => answers[i] === undefined ? [] : [correct === answers[i]]) : [];
+      if (submitted.length) { assessment.answered += submitted.length; assessment.correct += submitted.filter(Boolean).length; }
+      else if (outcome?.assessment?.total) {
+        const a = outcome.assessment;
+        if (a.attemptedOnly || a.correct === a.total) { assessment.answered += a.total; assessment.correct += a.correct; }
+        else assessment.legacyCorrect += a.correct; // total used to mean available, not answered
+      }
+      noteDate(days, outcome?.assessment?.at);
+    }
+    const milliseconds = { ...snap.study?.days };
+    for (const [day, bucket] of Object.entries(practice)) {
+      milliseconds[day] = (milliseconds[day] ?? 0) + bucket.ms;
+      spoken += bucket.spoken; scoreSum += bucket.scoreSum; extraPractice += bucket.rounds;
+      if (bucket.ms || bucket.spoken || bucket.rounds) days.add(day);
+    }
+    for (const [day, ms] of Object.entries(milliseconds)) if (ms > 0) { days.add(day); weekMs[day] = (weekMs[day] ?? 0) + ms; }
+    const pronunciation = { practiced: 0, review: 0 };
+    for (const v of Object.values(marks)) if (v?.mark) { pronunciation[v.mark]++; noteDate(days, v.updatedAt); }
+    for (const exam of Object.values(exams)) noteDate(days, exam?.lastAt);
+    if (placed?.status === 'placed') noteDate(days, placed.at);
+    const streak = calendarStreak(days, today);
+    for (const day of days) allDays.add(day);
+    const started = days.size > 0 || snap.course.completed > 0 || snap.course.partial > 0 || Object.keys(snap.sessions).length > 0 || reviews.total > 0 ||
+      wordDeck.seen > 0 || assessment.answered > 0 || drafts > 0 || pronunciation.practiced + pronunciation.review > 0;
+    return { ...entry, started, partial: snap.course.partial, completedLessons: snap.course.completed, totalLessons: snap.course.total, percent: snap.course.percent,
+      currentLessonTitle: started ? current?.title ?? null : null, currentLevelTitle: started ? currentLevel?.title ?? null : null, currentLevelCefr: started ? currentLevel?.cefr ?? null : null,
+      levels: snap.levelDefinitions.map(level => {
+        const tally = snap.levels[level.id] ?? { completed: 0, total: 0, percent: 0, partial: 0 };
+        const exam = exams[level.id];
+        return { ...level, ...tally, exam: exam ? { attempts: exam.attempts, last: exam.lastPercent, best: exam.bestPercent } : null,
+          state: tally.total && tally.completed === tally.total ? 'done' : tally.percent || (started && currentLevel?.id === level.id) ? 'active' : 'idle' };
+      }),
+      reviews, reviewsDone, reviewLowerBound, wordDeck, assessment, podcast: podcastStats, supplementExams, drafts, pronunciation, extraPractice,
+      speaking: { attempts: spoken, average: spoken ? Math.round(scoreSum / spoken) : null, drills, points, legacyBest, drillAverage: drills ? Math.round(drillSum / drills) : null },
+      placement: placed?.status === 'placed' ? snap.levelDefinitions.find(l => l.id === placed.levelId)?.cefr ?? null : null,
+      currentStreak: streak.current, longestStreak: Math.max(streak.best, progress.longestStreak), lastActiveDate: streak.last,
+      totalMinutes: Object.values(milliseconds).reduce((a, b) => a + b, 0) / 60000, todayMinutes: (milliseconds[today] ?? 0) / 60000,
+      legacyMinutes: progress.totalMinutes, dailyGoalMinutes: progress.dailyGoalMinutes, updatedAt: started ? progress.updatedAt : null, unreadable: snap.unreadable,
+    };
+  }));
+  const unavailable = rows.flatMap((row, i) => row.status === 'rejected' ? [entries[i].name] : []);
+  const languages = rows.flatMap(row => row.status === 'fulfilled' ? [row.value] : []);
+  if (!languages.length) throw new Error('سابقهٔ زبان‌ها خوانده نشد.');
+  const week: WeekDay[] = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(now); d.setDate(d.getDate() - 6 + i);
+    const key = localDay(d);
+    return { key, weekdayShort: WEEKDAY_SHORT[d.getDay()], minutes: (weekMs[key] ?? 0) / 60000, reviews: dailyReviews[key] ?? 0, active: allDays.has(key), isToday: key === today };
+  });
+  const streak = calendarStreak(allDays, today);
+  const sum = (f: (language: LanguageProfileStat) => number) => languages.reduce((n, l) => n + f(l), 0);
+  const due = languages.find(l => l.reviews.dueNow || l.wordDeck.due);
+  const completedLessons = sum(l => l.completedLessons);
   const base: Omit<LearnerProfileSummary, 'achievements'> = {
-    languages,
-    activeLanguages: languages.filter(item => item.started).length,
-    completedLessons,
-    totalLessons: languages.reduce((sum, item) => sum + item.totalLessons, 0),
-    totalMinutes: languages.reduce((sum, item) => sum + item.totalMinutes, 0),
-    todayMinutes: languages.reduce((sum, item) => sum + item.todayMinutes, 0),
-    dailyGoalMinutes: languages.reduce((max, item) => Math.max(max, item.started ? item.dailyGoalMinutes : 0), 0) || 10,
-    longestStreak: languages.reduce((max, item) => Math.max(max, item.longestStreak), 0),
-    currentStreak: languages.reduce((max, item) => Math.max(max, item.currentStreak), 0),
-    reviewsTotal: languages.reduce((sum, item) => sum + item.reviews.total, 0),
-    reviewsDueNow: languages.reduce((sum, item) => sum + item.reviews.dueNow, 0),
-    reviewsMastered: languages.reduce((sum, item) => sum + item.reviews.mastered, 0),
-    vocabulary: vocab,
-    week,
-    weekMinutes: week.reduce((sum, day) => sum + day.minutes, 0),
-    activeDaysLast30: activeKeys.size,
-    level: learnerLevel(completedLessons),
+    languages, unavailable, completedLessons, totalLessons: sum(l => l.totalLessons), activeLanguages: languages.filter(l => l.started).length,
+    totalMinutes: sum(l => l.totalMinutes), todayMinutes: sum(l => l.todayMinutes), dailyGoalMinutes: Math.max(0, ...languages.filter(l => l.started).map(l => l.dailyGoalMinutes)) || 10,
+    longestStreak: Math.max(streak.best, globalStreak.best, ...languages.map(l => l.longestStreak)), currentStreak: streak.current,
+    reviewsTotal: sum(l => l.reviews.total), reviewsMastered: sum(l => l.reviews.mastered), reviewsDueNow: sum(l => l.reviews.dueNow + l.wordDeck.due),
+    reviewsDone: sum(l => l.reviewsDone), reviewLowerBound: languages.some(l => l.reviewLowerBound),
+    nextReview: due ? { language: due.name, route: due.reviews.dueNow ? (due.id === 'en' ? '/review' : `/learn/${due.id}/review`) : `/learn/${due.id}/vocabulary` } : null,
+    vocabulary: vocab, week, weekMinutes: week.reduce((n, d) => n + d.minutes, 0),
+    activeDaysLast30: [...allDays].filter(d => d >= dayOffset(today, -29) && d <= today).length, level: learnerLevel(completedLessons),
   };
   return { ...base, achievements: buildAchievements(base) };
 }

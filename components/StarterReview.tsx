@@ -1,3 +1,4 @@
+import { useStudyTimer } from '@/components/useEnglishStudyTimer';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useMemo, useState } from 'react';
 import { narrationRate } from '@/lib/narration';
@@ -31,6 +32,7 @@ export default function StarterReview({course}: {course: StarterCourse}) {
   const [spokenScore, setSpokenScore] = useState<number | null>(null);
   const [sessionActive, setSessionActive] = useState(false);
   const [finished, setFinished] = useState(false);
+  const timer = useStudyTimer(sessionActive && !finished, course.id);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -95,8 +97,8 @@ export default function StarterReview({course}: {course: StarterCourse}) {
   if (sessionActive && currentContent) {
     const { lesson, sentence } = currentContent;
     const vocabulary = sentence.vocabulary.map(item => `${item.word} · ${item.meaning}`).join('   ');
-    return <View style={styles.root}>
-      {!!error && <Text accessibilityRole="alert" style={styles.error}>{error}</Text>}
+    return <View style={styles.root} onTouchStart={timer.interact}>
+      {!!(error || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{error || timer.error}</Text>}
       <View style={styles.header}><Text style={styles.title}>مرور امروز</Text><Text style={styles.subtitle}>کارت {fa(cardIndex + 1)} از {fa(sessionCards.length)} · {lesson.title}</Text></View>
       <View style={styles.sessionProgress}><View style={[styles.sessionProgressFill, { width: `${((cardIndex + 1) / sessionCards.length) * 100}%` }]} /></View>
       <ScrollView contentContainerStyle={styles.sessionContent}>
@@ -115,7 +117,7 @@ export default function StarterReview({course}: {course: StarterCourse}) {
     </View>;
   }
 
-  return <View style={styles.root}>
+  return <View style={styles.root} onTouchStart={timer.interact}>
     <View style={styles.header}><Text style={styles.title}>مرور {course.name}</Text><Text style={styles.subtitle}>نمونه‌های امروز</Text></View>
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       {finished ? <View style={styles.finishedCard}><View style={styles.finishedIcon}><Check size={32} color={Palette.success} /></View><Text style={styles.finishedTitle}>مرور امروز تمام شد</Text></View> : null}

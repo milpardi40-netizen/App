@@ -1,5 +1,5 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import type { AppRelease } from '@/lib/appReleases';
+import { findAppTarget, type AppRelease } from '@/lib/appReleases';
 import { downloadAndInstall, fetchLatestRelease, formatSize, installedVersion, isUpdateSupported } from '@/lib/appUpdates';
 import { toPersianDigits as fa } from '@/lib/format';
 import { ArrowDownToLine, CheckCircle2, RefreshCw, Sparkles } from 'lucide-react-native';
@@ -67,6 +67,8 @@ export function AppUpdateCard() {
         ) : null}
       </View>
 
+      {supported && <Text keepColor style={s.packageId}>{findAppTarget(installed.package)?.apk ?? installed.package}</Text>}
+
       {!supported && <Text style={s.hint}>به‌روزرسانی درون‌برنامه‌ای فقط در نسخهٔ اندروید در دسترس است.</Text>}
 
       {supported && status === 'available' && release && (
@@ -77,7 +79,7 @@ export function AppUpdateCard() {
           {busy && (
             <View style={s.progressWrap}>
               <View style={s.track}><View style={[s.fill, { width: `${Math.round((progress || 0) * 100)}%` }]} /></View>
-              <Text style={s.hint}>{progress && progress >= 1 ? 'باز کردن نصب‌کننده…' : `در حال دانلود… ${fa(Math.round((progress || 0) * 100))}٪`}</Text>
+              <Text style={s.hint}>{progress && progress >= 1 ? 'بررسی فایل و باز کردن نصب‌کننده…' : `در حال دانلود… ${fa(Math.round((progress || 0) * 100))}٪`}</Text>
             </View>
           )}
           <Pressable accessibilityRole="button" disabled={busy} onPress={() => void install()} style={({ pressed }) => [s.primary, (pressed || busy) && { opacity: 0.75 }]}>

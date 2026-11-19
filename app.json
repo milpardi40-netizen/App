@@ -35,6 +35,7 @@
       "./plugins/withStableLayoutDirection",
       "./plugins/withLightTextTheme",
       "./plugins/withAndroidAbis",
+      "./plugins/withReliableAndroidSpeech",
       "expo-font",
       [
         "expo-notifications",
@@ -91,6 +92,7 @@
         "expo-build-properties",
         {
           "android": {
+            "useLegacyPackaging": true,
             "packagingOptions": {
               "pickFirst": [
                 "**/libc++_shared.so",

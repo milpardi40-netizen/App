@@ -1,4 +1,4 @@
-import * as Speech from 'expo-speech';
+import * as Speech from './courseSpeech';
 
 /**
  * Voice rotation: when the device has more than one TTS voice for a language, consecutive

@@ -1,7 +1,7 @@
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import * as Speech from 'expo-speech';
+import * as Speech from '@/lib/courseSpeech';
 import { speechTagFor } from '@/lib/speechLanguage';
 import { isCorrect, SKILLS, type Task } from '@/lib/englishSupplement/content';
 import { Colors, DESIGN_VARIANT, Typography } from '@/lib/theme';

@@ -1,7 +1,9 @@
+import { withMergedRatings } from './reviewHistory';
+import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { SENTENCE_LESSONS } from './courseContent';
-import { COURSE_PROGRESS_STORAGE_KEY, parseCourseProgressBackup, type CourseProgress } from './courseProgress';
+import { withCourseProgressLock, COURSE_PROGRESS_STORAGE_KEY, parseCourseProgressBackup, type CourseProgress } from './courseProgress';
 import { STUDY_KEY, compareLessonAttempts, parseStudy, withStudyStorageLock, type StudyState } from './englishStudyState';
 import { SUPPLEMENT_KEY, parseProgress, type SupplementProgress } from './englishSupplement/progress';
 
@@ -140,7 +142,7 @@ function latestTimestamp(left?: string, right?: string): string | undefined {
 }
 
 function reviewedAt(card: CourseProgress['reviewCards'][number]): number {
-  return Date.parse(card.lastReviewedAt ?? card.dueAt) || 0;
+  return Date.parse(card.lastReviewedAt ?? '1970-01-01') || 0;
 }
 
 export function mergeEnglishCourseProgress(current: CourseProgress, incoming: CourseProgress, now = new Date()): CourseProgress {
@@ -151,8 +153,8 @@ export function mergeEnglishCourseProgress(current: CourseProgress, incoming: Co
     const existing = cards.get(candidate.id);
     if (!existing || reviewedAt(candidate) > reviewedAt(existing)
       || (reviewedAt(candidate) === reviewedAt(existing) && candidate.repetitions > existing.repetitions)) {
-      cards.set(candidate.id, candidate);
-    }
+      cards.set(candidate.id, existing ? withMergedRatings(candidate, existing) : candidate);
+    } else cards.set(candidate.id, withMergedRatings(existing, candidate));
   }
   const activityDate = latest.activityDate;
   return parseCourseProgressBackup({
@@ -315,7 +317,7 @@ export async function mergeEnglishSyncExtras(remote: unknown, storage: BackupSto
 }
 
 export async function restoreEnglishBackup(text: string, storage: BackupStorage = deviceStorage, now = new Date()): Promise<EnglishBackupSummary> {
-  return withStudyStorageLock(async () => {
+  return withCourseProgressLock(() => withStudyStorageLock(async () => {
   const incoming = parseEnglishBackup(text).data;
   const current = await readLocalData(storage);
   const merged = mergeEnglishBackupData(current, incoming, now);
@@ -340,6 +342,7 @@ export async function restoreEnglishBackup(text: string, storage: BackupStorage 
     if (rollbackFailed) throw new Error('بازیابی کامل نشد و بازگردانی خودکار یکی از بخش‌ها هم ناموفق بود؛ پیش از ادامه، دستگاه را بررسی کنید.');
     throw new Error('ذخیرهٔ بازیابی انجام نشد؛ تلاش برای بازگرداندن هر سه سابقهٔ قبلی انجام شد. دوباره تلاش کنید.');
   }
+  notifyLearningChange();
   return summarize(merged);
-  });
+  }));
 }

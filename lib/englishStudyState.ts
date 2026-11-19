@@ -1,3 +1,4 @@
+import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import type { Skill } from './englishSupplement/content';
@@ -14,6 +15,7 @@ export interface LessonAttempt {
 
 export interface LessonSession {
   stage: number;
+  updatedAt?: string;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
   stageVersion?: number;
   sentenceIndex: number;
@@ -81,6 +83,7 @@ export function parseStudy(raw: string | null): StudyState {
     const stage = resumeStage(value.stage, value.stageVersion, ENGLISH_ENGINE_STEPS.length);
     if (stage === null) continue;
     sessions[id] = { ...value, stage, stageVersion: LESSON_STAGE_VERSION };
+    if (typeof value.updatedAt !== 'string' || !Number.isFinite(Date.parse(value.updatedAt))) delete sessions[id].updatedAt;
   }
   return {
     ...parsed,
@@ -127,6 +130,7 @@ function update(change: (state: StudyState) => void): Promise<StudyState> {
       if (typeof window === 'undefined') throw Error('ذخیره‌سازی در دسترس نیست.');
       window.localStorage.setItem(STUDY_KEY, raw);
     } else await AsyncStorage.setItem(STUDY_KEY, raw);
+    notifyLearningChange();
     scheduleAccountSync();
     return state;
   });
@@ -137,7 +141,7 @@ export function saveLessonSession(id: string, value: LessonSession) {
     if (compareLessonAttempts(value.attempt, state.sessions[id]?.attempt) !== 0) {
       throw Error('این جلسه تغییر کرده است؛ درس را دوباره باز کنید.');
     }
-    state.sessions[id] = value;
+    state.sessions[id] = { ...value, updatedAt: positionTimestamp() };
   });
 }
 
@@ -149,7 +153,7 @@ export function resetLessonSession(id: string): Promise<StudyState> {
     if (!Number.isSafeInteger(generation)) throw Error('شروع مجدد این جلسه ممکن نیست.');
     // A unique tie-breaker lets independently restarted devices converge without wall-clock ordering.
     const attempt = { generation, id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}` };
-    state.sessions[id] = { ...freshSession(), attempt, attemptEvidence: {} };
+    state.sessions[id] = { ...freshSession(), attempt, attemptEvidence: {}, updatedAt: positionTimestamp() };
   });
 }
 

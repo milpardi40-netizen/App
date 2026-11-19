@@ -14,6 +14,7 @@ import { buildWordSession, loadWordProgress, rateWordCard, saveWordProgress, wor
 import { markPlanStep } from '@/lib/dailyPlan';
 import type { ReviewRating } from '@/lib/courseProgress';
 import { prefersRecordedSpeech, setPrefersRecordedSpeech, subscribeSpeechSource } from '@/lib/content/speechFallback';
+import { ensureRecordedAudio } from '@/lib/content/coreAudio';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 
@@ -102,6 +103,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   // Read the saved choice and follow later automatic switches, so the label always tells the truth.
   useEffect(() => {
     if (language === 'ru') warmRussianSpeech(); else warmStarterSpeech(locale);
+    void ensureRecordedAudio(language);
   }, [language, locale]);
 
   useEffect(() => {

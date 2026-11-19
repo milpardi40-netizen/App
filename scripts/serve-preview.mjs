@@ -15,6 +15,7 @@ const gzipCache = new Map();
 
 function contentType(p) {
   if (p.endsWith('.html')) return 'text/html; charset=UTF-8';
+  if (p.endsWith('.wasm')) return 'application/wasm';
   if (p.endsWith('.js')) return 'application/javascript; charset=UTF-8';
   if (p.endsWith('.css')) return 'text/css; charset=UTF-8';
   if (p.endsWith('.json')) return 'application/json';
@@ -31,7 +32,7 @@ function contentType(p) {
 }
 
 function isCompressible(p) {
-  return /\.(?:html|js|css|json|svg|ttf)$/i.test(p);
+  return /\.(?:html|js|css|json|svg|ttf|wasm)$/i.test(p);
 }
 
 function acceptsGzip(req) {

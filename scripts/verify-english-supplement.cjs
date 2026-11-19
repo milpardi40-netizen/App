@@ -8,6 +8,7 @@ const esbuild = require('esbuild');
     stdin: { contents: "export * from './lib/englishSupplement/content'; export * from './lib/englishSupplement/progress'; export * from './lib/englishSupplement/assessments'; export * from './lib/courseContent';", resolveDir: process.cwd() },
     bundle: true, platform: 'node', format: 'cjs', outfile: output,
     plugins: [{ name: 'platform', setup(build) {
+      build.onResolve({filter:/personalLearningSync$/}, () => ({path:path.resolve('scripts/test-stubs/offline-sync.cjs')}));
       build.onResolve({ filter: /^(react-native|@react-native-async-storage\/async-storage)$/ }, args => ({ path: args.path, namespace: 'stub' }));
       build.onLoad({ filter: /.*/, namespace: 'stub' }, args => ({ contents: args.path === 'react-native' ? "export const Platform={OS:'web'}" : 'export default {}' }));
     } }],
@@ -18,8 +19,8 @@ const esbuild = require('esbuild');
   const ids = new Set();
 
   check(app.ENGLISH_SUPPLEMENT.length === 24);
-  check(app.SENTENCE_LESSONS.length === 222);
-  const survivalLessons = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 1);
+  check(app.SENTENCE_LESSONS.length === 274);
+  const survivalLessons = app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 1 && lesson.id.startsWith('survival-'));
   check(survivalLessons.length === 19 && survivalLessons.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 950
     && survivalLessons.every(lesson => lesson.sentences.length === 50));
   check(app.ENGLISH_FOUNDATION_UNITS.length === 4);
@@ -153,5 +154,5 @@ const esbuild = require('esbuild');
   check(app.ENGLISH_SUPPLEMENT.every(unit => !mainLessonIds.has(unit.id)));
   check(supplementTaskIds.every(id => !mainSentenceIds.has(id)));
   check(app.SUPPLEMENT_KEY === 'english_supplement_evidence_v1' && app.SUPPLEMENT_KEY !== 'sentence_course_progress_v1');
-  console.log(`${checks} checks passed; 24 supplement units (4 Foundation + 20 A1), 192 unit questions and 44 final-check questions; 212 main lessons including 10 Foundation, 19 Survival lessons / 950 sentences, 20 Everyday lessons / 1000 sentences, and 15 Communication lessons / 750 sentences; the supplement remains separate.`);
+  console.log(`${checks} checks passed; 24 supplement units (4 Foundation + 20 A1), 192 unit questions and 44 final-check questions; ${app.SENTENCE_LESSONS.length} main lessons including 10 Foundation, 19 Survival lessons / 950 sentences, 20 Everyday lessons / 1000 sentences, and 15 Communication lessons / 750 sentences; the supplement remains separate.`);
 })().catch(error => { console.error(error); process.exit(1); });

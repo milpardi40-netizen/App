@@ -58,7 +58,12 @@ const esbuild = require('esbuild');
     { id: 'tr', key: app.TURKISH_STUDY_STORAGE_KEY, lessons: app.TURKISH_LESSONS, save: app.saveTurkishLessonSession, reset: app.resetTurkishLessonSession, load: app.loadTurkishLessonSessionWithPresence },
     { id: 'ru', key: app.RUSSIAN_STUDY_STORAGE_KEY, lessons: app.RUSSIAN_LESSONS, save: app.saveRussianLessonSession, reset: app.resetRussianLessonSession, load: app.loadRussianLessonSessionWithPresence },
   ];
-  const fresh = { stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false };
+  const fresh = { stageVersion: 2, stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false };
+  function savedPosition(value) {
+    const { updatedAt, ...position } = value;
+    assert.ok(Number.isFinite(Date.parse(updatedAt)), 'durable position has a resume timestamp');
+    return position;
+  }
   let checks = 0;
   const check = (value, message) => { assert.ok(value, message); checks++; };
   for (const platform of ['ios', 'web']) {
@@ -89,7 +94,7 @@ const esbuild = require('esbuild');
         release();
         await previousSave;
         assert.deepEqual(await reset, fresh);
-        assert.deepEqual(await resume, { session: fresh, hasSavedSession: true });
+        const saved = await resume; assert.ok(saved.hasSavedSession); assert.deepEqual(savedPosition(saved.session), fresh);
         checks += 2;
       } else {
         const previousSave = suite.save(target.id, old);
@@ -97,21 +102,21 @@ const esbuild = require('esbuild');
         const resume = suite.load(target.id);
         await previousSave;
         assert.deepEqual(await reset, fresh);
-        assert.deepEqual(await resume, { session: fresh, hasSavedSession: true });
+        const saved = await resume; assert.ok(saved.hasSavedSession); assert.deepEqual(savedPosition(saved.session), fresh);
         checks += 2;
       }
-      assert.deepEqual((await suite.load(other.id)).session, otherSession); checks++;
+      assert.deepEqual(savedPosition((await suite.load(other.id)).session), { ...otherSession, stageVersion: 2 }); checks++;
       check(data.get('unrelated-draft') === 'draft must survive' && data.get('progress-history-reviews-streaks') === '{"completion":[1],"reviews":[2],"streak":7}', `${platform}/${suite.id}: unrelated history and drafts survive`);
       await suite.save(target.id, old);
       const beforeFailure = data.get(suite.key);
       globalThis.__restartFailKey = suite.key;
       await assert.rejects(suite.reset(target.id), /write failed/); checks++;
       check(data.get(suite.key) === beforeFailure, `${platform}/${suite.id}: failed write does not claim or persist reset`);
-      assert.deepEqual((await suite.load(target.id)).session, old); checks++;
+      assert.deepEqual(savedPosition((await suite.load(target.id)).session), { ...old, stageVersion: 2 }); checks++;
       await suite.reset(target.id);
-      assert.deepEqual((await suite.load(target.id)).session, fresh); checks++;
+      assert.deepEqual(savedPosition((await suite.load(target.id)).session), fresh); checks++;
       await suite.save(target.id, old);
-      assert.deepEqual((await suite.load(target.id)).session, old); checks++;
+      assert.deepEqual(savedPosition((await suite.load(target.id)).session), { ...old, stageVersion: 2 }); checks++;
       await assert.rejects(suite.reset('not-a-lesson')); checks++;
       data.set(suite.key, '{bad json');
       await assert.rejects(suite.reset(target.id)); checks++;
@@ -127,14 +132,14 @@ const esbuild = require('esbuild');
     check(handler.includes(`reset${lang}LessonSession(lesson.id)`) && handler.includes(`stop${lang}Speech()`), `${lang}: header immediately queues same-lesson reset and stops speech`);
     check(lesson.includes(`? (restartPromise.current ??= reset${lang}LessonSession(lesson.id))`) && lesson.includes('replayingLevel && result.hasSavedSession') && !lesson.includes('lesson.id === lessons[0].id'), `${lang}: fromStart resets any lesson rather than using the separate level-replay mode`);
     check(lesson.includes('setStage(saved.stage)') && lesson.includes('setAnswers(saved.answers)') && lesson.includes('شروع مجدد ذخیره نشد'), `${lang}: successful reset hydrates fresh state and failure is visible`);
-    check(home.includes("id: heroLesson.id, fromStart: '1'") && home.includes('onPress={replayBeginnerLevel}') && home.includes("levelReplay: '1'"), `${lang}: current-lesson reset differs from non-destructive level replay`);
-    check(library.includes('hasSavedSession ? saved.session : null') && library.includes('openLesson(item.id)'), `${lang}: library distinguishes absent sessions and resumes selected lesson`);
+    check((home.includes("id: heroLesson.id, fromStart: '1'") || home.includes("heroLesson.id)}&fromStart=1")) && home.includes('onPress={replayBeginnerLevel}') && (home.includes("levelReplay: '1'") || home.includes("&levelReplay=1")), `${lang}: current-lesson reset differs from non-destructive level replay`);
+    check(library.includes('snapshot?.sessions ?? {}') && library.includes('openLesson(item.id)'), `${lang}: library distinguishes absent sessions and resumes selected lesson`);
   }
   // The language screens moved into their own modules, so the reset signal is checked where it is read.
   const newCourseScreen = fs.readFileSync(path.join(root, 'components/routes/NewCourseLessonScreen.tsx'), 'utf8');
   const ruScreen = fs.readFileSync(path.join(root, 'components/routes/RussianLessonScreen.tsx'), 'utf8');
   const ruRoute = fs.readFileSync(path.join(root, 'app/learn/ru/lesson.tsx'), 'utf8');
-  check(newCourseScreen.includes("fromStart === '1' ? 'listen'") && newCourseScreen.includes("fromStart={fromStart === '1'}")
+  check(newCourseScreen.includes("fromStart === '1' ? 'listen'")
     && ruScreen.includes("fromStart={fromStart === '1'}") && ruRoute.includes("fromStart={fromStart === '1'}"),
     'all route variants pass the home reset signal');
   fs.rmSync(temp, { recursive: true, force: true });

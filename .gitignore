@@ -15,6 +15,8 @@ ios/
 # Expo module and must be included in Git/EAS builds.
 !modules/milo-chat-foreground/android/
 !modules/milo-chat-foreground/android/**
+!modules/milo-apk-verifier/android/
+modules/milo-apk-verifier/android/build/
 
 # native
 *.orig.*
@@ -56,3 +58,9 @@ scripts/content/.stubs/
 content-packs/audio/
 content-packs/audio-bundles/
 content-packs/packs-all.json
+content-packs/core-audio/
+content-packs/core-bundles/
+content-packs/core-audio-index.json
+
+# Web-only speech engine, copied from the pinned npm dependency at export time
+/public/narration/engine/

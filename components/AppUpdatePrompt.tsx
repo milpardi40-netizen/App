@@ -1,5 +1,5 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import type { AppRelease } from '@/lib/appReleases';
+import { findAppTarget, type AppRelease } from '@/lib/appReleases';
 import { checkForUpdateOnLaunch, downloadAndInstall, formatSize, installedVersion, skipUpdate } from '@/lib/appUpdates';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Download, RefreshCw } from 'lucide-react-native';
@@ -29,6 +29,7 @@ export function UpdateSheet({ release, onClose }: { release: AppRelease; onClose
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState('');
   const installed = installedVersion();
+  const fileName = findAppTarget(installed.package)?.apk;
   const busy = progress !== null;
 
   async function install() {
@@ -46,6 +47,7 @@ export function UpdateSheet({ release, onClose }: { release: AppRelease; onClose
           <Text style={s.title}>نسخهٔ جدید آماده است</Text>
           <Text style={s.meta}>نسخهٔ {release.version_name} (ساخت {fa(release.version_code)}){release.file_size ? ` · ${formatSize(release.file_size)}` : ''}</Text>
           <Text style={s.metaSmall}>نسخهٔ فعلی شما: {installed.name} (ساخت {fa(installed.code)})</Text>
+          {!!fileName && <Text style={s.metaSmall}>فایل همین برنامه: {fileName}</Text>}
           <ScrollView style={s.body} contentContainerStyle={s.bodyContent} showsVerticalScrollIndicator persistentScrollbar bounces={false}>
             {!!release.release_notes && <Text style={s.notes}>{release.release_notes}</Text>}
           </ScrollView>
@@ -54,7 +56,7 @@ export function UpdateSheet({ release, onClose }: { release: AppRelease; onClose
           {busy && (
             <View style={s.progressWrap}>
               <View style={s.track}><View style={[s.fill, { width: `${Math.round((progress || 0) * 100)}%` }]} /></View>
-              <Text style={s.metaSmall}>{progress && progress >= 1 ? 'باز کردن نصب‌کننده…' : `در حال دانلود… ${fa(Math.round((progress || 0) * 100))}٪`}</Text>
+              <Text style={s.metaSmall}>{progress && progress >= 1 ? 'بررسی فایل و باز کردن نصب‌کننده…' : `در حال دانلود… ${fa(Math.round((progress || 0) * 100))}٪`}</Text>
             </View>
           )}
           <View style={s.actions}>

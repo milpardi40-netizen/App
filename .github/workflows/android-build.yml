@@ -80,6 +80,9 @@ jobs:
           NODE
 
       - name: Validate learner OTP, language entry and accessibility
+        env:
+          # This regression suite exercises all six stores, independently of the release flavor.
+          EXPO_PUBLIC_RUSSIAN_ONLY: 'false'
         run: |
           npm run typecheck
           npm run validate:hygiene
@@ -92,6 +95,24 @@ jobs:
           node scripts/verify-app-resume.cjs
           npm run validate:a11y
           npm run validate:requested-updates
+
+      - name: Verify curriculum and reserve the dedicated Russian build
+        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          npm run validate:russian
+          node scripts/verify-russian-redesign.cjs
+          node scripts/verify-russian-studio.cjs
+          node scripts/verify-russian-speech-flow.cjs
+          node scripts/verify-nonenglish-restart.cjs
+          tags=$(gh api --paginate "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/milo-russian-")
+          previous=$(jq -rs '[.[][] | .ref | capture("^refs/tags/milo-russian-(?<n>[0-9]+)$").n | tonumber] | max // 0' <<< "$tags")
+          (( GITHUB_RUN_NUMBER > previous )) || { echo 'Refusing to overwrite a published Russian build'; exit 1; }
+          if (( previous > 0 )); then echo "PREVIOUS_RUSSIAN_TAG=milo-russian-$previous" >> "$GITHUB_ENV"; fi
+          echo "MILO_VERSION_CODE=$((116 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
+          echo 'EXPO_PUBLIC_LANGUAGE_SCOPE=ru' >> "$GITHUB_ENV"
+          echo 'MILO_ANDROID_ABIS=armeabi-v7a,arm64-v8a,x86,x86_64' >> "$GITHUB_ENV"
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -199,7 +220,7 @@ jobs:
           script: bash .github/scripts/android-emulator-smoke-test.sh
 
       - name: Upload Android emulator diagnostics
-        if: ${{ always() }}
+        if: ${{ always() && env.EXPO_PUBLIC_RUSSIAN_ONLY != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: android-emulator-smoke-${{ github.run_id }}
@@ -211,11 +232,11 @@ jobs:
           retention-days: 3
 
       - name: Confirm both release APKs are ready
-        if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[apk-release]') }}
+        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY != 'true' && github.event_name == 'push' && contains(github.event.head_commit.message, '[apk-release]') }}
         run: test -s MiloMultilang.apk && (test '${{ env.EXPO_PUBLIC_RUSSIAN_ONLY }}' = 'true' || test -s MiloAdmin.apk)
 
       - name: Publish direct APK downloads
-        if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[apk-release]') }}
+        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY != 'true' && github.event_name == 'push' && contains(github.event.head_commit.message, '[apk-release]') }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: milomultilang-android-${{ github.run_number }}
@@ -230,11 +251,27 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Name and publish the Russian-only APK
+      - name: Inspect the signed Russian-only artifact
         if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           cp MiloMultilang.apk MiloRussian.apk
-          test -s MiloRussian.apk
+          python3 .github/scripts/verify-russian-apk.py
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Install and launch only the Russian APK
+        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-boot-timeout: 600
+          script: bash .github/scripts/smoke-russian-apk.sh
 
       - name: Publish Russian-only APK release
         if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}
@@ -242,13 +279,37 @@ jobs:
         with:
           tag_name: milo-russian-${{ github.run_number }}
           target_commitish: ${{ github.sha }}
-          name: "Milo Russian APK #${{ github.run_number }}"
-          body: "Russian-only learner APK (Milo Russian). Sideload on Android."
+          name: "Milo Russian · 1.0.${{ env.MILO_VERSION_CODE }}"
+          body_path: russian-release.md
           prerelease: true
-          files: MiloRussian.apk
+          files: |
+            MiloRussian.apk
+            MiloRussian.apk.sha256
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Register only the Russian package when in-app publishing is configured
+        if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: |
+          tag=milo-russian-$GITHUB_RUN_NUMBER
+          if [[ -n "$SERVICE_KEY" ]]; then
+            url=${SUPABASE_URL:-$(node -p "require('./config/supabase.public.json').EXPO_PUBLIC_SUPABASE_URL")}
+            row=$(jq -n --argjson code "$MILO_VERSION_CODE" --arg sha "$(cut -d' ' -f1 MiloRussian.apk.sha256)" \
+              --arg url "https://github.com/$GITHUB_REPOSITORY/releases/download/$tag/MiloRussian.apk" --argjson size "$(stat -c %s MiloRussian.apk)" \
+              '{package_name:"com.devicecontrol.milorussian",platform:"android",version_name:("1.0."+($code|tostring)),version_code:$code,download_url:$url,file_size:$size,sha256:$sha,release_notes:"آموزش گام‌به‌گام فعل‌ها و مکالمهٔ روسی با میکروفون و پاسخ خودکار",published:true,mandatory:false}')
+            curl --silent --show-error --fail -o /dev/null -X POST "$url/rest/v1/app_releases?on_conflict=package_name,platform,version_code" \
+              -H "apikey: $SERVICE_KEY" -H "Authorization: Bearer $SERVICE_KEY" -H 'Content-Type: application/json' \
+              -H 'Prefer: resolution=merge-duplicates,return=minimal' --data "$row"
+            echo 'In-app update registered for com.devicecontrol.milorussian only.' >> russian-release.md
+          else
+            echo 'Direct APK download; in-app update was not automatically registered.' >> russian-release.md
+          fi
+          gh release edit "$tag" --notes-file russian-release.md
 
       - name: Upload Russian-only APK artifact
         if: ${{ env.EXPO_PUBLIC_RUSSIAN_ONLY == 'true' }}

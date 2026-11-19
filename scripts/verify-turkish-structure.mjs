@@ -265,28 +265,28 @@ const EXPECTED_B1_SURVIVAL_TITLES = [
 ];
 
 // 1. Preserve English and Russian untouched baselines
-check(english.SENTENCE_LESSONS.length === 222, 'English baseline lesson count (222 incl. additive Pre-A1) holds');
-check(english.SENTENCE_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 4322, 'English baseline sentence count (4322 incl. additive Pre-A1) holds');
-check(russian.RUSSIAN_LESSONS.length === 129, 'Russian baseline lesson count (129) is untouched');
-check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1032, 'Russian baseline sentence count (1032) is untouched');
+check(english.SENTENCE_LESSONS.length === 274, 'English baseline lesson count (274 at release 14) holds');
+check(english.SENTENCE_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 4852, 'English baseline sentence count (4852 at release 14) holds');
+check(russian.RUSSIAN_LESSONS.length === 203, 'Russian baseline lesson count (203) is untouched');
+check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1664, 'Russian baseline sentence count (1664) is untouched');
 
 // 2. Alphabet, levels, and A1 + A2 syllabus structure
 check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ', 'Turkish 29-letter alphabet is exact');
-check(turkish.TURKISH_LEVELS.length === 7, 'Turkish has one standalone Pre-A1 level plus the six existing A1-C1 levels');
-check(turkish.TURKISH_LEVELS.slice(1).map(level => level.id).join('|') === russian.RUSSIAN_LEVELS.map(level => level.id).join('|'), 'Existing Turkish A1-C1 level ids still match the Russian structure');
-check(turkish.TURKISH_LEVELS.slice(1).map(level => level.title).join('|') === russian.RUSSIAN_LEVELS.map(level => level.title.replace('Russian', 'Turkish')).join('|'), 'Existing Turkish A1-C1 level sequence still mirrors the Russian course');
-check(turkish.TURKISH_LEVELS[0].id === -1 && turkish.TURKISH_LEVELS[0].cefr.startsWith('Pre-A1'), 'Turkish Pre-A1 is a distinct level before A1');
-check(JSON.stringify(turkish.TURKISH_LESSON_STAGES) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES), 'Turkish preserves all nine sentence-based lesson stages');
+check(turkish.TURKISH_LEVELS.map(level => level.cefr).join('|') === 'Pre-A1|A1|A2|B1|B2|C1', 'Turkish publishes six distinct CEFR bands');
+check(turkish.TURKISH_LEVELS.map(level => level.id).join('|') === russian.RUSSIAN_LEVELS.map(level => level.id).join('|'), 'Level ids agree across both maps');
+check(turkish.TURKISH_LESSON_STAGES.length === 10
+  && JSON.stringify(turkish.TURKISH_LESSON_STAGES) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES.slice(0, 10))
+  && russian.RUSSIAN_LESSON_STAGES[10]?.id === 'turn-exchange', 'The original ten stages agree; only Russian has the additional final exchange');
 
 const availableLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'available');
 const plannedLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'planned');
-check(availableLevels.map(level => level.id).join('|') === '-1|0|1|2|3|4|5', 'Pre-A1 and all existing A1-C1 levels are available');
+check(availableLevels.map(level => level.id).join('|') === '0|1|2|3|4|5', 'Pre-A1 and all existing A1-C1 levels are available');
 check(availableLevels.slice(1).every(level => level.description.length > 20 && level.modules.length >= 30), 'Available A1-C1 levels include descriptions and full syllabus modules');
 check(turkish.TURKISH_LEVELS[0].modules.length === 25, 'Pre-A1 exposes its 25 dedicated lessons');
 check(plannedLevels.length === 0, 'No level remains planned');
-check(turkish.TURKISH_LEVELS[6].modules.length === 61, 'C1 level exposes all 61 modules');
-check(turkish.TURKISH_LESSONS.every(lesson => lesson.levelId >= -1 && lesson.levelId <= 5), 'All lessons belong to Pre-A1 through C1');
-const preA1Lessons = turkish.TURKISH_LESSONS.filter(lesson => lesson.levelId === -1);
+check(turkish.TURKISH_LEVELS[5].modules.length === 61, 'C1 level exposes all 61 modules');
+check(turkish.TURKISH_LESSONS.every(lesson => lesson.levelId >= 0 && lesson.levelId <= 5), 'All lessons belong to Pre-A1 through C1');
+const preA1Lessons = turkish.TURKISH_LESSONS.filter(lesson => lesson.levelId === 0);
 check(preA1Lessons.length === 25 && preA1Lessons.every(lesson => lesson.id.startsWith('tr-prea1-')), 'Turkish Pre-A1 has 25 separately identified lessons');
 check(preA1Lessons.map(lesson => lesson.learningMode).join('|') === [...Array(14).fill('words'), ...Array(5).fill('chunks'), ...Array(6).fill('sentences')].join('|'), 'Pre-A1 teaches 14 lexical lessons, then 5 chunk lessons, then 6 sentence lessons');
 const preA1ModeCounts = preA1Lessons.reduce((counts, lesson) => ({ ...counts, [lesson.learningMode]: counts[lesson.learningMode] + lesson.sentences.length }), { words: 0, chunks: 0, sentences: 0 });
@@ -306,8 +306,8 @@ check(preA1Lessons[2].sentences.every(sentence => sentence.pattern?.startsWith('
 check(preA1Lessons[3].sentences.some(sentence => sentence.pattern?.startsWith('صفت')) && preA1Lessons[3].sentences.some(sentence => sentence.pattern?.startsWith('قید')), 'The fourth lesson teaches adjectives and adverbs as isolated words');
 
 // 3. Exact 182 A1 + A2 + B1 lessons & 1456 sentences content quality
-const foundationLessons = turkish.TURKISH_LESSONS.filter(lesson => lesson.levelId === 0);
-const survivalLessons = turkish.TURKISH_LESSONS.filter(lesson => lesson.levelId === 1);
+const foundationLessons = turkish.TURKISH_LESSONS.filter(lesson => lesson.levelId === 1 && lesson.id.startsWith('tr-l1-'));
+const survivalLessons = turkish.TURKISH_LESSONS.filter(lesson => lesson.levelId === 1 && lesson.id.startsWith('tr-l2-'));
 const everydayA2Lessons = turkish.TURKISH_LESSONS.filter(lesson => lesson.levelId === 2);
 const everydayA2Foundation = everydayA2Lessons.slice(0, 26);
 const everydayA2Survival = everydayA2Lessons.slice(26);
@@ -356,7 +356,7 @@ for (const lesson of turkish.TURKISH_LESSONS) {
   assert.ok(lesson.situation && lesson.situation.length >= 15, `${lesson.id} has Persian situation`);
   assert.ok(lesson.teachingFa && lesson.teachingFa.length >= 40, `${lesson.id} has Persian teaching note`);
   assert.ok(lesson.sentences.some(sentence => Boolean(sentence.pattern)), `${lesson.id} includes grammar-through-usage pattern notes`);
-  if (lesson.levelId === -1 && lesson.learningMode === 'words') {
+  if (lesson.levelId === 0 && lesson.learningMode === 'words') {
     assert.equal(lesson.dialogue.length, 0, `${lesson.id} does not introduce phrases or sentence dialogue before the chunk stage`);
   } else {
     assert.ok(lesson.dialogue.length >= 3, `${lesson.id} includes a multi-turn guided dialogue`);
@@ -370,7 +370,7 @@ for (const lesson of turkish.TURKISH_LESSONS) {
   }
   for (const sentence of lesson.sentences) {
     const tokenCount = sentence.text.trim().split(/\s+/).length;
-    if (lesson.levelId === -1 && lesson.learningMode === 'words') {
+    if (lesson.levelId === 0 && lesson.learningMode === 'words') {
       assert.equal(tokenCount, 1, `${sentence.id} is one isolated lexical item in a word-first Pre-A1 lesson`);
     } else {
       assert.ok(tokenCount >= 2, `${sentence.id} has >= 2 words for its chunk or sentence activity`);

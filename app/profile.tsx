@@ -1,3 +1,6 @@
+import { useFocusedLearningData } from '@/hooks/useFocusedLearningData';
+import { formatPercent, progressLabel } from '@/lib/levelProgress';
+import { ProgressTrack } from '@/components/ProgressTrack';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Platform, Pressable, StyleSheet, View } from 'react-native';
@@ -68,6 +71,8 @@ function formatDate(value: string | null | undefined, withTime = false): string 
 }
 
 function formatMinutes(minutes: number): string {
+  if (minutes > 0 && minutes < 1) return 'کمتر از یک دقیقه';
+  minutes = Math.floor(minutes);
   if (minutes < 60) return `${fa(minutes)} دقیقه`;
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
@@ -82,7 +87,7 @@ function daysSince(value: string | null | undefined): number | null {
 }
 
 function lastActiveLabel(key: string | null): string {
-  if (!key) return 'هنوز شروع نشده';
+  if (!key) return 'تاریخ ثبت نشده';
   const [y, m, d] = key.split('-').map(Number);
   if (!y || !m || !d) return '—';
   const date = new Date(y, m - 1, d);
@@ -100,7 +105,7 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
   const [localProfile, setLocalProfile] = useState<LocalProfile | null>(null);
   const [userId, setUserId] = useState('');
   const [lastSignIn, setLastSignIn] = useState<string | null>(null);
-  const [summary, setSummary] = useState<LearnerProfileSummary | null>(null);
+  const { data: summary, failed: statsFailed, retry: refreshStats } = useFocusedLearningData(loadLearnerProfileSummary, true);
   const [tab, setTab] = useState<Tab>('overview');
   const [editing, setEditing] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
@@ -113,7 +118,7 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
   const load = useCallback(async () => {
     try {
       if (local) {
-        const [stored, stats] = await Promise.all([getLocalProfile(), loadLearnerProfileSummary()]);
+        const stored = await getLocalProfile();
         setLocalProfile(stored);
         if (stored?.verifiedAt) {
           setProfile({ user_id: 'local', full_name: stored.fullName, email: stored.email, registered_at: stored.createdAt, last_seen_at: stored.lastSeenAt });
@@ -129,15 +134,13 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
         } else {
           setProfile(null);
         }
-        setSummary(stats);
         setError('');
         return;
       }
-      const [{ session, profile: registered }, stats] = await Promise.all([getRegisteredSession(), loadLearnerProfileSummary()]);
+      const { session, profile: registered } = await getRegisteredSession();
       setProfile(registered);
       setUserId(session?.user.id ?? '');
       setLastSignIn(session?.user.last_sign_in_at ?? null);
-      setSummary(stats);
       setError('');
     } catch (cause) {
       setError(local ? localProfileError(cause) : registrationError(cause));
@@ -324,7 +327,9 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
                 ))}
               </View>
 
-              {summary && tab === 'overview' && <OverviewTab summary={summary} onReview={() => router.push('/languages' as never)} />}
+              {(statsFailed || !!summary?.unavailable.length || summary?.languages.some(l => l.unreadable)) && <Pressable accessibilityRole="button" onPress={refreshStats}><Text style={styles.error}>بخشی از سابقه خوانده نشد{summary?.unavailable.length ? ` (${summary.unavailable.join('، ')})` : ''}؛ برای خواندن دوباره بزنید.</Text></Pressable>}
+              {!summary && !statsFailed && tab !== 'account' && <ActivityIndicator color={palette.forest} />}
+              {summary && tab === 'overview' && <OverviewTab summary={summary} onReview={() => { if (summary.nextReview) router.push(summary.nextReview.route as never); }} />}
               {summary && tab === 'languages' && <LanguagesTab summary={summary} onOpen={home => router.push(home as never)} />}
               {summary && tab === 'achievements' && <AchievementsTab achievements={summary.achievements} />}
               {tab === 'account' && (
@@ -362,7 +367,7 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
 /* ───────────────────────── Overview ───────────────────────── */
 
 function OverviewTab({ summary, onReview }: { summary: LearnerProfileSummary; onReview: () => void }) {
-  const goalPercent = Math.min(100, Math.round((summary.todayMinutes / Math.max(1, summary.dailyGoalMinutes)) * 100));
+  const goalPercent = Math.min(100, Math.floor((summary.todayMinutes / Math.max(1, summary.dailyGoalMinutes)) * 100));
   const maxMinutes = Math.max(1, ...summary.week.map(day => day.minutes));
   const level = summary.level;
   return (
@@ -371,8 +376,8 @@ function OverviewTab({ summary, onReview }: { summary: LearnerProfileSummary; on
         <View style={styles.todayRow}>
           <Ring percent={goalPercent} label={`${fa(goalPercent)}٪`} />
           <View style={styles.todayCopy}>
-            <Text style={styles.todayTitle}>{fa(summary.todayMinutes)} از {fa(summary.dailyGoalMinutes)} دقیقهٔ هدف روزانه</Text>
-            <Text style={styles.cardText}>{goalPercent >= 100 ? 'هدف امروز را کامل کردید؛ عالی!' : summary.todayMinutes > 0 ? `${fa(Math.max(0, summary.dailyGoalMinutes - summary.todayMinutes))} دقیقهٔ دیگر تا هدف امروز.` : 'هنوز امروز تمرین نکرده‌اید؛ با یک درس کوتاه شروع کنید.'}</Text>
+            <Text style={styles.todayTitle}>{fa(Math.floor(summary.todayMinutes))} از {fa(summary.dailyGoalMinutes)} دقیقهٔ هدف روزانه</Text>
+            <Text style={styles.cardText}>{goalPercent >= 100 ? 'هدف امروز را کامل کردید؛ عالی!' : summary.todayMinutes > 0 ? `${fa(Math.ceil(Math.max(0, summary.dailyGoalMinutes - summary.todayMinutes)))} دقیقهٔ دیگر تا هدف امروز.` : 'هنوز زمانی برای تمرین امروز ثبت نشده است.'}</Text>
             <View style={styles.inlineChips}>
               <Chip icon={<Repeat size={12} color={palette.forest} />} text={summary.reviewsDueNow ? `${fa(summary.reviewsDueNow)} مرور آماده` : 'مروری سررسید نشده'} tone={summary.reviewsDueNow ? 'warm' : 'calm'} />
               <Chip icon={<Flame size={12} color={palette.terracotta} />} text={summary.currentStreak ? `${fa(summary.currentStreak)} روز پیاپی` : 'زنجیرهٔ جدید از امروز'} tone="calm" />
@@ -385,7 +390,7 @@ function OverviewTab({ summary, onReview }: { summary: LearnerProfileSummary; on
         <View style={styles.levelSteps}>
           {Array.from({ length: level.total }).map((_, i) => <View key={i} style={[styles.levelStep, i < level.index && styles.levelStepDone, i === level.index && styles.levelStepActive]} />)}
         </View>
-        <View style={styles.levelTrack}><View style={[styles.levelFill, { width: `${Math.round(level.progress * 100)}%` }]} /></View>
+        <ProgressTrack value={level.progress * 100} color={palette.forest} />
         <Text style={styles.cardText}>{level.next ? `${fa(level.remaining)} درس دیگر تا سطح «${level.next}».` : 'به بالاترین سطح رسیده‌اید؛ آفرین!'}</Text>
       </Section>
 
@@ -396,29 +401,30 @@ function OverviewTab({ summary, onReview }: { summary: LearnerProfileSummary; on
         <View style={styles.chart}>
           {summary.week.map(day => (
             <View key={day.key} style={styles.chartCol}>
-              <Text style={styles.chartValue}>{day.minutes ? fa(day.minutes) : ''}</Text>
+              <Text style={styles.chartValue}>{day.minutes ? (day.minutes < 1 ? '‹۱' : fa(Math.floor(day.minutes))) : ''}</Text>
               <View style={styles.chartBarTrack}>
-                <View style={[styles.chartBar, { height: `${Math.max(day.minutes ? 8 : 2, Math.round((day.minutes / maxMinutes) * 100))}%` }, day.isToday && styles.chartBarToday]} />
+                <View style={[styles.chartBar, { height: `${(day.minutes / maxMinutes) * 100}%` }, day.isToday && styles.chartBarToday]} />
               </View>
-              <Text style={[styles.chartDay, day.isToday && styles.chartDayToday]}>{day.weekdayShort}</Text>
+              <Text style={[styles.chartDay, day.isToday && styles.chartDayToday]}>{day.weekdayShort}{day.active ? ' •' : ''}</Text>
             </View>
           ))}
         </View>
-        <Text style={styles.cardHint}>دقیقه‌های اندازه‌گیری‌شدهٔ تمرین در هر روز</Text>
+        <Text style={styles.cardHint}>ارتفاع ستون: دقیقه‌های اندازه‌گیری‌شده · نقطه: روز دارای فعالیت</Text>
       </Section>
 
       <View style={styles.statsGrid}>
         <StatTile icon={<BookOpenCheck size={18} color={palette.forest} />} value={fa(summary.completedLessons)} label="درس تکمیل‌شده" hint={`از ${fa(summary.totalLessons)} درس`} />
         <StatTile icon={<Flame size={18} color={palette.terracotta} />} value={fa(summary.currentStreak)} label="روز پیاپی" hint={`رکورد: ${fa(summary.longestStreak)} روز`} />
-        <StatTile icon={<Clock3 size={18} color={palette.forest} />} value={formatMinutes(summary.totalMinutes)} label="زمان کل یادگیری" compact />
+        <StatTile icon={<Clock3 size={18} color={palette.forest} />} value={formatMinutes(summary.totalMinutes)} label="زمان اندازه‌گیری‌شده" compact />
         <StatTile icon={<Languages size={18} color={palette.forest} />} value={fa(summary.activeLanguages)} label="زبان فعال" hint={`از ${fa(summary.languages.length)} زبان`} />
-        <StatTile icon={<Repeat size={18} color={palette.forest} />} value={fa(summary.reviewsTotal)} label="کارت مرور" hint={`${fa(summary.reviewsMastered)} در حافظهٔ بلندمدت`} />
+        <StatTile icon={<Repeat size={18} color={palette.forest} />} value={fa(summary.reviewsTotal)} label="کارت جمله" hint={`${fa(summary.reviewsMastered)} در حافظهٔ بلندمدت`} />
+        <StatTile icon={<Repeat size={18} color={palette.forest} />} value={`${summary.reviewLowerBound ? 'حداقل ' : ''}${fa(summary.reviewsDone)}`} label="مرور انجام‌شده" hint={`${fa(summary.reviewsDueNow)} کارت جمله و واژه آمادهٔ مرور`} />
         <StatTile icon={<Brain size={18} color={palette.terracotta} />} value={fa(summary.vocabulary.seen)} label="واژهٔ انگلیسی دیده‌شده" hint={`${fa(summary.vocabulary.mastered)} واژهٔ تثبیت‌شده`} />
       </View>
 
       {summary.reviewsDueNow > 0 && (
         <Pressable accessibilityRole="button" onPress={onReview} style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
-          <Repeat size={16} color="#FFFFFF" /><Text keepColor style={styles.primaryButtonText}>شروع {fa(summary.reviewsDueNow)} مرور آماده</Text>
+          <Repeat size={16} color="#FFFFFF" /><Text keepColor style={styles.primaryButtonText}>شروع مرور {summary.nextReview?.language}</Text>
         </Pressable>
       )}
     </>
@@ -448,8 +454,8 @@ function LanguageCard({ language, onOpen }: { language: LanguageProfileStat; onO
             <Text style={styles.langName}>{language.name}</Text>
             <Text style={styles.langNative}>{language.nativeName}</Text>
           </View>
-          <View style={styles.languageTrack}><View style={[styles.languageFill, { width: `${language.percent}%`, backgroundColor: language.accent }]} /></View>
-          <Text style={styles.languageMeta}>{fa(language.completedLessons)} از {fa(language.totalLessons)} درس · {fa(language.percent)}٪ · {language.started ? `آخرین فعالیت: ${lastActiveLabel(language.lastActiveDate)}` : 'هنوز شروع نشده'}</Text>
+          <ProgressTrack value={language.percent} color={language.accent} height={6} />
+          <Text style={styles.languageMeta}>{progressLabel({ ...language, total: language.totalLessons, completed: language.completedLessons })} · {formatPercent(language.percent)} · {language.started ? `آخرین فعالیت: ${lastActiveLabel(language.lastActiveDate)}` : 'هنوز شروع نشده'}</Text>
         </View>
         <ChevronLeft size={18} color={palette.muted} style={expanded ? styles.chevronOpen : undefined} />
       </Pressable>
@@ -458,11 +464,27 @@ function LanguageCard({ language, onOpen }: { language: LanguageProfileStat; onO
         <View style={styles.langBody}>
           <View style={styles.kvGrid}>
             <KeyValue label="سطح فعلی" value={language.currentLevelCefr ? `${language.currentLevelTitle} · ${language.currentLevelCefr}` : '—'} />
-            <KeyValue label="درس جاری" value={language.currentLessonTitle || '—'} />
+            <KeyValue label="درس جاری" value={language.currentLessonTitle || (language.completedLessons === language.totalLessons && language.totalLessons ? 'مسیر کامل شده' : '—')} />
             <KeyValue label="زنجیرهٔ فعلی" value={`${fa(language.currentStreak)} روز`} />
             <KeyValue label="بهترین زنجیره" value={`${fa(language.longestStreak)} روز`} />
             <KeyValue label="زمان تمرین" value={formatMinutes(language.totalMinutes)} />
-            <KeyValue label="امروز" value={`${fa(language.todayMinutes)} از ${fa(language.dailyGoalMinutes)} دقیقه`} />
+            <KeyValue label="امروز" value={`${fa(Math.floor(language.todayMinutes))} از ${fa(language.dailyGoalMinutes)} دقیقه`} />
+            {language.legacyMinutes > 0 && <KeyValue label="زمان ثبت‌شده در نسخه‌های قدیمی" value={formatMinutes(language.legacyMinutes)} />}
+            <KeyValue label="دفعات مرور جمله و واژه" value={`${language.reviewLowerBound ? 'حداقل ' : ''}${fa(language.reviewsDone)}`} />
+            {language.reviewLowerBound && <Text style={styles.cardHint}>در سابقهٔ قدیمی، تکرارهای پیش از فراموشی به‌طور کامل ثبت نمی‌شدند.</Text>}
+            <KeyValue label="میانگین تمرین گفتاری" value={language.speaking.average === null ? '—' : `${fa(language.speaking.average)}٪ · ${fa(language.speaking.attempts)} پاسخ`} />
+            <KeyValue label="آزمون گفتاری · آخرین نتیجهٔ هر درس" value={language.speaking.drillAverage === null ? '—' : `${fa(language.speaking.drillAverage)}٪ · ${fa(language.speaking.drills)} درس`} />
+            {language.speaking.legacyBest !== null && <KeyValue label="بهترین پاسخ گفتاری ثبت‌شده در سابقهٔ قدیمی" value={`${fa(language.speaking.legacyBest)}٪`} />}
+            {language.assessment.legacyCorrect > 0 && <KeyValue label="پاسخ درست در سنجش قدیمی (تعداد تلاش نامعلوم)" value={fa(language.assessment.legacyCorrect)} />}
+            {language.speaking.points > 0 && <KeyValue label="امتیاز آزمون‌های گفتاری ذخیره‌شده" value={fa(language.speaking.points)} />}
+            <KeyValue label="پاسخ درست در سنجش‌های ثبت‌شده" value={language.assessment.answered ? `${fa(language.assessment.correct)} از ${fa(language.assessment.answered)}` : '—'} />
+            {language.placement && <KeyValue label="نتیجهٔ تعیین سطح" value={language.placement} />}
+            {(language.pronunciation.practiced + language.pronunciation.review > 0) && <KeyValue label="کارگاه تلفظ" value={`${fa(language.pronunciation.practiced)} تمرین‌شده · ${fa(language.pronunciation.review)} برای مرور`} />}
+            {language.wordDeck.seen > 0 && <KeyValue label="آزمایشگاه واژه" value={`${fa(language.wordDeck.seen)} معرفی‌شده · ${fa(language.wordDeck.mastered)} تثبیت‌شده · ${fa(language.wordDeck.due)} آمادهٔ مرور`} />}
+            {language.extraPractice > 0 && <KeyValue label="دور تکمیلی و گرم‌کردن" value={fa(language.extraPractice)} />}
+            {language.supplementExams > 0 && <KeyValue label="سنجش تکمیلی پایان‌یافته" value={fa(language.supplementExams)} />}
+            {language.podcast.started > 0 && <KeyValue label="پادکست" value={`${fa(language.podcast.completed)} از ${fa(language.podcast.started)} قسمت شروع‌شده؛ ${fa(language.podcast.quizCorrect)} از ${fa(language.podcast.quizTotal)} پاسخ درست`} />}
+            {language.drafts > 0 && <KeyValue label="پیش‌نویس‌های تمرین" value={fa(language.drafts)} />}
           </View>
 
           <Text style={styles.subheading}>پیشرفت بر اساس سطح</Text>
@@ -474,9 +496,10 @@ function LanguageCard({ language, onOpen }: { language: LanguageProfileStat; onO
                   <Text style={styles.levelTitle}>{level.title}</Text>
                   <Text style={styles.levelCefr}>{level.cefr}</Text>
                 </View>
-                <View style={styles.levelMiniTrack}><View style={[styles.levelMiniFill, { width: `${level.percent}%`, backgroundColor: level.state === 'done' ? palette.success : language.accent }]} /></View>
+                <ProgressTrack value={level.percent} color={level.state === 'done' ? palette.success : language.accent} height={5} />
+                <Text style={styles.languageMeta}>{progressLabel(level)} · {formatPercent(level.percent)}</Text>
+                {level.exam && <Text style={styles.languageMeta}>آزمون سطح: {fa(level.exam.attempts)} بار · آخرین {fa(level.exam.last)}٪ · بهترین {fa(level.exam.best)}٪</Text>}
               </View>
-              <Text style={styles.levelCount}>{fa(level.completed)}/{fa(level.total)}</Text>
             </View>
           ))}
 
@@ -542,7 +565,7 @@ function AchievementsTab({ achievements }: { achievements: Achievement[] }) {
                 <Text style={styles.pendingTitle}>{a.title}</Text>
                 <Text style={styles.pendingDetail}>{fa(a.detail)}</Text>
               </View>
-              <View style={styles.levelMiniTrack}><View style={[styles.levelMiniFill, { width: `${Math.round(a.progress * 100)}%`, backgroundColor: palette.terracotta }]} /></View>
+              <ProgressTrack value={a.progress * 100} color={palette.terracotta} height={5} />
               <Text style={styles.pendingDesc}>{a.description}</Text>
             </View>
           </View>

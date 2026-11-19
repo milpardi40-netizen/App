@@ -1,3 +1,6 @@
+import { addPracticeActivity } from '@/lib/practiceActivity';
+import { localDay } from '@/lib/reviewHistory';
+import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { lessonUnit } from '@/lib/lessonUnits';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
@@ -31,6 +34,7 @@ import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } f
 import { bandReadinessForLevel } from '@/lib/content/readiness';
 
 import { addSentenceToReview, completeSentenceLesson, getDueReviewCards } from '@/lib/courseProgress';
+import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
 import { evaluateSpokenSentence, type SpeechEvaluation } from '@/lib/speechPractice';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
@@ -58,6 +62,7 @@ import { CORE_LESSON_EVIDENCE, isCoreLessonEvidenceComplete } from '@/lib/englis
 import { useEnglishStudyTimer } from '@/components/useEnglishStudyTimer';
 import { PAID_AI_ENABLED, PAID_AI_DISABLED_MESSAGE } from '@/lib/paidAI';
 import { ENGLISH_NATURAL_SPEECH_RATE, ENGLISH_NORMAL_SPEECH_RATE, ENGLISH_SLOW_SPEECH_RATE, playResponsiveSpeech, stopResponsiveSpeech, warmSpeech } from '@/lib/responsiveSpeech';
+import { ensureRecordedAudio } from '@/lib/content/coreAudio';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
 import { B1_INDEPENDENT_UNITS } from '@/lib/courseContentB1Independent';
 import { B2_UPPER_INTERMEDIATE_UNITS } from '@/lib/courseContentB2UpperIntermediate';
@@ -130,7 +135,7 @@ export default function SentenceLessonScreen() {
   const resettingRef = useRef(false);
   const screenRun = useRef(0);
   const [audioNotice, setAudioNotice] = useState('');
-  const timer=useEnglishStudyTimer(sessionReady && !resetting && !!getSentenceLesson(id || ''));
+  const timer=useEnglishStudyTimer(sessionReady && !resetting && !celebration && !chunkCelebration && !!getSentenceLesson(id || ''));
   useEffect(() => {
     let alive = true;
     const run = ++screenRun.current;
@@ -184,7 +189,7 @@ export default function SentenceLessonScreen() {
     let currentSave = true;
     const run = screenRun.current;
     if (sessionReady && loadedLesson.current === lesson.id && !completing.current && !resettingRef.current && !sessionError) {
-      void saveLessonSession(lesson.id, { stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence })
+      void saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence })
         .then(() => { if (currentSave && screenRun.current === run) setSessionError(''); })
         .catch(() => { if (currentSave && screenRun.current === run) setSessionError('جلسه ذخیره نشد؛ درس را دوباره باز کنید.'); });
     }
@@ -227,7 +232,7 @@ export default function SentenceLessonScreen() {
     ?? C1_ADVANCED_UNITS.find(unit => unit.id === lesson.id)?.topics.map(topic => topic[0]);
   const c1Unit = C1_ADVANCED_UNITS.find(unit => unit.id === lesson.id);
 
-  useEffect(() => warmSpeech('en-US'), []);
+  useEffect(() => { warmSpeech('en-US'); void ensureRecordedAudio('en'); }, []);
 
   useFocusEffect(useCallback(() => () => { void stopResponsiveSpeech(); }, []));
 
@@ -322,7 +327,10 @@ export default function SentenceLessonScreen() {
       setEvaluatingSpeech(true);
       setSpeechError(null);
       const result = await evaluateSpokenSentence(recorder.uri, current.en);
-      if (screenRun.current === run) setSpeechResult(result);
+      if (screenRun.current === run) {
+        setSpeechResult(result);
+        if (result.recognized.trim()) void addPracticeActivity('en', localDay(), { spoken: 1, scoreSum: result.score }).catch(() => undefined);
+      }
     } catch (cause) {
       if (screenRun.current === run) setSpeechError(cause instanceof Error && cause.message !== 'Recording URI is missing' ? cause.message : 'صدای شما بررسی نشد. دوباره تلاش کنید.');
     } finally {
@@ -338,12 +346,54 @@ export default function SentenceLessonScreen() {
     if (stage === 2 || index === sentenceIndex) speak(lesson.sentences[index].en);
   };
 
-  // «شنیدن»: read the whole list aloud automatically when the stage opens; the Continue button keeps working.
+  const [listenRun, setListenRun] = useState(0);
+  const listenListOffsetRef = useRef(0);
+  const vocabListOffsetRef = useRef(0);
+  const vocabCardYsRef = useRef<Record<number, number>>({});
+  const scrollToContentY = useCallback((contentY: number) => {
+    const targetY = Math.max(0, lessonScrollOffset(contentOffsetRef.current + contentY - 16, Dimensions.get('window').width));
+    lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
+  }, []);
+  const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+
+  // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
     if (stage !== 2) return;
-    return autoRead(lesson.sentences.length, index => selectListeningSentence(index), undefined, 900);
+    return autoRead(
+      lesson.sentences.length,
+      index => new Promise<void>(resolve => {
+        if (recorderState.isRecording || evaluatingSpeech) { resolve(); return; }
+        let settled = false;
+        const done = () => { if (!settled) { settled = true; resolve(); } };
+        setSentenceIndex(index);
+        setSpeechResult(null);
+        setSpeechError(null);
+        setAudioNotice('');
+        playResponsiveSpeech({
+          text: lesson.sentences[index].en,
+          locale: 'en-US',
+          onDone: done,
+          onError: () => {
+            setAudioNotice('پخش صدا ممکن نشد. صدای دستگاه و اجازهٔ پخش مرورگر را بررسی کنید.');
+            done();
+          },
+        });
+      }),
+      undefined,
+      850,
+      () => { void stopResponsiveSpeech(); },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stage, lesson.id]);
+  }, [stage, lesson.id, listenRun]);
+
+  const restartListening = () => {
+    if (recorderState.isRecording || evaluatingSpeech) return;
+    void stopResponsiveSpeech();
+    setSentenceIndex(0);
+    setSpeechResult(null);
+    setSpeechError(null);
+    setListenRun(n => n + 1);
+  };
 
   const next = async () => {
     if (!sessionReady || sessionError || completing.current || resettingRef.current) return;
@@ -376,7 +426,7 @@ export default function SentenceLessonScreen() {
       const weak = weakSpokenSentences(speakResult.current ? { ...speakResult.current, at: '' } : null);
       for (const sentenceId of weak) await addSentenceToReview(sentenceId, lesson.id).catch(() => undefined);
 
-    await saveLessonSession(lesson.id, { stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence });
+    await saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence });
     void stopResponsiveSpeech();
     const streak = await recordStudyDay();
     trackLessonCompleted('en', lesson.id);
@@ -477,7 +527,17 @@ export default function SentenceLessonScreen() {
             </View>
             <EnglishSpeechRateControls onPlay={rate => speak(current.en, rate)} />
             {!!audioNotice && <Text accessibilityLiveRegion="polite" style={styles.speechError}>{audioNotice}</Text>}
-            <SpeakCheck key={current.id} text={current.en} locale="en-US" accent={Colors.success[400]} />
+            <SpeakCheck
+              key={current.id}
+              text={current.en}
+              locale="en-US"
+              accent={Colors.success[400]}
+              onResult={result => {
+                if (sentenceIndex < chunkLastIndex) {
+                  scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
+                }
+              }}
+            />
           </View>
         )}
 
@@ -486,7 +546,18 @@ export default function SentenceLessonScreen() {
             <View style={styles.bigIcon}><Headphones size={34} color={Colors.primary[400]} /></View>
             <Text style={styles.stageTitle}>شنیدن جمله‌ها</Text>
             {showHint && <Text style={styles.stageDesc}>هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.</Text>}
-            <BlindListeningList items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} activeIndex={sentenceIndex} onSelect={selectListeningSentence} accent={Palette.primary} foreignStyle={styles.listenEnglish} />
+            <View style={{ width: '100%' }} onLayout={event => { listenListOffsetRef.current = event.nativeEvent.layout.y; }}>
+              <BlindListeningList
+                items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))}
+                activeIndex={sentenceIndex}
+                onSelect={selectListeningSentence}
+                onRestart={restartListening}
+                restartSignal={listenRun}
+                onActiveItemY={yInList => scrollToContentY(listenListOffsetRef.current + yInList)}
+                accent={Palette.primary}
+                foreignStyle={styles.listenEnglish}
+              />
+            </View>
             <View style={styles.shadowTip}>
               <Headphones size={18} color={Colors.primary[400]} />
               <Text style={styles.shadowText}>جمله‌ها به‌ترتیب خودکار پخش می‌شوند؛ هر زمان خواستید «ادامه» را بزنید.</Text>
@@ -506,7 +577,23 @@ export default function SentenceLessonScreen() {
               <EnglishSpeechRateControls onPlay={rate => speak(current.en, rate)} disabled={recorderState.isRecording || evaluatingSpeech} />
               {!!audioNotice && <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.speechError}>{audioNotice}</Text>}
               <Text style={styles.speechHint}>پس از شنیدن، جمله را با صدای بلند تکرار کنید.</Text>
-              <SpeakCheck key={current.id} text={current.en} locale="en-US" accent={Colors.success[400]} />
+              <SpeakCheck
+                key={current.id}
+                text={current.en}
+                locale="en-US"
+                accent={Colors.success[400]}
+                onResult={result => {
+                  if (sentenceIndex < lesson.sentences.length - 1) {
+                    const nextIdx = sentenceIndex + 1;
+                    scheduleOnPass(result, () => {
+                      setSentenceIndex(nextIdx);
+                      setSpeechResult(null);
+                      setSpeechError(null);
+                      speak(lesson.sentences[nextIdx].en);
+                    });
+                  }
+                }}
+              />
               {speechError ? <Text style={styles.speechError}>{speechError}</Text> : null}
             </View>
             <View style={styles.dots}>
@@ -536,16 +623,26 @@ export default function SentenceLessonScreen() {
             <View style={styles.bigIcon}><Sparkles size={34} color={Colors.warning[400]} /></View>
             <Text style={styles.stageTitle}>واژگان از دل جمله‌ها</Text>
             {showHint && <Text style={styles.stageDesc}>هر واژه را با معنی و جمله‌اش مرور کنید.</Text>}
-            <View style={styles.vocabList}>
-              {vocabulary.map(item => (
-                <View key={item.word} style={styles.vocabCard}>
+            <View style={styles.vocabList} onLayout={event => { vocabListOffsetRef.current = event.nativeEvent.layout.y; }}>
+              {vocabulary.map((item, vocabIndex) => (
+                <View key={item.word} onLayout={event => { vocabCardYsRef.current[vocabIndex] = event.nativeEvent.layout.y; }} style={styles.vocabCard}>
                   <View style={styles.vocabTop}>
                     <Text style={styles.vocabWord}>{item.word}</Text>
                     <Text style={styles.vocabMeaning}>{item.meaning}</Text>
                   </View>
                   <Text style={styles.vocabExample}>{item.exampleEn}</Text>
                   <Text keepColor style={styles.bubbleFa}>{item.exampleFa}</Text>
-                  <SpeakCheck compact text={item.word} locale="en-US" accent={Colors.success[400]} />
+                  <SpeakCheck
+                    compact
+                    text={item.word}
+                    locale="en-US"
+                    accent={Colors.success[400]}
+                    onResult={result => {
+                      if (vocabIndex < vocabulary.length - 1) {
+                        scheduleOnPass(result, () => scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0)));
+                      }
+                    }}
+                  />
                 </View>
               ))}
             </View>

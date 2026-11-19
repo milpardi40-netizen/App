@@ -1,3 +1,6 @@
+import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
+import { progressLabel } from '@/lib/levelProgress';
+import { syncPersonalLearningData } from '@/lib/personalLearningSync';
 import { lessonUnit } from '@/lib/lessonUnits';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text } from '@/components/LocalizedText';
@@ -17,8 +20,8 @@ import {
   Volume2,
 } from 'lucide-react-native';
 import { COURSE_LEVELS, SENTENCE_LESSONS, type CourseLevelId, type SentenceLesson } from '@/lib/courseContent';
-import { getCourseProgress, type CourseProgress } from '@/lib/courseProgress';
-import { loadStudy, type StudyState } from '@/lib/englishStudyState';
+import type { CourseProgress } from '@/lib/courseProgress';
+import type { StudyState } from '@/lib/englishStudyState';
 import { ENGLISH_ENGINE_BLUEPRINT, getAdvancedContentComposition, getEnglishLevelMetrics } from '@/lib/englishLearningEngine';
 import { ENGLISH_PHONEME_LICENSE } from '@/lib/englishPhonemeLicense';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
@@ -50,29 +53,21 @@ export default function EnglishLessonList() {
   const [expandedGroup, setExpandedGroup] = useState(0);
   const { level } = useLocalSearchParams<{ level?: string }>();
   const router = useRouter();
-  const [progress, setProgress] = useState<CourseProgress | null>(null);
-  const [study, setStudy] = useState<StudyState | null>(null);
-  const [error, setError] = useState('');
+  const { data: snapshot, failed, retry } = useCourseSnapshot('en');
+  const progress = snapshot?.progress ?? null, study = snapshot?.study ?? null;
+  const error = failed || snapshot?.unreadable ? 'بخشی از سابقه خوانده نشد؛ داده‌های ذخیره‌شده تغییر نکرده‌اند.' : '';
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => setHydrated(true), []);
   const selected = hydrated ? COURSE_LEVELS.find(item => String(item.id) === level) : undefined;
-  // Re-read on every visit: a lesson finished moments ago must move this level's progress line.
-  useFocusEffect(useCallback(() => {
-    let alive = true;
-    void Promise.all([getCourseProgress(), loadStudy()]).then(([nextProgress, nextStudy]) => {
-      if (alive) { setProgress(nextProgress); setStudy(nextStudy); }
-    }).catch(() => {
-      if (alive) setError('وضعیت ذخیره‌شده خوانده نشد؛ فهرست همچنان قابل استفاده است.');
-    });
-    return () => { alive = false; };
-  }, []));
+  useFocusEffect(useCallback(() => { void syncPersonalLearningData().catch(() => undefined); }, []));
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
 
   const lessons = useMemo(() => selected ? SENTENCE_LESSONS.filter(item => item.levelId === selected.id) : [], [selected?.id]);
   const completedIds = progress?.completedLessonIds ?? [];
   const completed = lessons.filter(item => completedIds.includes(item.id)).length;
-  const levelStartLesson = lessons.find(item => !completedIds.includes(item.id) && !!study?.sessions[item.id])
+  const levelStartLesson = lessons.find(item => item.id === snapshot?.current?.id && !!study?.sessions[item.id])
+    ?? lessons.find(item => !completedIds.includes(item.id) && !!study?.sessions[item.id])
     ?? lessons.find(item => !completedIds.includes(item.id))
     ?? lessons[0];
   const levelFullyCompleted = lessons.length > 0 && completed === lessons.length;
@@ -103,12 +98,9 @@ export default function EnglishLessonList() {
     }
     return groups;
   }, [lessons, selected?.id]);
-  const activeLesson = SENTENCE_LESSONS.find(item => item.id === progress?.currentLessonId) ?? SENTENCE_LESSONS[0];
+  const activeLesson = SENTENCE_LESSONS.find(item => item.id === (snapshot?.current?.id ?? progress?.currentLessonId)) ?? SENTENCE_LESSONS[0];
   const activeLevelId = activeLesson.levelId;
-  const counts = Object.fromEntries(COURSE_LEVELS.map(item => {
-    const value = getEnglishLevelMetrics(item.id, completedIds);
-    return [item.id, { completed: value.completedLessonCount, total: value.lessonCount }];
-  }));
+  const counts = snapshot?.levels ?? {};
   const allWords = new Set(SENTENCE_LESSONS.flatMap(item => item.sentences.flatMap(sentence => sentence.vocabulary.map(word => word.word))));
 
   const openLevel = (levelId: CourseLevelId) => router.push({ pathname: '/lang/library', params: { level: String(levelId) } } as never);
@@ -132,7 +124,7 @@ export default function EnglishLessonList() {
                 <View pointerEvents="none" style={styles.heroOrb} />
                 <View style={styles.heroTopRow}>
                   <View style={styles.heroIcon}><MiloGlobeHeadphoneMark size={48} /></View>
-                  <View style={styles.heroPill}><Sparkles size={13} color="#C8C9FF" /><Text style={styles.heroPillText}>۵ سطح آموزشی</Text></View>
+                  <View style={styles.heroPill}><Sparkles size={13} color="#C8C9FF" /><Text style={styles.heroPillText}>{toPersianDigits(COURSE_LEVELS.length)} سطح آموزشی</Text></View>
                 </View>
                 <Text style={styles.overviewTitle}>یک مسیر روشن؛{ '\n' }جمله به جمله</Text>
                 <View style={styles.overviewMetrics}>
@@ -154,7 +146,7 @@ export default function EnglishLessonList() {
               <View style={styles.levelList}>
                 {COURSE_LEVELS.map(item => {
                   const stats = getEnglishLevelMetrics(item.id, completedIds);
-                  const pct = stats.lessonCount ? (stats.completedLessonCount / stats.lessonCount) * 100 : 0;
+                  const pct = counts[item.id]?.percent ?? 0;
                   return (
                     <Pressable
                       key={item.id}
@@ -173,13 +165,11 @@ export default function EnglishLessonList() {
                         </View>
                         <Text style={styles.levelOptionDescription}>{item.description}</Text>
                         <View style={styles.levelOptionMeta}>
-                          <Text style={styles.levelOptionMetaText}>{toPersianDigits(stats.lessonCount)} درس</Text>
+                          <Text style={styles.levelOptionMetaText}>{progressLabel(counts[item.id])}</Text>
                           <View style={styles.metaDot} />
                           <Text style={styles.levelOptionMetaText}>{toPersianDigits(stats.sentenceCount)} جمله</Text>
                           <View style={styles.metaDot} />
                           <Text style={styles.levelOptionMetaText}>{toPersianDigits(stats.vocabularyCount)} واژهٔ یکتا</Text>
-                          <View style={styles.metaDot} />
-                          <Text style={styles.levelOptionMetaText}>{toPersianDigits(stats.completedLessonCount)} تکمیل</Text>
                         </View>
                         <EnglishProgressTrack value={pct} color={item.color} height={5} />
                       </View>
@@ -207,9 +197,9 @@ export default function EnglishLessonList() {
                   <Text style={styles.selectedDescription}>{selected.description}</Text>
                   <View style={styles.selectedProgressHeading}>
                     <Text style={styles.selectedProgressLabel}>پیشرفت این سطح</Text>
-                    <Text style={styles.selectedProgressValue}>{toPersianDigits(completed)} از {toPersianDigits(lessons.length)} درس</Text>
+                    <Text style={styles.selectedProgressValue}>{progressLabel(counts[selected.id])}</Text>
                   </View>
-                  <View style={styles.selectedProgressTrack}><View style={[styles.selectedProgressFill, { width: `${lessons.length ? (completed / lessons.length) * 100 : 0}%` }]} /></View>
+                  <EnglishProgressTrack value={counts[selected.id]?.percent ?? 0} color="#B8F28F" trackColor="rgba(255,255,255,0.22)" height={7} />
                   <View style={styles.metricGrid}>
                     <View style={styles.heroMetric}><Text style={styles.heroMetricValue}>{toPersianDigits(metrics.sentenceCount)}</Text><Text style={styles.heroMetricLabel}>جمله</Text></View>
                     <View style={styles.heroMetricDivider} />
@@ -368,7 +358,7 @@ export default function EnglishLessonList() {
               </View>
             </>
           )}
-          {!!error && <Text style={styles.error}>{error}</Text>}
+          {!!error && <Pressable accessibilityRole="button" onPress={retry}><Text accessibilityRole="alert" style={styles.error}>{error} تلاش دوباره</Text></Pressable>}
         </View>
       </ScrollView>
     </View>
@@ -426,8 +416,6 @@ const styles = StyleSheet.create({
   selectedProgressHeading: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
   selectedProgressLabel: { fontFamily: Typography.fontFamily, color: '#DCE0FF', fontSize: 10, writingDirection: 'rtl' },
   selectedProgressValue: { fontFamily: Typography.numberFontFamily, color: '#FFFFFF', fontSize: 10, fontWeight: '400', writingDirection: 'rtl' },
-  selectedProgressTrack: { height: 7, borderRadius: 999, overflow: 'hidden', backgroundColor: 'rgba(255,255,255,0.22)' },
-  selectedProgressFill: { height: '100%', alignSelf: 'flex-end', borderRadius: 999, backgroundColor: '#B8F28F' },
   levelStartButton: { minHeight: 48, marginTop: 5, paddingHorizontal: 15, borderRadius: 15, backgroundColor: '#FFFFFF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 9 },
   levelStartBeginningButton: { minHeight: 48, marginTop: 8, paddingHorizontal: 15, borderRadius: 15, backgroundColor: '#F5F2FF', borderWidth: 1, borderColor: '#D8D2FF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 9 },
   levelStartButtonDisabled: { opacity: 0.55 },

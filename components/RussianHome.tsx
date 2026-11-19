@@ -1,12 +1,14 @@
+import { VoiceRoomLink, GrammarLink } from '@/components/RussianWorkshopUI';
+import { useCourseHome } from '@/hooks/useCourseHome';
+import { progressLabel, formatPercent } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import OpeningOverlay from '@/components/OpeningOverlay';
 import { useOpeningNavigation } from '@/lib/useOpeningNavigation';
-import { getStudyStreak } from '@/lib/studyStreak';
 import {
   BookOpen,
   Check,
@@ -27,15 +29,12 @@ import { PageNavigation } from '@/components/PageNavigation';
 import { RussianBottomNav } from '@/components/RussianBottomNav';
 import { LearningHomeColors as HomeColors, learningHomeStyles as styles } from '@/components/LearningHomeStyles';
 import { EnglishLevelRail, EnglishProgressTrack, displayEnglishModuleLabel } from '@/components/EnglishUI';
-import { RUSSIAN_LEVELS, RUSSIAN_LESSONS, russianProgress, type RussianLevelId } from '@/lib/languages/russian';
+import { RUSSIAN_LEVELS, RUSSIAN_LESSONS, type RussianLevelId } from '@/lib/languages/russian';
 const READINESS = courseReadiness('ru', auditLessonsFromLearning(RUSSIAN_LESSONS as ReadonlyArray<import('@/lib/languages/types').LearningLesson & { levelId: number }>));
 import LevelReadinessLine from '@/components/LevelReadinessLine';
 import PlacementCard from '@/components/PlacementCard';
 import DailyPlanCard from '@/components/DailyPlanCard';
-import { buildDailyPlan, type DailyPlanStep } from '@/lib/dailyPlan';
 import { auditLessonsFromLearning, courseReadiness } from '@/lib/content/courseAudit';
-import { loadRussianLessonSessionWithPresence } from '@/lib/languages/russianStudyState';
-import type { CourseProgress } from '@/lib/courseProgress';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 
@@ -80,68 +79,25 @@ export default function RussianHome() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const compact = width < 640;
-  const [progress, setProgress] = useState<CourseProgress | null>(null);
-  const [dueCount, setDueCount] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [plan, setPlan] = useState<readonly DailyPlanStep[]>([]);
+  const { snapshot, progress, dueCount, streak, plan, hasStartedCourse, error, retry } = useCourseHome('ru');
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [error, setError] = useState('');
-  const [retry, setRetry] = useState(0);
-  const [hasStartedCourse, setHasStartedCourse] = useState(false);
-
-  useFocusEffect(useCallback(() => {
-    let alive = true;
-    void getStudyStreak().then(value => { if (alive) setStreak(value); }).catch(() => undefined);
-    void Promise.all([russianProgress.getCourseProgress(), russianProgress.getDueReviewCards()])
-      .then(async ([nextProgress, cards]) => {
-        if (!alive) return;
-        setProgress(nextProgress);
-        setDueCount(cards.length);
-        setError('');
-        const now = new Date();
-        const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        const lessonDoneToday = nextProgress.lastActiveDate === todayKey && nextProgress.completedLessonIds.length > 0;
-        void buildDailyPlan({
-          lessonDone: lessonDoneToday,
-          reviewsDue: cards.length,
-          lessonRoute: '/learn/ru/lesson',
-          reviewRoute: '/learn/ru/review',
-          speakRoute: '/learn/ru/vocabulary',
-        }).then(next => { if (alive) setPlan(next); }).catch(() => undefined);
-        const completed = new Set(nextProgress.completedLessonIds);
-        const currentLesson = RUSSIAN_LESSONS.find(lesson => lesson.id === nextProgress.currentLessonId && !completed.has(lesson.id))
-          ?? RUSSIAN_LESSONS.find(lesson => !completed.has(lesson.id));
-        const savedSession = currentLesson
-          ? await loadRussianLessonSessionWithPresence(currentLesson.id)
-          : null;
-        if (!alive) return;
-        setHasStartedCourse(nextProgress.completedLessonIds.length > 0 || !!savedSession?.hasSavedSession);
-      })
-      .catch(() => { if (alive) setError('پیشرفت روسی خوانده نشد؛ اطلاعات قبلی تغییر نکرده است. دوباره تلاش کنید.'); });
-    return () => { alive = false; };
-  }, [retry]));
-
   const completedIds = progress?.completedLessonIds ?? [];
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const nextLesson = RUSSIAN_LESSONS.find(lesson => !completedSet.has(lesson.id));
-  const savedCurrentLesson = RUSSIAN_LESSONS.find(lesson => lesson.id === progress?.currentLessonId && !completedSet.has(lesson.id));
+  const savedCurrentLesson = RUSSIAN_LESSONS.find(lesson => lesson.id === snapshot?.current?.id);
   const resumeLesson = savedCurrentLesson ?? nextLesson;
   const heroLesson = resumeLesson ?? RUSSIAN_LESSONS[RUSSIAN_LESSONS.length - 1];
   const activeLevel = RUSSIAN_LEVELS.find(level => level.id === (resumeLesson?.levelId ?? heroLesson.levelId)) ?? RUSSIAN_LEVELS[0];
-  const completedCount = RUSSIAN_LESSONS.filter(lesson => completedSet.has(lesson.id)).length;
+  const completedCount = snapshot?.course.completed ?? 0;
   const levelLessons = RUSSIAN_LESSONS.filter(lesson => lesson.levelId === activeLevel.id);
-  const levelCompleted = levelLessons.filter(lesson => completedSet.has(lesson.id)).length;
-  const levelProgress = levelLessons.length ? (levelCompleted / levelLessons.length) * 100 : 0;
+  const levelCompleted = snapshot?.levels[activeLevel.id]?.completed ?? 0;
+  const levelProgress = snapshot?.levels[activeLevel.id]?.percent ?? 0;
   const sentenceCount = RUSSIAN_LESSONS.reduce((count, lesson) => count + lesson.sentences.length, 0);
   const uniqueWords = new Set(RUSSIAN_LESSONS.flatMap(lesson => lesson.sentences.flatMap(sentence => sentence.vocabulary.map(item => item.word)))).size;
   const firstSentence = heroLesson.sentences[0];
   const heroLessonOrder = Math.max(1, RUSSIAN_LESSONS.findIndex(lesson => lesson.id === heroLesson.id) + 1);
-  const courseProgressPercent = RUSSIAN_LESSONS.length ? (completedCount / RUSSIAN_LESSONS.length) * 100 : 0;
-  const levelCounts = {} as Partial<Record<RussianLevelId, { completed: number; total: number }>>;
-  RUSSIAN_LEVELS.forEach(level => {
-    const lessons = RUSSIAN_LESSONS.filter(lesson => lesson.levelId === level.id);
-    levelCounts[level.id] = { completed: lessons.filter(lesson => completedSet.has(lesson.id)).length, total: lessons.length };
-  });
+  const courseProgressPercent = snapshot?.course.percent ?? 0;
+  const levelCounts = snapshot?.levels ?? {};
 
   const { opening, open } = useOpeningNavigation();
   // The level card answers the tap at once; its library loads on the next frame.
@@ -206,6 +162,8 @@ export default function RussianHome() {
             </View>
           </LinearGradient>
 
+          <GrammarLink onPress={() => open('/learn/ru/grammar')} />
+          <VoiceRoomLink onPress={() => open('/learn/ru/conversation')} />
           <View style={styles.pathPanel}>
             <View style={styles.panelHeadingRow}>
               <View style={styles.panelHeadingText}>
@@ -267,7 +225,8 @@ export default function RussianHome() {
                           <Text style={[styles.levelCefr, { color: level.color }]}>{level.cefr}</Text>
                         </View>
                         <Text style={styles.levelDesc} numberOfLines={1}>{level.description}</Text>
-                        <Text style={styles.levelStats}>{fa(count.completed)} از {fa(count.total)} درس · {level.status === 'planned' ? 'در نقشهٔ آینده' : 'محتوای موجود'}</Text>
+                        <Text style={styles.levelStats}>{progressLabel(snapshot?.levels[level.id])} · {level.status === 'planned' ? 'در نقشهٔ آینده' : 'محتوای موجود'}</Text>
+                        <EnglishProgressTrack value={count.percent ?? 0} color={level.color} height={5} />
                         <LevelReadinessLine course={READINESS} levelId={level.id} color={level.color} />
                       </View>
                       <ChevronLeft size={18} color={HomeColors.muted} />
@@ -281,7 +240,7 @@ export default function RussianHome() {
           {!!error && (
             <View style={russianOnlyStyles.errorCard}>
               <Text accessibilityRole="alert" style={russianOnlyStyles.errorText}>{error}</Text>
-              <Pressable accessibilityRole="button" onPress={() => setRetry(value => value + 1)}>
+              <Pressable accessibilityRole="button" onPress={retry}>
                 <Text style={russianOnlyStyles.retryText}>تلاش دوباره</Text>
               </Pressable>
             </View>
@@ -331,7 +290,7 @@ export default function RussianHome() {
             <View style={styles.levelProgressBlock}>
               <View style={styles.levelProgressMeta}>
                 <Text style={styles.levelProgressLabel}>پیشرفت در {activeLevel.title}</Text>
-                <Text style={styles.levelProgressValue}>{fa(levelCompleted)} از {fa(levelLessons.length)} درس</Text>
+                <Text style={styles.levelProgressValue}>{progressLabel(snapshot?.levels[activeLevel.id])}</Text>
               </View>
               <EnglishProgressTrack value={levelProgress} color={activeLevel.color} height={7} />
             </View>
@@ -394,7 +353,7 @@ export default function RussianHome() {
                 <Text style={styles.todayLabel}>درس‌های تکمیل‌شده در مسیر روسی</Text>
               </View>
               <View style={styles.todayPercentPill}>
-                <Text style={styles.todayPercentText}>{fa(Math.round(courseProgressPercent))}٪</Text>
+                <Text style={styles.todayPercentText}>{formatPercent(courseProgressPercent)}</Text>
               </View>
             </View>
             <View style={styles.todayProgressTrack}>

@@ -1,3 +1,5 @@
+import { notifyLearningChange } from './learningChanges';
+import { localDay } from './reviewHistory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
@@ -72,6 +74,7 @@ export function trackEvent(name: LearningEventName, payload: Omit<LearningEvent,
       const events = await readAll();
       events.push({ name, at: new Date().toISOString(), ...payload });
       await AsyncStorage.setItem(ANALYTICS_KEY, JSON.stringify(events.slice(-MAX_EVENTS)));
+      notifyLearningChange();
     } catch {
       /* Never surface analytics failures. */
     }
@@ -109,7 +112,7 @@ export function summarize(events: readonly LearningEvent[]): AnalyticsSummary {
   const days = new Set<string>();
   for (const event of events) {
     counts[event.name] = (counts[event.name] ?? 0) + 1;
-    days.add(event.at.slice(0, 10));
+    days.add(localDay(new Date(event.at)));
     if (event.course && event.course !== 'app') {
       const row = funnel[event.course] ?? { started: 0, completed: 0, abandoned: 0 };
       if (event.name === 'lesson_started') row.started += 1;
@@ -131,12 +134,15 @@ export function summarize(events: readonly LearningEvent[]): AnalyticsSummary {
   };
 }
 
+export async function loadLearningEvents() { await flushAnalytics(); return readAll(); }
+
 export async function loadAnalyticsSummary(): Promise<AnalyticsSummary> {
-  return summarize(await readAll());
+  return summarize(await loadLearningEvents());
 }
 
 export async function clearAnalytics(): Promise<void> {
-  try { await AsyncStorage.removeItem(ANALYTICS_KEY); } catch { /* local only */ }
+  writeQueue = writeQueue.then(async () => { await AsyncStorage.removeItem(ANALYTICS_KEY); notifyLearningChange(); }).catch(() => undefined);
+  await writeQueue;
 }
 
 /** Human line for the profile card: «۵ درس شروع شد، ۳ تمام شد». */

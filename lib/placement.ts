@@ -1,3 +1,4 @@
+import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { buildLessonPractice, type PracticeItem } from './lessonPractice';
@@ -31,7 +32,7 @@ export async function loadPlacement(courseId: string): Promise<PlacementRecord |
 }
 export async function savePlacement(courseId: string, record: Omit<PlacementRecord, 'at'>): Promise<PlacementRecord> {
   const full: PlacementRecord = { ...record, at: new Date().toISOString() };
-  try { const raw = JSON.stringify(full); if (Platform.OS === 'web') window.localStorage.setItem(keyFor(courseId), raw); else await AsyncStorage.setItem(keyFor(courseId), raw); } catch { /* local only */ }
+  try { const raw = JSON.stringify(full); if (Platform.OS === 'web') window.localStorage.setItem(keyFor(courseId), raw); else await AsyncStorage.setItem(keyFor(courseId), raw); notifyLearningChange(); } catch { /* local only */ }
   return full;
 }
 export async function clearPlacement(courseId: string): Promise<void> {

@@ -1,3 +1,5 @@
+import { useCourseHome } from '@/hooks/useCourseHome';
+import { progressLabel } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { lessonUnit } from '@/lib/lessonUnits';
 import { LocalizedText as Text } from '@/components/LocalizedText';
@@ -6,7 +8,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, Image, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { getStudyStreak } from '@/lib/studyStreak';
 import {
   ArrowLeft,
   BookOpen,
@@ -35,15 +36,13 @@ import LevelReadinessLine from '@/components/LevelReadinessLine';
 import PlacementCard from '@/components/PlacementCard';
 import { auditLessonsFromEnglish, courseReadiness } from '@/lib/content/courseAudit';
 const READINESS = courseReadiness('en', auditLessonsFromEnglish(SENTENCE_LESSONS));
-import { getCourseProgress, setCurrentLesson, type CourseProgress } from '@/lib/courseProgress';
+import { setCurrentLesson } from '@/lib/courseProgress';
 import { syncPersonalLearningData } from '@/lib/personalLearningSync';
 import { FEATURES } from '@/lib/features';
 import { LearningHomeColors as HomeColors, learningHomeStyles as styles } from '@/components/LearningHomeStyles';
 import DailyPlanCard from '@/components/DailyPlanCard';
-import { buildDailyPlan, type DailyPlanStep } from '@/lib/dailyPlan';
-import { getDueReviewCards } from '@/lib/courseProgress';
 import { toPersianDigits } from '@/lib/format';
-import { loadStudy, studyDay } from '@/lib/englishStudyState';
+import { studyDay } from '@/lib/englishStudyState';
 import { ENGLISH_ENGINE_BLUEPRINT, getEnglishLevelMetrics } from '@/lib/englishLearningEngine';
 import { EnglishLevelRail, EnglishProgressTrack, displayEnglishModuleLabel } from '@/components/EnglishUI';
 
@@ -54,13 +53,9 @@ export default function LearningHome() {
   const { width } = useWindowDimensions();
   const compact = width < 640;
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [measuredMinutes, setMeasuredMinutes] = useState(0);
-  const [timeError, setTimeError] = useState(false);
-  const [streak, setStreak] = useState(0);
-  useFocusEffect(useCallback(() => { let alive = true; void getStudyStreak().then(value => { if (alive) setStreak(value); }).catch(() => undefined); return () => { alive = false; }; }, []));
-  const [progress, setProgress] = useState<CourseProgress | null>(null);
-  const [hasStartedCourse, setHasStartedCourse] = useState(false);
-  const [plan, setPlan] = useState<readonly DailyPlanStep[]>([]);
+  const { snapshot, progress, hasStartedCourse, plan, streak, error, retry } = useCourseHome('en');
+  const measuredMinutes = Math.floor((snapshot?.study?.days[studyDay()] ?? 0) / 6000) / 10;
+  const timeError = !!error;
 
   // Paint the home shell first, then fetch/parse the lesson route in the
   // background so the first lesson is warm when the learner taps Start.
@@ -68,72 +63,19 @@ export default function LearningHome() {
     void import('@/components/EnglishLessonRoute');
   }, []);
 
-  useFocusEffect(useCallback(() => {
-    let alive = true;
-    void loadStudy().then(state => {
-      if (alive) {
-        setMeasuredMinutes(Math.floor((state.days[studyDay()] ?? 0) / 6000) / 10);
-        setTimeError(false);
-      }
-    }).catch(() => { if (alive) setTimeError(true); });
-    return () => { alive = false; };
-  }, []));
+  useFocusEffect(useCallback(() => { void syncPersonalLearningData().catch(() => undefined); }, []));
 
-  useFocusEffect(useCallback(() => {
-    let alive = true;
-    const refreshCourse = async () => {
-      const next = await getCourseProgress();
-      if (!alive) return;
-      setProgress(next);
-      try {
-        const study = await loadStudy();
-        if (alive) setHasStartedCourse(next.completedLessonIds.length > 0 || !!study.sessions[next.currentLessonId]);
-      } catch {
-        if (alive) setHasStartedCourse(next.completedLessonIds.length > 0);
-      }
-    };
-    void refreshCourse();
-    void syncPersonalLearningData().then(result => {
-      if (result.status === 'synced') return refreshCourse();
-      return undefined;
-    }).catch(() => undefined); // Local progress remains available if cloud setup or connectivity is unavailable.
-    return () => { alive = false; };
-  }, []));
-
-  const currentLesson = SENTENCE_LESSONS.find(lesson => lesson.id === progress?.currentLessonId) ?? SENTENCE_LESSONS[0];
+  const currentLesson = SENTENCE_LESSONS.find(lesson => lesson.id === (snapshot?.current?.id ?? progress?.currentLessonId)) ?? SENTENCE_LESSONS[0];
   const currentLevel = COURSE_LEVELS.find(level => level.id === currentLesson.levelId) ?? COURSE_LEVELS[0];
   const currentSentence = currentLesson.sentences[0];
   const completedIds = progress?.completedLessonIds ?? [];
-  const completed = completedIds.length;
+  const completed = snapshot?.course.completed ?? 0;
   const levelMetrics = getEnglishLevelMetrics(currentLevel.id, completedIds);
   const currentBlueprint = ENGLISH_ENGINE_BLUEPRINT.find(level => level.levelId === currentLevel.id);
-  useEffect(() => {
-    let alive = true;
-    void (async () => {
-      const due = await getDueReviewCards().then(cards => cards.length).catch(() => 0);
-      const now = new Date();
-      const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const lessonDoneToday = progress?.lastActiveDate === todayKey && (progress?.completedLessonIds.length ?? 0) > 0;
-      const steps = await buildDailyPlan({
-        lessonDone: lessonDoneToday,
-        reviewsDue: due,
-        lessonRoute: '/course/lesson',
-        reviewRoute: '/review',
-        speakRoute: '/learn/en/pronunciation',
-      }).catch(() => [] as DailyPlanStep[]);
-      if (alive) setPlan(steps);
-    })();
-    return () => { alive = false; };
-  }, [progress?.lastActiveDate, progress?.completedLessonIds.length, completed]);
   const dailyGoal = progress?.dailyGoalMinutes ?? 10;
   const dailyPct = Math.min(100, dailyGoal ? (measuredMinutes / dailyGoal) * 100 : 0);
-  const levelCounts = Object.fromEntries(COURSE_LEVELS.map(level => {
-    const metrics = getEnglishLevelMetrics(level.id, completedIds);
-    return [level.id, { completed: metrics.completedLessonCount, total: metrics.lessonCount }];
-  }));
-  const levelProgress = levelMetrics.lessonCount
-    ? (levelMetrics.completedLessonCount / levelMetrics.lessonCount) * 100
-    : 0;
+  const levelCounts = snapshot?.levels ?? {};
+  const levelProgress = levelCounts[currentLevel.id]?.percent ?? 0;
 
   const openLevel = (levelId: number) => router.push({ pathname: '/lang/library', params: { level: String(levelId) } } as never);
   const openCurrentLesson = () => router.push({ pathname: '/course/lesson', params: { id: currentLesson.id } } as never);
@@ -197,6 +139,7 @@ export default function LearningHome() {
             </View>
           </LinearGradient>
 
+          {!!error && <Pressable accessibilityRole="button" onPress={retry}><Text accessibilityRole="alert">{error} تلاش دوباره</Text></Pressable>}
           <View style={styles.pathPanel}>
             <View style={styles.panelHeadingRow}>
               <View style={styles.panelHeadingText}>
@@ -258,7 +201,8 @@ export default function LearningHome() {
                           <Text style={[styles.levelCefr, { color: level.color }]}>{level.cefr}</Text>
                         </View>
                         <Text style={styles.levelDesc} numberOfLines={1}>{level.description}</Text>
-                        <Text style={styles.levelStats}>{toPersianDigits(metrics.completedLessonCount)} از {toPersianDigits(metrics.lessonCount)} درس · {toPersianDigits(metrics.sentenceCount)} جمله · {toPersianDigits(metrics.vocabularyCount)} واژهٔ یکتا</Text>
+                        <Text style={styles.levelStats}>{progressLabel(levelCounts[level.id])} · {toPersianDigits(metrics.sentenceCount)} جمله · {toPersianDigits(metrics.vocabularyCount)} واژهٔ یکتا</Text>
+                        <EnglishProgressTrack value={levelCounts[level.id]?.percent ?? 0} color={level.color} height={5} />
                         <LevelReadinessLine course={READINESS} levelId={level.id} color={level.color} />
                       </View>
                       <ChevronLeft size={18} color={HomeColors.muted} />
@@ -316,7 +260,7 @@ export default function LearningHome() {
             <View style={styles.levelProgressBlock}>
               <View style={styles.levelProgressMeta}>
                 <Text style={styles.levelProgressLabel}>پیشرفت در {currentLevel.title}</Text>
-                <Text style={styles.levelProgressValue}>{toPersianDigits(levelMetrics.completedLessonCount)} از {toPersianDigits(levelMetrics.lessonCount)} درس</Text>
+                <Text style={styles.levelProgressValue}>{progressLabel(levelCounts[currentLevel.id])}</Text>
               </View>
               <EnglishProgressTrack value={levelProgress} color={currentLevel.color} height={7} />
             </View>

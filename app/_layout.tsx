@@ -8,7 +8,7 @@ import { I18nManager, Image, Platform, StyleSheet, Text, TextInput, View } from 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { MiloLogoMotion } from '@/components/MiloLogoMotion';
 import { KeyboardProvider } from '@/components/KeyboardRuntime';
-import { createAudioPlayer } from 'expo-audio';
+import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 // Imported from per-weight subpaths on purpose: the package root `require()`s
 // every weight at load time, so Metro bundled all 27 font files (7.0 MB) even
 // though only these 7 are used. Subpath imports keep only these (1.5 MB).
@@ -37,6 +37,7 @@ import { getPairingState, isOnboardingComplete } from '@/lib/storage';
 import { isSupabaseConfigured } from '@/lib/pairing';
 import { DesignTokens, RtlDirection } from '@/lib/theme';
 import { useRealAgent } from '@/lib/useRealAgent';
+import { RUSSIAN_ONLY_BUILD } from '@/lib/features';
 import { warmSpeech } from '@/lib/responsiveSpeech';
 import { DesignVariantStyles } from '@/components/DesignVariantStyles';
 
@@ -107,6 +108,12 @@ function CompanionRuntime() {
  */
 export default function RootLayout() {
   useFrameworkReady();
+  useEffect(() => {
+    // Use the media output for lessons even before the first microphone exercise.
+    if (Platform.OS === 'ios') {
+      void setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true }).catch(() => undefined);
+    }
+  }, []);
   // Six local events only: no network, no SDK, no token. They turn «is this fun?» into a number.
   useEffect(() => {
     initAnalytics();
@@ -179,7 +186,7 @@ export default function RootLayout() {
     const finish = setTimeout(() => {
       player?.remove();
       setIntroComplete(true);
-      warmSpeech('en-US');
+      if (!RUSSIAN_ONLY_BUILD) warmSpeech('en-US');
     }, 3400);
     return () => clearTimeout(finish);
   }, [fontsLoaded, fontError]);

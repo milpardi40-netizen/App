@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, AppState, Platform, StyleSheet, View } from 'react-native';
 import { useGlobalSearchParams, useNavigationContainerRef, usePathname, useRouter } from 'expo-router';
-import { FEATURES, MANAGEMENT_BUILD } from '@/lib/features';
+import { FEATURES, MANAGEMENT_BUILD, RUSSIAN_ONLY_BUILD, outsideRussianScope } from '@/lib/features';
 import { languageForResume, readResumeSnapshot, resumeDestination, resumeHref, writeResumeSnapshot, type ResumeParams, type ResumeSnapshot } from '@/lib/appResume';
 
 /** Keep learner navigation stable across Android/iOS background and process restarts. */
@@ -10,7 +10,8 @@ export function AppResumeGuard() {
   const navigation = useNavigationContainerRef();
   const pathname = usePathname();
   const params = useGlobalSearchParams() as ResumeParams;
-  const href = resumeHref(pathname, params);
+  const href = RUSSIAN_ONLY_BUILD && outsideRussianScope(pathname) ? null : resumeHref(pathname, params);
+  useEffect(() => { if (RUSSIAN_ONLY_BUILD && outsideRussianScope(pathname)) router.replace('/languages' as never); }, [pathname, router]);
   const disabled = Platform.OS === 'web' || MANAGEMENT_BUILD;
   const [loaded, setLoaded] = useState(false);
   const [restoring, setRestoring] = useState(!disabled);
@@ -50,7 +51,8 @@ export function AppResumeGuard() {
       ready.current = true;
       initial.current = null;
       if (saved) {
-        const target = resumeDestination(saved, Date.now(), FEATURES.learnerLogin);
+        const route = resumeDestination(saved, Date.now(), FEATURES.learnerLogin);
+        const target = RUSSIAN_ONLY_BUILD && outsideRussianScope(route) ? '/languages' : route;
         pendingHref.current = target;
         router.replace(target as never);
       } else setRestoring(false);
@@ -61,7 +63,8 @@ export function AppResumeGuard() {
       const saved = initial.current;
       initial.current = null;
       if (saved) {
-        const target = resumeDestination(saved, Date.now(), FEATURES.learnerLogin);
+        const route = resumeDestination(saved, Date.now(), FEATURES.learnerLogin);
+        const target = RUSSIAN_ONLY_BUILD && outsideRussianScope(route) ? '/languages' : route;
         if (target !== href) {
           pendingHref.current = target;
           router.replace(target as never);
@@ -117,7 +120,8 @@ export function AppResumeGuard() {
           // still exactly where they left. Only a stale session (away too long or
           // a retired route) is redirected; anything else would move the user to a
           // page they did not choose.
-          const target = resumeDestination(saved, Date.now(), FEATURES.learnerLogin);
+          const route = resumeDestination(saved, Date.now(), FEATURES.learnerLogin);
+        const target = RUSSIAN_ONLY_BUILD && outsideRussianScope(route) ? '/languages' : route;
           if (target !== saved.href && target !== currentHref.current) {
             setRestoring(true);
             pendingHref.current = target;

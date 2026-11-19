@@ -67,12 +67,36 @@ async function withPiper(lang, text) {
   }
 }
 
+let hasNativeEspeak = null;
+function nativeEspeakAvailable() {
+  if (hasNativeEspeak !== null) return hasNativeEspeak;
+  try {
+    execFileSync('espeak-ng', ['--version'], { stdio: 'ignore', timeout: 5000 });
+    hasNativeEspeak = true;
+  } catch {
+    hasNativeEspeak = false;
+  }
+  return hasNativeEspeak;
+}
+
 let espeakFactory = null;
 async function withEspeak(lang, text) {
+  const voice = ESPEAK_VOICE[lang] || 'en-us';
+  if (nativeEspeakAvailable()) {
+    const wavPath = `/tmp/espeak-tts-${process.pid}.wav`;
+    try {
+      execFileSync('espeak-ng', ['-w', wavPath, '-v', voice, '--', text], {
+        stdio: ['ignore', 'ignore', 'pipe'], timeout: 30000,
+      });
+      return mp3FromWav(fs.readFileSync(wavPath));
+    } finally {
+      if (fs.existsSync(wavPath)) fs.rmSync(wavPath);
+    }
+  }
   if (!espeakFactory) espeakFactory = (await import('espeak-ng')).default;
   // The Emscripten CLI is one-shot, so each sentence needs a fresh module instance (~120 ms).
   // Keeping the process alive avoids paying Node/WASM startup 15 000 times.
-  const espeak = await espeakFactory({ arguments: ['-w', 'out.wav', '-v', ESPEAK_VOICE[lang] || 'en-us', text] });
+  const espeak = await espeakFactory({ arguments: ['-w', 'out.wav', '-v', voice, '--', text] });
   return mp3FromWav(Buffer.from(espeak.FS.readFile('out.wav')));
 }
 

@@ -25,13 +25,14 @@
     "validate:language-entry": "node scripts/verify-language-entry.cjs",
     "validate:turkish-structure": "node scripts/verify-turkish-structure.mjs",
     "validate:speech-policy": "node scripts/verify-speech-policy.mjs",
-    "validate:narration": "node scripts/verify-narration-contract.mjs",
+    "validate:narration": "node scripts/verify-narration-contract.mjs && node scripts/verify-recording-cache.mjs",
     "validate:assessment": "node scripts/verify-assessment-layout.mjs",
     "validate:progress": "node scripts/verify-progress-display.mjs",
     "validate:app-lock": "node scripts/verify-app-lock.mjs",
     "validate:typography": "node scripts/verify-typography-stability.mjs",
     "validate:chat-notifications": "node scripts/verify-chat-notifications.mjs",
     "validate:registration-admin": "node scripts/verify-registration-admin.mjs",
+    "validate:apk-download": "node scripts/verify-apk-download.cjs",
     "validate:requested-updates": "node scripts/verify-requested-updates.mjs",
     "validate:backup": "node scripts/verify-english-backup.mjs",
     "validate:a11y": "node scripts/verify-accessibility-static.mjs",
@@ -79,7 +80,7 @@
     "expo-router": "~6.0.8",
     "expo-secure-store": "~15.0.7",
     "expo-sharing": "~14.0.7",
-    "expo-speech": "~13.1.7",
+    "expo-speech": "~14.0.7",
     "expo-speech-recognition": "^3.1.3",
     "expo-splash-screen": "~31.0.10",
     "expo-status-bar": "~3.0.8",
@@ -104,6 +105,7 @@
     "@types/react": "~19.1.10",
     "babel-plugin-module-resolver": "^5.0.3",
     "esbuild": "^0.28.2",
+    "espeak-ng": "1.0.2",
     "typescript": "~5.9.2"
   }
 }

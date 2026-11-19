@@ -12,7 +12,7 @@ const result = await build({
   bundle: true, write: false, platform: 'node', format: 'esm', logLevel: 'silent',
   plugins: [{ name: 'isolated-storage', setup(build) {
     build.onResolve({ filter: /^(react-native|@react-native-async-storage\/async-storage)$/ }, args => ({ path: args.path, namespace: 'test' }));
-    build.onResolve({ filter: /^\.\/personalLearningSync$/ }, () => ({ path: 'sync', namespace: 'test' }));
+    build.onResolve({ filter: /personalLearningSync$/ }, () => ({ path: 'sync', namespace: 'test' }));
     build.onResolve({ filter: /^\.\/supabase$/ }, () => ({ path: 'supabase', namespace: 'test' }));
     build.onLoad({ filter: /.*/, namespace: 'test' }, args => ({ loader: 'js', contents: args.path === 'react-native'
       ? "export const Platform = { get OS(){ return globalThis.__resetPlatform || 'web'; } };"
@@ -62,7 +62,7 @@ const restarted = await study.resetLessonSession('first');
 const session = restarted.sessions.first;
 check(session.stage === 0 && session.sentenceIndex === 0 && !session.revealed && !session.evidencePassed, 'restart persists a fresh position and flags');
 check(session.attempt.generation === 1 && !!session.attempt.id && Object.keys(session.attemptEvidence).length === 0, 'restart creates a fresh attempt and no attempt answers');
-check(JSON.stringify(restarted.sessions.second) === JSON.stringify(initial.sessions.second), 'another lesson survives');
+check(JSON.stringify(restarted.sessions.second) === JSON.stringify(beforeRestart.sessions.second), 'another lesson survives');
 check(JSON.stringify(restarted.lessonEvidence) === JSON.stringify(initial.lessonEvidence) && restarted.days['2026-10-01'] === 4500, 'historical evidence and study time survive');
 check(store.get('sentence_course_progress_v1') === 'completion and review history' && store.get('another_language') === 'other course', 'completion, review, and other languages are untouched');
 check(JSON.stringify((await study.loadStudy()).sessions.first) === JSON.stringify(session), 'reload sees the persisted fresh attempt');

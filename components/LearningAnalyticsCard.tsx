@@ -1,3 +1,4 @@
+import { useFocusedLearningData } from '@/hooks/useFocusedLearningData';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Switch, View } from 'react-native';
@@ -23,13 +24,12 @@ const C = {
  * switchable off, deletable. Nothing is uploaded anywhere.
  */
 export default function LearningAnalyticsCard() {
-  const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
+  const { data: summary } = useFocusedLearningData(loadAnalyticsSummary);
   const [enabled, setEnabled] = useState(true);
   const [busy, setBusy] = useState(false);
 
   const refresh = useCallback(async () => {
-    const [next, on] = await Promise.all([loadAnalyticsSummary(), isAnalyticsEnabled()]);
-    setSummary(next);
+    const on = await isAnalyticsEnabled();
     setEnabled(on);
   }, []);
 
@@ -72,8 +72,8 @@ export default function LearningAnalyticsCard() {
       {summary && summary.total > 0 ? (
         <>
           <View style={styles.grid}>
-            <Stat value={fa(summary.funnel.en?.started ?? 0)} label="درس شروع‌شده" />
-            <Stat value={fa(summary.funnel.en?.completed ?? 0)} label="درس تمام‌شده" />
+            <Stat value={fa(summary.counts.lesson_started)} label="درس شروع‌شده" />
+            <Stat value={fa(summary.counts.lesson_completed)} label="درس تمام‌شده" />
             <Stat value={fa(summary.activeDays)} label="روز فعال" />
             <Stat value={fa(summary.returns)} label="برگشت روز بعد" />
           </View>
