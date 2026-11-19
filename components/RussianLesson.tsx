@@ -496,7 +496,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           </View> : null}
         </View>}
 
-        {stage === 10 && <View style={styles.centerStage}>
+        {stage === 9 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><MessageCircle size={34} color={Palette.primary} /></View>
           <Text style={styles.stageTitle}>مکالمهٔ هدایت‌شده</Text>
           {showHint && <Text style={styles.stageDesc}>نقش خود را بگویید، سپس نمونه را بشنوید.</Text>}
@@ -504,7 +504,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
         </View>}
 
-        {(stage === 8 || stage === 9) && <View style={styles.centerStage}>
+        {(stage === 7 || stage === 8) && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="ru-RU" accent={Palette.success} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('ru', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
             { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
@@ -530,10 +530,10 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             {!showCheckAnswers && <Pressable accessibilityRole="button" style={styles.showAnswersButton} onPress={() => setShowCheckAnswers(true)}><Text style={styles.showAnswersText}>نمایش توضیح همهٔ پاسخ‌ها</Text></Pressable>}
           </View>}
             </> },
-          ]; return <>{stage === 8 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 9 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
+          ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
 
-        {stage === 11 && <RussianTurnExchange key={lesson.id} lesson={lesson} path={exchange} change={setExchange} finish={() => void next()} locked={saving || !!sessionError || !!celebration} />}
+        {stage === 10 && <RussianTurnExchange key={lesson.id} lesson={lesson} path={exchange} change={setExchange} finish={() => void next()} locked={saving || !!sessionError || !!celebration} />}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
@@ -541,7 +541,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         <View style={{ height: bottomSpacer }} />
       </FitScrollView>
 
-      {stage !== 11 && <View style={styles.footer}>
+      {stage !== 10 && <View style={styles.footer}>
         <View style={styles.footerActions}>
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && styles.nextButtonDisabled]}>
             <Text style={styles.previousButtonText}>جمله قبلی</Text>
