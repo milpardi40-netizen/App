@@ -34,7 +34,7 @@ def clean(s):
 def locate(label, *, tap=False, deny_dialog=False):
     # Accessibility tree (not screen pixels or assumptions about the OEM font size).
     # Search in both directions because a screen can keep its offset across a turn.
-    target = clean(label)
+    targets = [clean(s) for s in ((label,) if isinstance(label,str) else label)]
     visible = []
     for attempt in range(14):
         try:
@@ -44,18 +44,18 @@ def locate(label, *, tap=False, deny_dialog=False):
             for node in root.iter('node'):
                 texts = [clean(node.get(k,'')) for k in ('text','content-desc')]
                 visible.extend(t for t in texts if t)
-                deny = deny_dialog and node.get('resource-id','').endswith(':id/permission_deny_button')
-                if not deny and not any((target == t if tap else target in t) for t in texts):
+                deny = deny_dialog and re.search(r':id/permission_deny(?:_and_dont_ask_again)?_button$',node.get('resource-id',''))
+                if not deny and not any((target == t if tap else target in t) for target in targets for t in texts):
                     continue
                 bounds = list(map(int, re.findall(r'-?\d+',node.get('bounds',''))))
                 if len(bounds) != 4: continue
                 x1,y1,x2,y2 = bounds
                 if not (x2>x1 and min(y2,h)>max(y1,0)): continue
-                if tap:
+                if tap or deny:
                     shell('input','tap',str((x1+x2)//2),str((max(0,y1)+min(y2,h))//2))
                 if deny:
                     break  # let the OS finish closing its permission prompt and inspect the app again
-                annotation('notice', ('Tapped' if tap else 'Rendered')+': '+label)
+                annotation('notice', ('Tapped' if tap else 'Rendered')+': '+str(next(t for t in texts if any(target in t for target in targets))))
                 return
         except (ET.ParseError, subprocess.SubprocessError):
             pass  # first dump can race a permission view or navigation transition
@@ -73,7 +73,8 @@ locate('دیدن مثال',tap=True)
 locate('Я хочу чай')
 # A system recognizer or Russian acoustic model is not guaranteed on google_apis images.
 # Exercise the explicitly denied/offline fallback, not a fictitious successful voice recognition.
-shell('pm','set-permission-flags','--user','0',PKG,'android.permission.RECORD_AUDIO','user-set','user-fixed')
+# API 30 has no compatible `pm set-permission-flags` command. Respond to Android's
+# own permission prompt instead. No permission grant or synthetic voice service.
 # Return from the example to the workshop, and from the workshop to the actual home card.
 locate('بازگشت به فهرست کارگاه',tap=True)
 locate('بازگشت به صفحهٔ قبل',tap=True)
@@ -82,9 +83,11 @@ locate('اتاق مکالمهٔ روسی',tap=True)
 for _ in range(6):
     locate('موقعیت بعدی',tap=True)
     time.sleep(.5)
+# The 7th scene's title is at the top even if the previous Next button was at the bottom.
 locate('چای می‌خواهم یا آب؟')
 locate('من شروع می‌کنم',tap=True)
-locate('تمرین بدون میکروفون',tap=True,deny_dialog=True)
+locate(('دسترسی میکروفون یا تشخیص گفتار داده نشد', 'تشخیص گفتار روسی در این دستگاه', 'میکروفون در دسترس نیست'),deny_dialog=True)
+locate('تمرین بدون میکروفون',tap=True)
 locate('بگو: Я хочу воду.',tap=True)
 locate('Вот твоя вода')
 with Path('russian-release.md').open('a') as f:
