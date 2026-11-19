@@ -64,6 +64,8 @@ export const ENGLISH_ENGINE_STEPS = [
   { id: 'conversation', labelFa: 'مکالمه', labelEn: 'Conversation Practice' },
 ] as const;
 
+export const ENGLISH_CONVERSATION_STAGE_INDEX = ENGLISH_ENGINE_STEPS.findIndex(step => step.id === 'conversation');
+
 /** Existing data sources behind the requested relational learning model. */
 export const ENGLISH_CORE_DATABASE_FLOW = [
   { entity: 'Situations', source: 'SentenceLesson.situation' },

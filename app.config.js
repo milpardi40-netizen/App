@@ -12,6 +12,7 @@ const ciVersionCode = Number.parseInt(process.env.MILO_VERSION_CODE || '', 10);
 const base = Number.isFinite(ciVersionCode) && ciVersionCode > 0
   ? { ...rootBase, version: `1.0.${ciVersionCode}`, android: { ...rootBase.android, versionCode: ciVersionCode } }
   : rootBase;
+const learnerDisplayName = process.env.MILO_APP_DISPLAY_NAME?.trim() || 'MiloLang';
 
 // Optional legacy Expo remote push on Android uses FCM v1 and needs the matching
 // google-services file. The no-FCM foreground WebSocket/local-notification path
@@ -82,7 +83,7 @@ const build = () => {
   if (!admin && process.env.EXPO_PUBLIC_LEARNER_ENGLISH_NOLOGIN === 'true') {
     return {
       ...base,
-      name: 'MiloLang',
+      name: learnerDisplayName,
       scheme: 'miloenglish',
       android: { ...base.android, package: 'com.devicecontrol.miloenglish' },
       ios: { ...base.ios, bundleIdentifier: 'com.devicecontrol.miloenglish' },
@@ -97,7 +98,7 @@ const build = () => {
       ios: { ...base.ios, bundleIdentifier: 'com.devicecontrol.milofive' },
     };
   }
-  if (!admin) return { ...base, name: 'MiloLang' };
+  if (!admin) return { ...base, name: learnerDisplayName };
   return {
     ...base,
     name: 'Admin App',

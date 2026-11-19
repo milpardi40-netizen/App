@@ -389,6 +389,7 @@ jobs:
       EXPO_PUBLIC_ENABLE_EDUCATION_ADMIN: 'false'
       EXPO_PUBLIC_LEARNER_LOGIN: 'false'
       EXPO_PUBLIC_LANGUAGE_SCOPE: ${{ inputs.language_scope_nologin || 'en,ru' }}
+      MILO_APP_DISPLAY_NAME: "MiloLang ${{ inputs.language_scope_nologin || 'en,ru' }}"
       EXPECTED_PACKAGE: 'com.devicecontrol.companion'
       EXPECTED_SCOPE: ${{ inputs.language_scope_nologin || 'en,ru' }}
       APK_NAME: '2update.apk'
@@ -452,6 +453,7 @@ jobs:
       EXPO_PUBLIC_LEARNER_LOGIN: 'false'
       EXPO_PUBLIC_LEARNER_ENGLISH_NOLOGIN: 'true'
       EXPO_PUBLIC_LANGUAGE_SCOPE: 'en'
+      MILO_APP_DISPLAY_NAME: 'MiloLang English'
       EXPECTED_PACKAGE: 'com.devicecontrol.miloenglish'
       EXPECTED_SCOPE: 'en'
       APK_NAME: 'english.apk'

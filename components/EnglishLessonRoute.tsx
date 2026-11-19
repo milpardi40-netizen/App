@@ -49,7 +49,7 @@ import { EnglishB2TopicPractice } from '@/components/EnglishB2TopicPractice';
 import { EnglishB2Scenario } from '@/components/EnglishB2Scenario';
 import { EnglishC1Reading } from '@/components/EnglishC1Reading';
 import { EnglishC1ExtendedModel } from '@/components/EnglishC1ExtendedModel';
-import { ENGLISH_ENGINE_STEPS, getLessonPatterns, getLessonVocabulary } from '@/lib/englishLearningEngine';
+import { ENGLISH_CONVERSATION_STAGE_INDEX, ENGLISH_ENGINE_STEPS, getLessonPatterns, getLessonVocabulary } from '@/lib/englishLearningEngine';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
@@ -77,7 +77,8 @@ const stages = ENGLISH_ENGINE_STEPS;
 
 export default function SentenceLessonScreen() {
   const router = useRouter();
-  const { id, fromStart } = useLocalSearchParams<{ id: string; fromStart?: string }>();
+  const { id, fromStart, openConversation } = useLocalSearchParams<{ id: string; fromStart?: string; openConversation?: string }>();
+  const openConversationOnly = openConversation === '1';
   const lesson = getSentenceLesson(id || '') ?? SENTENCE_LESSONS[0];
   const courseLevel = COURSE_LEVELS.find(item => item.id === lesson.levelId) ?? COURSE_LEVELS[0];
   const [evidencePassed, setEvidencePassed] = useState(false);
@@ -171,14 +172,14 @@ export default function SentenceLessonScreen() {
       if (!alive || screenRun.current !== run) return;
       attempt.current = saved.attempt;
       setAttemptEvidence(saved.attempt ? (saved.attemptEvidence ?? {}) : undefined);
-      setStage(saved.stage);
+      setStage(openConversationOnly ? ENGLISH_CONVERSATION_STAGE_INDEX : saved.stage);
       setSentenceIndex(Math.min(saved.sentenceIndex, lesson.sentences.length - 1));
       setRevealed(saved.revealed);
       setEvidencePassed(passed);
       setCompletionError('');
       loadedLesson.current = lesson.id;
       setSessionReady(true);
-      trackLessonStarted('en', lesson.id);
+      if (!openConversationOnly) trackLessonStarted('en', lesson.id);
       if (startFromBeginning) router.setParams({ fromStart: undefined });
     }).catch(() => {
       if (alive) setSessionError(startFromBeginning
@@ -186,17 +187,17 @@ export default function SentenceLessonScreen() {
         : 'جلسه قبلی خوانده نشد؛ برای حفظ اطلاعات، ذخیره متوقف است. صفحه را دوباره باز کنید.');
     });
     return () => { alive = false; screenRun.current++; void stopResponsiveSpeech(); };
-  }, [lesson.id, lesson.levelId, lesson.sentences.length, id, fromStart, reload]);
+  }, [lesson.id, lesson.levelId, lesson.sentences.length, id, fromStart, openConversationOnly, reload]);
   useEffect(() => {
     let currentSave = true;
     const run = screenRun.current;
-    if (sessionReady && loadedLesson.current === lesson.id && !completing.current && !resettingRef.current && !sessionError) {
+    if (!openConversationOnly && sessionReady && loadedLesson.current === lesson.id && !completing.current && !resettingRef.current && !sessionError) {
       void saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence })
         .then(() => { if (currentSave && screenRun.current === run) setSessionError(''); })
         .catch(() => { if (currentSave && screenRun.current === run) setSessionError('جلسه ذخیره نشد؛ درس را دوباره باز کنید.'); });
     }
     return () => { currentSave = false; };
-  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, evidencePassed, attemptEvidence, resetting, sessionError]);
+  }, [lesson.id, openConversationOnly, sessionReady, stage, sentenceIndex, revealed, evidencePassed, attemptEvidence, resetting, sessionError]);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(recorder, 250);
   const [evaluatingSpeech, setEvaluatingSpeech] = useState(false);
@@ -399,6 +400,11 @@ export default function SentenceLessonScreen() {
 
   const next = async () => {
     if (!sessionReady || sessionError || completing.current || resettingRef.current) return;
+    if (openConversationOnly) {
+      if (router.canGoBack()) router.back();
+      else router.replace('/lang' as never);
+      return;
+    }
     if (stage === 1 && sentenceIndex < chunkLastIndex) {
       setSentenceIndex((value) => value + 1);
       setRevealed(false);
@@ -466,11 +472,11 @@ export default function SentenceLessonScreen() {
         <View style={styles.headerTop}>
           <View style={styles.headerText}>
             <Text style={styles.headerTitle}>{lesson.title}</Text>
-            <Text style={styles.headerSub}>{stages[stage].labelFa} · مرحله {toPersianDigits(stage + 1)} از {toPersianDigits(stages.length)}</Text>
+            <Text style={styles.headerSub}>{openConversationOnly ? 'تمرین مکالمهٔ همین درس' : `${stages[stage].labelFa} · مرحله ${toPersianDigits(stage + 1)} از ${toPersianDigits(stages.length)}`}</Text>
           </View>
           <View style={styles.percentBadge}>
-            <Text style={styles.percent}>{toPersianDigits(progressPercent)}٪</Text>
-            <Text style={styles.percentLabel}>پیشرفت</Text>
+            <Text style={styles.percent}>{openConversationOnly ? 'تمرین' : `${toPersianDigits(progressPercent)}٪`}</Text>
+            <Text style={styles.percentLabel}>{openConversationOnly ? 'مستقل' : 'پیشرفت'}</Text>
           </View>
         </View>
       </LinearGradient>
@@ -484,7 +490,7 @@ export default function SentenceLessonScreen() {
           </View>
         </View>
         <View style={styles.stepSegments}>
-          {stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}
+          {stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, !openConversationOnly && index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}
         </View>
         {chunks.chunked ? <View style={styles.chunkBar}>
           <Text style={styles.chunkText}>بخش {toPersianDigits(chunks.current)} از {toPersianDigits(chunks.total)} · جملهٔ {toPersianDigits(sentenceIndex + 1)} تا {toPersianDigits(chunks.end)}</Text>
@@ -712,9 +718,9 @@ export default function SentenceLessonScreen() {
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && { opacity: .45 }]}>
             <Text style={styles.secondaryControlText}>جمله قبلی</Text>
           </Pressable>}
-          <Pressable accessibilityRole="button" disabled={saving || !!sessionError} style={[styles.nextButton, saving && { opacity: .45 }]} onPress={() => void next()}>
-            <Text style={styles.nextText}>{stage === stages.length - 1 ? 'پایان درس' : stage === 1 && sentenceIndex < lesson.sentences.length - 1 ? 'جمله بعدی' : 'ادامه'}</Text>
-            {stage === stages.length - 1 ? <Check size={20} color={Colors.onColor} /> : <ChevronLeft size={20} color={Colors.onColor} />}
+          <Pressable accessibilityRole="button" accessibilityLabel={openConversationOnly ? 'بازگشت به خانه بدون تغییر پیشرفت درس' : undefined} disabled={saving || !!sessionError} style={[styles.nextButton, saving && { opacity: .45 }]} onPress={() => void next()}>
+            <Text style={styles.nextText}>{openConversationOnly ? 'بازگشت به خانه' : stage === stages.length - 1 ? 'پایان درس' : stage === 1 && sentenceIndex < lesson.sentences.length - 1 ? 'جمله بعدی' : 'ادامه'}</Text>
+            {stage === stages.length - 1 && !openConversationOnly ? <Check size={20} color={Colors.onColor} /> : <ChevronLeft size={20} color={Colors.onColor} />}
           </Pressable>
         </View>
       </View>

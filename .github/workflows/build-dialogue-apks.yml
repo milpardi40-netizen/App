@@ -60,11 +60,13 @@ jobs:
       matrix:
         include:
           - flavor: english-russian
+            display_name: MiloLang EN-RU
             apk_name: 2update.apk
             language_scope: en,ru
             expected_package: com.devicecontrol.companion
             english_only: 'false'
           - flavor: english-only
+            display_name: MiloLang English
             apk_name: english.apk
             language_scope: en
             expected_package: com.devicecontrol.miloenglish
@@ -81,8 +83,10 @@ jobs:
       EXPO_PUBLIC_LEARNER_LOGIN: 'false'
       EXPO_PUBLIC_LEARNER_ENGLISH_NOLOGIN: ${{ matrix.english_only }}
       EXPO_PUBLIC_LANGUAGE_SCOPE: ${{ matrix.language_scope }}
+      MILO_APP_DISPLAY_NAME: ${{ matrix.display_name }}
       APK_NAME: ${{ matrix.apk_name }}
       EXPECTED_PACKAGE: ${{ matrix.expected_package }}
+      EXPECTED_APP_NAME: ${{ matrix.display_name }}
       EXPECTED_SCOPE: ${{ matrix.language_scope }}
       BASELINE_RELEASE_TAG: milo-requested-${{ needs.reserve.outputs.latest_tag }}
     steps:
@@ -141,6 +145,8 @@ jobs:
           set -euo pipefail
           APK_ID=$("$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$APK_NAME" | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
           test "$APK_ID" = "$EXPECTED_PACKAGE" || { echo "Wrong package: $APK_ID"; exit 1; }
+          APK_LABEL=$("$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$APK_NAME" | sed -n "s/^application-label:'\([^']*\)'.*/\1/p" | head -1)
+          test "$APK_LABEL" = "$EXPECTED_APP_NAME" || { echo "Wrong launcher label: $APK_LABEL"; exit 1; }
           python3 - <<'PY'
           import os, sys, zipfile
           apk = os.environ['APK_NAME']
@@ -162,7 +168,7 @@ jobs:
           missing = [marker for marker in markers if not any(form in bundle for form in encoded_forms(marker))]
           if missing:
               sys.exit(f'{apk}: required lesson-sentence dialogue marker(s) absent from native bundle: {missing}')
-          print(f'{apk}: package={os.environ["EXPECTED_PACKAGE"]}, scope={expected_scope}; standalone bundle verified')
+          print(f'{apk}: package={os.environ["EXPECTED_PACKAGE"]}, label={os.environ["EXPECTED_APP_NAME"]}, scope={expected_scope}; standalone bundle verified')
           PY
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose "$APK_NAME"
           sha256sum "$APK_NAME"

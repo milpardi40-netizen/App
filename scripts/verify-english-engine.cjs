@@ -21,6 +21,7 @@ const esbuild = require('esbuild');
 
   check(app.ENGLISH_ENGINE_BLUEPRINT.length === 6);
   check(app.ENGLISH_ENGINE_STEPS.length === 10);
+  check(app.ENGLISH_CONVERSATION_STAGE_INDEX === 9 && app.ENGLISH_ENGINE_STEPS[app.ENGLISH_CONVERSATION_STAGE_INDEX].id === 'conversation');
   check(app.ENGLISH_ENGINE_BLUEPRINT.map(item => item.title).join('|') === app.COURSE_LEVELS.map(item => item.title).join('|'));
   check(app.ENGLISH_ENGINE_BLUEPRINT.every((item, index) => item.levelId === index && item.modules.length > 0));
   check(app.ENGLISH_ENGINE_BLUEPRINT[0].modules.length === 14 && app.COURSE_LEVELS[0].modules.length === 14);
@@ -33,6 +34,7 @@ const esbuild = require('esbuild');
   // synthesize branch lines or fall back to a dialogue from another content layer.
   const englishDialoguePractice = require('node:fs').readFileSync('components/EnglishDialoguePractice.tsx', 'utf8');
   const englishLessonRoute = require('node:fs').readFileSync('components/EnglishLessonRoute.tsx', 'utf8');
+  const englishHome = require('node:fs').readFileSync('app/lang/index.tsx', 'utf8');
   check(englishDialoguePractice.includes('lessonSentenceDialogue') && englishDialoguePractice.includes('localScriptOnly'));
   check(!englishDialoguePractice.includes('branchPool={pool}'));
   check(englishLessonRoute.includes('<EnglishDialoguePractice key={lesson.id} sentences={lesson.sentences}')
@@ -41,6 +43,15 @@ const esbuild = require('esbuild');
     && !englishLessonRoute.includes('lines={lesson.dialogue'));
   check(englishLessonRoute.includes('expandedConversationExtrasFor === lesson.id && <View')
     && englishLessonRoute.includes('تمرین‌های اختیاری · جدا از مکالمهٔ همین درس'));
+  check(englishHome.includes("params: { id: currentLesson.id, openConversation: '1' }")
+    && englishHome.includes('<Text style={styles.quickTitle}>تمرین مکالمه</Text>')
+    && englishHome.includes('onPress={openCurrentConversation}'));
+  check(englishLessonRoute.includes("const openConversationOnly = openConversation === '1';")
+    && englishLessonRoute.includes('setStage(openConversationOnly ? ENGLISH_CONVERSATION_STAGE_INDEX : saved.stage)'));
+  check(englishLessonRoute.includes('!openConversationOnly && sessionReady')
+    && englishLessonRoute.includes('if (openConversationOnly) {')
+    && englishLessonRoute.includes("router.replace('/lang' as never)"));
+  check(englishLessonRoute.includes("openConversationOnly ? 'بازگشت به خانه' : stage === stages.length - 1 ? 'پایان درس'"));
   for (const lesson of app.SENTENCE_LESSONS) {
     const rehearsal = app.lessonSentenceDialogue(lesson.sentences, sentence => sentence.en, { partner: 'طرف مقابل', learner: 'شما' });
     assert.deepEqual(rehearsal, lesson.sentences.map((sentence, index) => ({
