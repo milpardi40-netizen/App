@@ -41,6 +41,7 @@ export const RUSSIAN_LESSON_STAGES = [
   { id: 'conversation', labelFa: 'مکالمه', labelEn: 'Conversation Practice' },
   { id: 'short-assessment', labelFa: 'سنجش کوتاه', labelEn: 'Short Assessment' },
   { id: 'speaking-check', labelFa: 'آزمون گفتاری', labelEn: 'Speaking Check' },
+  { id: 'turn-exchange', labelFa: 'مکالمهٔ نوبتی', labelEn: 'Turn-taking Exchange' },
 ] as const;
 
 const sentence = (
@@ -603,7 +604,7 @@ export const RUSSIAN_LEVELS: readonly RussianCourseLevel[] = [
     id: 0,
     title: 'Absolute Beginner',
     cefr: 'Pre-A1',
-    description: 'آغاز از صفر: الفبای سیریلیک قدم‌به‌قدم، تکیهٔ واژه، تابلوها و ترکیب‌های کوتاه — بدون تکرار با A1',
+    description: 'از سلام و گفتن اسم تا درخواست آب، شمردن تا پنج و پیدا کردن ورودی؛ خط سیریلیک را هم‌زمان، چند حرف در هر درس یاد می‌گیری.',
     color: '#94a3b8',
     modules: RUSSIAN_PRE_A1_MODULES,
     status: 'available',

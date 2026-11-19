@@ -282,8 +282,8 @@ const esbuild = require('esbuild');
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
   const datesCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-l2-months-dates').checks[0];
   check('date-question spelling fix preserves the original answer slot', datesCheck.correctIndex === 0 && datesCheck.choices[0] === 'Како́е сего́дня число́?');
-  check('Russian stage IDs, order and labels exactly match the English lesson flow', app.RUSSIAN_LESSON_STAGES.length === 10
-    && app.RUSSIAN_LESSON_STAGES.every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
+  check('Russian preserves the ten saved stage indexes and appends its own final exchange', app.RUSSIAN_LESSON_STAGES.length === 11
+    && app.RUSSIAN_LESSON_STAGES[10].id === 'turn-exchange' && app.RUSSIAN_LESSON_STAGES.slice(0, 10).every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa
       && stage.labelEn === app.ENGLISH_ENGINE_STEPS[index].labelEn));
   check('English lesson scope includes the original material, Pre-A1, practice labs and the A2, B1 and B2 lessons', app.SENTENCE_LESSONS.length === 274
@@ -358,5 +358,5 @@ const esbuild = require('esbuild');
     && savedProgress.learnedEssential504Words.length === 0);
   check('Russian progress never calls the Supabase cloud client', global.__russianSupabaseCalls === 0);
 
-  console.log(`${checks.length} Russian curriculum, ten-stage flow, registry, session-resume and language-isolation checks passed (${sentenceCount} Russian sentences).`);
+  console.log(`${checks.length} Russian curriculum, turn-taking flow, registry, session-resume and language-isolation checks passed (${sentenceCount} Russian sentences).`);
 })().catch(error => { console.error(error); process.exit(1); });

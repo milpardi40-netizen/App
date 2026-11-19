@@ -22,12 +22,15 @@ const configuredLanguageScope = (process.env.EXPO_PUBLIC_LANGUAGE_SCOPE || '')
   .map(value => value.trim().toLowerCase())
   .filter(isLanguageId);
 export const LANGUAGE_SCOPE: ReadonlyArray<LanguageId> = Object.freeze(
-  configuredLanguageScope.length
+  RUSSIAN_ONLY_BUILD ? ['ru'] : configuredLanguageScope.length
     ? Array.from(new Set(configuredLanguageScope)) as LanguageId[]
     : MANAGEMENT_BUILD ? [...ADMIN_DEFAULT_SCOPE] : Platform.OS === 'web' ? [...LANGUAGE_IDS] : [...NATIVE_DEFAULT_SCOPE],
 );
 export const isLanguageEnabled = (language: string | undefined): boolean =>
-  language === 'en' || (isLanguageId(language) && LANGUAGE_SCOPE.includes(language));
+  (!RUSSIAN_ONLY_BUILD && language === 'en') || (isLanguageId(language) && LANGUAGE_SCOPE.includes(language));
+
+// Older English screens predate the /learn/[language] route guard.
+export const outsideRussianScope = (href: string) => /^\/(?:lang|review|course|admin)(?:[/?]|$)|^\/conversations\/emma(?:[/?]|$)|^\/(?:learn|foundation)\/(?!ru(?:[/?]|$))/.test(href);
 
 export const FEATURES = Object.freeze({
   /**

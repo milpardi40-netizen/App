@@ -23,6 +23,11 @@ import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
 import RussianSentenceBuilder from '@/components/RussianSentenceBuilder';
+import { GrammarLink, Hear } from '@/components/RussianWorkshopUI';
+import RussianStarterReading, { ListenCue } from '@/components/RussianStarterReading';
+import RussianTurnExchange from '@/components/RussianTurnExchange';
+import { exchangeForLesson, exchangeView, type ExchangePath } from '@/lib/languages/russianExchange';
+import { starterStep } from '@/lib/languages/russianPreA1';
 import RussianDialoguePractice from '@/components/RussianDialoguePractice';
 import { modeForLevel } from '@/components/LanguageDialoguePractice';
 import { clearRussianLessonSession, loadRussianLessonSessionWithPresence, saveRussianLessonSession, resetRussianLessonSession } from '@/lib/languages/russianStudyState';
@@ -58,6 +63,9 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const pace = (name: NarrationPace) => narrationRate('ru-RU', name);
   // Warm the phone voice while the lesson paints, so the first sentence is not late.
   useEffect(() => { warmRussianSpeech(); void ensureRecordedAudio('ru'); }, []);
+  const starter = starterStep(lesson.id);
+  const [exchange, setExchange] = useState<ExchangePath | null>(null);
+  const exchangeDone = useMemo(() => !!exchange && !!exchangeView(exchangeForLesson(lesson), exchange)?.complete, [lesson, exchange]);
   const [stage, setStage] = useState(0);
   const [sentenceIndex, setSentenceIndex] = useState(0);
 
@@ -115,6 +123,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
   const allChecksPassed = checks.every((question, index) => answers[String(index)] === question.correctIndex);
+  const stageLabel = starter && stage === 4 ? 'خواندن با حرف‌های آشنا' : stages[stage].labelFa;
   const progressPercent = Math.round(((stage + 1) / stages.length) * 100);
   const vocabulary = useMemo(() => {
     const byWord = new Map<string, { word: LearningLessonVocabulary; sentence: RussianCourseLesson['sentences'][number] }>();
@@ -161,6 +170,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         levelReplayRequested.current = false;
         router.setParams({ levelReplay: undefined });
       }
+      setExchange('exchange' in saved ? saved.exchange ?? null : null);
       setStage(saved.stage);
       setSentenceIndex(Math.min(saved.sentenceIndex, lesson.sentences.length - 1));
       setRevealed(saved.revealed);
@@ -183,11 +193,11 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: RussianLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
+    const nextSession: RussianLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers, ...(exchange ? { exchange } : {}) };
     void saveRussianLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
-  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, exchange, saveRetry]);
 
   const speak = useCallback((text: string, rate = narrationRate('ru-RU', 'listen')) => {
     setSpeechError('');
@@ -272,7 +282,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   };
 
   const next = async () => {
-    if (!sessionReady || sessionError || completing.current || saving) return;
+    if (!sessionReady || sessionError || completing.current || saving || (stage === 10 && !exchangeDone)) return;
     setCompletionError('');
     if (stage === 1 && sentenceIndex < lesson.sentences.length - 1) {
       const nextIndex = sentenceIndex + 1;
@@ -340,7 +350,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         <View style={styles.headerTop}>
           <View style={styles.headerText}>
             <Text style={styles.headerTitle}>{lesson.title}</Text>
-            <Text style={styles.headerSub}>{stages[stage].labelFa} · مرحلهٔ {fa(stage + 1)} از {fa(stages.length)}</Text>
+            <Text style={styles.headerSub}>{stageLabel} · مرحلهٔ {fa(stage + 1)} از {fa(stages.length)}</Text>
           </View>
           <View style={styles.percentBadge}><Text style={styles.percent}>{fa(progressPercent)}٪</Text><Text style={styles.percentLabel}>پیشرفت</Text></View>
         </View>
@@ -348,7 +358,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
 
       <View style={styles.stepperCard}>
         <View style={styles.stepperHeading}>
-                    <View style={styles.stepperNow}><Text style={styles.stepperNowFa}>{stages[stage].labelFa}</Text></View>
+                    <View style={styles.stepperNow}><Text style={styles.stepperNowFa}>{stageLabel}</Text></View>
         </View>
         <View style={styles.stepSegments}>{stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}</View>
       </View>
@@ -361,10 +371,12 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <Text style={styles.stageTitle}>{lesson.title}</Text>
           <Text style={styles.situation}>{lesson.situation}</Text>
           {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.dialogue} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
+          {starter && <Text style={styles.stageDesc}>{starter.letters ? `حرف‌های تازه: ${[...starter.letters].join(' · ')}. ` : ''}برای گفت‌وگو فقط بشنو و جواب بده؛ خواندنِ مستقل را با دو نوشتهٔ آخر تمرین می‌کنی.</Text>}
           {lesson.teachingFa ? <View style={styles.noteCard}><Text style={styles.noteTitle}>نکتهٔ روسی به فارسی</Text><Text style={styles.noteText}>{lesson.teachingFa}</Text></View> : null}
         </View>}
 
         {stage === 1 && <View style={styles.sentenceStage} onLayout={event => { stageOffsetRef.current = event.nativeEvent.layout.y; }}>
+          {starter && <Text style={styles.stageDesc}>{sentenceIndex < 6 ? 'بشنو و بگو · لازم نیست این عبارت را از روی خط بخوانی.' : 'حالا خودت بخوان · فقط با حرف‌هایی که بلدی.'}</Text>}
           <Text style={styles.counter}>جملهٔ {fa(sentenceIndex + 1)} از {fa(lesson.sentences.length)}</Text>
           <View style={styles.sentenceCard}>
             <Pressable accessibilityRole="button" accessibilityLabel="شنیدن جملهٔ روسی" style={styles.soundButton} onPress={() => speak(current.text)}><Volume2 size={25} color="#FFFFFF" /></Pressable>
@@ -436,7 +448,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${fa(index + 1)}`} onPress={() => selectSentence(index, .68)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
         </View>}
 
-        {stage === 4 && <View style={styles.centerStage}>
+        {stage === 4 && starter && <RussianStarterReading key={lesson.id} words={starter.read} letters={starter.letters} speak={speak} />}
+        {stage === 4 && !starter && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
           <Text style={styles.stageTitle}>ساخت جمله</Text>
           {showHint && <Text style={styles.stageDesc}>معنی را بخوانید و واژه‌ها را به ترتیب بچینید.</Text>}
@@ -468,6 +481,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
 
         {stage === 6 && <View style={styles.grammarStage}>
           <GrammarStageHeader title="دستور در کاربرد" description={showHint ? 'الگوی هر جمله را ببینید و مثالش را بشنوید.' : undefined} />
+          <GrammarLink fromLesson onPress={() => { void stopRussianSpeech(); router.push({ pathname: '/learn/ru/grammar', params: { lessonId: lesson.id } } as never); }} />
           {grammarPatterns.length ? grammarPatterns.map(({ sentence, pattern }, index) => (
             <GrammarPatternCard key={sentence.id} index={index + 1} pattern={pattern} example={sentence.text} translation={sentence.fa} onSpeak={() => speak(sentence.text)} />
           )) : null}
@@ -486,7 +500,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
         </View>}
 
-        {stage >= 8 && <View style={styles.centerStage}>
+        {(stage === 8 || stage === 9) && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="ru-RU" accent={Palette.success} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('ru', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
             { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
@@ -494,13 +508,14 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             {checks.map((question, index) => <View key={index} style={styles.question}>
               <View style={styles.questionHeader}><View style={styles.questionBadge}><Text style={styles.questionBadgeText}>سؤال {fa(index + 1)}</Text></View><View style={styles.questionRule} /></View>
               <Text style={styles.questionPrompt}>{question.promptFa}</Text>
+              {starter && index === 0 && <ListenCue line={starter.oral[2]} speak={speak} />}
               {question.choices.map((choice, choiceIndex) => {
                 const selected = answers[String(index)] === choiceIndex;
                 const shownCorrect = showCheckAnswers && choiceIndex === question.correctIndex;
                 const locked = answers[String(index)] === question.correctIndex || showCheckAnswers;
-                return <Pressable key={`${index}-${choiceIndex}`} accessibilityRole="radio" accessibilityState={{ checked: selected || shownCorrect, disabled: locked }} disabled={locked} onPress={() => setAnswers(value => ({ ...value, [String(index)]: choiceIndex }))} style={[styles.choice, (selected || shownCorrect) && styles.choiceSelected, shownCorrect && styles.choiceCorrect]}>
+                return <View key={`${index}-${choiceIndex}`}>{starter && index === 1 && <View style={{flexDirection:"row-reverse", alignItems:"center", gap:8}}><Hear text={choice} speak={speak} /><Text style={styles.pronunciation}>{starter.oral.find(l => l.text === choice)?.pronunciation}</Text></View>}<Pressable accessibilityRole="radio" accessibilityState={{ checked: selected || shownCorrect, disabled: locked }} disabled={locked} onPress={() => setAnswers(value => ({ ...value, [String(index)]: choiceIndex }))} style={[styles.choice, (selected || shownCorrect) && styles.choiceSelected, shownCorrect && styles.choiceCorrect]}>
                   <View style={[styles.choiceIndicator, (selected || shownCorrect) && styles.choiceIndicatorActive]}><Text style={styles.choiceIndicatorText}>{selected || shownCorrect ? '✓' : ''}</Text></View><Text style={[ /[А-Яа-яЁё]/.test(choice) ? styles.choiceRussian : styles.choicePersian, styles.choiceLabel ]}>{choice}</Text>
-                </Pressable>;
+                </Pressable></View>;
               })}
               {(answers[String(index)] !== undefined || showCheckAnswers) && <View style={styles.feedbackBox}>
                 <Text style={showCheckAnswers || answers[String(index)] === question.correctIndex ? styles.feedbackTitle : styles.feedbackError}>{showCheckAnswers && answers[String(index)] !== question.correctIndex ? `پاسخ نمونه: ${question.choices[question.correctIndex]}` : answers[String(index)] === question.correctIndex ? 'درست است.' : 'دوباره تلاش کنید.'}</Text>
@@ -514,6 +529,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           ]; return <>{stage === 8 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 9 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
 
+        {stage === 10 && <RussianTurnExchange lesson={lesson} path={exchange} change={setExchange} speak={speak}/>}
+
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
       </View>
@@ -525,7 +542,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && styles.nextButtonDisabled]}>
             <Text style={styles.previousButtonText}>جمله قبلی</Text>
           </Pressable>}
-          <Pressable accessibilityRole="button" disabled={saving || !!sessionError} style={[styles.nextButton, saving && styles.nextButtonDisabled]} onPress={() => void next()}>
+          <Pressable accessibilityRole="button" disabled={saving || !!sessionError || (stage === 10 && !exchangeDone)} style={[styles.nextButton, (saving || (stage === 10 && !exchangeDone)) && styles.nextButtonDisabled]} onPress={() => void next()}>
             <Text style={styles.nextText}>{saving ? 'در حال ذخیره…' : stage === stages.length - 1 ? 'پایان درس' : stage === 1 && sentenceIndex < lesson.sentences.length - 1 ? 'جملهٔ بعدی' : 'ادامه'}</Text>
             {stage === stages.length - 1 ? <Check size={20} color="#FFFFFF" /> : <ChevronLeft size={20} color="#FFFFFF" />}
           </Pressable>

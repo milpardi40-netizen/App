@@ -45,6 +45,13 @@ assert.deepEqual(values(load('android')), six);
 assert.deepEqual(values(load('web', {}, true)), ['en', 'tr']);
 assert.deepEqual(values(load('web', { EXPO_PUBLIC_LANGUAGE_SCOPE: ' en,fr, en ' })), ['en', 'fr']);
 assert.equal(load('web', { EXPO_PUBLIC_LANGUAGE_SCOPE: 'en,fr' }).isLanguageEnabled('tr'), false);
+for (const platform of ['web', 'android', 'ios']) {
+  const ru = load(platform, { EXPO_PUBLIC_RUSSIAN_ONLY: 'true', EXPO_PUBLIC_LANGUAGE_SCOPE: 'en,fr' });
+  assert.deepEqual(values(ru), ['ru']);
+  assert.deepEqual(six.filter(l => ru.isLanguageEnabled(l)), ['ru']);
+  for (const path of ['/lang', '/lang/lesson', '/course/lesson', '/review', '/learn/en', '/learn/fr', '/foundation/tr', '/admin']) assert.ok(ru.outsideRussianScope(path));
+  for (const path of ['/languages', '/profile', '/learn/ru/grammar', '/foundation/ru', '/feedback']) assert.ok(!ru.outsideRussianScope(path));
+}
 const learnerScript = require('../package.json').scripts['build:web:learner'];
 assert(learnerScript.includes('EXPO_PUBLIC_LANGUAGE_SCOPE=en,ru,tr,de,fr,es'));
 assert(read('app/languages.tsx').includes('LANGUAGE_SCOPE.includes(language.id)'));

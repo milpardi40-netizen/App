@@ -37,6 +37,7 @@ import { getPairingState, isOnboardingComplete } from '@/lib/storage';
 import { isSupabaseConfigured } from '@/lib/pairing';
 import { DesignTokens, RtlDirection } from '@/lib/theme';
 import { useRealAgent } from '@/lib/useRealAgent';
+import { RUSSIAN_ONLY_BUILD } from '@/lib/features';
 import { warmSpeech } from '@/lib/responsiveSpeech';
 import { DesignVariantStyles } from '@/components/DesignVariantStyles';
 
@@ -185,7 +186,7 @@ export default function RootLayout() {
     const finish = setTimeout(() => {
       player?.remove();
       setIntroComplete(true);
-      warmSpeech('en-US');
+      if (!RUSSIAN_ONLY_BUILD) warmSpeech('en-US');
     }, 3400);
     return () => clearTimeout(finish);
   }, [fontsLoaded, fontError]);

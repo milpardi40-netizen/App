@@ -1,3 +1,4 @@
+import { russianStarterRound } from '@/lib/languages/russianStarterRounds';
 import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
 import { progressLabel } from '@/lib/levelProgress';
 import { addPracticeActivity } from '@/lib/practiceActivity';
@@ -73,14 +74,15 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [level, mode]);
 
-  const packPool = usePackPool(courseId, running?.mode === 'practice' ? running.levelId : null);
+  const russianStarter = courseId === 'ru' && running?.levelId === 0;
+  const packPool = usePackPool(courseId, !russianStarter && running?.mode === 'practice' ? running.levelId : null);
   const pool = useMemo(() => {
     if (!running) return null;
     const base = levelPool(courseId, allLessons, running.levelId);
     // Daily supplement draws from shipped sentences plus the level's content pack; exams stay on shipped content.
-    return packPool.length ? { ...base, sentences: [...base.sentences, ...asLessonSentences(packPool)] } : base;
-  }, [running, courseId, allLessons, packPool]);
-  const items = useMemo(() => running && pool ? (running.mode === 'exam' ? buildLevelExam(pool, running.attempt) : running.mode === 'warmup' ? buildLevelWarmUp(allLessons, running.levelId) : buildLevelSupplement(pool, running.levelId)) : [], [running, pool, allLessons]);
+    return !russianStarter && packPool.length ? { ...base, sentences: [...base.sentences, ...asLessonSentences(packPool)] } : base;
+  }, [running, courseId, allLessons, packPool, russianStarter]);
+  const items = useMemo(() => running && pool && russianStarter ? russianStarterRound(allLessons, running.mode, running.mode === 'exam' ? running.attempt : localDay()) : running && pool ? (running.mode === 'exam' ? buildLevelExam(pool, running.attempt) : running.mode === 'warmup' ? buildLevelWarmUp(allLessons, running.levelId) : buildLevelSupplement(pool, running.levelId)) : [], [running, pool, allLessons, russianStarter]);
   const speak = useCallback((text: string) => speakText(text), [speakText]);
 
   const finish = useCallback(async (stats: PracticeStats) => {
@@ -111,7 +113,7 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
         </LinearGradient>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           {running.mode === 'exam' ? <View style={styles.rulesCard}><Text style={styles.rulesTitle}>قانون آزمون</Text><Text style={styles.rulesText}>{fa(ASSESSMENT_QUESTIONS)} سؤال از همهٔ درس‌های این سطح، در قالب‌های مختلف. هر سؤال یک بار پرسیده می‌شود و فرصت دوباره ندارد. حد قبولی {fa(ASSESSMENT_PASS_PERCENT)}٪ است؛ هر بار آزمون، سؤال‌های تازه دارد.</Text></View> : null}
-          <LessonPracticeBlock title={running.mode === 'exam' ? `آزمون سطح` : running.mode === 'warmup' ? 'گرم‌کردن سطح' : 'تمرین تکمیلی'} intro={running.mode === 'exam' ? `${fa(items.length)} سؤال؛ بدون فرصت دوباره.` : running.mode === 'warmup' ? `${fa(items.length)} ضربه، از هر درسِ این سطح یکی، به ترتیب درس‌ها؛ اگر جایی اشتباه شد، همان‌جا به شکل دیگری برمی‌گردد.` : `${fa(SUPPLEMENT_QUESTIONS)} ضربه از جمله‌های این سطح؛ هر روز تازه می‌شود.`} items={items} source={pool} exam={running.mode === 'exam'} onSkip={() => setRunning(null)} onSpeak={speak} onComplete={finish} foreignStyle={[styles.foreign, config.foreignFontFamily ? { fontFamily: config.foreignFontFamily } : null]} accent={running.mode === 'exam' ? Palette.primary : running.mode === 'warmup' ? '#D97706' : Palette.success} />
+          <LessonPracticeBlock title={running.mode === 'exam' ? `آزمون سطح` : running.mode === 'warmup' ? 'گرم‌کردن سطح' : 'تمرین تکمیلی'} intro={running.mode === 'exam' ? `${fa(items.length)} سؤال؛ بدون فرصت دوباره.` : running.mode === 'warmup' ? `${fa(items.length)} ضربه، از هر درسِ این سطح یکی، به ترتیب درس‌ها؛ اگر جایی اشتباه شد، همان‌جا به شکل دیگری برمی‌گردد.` : `${fa(SUPPLEMENT_QUESTIONS)} ضربه از جمله‌های این سطح؛ هر روز تازه می‌شود.`} items={items} source={pool} retryKinds={russianStarter ? ['listen'] : undefined} exam={running.mode === 'exam'} onSkip={() => setRunning(null)} onSpeak={speak} onComplete={finish} foreignStyle={[styles.foreign, config.foreignFontFamily ? { fontFamily: config.foreignFontFamily } : null]} accent={running.mode === 'exam' ? Palette.primary : running.mode === 'warmup' ? '#D97706' : Palette.success} />
         </ScrollView>
         <BottomNav />
       </View>

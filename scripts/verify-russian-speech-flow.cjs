@@ -8,11 +8,14 @@ const esbuild = require('esbuild');
   await esbuild.build({
     entryPoints: ['lib/russianSpeech.ts'], outfile: output, bundle: true, platform: 'node',
     plugins: [{ name: 'speech-mock', setup(build) {
+      // Isolate the optional recording/cache layer; exercise the real RU TTS queue and cancellation.
+      build.onResolve({ filter: /content\/(packAudio|speechFallback)$/ }, () => ({ path: 'recording', namespace: 'offline' }));
+      build.onLoad({ filter: /.*/, namespace: 'offline' }, () => ({ contents: 'export function stopRecorded() {} export async function playPreferredRecording(){return false} export async function playFallbackRecording(){return false} export function noteSpeechSuccess(){}' }));
       build.onResolve({ filter: /^expo-speech$/ }, () => ({ path: 'speech', namespace: 'stub' }));
       build.onResolve({ filter: /^react-native$/ }, () => ({ path: 'native', namespace: 'stub' }));
       build.onLoad({ filter: /.*/, namespace: 'stub' }, args => ({ contents: args.path === 'native'
         ? 'export const Platform={get OS(){return globalThis.__platform}};'
-        : 'export function stop(){return globalThis.__stop()} export function speak(text,options){globalThis.__utterances.push({text,options})}', loader: 'js' }));
+        : 'export async function isSpeakingAsync(){return false} export async function getAvailableVoicesAsync(){return []} export function stop(){return globalThis.__stop()} export function speak(text,options){globalThis.__utterances.push({text,options})}', loader: 'js' }));
     } }],
   });
   const { playRussianSpeech: play, stopRussianSpeech: stop } = require(output);
@@ -42,7 +45,7 @@ const esbuild = require('esbuild');
   assert.equal(global.__utterances[1].options.language, 'ru-RU');
   assert.equal(global.__utterances[1].options.rate, .5);
   const screen = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
-  assert(screen.includes('sessionReady || stage !== 1 || !current') && screen.includes('speak(current.text, NORMAL_SPEECH_RATE)'));
+  assert(screen.includes('sessionReady || stage !== 1 || !current') && screen.includes('speak(current.text, pace(\'normal\'))'));
   assert(screen.includes('lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak'));
   console.log('Russian speech: automatic main-sentence hook, serialized stop, latest-request cancellation and Android/iOS language checks passed.');
 })().catch(error => { console.error(error); process.exit(1); });

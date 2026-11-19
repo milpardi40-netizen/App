@@ -2,6 +2,8 @@ import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
+import { STARTER_CHECKS_REVISION } from './russianPreA1';
+import { exchangeForLesson, validExchangePath, type ExchangePath } from './russianExchange';
 import { RUSSIAN_LESSONS, RUSSIAN_LESSON_STAGES } from './russian';
 
 export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
@@ -9,6 +11,8 @@ export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
 export interface RussianLessonSession {
   stage: number;
   updatedAt?: string;
+  checksRevision?: string;
+  exchange?: ExchangePath;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
   stageVersion?: number;
   sentenceIndex: number;
@@ -53,13 +57,15 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
   const lesson = RUSSIAN_LESSONS.find(item => item.id === lessonId);
   if (!lesson || !value || typeof value !== 'object' || Array.isArray(value)) throw new Error('جلسهٔ روسی برای این درس معتبر نیست.');
   const session = value as Partial<RussianLessonSession>;
-  const stage = resumeStage(Number(session.stage), session.stageVersion, RUSSIAN_LESSON_STAGES.length);
+  const stage = resumeStage(Number(session.stage), session.stageVersion, session.stageVersion === LESSON_STAGE_VERSION ? RUSSIAN_LESSON_STAGES.length : 10);
   if (stage === null
     || !Number.isInteger(session.sentenceIndex) || session.sentenceIndex! < 0 || session.sentenceIndex! >= lesson.sentences.length
     || typeof session.revealed !== 'boolean' || typeof session.showCheckAnswers !== 'boolean'
     || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
+  // Validate the stored shape even for retired questions, but never grade a previous meaning.
+  const retiredChecks = lesson.levelId === 0 && session.checksRevision !== STARTER_CHECKS_REVISION;
   const answers: Record<string, number> = {};
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
@@ -67,7 +73,7 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
-    answers[key] = answer!;
+    if (!retiredChecks) answers[key] = answer!;
   }
   return {
     stage,
@@ -76,7 +82,9 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     sentenceIndex: session.sentenceIndex!,
     revealed: session.revealed,
     answers,
-    showCheckAnswers: session.showCheckAnswers,
+    showCheckAnswers: !retiredChecks && session.showCheckAnswers,
+    // A stale conversation path restarts only the exchange, never the whole lesson.
+    ...(stage === 10 && session.exchange && validExchangePath(exchangeForLesson(lesson), session.exchange) ? { exchange: session.exchange } : {}),
   };
 }
 
@@ -115,9 +123,10 @@ function serial<T>(job: () => Promise<T>): Promise<T> {
 
 export function saveRussianLessonSession(lessonId: string, value: RussianLessonSession): Promise<void> {
   return serial(async () => {
-    const safe = validateSession(lessonId, value);
+    // New writes come from the current UI. Migration applies on read of old persisted attempts.
+    const safe = validateSession(lessonId, { ...value, checksRevision: STARTER_CHECKS_REVISION });
     const state = parseState(await readRaw());
-    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, updatedAt: positionTimestamp() } } }));
+    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, ...(lessonId.startsWith('ru-pre-') ? { checksRevision: STARTER_CHECKS_REVISION } : {}), updatedAt: positionTimestamp() } } }));
     notifyLearningChange();
   });
 }

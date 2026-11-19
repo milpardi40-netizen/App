@@ -1,3 +1,4 @@
+import { GrammarLink } from '@/components/RussianWorkshopUI';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel, formatPercent } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -161,6 +162,7 @@ export default function RussianHome() {
             </View>
           </LinearGradient>
 
+          <GrammarLink onPress={() => open('/learn/ru/grammar')} />
           <View style={styles.pathPanel}>
             <View style={styles.panelHeadingRow}>
               <View style={styles.panelHeadingText}>

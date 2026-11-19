@@ -330,7 +330,7 @@ for (const os of ['android', 'web']) {
     snap = await app.loadCourseSnapshot(id);
     const t = snap.levels[a.levelId];
     must.equal(t.completed, 0); must.equal(t.partial, 1);
-    must.ok(Math.abs(t.percent - 100 * (1 + 1/a.sentences.length) / (10 * t.total)) < 1e-9);
+    must.ok(Math.abs(t.percent - 100 * (1 + 1/a.sentences.length) / ((id === 'ru' ? 11 : 10) * t.total)) < 1e-9);
     must.notEqual(app.formatPercent(t.percent), '۰٪');
     await save(c1.id, { ...intro, stage: 9 });
     const restored = await launch(outfile).loadCourseSnapshot(id);
