@@ -112,7 +112,6 @@ jobs:
           echo "MILO_VERSION_CODE=$((116 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
           echo 'EXPO_PUBLIC_LANGUAGE_SCOPE=ru' >> "$GITHUB_ENV"
           echo 'MILO_ANDROID_ABIS=armeabi-v7a,arm64-v8a,x86,x86_64' >> "$GITHUB_ENV"
-          echo 'NODE_OPTIONS=--max-old-space-size=8192' >> "$GITHUB_ENV"
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -220,7 +219,7 @@ jobs:
           script: bash .github/scripts/android-emulator-smoke-test.sh
 
       - name: Upload Android emulator diagnostics
-        if: ${{ always() }}
+        if: ${{ always() && env.EXPO_PUBLIC_RUSSIAN_ONLY != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: android-emulator-smoke-${{ github.run_id }}
