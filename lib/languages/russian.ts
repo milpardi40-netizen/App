@@ -38,9 +38,9 @@ export const RUSSIAN_LESSON_STAGES = [
   { id: 'sentence-building', labelFa: 'ساخت جمله', labelEn: 'Sentence Building' },
   { id: 'vocabulary', labelFa: 'واژگان از جمله', labelEn: 'Vocabulary From Sentences' },
   { id: 'grammar-through-usage', labelFa: 'دستور در کاربرد', labelEn: 'Grammar Through Usage' },
-  { id: 'conversation', labelFa: 'مکالمه', labelEn: 'Conversation Practice' },
   { id: 'short-assessment', labelFa: 'سنجش کوتاه', labelEn: 'Short Assessment' },
   { id: 'speaking-check', labelFa: 'آزمون گفتاری', labelEn: 'Speaking Check' },
+  { id: 'conversation', labelFa: 'مکالمه', labelEn: 'Conversation Practice' },
   { id: 'turn-exchange', labelFa: 'اتاق مکالمه', labelEn: 'Guided Speaking Room' },
 ] as const;
 

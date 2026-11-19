@@ -667,7 +667,7 @@ export default function SentenceLessonScreen() {
           </View>
         )}
 
-        {stage === 7 && (
+        {stage === 10 && (
           <View style={styles.centerStage}>
             <View style={styles.bigIcon}><MessageCircle size={34} color={Colors.accent[400]} /></View>
             <Text style={styles.stageTitle}>Conversation Practice · مکالمهٔ هدایت‌شده</Text>
@@ -680,7 +680,7 @@ export default function SentenceLessonScreen() {
           </View>
         )}
 
-        {stage >= 8 && (
+        {(stage === 8 || stage === 9) && (
           <View style={styles.centerStage}>
                         {(() => { const finalSections: FinalSection[] = [
               { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },

@@ -16,7 +16,11 @@ export function EnglishDialoguePractice({ dialogue, sentences, defaultMode = 'gu
   sentences?: ReadonlyArray<{ en: string; fa: string }>;
   defaultMode?: DialogueMode;
 }) {
-  const lines = useMemo(() => dialogue.map(line => ({ speaker: line.speaker === 'learner' ? LEARNER : PARTNER, text: line.text, fa: line.fa })), [dialogue]);
+  // The final conversation is a controlled recycle of this lesson only: no cross-lesson
+  // filler is introduced, and every displayed line is one of the lesson's source sentences.
+  const lines = useMemo(() => (sentences?.length ? sentences : dialogue.map(line => ({ en: line.text, fa: line.fa }))).map((line, index) => ({
+    speaker: index % 2 === 0 ? PARTNER : LEARNER, text: line.en, fa: line.fa,
+  })), [dialogue, sentences]);
   const pool = useMemo(() => sentences?.map(sentence => ({ text: sentence.en, fa: sentence.fa })), [sentences]);
   useEffect(() => () => { void stopResponsiveSpeech(); }, []);
   const speak = (text: string) => playResponsiveSpeech({ text, locale: 'en-US', rate: 0.76 });
