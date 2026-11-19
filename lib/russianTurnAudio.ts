@@ -1,3 +1,4 @@
+import { AppState } from 'react-native';
 import { ExpoSpeechRecognitionModule as mic } from 'expo-speech-recognition';
 import { playRussianSpeech, stopRussianSpeech } from './russianSpeech';
 import { narrationRate } from './narration';
@@ -6,6 +7,33 @@ import { requireActive, type TurnAudio } from './languages/russianVoiceExchange'
 // One recognizer per device. A cancelled turn also drains its native `end` before
 // another turn may attach listeners: no delayed result can answer the next question.
 let micReleased: Promise<void> = Promise.resolve();
+// Android can pause the Activity specifically to show its own RECORD_AUDIO dialog. No
+// recorder exists then. Preserve that tap through the dialog, never through navigation.
+let permissionUI: AbortSignal | null = null;
+export const showingRussianPermissionDialog = (signal?: AbortSignal) =>
+  !!signal && !signal.aborted && permissionUI === signal;
+const foreground = () => AppState.currentState !== 'background' && AppState.currentState !== 'inactive';
+const pausedError = () => new Error('مکالمه مکث شد. برای باز کردن میکروفون از همین نوبت ادامه بده.');
+async function returnFromDialog(signal: AbortSignal) {
+  requireActive(signal);
+  if (foreground()) return;
+  // Some devices deliver the permission result just before the host resumes. Do not wait
+  // for an eventual unrelated foreground hours later or open a microphone in the background.
+  await new Promise<void>((resolve, reject) => {
+    const finish = (error?: Error) => {
+      clearTimeout(timer);
+      sub.remove();
+      signal.removeEventListener('abort', cancel);
+      error ? reject(error) : resolve();
+    };
+    const cancel = () => finish(new Error('cancelled'));
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') finish();
+    });
+    const timer = setTimeout(() => finish(pausedError()), 1300);
+    signal.addEventListener('abort', cancel);
+  });
+}
 function message(code: string) {
   switch (code) {
     case 'not-allowed':
@@ -68,12 +96,19 @@ export const russianTurnAudio: TurnAudio = {
     let permissions = await mic.getPermissionsAsync();
     requireActive(signal);
     if (!permissions.granted && permissions.canAskAgain) {
-      permissions = await mic.requestPermissionsAsync();
-      requireActive(signal);
+      permissionUI = signal;
+      try {
+        permissions = await mic.requestPermissionsAsync();
+        requireActive(signal);
+        if (permissions.granted) await returnFromDialog(signal);
+      } finally {
+        if (permissionUI === signal) permissionUI = null;
+      }
     }
     if (!permissions.granted) throw new Error(message('not-allowed'));
     await stopRussianSpeech();
     requireActive(signal);
+    if (!foreground()) throw pausedError();
     let release!: () => void;
     micReleased = new Promise<void>((resolve) => {
       release = resolve;

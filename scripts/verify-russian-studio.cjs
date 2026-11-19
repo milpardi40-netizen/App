@@ -51,7 +51,20 @@ const flush = () => new Promise((r) => setImmediate(r));
     spoken.push(text);
   };
   global.storage = { getItem: async (k) => disk.get(k) ?? null, setItem: async (k, v) => disk.set(k, v) };
+  const observers = new Set();
+  global.appState = {
+    currentState: 'active',
+    addEventListener: (_, cb) => {
+      observers.add(cb);
+      return { remove: () => observers.delete(cb) };
+    },
+  };
+  const activity = (s) => {
+    global.appState.currentState = s;
+    for (const cb of [...observers]) cb(s);
+  };
   const stubs = {
+    'react-native': 'export const AppState=globalThis.appState',
     'expo-speech-recognition': 'export const ExpoSpeechRecognitionModule=globalThis.mic',
     './russianSpeech': 'export const playRussianSpeech=globalThis.tts, stopRussianSpeech=globalThis.stopTTS',
     '@react-native-async-storage/async-storage': 'export default globalThis.storage',
@@ -218,6 +231,27 @@ const flush = () => new Promise((r) => setImmediate(r));
   c.abort();
   answerPerm({ granted: true });
   await assert.rejects(job, /cancelled/);
+  assert(!recording);
+  // The first-ever permission dialog can background the Activity. Granting it is part
+  // of the original tap; only resume a recognizer after the actual foreground event.
+  job = begin();
+  await flush();
+  assert(x.showingRussianPermissionDialog(c.signal));
+  activity('background');
+  answerPerm({ granted: true });
+  await flush();
+  assert(!recording);
+  activity('active');
+  await flush();
+  assert(recording && !x.showingRussianPermissionDialog(c.signal));
+  c.abort();
+  await assert.rejects(job, /cancelled/);
+  job = begin();
+  await flush();
+  activity('background');
+  answerPerm({ granted: true });
+  await assert.rejects(job, /مکث/);
+  activity('active');
   assert(!recording);
   grant = true;
   job = begin({ starter: 'partner', picks: [] });

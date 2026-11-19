@@ -23,7 +23,7 @@ import {
   type ExchangePath,
 } from '@/lib/languages/russianExchange';
 import { runVoiceExchange, type VoiceState } from '@/lib/languages/russianVoiceExchange';
-import { russianTurnAudio as audio } from '@/lib/russianTurnAudio';
+import { russianTurnAudio as audio, showingRussianPermissionDialog } from '@/lib/russianTurnAudio';
 import { stopRussianSpeech } from '@/lib/russianSpeech';
 import { toPersianDigits as fa } from '@/lib/format';
 
@@ -78,7 +78,7 @@ export default function RussianTurnExchange({
   useFocusEffect(
     useCallback(() => {
       const app = AppState.addEventListener('change', (state) => {
-        if (state === 'background') pause();
+        if (state === 'background' && !showingRussianPermissionDialog(owner.current?.signal)) pause();
       });
       return () => {
         app.remove();
