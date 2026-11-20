@@ -106,6 +106,10 @@ on:
         description: 'Languages for the learner build WITHOUT login'
         required: false
         default: 'en,ru'
+      language_scope_five_nologin:
+        description: 'Languages for the five-language learner build WITHOUT login'
+        required: false
+        default: 'en,fr,tr,es,de'
       abis:
         description: 'CPU architectures (blank = 64-bit and 32-bit ARM phones)'
         required: false
@@ -421,9 +425,9 @@ jobs:
       EXPO_PUBLIC_ENABLE_EDUCATION_ADMIN: 'false'
       EXPO_PUBLIC_LEARNER_LOGIN: 'false'
       EXPO_PUBLIC_LEARNER_FIVE_NOLOGIN: 'true'
-      EXPO_PUBLIC_LANGUAGE_SCOPE: 'en,de,fr,tr,es'
+      EXPO_PUBLIC_LANGUAGE_SCOPE: ${{ inputs.language_scope_five_nologin || 'en,fr,tr,es,de' }}
       EXPECTED_PACKAGE: 'com.devicecontrol.milofive'
-      EXPECTED_SCOPE: 'en,de,fr,tr,es'
+      EXPECTED_SCOPE: ${{ inputs.language_scope_five_nologin || 'en,fr,tr,es,de' }}
       APK_NAME: '5update.apk'
     steps:
       - *checkout
@@ -593,7 +597,7 @@ jobs:
             - `login.5update.apk` — MiloMultiLanguage WITH login, package `com.devicecontrol.milomultilang`, languages ${{ inputs.language_scope_login || 'en,de,fr,tr,es' }}
             - `2update.apk` — MiloMultiLanguage WITHOUT login, package `com.devicecontrol.companion`, languages en, ru
             - `login.2update.apk` — two-language MiloLang WITH login, package `com.devicecontrol.milolang2`, languages en, ru
-            - `5update.apk` — five-language MiloMultiLanguage WITHOUT login, package `com.devicecontrol.milofive`, languages en, de, fr, tr, es
+            - `5update.apk` — five-language MiloMultiLanguage WITHOUT login, package `com.devicecontrol.milofive`, languages ${{ inputs.language_scope_five_nologin || 'en,fr,tr,es,de' }}
             - `english.apk` — English-only MiloLang WITHOUT login, package `com.devicecontrol.miloenglish`, language en
           files: |
             out/AdminApp.apk/AdminApp.apk
