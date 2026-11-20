@@ -122,6 +122,8 @@ const esbuild = require('esbuild');
   // app/course/lesson.tsx is only a Suspense shell; the lesson logic lives in
   // components/EnglishLessonRoute.tsx. Assert the real order, not just presence.
   const screen = fs.readFileSync('components/EnglishLessonRoute.tsx', 'utf8');
+  const room = fs.readFileSync('components/LessonConversationRoom.tsx', 'utf8');
+  const speakCheck = fs.readFileSync('components/SpeakCheck.tsx', 'utf8');
   const atComplete = screen.indexOf('await completeSentenceLesson(');
   const atSave = screen.indexOf('await saveLessonSession(lesson.id,');
   const atNavigate = screen.indexOf("params: { id: nextLesson.id }");
@@ -131,6 +133,11 @@ const esbuild = require('esbuild');
     'navigation occurs after durable progress and session saves',
   );
   check(!screen.includes('saveLessonSession(lesson.id,freshSession())'), 'completion does not erase the saved session');
+  check(screen.includes('stage === 9 && <LessonConversationRoom')
+    && screen.includes('lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))}')
+    && room.includes('requestPermissionsAsync') && room.includes('autoStart') && room.includes('onResult={nextTurn}')
+    && room.includes('onSpeak(current.text, finish)') && speakCheck.includes('const retry = autoStart && !stoppingByUser.current;'), 'the final English stage automatically alternates device speech and learner microphone turns, retrying silence');
+  check(!screen.includes('speakingTestComplete') && screen.includes('disabled={saving || !!sessionError}'), 'the English speaking test is optional and Continue remains available');
   const home = fs.readFileSync('app/lang/index.tsx', 'utf8');
   const library = fs.readFileSync('app/lang/library.tsx', 'utf8');
   check(home.includes('شروع از ابتدا') && home.includes("params: { id: currentLesson.id, fromStart: '1' }") && home.includes('SENTENCE_LESSONS[0].id'), 'home restart opens the selected lesson, while beginner restart opens the first lesson');

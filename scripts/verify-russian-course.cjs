@@ -267,10 +267,16 @@ const esbuild = require('esbuild');
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
   const datesCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-l2-months-dates').checks[0];
   check('A1 date correction checks the final date, not the misprinted ticket', datesCheck.choices[datesCheck.correctIndex] === 'پنجم مه');
-  check('Russian follows the shared nine-stage lesson flow', app.RUSSIAN_LESSON_STAGES.length === 9
+  check('Russian follows the shared ten-stage lesson flow with conversation after speaking', app.RUSSIAN_LESSON_STAGES.length === 10
     && app.RUSSIAN_LESSON_STAGES.every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa
       && stage.labelEn === app.ENGLISH_ENGINE_STEPS[index].labelEn));
+  const russianLessonScreen = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
+  check('Russian conversation stage uses every original lesson sentence and the Russian voice', russianLessonScreen.includes('stage === 9 && <LessonConversationRoom')
+    && russianLessonScreen.includes('lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}')
+    && russianLessonScreen.includes('locale="ru-RU"'));
+  check('Russian speaking test is optional and Continue remains available', !russianLessonScreen.includes('speakingTestComplete')
+    && russianLessonScreen.includes('disabled={saving || !!sessionError}'));
   check('English lesson scope includes the original material, Pre-A1, practice labs and the A2, B1 and B2 lessons', app.SENTENCE_LESSONS.length === 274
     && app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4852
     && app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0).length === 14

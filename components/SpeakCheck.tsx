@@ -48,6 +48,8 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   /** Last transcript of any kind; some Android recognisers end without ever flagging a result as final. */
   const lastHeardRef = useRef('');
   const settledRef = useRef(false);
+  const stoppingByUser = useRef(false);
+  const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const targetRef = useRef(text);
   targetRef.current = text;
   const onResultRef = useRef(onResult);
@@ -61,7 +63,12 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     lastHeardRef.current = '';
     settledRef.current = false;
   }, [text]);
-  useEffect(() => () => { generation.current++; if (micOwner === owner.current) { micOwner = null; void ExpoSpeechRecognitionModule.abort?.(); } }, [text]);
+  useEffect(() => () => {
+    generation.current++;
+    if (retryTimer.current) clearTimeout(retryTimer.current);
+    retryTimer.current = null;
+    if (micOwner === owner.current) { micOwner = null; void ExpoSpeechRecognitionModule.abort?.(); }
+  }, [text]);
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
   const startRef = useRef<null | (() => Promise<void>)>(null);
@@ -75,11 +82,22 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const finish = useCallback((heard: string) => {
     const scored = scoreSpeech(targetRef.current, heard);
     setResult(scored);
-    if (!heard.trim()) return;
+    if (!heard.trim()) {
+      // Keep the automatic conversation on this learner turn until speech is actually heard.
+      const retry = autoStart && !stoppingByUser.current;
+      stoppingByUser.current = false;
+      if (retry && !retryTimer.current) {
+        retryTimer.current = setTimeout(() => {
+          retryTimer.current = null;
+          void startRef.current?.();
+        }, 650);
+      }
+      return;
+    }
     const id = locale.split('-')[0];
     if (isLanguageId(id)) void addPracticeActivity(id, localDay(), { spoken: 1, scoreSum: scored.score }).catch(() => undefined);
     onResultRef.current?.(scored);
-  }, [locale]);
+  }, [autoStart, locale]);
 
   const listeningRef = useRef(false);
   useEffect(() => { listeningRef.current = listening; }, [listening]);
@@ -138,6 +156,9 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   });
 
   const start = useCallback(async () => {
+    if (retryTimer.current) clearTimeout(retryTimer.current);
+    retryTimer.current = null;
+    stoppingByUser.current = false;
     setError('');
     setResult(null);
     finalRef.current = '';
@@ -162,7 +183,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   }, [locale, text]);
 
   startRef.current = start;
-  const stop = useCallback(() => { ExpoSpeechRecognitionModule.stop(); }, []);
+  const stop = useCallback(() => { stoppingByUser.current = true; ExpoSpeechRecognitionModule.stop(); }, []);
   const sayWord = useCallback((word: string) => { try { Speech.stop(); Speech.speak(word, { language: locale, rate: 0.6 }); } catch { /* no tts */ } }, [locale]);
   const missed = result ? result.words.filter(w => w.state !== 'ok' && tokens(w.word).length) : [];
   const sayMissed = useCallback(() => { if (!missed.length) return; try { Speech.stop(); Speech.speak(missed.map(w => w.word).join(', '), { language: locale, rate: 0.6 }); } catch { /* no tts */ } }, [missed, locale]);

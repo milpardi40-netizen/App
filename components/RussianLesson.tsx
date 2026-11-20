@@ -19,6 +19,7 @@ import ProductionTask from '@/components/ProductionTask';
 import RevealText from '@/components/RevealText';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
+import LessonConversationRoom from '@/components/LessonConversationRoom';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
@@ -141,6 +142,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   useEffect(() => {
     let alive = true;
     const restarting = restartRequested.current;
+    speakResult.current = null;
     const replayingLevel = levelReplayRequested.current && !restarting;
     restartPending.current = restarting;
     completing.current = false;
@@ -200,6 +202,10 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
     setSpeechError('');
     void playRussianSpeech(text, rate, () => setSpeechError('صدای روسی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.'));
   }, []);
+  const speakConversationLine = useCallback((text: string, onDone: () => void) => {
+    void playRussianSpeech(text, narrationRate('ru-RU', 'normal'), onDone, onDone);
+  }, []);
+  const stopConversationSpeech = useCallback(() => { void stopRussianSpeech(); }, []);
 
   // Read the visible main sentence on entry, resume, and each sentence change.
   useEffect(() => {
@@ -519,6 +525,13 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             </> },
           ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
+        {stage === 9 && <LessonConversationRoom
+          key={lesson.id}
+          lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}
+          locale="ru-RU"
+          onSpeak={speakConversationLine}
+          onStop={stopConversationSpeech}
+        />}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
@@ -531,7 +544,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && styles.nextButtonDisabled]}>
             <Text style={styles.previousButtonText}>جمله قبلی</Text>
           </Pressable>}
-          <Pressable accessibilityRole="button" disabled={saving || !!sessionError} style={[styles.nextButton, (saving || !!sessionError) && styles.nextButtonDisabled]} onPress={() => void next()}>
+          <Pressable accessibilityRole="button" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} style={[styles.nextButton, (saving || !!sessionError) && styles.nextButtonDisabled]} onPress={() => void next()}>
             <Text style={styles.nextText}>{saving ? 'در حال ذخیره…' : stage === 1 && sentenceIndex < lesson.sentences.length - 1 ? 'جملهٔ بعدی' : 'ادامه'}</Text>
             <ChevronLeft size={20} color="#FFFFFF" />
           </Pressable>

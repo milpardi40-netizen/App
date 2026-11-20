@@ -50,6 +50,7 @@ import { EnglishC1ExtendedModel } from '@/components/EnglishC1ExtendedModel';
 import { ENGLISH_ENGINE_STEPS, getLessonPatterns, getLessonVocabulary } from '@/lib/englishLearningEngine';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
+import LessonConversationRoom from '@/components/LessonConversationRoom';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
@@ -138,6 +139,7 @@ export default function SentenceLessonScreen() {
   useEffect(() => {
     let alive = true;
     const run = ++screenRun.current;
+    speakResult.current = null;
     loadedLesson.current = null;
     resettingRef.current = false;
     setAudioNotice('');
@@ -214,6 +216,10 @@ export default function SentenceLessonScreen() {
   }, [chunks.chunked, chunks.start, lesson.id]);
   const chunkLastIndex = chunks.chunked ? chunks.end - 1 : lesson.sentences.length - 1;
   const current = lesson.sentences[sentenceIndex];
+  const speakConversationLine = useCallback((text: string, onDone: () => void) => {
+    playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone });
+  }, []);
+  const stopConversationSpeech = useCallback(() => { void stopResponsiveSpeech(); }, []);
   const vocabulary = getLessonVocabulary(lesson);
   // One pattern per slot: the same «I am + feeling» repeated eight times is noise, not teaching.
   // Pre-A1 lessons are built around 1–2 slots, so the grammar stage shows each slot once.
@@ -668,7 +674,7 @@ export default function SentenceLessonScreen() {
         {(stage === 7 || stage === 8) && (
           <View style={styles.centerStage}>
                         {(() => { const finalSections: FinalSection[] = [
-              { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
+            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
               { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
             {false ? null : evidencePassed
               ? CORE_LESSON_EVIDENCE[lesson.id]
@@ -679,6 +685,13 @@ export default function SentenceLessonScreen() {
             ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
           </View>
         )}
+        {stage === 9 && <LessonConversationRoom
+          key={lesson.id}
+          lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))}
+          locale="en-US"
+          onSpeak={speakConversationLine}
+          onStop={stopConversationSpeech}
+        />}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}
       </View>
         <View style={{ height: bottomSpacer }} />
@@ -689,7 +702,7 @@ export default function SentenceLessonScreen() {
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && { opacity: .45 }]}>
             <Text style={styles.secondaryControlText}>جمله قبلی</Text>
           </Pressable>}
-          <Pressable accessibilityRole="button" disabled={saving || !!sessionError} style={[styles.nextButton, saving && { opacity: .45 }]} onPress={() => void next()}>
+          <Pressable accessibilityRole="button" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} style={[styles.nextButton, (saving || !!sessionError) && { opacity: .45 }]} onPress={() => void next()}>
             <Text style={styles.nextText}>{stage === stages.length - 1 ? 'پایان درس' : stage === 1 && sentenceIndex < lesson.sentences.length - 1 ? 'جمله بعدی' : 'ادامه'}</Text>
             {stage === stages.length - 1 ? <Check size={20} color={Colors.onColor} /> : <ChevronLeft size={20} color={Colors.onColor} />}
           </Pressable>
