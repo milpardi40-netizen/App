@@ -1,7 +1,7 @@
 import { orderChecks } from './russianBeginner/checkOrder';
 import type { LearningLesson } from './types';
 
-// The first six slots are for the ear; only the last two are independent reading.
+// In every step, the six oral lines are for listening; the two final read lines use letters introduced by that step.
 // An address in this array is also a saved sentence/review address. Never reorder the IDs.
 export interface StarterLine { text: string; fa: string; pronunciation: string; }
 const p = (text: string, fa: string, pronunciation: string): StarterLine => ({ text, fa, pronunciation });
@@ -222,7 +222,7 @@ export const RUSSIAN_STARTER_STEPS: readonly Step[] = [
     read: [p("подъе́зд", "ورودی ساختمان", "پادیِست"), p("ещё", "باز هم", "یِشّو")] },
   { id: "review", title: "مرور نام و خواندن کوتاه", letters: "",
     goal: "نام کوتاه را از روی نوشته بخوان، خودت را با نام کوچک معرفی کن و پاسخ سادهٔ هم‌صحبت را بفهم.",
-    note: "این مرور فقط از حروف آموزش‌داده‌شده استفاده می‌کند. در Pre-A1 نام کوچک و عبارت آماده کافی است؛ معرفی نام خانوادگی و شهر در A1 گسترش می‌یابد.",
+    note: "این مرور فقط از حروف آموزش‌داده‌شده استفاده می‌کند. در Pre-A1 نام کوچک و عبارت آماده کافی است؛ معرفی نام خانوادگی و شهر در A1 گسترش می‌یابد. تمرین نوشتن اختیاری: نام خودت و دو واژهٔ این درس را روی کاغذ بنویس؛ برنامه پاسخ را ذخیره یا تصحیح نمی‌کند.",
     situationCheck: "هم‌صحبت می‌پرسد اسمت چیست؛ نام «نینا» روی کارت توست. چه می‌گویی؟",
     oral: [
       p("Как тебя́ зову́т?", "اسمت چیست؟", "کاک تی‌بیا زاووت"),
@@ -259,4 +259,29 @@ export const RUSSIAN_PRE_A1_LESSONS: readonly LearningLesson[] = RUSSIAN_STARTER
     ], index) };
 });
 export const RUSSIAN_PRE_A1_SUBTITLES = Object.fromEntries(RUSSIAN_STARTER_STEPS.map(s => [`ru-pre-${s.id}`, s.goal]));
-export const RUSSIAN_PRE_A1_MODULES = RUSSIAN_STARTER_STEPS.map(s => s.title);
+export const RUSSIAN_PRE_A1_MODULES = [
+  'الفبا و صداها',
+  'واژه‌های پایه',
+  'عبارت‌های پایه',
+  'اولین جمله‌ها',
+  'دستور پایه',
+  'واژگان روزمره',
+  'مکالمه‌های ساده',
+] as const;
+
+const PRE_A1_MODULE_BY_STEP: Record<string, string> = {
+  hello: 'الفبا و صداها', name: 'الفبا و صداها', days: 'الفبا و صداها',
+  'numbers-1-10': 'واژه‌های پایه', family: 'واژه‌های پایه',
+  'yes-no': 'عبارت‌های پایه', 'please-thanks': 'عبارت‌های پایه',
+  'i-am': 'اولین جمله‌ها', 'this-is': 'اولین جمله‌ها',
+  'i-have': 'دستور پایه', 'where-is': 'دستور پایه', health: 'دستور پایه',
+  drinks: 'واژگان روزمره', time: 'واژگان روزمره', places: 'واژگان روزمره', shopping: 'واژگان روزمره',
+  review: 'مکالمه‌های ساده',
+};
+
+export function russianPreA1ModuleForLesson(lessonId: string): string {
+  const stepId = lessonId.replace(/^ru-pre-/, '');
+  const module = PRE_A1_MODULE_BY_STEP[stepId];
+  if (!module) throw new Error(`Pre-A1 Russian lesson ${lessonId} has no curriculum module.`);
+  return module;
+}

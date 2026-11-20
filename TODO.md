@@ -1,6 +1,5 @@
-# App deployment outcomes
+# بازآرایی سطوح روسی Pre-A1 و A1
 
-- [ ] **Run the App web app** — preserve the existing Expo/React Native web application and its language-learning routes for English, Russian, and Turkish.
-- [ ] **Serve the complete route manifest** — expose `GET /manus-routes.json` with the current static and dynamic page routes.
-- [ ] **Publish a static production build** — install from the committed lockfile, export the web bundle, and publish the resulting `dist` directory with an `index.html` entrypoint.
-- [ ] **Verify the published URL** — confirm the deployed public URL responds successfully and serves the App application shell.
+- [x] **Pre-A1 روسی در ماژول‌های آغازین سازمان‌دهی شد** — سطح مستقلِ زبان‌آموز کاملاً مبتدی با هفت ماژول الفبا و صداها، واژه‌های پایه، عبارت‌های پایه، اولین جمله‌ها، دستور پایه، واژگان روزمره و مکالمه‌های ساده نمایش داده می‌شود. محتوای آغازین بر عبارت‌ها و الگوهای ساده تمرکز دارد و صرف کامل/جدول‌های گسترده به این مرحله تحمیل نشده است.
+- [x] **A1 روسی در ماژول‌های ارتباطی سازمان‌دهی شد** — نه ماژول ساختار جمله، ضمیر/مالکیت، اسم/حالت‌های دستوری، فعل/زمان‌ها، صفت/قید، واژگان روزمره، عبارت کاربردی، مکالمه/ارتباط و شنیدن/خواندن/نوشتن در کتابخانه نمایش داده می‌شوند. دو تمرین نوشتاری خودراهنما اختیاری‌اند؛ ذخیره یا تصحیح خودکار ندارند.
+- [x] **مرز دو سطح و سازگاری اپ حفظ شد** — Pre-A1 برای شناخت خط و صدا، واژه/عبارت، جمله‌های کوتاه و مکالمهٔ پیش‌بینی‌پذیر مرتب شد؛ A1 جمله‌سازی و ارتباط روزمره را با الگوهای محدود گرامری گسترش می‌دهد. ساختار جریان درس و محتوای زبان‌های دیگر تغییر نکرد؛ شناسه‌ها و کلیدهای ذخیرهٔ پیشرفت ثابت ماندند. آزمون روسی (۷۶ بررسی)، بررسی محتوای سراسری، TypeScript و آزمون پیشرفت با موفقیت گذشتند. برچسب CEFR به‌عنوان گواهی رسمی معرفی نمی‌شود.

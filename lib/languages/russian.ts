@@ -8,7 +8,7 @@ import { RUSSIAN_B1_LESSONS } from './russianB1';
 import { RUSSIAN_B2_LESSONS } from './russianB2';
 import { RUSSIAN_C1_LESSONS } from './russianC1';
 import { RUSSIAN_A2_EXPANSION_LESSONS } from './russianA2Expansion';
-import { RUSSIAN_PRE_A1_LESSONS, RUSSIAN_PRE_A1_MODULES, RUSSIAN_PRE_A1_SUBTITLES } from './russianPreA1';
+import { RUSSIAN_PRE_A1_LESSONS, RUSSIAN_PRE_A1_MODULES, RUSSIAN_PRE_A1_SUBTITLES, russianPreA1ModuleForLesson } from './russianPreA1';
 import { RUSSIAN_B1_EXPANSION_LESSONS } from './russianB1Expansion';
 import { RUSSIAN_B2_EXPANSION_LESSONS } from './russianB2Expansion';
 import { RUSSIAN_C1_EXPANSION_LESSONS } from './russianC1Expansion';
@@ -78,6 +78,56 @@ export interface RussianCourseLesson extends LearningLesson {
   levelId: RussianLevelId;
   order: number;
   subtitle: string;
+  module?: string;
+}
+
+export const RUSSIAN_A1_MODULES = [
+  'ساختار جمله',
+  'ضمیر و مالکیت',
+  'اسم‌ها و حالت‌های دستوری',
+  'فعل‌ها و زمان‌ها',
+  'صفت‌ها و قیدها',
+  'واژگان روزمره',
+  'عبارت‌های کاربردی',
+  'مکالمه و ارتباط',
+  'شنیدن، خواندن و نوشتن',
+] as const;
+
+const RUSSIAN_A1_MODULE_BY_LESSON: Record<string, string> = {
+  'ru-l1-greetings': RUSSIAN_A1_MODULES[0], 'ru-l1-how-are-you': RUSSIAN_A1_MODULES[0],
+  'ru-l1-yes-no-understand': RUSSIAN_A1_MODULES[0], 'ru-l1-question-words': RUSSIAN_A1_MODULES[0],
+  'ru-l1-where-is': RUSSIAN_A1_MODULES[0],
+  'ru-l1-introductions': RUSSIAN_A1_MODULES[1], 'ru-l1-numbers-family': RUSSIAN_A1_MODULES[1],
+  'ru-l1-objects-this-is': RUSSIAN_A1_MODULES[1], 'ru-l1-my-your': RUSSIAN_A1_MODULES[1],
+  'ru-l1-we-they': RUSSIAN_A1_MODULES[1],
+  'ru-l1-numbers-1-10': RUSSIAN_A1_MODULES[2], 'ru-l1-numbers-20-100': RUSSIAN_A1_MODULES[2],
+  'ru-l1-prices': RUSSIAN_A1_MODULES[2], 'ru-l2-groceries': RUSSIAN_A1_MODULES[2],
+  'ru-l1-everyday-verbs': RUSSIAN_A1_MODULES[3], 'ru-l1-time-words': RUSSIAN_A1_MODULES[3],
+  'ru-l2-time': RUSSIAN_A1_MODULES[3], 'ru-l2-days': RUSSIAN_A1_MODULES[3],
+  'ru-l2-daily-routine': RUSSIAN_A1_MODULES[3], 'ru-l2-weekend-plans': RUSSIAN_A1_MODULES[3],
+  'ru-l2-months-dates': RUSSIAN_A1_MODULES[3],
+  'ru-l1-colors': RUSSIAN_A1_MODULES[4], 'ru-l1-likes': RUSSIAN_A1_MODULES[4],
+  'ru-l1-weather': RUSSIAN_A1_MODULES[4], 'ru-l1-adjectives': RUSSIAN_A1_MODULES[4],
+  'ru-l2-clothes-sizes': RUSSIAN_A1_MODULES[4],
+  'ru-l1-food': RUSSIAN_A1_MODULES[5], 'ru-l1-drinks': RUSSIAN_A1_MODULES[5],
+  'ru-l1-body-parts': RUSSIAN_A1_MODULES[5], 'ru-l1-clothes': RUSSIAN_A1_MODULES[5],
+  'ru-l1-places': RUSSIAN_A1_MODULES[5], 'ru-l1-transport': RUSSIAN_A1_MODULES[5],
+  'ru-l1-jobs': RUSSIAN_A1_MODULES[5],
+  'ru-l1-polite-words': RUSSIAN_A1_MODULES[6], 'ru-l1-basic-wants-needs': RUSSIAN_A1_MODULES[6],
+  'ru-l2-cafe': RUSSIAN_A1_MODULES[6], 'ru-l2-shopping': RUSSIAN_A1_MODULES[6],
+  'ru-l2-emergency': RUSSIAN_A1_MODULES[6], 'ru-l2-restaurant-order': RUSSIAN_A1_MODULES[6],
+  'ru-l2-paying-bill': RUSSIAN_A1_MODULES[6], 'ru-l2-taxi': RUSSIAN_A1_MODULES[6],
+  'ru-l2-bus-tickets': RUSSIAN_A1_MODULES[6], 'ru-l2-hotel': RUSSIAN_A1_MODULES[6],
+  'ru-l2-pharmacy': RUSSIAN_A1_MODULES[6],
+  'ru-l2-directions': RUSSIAN_A1_MODULES[7], 'ru-l2-lost-property': RUSSIAN_A1_MODULES[7],
+  'ru-l2-invitations': RUSSIAN_A1_MODULES[7],
+  'ru-l2-phone-calls': RUSSIAN_A1_MODULES[8], 'ru-l2-appointments': RUSSIAN_A1_MODULES[8],
+};
+
+function russianA1ModuleForLesson(lessonId: string): string {
+  const module = RUSSIAN_A1_MODULE_BY_LESSON[lessonId];
+  if (!module) throw new Error(`A1 Russian lesson ${lessonId} has no curriculum module.`);
+  return module;
 }
 
 export const RUSSIAN_LEVELS: readonly RussianCourseLevel[] = [
@@ -85,7 +135,7 @@ export const RUSSIAN_LEVELS: readonly RussianCourseLevel[] = [
     id: 0,
     title: 'Absolute Beginner',
     cefr: 'Pre-A1',
-    description: 'از سلام و گفتن اسم تا درخواست آب، شمردن تا پنج و پیدا کردن ورودی؛ خط سیریلیک را هم‌زمان، چند حرف در هر درس یاد می‌گیری.',
+    description: 'شروع مستقل از صفر: آشنایی تدریجی با الفبا و صداها، واژه‌ها و عبارت‌های پرتکرار، جمله‌های کوتاه و مکالمه‌های قابل‌پیش‌بینی. دستور فقط در الگوهای ساده می‌آید؛ صرف کامل و جدول‌های گسترده برای این مرحله نیست.',
     color: '#94a3b8',
     modules: RUSSIAN_PRE_A1_MODULES,
     status: 'available',
@@ -94,9 +144,9 @@ export const RUSSIAN_LEVELS: readonly RussianCourseLevel[] = [
     id: 1,
     title: 'A1 · Foundation & Survival',
     cefr: 'A1',
-    description: 'با جمله‌های پیوسته اطلاعات بگیر، اشتباه را اصلاح کن و در موقعیت‌های روزمره به یک نتیجه برس. آشنایی اولیه با خط و عبارت‌های کوتاه در Pre-A1 تمرین شده است.',
+    description: 'از عبارت‌های آمادهٔ Pre-A1 به ساخت جمله‌های مستقل‌تر و ارتباط ساده در موقعیت‌های روزمره برو. حالت‌ها و زمان‌های روسی با الگوهای پرتکرار و محدود آموزش داده می‌شوند، نه با حفظ همهٔ صرف‌ها و استثناها؛ این برچسب گواهی رسمی CEFR نیست.',
     color: '#27A1D6',
-    modules: ['کلاس و آشنایی', 'درخواست و تأیید اطلاعات', 'خانواده و مالکیت', 'محل و مسیر', 'عادت و ترجیح', 'انتخاب و مقایسه', 'شهر و کار', 'خرید و خدمات', 'سفر و اقامت', 'قرار و دعوت'],
+    modules: RUSSIAN_A1_MODULES,
     status: 'available',
   },
   {
@@ -159,9 +209,9 @@ export const RUSSIAN_LEVELS: readonly RussianCourseLevel[] = [
 ];
 
 const RUSSIAN_LESSON_LEVELS: Record<string, { levelId: RussianLevelId; subtitle: string }> = {
-  ...Object.fromEntries(RUSSIAN_PRE_A1_LESSONS.map(lesson => [lesson.id, { levelId: 0 as const, subtitle: RUSSIAN_PRE_A1_SUBTITLES[lesson.id] ?? lesson.situation }])),
+  ...Object.fromEntries(RUSSIAN_PRE_A1_LESSONS.map(lesson => [lesson.id, { levelId: 0 as const, module: russianPreA1ModuleForLesson(lesson.id), subtitle: RUSSIAN_PRE_A1_SUBTITLES[lesson.id] ?? lesson.situation }])),
   /* سطح ۱ */
-  ...Object.fromEntries([...A1_FOUNDATION, ...A1_SURVIVAL].map(l => [l.id, {levelId: 1 as const, subtitle: l.situation}])),
+  ...Object.fromEntries([...A1_FOUNDATION, ...A1_SURVIVAL].map(l => [l.id, {levelId: 1 as const, module: russianA1ModuleForLesson(l.id), subtitle: l.situation}])),
   'ru-l3-past-simple': { levelId: 2, subtitle: 'گذشته: دیروز چه کار کردیم و چه بود' },
   'ru-l3-future-simple': { levelId: 2, subtitle: 'آینده ساده با «бу́ду» و فعل کامل' },
   'ru-l3-plans': { levelId: 2, subtitle: 'قصد، تصمیم و بایدهای آینده' },

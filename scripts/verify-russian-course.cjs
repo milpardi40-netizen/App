@@ -9,6 +9,7 @@ const esbuild = require('esbuild');
     stdin: {
       contents: [
         "export * from './lib/languages/russian';",
+        "export * from './lib/languages/russianPreA1';",
         "export * from './lib/languages/catalog';",
         "export * from './lib/languages/russianStudyState';",
         "export * from './lib/englishLessonNavigation';",
@@ -71,6 +72,32 @@ const esbuild = require('esbuild');
     && lessonsByLevel.map(lessons => lessons.length).join('|') === '17|49|37|37|33|30'
     && lessonsByLevel.every(lessons => lessons.length > 0)
     && lessonsByLevel.flat().length === app.RUSSIAN_LESSONS.length);
+  const expectedPreA1Ids = ['hello','name','yes-no','i-am','numbers-1-10','please-thanks','this-is','i-have','family','where-is','drinks','time','places','shopping','health','days','review'].map(id => `ru-pre-${id}`);
+  check('Pre-A1 lesson IDs and order remain stable', lessonsByLevel[0].map(lesson => lesson.id).join('|') === expectedPreA1Ids.join('|'));
+  const taughtLetters = new Set();
+  const independentReadingUsesIntroducedLetters = app.RUSSIAN_STARTER_STEPS.every(step => {
+    for (const letter of step.letters.toLocaleUpperCase('ru-RU')) taughtLetters.add(letter);
+    return step.read.every(line => [...line.text.toLocaleUpperCase('ru-RU').replace(/\u0301/g, '').replace(/[^А-ЯЁ]/g, '')]
+      .every(letter => taughtLetters.has(letter)));
+  });
+  check('Independent reading uses only Cyrillic letters introduced by that step and all 33 letters are covered', independentReadingUsesIntroducedLetters
+    && app.RUSSIAN_ALPHABET.every(letter => taughtLetters.has(letter)) && taughtLetters.size === app.RUSSIAN_ALPHABET.length);
+  const preA1Modules = app.RUSSIAN_LEVELS[0].modules;
+  const a1Modules = app.RUSSIAN_LEVELS[1].modules;
+  check('Pre-A1 has seven populated curriculum modules and all 17 stable lessons are assigned once', preA1Modules.length === 7
+    && lessonsByLevel[0].every(lesson => preA1Modules.includes(lesson.module))
+    && preA1Modules.every(module => lessonsByLevel[0].some(lesson => lesson.module === module)));
+  check('A1 has nine populated curriculum modules and all 49 stable lessons are assigned once', a1Modules.length === 9
+    && lessonsByLevel[1].every(lesson => a1Modules.includes(lesson.module))
+    && a1Modules.every(module => lessonsByLevel[1].some(lesson => lesson.module === module)));
+  const russianLibrarySource = fs.readFileSync('components/RussianLibrary.tsx', 'utf8');
+  check('Pre-A1 and A1 library views group lessons by module while higher levels keep their existing groups', russianLibrarySource.includes('selected.modules.map(module => selectedLessons.filter(item => item.module === module)')
+    && russianLibrarySource.includes('for (let index = 0; index < selectedLessons.length; index += LESSONS_PER_GROUP)'));
+  const starterReviewNote = lessonsByLevel[0].find(lesson => lesson.id === 'ru-pre-review').teachingFa;
+  const phonePracticeNote = lessonsByLevel[1].find(lesson => lesson.id === 'ru-l2-phone-calls').teachingFa;
+  const appointmentPracticeNote = lessonsByLevel[1].find(lesson => lesson.id === 'ru-l2-appointments').teachingFa;
+  check('Beginner reading/writing prompts are optional and do not claim app storage or automatic correction', starterReviewNote.includes('تمرین نوشتن اختیاری')
+    && [phonePracticeNote, appointmentPracticeNote].every(note => note.includes('تمرین اختیاری مهارت‌ها') && note.includes('ذخیره یا تصحیح')));
   check('B1 and B2 are available', app.RUSSIAN_LEVELS[3].status === 'available'
     && app.RUSSIAN_LEVELS[4].status === 'available'
     && app.RUSSIAN_LEVELS[2].status === 'available');

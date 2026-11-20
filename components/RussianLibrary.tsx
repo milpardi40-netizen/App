@@ -42,10 +42,16 @@ export default function RussianLibrary() {
   const selected = hydrated ? RUSSIAN_LEVELS.find(item => String(item.id) === String(level)) : undefined;
   const selectedLessons = useMemo(() => selected ? RUSSIAN_LESSONS.filter(item => item.levelId === selected.id) : [], [selected?.id]);
   const lessonGroups = useMemo(() => {
+    if (selected?.id === 0 || selected?.id === 1) {
+      const groups = selected.modules.map(module => selectedLessons.filter(item => item.module === module)).filter(group => group.length > 0);
+      const unassigned = selectedLessons.filter(item => !item.module);
+      if (unassigned.length) groups.push(unassigned);
+      return groups;
+    }
     const groups: typeof selectedLessons[] = [];
     for (let index = 0; index < selectedLessons.length; index += LESSONS_PER_GROUP) groups.push(selectedLessons.slice(index, index + LESSONS_PER_GROUP));
     return groups;
-  }, [selectedLessons]);
+  }, [selected, selectedLessons]);
 
 
 
@@ -165,7 +171,7 @@ export default function RussianLibrary() {
               return <View key={`${first.id}-${last.id}`} style={styles.group}>
                 <Pressable accessibilityRole="button" accessibilityState={{ expanded: open }} style={styles.groupHeader} onPress={() => setExpandedGroup(open ? -1 : index)}>
                   <View style={[styles.groupNumber, open && styles.groupNumberActive]}><Text style={[styles.groupNumberText, open && styles.groupNumberTextActive]}>{fa(index + 1)}</Text></View>
-                  <View style={styles.groupHeaderCopy}><Text style={styles.groupTitle}>بخش {fa(index + 1)} · درس‌های {fa(first.order)} تا {fa(last.order)}</Text><Text style={styles.groupMeta}>{fa(group.length)} درس · {fa(groupCompleted)} تکمیل‌شده</Text></View>
+                  <View style={styles.groupHeaderCopy}><Text style={styles.groupTitle}>{first.module ?? `بخش ${fa(index + 1)}`} · درس‌های {fa(first.order)} تا {fa(last.order)}</Text><Text style={styles.groupMeta}>{fa(group.length)} درس · {fa(groupCompleted)} تکمیل‌شده</Text></View>
                   {open ? <ChevronUp size={18} color={Palette.primary} /> : <ChevronDown size={18} color={Palette.muted} />}
                 </Pressable>
                 {open && <View style={styles.lessonList}>{group.map(item => {
