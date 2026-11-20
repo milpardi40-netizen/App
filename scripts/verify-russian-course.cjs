@@ -14,7 +14,6 @@ const esbuild = require('esbuild');
         "export * from './lib/englishLessonNavigation';",
         "export * from './lib/courseContent';",
         "export * from './lib/englishLearningEngine';",
-        "export * from './lib/lessonSentenceDialogue';",
       ].join('\n'),
       resolveDir: process.cwd(),
     },
@@ -220,31 +219,6 @@ const esbuild = require('esbuild');
     ...Array.from({ length: 168 }, (_, i) => `ru2-${String(i + 1).padStart(2, '0')}`),
   ];
   check('A1 sentence IDs and sequence remain stable', a1.flatMap(lesson => lesson.sentences.map(sentence => sentence.id)).join('|') === expectedA1SentenceIds.join('|'));
-  const russianDialoguePractice = fs.readFileSync('components/RussianDialoguePractice.tsx', 'utf8');
-  const russianLessonRoute = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
-  check('Russian conversation is fed only the current lesson sentence list', russianDialoguePractice.includes('lessonSentenceDialogue')
-    && russianDialoguePractice.includes('localScriptOnly')
-    && russianLessonRoute.includes('<RussianDialoguePractice key={lesson.id} sentences={lesson.sentences}')
-    && !russianLessonRoute.includes('<RussianDialoguePractice key={lesson.id} dialogue={lesson.dialogue}'));
-  const russianConversationRoom = fs.readFileSync('app/learn/ru/conversation.tsx', 'utf8');
-  check('Russian free-conversation room uses the same exact lesson sentence list, not the legacy exchange', russianConversationRoom.includes('<RussianDialoguePractice')
-    && russianConversationRoom.includes('sentences={lesson.sentences}') && russianConversationRoom.includes('modeForLevel(lesson.levelId)')
-    && !russianConversationRoom.includes('RussianTurnExchange') && !russianConversationRoom.includes('lesson.dialogue'));
-  check('Russian finale and advanced reading preview also use the exact lesson sentences', russianLessonRoute.includes('stage === 10 && <View')
-    && russianLessonRoute.includes('key={`${lesson.id}-final`} sentences={lesson.sentences}')
-    && russianLessonRoute.includes('lines={lesson.sentences.map((sentence, index)')
-    && !russianLessonRoute.includes('<RussianTurnExchange') && !russianLessonRoute.includes('lines={lesson.dialogue}'));
-  check('Russian production exercise is explicitly optional and hidden outside the exact dialogue by default', russianLessonRoute.includes('expandedProductionFor === lesson.id ? <ProductionTask')
-    && russianLessonRoute.includes('تمرین تکمیلی اختیاری · جدا از مکالمهٔ همین درس'));
-  for (const lesson of app.RUSSIAN_LESSONS) {
-    const rehearsal = app.lessonSentenceDialogue(lesson.sentences, sentence => sentence.text, { partner: 'هم‌صحبت', learner: 'زبان‌آموز' });
-    assert.deepEqual(rehearsal, lesson.sentences.map((sentence, index) => ({
-      speaker: index % 2 === 0 ? 'هم‌صحبت' : 'زبان‌آموز',
-      text: sentence.text,
-      fa: sentence.fa,
-    })), `Russian rehearsal must include only this lesson's exact sentences: ${lesson.id}`);
-    checks.push(`Russian rehearsal: ${lesson.id}`);
-  }
   const preLines = new Set(lessonsByLevel[0].flatMap(l => l.sentences.map(s => normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   const shared = a1.flatMap(l => l.sentences.filter(s => preLines.has(normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   check('A1 does not reteach the starter utterance list or the alphabet', !shared.length && a1.every(l => !l.teachingFa.includes('الفبا')));
@@ -293,8 +267,8 @@ const esbuild = require('esbuild');
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
   const datesCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-l2-months-dates').checks[0];
   check('A1 date correction checks the final date, not the misprinted ticket', datesCheck.choices[datesCheck.correctIndex] === 'پنجم مه');
-  check('Russian preserves the ten saved stage indexes and appends its own final exchange', app.RUSSIAN_LESSON_STAGES.length === 11
-    && app.RUSSIAN_LESSON_STAGES[10].id === 'turn-exchange' && app.RUSSIAN_LESSON_STAGES.slice(0, 10).every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
+  check('Russian follows the shared nine-stage lesson flow', app.RUSSIAN_LESSON_STAGES.length === 9
+    && app.RUSSIAN_LESSON_STAGES.every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa
       && stage.labelEn === app.ENGLISH_ENGINE_STEPS[index].labelEn));
   check('English lesson scope includes the original material, Pre-A1, practice labs and the A2, B1 and B2 lessons', app.SENTENCE_LESSONS.length === 274
@@ -369,5 +343,5 @@ const esbuild = require('esbuild');
     && savedProgress.learnedEssential504Words.length === 0);
   check('Russian progress never calls the Supabase cloud client', global.__russianSupabaseCalls === 0);
 
-  console.log(`${checks.length} Russian curriculum, turn-taking flow, registry, session-resume and language-isolation checks passed (${sentenceCount} Russian sentences).`);
+  console.log(`${checks.length} Russian curriculum, lesson flow, registry, session-resume and language-isolation checks passed (${sentenceCount} Russian sentences).`);
 })().catch(error => { console.error(error); process.exit(1); });

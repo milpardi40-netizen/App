@@ -20,7 +20,6 @@ const files = [
   'app/lang/library.tsx',
   'app/personal-sync.tsx',
   'components/EnglishSentenceBuilder.tsx',
-  'components/EnglishDialoguePractice.tsx',
   'components/EnglishSupplementTask.tsx',
   'components/EnglishUI.tsx',
 ];

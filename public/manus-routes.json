@@ -41,7 +41,6 @@
     { "path": "/learn/:language/review", "title": "Review" },
     { "path": "/learn/:language/studio", "title": "Language studio" },
     { "path": "/learn/:language/vocabulary", "title": "Language vocabulary" },
-    { "path": "/learn/ru/conversation", "title": "Russian conversation" },
     { "path": "/learn/ru/grammar", "title": "Russian grammar" },
     { "path": "/learn/ru", "title": "Russian dashboard" },
     { "path": "/learn/ru/lesson", "title": "Russian lesson" },

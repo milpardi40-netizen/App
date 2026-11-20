@@ -79,7 +79,6 @@ export default function LearningHome() {
 
   const openLevel = (levelId: number) => router.push({ pathname: '/lang/library', params: { level: String(levelId) } } as never);
   const openCurrentLesson = () => router.push({ pathname: '/course/lesson', params: { id: currentLesson.id } } as never);
-  const openCurrentConversation = () => router.push({ pathname: '/course/lesson', params: { id: currentLesson.id, openConversation: '1' } } as never);
 
   const restartFromBeginnerLevel = () => {
     Alert.alert('شروع مجدد از سطح ابتدایی', 'می‌خواهید دوباره از اولین درسِ سطح ابتدایی شروع کنید؟ محتوای درس‌ها دست‌نخورده می‌ماند.', [
@@ -360,14 +359,6 @@ export default function LearningHome() {
                 <View style={styles.quickCopy}>
                   <Text style={styles.quickTitle}>مرور جمله‌ها</Text>
                   <Text style={styles.quickDesc}>کارت‌های زمان‌بندی‌شدهٔ تو</Text>
-                </View>
-                <ChevronLeft size={17} color={HomeColors.muted} />
-              </Pressable>
-              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={openCurrentConversation}>
-                <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><MessageCircle size={18} color={HomeColors.accent} /></View>
-                <View style={styles.quickCopy}>
-                  <Text style={styles.quickTitle}>تمرین مکالمه</Text>
-                  <Text style={styles.quickDesc}>گفت‌وگوی همین درس</Text>
                 </View>
                 <ChevronLeft size={17} color={HomeColors.muted} />
               </Pressable>

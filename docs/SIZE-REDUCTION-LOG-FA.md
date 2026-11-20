@@ -144,7 +144,6 @@ import { Inter_400Regular } from '@expo-google-fonts/inter/400Regular';
 
 | جفت | اختلاف قبلی | فایل مشترک جدید |
 |---|---|---|
-| `RussianDialoguePractice` ↔ `TurkishDialoguePractice` | ۲ خط | `LanguageDialoguePractice.tsx` |
 | `RussianSentenceBuilder` ↔ `TurkishSentenceBuilder` | ۲ خط | `LanguageSentenceBuilder.tsx` |
 | `RussianBottomNav` ↔ `TurkishBottomNav` | ۱۰ خط | `LanguageBottomNav.tsx` |
 

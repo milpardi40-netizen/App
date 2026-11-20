@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
 import { STARTER_CHECKS_REVISION } from './russianPreA1';
-import { exchangeForLesson, validExchangePath, type ExchangePath } from './russianExchange';
 import { RUSSIAN_LESSONS, RUSSIAN_LESSON_STAGES } from './russian';
 
 export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
@@ -12,8 +11,6 @@ export interface RussianLessonSession {
   stage: number;
   updatedAt?: string;
   checksRevision?: string;
-  exchangeRevision?: number;
-  exchange?: ExchangePath;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
   stageVersion?: number;
   sentenceIndex: number;
@@ -84,8 +81,6 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     revealed: session.revealed,
     answers,
     showCheckAnswers: !retiredChecks && session.showCheckAnswers,
-    // A stale conversation path restarts only the exchange, never the whole lesson.
-    ...(stage === 10 && session.exchangeRevision === 2 && session.exchange && validExchangePath(exchangeForLesson(lesson), session.exchange) ? { exchangeRevision: 2, exchange: session.exchange } : {}),
   };
 }
 
@@ -125,7 +120,7 @@ function serial<T>(job: () => Promise<T>): Promise<T> {
 export function saveRussianLessonSession(lessonId: string, value: RussianLessonSession): Promise<void> {
   return serial(async () => {
     // New writes come from the current UI. Migration applies on read of old persisted attempts.
-    const safe = validateSession(lessonId, { ...value, exchangeRevision: 2, checksRevision: STARTER_CHECKS_REVISION });
+    const safe = validateSession(lessonId, { ...value, checksRevision: STARTER_CHECKS_REVISION });
     const state = parseState(await readRaw());
     await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, checksRevision: STARTER_CHECKS_REVISION, updatedAt: positionTimestamp() } } }));
     notifyLearningChange();

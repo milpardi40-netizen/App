@@ -61,10 +61,8 @@ export const ENGLISH_ENGINE_STEPS = [
   { id: 'grammar-through-usage', labelFa: 'دستور در کاربرد', labelEn: 'Grammar Through Usage' },
   { id: 'short-assessment', labelFa: 'سنجش کوتاه', labelEn: 'Short Assessment' },
   { id: 'speaking-check', labelFa: 'آزمون گفتاری', labelEn: 'Speaking Check' },
-  { id: 'conversation', labelFa: 'مکالمه', labelEn: 'Conversation Practice' },
 ] as const;
 
-export const ENGLISH_CONVERSATION_STAGE_INDEX = ENGLISH_ENGINE_STEPS.findIndex(step => step.id === 'conversation');
 
 /** Existing data sources behind the requested relational learning model. */
 export const ENGLISH_CORE_DATABASE_FLOW = [
@@ -72,7 +70,6 @@ export const ENGLISH_CORE_DATABASE_FLOW = [
   { entity: 'Sentence Patterns', source: 'CourseSentence.pattern' },
   { entity: 'Vocabulary', source: 'CourseSentence.vocabulary, attached to its sentence' },
   { entity: 'Grammar Through Usage', source: 'Existing sentence patterns and examples; no rules are generated' },
-  { entity: 'Dialogues', source: 'SentenceLesson.dialogue' },
   { entity: 'Exercises', source: 'Checks derived from sentences in EnglishLessonEvidence' },
   { entity: 'User Progress', source: 'courseProgress.ts and englishStudyState.ts' },
   { entity: 'Spaced Repetition', source: 'CourseProgress.reviewCards' },

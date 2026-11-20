@@ -95,7 +95,6 @@ import { TURKISH_LESSONS, turkishProgress } from './turkish';
 
 | فایل روسی | فایل ترکی | حجم هرکدام | خطوط متفاوت |
 |---|---|---:|---:|
-| `RussianDialoguePractice.tsx` | `TurkishDialoguePractice.tsx` | 7,506 B | **۲** |
 | `RussianSentenceBuilder.tsx` | `TurkishSentenceBuilder.tsx` | ~6,500 B | **۲** |
 | `RussianBottomNav.tsx` | `TurkishBottomNav.tsx` | 2,452 B | ۱۰ |
 | `RussianReview.tsx` | `TurkishReview.tsx` | ~18,700 B | ۴۴ از ۲۰۱ |
@@ -273,7 +272,6 @@ const loaders = {
 
 ### مرحلهٔ ۴ — حذف تکرار کد
 
-`RussianDialoguePractice` ↔ `TurkishDialoguePractice` و `RussianSentenceBuilder` ↔ `TurkishSentenceBuilder` با فقط **۲ خط تفاوت** عملاً فایل یکسان هستند. آن‌ها را به یک کامپوننت با پارامتر زبان تبدیل کنید. همین کار برای `Home` / `Lesson` / `Library` / `Review` حدود **۲۰۰ کیلوبایت** صرفه‌جویی و نصف‌شدن سطح تست دارد.
 
 ### مرحلهٔ ۵ — بهینه‌سازی تصاویر (۱.۱ مگابایت، بدون افت کیفیت)
 

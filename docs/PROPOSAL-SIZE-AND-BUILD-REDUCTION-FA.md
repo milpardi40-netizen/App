@@ -212,7 +212,6 @@ const lessonsCount = { en: 508, ru: 240, tr: 460 }; // اعداد از build man
 
 ## ۷. کارگاه E — حذف تکرار (ریسک: پایین، اثر: ۲۰۰ KB + نصف‌شدن تست)
 
-`RussianDialoguePractice` ↔ `TurkishDialoguePractice` و `RussianSentenceBuilder` ↔ `TurkishSentenceBuilder` پس از یکسان‌سازی نام زبان **۲ خط تفاوت** دارند. همین‌طور `BottomNav` (۱۰ خط).
 
 پیشنهاد: یک کامپوننت با پارامتر `locale` + یک فایل متن. `Home`/`Lesson`/`Library`/`Review` (۷۰–۸۰٪ یکسان) در فاز بعد.
 

@@ -1,4 +1,4 @@
-import { VoiceRoomLink, GrammarLink } from '@/components/RussianWorkshopUI';
+import { GrammarLink } from '@/components/RussianWorkshopUI';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel, formatPercent } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -419,7 +419,6 @@ export default function RussianHome() {
           <View style={styles.pathPanel}>
             <Text style={styles.panelTitle}>اتاق‌های تمرین روسی</Text>
             <GrammarLink onPress={() => open('/learn/ru/verbs')} />
-            <VoiceRoomLink onPress={() => open('/learn/ru/conversation')} />
           </View>
         </View>
       </ScrollView>

@@ -275,8 +275,8 @@ check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ
 check(turkish.TURKISH_LEVELS.map(level => level.cefr).join('|') === 'Pre-A1|A1|A2|B1|B2|C1', 'Turkish publishes six distinct CEFR bands');
 check(turkish.TURKISH_LEVELS.map(level => level.id).join('|') === russian.RUSSIAN_LEVELS.map(level => level.id).join('|'), 'Level ids agree across both maps');
 check(turkish.TURKISH_LESSON_STAGES.length === 10
-  && JSON.stringify(turkish.TURKISH_LESSON_STAGES) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES.slice(0, 10))
-  && russian.RUSSIAN_LESSON_STAGES[10]?.id === 'turn-exchange', 'The original ten stages agree; only Russian has the additional final exchange');
+  && JSON.stringify(turkish.TURKISH_LESSON_STAGES.filter(stage => stage.id !== 'conversation')) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES)
+  && turkish.TURKISH_LESSON_STAGES.some(stage => stage.id === 'conversation'), 'The shared nine-stage core agrees; Turkish retains its own additional stage');
 
 const availableLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'available');
 const plannedLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'planned');

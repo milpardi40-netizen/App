@@ -7,7 +7,7 @@ const esbuild = require('esbuild');
   const output = path.resolve('node_modules/.cache/english-learning-engine-test.cjs');
   await esbuild.build({
     stdin: {
-      contents: "export * from './lib/courseContent'; export * from './lib/courseContentB1Independent'; export * from './lib/courseContentB2UpperIntermediate'; export * from './lib/courseContentB2Expansion'; export * from './lib/englishB2Practice'; export * from './lib/englishB2Scenarios'; export * from './lib/courseContentC1Advanced'; export * from './lib/englishC1Practice'; export * from './lib/englishC1Reading'; export * from './lib/englishC1ExtendedModels'; export * from './lib/englishC1AppliedAssessment'; export * from './lib/courseContentA2Foundation'; export * from './lib/englishLearningEngine'; export * from './lib/englishFoundationEvidence'; export * from './lib/lessonSentenceDialogue'; export { isCorrect } from './lib/englishSupplement/content';",
+      contents: "export * from './lib/courseContent'; export * from './lib/courseContentB1Independent'; export * from './lib/courseContentB2UpperIntermediate'; export * from './lib/courseContentB2Expansion'; export * from './lib/englishB2Practice'; export * from './lib/englishB2Scenarios'; export * from './lib/courseContentC1Advanced'; export * from './lib/englishC1Practice'; export * from './lib/englishC1Reading'; export * from './lib/englishC1ExtendedModels'; export * from './lib/englishC1AppliedAssessment'; export * from './lib/courseContentA2Foundation'; export * from './lib/englishLearningEngine'; export * from './lib/englishFoundationEvidence'; export { isCorrect } from './lib/englishSupplement/content';",
       resolveDir: process.cwd(),
     },
     bundle: true,
@@ -20,8 +20,6 @@ const esbuild = require('esbuild');
   const check = value => { assert(value); checks += 1; };
 
   check(app.ENGLISH_ENGINE_BLUEPRINT.length === 6);
-  check(app.ENGLISH_ENGINE_STEPS.length === 10);
-  check(app.ENGLISH_CONVERSATION_STAGE_INDEX === 9 && app.ENGLISH_ENGINE_STEPS[app.ENGLISH_CONVERSATION_STAGE_INDEX].id === 'conversation');
   check(app.ENGLISH_ENGINE_BLUEPRINT.map(item => item.title).join('|') === app.COURSE_LEVELS.map(item => item.title).join('|'));
   check(app.ENGLISH_ENGINE_BLUEPRINT.every((item, index) => item.levelId === index && item.modules.length > 0));
   check(app.ENGLISH_ENGINE_BLUEPRINT[0].modules.length === 14 && app.COURSE_LEVELS[0].modules.length === 14);
@@ -29,39 +27,7 @@ const esbuild = require('esbuild');
   check(app.EXISTING_SENTENCE_LESSONS.length === 174 && app.EXISTING_SENTENCE_LESSONS.every(lesson => { const actual = app.SENTENCE_LESSONS.find(item => item.id === lesson.id); if (!actual) return false; const { a2Section, ...rest } = actual; return JSON.stringify({ ...rest, order: lesson.order }) === JSON.stringify(lesson); }));
   check(app.B1_INDEPENDENT_UNITS.length === 11 && app.B1_INDEPENDENT_UNITS.reduce((n, unit) => n + unit.topics.length, 0) === 55 && app.B1_INDEPENDENT_UNITS.every(unit => unit.topics.length === unit.rows.length));
   check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4852);
-  check(app.ENGLISH_CORE_DATABASE_FLOW.map(item => item.entity).join('|') === 'Situations|Sentence Patterns|Vocabulary|Grammar Through Usage|Dialogues|Exercises|User Progress|Spaced Repetition');
-  // The lesson conversation is rendered from the exact source sentence list; the UI must not
-  // synthesize branch lines or fall back to a dialogue from another content layer.
-  const englishDialoguePractice = require('node:fs').readFileSync('components/EnglishDialoguePractice.tsx', 'utf8');
-  const englishLessonRoute = require('node:fs').readFileSync('components/EnglishLessonRoute.tsx', 'utf8');
-  const englishHome = require('node:fs').readFileSync('app/lang/index.tsx', 'utf8');
-  check(englishDialoguePractice.includes('lessonSentenceDialogue') && englishDialoguePractice.includes('localScriptOnly'));
-  check(!englishDialoguePractice.includes('branchPool={pool}'));
-  check(englishLessonRoute.includes('<EnglishDialoguePractice key={lesson.id} sentences={lesson.sentences}')
-    && !englishLessonRoute.includes('<EnglishDialoguePractice key={lesson.id} dialogue={lesson.dialogue}'));
-  check(englishLessonRoute.includes('lines={lesson.sentences.map((sentence, index)')
-    && !englishLessonRoute.includes('lines={lesson.dialogue'));
-  check(englishLessonRoute.includes('expandedConversationExtrasFor === lesson.id && <View')
-    && englishLessonRoute.includes('تمرین‌های اختیاری · جدا از مکالمهٔ همین درس'));
-  check(englishHome.includes("params: { id: currentLesson.id, openConversation: '1' }")
-    && englishHome.includes('<Text style={styles.quickTitle}>تمرین مکالمه</Text>')
-    && englishHome.includes('onPress={openCurrentConversation}'));
-  check(englishLessonRoute.includes("const openConversationOnly = openConversation === '1';")
-    && englishLessonRoute.includes('setStage(openConversationOnly ? ENGLISH_CONVERSATION_STAGE_INDEX : saved.stage)'));
-  check(englishLessonRoute.includes('!openConversationOnly && sessionReady')
-    && englishLessonRoute.includes('if (openConversationOnly) {')
-    && englishLessonRoute.includes("router.replace('/lang' as never)"));
-  check(englishLessonRoute.includes("openConversationOnly ? 'بازگشت به خانه' : stage === stages.length - 1 ? 'پایان درس'"));
-  for (const lesson of app.SENTENCE_LESSONS) {
-    const rehearsal = app.lessonSentenceDialogue(lesson.sentences, sentence => sentence.en, { partner: 'طرف مقابل', learner: 'شما' });
-    assert.deepEqual(rehearsal, lesson.sentences.map((sentence, index) => ({
-      speaker: index % 2 === 0 ? 'طرف مقابل' : 'شما',
-      text: sentence.en,
-      fa: sentence.fa,
-    })), `English rehearsal must include only this lesson's exact sentences: ${lesson.id}`);
-    checks += 1;
-  }
-
+  check(app.ENGLISH_CORE_DATABASE_FLOW.map(item => item.entity).join('|') === 'Situations|Sentence Patterns|Vocabulary|Grammar Through Usage|Exercises|User Progress|Spaced Repetition');
   // Band ids are stable; level numbers shifted when the Pre-A1 band and the practice labs were added.
   const foundation = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('foundation-'));
   const survival = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('survival-'));
@@ -416,5 +382,5 @@ const esbuild = require('esbuild');
     check(app.getLessonPatterns(lesson).length === lesson.sentences.filter(sentence => !!sentence.pattern).length);
   }
 
-  console.log(`${checks} engine checks passed; 6 levels (Pre-A1 to C1), 10 ordered lesson stages, 274 lesson records (existing lessons retained), 4852 sentences, the full evidence set across Pre-A1, Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
+  console.log(`${checks} engine checks passed; 6 levels (Pre-A1 to C1), 9 ordered lesson stages, 274 lesson records (existing lessons retained), 4852 sentences, the full evidence set across Pre-A1, Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
 })().catch(error => { console.error(error); process.exit(1); });
