@@ -88,6 +88,19 @@ const esbuild = require('esbuild');
       && lesson.dialogue.every((line, i) => line.text === expectedDialogue[i].text && line.fa === expectedDialogue[i].fa
         && line.speaker === (i % 2 === 0 ? 'هم‌صحبت' : 'زبان‌آموز'));
   }));
+  // A step that quotes a Russian line in its situation prompt must quote a line the learner *hears*, and a
+  // wh-question is never answered with «Да, …»: those are the two ways a rewritten step ends up asking about
+  // one line while the graded answer is another. Content is rewritten in place; this keeps the two in step.
+  const normCyr = (s) => s.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е').replace(/[^а-я0-9 ]/g, '').trim();
+  const whCyr = /(кто|что|где|когда|почему|зачем|сколько|како[йая]|кака[яое])/;
+  const situationPromptsAlign = app.RUSSIAN_STARTER_STEPS.every(step => {
+    const quoted = /«([А-Яа-яЁё][^»]*[?!.])»/.exec(step.situationCheck);
+    if (!quoted) return true;
+    const asked = normCyr(quoted[1]), answer = normCyr(step.oral[1].text);
+    return asked !== answer && !(whCyr.test(asked) && /^да\b/.test(answer));
+  });
+  check('a starter situation prompt quotes a line the learner hears, and never grades a yes against a wh-question', situationPromptsAlign);
+
   const taughtLetters = new Set();
   const independentReadingUsesIntroducedLetters = app.RUSSIAN_STARTER_STEPS.every(step => {
     for (const letter of step.letters.toLocaleUpperCase('ru-RU')) taughtLetters.add(letter);
