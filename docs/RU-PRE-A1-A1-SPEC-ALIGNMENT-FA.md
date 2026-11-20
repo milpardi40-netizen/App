@@ -342,6 +342,7 @@ node scripts/verify-russian-studio.cjs       # در این محیط به میک�
 | ماژول‌بندی | `lib/languages/russian.ts` | ۴۹ id ثبت‌شده | ۵۶ id؛ هر درس تازه در `RUSSIAN_A1_MODULE_BY_LESSON` ثبت شد (زمان‌ها→ماژول ۴، خانواده/صفت→۵، شهر/کشور→۳، فصل/حیوانات→۶) |
 | نوشتن آزاد | `components/RussianLesson.tsx`، `lib/productionPrompt.ts` | `ProductionTask` ایمپورت ولی رندر نشده بود؛ `productionPrompt` برای سطح ۱ فقط متن B1 می‌داد (۳۰ کلمه) | بلوک نوشتن در مرحلهٔ «آزمون گفتاری» برای درس‌های `levelId >= 1` رندر می‌شود؛ `productionPrompt` حالا سطح ۱ و ۲ را می‌شناسد (هدف ۱۰ کلمه در A1 و چک‌لیست: سه‌پنج جمله، دو واژه از همین درس، فعلِ هم‌خوان، نه ترجمهٔ کلمه‌به‌کلمه). همچنان خودارزیاب، روی دستگاه، و شرط پایان درس نیست |
 | تایپ در سنجش سطح | `lib/levelAssessment.ts`، `components/LanguageLevelStudio.tsx` | آیتم «بنویس» از A2 به بعد | `buildLevelSupplement(pool, levelId, writeFromLevel = 2)`؛ روسی از **A1** آیتم تایپی دارد، بقیهٔ زبان‌ها دست‌نخورده |
+| پاسخ‌های ذخیره‌شده | `STARTER_CHECKS_REVISION` | `ru-pre-a1-a1-content-5` | `…-6`؛ چون متن سه خطِ «кофе» در Pre-A1 عوض شد، پاسخ‌های معنای سطح ۰ و ۱ بازنشسته می‌شوند (مکانیزم از پیش موجود در `russianStudyState.ts:66`) |
 | تراز واژه | `lib/languages/russianPreA1.ts` | `ко́фе` (تاکید غلط) | `кофе́` در سه موضع |
 
 | واژگان A1 (سنجۀ تازه) | `scripts/measure-russian-lexicon.cjs` | ۴۹ درس · ۳۹۲ خط · ۶۳۷ شکل · ۴۶۴ لِم · ۵۰٪ تکرار در ≥۲ درس | **۵۶ درس · ۴۴۸ خط · ۷۵۰ شکل · ۵۳۷ لِم · ۵۲٪ تکرار** (اعداد «پیش» از worktree کامیت `c866d12`) |
