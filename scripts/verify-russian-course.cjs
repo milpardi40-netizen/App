@@ -74,6 +74,14 @@ const esbuild = require('esbuild');
     && lessonsByLevel.flat().length === app.RUSSIAN_LESSONS.length);
   const expectedPreA1Ids = ['hello','name','yes-no','i-am','numbers-1-10','please-thanks','this-is','i-have','family','where-is','drinks','time','places','shopping','health','days','review'].map(id => `ru-pre-${id}`);
   check('Pre-A1 lesson IDs and order remain stable', lessonsByLevel[0].map(lesson => lesson.id).join('|') === expectedPreA1Ids.join('|'));
+  check('Pre-A1 conversation uses the app’s six oral lines and separate ending without changing sentence addresses', lessonsByLevel[0].every(lesson => {
+    const step = app.starterStep(lesson.id);
+    if (!step || lesson.sentences.length !== 8) return false;
+    const expectedDialogue = [step.oral[0], step.oral[1], step.oral[2], step.oral[5], step.ending];
+    return lesson.dialogue.length === expectedDialogue.length
+      && lesson.dialogue.every((line, i) => line.text === expectedDialogue[i].text && line.fa === expectedDialogue[i].fa
+        && line.speaker === (i % 2 === 0 ? 'هم‌صحبت' : 'زبان‌آموز'));
+  }));
   const taughtLetters = new Set();
   const independentReadingUsesIntroducedLetters = app.RUSSIAN_STARTER_STEPS.every(step => {
     for (const letter of step.letters.toLocaleUpperCase('ru-RU')) taughtLetters.add(letter);
@@ -86,7 +94,9 @@ const esbuild = require('esbuild');
   const a1Modules = app.RUSSIAN_LEVELS[1].modules;
   check('Pre-A1 has seven populated curriculum modules and all 17 stable lessons are assigned once', preA1Modules.length === 7
     && lessonsByLevel[0].every(lesson => preA1Modules.includes(lesson.module))
-    && preA1Modules.every(module => lessonsByLevel[0].some(lesson => lesson.module === module)));
+    && preA1Modules.every(module => lessonsByLevel[0].some(lesson => lesson.module === module))
+    && ['ru-pre-health','ru-pre-drinks','ru-pre-time','ru-pre-places','ru-pre-shopping','ru-pre-days'].every(id => lessonsByLevel[0].find(lesson => lesson.id === id)?.module === 'واژگان روزمره')
+    && ['ru-pre-i-have','ru-pre-where-is'].every(id => lessonsByLevel[0].find(lesson => lesson.id === id)?.module === 'دستور پایه'));
   check('A1 has nine populated curriculum modules and all 49 stable lessons are assigned once', a1Modules.length === 9
     && lessonsByLevel[1].every(lesson => a1Modules.includes(lesson.module))
     && a1Modules.every(module => lessonsByLevel[1].some(lesson => lesson.module === module)));
@@ -97,7 +107,9 @@ const esbuild = require('esbuild');
   const phonePracticeNote = lessonsByLevel[1].find(lesson => lesson.id === 'ru-l2-phone-calls').teachingFa;
   const appointmentPracticeNote = lessonsByLevel[1].find(lesson => lesson.id === 'ru-l2-appointments').teachingFa;
   check('Beginner reading/writing prompts are optional and do not claim app storage or automatic correction', starterReviewNote.includes('تمرین نوشتن اختیاری')
-    && [phonePracticeNote, appointmentPracticeNote].every(note => note.includes('تمرین اختیاری مهارت‌ها') && note.includes('ذخیره یا تصحیح')));
+    && starterReviewNote.includes('خارج از اپ') && starterReviewNote.includes('ذخیره') && starterReviewNote.includes('تصحیح نمی‌شود')
+    && [phonePracticeNote, appointmentPracticeNote].every(note => note.includes('نوشتن اختیاری است')
+      && note.includes('بیرون از اپ') && note.includes('ذخیره') && note.includes('تصحیح نمی‌شود')));
   check('B1 and B2 are available', app.RUSSIAN_LEVELS[3].status === 'available'
     && app.RUSSIAN_LEVELS[4].status === 'available'
     && app.RUSSIAN_LEVELS[2].status === 'available');
@@ -229,8 +241,9 @@ const esbuild = require('esbuild');
   const allRussianIds = app.RUSSIAN_LESSONS.flatMap(lesson => [lesson.id, ...lesson.sentences.map(sentence => sentence.id)]);
   check('Russian lesson and sentence IDs are unique', new Set(allRussianIds).size === allRussianIds.length);
   const coreLessons = app.RUSSIAN_LESSONS.filter(lesson => !lesson.id.startsWith('lab-'));
-  check('Russian target sentences are Cyrillic and linked to Persian, pronunciation and vocabulary', coreLessons.every(lesson => lesson.sentences.every(sentence => /[А-Яа-яЁё]/.test(sentence.text)
-    && !!sentence.fa && !!sentence.pronunciation && !/[А-Яа-яЁё]/.test(sentence.pronunciation) && sentence.vocabulary.length > 0)));
+  check('Russian target sentences use Cyrillic and every pronunciation is complete and contains no Cyrillic', coreLessons.every(lesson => lesson.sentences.every(sentence => /[А-Яа-яЁё]/.test(sentence.text)
+    && !!sentence.fa && !!sentence.pronunciation && !/[А-Яа-яЁё]/.test(sentence.pronunciation) && sentence.vocabulary.length > 0)
+    && lessonsByLevel.slice(0, 2).flat().every(lesson => lesson.dialogue.every(turn => !!turn.pronunciation && !/[А-Яа-яЁё]/.test(turn.pronunciation)))));
   check('Russian practice-lab sentences keep Cyrillic text, translation, a guide and vocabulary', app.RUSSIAN_LESSONS.filter(lesson => lesson.id.startsWith('lab-')).every(lesson => lesson.sentences.every(sentence => /[А-Яа-яЁё]/.test(sentence.text)
     && !!sentence.fa && !!sentence.pronunciation && sentence.vocabulary.length > 0)));
   check('every lesson has a short dialogue and valid self-study checks', coreLessons.every(lesson => lesson.dialogue.length >= 3
@@ -293,7 +306,7 @@ const esbuild = require('esbuild');
   check('A2 shopping spelling correction preserves the saved answer slot', shoppingCheck.correctIndex === 0
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
   const datesCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-l2-months-dates').checks[0];
-  check('A1 date correction checks the final date, not the misprinted ticket', datesCheck.choices[datesCheck.correctIndex] === 'پنجم مه');
+  check('A1 date check matches the corrected meeting date in the revised scene', datesCheck.choices[datesCheck.correctIndex] === 'بیست‌ویکم ماه مه');
   check('Russian follows the shared ten-stage lesson flow with conversation after speaking', app.RUSSIAN_LESSON_STAGES.length === 10
     && app.RUSSIAN_LESSON_STAGES.every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa
@@ -362,7 +375,15 @@ const esbuild = require('esbuild');
   check('invalid Russian session cannot overwrite stored progress', storedAfterInvalidSave.schema === 1
     && Object.keys(storedAfterInvalidSave.sessions).length === 1 && sameSession(storedAfterInvalidSave.sessions[firstLesson.id], saved));
   await app.clearRussianLessonSession(firstLesson.id);
-  check('clearing the Russian session does not touch course-progress storage', memory.size === 0);
+  check('clearing the Russian lesson session does not touch course-progress storage', memory.size === 0);
+  memory.set(app.RUSSIAN_STUDY_STORAGE_KEY, JSON.stringify({ schema: 1, sessions: {
+    [firstLesson.id]: { ...saved, checksRevision: 'ru-pre-a1-a1-content-3' },
+  } }));
+  const migratedSession = await app.loadRussianLessonSession(firstLesson.id);
+  check('revised lesson checks retire only old answers while preserving the saved lesson position', migratedSession.stage === saved.stage
+    && migratedSession.sentenceIndex === saved.sentenceIndex && migratedSession.revealed === saved.revealed
+    && Object.keys(migratedSession.answers).length === 0 && !migratedSession.showCheckAnswers);
+  await app.clearRussianLessonSession(firstLesson.id);
   await app.russianProgress.completeSentenceLesson(firstLesson.id, app.RUSSIAN_LESSONS[1].id);
   const savedProgress = await app.russianProgress.getCourseProgress();
   check('Russian lesson completion persists under its own progress key and advances', savedProgress.completedLessonIds.includes(firstLesson.id)
