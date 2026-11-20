@@ -267,16 +267,22 @@ const EXPECTED_B1_SURVIVAL_TITLES = [
 // 1. Preserve English and Russian untouched baselines
 check(english.SENTENCE_LESSONS.length === 274, 'English baseline lesson count (274 at release 14) holds');
 check(english.SENTENCE_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 4852, 'English baseline sentence count (4852 at release 14) holds');
-check(russian.RUSSIAN_LESSONS.length === 203, 'Russian baseline lesson count (203) is untouched');
-check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1664, 'Russian baseline sentence count (1664) is untouched');
+// Russian grew on purpose in the Pre-A1/A1 spec-alignment work (docs/RU-PRE-A1-A1-SPEC-ALIGNMENT-FA.md §11):
+// 28 Pre-A1 steps + 56 A1 lessons. These numbers are the frozen baseline Turkish work must not disturb.
+check(russian.RUSSIAN_LESSONS.length === 221, 'Russian baseline lesson count (221 after the spec-alignment batches) is untouched');
+check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1808, 'Russian baseline sentence count (1808 after the spec-alignment batches) is untouched');
 
 // 2. Alphabet, levels, and A1 + A2 syllabus structure
 check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ', 'Turkish 29-letter alphabet is exact');
 check(turkish.TURKISH_LEVELS.map(level => level.cefr).join('|') === 'Pre-A1|A1|A2|B1|B2|C1', 'Turkish publishes six distinct CEFR bands');
 check(turkish.TURKISH_LEVELS.map(level => level.id).join('|') === russian.RUSSIAN_LEVELS.map(level => level.id).join('|'), 'Level ids agree across both maps');
-check(turkish.TURKISH_LESSON_STAGES.length === 10
-  && JSON.stringify(turkish.TURKISH_LESSON_STAGES.filter(stage => stage.id !== 'conversation')) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES)
-  && turkish.TURKISH_LESSON_STAGES.some(stage => stage.id === 'conversation'), 'The shared nine-stage core agrees; Turkish retains its own additional stage');
+// Both ladders are ten stages long and share nine of them. Turkish ends with a plain
+// «مکالمه» practice stage; Russian ends with a «اتاق مکالمه» room. Compare the shared nine,
+// then require each language's own tenth stage to stay where it is.
+check(turkish.TURKISH_LESSON_STAGES.length === 10 && russian.RUSSIAN_LESSON_STAGES.length === 10
+  && JSON.stringify(turkish.TURKISH_LESSON_STAGES.filter(stage => stage.id !== 'conversation')) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES.filter(stage => stage.id !== 'conversation-room'))
+  && turkish.TURKISH_LESSON_STAGES.some(stage => stage.id === 'conversation')
+  && russian.RUSSIAN_LESSON_STAGES[russian.RUSSIAN_LESSON_STAGES.length - 1].id === 'conversation-room', 'The shared nine-stage core agrees; Turkish keeps its own conversation stage and Russian its conversation room');
 
 const availableLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'available');
 const plannedLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'planned');

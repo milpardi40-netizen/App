@@ -122,6 +122,10 @@ const RUSSIAN_A1_MODULE_BY_LESSON: Record<string, string> = {
   'ru-l2-directions': RUSSIAN_A1_MODULES[7], 'ru-l2-lost-property': RUSSIAN_A1_MODULES[7],
   'ru-l2-invitations': RUSSIAN_A1_MODULES[7],
   'ru-l2-phone-calls': RUSSIAN_A1_MODULES[8], 'ru-l2-appointments': RUSSIAN_A1_MODULES[8],
+  'ru-l2-yesterday': RUSSIAN_A1_MODULES[3], 'ru-l2-tomorrow': RUSSIAN_A1_MODULES[3],
+  'ru-l2-family-describe': RUSSIAN_A1_MODULES[4], 'ru-l2-compare-shopping': RUSSIAN_A1_MODULES[4],
+  'ru-l2-seasons-weather': RUSSIAN_A1_MODULES[5], 'ru-l2-animals-zoo': RUSSIAN_A1_MODULES[5],
+  'ru-l2-cities-countries': RUSSIAN_A1_MODULES[2],
 };
 
 function russianA1ModuleForLesson(lessonId: string): string {

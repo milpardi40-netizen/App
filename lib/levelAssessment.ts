@@ -42,9 +42,11 @@ function dayKey(): string { const d = new Date(); return `${d.getFullYear()}-${d
 export function buildLevelExam(pool: ReturnType<typeof levelPool>, attempt: number): PracticeItem[] {
   return buildLessonPractice(pool, { count: ASSESSMENT_QUESTIONS, seedSalt: `exam-${attempt}` });
 }
-/** Supplement: a fresh short round every day; from A2 up one item is typed («بنویس»). */
-export function buildLevelSupplement(pool: ReturnType<typeof levelPool>, levelId?: LevelId): PracticeItem[] {
-  return buildLessonPractice(pool, { count: SUPPLEMENT_QUESTIONS, seedSalt: `daily-${dayKey()}`, write: (levelId ?? 0) >= 2 });
+/** Supplement: a fresh short round every day; one item is typed («بنویس»).
+ * Typed production starts at A2 by default; the Russian course asks for it from A1,
+ * because its A1 band already teaches the case endings the typed sentence needs. */
+export function buildLevelSupplement(pool: ReturnType<typeof levelPool>, levelId?: LevelId, writeFromLevel: LevelId = 2): PracticeItem[] {
+  return buildLessonPractice(pool, { count: SUPPLEMENT_QUESTIONS, seedSalt: `daily-${dayKey()}`, write: (levelId ?? 0) >= writeFromLevel });
 }
 
 /**

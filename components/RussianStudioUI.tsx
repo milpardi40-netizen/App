@@ -4,6 +4,7 @@ import Svg, { Circle, G, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { ArrowLeft, Check, ChevronLeft, Headphones, type LucideIcon } from 'lucide-react-native';
 import { LocalizedText as Text } from './LocalizedText';
 import { toPersianDigits as fa } from '@/lib/format';
+import { Typography } from '@/lib/theme';
 
 // Ink, paper, pencil and a single warm accent. Never use colour alone to identify a step.
 export const studio = {
@@ -206,8 +207,8 @@ export const ss = StyleSheet.create({
   copy: { fontSize: 16, lineHeight: 26, color: studio.quiet },
   small: { fontSize: 14, lineHeight: 22, color: studio.quiet },
   kicker: { fontSize: 13, lineHeight: 21, color: studio.leaf },
-  ru: { fontSize: 24, lineHeight: 36, color: studio.ink, writingDirection: 'ltr', textAlign: 'left' },
-  lemma: { fontSize: 34, lineHeight: 45, color: studio.ink, writingDirection: 'ltr', textAlign: 'left' },
+  ru: { fontSize: 24, lineHeight: 36, color: studio.ink, writingDirection: 'ltr', fontFamily: Typography.latinFontFamily, textAlign: 'left' },
+  lemma: { fontSize: 34, lineHeight: 45, color: studio.ink, writingDirection: 'ltr', fontFamily: Typography.latinFontFamily, textAlign: 'left' },
   paper: {
     backgroundColor: studio.white,
     borderWidth: 1,

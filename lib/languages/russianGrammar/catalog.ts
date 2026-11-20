@@ -17,7 +17,10 @@ export function lessonExample(verb: Verb, lesson?: LearningLesson) {
   if (!ref) return;
   const [key, form] = ref;
   const s = key.startsWith('d:') ? lesson.dialogue[Number(key.slice(2))] : lesson.sentences.find(s => s.id === key);
-  if (s) return { text: s.text, fa: s.fa, form };
+  // The index is built from a snapshot of the course, so a rewritten or moved line leaves a reference that
+  // points at a sentence no longer carrying the form. The workshop labels that example «از همین درس», so an
+  // out-of-date pointer falls back to the trail example instead of showing a line that proves nothing.
+  if (s && tokens(s.text).includes(normalize(form))) return { text: s.text, fa: s.fa, form };
 }
 export function verbExamples(verb: Verb, lesson?: LearningLesson) {
   const local = lessonExample(verb, lesson);

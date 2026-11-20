@@ -13,6 +13,7 @@ All commands run from the repo root with the lesson-data shim:
 ```
 export NODE_OPTIONS="--require ./scripts/content/shim.cjs"
 npx tsx scripts/content/curateFrequency.ts --write    # 0. remove corpus artefacts from the frequency lists
+npx tsx scripts/content/genBeginnerFrequency.ts --write  # 0b. rebuild the Russian beginner core (Pre-A1/A1 target)
 npx tsx scripts/content/gapReport.ts de A2 --with-packs                 # 1. missing words, including downloaded packs
 npx tsx scripts/content/genLabLessons.ts --write                          # 2a. real bundled lessons (structure half)
 npx tsx scripts/content/genCoveragePacks.ts --write --target 92         # 2b. close all six bands' gaps (hybrid generator)
@@ -40,6 +41,14 @@ node scripts/content/buildContentRelease.mjs                          # → pack
 stray English stop-words and initials — to the tail of each top-8000 list. Teachable words keep their
 original relative rank, so a word already inside a band's ceiling stays inside it. See
 `docs/frequency-curation.md`.
+
+## 0b. Beginner core
+`genBeginnerFrequency.ts` writes `lib/content/frequency/ru-beginner.json`: the words a beginner course is
+actually measured on, in teaching order, with the bands it is the target for named in the file
+(`pre`, `A1`). The corpus lists answer «which words does Russian use»; this list answers «which words must
+a Pre-A1/A1 learner meet», which is the question `computeReadiness` asks at the bottom of the course. The
+script asserts that the Pre-A1 group fills `COURSE_SPEC.pre.vocabularyCeiling` exactly and that the core
+never grows past the A1 ceiling, so a curated word cannot sit unmeasured. See `docs/beginner-frequency.md`.
 
 ## 1. Gap report
 Prints, for a language and band, the frequency words (≤ band ceiling) that no shipped sentence
