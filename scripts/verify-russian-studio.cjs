@@ -136,6 +136,24 @@ const flush = () => new Promise((r) => setImmediate(r));
   const lesson = x.findRussianLesson('ru-pre-this-is'),
     verb = x.VERBS.find((v) => v.lemma === 'хотеть');
   assert.equal(x.studyExamples(verb, 0, lesson)[0].source, 'از همین درس');
+  // …and that claim must be true for every beginner lesson: a «from this very lesson» example has to
+  // contain a real form of the verb it demonstrates. Content is rewritten in place; the index is not.
+  {
+    const words = (t) => t.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е').split(/[^а-яe]+/).filter(Boolean);
+    let cited = 0;
+    for (const l of x.RUSSIAN_LESSONS.filter((l) => l.levelId <= 1)) {
+      for (const lemma of x.lessonVerbs(l.id)) {
+        const v = x.VERBS.find((entry) => entry.lemma === lemma);
+        if (!v) continue;
+        const first = x.studyExamples(v, l.levelId, l)[0];
+        if (!first || first.source !== 'از همین درس') continue;
+        cited += 1;
+        assert(words(first.text).includes(x.normalize(first.form)), `${l.id}: «${first.text}» does not contain ${first.form}`);
+      }
+    }
+    assert(cited > 0, 'no beginner lesson cites its own verb example at all');
+    console.log(`${cited} beginner verb examples verified against their own lesson line`);
+  }
   await Promise.all([x.markPractised('хотеть', 0), x.markPractised('читать', 4), x.markPractised('хотеть', 0)]);
   assert.deepEqual(await x.readMarks(), ['хотеть:0', 'читать:4']);
   console.log(
@@ -170,22 +188,22 @@ const flush = () => new Promise((r) => setImmediate(r));
   assert.equal(starts[0].recordingOptions.persist, false);
   result('это мама', false);
   assert.equal(saved.length, 0);
-  result('это кот');
+  result('да я хочу чай');
   result('чай');
   await flush();
   assert.equal(saved.length, 0, 'wait for native end');
   end();
   await flush();
-  assert.equal(speech.text, 'А э́то дом?');
-  assert.equal(saved.at(-1).said[0], 'это кот');
+  assert.equal(speech.text, 'Хоро́шо, вот чай.');
+  assert.equal(saved.at(-1).said[0], 'да я хочу чай');
   assert(!recording);
   done();
   await flush();
   assert(recording);
   end();
-  result('да это дом');
+  result('сок пожалуйста');
   await flush();
-  assert.equal(speech.text, 'Хорошо́.');
+  assert.equal(speech.text, 'Держи́, сок.');
   done();
   await job;
   assert.equal(starts.length, 2);
@@ -289,18 +307,18 @@ const flush = () => new Promise((r) => setImmediate(r));
   await assert.rejects(job, /پخش نشد/);
   assert(!recording);
   assert.equal(saved.length, count);
-  const resumed = { starter: 'partner', picks: [0], said: { 0: 'это кот' } };
+  const resumed = { starter: 'partner', picks: [0], said: { 0: 'да я хочу чай' } };
   job = begin(resumed, true);
   await flush();
-  assert.equal(speech.text, 'А э́то дом?');
+  assert.equal(speech.text, 'Хоро́шо, вот чай.');
   done();
   await flush();
-  result('да это дом');
+  result('сок пожалуйста');
   end();
   await flush();
   done();
   await job;
-  assert.equal(saved.at(-1).said[0], 'это кот');
+  assert.equal(saved.at(-1).said[0], 'да я хочу чай');
   assert.equal(saved.at(-1).picks.length, 2);
   const card = x.verbVoiceCards(verb, 0)[0];
   const answers = [], phases = [], ctrl = new AbortController();

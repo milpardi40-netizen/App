@@ -485,10 +485,15 @@ const esbuild = require('esbuild');
     onCore.bands.every(band => band.readiness === (band.lessons ? Math.min(band.structureScore, band.coverage) : 0))
       && onCore.packsIncluded === false
       && (() => {
-        const withPacks = app.computeReadiness('ru', readinessAudit, app.ruFrequency, 60, { A1: [core.words[core.words.length - 1]] }, { beginnerFrequency: core });
+        // Any word the band does not teach will do; taking the last entry of the list went stale as soon as
+        // the course grew into it, and the branch then silently stopped being exercised.
+        const untaught = onCore.bands[1].gaps[0] ?? core.words[core.words.length - 1];
+        const withPacks = app.computeReadiness('ru', readinessAudit, app.ruFrequency, 60, { A1: [untaught] }, { beginnerFrequency: core });
         const a1 = withPacks.bands[1];
-        return withPacks.packsIncluded === true && a1.coverageWithPacks > a1.coverage && a1.coverage === a1.coverageCourse
-          && a1.coveredWords === a1.coveredWordsCourse;
+        // Percentages are rounded, so compare the counts: one extra pack word must move the side figure and
+        // leave the headline exactly where the course alone put it.
+        return withPacks.packsIncluded === true && a1.coveredWordsWithPacks > a1.coveredWords && a1.coverage === a1.coverageCourse
+          && a1.coveredWords === a1.coveredWordsCourse && a1.coverageWithPacks >= a1.coverage;
       })());
   const readinessLine = fs.readFileSync('components/LevelReadinessLine.tsx', 'utf8');
   check('the level card shows both readiness branches and keeps the pack number beside the vocabulary branch',

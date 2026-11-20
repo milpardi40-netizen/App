@@ -56,12 +56,14 @@ const es = require('esbuild');
     }
     visit([]); assert.equal(x.exchangeView(scene,{starter,picks:[15]}),null);
   }
-  // Pre-A1 «این گربه است» opens the finale itself: two taught lines, each with its own partner reply.
+  // Pre-A1 «ч и й: want and show» opens the finale itself: two taught lines, each with its own partner reply.
+  // The lines are the fixture's content of the lesson; what is under test is the resolver: two options, an exact
+  // match for each, nothing matched by a near-miss, and a reply that belongs to the branch chosen.
   const l=lessons.find(l=>l.id==='ru-pre-this-is'), scene=x.exchangeForLesson(l), turn=x.exchangeView(scene,{starter:'partner',picks:[]});
-  assert.deepEqual(turn.options.map(o=>o.say.text), ['Э́то кот.','Кто э́то?']);
-  for(const [text,i] of [['это кот',0],['Кто это?',1],['Это мама.',-1],['можно воду',-1],['не хочу чай',-1],['чай или воду',-1],['',-1]]) assert.equal(x.matchExchangeReply(text,turn.options),i);
-  assert(x.exchangeView(scene,{starter:'learner',picks:[0]}).history.at(-1).line.text.includes('дом'));
-  assert(x.exchangeView(scene,{starter:'learner',picks:[1]}).history.at(-1).line.text.includes('ма́ма'));
+  assert.deepEqual(turn.options.map(o=>o.say.text), ['Да, я хочу́ чай.','Нет, я не хочу́ чай.']);
+  for(const [text,i] of [['да я хочу чай',0],['нет я не хочу чай',1],['я хочу чай',-1],['что ты хочешь',-1],['это мама',-1],['чай или воду',-1],['',-1]]) assert.equal(x.matchExchangeReply(text,turn.options),i);
+  assert(x.exchangeView(scene,{starter:'learner',picks:[0]}).history.at(-1).line.text.includes('вот'));
+  assert(x.exchangeView(scene,{starter:'learner',picks:[1]}).history.at(-1).line.text.includes('хо́чешь'));
   // the drink request lives in its own lesson now: «Чай?» is a legal opening there, not here.
   const drinkScene=x.exchangeForLesson(lessons.find(d=>d.id==='ru-pre-drinks'));
   assert.equal(x.matchExchangeReply('чай', x.exchangeView(drinkScene,{starter:'learner',picks:[]}).options), 0);
