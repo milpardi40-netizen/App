@@ -131,9 +131,10 @@ const esbuild = require('esbuild');
     const handler = lesson.slice(lesson.indexOf('const startCurrentLessonFromBeginning'), lesson.indexOf('const selectSentence'));
     check(handler.includes(`reset${lang}LessonSession(lesson.id)`) && handler.includes(`stop${lang}Speech()`), `${lang}: header immediately queues same-lesson reset and stops speech`);
     check(lesson.includes(`? (restartPromise.current ??= reset${lang}LessonSession(lesson.id))`) && lesson.includes('replayingLevel && result.hasSavedSession') && !lesson.includes('lesson.id === lessons[0].id'), `${lang}: fromStart resets any lesson rather than using the separate level-replay mode`);
-    check(lesson.includes('setStage(saved.stage)') && lesson.includes('setAnswers(saved.answers)') && lesson.includes('شروع مجدد ذخیره نشد'), `${lang}: successful reset hydrates fresh state and failure is visible`);
-    check((home.includes("id: heroLesson.id, fromStart: '1'") || home.includes("heroLesson.id)}&fromStart=1")) && home.includes('onPress={replayBeginnerLevel}') && (home.includes("levelReplay: '1'") || home.includes("&levelReplay=1")), `${lang}: current-lesson reset differs from non-destructive level replay`);
+    check((lesson.includes('setStage(saved.stage)') || lesson.includes('setStage(Math.min(saved.stage')) && lesson.includes('setAnswers(saved.answers)') && lesson.includes('شروع مجدد ذخیره نشد'), `${lang}: successful reset hydrates fresh state and failure is visible`);
+    check((home.includes("id: heroLesson.id, fromStart: '1'") || home.includes("heroLesson.id)}&fromStart=1")) && home.includes('onPress={replayBeginnerLevel}') && (home.includes("levelReplay: '1'") || home.includes('&levelReplay=1')), `${lang}: current-lesson reset differs from non-destructive level replay`);
     check(library.includes('snapshot?.sessions ?? {}') && library.includes('openLesson(item.id)'), `${lang}: library distinguishes absent sessions and resumes selected lesson`);
+    check(library.includes("fromStart ? '&fromStart=1' : ''") && library.includes('openLesson(selectedLessons[0].id, true)') && library.includes('openLesson(levelStartLesson.id)'), `${lang}: start-from-beginning resets the first lesson while normal start resumes saved progress`);
   }
   // The language screens moved into their own modules, so the reset signal is checked where it is read.
   const newCourseScreen = fs.readFileSync(path.join(root, 'components/routes/NewCourseLessonScreen.tsx'), 'utf8');

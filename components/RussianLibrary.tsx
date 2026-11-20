@@ -74,7 +74,7 @@ export default function RussianLibrary() {
   const totalSentences = RUSSIAN_LESSONS.reduce((count, lesson) => count + lesson.sentences.length, 0);
 
   const openLevel = (levelId: RussianLevelId) => router.push(`/learn/ru/library?level=${levelId}` as never);
-  const openLesson = (id: string) => router.push(`/learn/ru/lesson?id=${encodeURIComponent(id)}` as never);
+  const openLesson = (id: string, fromStart = false) => router.push(`/learn/ru/lesson?id=${encodeURIComponent(id)}${fromStart ? '&fromStart=1' : ''}` as never);
 
   return (
     <View style={styles.root}>
@@ -147,7 +147,7 @@ export default function RussianLibrary() {
                 <Text style={styles.levelStartButtonText}>{levelStartLabel}</Text>
                 <ChevronLeft size={18} color={selected.color} />
               </Pressable>
-              <Pressable accessibilityRole="button" accessibilityLabel={`شروع از ابتدای سطح: ${selected.title}`} accessibilityState={{ disabled: !selectedLessons[0] }} disabled={!selectedLessons[0]} style={({ pressed }) => [styles.levelStartBeginningButton, pressed && { opacity: .85 }, !selectedLessons[0] && styles.levelStartButtonDisabled]} onPress={() => { if (selectedLessons[0]) openLesson(selectedLessons[0].id); }}>
+              <Pressable accessibilityRole="button" accessibilityLabel={`شروع از ابتدای سطح: ${selected.title}`} accessibilityState={{ disabled: !selectedLessons[0] }} disabled={!selectedLessons[0]} style={({ pressed }) => [styles.levelStartBeginningButton, pressed && { opacity: .85 }, !selectedLessons[0] && styles.levelStartButtonDisabled]} onPress={() => { if (selectedLessons[0]) openLesson(selectedLessons[0].id, true); }}>
                 <Play size={16} color={selected.color} fill={selected.color} />
                 <Text style={styles.levelStartButtonText}>شروع از ابتدا</Text>
                 <ChevronLeft size={18} color={selected.color} />
