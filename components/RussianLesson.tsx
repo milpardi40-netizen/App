@@ -16,6 +16,8 @@ import * as Speech from '@/lib/courseSpeech';
 import { ArrowRight, ChevronLeft, Headphones, Mic2, RefreshCw, RotateCcw, Sparkles, Volume2 } from 'lucide-react-native';
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
 import ProductionTask from '@/components/ProductionTask';
+import StarterA1Skill from '@/components/StarterA1Skill';
+import { RUSSIAN_A1_SKILLS } from '@/lib/languages/russianA1Skills';
 import RevealText from '@/components/RevealText';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
@@ -122,6 +124,11 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
   const allChecksPassed = checks.every((question, index) => answers[String(index)] === question.correctIndex);
+  // Optional cold comprehension for A1: a two-line message the learner has not rehearsed.
+  const a1Skills = lesson.levelId === 1 ? RUSSIAN_A1_SKILLS[lesson.id] ?? [] : [];
+  const listeningSkill = a1Skills.find(task => task.kind === 'listening');
+  const readingSkill = a1Skills.find(task => task.kind === 'reading');
+
   const stageLabel = starter && stage === 4 ? 'خواندن با حرف‌های آشنا' : stages[stage].labelFa;
   const progressPercent = Math.round(((stage + 1) / stages.length) * 100);
   const vocabulary = useMemo(() => {
@@ -426,6 +433,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             />
           </View>
           <View style={styles.shadowTip}><Headphones size={18} color={Palette.primary} /><Text style={styles.shadowText}>جمله‌ها به‌ترتیب خودکار پخش می‌شوند؛ هر زمان خواستید «ادامه» را بزنید.</Text></View>
+          {listeningSkill ? <StarterA1Skill key={`${lesson.id}-listening`} task={listeningSkill} onSpeak={speak} /> : null}
         </View>}
 
         {stage === 3 && <View style={styles.centerStage}>
@@ -495,6 +503,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             <Text style={styles.bridgeSummaryText}>جاهایی که ذهن فارسی‌زبان در این درس باید حواسش باشد، و جاهایی که روسی عین فارسی است.</Text>
             {bridgeRules.map(rule => <RuleCard key={rule.id} rule={rule} />)}
           </View> : null}
+          {readingSkill ? <StarterA1Skill key={`${lesson.id}-reading`} task={readingSkill} onSpeak={speak} /> : null}
         </View>}
 
         {(stage === 7 || stage === 8) && <View style={styles.centerStage}>

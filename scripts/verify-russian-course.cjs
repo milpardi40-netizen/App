@@ -10,6 +10,7 @@ const esbuild = require('esbuild');
       contents: [
         "export * from './lib/languages/russian';",
         "export * from './lib/languages/russianPreA1';",
+        "export * from './lib/languages/russianA1Skills';",
         "export * from './lib/languages/catalog';",
         "export * from './lib/languages/russianStudyState';",
         "export * from './lib/englishLessonNavigation';",
@@ -262,6 +263,44 @@ const esbuild = require('esbuild');
   const preLines = new Set(lessonsByLevel[0].flatMap(l => l.sentences.map(s => normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   const shared = a1.flatMap(l => l.sentences.filter(s => preLines.has(normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   check('A1 does not reteach the starter utterance list or the alphabet', !shared.length && a1.every(l => !l.teachingFa.includes('الفبا')));
+  // Optional cold comprehension for the Russian A1 band (lib/languages/russianA1Skills.ts).
+  const a1Skills = app.RUSSIAN_A1_SKILLS;
+  const a1SkillTasks = Object.values(a1Skills).flat();
+  check('A1 independent reading/listening tasks point at real A1 lessons', Object.keys(a1Skills).every(id => lessonsByLevel[1].some(lesson => lesson.id === id)));
+  check('every A1 lesson with a cold message has one listening and one reading task', Object.values(a1Skills).every(tasks => tasks.length === 2
+    && tasks.some(task => task.kind === 'listening') && tasks.some(task => task.kind === 'reading')));
+  check('A1 cold messages are decodable Russian with three distinct Persian choices and a valid answer', a1SkillTasks.every(task => /[А-Яа-я]/.test(task.passage)
+    && !/[A-Za-z]/.test(task.passage) && /\u0301/.test(task.passage) && task.passage.split(/\s+/).length >= 5
+    && task.choices.length === 3 && new Set(task.choices).size === 3
+    && task.choices.every(choice => /[\u0600-\u06FF]/.test(choice) && !/[А-Яа-я]/.test(choice))
+    && task.correctIndex >= 0 && task.correctIndex < 3 && !!task.promptFa && !!task.explanationFa));
+  const bandLines = new Set(lessonsByLevel[0].concat(lessonsByLevel[1]).flatMap(lesson => lesson.sentences.map(sentence => sentence.text)));
+  check('A1 cold messages never reuse a rehearsed dialogue line', !a1SkillTasks.some(task => bandLines.has(task.passage)));
+  check('A1 cold messages stay inside the vocabulary the two bands already show', (() => {
+    const fold = value => value.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е');
+    const words = value => (value.match(/[А-Яа-яЁё\u0301]+(?:-[А-Яа-яЁё\u0301]+)*/g) ?? []).map(fold);
+    const taught = new Set();
+    for (const lesson of lessonsByLevel[0].concat(lessonsByLevel[1])) {
+      for (const sentence of lesson.sentences) {
+        for (const word of words(sentence.text)) taught.add(word);
+        for (const entry of sentence.vocabulary ?? []) for (const word of words(entry.word)) taught.add(word);
+      }
+      for (const turn of lesson.dialogue ?? []) for (const word of words(turn.text)) taught.add(word);
+    }
+    const stems = new Set([...taught].filter(word => word.length > 3).map(word => word.slice(0, 4)));
+    const known = word => word.length <= 2 || taught.has(word) || word.startsWith('по-')
+      || stems.has(word.slice(0, 4)) || (word.endsWith('ла') && taught.has(word.slice(0, -2) + 'л'));
+    const unknown = new Set();
+    for (const task of a1SkillTasks) for (const word of words(task.passage)) if (!known(word)) unknown.add(word);
+    if (unknown.size) process.stdout.write(`  untaught in cold messages: ${[...unknown].join(', ')}\n`);
+    return unknown.size === 0;
+  })());
+
+  check('A1 cold messages do not leak the answer through a fixed slot', new Set(a1SkillTasks.map(task => task.correctIndex)).size >= 2
+    && a1SkillTasks.length >= 14);
+
+  check('A1 cold messages stay optional: the graded checks of an A1 lesson are still two', a1.every(lesson => lesson.checks.length === 2));
+
   check('A1 rehearses the complete local scene rather than isolated word lists', a1.every(l => l.dialogue.length === 8 && l.dialogue.every((d,i) => d.text === l.sentences[i].text && d.fa === l.sentences[i].fa)));
   check('A1 exit tasks have unique situations, evidence and a productive reply', new Set(a1.map(l=>l.checks[0].promptFa)).size===56 && a1.every(l => l.checks[1].choices[l.checks[1].correctIndex] === l.dialogue[7].text));
   check('A1 vocabulary remains anchored to the exact spoken line', a1.every(l=>l.sentences.every(s=>s.vocabulary.every(v=>s.text.includes(v.word) && v.meaning))));
