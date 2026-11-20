@@ -59,7 +59,7 @@ const check = (label, value) => { assert(value, label); checks.push(label); };
 const fold = (value) => value.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '')
   .replace(/ё/g, 'е').replace(/[«».,!?—–:;"'()]/g, '').replace(/ʹ|’|´/g, '').replace(/\s+/g, ' ').trim();
 
-const FLOOR = { de: 154, ru: 99 };
+const FLOOR = { de: 154, ru: 118 };
 
 for (const language of ['de', 'ru']) {
   const core = app.CORE_WORDS[language];

@@ -57,10 +57,10 @@ const esbuild = require('esbuild');
   const allIds = app.RUSSIAN_LESSONS.map(lesson => lesson.id);
   let cursor = 0;
   for (const id of allIds) if (id === stableIds[cursor]) cursor += 1;
-  check('Russian course keeps every original lesson in order and appends the Pre-A1 band and practice labs', app.RUSSIAN_LESSONS.length === 203
+  check('Russian course keeps every original lesson in order and appends the Pre-A1 band and practice labs', app.RUSSIAN_LESSONS.length === 214
     && cursor === stableIds.length
     && app.RUSSIAN_LESSONS.every(lesson => /^lab-ru-[a-z0-9]+-\d{2}$/.test(lesson.id) || (lesson.title && lesson.situation)));
-  check('Russian course keeps eight-sentence lessons and its practice labs', sentenceCount === 1664
+  check('Russian course keeps eight-sentence lessons and its practice labs', sentenceCount === 1752
     && app.RUSSIAN_LESSONS.filter(lesson => !lesson.id.startsWith('lab-')).every(lesson => lesson.sentences.length === 8)
     && app.RUSSIAN_LESSONS.filter(lesson => lesson.id.startsWith('lab-')).every(lesson => [10, 12].includes(lesson.sentences.length)));
   check('Russian roadmap now has six levels', app.RUSSIAN_LEVELS.map(level => level.id).join('|') === '0|1|2|3|4|5'
@@ -69,10 +69,10 @@ const esbuild = require('esbuild');
   const lessonsByLevel = [0, 1, 2, 3, 4, 5].map(levelId => app.RUSSIAN_LESSONS.filter(lesson => lesson.levelId === levelId));
   check('Russian roadmap groups lessons by level in order, from Pre-A1 through C1', app.RUSSIAN_LESSONS.every((lesson, index) => lesson.order === index + 1 && lesson.subtitle)
     && app.RUSSIAN_LESSONS.every((lesson, index) => index === 0 || lesson.levelId >= app.RUSSIAN_LESSONS[index - 1].levelId)
-    && lessonsByLevel.map(lessons => lessons.length).join('|') === '17|49|37|37|33|30'
+    && lessonsByLevel.map(lessons => lessons.length).join('|') === '28|49|37|37|33|30'
     && lessonsByLevel.every(lessons => lessons.length > 0)
     && lessonsByLevel.flat().length === app.RUSSIAN_LESSONS.length);
-  const expectedPreA1Ids = ['hello','name','yes-no','i-am','numbers-1-10','please-thanks','this-is','i-have','family','where-is','drinks','time','places','shopping','health','days','review'].map(id => `ru-pre-${id}`);
+  const expectedPreA1Ids = ['hello','name','yes-no','i-am','numbers-1-10','please-thanks','this-is','i-have','family','where-is','drinks','time','places','shopping','health','days','people','adjectives','colors','family-more','numbers-teens','questions','food','week','home','city','work','review'].map(id => `ru-pre-${id}`);
   check('Pre-A1 lesson IDs and order remain stable', lessonsByLevel[0].map(lesson => lesson.id).join('|') === expectedPreA1Ids.join('|'));
   check('Pre-A1 conversation uses the app’s six oral lines and separate ending without changing sentence addresses', lessonsByLevel[0].every(lesson => {
     const step = app.starterStep(lesson.id);
@@ -92,7 +92,7 @@ const esbuild = require('esbuild');
     && app.RUSSIAN_ALPHABET.every(letter => taughtLetters.has(letter)) && taughtLetters.size === app.RUSSIAN_ALPHABET.length);
   const preA1Modules = app.RUSSIAN_LEVELS[0].modules;
   const a1Modules = app.RUSSIAN_LEVELS[1].modules;
-  check('Pre-A1 has seven populated curriculum modules and all 17 stable lessons are assigned once', preA1Modules.length === 7
+  check('Pre-A1 has seven populated curriculum modules and all 28 stable lessons are assigned once', preA1Modules.length === 7
     && lessonsByLevel[0].every(lesson => preA1Modules.includes(lesson.module))
     && preA1Modules.every(module => lessonsByLevel[0].some(lesson => lesson.module === module))
     && ['ru-pre-health','ru-pre-drinks','ru-pre-time','ru-pre-places','ru-pre-shopping','ru-pre-days'].every(id => lessonsByLevel[0].find(lesson => lesson.id === id)?.module === 'واژگان روزمره')
