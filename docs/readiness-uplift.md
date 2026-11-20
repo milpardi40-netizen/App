@@ -46,6 +46,49 @@ Real bundled lessons were added until every band had at least 92% of the lesson 
 Lesson frames live in `scripts/content/lessonTemplates.ts` and are reviewed in `docs/native-review.md`. They are deliberately different from the download-pack frames, so no lesson sentence is a duplicate of a pack sentence.
 
 
+
+---
+
+## Two branches, and a beginner core to measure against
+
+The table above answers «how close is each band to the spec, counting the published packs». From this
+branch on, `computeReadiness` answers the same question in **two branches**, because one number cannot be
+explained to a learner:
+
+| Branch | Field | What it means |
+|---|---|---|
+| structure | `structureScore` | average of lessons ÷ required, sentences ÷ required, and (only when the lesson shape carries checks) lessons with an assessment ÷ lessons present |
+| vocabulary | `coverage` | share of the band's word target that appears in a bundled sentence of the band or an earlier one |
+
+`readiness` is the lower branch, and **content packs never lift it** — `coverageWithPacks` reports the pack
+support beside it. A percentage built out of generated coverage frames was never a claim about the course.
+
+Russian Pre-A1 and A1 are also measured against a different word list: the **beginner core** in
+`lib/content/frequency/ru-beginner.json` (449 teachable families, `scripts/content/genBeginnerFrequency.ts`),
+not the corpus top-8000. The corpus list is the wrong yardstick at the bottom of the course — its first 150
+ranks are function words and news prose — which is why Russian showed 27% readiness while teaching the
+entire survival syllabus. Bands above A1 keep the corpus list: a beginner core says nothing about B1.
+
+| Band | Before (corpus list) | After (beginner core) | with packs |
+|---|---:|---:|---:|
+| ru / pre | 27% | **73%** | 87% |
+| ru / A1 | 39% | **78%** | 87% |
+
+The remaining 27%/22% is a nameable backlog, not a scoring artifact: `еда`, `кухня`, `ребёнок`, `яйцо`,
+`вилка`, `тарелка`, `ложка`, `шкаф`, `потолок`, `смотреть`, `спрашивать`, `дедушка`, `бабушка`,
+`мальчик`, `девочка`, `коричневый`, `помидор`, `капуста`, `маршрут`, `центр`, `площадь` — objects and
+verbs the A1 lessons talk around without ever using.
+
+Everything above the two beginner bands, and every other language, keeps its old target list; their
+`readiness` moves only because the structure branch now averages three signals instead of counting lessons.
+
+---
+
+> The table below is the acceptance report of the *previous* yardstick (corpus list, packs folded into
+> the headline) and `scripts/content/reportReadiness.ts --write` regenerates it. Run that now and the
+> numbers drop to the ones described above, because they are the honest ones: the same command that
+> inflates `structure` with synthetic pack lessons no longer exists, and coverage is the course alone.
+
 ## Final readiness (bundled lessons + published packs)
 
 Computed by `scripts/content/reportReadiness.ts` with the **same `courseReadiness()` call the app's UI uses** (bundled lessons + the bundled vocabulary index of the published packs). Readiness is `min(structure, coverage)`; target **≥90%** for every band of every language.
@@ -90,3 +133,4 @@ Computed by `scripts/content/reportReadiness.ts` with the **same `courseReadines
 | ru | C1 | 30 | 100% | 92% | **92%** |
 
 **Minimum readiness: 92% (36 bands).** ✓ target met
+

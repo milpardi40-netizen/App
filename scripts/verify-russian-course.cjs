@@ -16,6 +16,11 @@ const esbuild = require('esbuild');
         "export * from './lib/englishLessonNavigation';",
         "export * from './lib/courseContent';",
         "export * from './lib/englishLearningEngine';",
+        "export * from './lib/content/readiness';",
+        "export * from './lib/content/courseSpec';",
+        "export { familyKey, sameFamily } from './lib/content/morphology';",
+        "export { default as ruBeginner } from './lib/content/frequency/ru-beginner.json';",
+        "export { default as ruFrequency } from './lib/content/frequency/ru.json';",
       ].join('\n'),
       resolveDir: process.cwd(),
     },
@@ -435,6 +440,61 @@ const esbuild = require('esbuild');
   check('Russian completion does not invent study minutes or English vocabulary mastery', savedProgress.totalMinutes === 0
     && savedProgress.learnedEssential504Words.length === 0);
   check('Russian progress never calls the Supabase cloud client', global.__russianSupabaseCalls === 0);
+
+  // ── phase 3: how the course is measured ────────────────────────────────────────────────
+  const core = app.ruBeginner;
+  const CORE_NOISE = ['млн', 'млрд', 'тыс', 'области', 'района', 'партии', 'президента', 'правительства', 'апреля', 'июня', 'населения', 'смерти', 'организации', 'депутатов'];
+  check('the beginner core is a teachable word list: bare lowercase Cyrillic, unique, sized for the beginner bands',
+    Array.isArray(core.words) && core.words.length >= app.COURSE_SPEC.pre.vocabularyCeiling
+      && core.words.length <= app.COURSE_SPEC.A1.vocabularyCeiling
+      && core.words.every(word => /^[а-яё]+$/.test(word))
+      && new Set(core.words).size === core.words.length
+      && core.words.every(word => !CORE_NOISE.includes(word)));
+  check('the beginner core names the bands it measures, and only those', JSON.stringify(core.bands) === JSON.stringify(['pre', 'A1']));
+  const readinessAudit = app.RUSSIAN_LESSONS.map(lesson => ({
+    id: lesson.id, levelId: lesson.levelId, title: lesson.title, sentences: lesson.sentences,
+    hasDialogue: (lesson.dialogue || []).length > 0, checks: (lesson.checks || []).length,
+  }));
+  const onCorpus = app.computeReadiness('ru', readinessAudit, app.ruFrequency, 60);
+  const onCore = app.computeReadiness('ru', readinessAudit, app.ruFrequency, 60, undefined, { beginnerFrequency: core });
+  check('Pre-A1 and A1 are measured on the beginner core, the bands above stay on the corpus list',
+    onCore.bands[0].vocabularyTarget === 'beginner' && onCore.bands[1].vocabularyTarget === 'beginner'
+      && onCore.bands.slice(2).every(band => band.vocabularyTarget === 'corpus'));
+  check('the beginner core measures at least what the corpus list credited, and reports its target size',
+    onCore.bands[0].coverage >= onCorpus.bands[0].coverage && onCore.bands[1].coverage >= onCorpus.bands[1].coverage
+      && onCore.bands[0].vocabularyTargetSize === app.COURSE_SPEC.pre.vocabularyCeiling
+      && onCore.bands[1].vocabularyTargetSize === core.words.length);
+  check('one family gets one target slot: no beginner word is listed twice under two case forms',
+    core.words.filter((word, index) => core.words.some((other, position) => position < index
+      && word.length >= 5 && other.length >= 5 && word.slice(0, 5) === other.slice(0, 5) && Math.abs(word.length - other.length) <= 3)).length === 0);
+  check('an inflected taught form credits its dictionary word (хочу counts for хотеть, пишет for писать)',
+    app.sameFamily(app.familyKey('ru', 'хотеть'), app.familyKey('ru', 'хочу'))
+      && app.sameFamily(app.familyKey('ru', 'писать'), app.familyKey('ru', 'пишет'))
+      && app.sameFamily(app.familyKey('ru', 'мочь'), app.familyKey('ru', 'может'))
+      && app.sameFamily(app.familyKey('ru', 'жена'), app.familyKey('ru', 'жену'))
+      && !app.sameFamily(app.familyKey('ru', 'жена'), app.familyKey('ru', 'женщина'))
+      && app.familyKey('de', 'kommen') === null);
+  check('the structure branch averages the signals the course data carries, and skips the ones it does not',
+    onCore.bands.every(band => {
+      if (!band.lessons) return band.structureScore === 0;
+      const ratio = (value, total) => total <= 0 ? 100 : Math.max(0, Math.min(100, Math.round((value / total) * 100)));
+      const signals = [ratio(band.lessons, band.lessonsTarget), ratio(band.sentences, band.sentencesTarget), ratio(band.lessonsWithChecks, band.lessons)];
+      return band.structureScore === Math.round(signals.reduce((sum, signal) => sum + signal, 0) / signals.length);
+    }));
+  check('readiness is the weaker of the two branches and never counts content packs in the headline',
+    onCore.bands.every(band => band.readiness === (band.lessons ? Math.min(band.structureScore, band.coverage) : 0))
+      && onCore.packsIncluded === false
+      && (() => {
+        const withPacks = app.computeReadiness('ru', readinessAudit, app.ruFrequency, 60, { A1: [core.words[core.words.length - 1]] }, { beginnerFrequency: core });
+        const a1 = withPacks.bands[1];
+        return withPacks.packsIncluded === true && a1.coverageWithPacks > a1.coverage && a1.coverage === a1.coverageCourse
+          && a1.coveredWords === a1.coveredWordsCourse;
+      })());
+  const readinessLine = fs.readFileSync('components/LevelReadinessLine.tsx', 'utf8');
+  check('the level card shows both readiness branches and keeps the pack number beside the vocabulary branch',
+    readinessLine.includes('label="ساختار"') && readinessLine.includes("'واژگان مقدماتی'")
+      && readinessLine.includes("'واژگان پربسامد'") && readinessLine.includes('band.structureScore')
+      && readinessLine.includes('band.coverageWithPacks > band.coverage') && readinessLine.includes('vocabularyTargetSize'));
 
   console.log(`${checks.length} Russian curriculum, lesson flow, registry, session-resume and language-isolation checks passed (${sentenceCount} Russian sentences).`);
 })().catch(error => { console.error(error); process.exit(1); });
