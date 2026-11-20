@@ -525,6 +525,17 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             </> },
           ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
+        {/* A1 and up ends with a written answer to the same situation: on-device, self-checked,
+            never graded and never required to finish the lesson. */}
+        {stage === 8 && lesson.levelId >= 1 ? <ProductionTask
+          key={`${lesson.id}-production`}
+          source={lesson}
+          examples={lesson.sentences}
+          onSpeak={text => speak(text)}
+          foreignStyle={styles.practiceForeign}
+          accent={Palette.primary}
+        /> : null}
+
         {stage === 9 && <LessonConversationRoom
           key={lesson.id}
           lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}

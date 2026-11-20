@@ -10,7 +10,7 @@ import type { LearningLesson } from './languages/types';
  *  - listen:    the sentence is played; pick the Persian meaning
  *  - truefalse: a sentence with a meaning that is sometimes swapped; ✓ or ✗
  *  - match:     pair three sentences with their three meanings
- *  - write:     the Persian is shown; type the sentence (production — opt-in from A2 up)
+ *  - write:     the Persian is shown; type the sentence (production — opt-in from A2 up, from A1 in Russian)
  * Everything is deterministic per lesson (seeded), with no new teaching content.
  */
 export type PracticeKind = 'order' | 'fill' | 'listen' | 'truefalse' | 'match' | 'write';
