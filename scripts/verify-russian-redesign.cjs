@@ -64,9 +64,11 @@ const es = require('esbuild');
   for(const [text,i] of [['да я хочу чай',0],['нет я не хочу чай',1],['я хочу чай',-1],['что ты хочешь',-1],['это мама',-1],['чай или воду',-1],['',-1]]) assert.equal(x.matchExchangeReply(text,turn.options),i);
   assert(x.exchangeView(scene,{starter:'learner',picks:[0]}).history.at(-1).line.text.includes('вот'));
   assert(x.exchangeView(scene,{starter:'learner',picks:[1]}).history.at(-1).line.text.includes('хо́чешь'));
-  // the drink request lives in its own lesson now: «Чай?» is a legal opening there, not here.
+  // the drink choice lives in its own lesson now: its opening question is legal there, not here; a bare
+  // word from the middle of the sentence is a near-miss, not a match.
   const drinkScene=x.exchangeForLesson(lessons.find(d=>d.id==='ru-pre-drinks'));
-  assert.equal(x.matchExchangeReply('чай', x.exchangeView(drinkScene,{starter:'learner',picks:[]}).options), 0);
+  assert.equal(x.matchExchangeReply('чай или воду', x.exchangeView(drinkScene,{starter:'learner',picks:[]}).options), 0);
+  assert.equal(x.matchExchangeReply('воду', x.exchangeView(drinkScene,{starter:'learner',picks:[]}).options), -1);
   assert(!x.validExchangePath(scene,{starter:'partner',picks:[1],said:{0:'я не хочу воду'}}));
   const all = new Set(x.VERBS.map(v=>v.lemma)); assert.equal(all.size,x.VERBS.length);
   for(const v of x.VERBS) { assert(v.fa && v.forms.length && v.examples.length && v.level>=0 && v.level<=5); for(const s of v.examples) assert(s.fa && x.gapFor(s.text,s.form).includes('____'), v.lemma); }
