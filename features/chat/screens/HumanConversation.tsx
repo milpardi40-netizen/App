@@ -13,7 +13,7 @@ import {
   useAudioRecorder,
   useAudioRecorderState,
 } from 'expo-audio';
-import { BarChart3, Check, Headphones, Languages, Lightbulb, Mic, Smile, Pause, Play, Send, ShieldCheck, Sparkles, Square, Timer, Trash2, UserRound, Volume2, X } from 'lucide-react-native';
+import { BarChart3, Headphones, Mic, Pause, Play, Send, ShieldCheck, Sparkles, Square, Timer, Trash2, UserRound, Volume2, X } from 'lucide-react-native';
 import {
   currentChatUserId,
   deleteConversationForMe,
@@ -27,8 +27,6 @@ import {
   unsubscribeFromMessages,
   type DirectMessage,
 } from '@/lib/conversations';
-import { EmojiPicker } from '@/components/EmojiPicker';
-import { requestHumanChatAssist, type HumanAssistMode, type HumanAssistResult } from '@/lib/humanChatAssist';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { ChatBackButton } from '@/components/ChatBackButton';
 import { KeyboardAttachedView } from '@/components/KeyboardAttachedView';
@@ -138,16 +136,16 @@ export default function HumanConversationScreen() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showEmoji, setShowEmoji] = useState(false);
-  const [showCoach, setShowCoach] = useState(false);
-  const [assisting, setAssisting] = useState<HumanAssistMode | null>(null);
-  const [assistResult, setAssistResult] = useState<HumanAssistResult | null>(null);
+  const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
   const [showEvaluation, setShowEvaluation] = useState(false);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(recorder, 250);
-  const textMessageCount = messages.filter(message => message.type === 'text' && !!message.body).length;
-  const freeStep = freePlan ? Math.min(textMessageCount, freePlan.prompts.length) : 0;
+  const myTurnMessages = messages.filter(message => message.senderId === myId && (message.type === 'text' || message.type === 'voice'));
+  const partnerTurnMessages = messages.filter(message => message.senderId !== myId && (message.type === 'text' || message.type === 'voice'));
+  const freeStep = freePlan ? Math.min(myTurnMessages.length, freePlan.prompts.length) : 0;
   const activeFreePrompt = freePlan && freeStep < freePlan.prompts.length ? freePlan.prompts[freeStep] : null;
+  const myTurn = myTurnMessages.length <= partnerTurnMessages.length;
+  const activeTurnPrompt = freePlan ? (freeStep === 0 ? freePlan.starter : activeFreePrompt || 'حالا یک پرسش مرتبط از هم‌صحبت بپرس.') : 'به موضوع درس پاسخ بده و گفت‌وگو را ادامه بده.';
   const roomLevel = levelId ? `سطح ${String(levelId)}` : 'سطح آزاد';
   const roomTopic = String(situation || freePlan?.title || 'گفت‌وگوی روزمره');
   const evaluation = useMemo<HumanConversationEvaluation>(() => evaluateHumanConversation(messages, myId, language === 'ru' ? 'ru' : 'en'), [language, messages, myId]);
@@ -188,9 +186,14 @@ export default function HumanConversationScreen() {
   const send = async () => {
     const clean = input.trim();
     if (!clean || sending) return;
+    if (!myTurn) { setError('اکنون نوبت هم‌صحبت است؛ بعد از پاسخ او ادامه بده.'); return; }
+    const context = `${freePlan?.mission || ''} ${freePlan?.title || ''} ${freePlan?.prompts.join(' ') || ''} ${situation || ''}`.toLowerCase();
+    const answerWords = clean.toLowerCase().split(/\s+/).filter(Boolean);
+    const contextWords = context.split(/\s+/).filter(word => word.length > 3);
+    const related = answerWords.length >= 2 && (answerWords.some(word => contextWords.some(contextWord => contextWord.includes(word) || word.includes(contextWord))) || clean.length >= 18);
+    if (!related) { setError('این پاسخ هنوز به مأموریت مکالمه مرتبط نیست. به پرسش فعلی پاسخ بده یا یک جزئیات مرتبط اضافه کن.'); return; }
     setSending(true);
     setInput('');
-    setAssistResult(null);
     try {
       addMessage(await sendTextMessage(conversationId, clean));
       setError(null);
@@ -218,31 +221,10 @@ export default function HumanConversationScreen() {
     }
   };
 
-  const runAssist = async (mode: HumanAssistMode) => {
-    if (assisting) return;
-    if (mode !== 'suggest' && !input.trim()) {
-      setError(mode === 'translate' ? 'ابتدا جمله فارسی را بنویسید.' : 'ابتدا جمله انگلیسی را بنویسید.');
-      return;
-    }
-    setAssisting(mode);
-    setError(null);
-    try {
-      const result = await requestHumanChatAssist(
-        conversationId,
-        mode,
-        input,
-        messages.filter((item) => item.type === 'text' && item.body).map((item) => ({ mine: item.senderId === myId, text: item.body || '' })),
-      );
-      setAssistResult(result);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'دستیار خصوصی پاسخ نداد.');
-    } finally {
-      setAssisting(null);
-    }
-  };
 
   const startRecording = async () => {
     if (!ONLINE_AUDIO_ENABLED) { setError(ONLINE_AUDIO_DISABLED_MESSAGE); return; }
+    if (!myTurn) { setError('اکنون نوبت هم‌صحبت است؛ بعد از پاسخ او ادامه بده.'); return; }
     if (sending || recorderState.isRecording) return;
     try {
       setError(null);
@@ -265,6 +247,7 @@ export default function HumanConversationScreen() {
 
   const stopAndSendRecording = async () => {
     if (!ONLINE_AUDIO_ENABLED) { setError(ONLINE_AUDIO_DISABLED_MESSAGE); return; }
+    if (!myTurn) { setError('اکنون نوبت هم‌صحبت است؛ بعد از پاسخ او ادامه بده.'); return; }
     if (!recorderState.isRecording || sending) return;
     const duration = Math.max(1, Math.round(recorderState.durationMillis / 1000));
     setSending(true);
@@ -339,17 +322,16 @@ export default function HumanConversationScreen() {
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
         >
             {freePlan ? (
-              <View style={styles.freePlanCard}>
-                <View style={styles.freePlanHeader}><Sparkles size={15} color={Colors.warning[400]} /><Text style={styles.freePlanKicker}>مأموریت مکالمهٔ آزاد · بدون تکرار دیالوگ درس</Text></View>
+              <View style={styles.missionCard}>
+                <View style={styles.freePlanHeader}><Sparkles size={15} color={Colors.warning[400]} /><Text style={styles.freePlanKicker}>مأموریت مرتبط با درس · نوبت {freeStep + 1}</Text></View>
                 <Text style={styles.freePlanTitle}>{freePlan.title}</Text>
                 <Text style={styles.freePlanMission}>{freePlan.mission}</Text>
-                <Text style={styles.freePlanStep}>{freeStep < freePlan.prompts.length ? `نوبت ${freeStep + 1} از ${freePlan.prompts.length}` : 'حالا آزاد ادامه بده'}</Text>
-                <Text style={styles.freePlanStarter}>{freeStep === 0 ? freePlan.starter : activeFreePrompt || 'حالا با یک پرسش تازه ادامه بده.'}</Text>
-                {activeFreePrompt ? <Text style={styles.freePlanPrompt}>راهنمای این نوبت: {activeFreePrompt}</Text> : null}
+                <View style={styles.promptBox}><Text style={styles.promptLabel}>{myTurn ? 'نوبت شماست — پاسخ بده' : 'نوبت هم‌صحبت است — گوش بده'}</Text><Text style={styles.freePlanStarter}>{activeTurnPrompt}</Text></View>
+                {activeFreePrompt ? <Text style={styles.freePlanPrompt}>پاسخ باید به این پرسش مرتبط باشد: {activeFreePrompt}</Text> : null}
               </View>
             ) : null}
             <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
-            <View style={styles.turnBanner}><View style={styles.turnIcon}><Mic size={15} color={Colors.primary[400]} /></View><View style={styles.turnCopy}><Text style={styles.turnTitle}>مکالمه را طبیعی ادامه دهید</Text><Text style={styles.turnText}>اشتباه‌ها مکالمه را متوقف نمی‌کنند؛ بعداً بازخورد می‌گیرید.</Text></View></View>
+            <View style={[styles.turnBanner, !myTurn && styles.turnBannerWaiting]}><View style={styles.turnIcon}><Mic size={15} color={myTurn ? Colors.primary[400] : Colors.success[400]} /></View><View style={styles.turnCopy}><Text style={styles.turnTitle}>{myTurn ? 'فقط پاسخ مرتبط با مأموریت' : 'در حال گوش دادن به هم‌صحبت'}</Text><Text style={styles.turnText}>{myTurn ? 'پاسخ را گفتاری یا نوشتاری بفرست؛ پیام آزاد و خارج از موضوع ارسال نمی‌شود.' : 'پس از پاسخ هم‌صحبت، نوبت شما به‌صورت خودکار باز می‌شود.'}</Text></View></View>
             {showEvaluation ? <EvaluationCard evaluation={evaluation} onClose={() => setShowEvaluation(false)} /> : null}
           {!messages.length ? (
             <View style={styles.empty}><Text style={styles.emptyEmoji}>👋</Text><Text style={styles.emptyTitle}>گفتگو را شروع کنید</Text><Text style={styles.emptyDesc}>یک سلام ساده انگلیسی بهترین شروع است.</Text></View>
@@ -366,44 +348,23 @@ export default function HumanConversationScreen() {
       )}
 
       <KeyboardAttachedView onLayout={event => { composerHeight.current = event.nativeEvent.layout.height; }}>
-      {showCoach ? (
-        <View style={styles.coach}>
-          <View style={styles.coachTitleRow}><Sparkles size={15} color={Colors.warning[400]} /><Text style={styles.coachTitle}>دستیار خصوصی — چیزی خودکار ارسال نمی‌شود</Text></View>
-          <View style={styles.coachActions}>
-            <Pressable accessibilityRole="button" accessibilityLabel="ترجمهٔ پیش‌نویس پیام" accessibilityState={{ disabled: !!assisting }} style={styles.coachAction} disabled={!!assisting} onPress={() => void runAssist('translate')}><Languages size={14} color={Colors.warning[300]} /><Text style={styles.coachActionText}>ترجمه</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="اصلاح پیش‌نویس پیام" accessibilityState={{ disabled: !!assisting }} style={styles.coachAction} disabled={!!assisting} onPress={() => void runAssist('correct')}><Check size={14} color={Colors.success[300]} /><Text style={styles.coachActionText}>اصلاح</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="پیشنهاد پاسخ" accessibilityState={{ disabled: !!assisting }} style={styles.coachAction} disabled={!!assisting} onPress={() => void runAssist('suggest')}><Lightbulb size={14} color={Colors.primary[300]} /><Text style={styles.coachActionText}>پیشنهاد پاسخ</Text></Pressable>
-          </View>
-          {assisting ? <ActivityIndicator size="small" color={Colors.warning[400]} /> : null}
-          {assistResult ? (
-            <View style={styles.assistResult}>
-              <Text style={styles.assistPrimary}>{assistResult.primary}</Text>
-              {assistResult.explanationFa ? <Text style={styles.assistExplanation}>{assistResult.explanationFa}</Text> : null}
-              <Pressable accessibilityRole="button" accessibilityLabel="قرار دادن پیشنهاد در کادر پیام" style={styles.useSuggestion} onPress={() => { setInput(assistResult.primary); setAssistResult(null); }}><Text style={styles.useSuggestionText}>قرار دادن در کادر پیام</Text></Pressable>
-              {assistResult.alternatives.map((item) => <Pressable key={item} accessibilityRole="button" accessibilityLabel={`استفاده از پیشنهاد: ${item}`} onPress={() => { setInput(item); setAssistResult(null); }}><Text style={styles.alternative}>{item}</Text></Pressable>)}
-            </View>
-          ) : null}
-        </View>
-      ) : null}
+      <View style={styles.modeSwitch}><Text style={styles.modeLabel}>نوع پاسخ:</Text><Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}><Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text></Pressable><Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}><Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text></Pressable></View>
       {recorderState.isRecording ? <View style={styles.recording}><View style={styles.recordDot} /><Text style={styles.recordingText}>در حال ضبط · {Math.max(1, Math.round(recorderState.durationMillis / 1000))} ثانیه · برای ارسال دوباره بزنید</Text></View> : null}
       {!ONLINE_AUDIO_ENABLED ? <View style={styles.audioNotice}><ShieldCheck size={14} color={Colors.success[300]} /><Text style={styles.audioNoticeText}>{ONLINE_AUDIO_DISABLED_MESSAGE} پخش پیام‌های دریافتی همچنان در دسترس است.</Text></View> : null}
       {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
-      {showEmoji ? <EmojiPicker onPick={(emoji) => setInput((value) => value + emoji)} /> : null}
       <View style={styles.composer}>
-        <Pressable accessibilityRole="button" accessibilityLabel="باز و بسته‌کردن دستیار زبان" accessibilityState={{ expanded: showCoach }} style={styles.helper} onPress={() => setShowCoach((value) => !value)}><Sparkles size={19} color={showCoach ? Colors.warning[400] : Colors.neutral[400]} /></Pressable>
-        <Pressable accessibilityRole="button" accessibilityLabel="باز و بسته‌کردن ایموجی‌ها" accessibilityState={{ expanded: showEmoji }} style={styles.helper} onPress={() => { setShowEmoji((value) => !value); if (!showEmoji) Keyboard.dismiss(); }}><Smile size={19} color={showEmoji ? Colors.warning[400] : Colors.neutral[400]} /></Pressable>
-        <TextInput
+        {inputMode === 'text' ? <TextInput
           accessibilityLabel="متن پیام فارسی یا انگلیسی"
           style={[styles.input, containsRtlScript(input || 'پیام') ? styles.rtlText : styles.ltrText]}
           value={input}
           onChangeText={setInput}
-          onFocus={() => setShowEmoji(false)}
-          placeholder="پیام فارسی یا انگلیسی بنویسید…"
+          onFocus={() => undefined}
+          placeholder={myTurn ? 'پاسخ مرتبط با مأموریت را بنویسید…' : 'منتظر پاسخ هم‌صحبت باشید…'}
           placeholderTextColor={Colors.neutral[600]}
           multiline
-        />
-        {input.trim() ? (
-          <Pressable accessibilityRole="button" accessibilityLabel="ارسال پیام متنی" accessibilityState={{ disabled: sending }} style={[styles.send, sending && styles.disabled]} disabled={sending} onPress={() => void send()}>{sending ? <ActivityIndicator size="small" color={Colors.onColor} /> : <Send size={18} color={Colors.onColor} />}</Pressable>
+        /> : <View style={styles.voiceModeHint}><Mic size={20} color={Colors.primary[400]} /><Text style={styles.voiceModeText}>{ONLINE_AUDIO_ENABLED ? 'برای پاسخ مرتبط، صحبت کن و دکمه را بزن' : 'ضبط گفتاری فعلاً در دسترس نیست؛ نوشتاری را انتخاب کن'}</Text></View>}
+        {inputMode === 'text' ? (
+          <Pressable accessibilityRole="button" accessibilityLabel="ارسال پاسخ مرتبط" accessibilityState={{ disabled: sending || !myTurn }} style={[styles.send, (sending || !myTurn) && styles.disabled]} disabled={sending || !myTurn} onPress={() => void send()}>{sending ? <ActivityIndicator size="small" color={Colors.onColor} /> : <Send size={18} color={Colors.onColor} />}</Pressable>
         ) : (
           <Pressable accessibilityRole="button" accessibilityLabel={ONLINE_AUDIO_ENABLED ? 'شروع یا پایان ضبط پیام صوتی' : 'ضبط و ارسال پیام صوتی فعلاً غیرفعال است'} accessibilityHint={!ONLINE_AUDIO_ENABLED ? ONLINE_AUDIO_DISABLED_MESSAGE : undefined} accessibilityState={{ disabled: !ONLINE_AUDIO_ENABLED || sending }} style={[styles.send, recorderState.isRecording && styles.recordStop, (sending || !ONLINE_AUDIO_ENABLED) && styles.disabled]} disabled={sending || !ONLINE_AUDIO_ENABLED} onPress={() => recorderState.isRecording ? void stopAndSendRecording() : void startRecording()}>
             {sending ? <ActivityIndicator size="small" color={Colors.onColor} /> : recorderState.isRecording ? <Square size={16} color={Colors.onColor} fill={Colors.onColor} /> : <Mic size={19} color={Colors.onColor} />}
@@ -444,6 +405,7 @@ const styles = StyleSheet.create({
   privateNote: { alignSelf: 'center', flexDirection: 'row-reverse', alignItems: 'center', gap: 5, borderRadius: Radius.full, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: Colors.success[500] + '0D', marginBottom: 2 },
   privateText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400] },
   turnBanner: { flexDirection: 'row-reverse', alignItems: 'center', gap: 9, padding: 11, borderRadius: Radius.lg, backgroundColor: Colors.primary[500] + '0B', borderWidth: 1, borderColor: Colors.primary[500] + '20' },
+  turnBannerWaiting: { backgroundColor: Colors.success[500] + '0B', borderColor: Colors.success[500] + '25' },
   turnIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: Colors.primary[500] + '18', alignItems: 'center', justifyContent: 'center' },
   turnCopy: { flex: 1, gap: 2 },
   turnTitle: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Colors.primary[700], textAlign: 'right' },
@@ -511,6 +473,17 @@ const styles = StyleSheet.create({
   useSuggestion: { alignSelf: 'flex-end', borderRadius: Radius.full, backgroundColor: Colors.primary[500], paddingHorizontal: 10, paddingVertical: 6 },
   useSuggestionText: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.onColor },
   alternative: { fontFamily: Typography.latinFontFamily, fontSize: 12, fontWeight: '800', color: Colors.primary[200], textAlign: 'left', writingDirection: 'ltr', paddingVertical: 3 },
+  missionCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '35', gap: 7 },
+  promptBox: { borderRadius: Radius.lg, padding: 11, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.primary[500] + '25', gap: 5 },
+  promptLabel: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Colors.primary[600], textAlign: 'right' },
+  modeSwitch: { minHeight: 42, paddingHorizontal: Spacing.md, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'flex-start', gap: 7 },
+  modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[300], marginLeft: 3 },
+  modeButton: { minHeight: 30, borderRadius: Radius.full, paddingHorizontal: 12, justifyContent: 'center', backgroundColor: '#F5F6FB' },
+  modeButtonActive: { backgroundColor: Colors.primary[500] + '18', borderWidth: 1, borderColor: Colors.primary[500] + '35' },
+  modeButtonText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300] },
+  modeButtonTextActive: { color: Colors.primary[600], fontFamily: Typography.boldFontFamily },
+  voiceModeHint: { flex: 1, minHeight: 44, borderRadius: 22, paddingHorizontal: 12, backgroundColor: Colors.primary[500] + '0A', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
+  voiceModeText: { flexShrink: 1, fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 17, color: Colors.primary[600], textAlign: 'right' },
   recording: { minHeight: 34, backgroundColor: Colors.error[500] + '12', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   recordDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.error[400] },
   recordingText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.error[300] },
