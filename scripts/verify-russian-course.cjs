@@ -369,9 +369,13 @@ const esbuild = require('esbuild');
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa
       && stage.labelEn === app.ENGLISH_ENGINE_STEPS[index].labelEn));
   const russianLessonScreen = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
-  check('Russian conversation stage uses every original lesson sentence and the Russian voice', russianLessonScreen.includes('stage === 9 && <LessonConversationRoom')
-    && russianLessonScreen.includes('lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}')
-    && russianLessonScreen.includes('locale="ru-RU"'));
+  check('Russian conversation stage runs the lesson dialogue with its own roles and the Russian voice', russianLessonScreen.includes('stage === 9 && <LessonConversationRoom')
+    && russianLessonScreen.includes('dialogue={lesson.dialogue}')
+    && russianLessonScreen.includes('fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}')
+    && russianLessonScreen.includes('locale="ru-RU"')
+    // the room is shared: the dialogue must drive the roles, and a stuck learner must always have a way on
+    && fs.readFileSync('components/LessonConversationRoom.tsx', 'utf8').includes('result.score >= PASS')
+    && fs.readFileSync('components/LessonConversationRoom.tsx', 'utf8').includes('setTyped(true)'));
   check('Russian speaking test is optional and Continue remains available', !russianLessonScreen.includes('speakingTestComplete')
     && russianLessonScreen.includes('disabled={saving || !!sessionError}'));
   check('English lesson scope includes the original material, Pre-A1, practice labs and the A2, B1 and B2 lessons', app.SENTENCE_LESSONS.length === 274

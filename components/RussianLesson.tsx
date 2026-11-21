@@ -547,7 +547,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
 
         {stage === 9 && <LessonConversationRoom
           key={lesson.id}
-          lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}
+          dialogue={lesson.dialogue}
+          fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
           locale="ru-RU"
           onSpeak={speakConversationLine}
           onStop={stopConversationSpeech}

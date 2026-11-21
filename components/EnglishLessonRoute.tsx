@@ -687,7 +687,8 @@ export default function SentenceLessonScreen() {
         )}
         {stage === 9 && <LessonConversationRoom
           key={lesson.id}
-          lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))}
+          dialogue={lesson.dialogue}
+          fallback={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
           locale="en-US"
           onSpeak={speakConversationLine}
           onStop={stopConversationSpeech}

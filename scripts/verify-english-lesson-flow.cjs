@@ -134,9 +134,11 @@ const esbuild = require('esbuild');
   );
   check(!screen.includes('saveLessonSession(lesson.id,freshSession())'), 'completion does not erase the saved session');
   check(screen.includes('stage === 9 && <LessonConversationRoom')
-    && screen.includes('lines={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))}')
-    && room.includes('requestPermissionsAsync') && room.includes('autoStart') && room.includes('onResult={nextTurn}')
-    && room.includes('onSpeak(current.text, finish)') && speakCheck.includes('const retry = autoStart && !stoppingByUser.current;'), 'the final English stage automatically alternates device speech and learner microphone turns, retrying silence');
+    && screen.includes('dialogue={lesson.dialogue}') && screen.includes('locale="en-US"')
+    && room.includes('requestPermissionsAsync') && room.includes('autoStart')
+    && room.includes('const PASS = 70') && room.includes('result.score >= PASS') && room.includes('sendTyped')
+    && room.includes('speak(current.text, index)') && speakCheck.includes('const retry = autoStart && !stoppingByUser.current;'),
+    'the final English stage is a chat over the lesson dialogue: roles come from the data, a turn advances only on a passing answer, and a learner without a microphone can type the answer');
   check(!screen.includes('speakingTestComplete') && screen.includes('disabled={saving || !!sessionError}'), 'the English speaking test is optional and Continue remains available');
   const home = fs.readFileSync('app/lang/index.tsx', 'utf8');
   const library = fs.readFileSync('app/lang/library.tsx', 'utf8');
