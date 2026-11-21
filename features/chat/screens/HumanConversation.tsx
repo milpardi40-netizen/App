@@ -13,7 +13,7 @@ import {
   useAudioRecorder,
   useAudioRecorderState,
 } from 'expo-audio';
-import { Check, Languages, Lightbulb, Mic, Smile, Pause, Play, Send, ShieldCheck, Sparkles, Square, Trash2, UserRound } from 'lucide-react-native';
+import { Check, Headphones, Languages, Lightbulb, Mic, Smile, Pause, Play, Send, ShieldCheck, Sparkles, Square, Timer, Trash2, UserRound, Volume2 } from 'lucide-react-native';
 import {
   currentChatUserId,
   deleteConversationForMe,
@@ -132,6 +132,8 @@ export default function HumanConversationScreen() {
   const textMessageCount = messages.filter(message => message.type === 'text' && !!message.body).length;
   const freeStep = freePlan ? Math.min(textMessageCount, freePlan.prompts.length) : 0;
   const activeFreePrompt = freePlan && freeStep < freePlan.prompts.length ? freePlan.prompts[freeStep] : null;
+  const roomLevel = levelId ? `سطح ${String(levelId)}` : 'سطح آزاد';
+  const roomTopic = String(situation || freePlan?.title || 'گفت‌وگوی روزمره');
 
   const addMessage = (message: DirectMessage) => {
     setMessages((current) => current.some((item) => item.id === message.id) ? current : [...current, message]);
@@ -288,9 +290,22 @@ export default function HumanConversationScreen() {
       <View style={styles.header}>
         <ChatBackButton fallback={MANAGEMENT_BUILD ? '/admin/chats' : '/conversations'} />
         <View style={styles.avatar}><UserRound size={22} color={Colors.primary[300]} /></View>
-        <View style={styles.headerText}><Text style={[styles.name, containsRtlScript(name || 'مخاطب واقعی') ? styles.rtlText : styles.ltrText]}>{name || 'مخاطب واقعی'}</Text><Text style={styles.status}>گفتگوی خصوصی</Text></View>
+        <View style={styles.headerText}><Text style={[styles.name, containsRtlScript(name || 'مخاطب واقعی') ? styles.rtlText : styles.ltrText]}>{name || 'مخاطب واقعی'}</Text><View style={styles.onlineRow}><View style={styles.onlineDot} /><Text style={styles.status}>آمادهٔ مکالمه</Text></View></View>
         <Pressable accessibilityRole="button" accessibilityLabel="حذف این مخاطب و گفتگو" accessibilityState={{ disabled: sending }} style={styles.deleteButton} onPress={confirmDeleteConversation} disabled={sending}><Trash2 size={18} color={Colors.error[300]} /></Pressable>
         <ShieldCheck size={20} color={Colors.success[400]} />
+      </View>
+
+      <View style={styles.roomBar}>
+        <View style={styles.roomBarTop}>
+          <View style={styles.roomIdentity}><Headphones size={17} color={Colors.primary[400]} /><Text style={styles.roomTitle}>اتاق تمرین مکالمه</Text></View>
+          <View style={styles.liveBadge}><View style={styles.liveDot} /><Text style={styles.liveText}>زنده</Text></View>
+        </View>
+        <Text style={styles.roomTopic}>{roomTopic}</Text>
+        <View style={styles.roomMetaRow}>
+          <View style={styles.metaChip}><Text style={styles.metaChipText}>{roomLevel}</Text></View>
+          <View style={styles.metaChip}><Timer size={13} color={Colors.neutral[400]} /><Text style={styles.metaChipText}>مکالمهٔ آزاد</Text></View>
+          <View style={styles.metaChip}><Volume2 size={13} color={Colors.success[400]} /><Text style={styles.metaChipText}>نوبتی</Text></View>
+        </View>
       </View>
 
       {loading ? (
@@ -316,6 +331,7 @@ export default function HumanConversationScreen() {
               </View>
             ) : null}
             <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
+            <View style={styles.turnBanner}><View style={styles.turnIcon}><Mic size={15} color={Colors.primary[400]} /></View><View style={styles.turnCopy}><Text style={styles.turnTitle}>مکالمه را طبیعی ادامه دهید</Text><Text style={styles.turnText}>اشتباه‌ها مکالمه را متوقف نمی‌کنند؛ بعداً بازخورد می‌گیرید.</Text></View></View>
           {!messages.length ? (
             <View style={styles.empty}><Text style={styles.emptyEmoji}>👋</Text><Text style={styles.emptyTitle}>گفتگو را شروع کنید</Text><Text style={styles.emptyDesc}>یک سلام ساده انگلیسی بهترین شروع است.</Text></View>
           ) : messages.map((message) => {
@@ -381,19 +397,37 @@ export default function HumanConversationScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: Colors.neutral[950] },
-  header: { paddingTop: 12, paddingHorizontal: Spacing.md, paddingBottom: Spacing.sm, minHeight: 64, backgroundColor: Colors.neutral[900], borderBottomWidth: 1, borderBottomColor: Colors.neutral[800], flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
-  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.primary[500] + '15', alignItems: 'center', justifyContent: 'center' },
+  root: { flex: 1, backgroundColor: '#F7F8FC' },
+  header: { paddingTop: 13, paddingHorizontal: Spacing.md, paddingBottom: 12, minHeight: 70, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
+  avatar: { width: 46, height: 46, borderRadius: 23, backgroundColor: Colors.primary[500] + '15', borderWidth: 1, borderColor: Colors.primary[500] + '30', alignItems: 'center', justifyContent: 'center' },
   headerText: { flex: 1 },
-  name: { fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[100] },
-  status: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400], textAlign: 'right', marginTop: 2 },
+  name: { fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[0] },
+  onlineRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, marginTop: 3 },
+  onlineDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.success[500] },
+  status: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[600], textAlign: 'right' },
   deleteButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: Colors.error[500] + '12', alignItems: 'center', justifyContent: 'center' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   centerText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[500] },
+  roomBar: { marginHorizontal: Spacing.md, marginTop: Spacing.md, padding: Spacing.md, borderRadius: Radius.xl, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E3E7F3', shadowColor: '#312E81', shadowOpacity: 0.07, shadowRadius: 14, shadowOffset: { width: 0, height: 5 }, elevation: 2, gap: 7 },
+  roomBarTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
+  roomIdentity: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
+  roomTitle: { fontFamily: Typography.boldFontFamily, fontSize: 14, color: Colors.neutral[0], textAlign: 'right' },
+  liveBadge: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, borderRadius: Radius.full, paddingHorizontal: 8, paddingVertical: 4, backgroundColor: Colors.success[500] + '12' },
+  liveDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.success[500] },
+  liveText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[600] },
+  roomTopic: { fontFamily: Typography.boldFontFamily, fontSize: 16, color: Colors.primary[700], textAlign: 'right' },
+  roomMetaRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 6 },
+  metaChip: { minHeight: 27, borderRadius: Radius.full, paddingHorizontal: 9, backgroundColor: '#F5F6FB', flexDirection: 'row-reverse', alignItems: 'center', gap: 4 },
+  metaChipText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300] },
   messages: { flex: 1, minHeight: 0 },
-  messageContent: { flexGrow: 1, padding: Spacing.md, gap: Spacing.sm },
-  privateNote: { alignSelf: 'center', flexDirection: 'row-reverse', alignItems: 'center', gap: 5, borderRadius: Radius.full, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: Colors.success[500] + '0D', marginBottom: Spacing.md },
+  messageContent: { flexGrow: 1, padding: Spacing.md, gap: 10 },
+  privateNote: { alignSelf: 'center', flexDirection: 'row-reverse', alignItems: 'center', gap: 5, borderRadius: Radius.full, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: Colors.success[500] + '0D', marginBottom: 2 },
   privateText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400] },
+  turnBanner: { flexDirection: 'row-reverse', alignItems: 'center', gap: 9, padding: 11, borderRadius: Radius.lg, backgroundColor: Colors.primary[500] + '0B', borderWidth: 1, borderColor: Colors.primary[500] + '20' },
+  turnIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: Colors.primary[500] + '18', alignItems: 'center', justifyContent: 'center' },
+  turnCopy: { flex: 1, gap: 2 },
+  turnTitle: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Colors.primary[700], textAlign: 'right' },
+  turnText: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 17, color: Colors.neutral[300], textAlign: 'right' },
   freePlanCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.warning[500] + '0B', borderWidth: 1, borderColor: Colors.warning[500] + '25', gap: 6 },
   freePlanHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
   freePlanKicker: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.warning[300], textAlign: 'right' },
@@ -406,9 +440,9 @@ const styles = StyleSheet.create({
   emptyEmoji: { fontSize: 42 },
   emptyTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[200], marginTop: Spacing.md },
   emptyDesc: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Colors.neutral[600], marginTop: 4 },
-  bubble: { maxWidth: '84%', borderRadius: Radius.xl, padding: Spacing.md, borderWidth: 1 },
-  mine: { alignSelf: 'flex-end', backgroundColor: '#E6F4EA', borderColor: '#BFE3C9', borderBottomRightRadius: 5 },
-  theirs: { alignSelf: 'flex-start', backgroundColor: '#FFFFFF', borderColor: '#DDE3EA', borderBottomLeftRadius: 5 },
+  bubble: { maxWidth: '86%', borderRadius: 20, padding: Spacing.md, borderWidth: 1, shadowColor: '#334155', shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 },
+  mine: { alignSelf: 'flex-end', backgroundColor: '#EEF0FF', borderColor: '#DCDFFF', borderBottomRightRadius: 6 },
+  theirs: { alignSelf: 'flex-start', backgroundColor: '#FFFFFF', borderColor: '#E5E7EF', borderBottomLeftRadius: 6 },
   messageText: { fontSize: 16, lineHeight: 24, color: '#1F2937' },
   rtlText: { fontFamily: Typography.fontFamily, textAlign: 'right', writingDirection: 'rtl' },
   ltrText: { fontFamily: Typography.latinFontFamily, fontWeight: '800', textAlign: 'left', writingDirection: 'ltr' },
@@ -436,9 +470,9 @@ const styles = StyleSheet.create({
   audioNotice: { minHeight: 34, paddingHorizontal: Spacing.md, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7, backgroundColor: Colors.success[500] + '0D' },
   audioNoticeText: { flexShrink: 1, fontFamily: Typography.fontFamily, fontSize: 9, lineHeight: 16, color: Colors.success[300], textAlign: 'right' },
   error: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.error[300], textAlign: 'center', paddingHorizontal: Spacing.md, paddingTop: 6, backgroundColor: Colors.neutral[900] },
-  composer: { flexShrink: 0, minHeight: 64, overflow: 'visible', padding: Spacing.sm, paddingBottom: 10, backgroundColor: Colors.neutral[900], flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
-  helper: { width: 42, height: 42, borderRadius: 21, backgroundColor: Colors.neutral[850], alignItems: 'center', justifyContent: 'center' },
-  input: { flex: 1, minHeight: 44, maxHeight: 100, borderRadius: 22, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.neutral[700], paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[100], textAlignVertical: 'center', includeFontPadding: false },
+  composer: { flexShrink: 0, minHeight: 70, overflow: 'visible', padding: Spacing.sm, paddingBottom: 12, paddingTop: 9, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
+  helper: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#F3F4FA', alignItems: 'center', justifyContent: 'center' },
+  input: { flex: 1, minHeight: 44, maxHeight: 100, borderRadius: 22, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
   send: { width: 42, height: 42, borderRadius: 21, backgroundColor: Colors.primary[500], alignItems: 'center', justifyContent: 'center' },
   recordStop: { backgroundColor: Colors.error[500] },
   disabled: { opacity: .4 },
