@@ -16182,62 +16182,12 @@
   ]
  },
  "references": {
-  "ru-pre-hello": {
-   "здравствовать": [
-    "ru-pre-hello-04",
-    "Здра́вствуйте"
-   ]
-  },
-  "ru-pre-name": {},
-  "ru-pre-yes-no": {},
-  "ru-pre-i-am": {},
-  "ru-pre-numbers-1-10": {
-   "видеть": [
-    "d:4",
-    "ви́жу"
-   ]
-  },
-  "ru-pre-please-thanks": {},
   "ru-pre-this-is": {
    "хотеть": [
-    "ru-pre-this-is-01",
-    "хо́чешь"
+    "ru-pre-this-is-05",
+    "хочу́"
    ]
   },
-  "ru-pre-i-have": {},
-  "ru-pre-family": {},
-  "ru-pre-where-is": {},
-  "ru-pre-drinks": {
-   "быть": [
-    "ru-pre-drinks-06",
-    "есть"
-   ]
-  },
-  "ru-pre-time": {},
-  "ru-pre-places": {
-   "смотреть": [
-    "ru-pre-places-06",
-    "смотри́"
-   ],
-   "видеть": [
-    "d:4",
-    "ви́жу"
-   ]
-  },
-  "ru-pre-shopping": {},
-  "ru-pre-health": {
-   "взять": [
-    "ru-pre-health-05",
-    "возьми́"
-   ]
-  },
-  "ru-pre-days": {
-   "смотреть": [
-    "d:4",
-    "Смотри́"
-   ]
-  },
-  "ru-pre-review": {},
   "ru-l1-greetings": {
    "сесть": [
     "ru1-05",
