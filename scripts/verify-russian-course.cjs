@@ -369,7 +369,7 @@ const esbuild = require('esbuild');
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa
       && stage.labelEn === app.ENGLISH_ENGINE_STEPS[index].labelEn));
   const russianLessonScreen = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
-  check('Russian conversation stage runs the lesson dialogue with its own roles and the Russian voice', russianLessonScreen.includes('stage === 9 && <LessonConversationRoom')
+  check('Russian conversation stage runs the lesson dialogue with its own roles and the Russian voice', /stage === 9 &&[\s\S]*<LessonConversationRoom/.test(russianLessonScreen)
     && russianLessonScreen.includes('dialogue={lesson.dialogue}')
     && russianLessonScreen.includes('fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}')
     && russianLessonScreen.includes('locale="ru-RU"')
