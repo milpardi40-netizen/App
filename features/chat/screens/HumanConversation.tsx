@@ -33,6 +33,7 @@ import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { ChatBackButton } from '@/components/ChatBackButton';
 import { KeyboardAttachedView } from '@/components/KeyboardAttachedView';
 import { ONLINE_AUDIO_DISABLED_MESSAGE, ONLINE_AUDIO_ENABLED } from '@/lib/onlineAudioPolicy';
+import { freeConversationPlan } from '@/lib/freeConversation';
 
 const containsRtlScript = (value: string) => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(value);
 
@@ -85,7 +86,14 @@ function VoiceMessage({ message }: { message: DirectMessage }) {
 
 export default function HumanConversationScreen() {
   const router = useRouter();
-  const { conversationId, name } = useLocalSearchParams<{ conversationId: string; name?: string }>();
+  const { conversationId, name, lessonId, lessonTitle, levelId, situation, language } = useLocalSearchParams<{ conversationId: string; name?: string; lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
+  const freePlan = lessonTitle ? freeConversationPlan({
+    language: language === 'ru' ? 'ru' : 'en',
+    levelId: Number(levelId || 1),
+    lessonId: String(lessonId || ''),
+    lessonTitle: String(lessonTitle),
+    situation: String(situation || ''),
+  }) : null;
   const scrollRef = useRef<ScrollView>(null);
   // The composer is translated up over the message list when the keyboard opens, so the
   // list itself is not resized; reserve exactly the hidden height at the bottom and keep
@@ -294,7 +302,16 @@ export default function HumanConversationScreen() {
           automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
         >
-          <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
+            {freePlan ? (
+              <View style={styles.freePlanCard}>
+                <View style={styles.freePlanHeader}><Sparkles size={15} color={Colors.warning[400]} /><Text style={styles.freePlanKicker}>مأموریت مکالمهٔ آزاد · بدون تکرار دیالوگ درس</Text></View>
+                <Text style={styles.freePlanTitle}>{freePlan.title}</Text>
+                <Text style={styles.freePlanMission}>{freePlan.mission}</Text>
+                <Text style={styles.freePlanStarter}>{freePlan.starter}</Text>
+                {freePlan.prompts.map(prompt => <Text key={prompt} style={styles.freePlanPrompt}>• {prompt}</Text>)}
+              </View>
+            ) : null}
+            <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
           {!messages.length ? (
             <View style={styles.empty}><Text style={styles.emptyEmoji}>👋</Text><Text style={styles.emptyTitle}>گفتگو را شروع کنید</Text><Text style={styles.emptyDesc}>یک سلام ساده انگلیسی بهترین شروع است.</Text></View>
           ) : messages.map((message) => {
@@ -373,6 +390,13 @@ const styles = StyleSheet.create({
   messageContent: { flexGrow: 1, padding: Spacing.md, gap: Spacing.sm },
   privateNote: { alignSelf: 'center', flexDirection: 'row-reverse', alignItems: 'center', gap: 5, borderRadius: Radius.full, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: Colors.success[500] + '0D', marginBottom: Spacing.md },
   privateText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400] },
+  freePlanCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.warning[500] + '0B', borderWidth: 1, borderColor: Colors.warning[500] + '25', gap: 6 },
+  freePlanHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
+  freePlanKicker: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.warning[300], textAlign: 'right' },
+  freePlanTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  freePlanMission: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, lineHeight: 20, color: Colors.neutral[300], textAlign: 'right' },
+  freePlanStarter: { fontFamily: Typography.latinFontFamily, fontSize: 14, lineHeight: 20, color: Colors.neutral[100], textAlign: 'left', writingDirection: 'ltr', backgroundColor: Colors.neutral[900], borderRadius: Radius.md, padding: Spacing.sm },
+  freePlanPrompt: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 18, color: Colors.neutral[400], textAlign: 'right' },
   empty: { flex: 1, minHeight: 300, alignItems: 'center', justifyContent: 'center' },
   emptyEmoji: { fontSize: 42 },
   emptyTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[200], marginTop: Spacing.md },
@@ -414,4 +438,3 @@ const styles = StyleSheet.create({
   recordStop: { backgroundColor: Colors.error[500] },
   disabled: { opacity: .4 },
 });
-

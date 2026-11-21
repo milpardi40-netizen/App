@@ -17,11 +17,19 @@ import { SupabaseSetupNotice } from '@/components/SupabaseSetupNotice';
 import { ChatAlertSettingsCard } from '@/components/ChatAlertSettingsCard';
 import { MANAGEMENT_BUILD } from '@/lib/features';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
+import { freeConversationPlan } from '@/lib/freeConversation';
 
 export default function ConversationsHome() {
   const router = useRouter();
-  const { lessonTitle, levelId, situation, language } = useLocalSearchParams<{ lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
+  const { lessonId, lessonTitle, levelId, situation, language } = useLocalSearchParams<{ lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
   const lessonContext = lessonTitle ? { title: String(lessonTitle), level: levelId ? String(levelId) : '', situation: situation ? String(situation) : '', language: language ? String(language) : '' } : null;
+  const freePlan = lessonContext ? freeConversationPlan({
+    language: lessonContext.language === 'ru' ? 'ru' : 'en',
+    levelId: Number(lessonContext.level || 1),
+    lessonId: String(lessonId || ''),
+    lessonTitle: lessonContext.title,
+    situation: lessonContext.situation,
+  }) : null;
   const [contacts, setContacts] = useState<RealContact[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [contactsError, setContactsError] = useState<string | null>(null);
@@ -109,10 +117,25 @@ export default function ConversationsHome() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {lessonContext ? (
           <View style={styles.lessonContextCard}>
-            <Text style={styles.lessonContextKicker}>مکالمهٔ مرتبط با همین درس</Text>
+            <Text style={styles.lessonContextKicker}>موضوع مرجع درس — فقط برای انتخاب سناریو</Text>
             <Text style={styles.lessonContextTitle}>{lessonContext.title}</Text>
-            <Text style={styles.lessonContextText}>{lessonContext.situation || 'موضوع و واژه‌های همین درس را با یک زبان‌آموز واقعی تمرین کن.'}</Text>
+            <Text style={styles.lessonContextText}>{lessonContext.situation || 'موضوع کلی درس برای شروع یک گفت‌وگوی تازه.'}</Text>
             <Text style={styles.lessonContextMeta}>{lessonContext.language === 'ru' ? 'روسی' : 'انگلیسی'}{lessonContext.level ? ` · سطح ${lessonContext.level}` : ''}</Text>
+          </View>
+        ) : null}
+        {freePlan ? (
+          <View style={styles.freePlanCard}>
+            <View style={styles.freePlanHeader}>
+              <Sparkles size={18} color={Colors.warning[400]} />
+              <Text style={styles.freePlanKicker}>مکالمهٔ آزاد — محتوای مستقل</Text>
+            </View>
+            <Text style={styles.freePlanTitle}>{freePlan.title}</Text>
+            <Text style={styles.freePlanMission}>{freePlan.mission}</Text>
+            <Text style={styles.freePlanStarter}>{freePlan.starter}</Text>
+            <View style={styles.promptList}>
+              {freePlan.prompts.map(prompt => <Text key={prompt} style={styles.promptItem}>• {prompt}</Text>)}
+            </View>
+            <Text style={styles.boundary}>{freePlan.boundary}</Text>
           </View>
         ) : null}
         {configured && MANAGEMENT_BUILD ? <ChatAlertSettingsCard /> : null}
@@ -137,7 +160,7 @@ export default function ConversationsHome() {
               <Pressable
                 key={contact.id}
                 style={styles.contactCard}
-                onPress={() => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName } } as never)}
+                onPress={() => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, lessonTitle, levelId, situation, language, lessonId } } as never)}
               >
                 <View style={styles.realAvatar}><Text style={styles.realAvatarText}>{contact.avatarEmoji}</Text></View>
                 <View style={styles.realContactText}>
@@ -209,6 +232,15 @@ const styles = StyleSheet.create({
   lessonContextTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
   lessonContextText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, lineHeight: 21, color: Colors.neutral[400], textAlign: 'right' },
   lessonContextMeta: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.success[400], textAlign: 'right', marginTop: 3 },
+  freePlanCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.warning[500] + '35', gap: 7 },
+  freePlanHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  freePlanKicker: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.warning[300], textAlign: 'right' },
+  freePlanTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  freePlanMission: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[300], textAlign: 'right' },
+  freePlanStarter: { fontFamily: Typography.latinFontFamily, fontSize: 15, lineHeight: 22, color: Colors.neutral[100], textAlign: 'left', writingDirection: 'ltr', backgroundColor: Colors.neutral[900], borderRadius: Radius.md, padding: Spacing.sm },
+  promptList: { gap: 3 },
+  promptItem: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, lineHeight: 20, color: Colors.neutral[400], textAlign: 'right' },
+  boundary: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400], textAlign: 'right' },
   emmaCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.accent[500] + '50', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.md },
   avatarWrap: { position: 'relative' },
   emmaAvatar: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.accent[500] + '20' },

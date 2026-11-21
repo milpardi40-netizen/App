@@ -23,7 +23,7 @@ export default function RealConversationEntry({
       <View style={styles.icon}><Users size={22} color={Colors.primary[300]} /></View>
       <View style={styles.copy}>
         <Text style={styles.title}>مکالمه با یک زبان‌آموز واقعی</Text>
-        <Text style={styles.description}>همین موضوع درس را با یک نفر دیگر تمرین کن؛ با پیام متنی یا صوتی.</Text>
+        <Text style={styles.description}>موضوع درس فقط نقطهٔ شروع است؛ یک مأموریت و گفت‌وگوی تازه را با پیام متنی یا صوتی انجام بده، نه دیالوگ‌های درس را.</Text>
       </View>
       <Pressable
         accessibilityRole="button"
