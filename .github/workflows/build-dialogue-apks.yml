@@ -160,9 +160,9 @@ jobs:
               text = bundle.decode('utf-8', 'ignore')
           if expected_scope not in text:
               sys.exit(f'{apk}: expected language scope {expected_scope!r} is absent')
-          markers = ['تمرین‌های اختیاری · جدا از مکالمهٔ همین درس']
+          markers = ['ورود به گفت‌وگو', 'گفت‌وگو تمام شد']
           if os.environ['EXPECTED_PACKAGE'] == 'com.devicecontrol.companion':
-              markers.append('مکالمهٔ پایانی همین درس')
+              markers.append('پاسخ خود را بنویس')
           def encoded_forms(marker):
               return (marker.encode('utf-8'), marker.encode('unicode_escape'), marker.encode('utf-16le'), marker.encode('utf-16be'))
           missing = [marker for marker in markers if not any(form in bundle for form in encoded_forms(marker))]
