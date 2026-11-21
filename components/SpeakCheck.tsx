@@ -28,6 +28,8 @@ type Props = {
   onResult?: (result: SpeakCheckResult) => void;
   /** Opens the microphone by itself once (used right after the app pronounced the word). */
   autoStart?: boolean;
+  /** Conversation mode: report even an empty attempt instead of forcing another recording. */
+  singleAttempt?: boolean;
 };
 
 let micOwner: symbol | null = null;
@@ -37,7 +39,7 @@ let micOwner: symbol | null = null;
  * each expected word is shown green (heard) or red (missed) together with a percentage.
  * Works on Android/iOS through the native recogniser and on web through the browser's Web Speech API.
  */
-export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false }: Props) {
+export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false }: Props) {
   const owner = useRef(Symbol('practice'));
   const generation = useRef(0);
   const [listening, setListening] = useState(false);
@@ -84,8 +86,9 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     setResult(scored);
     if (!heard.trim()) {
       // Keep the automatic conversation on this learner turn until speech is actually heard.
-      const retry = autoStart && !stoppingByUser.current;
+      const retry = autoStart && !singleAttempt && !stoppingByUser.current;
       stoppingByUser.current = false;
+      if (singleAttempt) onResultRef.current?.(scored);
       if (retry && !retryTimer.current) {
         retryTimer.current = setTimeout(() => {
           retryTimer.current = null;

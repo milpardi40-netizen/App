@@ -137,7 +137,7 @@ const esbuild = require('esbuild');
     && screen.includes('dialogue={lesson.dialogue}') && screen.includes('locale="en-US"')
     && room.includes('requestPermissionsAsync') && room.includes('autoStart')
     && room.includes('answer.trim()') && room.includes('result.heard.trim()') && room.includes('sendTyped')
-    && room.includes('speak(current.text, index)') && speakCheck.includes('const retry = autoStart && !stoppingByUser.current;'),
+    && room.includes('speak(current.text, index)') && room.includes('singleAttempt') && speakCheck.includes('const retry = autoStart && !singleAttempt && !stoppingByUser.current;'),
     'the final English stage is a chat over the lesson dialogue: roles come from the data, one spoken attempt advances the turn, and a learner without a microphone can type the answer');
   check(!screen.includes('speakingTestComplete') && screen.includes('disabled={saving || !!sessionError}'), 'the English speaking test is optional and Continue remains available');
   const home = fs.readFileSync('app/lang/index.tsx', 'utf8');

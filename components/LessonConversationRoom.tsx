@@ -11,8 +11,10 @@ import { Typography } from '@/lib/theme';
 import { toPersianDigits as fa } from '@/lib/format';
 import { normalizeLessonConversation, type LessonConversationSession } from '@/lib/lessonConversation';
 import { evaluateSemanticResponse, type BranchingConversation } from '@/lib/branchingConversation';
+import { scoreSpeech } from '@/lib/speechScore';
 
 type ChatLine = { who: string; role?: 'learner' | 'partner'; text: string; fa: string };
+type TurnReport = { index: number; heard: string; score: number; feedback: string };
 type Props = {
   /** The lesson's own dialogue, with its real speaker roles. This is what makes it a conversation. */
   dialogue: ReadonlyArray<{ speaker: string; role?: 'learner' | 'partner'; text: string; fa: string }>;
@@ -75,6 +77,7 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
   const [turnScore, setTurnScore] = useState<number | null>(null);
   const [turnReviewed, setTurnReviewed] = useState(false);
   const [pendingReply, setPendingReply] = useState<{ text: string; fa: string } | undefined>();
+  const [reports, setReports] = useState<TurnReport[]>([]);
   const [hintOpen, setHintOpen] = useState(false);
   const [starting, setStarting] = useState(false);
   const [hydrated, setHydrated] = useState(false);
@@ -107,6 +110,7 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
     setTurnScore(null);
     setTurnReviewed(false);
     setPendingReply(undefined);
+    setReports([]);
     setHintOpen(false);
     setHydrated(true);
   // A lesson mounts once per route. Do not rehydrate from the parent's changing save object.
@@ -188,14 +192,16 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
     if (!current || turnReviewed) return;
     if (currentRule) {
       const semantic = evaluateSemanticResponse(currentRule, answer, locale, semanticPractice?.level ?? 'A1');
-      setDraft(''); setNote(semantic.feedback); setPendingReply(semantic.accepted ? semantic.branchReply : undefined); setTurnScore(semantic.accepted ? 100 : 0); setTurnReviewed(true);
+      setReports(value => [...value, { index, heard: answer, score: semantic.score, feedback: semantic.feedback }]);
+      setDraft(''); setNote(''); setPendingReply(semantic.accepted ? semantic.branchReply : undefined); setTurnReviewed(true); succeed(semantic.accepted ? semantic.branchReply : undefined);
       return;
     }
     // This room is a conversation rehearsal, not a second pronunciation exam.
     // Once the learner has made one attempt, the turn advances; pronunciation
     // feedback belongs to the speaking stage immediately before this room.
-    if (answer.trim()) { setDraft(''); setTurnReviewed(true); return; }
-    fail('یک پاسخ کوتاه بگو یا بنویس تا گفت‌وگو ادامه پیدا کند.');
+    const scored = scoreSpeech(current.text, answer);
+    setReports(value => [...value, { index, heard: answer, score: scored.score, feedback: answer.trim() ? 'پاسخ ثبت شد؛ اصلاحات در پایان نمایش داده می‌شود.' : 'پاسخ شنیده نشد.' }]);
+    setDraft(''); setNote(''); setTurnReviewed(true); succeed();
   };
 
   // Asked from the learner's own tap, so both the browser and native permission prompt are user-initiated.
@@ -221,7 +227,7 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
     clearTimer(); clearStall();
     spokenFor.current = null;
     setBranchReplies({});
-    setIndex(0); setAttempts(0); setRevealed(false); setTyping(false); setSpeakingAt(null); setDraft(''); setNote('');
+    setIndex(0); setAttempts(0); setRevealed(false); setTyping(false); setSpeakingAt(null); setDraft(''); setNote(''); setReports([]); setTurnReviewed(false); setTurnScore(null);
   };
 
   const flipRole = () => {
@@ -261,6 +267,12 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
         <View style={styles.doneCard}>
           <Text style={styles.doneTitle}>گفت‌وگو تمام شد ✓</Text>
           <Text style={styles.doneText}>{fa(lines.length)} نوبت با {partnerName} رد و بدل کردی.</Text>
+          {reports.length ? <>
+            <Text style={styles.finalScore}>امتیاز مکالمه: {fa(Math.round(reports.reduce((sum, item) => sum + item.score, 0) / reports.length))}٪</Text>
+            <Text style={styles.finalHint}>مکالمه بدون توقف انجام شد؛ این موارد برای اصلاح ثبت شده‌اند:</Text>
+            {reports.filter(item => item.score < 70).slice(0, 4).map(item => <Text key={`report-${item.index}`} style={styles.errorLine}>نوبت {fa(item.index + 1)}: {item.feedback}</Text>)}
+            {!reports.some(item => item.score < 70) ? <Text style={styles.successLine}>خطای مهمی در پاسخ‌ها دیده نشد.</Text> : null}
+          </> : null}
           <Pressable accessibilityRole="button" style={styles.againButton} onPress={restart}><Text style={styles.againText}>یک بار دیگر</Text></Pressable>
         </View>
       ) : (
@@ -288,20 +300,12 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
               <Text style={styles.turnTitle}>نوبت توست · خودت جواب بده</Text>
               <Text style={styles.turnPrompt}>{semanticPractice?.turns[index]?.promptFa ?? current.fa}</Text>
               {revealed ? <Text style={styles.turnTarget}>{current.text}</Text> : hintOpen ? <Text style={styles.turnHint}>{current.text.split(/\s+/).slice(0, Math.max(1, Math.ceil(current.text.split(/\s+/).length / 2))).join(' ')} …</Text> : <Text style={styles.turnHint}>هر پاسخی که منظورت را می‌رساند بگو.</Text>}
-              {turnReviewed ? (
-                <View style={styles.reviewCard}>
-                  {turnScore !== null ? <Text style={styles.reviewScore}>امتیاز این تلاش: {fa(turnScore)}٪</Text> : <Text style={styles.reviewScore}>پاسخ ثبت شد.</Text>}
-                  <Text style={styles.reviewHint}>برای ادامه لازم نیست دوباره بگویی.</Text>
-                  <View style={styles.reviewActions}>
-                    <Pressable accessibilityRole="button" style={styles.continueButton} onPress={() => succeed(pendingReply)}><Text style={styles.continueButtonText}>ادامهٔ گفت‌وگو</Text></Pressable>
-                    <Pressable accessibilityRole="button" style={styles.retryButton} onPress={() => { setTurnReviewed(false); setTurnScore(null); setPendingReply(undefined); setAttempts(value => value + 1); setTyped(false); setNote(''); }}><RefreshCw size={15} color={Palette.primary} /><Text style={styles.linkText}>تکرار اختیاری</Text></Pressable>
-                  </View>
-                </View>
-              ) : !typed ? (
+              {!typed ? (
                 <SpeakCheck key={`${index}-${attempts}-${current.text}`} text={current.text} locale={locale} accent={Palette.primary} title="بگو" autoStart onResult={result => {
                   if (currentRule) { submitAnswer(result.heard); return; }
-                  setTurnScore(result.heard.trim() ? result.score : 0); setTurnReviewed(true); setNote(result.heard.trim() ? '' : 'تلاش ثبت شد؛ برای ادامه می‌توانی عبور کنی یا داوطلبانه تکرار کنی.');
-                }} />
+                  setReports(value => [...value, { index, heard: result.heard, score: result.score, feedback: result.heard.trim() ? 'پاسخ ثبت شد؛ اصلاحات در پایان نمایش داده می‌شود.' : 'پاسخ شنیده نشد.' }]);
+                  setTurnReviewed(true); setNote(''); succeed();
+                }} singleAttempt />
               ) : null}
               <View style={styles.turnRow}>
                 {!typed ? (
@@ -389,6 +393,10 @@ const styles = StyleSheet.create({
   doneCard: { width: '100%', marginTop: 12, padding: 20, borderRadius: 18, alignItems: 'center', gap: 8, backgroundColor: '#F0FDF4', borderWidth: 1, borderColor: '#BBF7D0' },
   doneTitle: { fontFamily: Typography.boldFontFamily, fontSize: 17, color: '#166534', textAlign: 'center', writingDirection: 'rtl' },
   doneText: { fontFamily: Typography.fontFamily, fontSize: 13, color: '#166534', textAlign: 'center', writingDirection: 'rtl' },
+  finalScore: { fontFamily: Typography.boldFontFamily, fontSize: 18, color: '#166534', textAlign: 'center', writingDirection: 'rtl' },
+  finalHint: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 21, color: '#166534', textAlign: 'center', writingDirection: 'rtl' },
+  errorLine: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#B91C1C', textAlign: 'right', writingDirection: 'rtl', width: '100%' },
+  successLine: { fontFamily: Typography.fontFamily, fontSize: 12, color: '#166534', textAlign: 'center', writingDirection: 'rtl' },
   againButton: { minHeight: 44, paddingHorizontal: 18, borderRadius: 14, borderWidth: 1, borderColor: '#166534', alignItems: 'center', justifyContent: 'center' },
   againText: { fontFamily: Typography.boldFontFamily, fontSize: 13, color: '#166534', writingDirection: 'rtl' },
 });
