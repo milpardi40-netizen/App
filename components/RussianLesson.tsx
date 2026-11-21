@@ -557,6 +557,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         {stage === 9 && <LessonConversationRoom
           key={lesson.id}
           lessonId={lesson.id}
+          situation={lesson.situation}
+          partnerRole="طرف مقابل"
           dialogue={lesson.dialogue}
           fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
           locale="ru-RU"

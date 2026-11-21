@@ -23,6 +23,8 @@ type Props = {
   onSpeak: (text: string, onDone: () => void) => void;
   onStop?: () => void;
   lessonId: string;
+  situation?: string;
+  partnerRole?: string;
   initialSession?: LessonConversationSession;
   onSessionChange?: (session: LessonConversationSession) => void;
   /** Optional level-aware semantic/branching practice. Omitted lessons keep exact-line rehearsal. */
@@ -49,7 +51,7 @@ const nameOf = (who: string) => (who === 'partner' ? 'هم‌صحبت' : who ===
  * their line lands in the thread only once it was actually said. Nothing is graded here and nothing is
  * required to finish the lesson — a learner who cannot speak still reads the whole exchange and leaves.
  */
-export default function LessonConversationRoom({ dialogue, fallback, locale, onSpeak, onStop, lessonId, initialSession, onSessionChange, semanticPractice }: Props) {
+export default function LessonConversationRoom({ dialogue, fallback, locale, onSpeak, onStop, lessonId, situation, partnerRole, initialSession, onSessionChange, semanticPractice }: Props) {
   const lines = useMemo<ChatLine[]>(() => {
     const real = dialogue.filter(line => line.text.trim());
     if (real.length) return real.map(line => ({ who: line.speaker, role: line.role, text: line.text, fa: line.fa }));
@@ -73,6 +75,7 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
   const [typed, setTyped] = useState(false);
   const [draft, setDraft] = useState('');
   const [note, setNote] = useState('');
+  const [hintOpen, setHintOpen] = useState(false);
   const [starting, setStarting] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -101,6 +104,7 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
     setTyped(false);
     setDraft('');
     setNote('');
+    setHintOpen(false);
     setHydrated(true);
   // A lesson mounts once per route. Do not rehydrate from the parent's changing save object.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -136,7 +140,7 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
 
   const advance = useCallback(() => {
     clearStall();
-    setAttempts(0); setRevealed(false); setDraft(''); setNote('');
+    setAttempts(0); setRevealed(false); setDraft(''); setNote(''); setHintOpen(false);
     setIndex(value => value + 1);
   }, [clearStall]);
 
@@ -236,8 +240,9 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
     <View style={styles.wrap}>
       {!open ? (
         <View style={styles.invite}>
-          <Text style={styles.inviteTitle}>{fa(lines.length)} نوبت گفت‌وگو با {partnerName}</Text>
-          <Text style={styles.inviteText}>تمرین مکالمهٔ همین درس؛ خط‌های درس بین دو نفر رد و بدل می‌شود. هرچه بشنوی کافی است؛ نوشتن هم می‌توانی.</Text>
+          <Text style={styles.inviteTitle}>یک گفت‌وگوی واقعی با {partnerName}</Text>
+          {situation ? <Text style={styles.sceneText}>{situation}</Text> : null}
+          <Text style={styles.inviteText}>تو صحبت می‌کنی؛ {partnerRole || partnerName} به حرفت واکنش نشان می‌دهد. گزینهٔ آماده‌ای نمایش داده نمی‌شود.</Text>
           {roles.length > 1 ? (
             <View style={styles.roleRow}>
               {roles.map(role => <Pressable key={role} accessibilityRole="button" accessibilityState={{ selected: role === myRole }} onPress={() => { setMyRole(role); restart(); }} style={[styles.roleChip, role === myRole && styles.roleChipOn]}><Text style={[styles.roleChipText, role === myRole && styles.roleChipTextOn]}>{nameOf(role)}</Text></Pressable>)}
@@ -276,18 +281,9 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
 
           {current && isMine ? (
             <View style={styles.turnCard}>
-              <Text style={styles.turnTitle}>نوبت توست · به {partnerName} جواب بده</Text>
+              <Text style={styles.turnTitle}>نوبت توست · خودت جواب بده</Text>
               <Text style={styles.turnPrompt}>{semanticPractice?.turns[index]?.promptFa ?? current.fa}</Text>
-              {revealed ? <Text style={styles.turnTarget}>{current.text}</Text> : <Text style={styles.turnHint}>{attempts ? 'اول از حفظ بگو؛ اگر سخت بود «نمایش» را بزن.' : 'همان چیزی که در این موقعیت می‌گویی.'}</Text>}
-              {currentRule?.choices?.length ? (
-                <View style={styles.choiceList}>
-                  {currentRule.choices.map((choice, choiceIndex) => (
-                    <Pressable key={`${choice.text}-${choiceIndex}`} accessibilityRole="button" onPress={() => submitAnswer(choice.text)} style={[styles.choice, choice.correct && styles.choicePrimary]}>
-                      <Text style={[styles.choiceText, choice.correct && styles.choiceTextPrimary]}>{choice.text}</Text>
-                    </Pressable>
-                  ))}
-                </View>
-              ) : null}
+              {revealed ? <Text style={styles.turnTarget}>{current.text}</Text> : hintOpen ? <Text style={styles.turnHint}>{current.text.split(/\s+/).slice(0, Math.max(1, Math.ceil(current.text.split(/\s+/).length / 2))).join(' ')} …</Text> : <Text style={styles.turnHint}>هر پاسخی که منظورت را می‌رساند بگو.</Text>}
               {!typed ? (
                 <SpeakCheck key={`${index}-${attempts}-${current.text}`} text={current.text} locale={locale} accent={Palette.primary} title="بگو" autoStart onResult={result => {
                   if (currentRule) { submitAnswer(result.heard); return; }
@@ -304,7 +300,8 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
                     <Pressable accessibilityRole="button" onPress={sendTyped} style={styles.send}><Send size={16} color="#FFFFFF" /></Pressable>
                   </View>
                 )}
-                {!revealed ? <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => setRevealed(true)}><Text style={styles.linkText}>نمایش</Text></Pressable> : null}
+                {!revealed ? <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => setHintOpen(true)}><Text style={styles.linkText}>راهنما</Text></Pressable> : null}
+                {!revealed && hintOpen ? <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => setRevealed(true)}><Text style={styles.linkText}>نمایش پاسخ</Text></Pressable> : null}
                 {revealed ? <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => succeed()}><Text style={styles.linkText}>گفتم؛ رد شو</Text></Pressable> : null}
                 <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(false); setNote(''); }}><Text style={styles.linkText}>میکروفن</Text></Pressable>
               </View>
@@ -330,6 +327,7 @@ const styles = StyleSheet.create({
   wrap: { width: '100%', alignItems: 'stretch', gap: 9, paddingVertical: 6 },
   invite: { width: '100%', gap: 10, paddingVertical: 14, alignItems: 'center' },
   inviteTitle: { fontFamily: Typography.boldFontFamily, fontSize: 18, lineHeight: 30, color: Palette.ink, textAlign: 'center', writingDirection: 'rtl' },
+  sceneText: { fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 25, color: Palette.primaryDark, textAlign: 'center', writingDirection: 'rtl', maxWidth: 560 },
   inviteText: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 23, color: Palette.text, textAlign: 'center', writingDirection: 'rtl', maxWidth: 520 },
   roleRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginTop: 4 },
   roleChip: { minHeight: 40, borderRadius: 20, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', paddingHorizontal: 14, justifyContent: 'center' },
@@ -361,11 +359,6 @@ const styles = StyleSheet.create({
   turnPrompt: { fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 26, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
   turnHint: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 21, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   turnTarget: { fontFamily: 'Times New Roman', fontSize: 17, lineHeight: 27, fontWeight: '700', color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
-  choiceList: { width: '100%', gap: 8, marginTop: 4 },
-  choice: { minHeight: 48, borderRadius: 14, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', paddingHorizontal: 14, justifyContent: 'center' },
-  choicePrimary: { backgroundColor: Palette.primarySoft, borderColor: '#DDE2FF' },
-  choiceText: { fontFamily: 'Times New Roman', fontSize: 17, lineHeight: 24, color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
-  choiceTextPrimary: { color: Palette.primaryDark, fontWeight: '700' },
   turnRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', alignItems: 'center', gap: 10 },
   linkButton: { minHeight: 40, justifyContent: 'center', paddingHorizontal: 4 },
   linkText: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.primary, writingDirection: 'rtl' },

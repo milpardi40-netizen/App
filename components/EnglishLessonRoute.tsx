@@ -696,6 +696,8 @@ export default function SentenceLessonScreen() {
         {stage === 9 && <LessonConversationRoom
           key={lesson.id}
           lessonId={lesson.id}
+          situation={lesson.situation}
+          partnerRole="طرف مقابل"
           dialogue={lesson.dialogue}
           fallback={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
           locale="en-US"
