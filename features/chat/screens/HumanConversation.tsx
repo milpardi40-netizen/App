@@ -3,16 +3,7 @@ import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/compon
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, BackHandler, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import {
-  RecordingPresets,
-  getRecordingPermissionsAsync,
-  requestRecordingPermissionsAsync,
-  setAudioModeAsync,
-  useAudioPlayer,
-  useAudioPlayerStatus,
-  useAudioRecorder,
-  useAudioRecorderState,
-} from 'expo-audio';
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { BarChart3, Headphones, Mic, Pause, Play, Send, ShieldCheck, Sparkles, Square, Timer, Trash2, UserRound, Volume2, X } from 'lucide-react-native';
 import {
   currentChatUserId,
@@ -22,7 +13,6 @@ import {
   sendTextMessage,
   isConversationClosedError,
   recoverSupportConversation,
-  sendVoiceMessage,
   subscribeToMessages,
   unsubscribeFromMessages,
   type DirectMessage,
@@ -30,9 +20,9 @@ import {
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { ChatBackButton } from '@/components/ChatBackButton';
 import { KeyboardAttachedView } from '@/components/KeyboardAttachedView';
-import { ONLINE_AUDIO_DISABLED_MESSAGE, ONLINE_AUDIO_ENABLED } from '@/lib/onlineAudioPolicy';
 import { freeConversationPlan } from '@/lib/freeConversation';
 import { evaluateHumanConversation, type HumanConversationEvaluation } from '@/lib/humanConversationEvaluation';
+import SpeakCheck from '@/components/SpeakCheck';
 
 const containsRtlScript = (value: string) => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(value);
 
@@ -138,8 +128,6 @@ export default function HumanConversationScreen() {
   const [error, setError] = useState<string | null>(null);
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
   const [showEvaluation, setShowEvaluation] = useState(false);
-  const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
-  const recorderState = useAudioRecorderState(recorder, 250);
   const myTurnMessages = messages.filter(message => message.senderId === myId && (message.type === 'text' || message.type === 'voice'));
   const partnerTurnMessages = messages.filter(message => message.senderId !== myId && (message.type === 'text' || message.type === 'voice'));
   const freeStep = freePlan ? Math.min(myTurnMessages.length, freePlan.prompts.length) : 0;
@@ -222,43 +210,15 @@ export default function HumanConversationScreen() {
   };
 
 
-  const startRecording = async () => {
-    if (!ONLINE_AUDIO_ENABLED) { setError(ONLINE_AUDIO_DISABLED_MESSAGE); return; }
-    if (!myTurn) { setError('اکنون نوبت هم‌صحبت است؛ بعد از پاسخ او ادامه بده.'); return; }
-    if (sending || recorderState.isRecording) return;
-    try {
-      setError(null);
-      let permission = await getRecordingPermissionsAsync();
-      if (!permission.granted) permission = await requestRecordingPermissionsAsync();
-      if (!permission.granted) throw new Error('برای پیام صوتی، اجازه میکروفن را در تنظیمات گوشی فعال کنید.');
-      await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
-      try {
-        await recorder.prepareToRecordAsync();
-      } catch {
-        // First use right after granting permission can fail once on some devices; retry.
-        await new Promise((resolve) => setTimeout(resolve, 250));
-        await recorder.prepareToRecordAsync();
-      }
-      recorder.record();
-    } catch (cause) {
-      setError(cause instanceof Error && cause.message ? `ضبط صدا شروع نشد: ${cause.message}` : 'ضبط صدا شروع نشد.');
-    }
-  };
-
-  const stopAndSendRecording = async () => {
-    if (!ONLINE_AUDIO_ENABLED) { setError(ONLINE_AUDIO_DISABLED_MESSAGE); return; }
-    if (!myTurn) { setError('اکنون نوبت هم‌صحبت است؛ بعد از پاسخ او ادامه بده.'); return; }
-    if (!recorderState.isRecording || sending) return;
-    const duration = Math.max(1, Math.round(recorderState.durationMillis / 1000));
+  const sendSpokenAnswer = async (heard: string) => {
+    if (!heard.trim()) { setError('این نوبت ثبت نشد؛ عبارت را کامل و یک‌بار دیگر بگو.'); return; }
+    if (!myTurn || sending) return;
     setSending(true);
     try {
-      await recorder.stop();
-      await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
-      if (!recorder.uri) throw new Error('فایل صدای ضبط‌شده پیدا نشد.');
-      addMessage(await sendVoiceMessage(conversationId, recorder.uri, duration));
+      addMessage(await sendTextMessage(conversationId, heard.trim()));
       setError(null);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'پیام صوتی ارسال نشد.');
+      setError(cause instanceof Error ? cause.message : 'پاسخ گفتاری ثبت نشد.');
     } finally {
       setSending(false);
     }
@@ -349,28 +309,20 @@ export default function HumanConversationScreen() {
 
       <KeyboardAttachedView onLayout={event => { composerHeight.current = event.nativeEvent.layout.height; }}>
       <View style={styles.modeSwitch}><Text style={styles.modeLabel}>نوع پاسخ:</Text><Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}><Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text></Pressable><Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}><Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text></Pressable></View>
-      {recorderState.isRecording ? <View style={styles.recording}><View style={styles.recordDot} /><Text style={styles.recordingText}>در حال ضبط · {Math.max(1, Math.round(recorderState.durationMillis / 1000))} ثانیه · برای ارسال دوباره بزنید</Text></View> : null}
-      {!ONLINE_AUDIO_ENABLED ? <View style={styles.audioNotice}><ShieldCheck size={14} color={Colors.success[300]} /><Text style={styles.audioNoticeText}>{ONLINE_AUDIO_DISABLED_MESSAGE} پخش پیام‌های دریافتی همچنان در دسترس است.</Text></View> : null}
       {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
-      <View style={styles.composer}>
-        {inputMode === 'text' ? <TextInput
-          accessibilityLabel="متن پیام فارسی یا انگلیسی"
-          style={[styles.input, containsRtlScript(input || 'پیام') ? styles.rtlText : styles.ltrText]}
-          value={input}
-          onChangeText={setInput}
-          onFocus={() => undefined}
-          placeholder={myTurn ? 'پاسخ مرتبط با مأموریت را بنویسید…' : 'منتظر پاسخ هم‌صحبت باشید…'}
-          placeholderTextColor={Colors.neutral[600]}
-          multiline
-        /> : <View style={styles.voiceModeHint}><Mic size={20} color={Colors.primary[400]} /><Text style={styles.voiceModeText}>{ONLINE_AUDIO_ENABLED ? 'برای پاسخ مرتبط، صحبت کن و دکمه را بزن' : 'ضبط گفتاری فعلاً در دسترس نیست؛ نوشتاری را انتخاب کن'}</Text></View>}
-        {inputMode === 'text' ? (
-          <Pressable accessibilityRole="button" accessibilityLabel="ارسال پاسخ مرتبط" accessibilityState={{ disabled: sending || !myTurn }} style={[styles.send, (sending || !myTurn) && styles.disabled]} disabled={sending || !myTurn} onPress={() => void send()}>{sending ? <ActivityIndicator size="small" color={Colors.onColor} /> : <Send size={18} color={Colors.onColor} />}</Pressable>
-        ) : (
-          <Pressable accessibilityRole="button" accessibilityLabel={ONLINE_AUDIO_ENABLED ? 'شروع یا پایان ضبط پیام صوتی' : 'ضبط و ارسال پیام صوتی فعلاً غیرفعال است'} accessibilityHint={!ONLINE_AUDIO_ENABLED ? ONLINE_AUDIO_DISABLED_MESSAGE : undefined} accessibilityState={{ disabled: !ONLINE_AUDIO_ENABLED || sending }} style={[styles.send, recorderState.isRecording && styles.recordStop, (sending || !ONLINE_AUDIO_ENABLED) && styles.disabled]} disabled={sending || !ONLINE_AUDIO_ENABLED} onPress={() => recorderState.isRecording ? void stopAndSendRecording() : void startRecording()}>
-            {sending ? <ActivityIndicator size="small" color={Colors.onColor} /> : recorderState.isRecording ? <Square size={16} color={Colors.onColor} fill={Colors.onColor} /> : <Mic size={19} color={Colors.onColor} />}
-          </Pressable>
-        )}
-      </View>
+      {inputMode === 'voice' ? (
+        <View style={styles.practiceCard}>
+          <Text style={styles.practiceTitle}>بگو — پاسخ این نوبت</Text>
+          <Text style={styles.practicePrompt}>{myTurn ? activeTurnPrompt : 'منتظر پاسخ هم‌صحبت باشید.'}</Text>
+          {myTurn ? <SpeakCheck text={activeTurnPrompt} locale={language === 'ru' ? 'ru-RU' : 'en-US'} title="فقط همین عبارت یا جمله را بگو" singleAttempt onResult={(result) => void sendSpokenAnswer(result.heard)} /> : null}
+        </View>
+      ) : (
+        <View style={styles.practiceCard}>
+          <Text style={styles.practiceTitle}>پاسخ این نوبت را بنویس</Text>
+          <TextInput accessibilityLabel="پاسخ این نوبت" style={[styles.input, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]} value={input} onChangeText={setInput} placeholder={myTurn ? 'عبارت یا جمله مرتبط با مأموریت…' : 'منتظر پاسخ هم‌صحبت باشید…'} placeholderTextColor={Colors.neutral[600]} multiline editable={myTurn && !sending} />
+          <Pressable accessibilityRole="button" accessibilityLabel="ثبت پاسخ" accessibilityState={{ disabled: sending || !myTurn }} style={[styles.submitAnswer, (sending || !myTurn) && styles.disabled]} disabled={sending || !myTurn} onPress={() => void send()}>{sending ? <ActivityIndicator size="small" color={Colors.onColor} /> : <><Send size={16} color={Colors.onColor} /><Text style={styles.submitAnswerText}>ثبت پاسخ</Text></>}</Pressable>
+        </View>
+      )}
       </KeyboardAttachedView>
     </View>
   );
@@ -490,6 +442,11 @@ const styles = StyleSheet.create({
   audioNotice: { minHeight: 34, paddingHorizontal: Spacing.md, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7, backgroundColor: Colors.success[500] + '0D' },
   audioNoticeText: { flexShrink: 1, fontFamily: Typography.fontFamily, fontSize: 9, lineHeight: 16, color: Colors.success[300], textAlign: 'right' },
   error: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.error[300], textAlign: 'center', paddingHorizontal: Spacing.md, paddingTop: 6, backgroundColor: Colors.neutral[900] },
+  practiceCard: { padding: Spacing.md, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 8 },
+  practiceTitle: { fontFamily: Typography.boldFontFamily, fontSize: 13, color: Colors.neutral[0], textAlign: 'right' },
+  practicePrompt: { fontFamily: Typography.latinFontFamily, fontSize: 15, lineHeight: 22, color: Colors.primary[700], textAlign: 'left', writingDirection: 'ltr' },
+  submitAnswer: { minHeight: 42, borderRadius: Radius.lg, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
+  submitAnswerText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Colors.onColor },
   composer: { flexShrink: 0, minHeight: 70, overflow: 'visible', padding: Spacing.sm, paddingBottom: 12, paddingTop: 9, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
   helper: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#F3F4FA', alignItems: 'center', justifyContent: 'center' },
   input: { flex: 1, minHeight: 44, maxHeight: 100, borderRadius: 22, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
