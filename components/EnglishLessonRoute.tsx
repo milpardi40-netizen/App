@@ -51,6 +51,7 @@ import { ENGLISH_ENGINE_STEPS, getLessonPatterns, getLessonVocabulary } from '@/
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
 import LessonConversationRoom from '@/components/LessonConversationRoom';
+import RealConversationEntry from '@/components/RealConversationEntry';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
@@ -693,20 +694,23 @@ export default function SentenceLessonScreen() {
             ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
           </View>
         )}
-        {stage === 9 && <LessonConversationRoom
-          key={lesson.id}
-          lessonId={lesson.id}
-          situation={lesson.situation}
-          partnerRole="طرف مقابل"
-          dialogue={lesson.dialogue}
-          fallback={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
-          locale="en-US"
-          onSpeak={speakConversationLine}
-          onStop={stopConversationSpeech}
-          initialSession={conversation}
-          onSessionChange={setConversation}
-          semanticPractice={conversationPracticeForLesson(lesson, 'en-US')}
-        />}
+        {stage === 9 && <>
+          <LessonConversationRoom
+            key={lesson.id}
+            lessonId={lesson.id}
+            situation={lesson.situation}
+            partnerRole="طرف مقابل"
+            dialogue={lesson.dialogue}
+            fallback={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
+            locale="en-US"
+            onSpeak={speakConversationLine}
+            onStop={stopConversationSpeech}
+            initialSession={conversation}
+            onSessionChange={setConversation}
+            semanticPractice={conversationPracticeForLesson(lesson, 'en-US')}
+          />
+          <RealConversationEntry language="en" lessonId={lesson.id} lessonTitle={lesson.title} levelId={lesson.levelId} situation={lesson.situation} />
+        </>}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}
       </View>
         <View style={{ height: bottomSpacer }} />

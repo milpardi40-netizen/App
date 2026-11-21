@@ -18,7 +18,7 @@ const admin = read('app/admin/index.tsx');
 const migration = read('supabase/migrations/202610190001_multi_contact_chat_moderation.sql');
 const copySql = read('supabase/SETUP-MULTI-CONTACT-ADMIN-ONCE.sql');
 
-verify(ruNav.includes("'/learn/ru/pronunciation'") && ruNav.includes("'/feedback'") && /ensureSupportConversation/.test(read('app/feedback.tsx')), 'Russian navigation links to pronunciation and real conversations');
+verify(ruNav.includes("'/learn/ru/pronunciation'") && ruNav.includes("'/conversations'") && /ensureSupportConversation/.test(read('features/chat/screens/ConversationsHome.tsx')), 'Russian navigation links to pronunciation and real conversations');
 verify(/flexDirection: 'row-reverse'/.test(navShell), 'Russian navigation remains RTL');
 verify(logo.includes("const SUBTITLE = 'MULTILANGUAGE'"), 'startup logo displays the full MiloMultiLanguage wordmark');
 verify(/}, 3400\)/.test(root), 'startup wordmark remains visible until its animation completes');

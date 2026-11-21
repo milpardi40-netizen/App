@@ -22,6 +22,7 @@ import RevealText from '@/components/RevealText';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
 import LessonConversationRoom from '@/components/LessonConversationRoom';
+import RealConversationEntry from '@/components/RealConversationEntry';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
@@ -554,20 +555,23 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           accent={Palette.primary}
         /> : null}
 
-        {stage === 9 && <LessonConversationRoom
-          key={lesson.id}
-          lessonId={lesson.id}
-          situation={lesson.situation}
-          partnerRole="طرف مقابل"
-          dialogue={lesson.dialogue}
-          fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
-          locale="ru-RU"
-          onSpeak={speakConversationLine}
-          onStop={stopConversationSpeech}
-          initialSession={conversation}
-          onSessionChange={setConversation}
-          semanticPractice={conversationPracticeForLesson(lesson, 'ru-RU')}
-        />}
+        {stage === 9 && <>
+          <LessonConversationRoom
+            key={lesson.id}
+            lessonId={lesson.id}
+            situation={lesson.situation}
+            partnerRole="طرف مقابل"
+            dialogue={lesson.dialogue}
+            fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+            locale="ru-RU"
+            onSpeak={speakConversationLine}
+            onStop={stopConversationSpeech}
+            initialSession={conversation}
+            onSessionChange={setConversation}
+            semanticPractice={conversationPracticeForLesson(lesson, 'ru-RU')}
+          />
+          <RealConversationEntry language="ru" lessonId={lesson.id} lessonTitle={lesson.title} levelId={lesson.levelId} situation={lesson.situation} />
+        </>}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}

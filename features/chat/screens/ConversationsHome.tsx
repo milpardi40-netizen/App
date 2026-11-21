@@ -1,7 +1,7 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { ChevronLeft, MessageCircle, Mic2, Plus, QrCode, ShieldCheck, Sparkles, Trash2, UserRound } from 'lucide-react-native';
 import { AppBottomNav } from '@/components/AppBottomNav';
 import { RussianBottomNav } from '@/components/RussianBottomNav';
@@ -20,6 +20,8 @@ import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 
 export default function ConversationsHome() {
   const router = useRouter();
+  const { lessonTitle, levelId, situation, language } = useLocalSearchParams<{ lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
+  const lessonContext = lessonTitle ? { title: String(lessonTitle), level: levelId ? String(levelId) : '', situation: situation ? String(situation) : '', language: language ? String(language) : '' } : null;
   const [contacts, setContacts] = useState<RealContact[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [contactsError, setContactsError] = useState<string | null>(null);
@@ -105,6 +107,14 @@ export default function ConversationsHome() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        {lessonContext ? (
+          <View style={styles.lessonContextCard}>
+            <Text style={styles.lessonContextKicker}>مکالمهٔ مرتبط با همین درس</Text>
+            <Text style={styles.lessonContextTitle}>{lessonContext.title}</Text>
+            <Text style={styles.lessonContextText}>{lessonContext.situation || 'موضوع و واژه‌های همین درس را با یک زبان‌آموز واقعی تمرین کن.'}</Text>
+            <Text style={styles.lessonContextMeta}>{lessonContext.language === 'ru' ? 'روسی' : 'انگلیسی'}{lessonContext.level ? ` · سطح ${lessonContext.level}` : ''}</Text>
+          </View>
+        ) : null}
         {configured && MANAGEMENT_BUILD ? <ChatAlertSettingsCard /> : null}
         {configured && (
           <Pressable accessibilityRole="button" style={styles.supportButton} disabled={openingSupport} onPress={openSupport}>
@@ -194,6 +204,11 @@ const styles = StyleSheet.create({
   sectionLabel: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[200], textAlign: 'right' },
   sectionRow: { marginTop: Spacing.sm, flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' },
   sectionHint: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
+  lessonContextCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.accent[500] + '12', borderWidth: 1, borderColor: Colors.accent[500] + '35', gap: 4 },
+  lessonContextKicker: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.accent[300], textAlign: 'right' },
+  lessonContextTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  lessonContextText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, lineHeight: 21, color: Colors.neutral[400], textAlign: 'right' },
+  lessonContextMeta: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.success[400], textAlign: 'right', marginTop: 3 },
   emmaCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.accent[500] + '50', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.md },
   avatarWrap: { position: 'relative' },
   emmaAvatar: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.accent[500] + '20' },
@@ -239,4 +254,3 @@ const styles = StyleSheet.create({
   modeTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.neutral[200] },
   modeDesc: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[600] },
 });
-
