@@ -56,20 +56,29 @@ const es = require('esbuild');
     }
     visit([]); assert.equal(x.exchangeView(scene,{starter,picks:[15]}),null);
   }
-  // Pre-A1 «ч и й: want and show» opens the finale itself: two taught lines, each with its own partner reply.
-  // The lines are the fixture's content of the lesson; what is under test is the resolver: two options, an exact
-  // match for each, nothing matched by a near-miss, and a reply that belongs to the branch chosen.
+  // Pre-A1 «ч и й: this is / this is not» opens the finale itself: the two alternatives the learner heard in
+  // spoken slots 2–5, each with its own partner reply. The lines are taken from the lesson rather than repeated
+  // in this file, because the level's content is the single source of truth; what is under test is the resolver:
+  // two options, an exact match for each, nothing matched by a near-miss, and a reply that belongs to the
+  // branch that was chosen.
   const l=lessons.find(l=>l.id==='ru-pre-this-is'), scene=x.exchangeForLesson(l), turn=x.exchangeView(scene,{starter:'partner',picks:[]});
-  assert.deepEqual(turn.options.map(o=>o.say.text), ['Да, я хочу́ чай.','Нет, я не хочу́ чай.']);
-  for(const [text,i] of [['да я хочу чай',0],['нет я не хочу чай',1],['я хочу чай',-1],['что ты хочешь',-1],['это мама',-1],['чай или воду',-1],['',-1]]) assert.equal(x.matchExchangeReply(text,turn.options),i);
-  assert(x.exchangeView(scene,{starter:'learner',picks:[0]}).history.at(-1).line.text.includes('вот'));
-  assert(x.exchangeView(scene,{starter:'learner',picks:[1]}).history.at(-1).line.text.includes('хо́чешь'));
+  assert.deepEqual(turn.options.map(o=>o.say.text),[l.sentences[1].text,l.sentences[3].text]);
+  const said=turn.options.map(o=>x.plainRussian(o.say.text));
+  assert.equal(new Set(said).size,2);
+  for(const [text,i] of [[said[0],0],[said[1],1],
+    // a line heard with its first word dropped, or one letter short, is not an answer to this prompt
+    [said[0].split(' ')[0],-1],['не '+said[1].split(' ').pop(),-1],[said[0]+' или '+said[1].split(' ').pop(),-1],['это вода',-1],['',-1]])
+    assert.equal(x.matchExchangeReply(text,turn.options),i,`${text} against ${said.join(' / ')}`);
+  assert.equal(x.exchangeView(scene,{starter:'learner',picks:[0]}).history.at(-1).line.text,l.sentences[2].text);
+  assert.equal(x.exchangeView(scene,{starter:'learner',picks:[1]}).history.at(-1).line.text,l.sentences[4].text);
   // the drink choice lives in its own lesson now: its opening question is legal there, not here; a bare
   // word from the middle of the sentence is a near-miss, not a match.
-  const drinkScene=x.exchangeForLesson(lessons.find(d=>d.id==='ru-pre-drinks'));
-  assert.equal(x.matchExchangeReply('чай или воду', x.exchangeView(drinkScene,{starter:'learner',picks:[]}).options), 0);
-  assert.equal(x.matchExchangeReply('воду', x.exchangeView(drinkScene,{starter:'learner',picks:[]}).options), -1);
-  assert(!x.validExchangePath(scene,{starter:'partner',picks:[1],said:{0:'я не хочу воду'}}));
+  const drinkLesson=lessons.find(d=>d.id==='ru-pre-drinks'), drinkTurn=x.exchangeView(x.exchangeForLesson(drinkLesson),{starter:'learner',picks:[]});
+  const drinkSaid=x.plainRussian(drinkTurn.options[0].say.text);
+  assert.equal(x.matchExchangeReply(drinkSaid,drinkTurn.options),0);
+  assert.equal(x.matchExchangeReply(drinkSaid.split(' ')[1],drinkTurn.options),-1);
+  assert(!x.validExchangePath(scene,{starter:'partner',picks:[1],said:{0:said[0]}}));
+  assert(x.validExchangePath(scene,{starter:'partner',picks:[1],said:{0:said[1]}}));
   const all = new Set(x.VERBS.map(v=>v.lemma)); assert.equal(all.size,x.VERBS.length);
   for(const v of x.VERBS) { assert(v.fa && v.forms.length && v.examples.length && v.level>=0 && v.level<=5); for(const s of v.examples) assert(s.fa && x.gapFor(s.text,s.form).includes('____'), v.lemma); }
   for(const l of lessons) for(const v of x.lessonVerbs(l.id)) assert(all.has(v));
