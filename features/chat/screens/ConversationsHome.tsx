@@ -182,7 +182,9 @@ export default function ConversationsHome() {
               <Pressable
                 key={contact.id}
                 style={styles.contactCard}
-                onPress={() => contact.pendingLevelId !== null
+                onPress={() => contact.activeLevelId !== null
+                  ? router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, conversationLevel: String(contact.activeLevelId), lessonTitle, levelId, situation, language, lessonId } } as never)
+                  : contact.pendingLevelId !== null
                   ? router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, conversationLevel: String(contact.pendingLevelId), pendingLevelId: String(contact.pendingLevelId), pendingLevelRequestedBy: contact.pendingLevelRequestedBy || '', lessonTitle, levelId, situation, language, lessonId } } as never)
                   : chooseConversationLevel(contact)}
               >

@@ -9,6 +9,7 @@ import {
   currentChatUserId,
   deleteConversationForMe,
   getVoiceMessageUrl,
+  getConversationActiveLevel,
   listMessages,
   sendTextMessage,
   isConversationClosedError,
@@ -92,13 +93,14 @@ function EvaluationCard({ evaluation, onClose }: { evaluation: HumanConversation
 export default function HumanConversationScreen() {
   const router = useRouter();
   const { conversationId, name, lessonId, lessonTitle, levelId, situation, language, conversationLevel: selectedLevel, pendingLevelId, pendingLevelRequestedBy } = useLocalSearchParams<{ conversationId: string; name?: string; lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string; conversationLevel?: string; pendingLevelId?: string; pendingLevelRequestedBy?: string }>();
-  const chosenConversationLevel = selectedLevel !== undefined ? Number(selectedLevel) : (pendingLevelId !== undefined ? Number(pendingLevelId) : undefined);
+  const [serverConversationLevel, setServerConversationLevel] = useState<number | null>(null);
+  const chosenConversationLevel = selectedLevel !== undefined ? Number(selectedLevel) : (pendingLevelId !== undefined ? Number(pendingLevelId) : serverConversationLevel ?? undefined);
   const chosenLevel = conversationLevel(chosenConversationLevel);
-  const freePlan = lessonTitle ? freeConversationPlan({
+  const freePlan = chosenConversationLevel !== undefined || lessonTitle ? freeConversationPlan({
     language: language === 'ru' ? 'ru' : 'en',
     levelId: chosenConversationLevel ?? Number(levelId || 1),
     lessonId: String(lessonId || ''),
-    lessonTitle: String(lessonTitle),
+    lessonTitle: String(lessonTitle || ''),
     situation: String(situation || ''),
   }) : null;
   const scrollRef = useRef<ScrollView>(null);
@@ -138,7 +140,9 @@ export default function HumanConversationScreen() {
   const freeStep = freePlan ? Math.min(myTurnMessages.length, freePlan.prompts.length) : 0;
   const activeFreePrompt = freePlan && freeStep < freePlan.prompts.length ? freePlan.prompts[freeStep] : null;
   const myTurn = myTurnMessages.length <= partnerTurnMessages.length;
-  const activeTurnPrompt = freePlan ? (freeStep === 0 ? freePlan.starter : activeFreePrompt || 'حالا یک پرسش مرتبط از هم‌صحبت بپرس.') : 'به موضوع درس پاسخ بده و گفت‌وگو را ادامه بده.';
+  const activeTurnPrompt = freePlan
+    ? (freePlan.lessonExamples[freeStep] || (freeStep === 0 ? freePlan.starter : activeFreePrompt || 'حالا یک پرسش مرتبط از هم‌صحبت بپرس.'))
+    : 'به موضوع درس پاسخ بده و گفت‌وگو را ادامه بده.';
   const roomLevel = chosenConversationLevel !== undefined ? `سطح ${chosenLevel.label}` : 'سطح انتخاب‌نشده';
   const roomTopic = String(situation || freePlan?.title || 'گفت‌وگوی روزمره');
   const evaluation = useMemo<HumanConversationEvaluation>(() => evaluateHumanConversation(messages, myId, language === 'ru' ? 'ru' : 'en'), [language, messages, myId]);
@@ -164,11 +168,12 @@ export default function HumanConversationScreen() {
   useEffect(() => {
     let active = true;
     let channel: ReturnType<typeof subscribeToMessages> | null = null;
-    Promise.all([listMessages(conversationId), currentChatUserId()])
-      .then(([rows, userId]) => {
+    Promise.all([listMessages(conversationId), currentChatUserId(), getConversationActiveLevel(conversationId)])
+      .then(([rows, userId, activeLevel]) => {
         if (!active) return;
         setMessages(rows);
         setMyId(userId);
+        setServerConversationLevel(activeLevel);
         channel = subscribeToMessages(conversationId, addMessage);
         setError(null);
       })
@@ -304,8 +309,11 @@ export default function HumanConversationScreen() {
               <View style={styles.missionCard}>
                 <View style={styles.freePlanHeader}><Sparkles size={15} color={Colors.warning[400]} /><Text style={styles.freePlanKicker}>مأموریت مرتبط با درس · نوبت {freeStep + 1}</Text></View>
                 <Text style={styles.freePlanTitle}>{freePlan.title}</Text>
+                <Text style={styles.lessonSource}>محتوای درس {chosenLevel.label}: {freePlan.lessonTitle}</Text>
+                {freePlan.lessonSituation ? <Text style={styles.freePlanMission}>{freePlan.lessonSituation}</Text> : null}
                 <Text style={styles.freePlanMission}>{freePlan.mission}</Text>
                 <View style={styles.promptBox}><Text style={styles.promptLabel}>{myTurn ? 'نوبت شماست — پاسخ بده' : 'نوبت هم‌صحبت است — گوش بده'}</Text><Text style={styles.freePlanStarter}>{activeTurnPrompt}</Text></View>
+                {freePlan.lessonExamples.length ? <View style={styles.lessonExamples}>{freePlan.lessonExamples.map(example => <Text key={example} style={styles.lessonExample}>{example}</Text>)}</View> : null}
                 {activeFreePrompt ? <Text style={styles.freePlanPrompt}>پاسخ باید به این پرسش مرتبط باشد: {activeFreePrompt}</Text> : null}
               </View>
             ) : null}
@@ -420,6 +428,9 @@ const styles = StyleSheet.create({
   freePlanHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
   freePlanKicker: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.warning[300], textAlign: 'right' },
   freePlanTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  lessonSource: { fontFamily: Typography.boldFontFamily, fontSize: 11, lineHeight: 18, color: Colors.primary[600], textAlign: 'right' },
+  lessonExamples: { gap: 5, paddingTop: 3 },
+  lessonExample: { fontFamily: Typography.latinFontFamily, fontSize: 13, lineHeight: 19, color: Colors.neutral[100], textAlign: 'left', writingDirection: 'ltr', backgroundColor: '#F5F6FB', borderRadius: Radius.md, padding: 7 },
   freePlanMission: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, lineHeight: 20, color: Colors.neutral[300], textAlign: 'right' },
   freePlanStarter: { fontFamily: Typography.latinFontFamily, fontSize: 14, lineHeight: 20, color: Colors.neutral[100], textAlign: 'left', writingDirection: 'ltr', backgroundColor: Colors.neutral[900], borderRadius: Radius.md, padding: Spacing.sm },
   freePlanStep: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400], textAlign: 'right' },

@@ -6,6 +6,9 @@ export type FreeConversationPlan = {
   starter: string;
   prompts: string[];
   boundary: string;
+  lessonTitle: string;
+  lessonSituation: string;
+  lessonExamples: string[];
 };
 
 type PlanInput = {
@@ -16,7 +19,9 @@ type PlanInput = {
   situation?: string;
 };
 
-const ENGLISH_PLANS: Array<Omit<FreeConversationPlan, 'boundary'>> = [
+type ConversationTemplate = Omit<FreeConversationPlan, 'boundary' | 'lessonTitle' | 'lessonSituation' | 'lessonExamples'>;
+
+const ENGLISH_PLANS: ConversationTemplate[] = [
   {
     title: 'Make it personal',
     mission: 'Share a real experience connected to the lesson topic and ask your partner about theirs.',
@@ -43,7 +48,7 @@ const ENGLISH_PLANS: Array<Omit<FreeConversationPlan, 'boundary'>> = [
   },
 ];
 
-const RUSSIAN_PLANS: Array<Omit<FreeConversationPlan, 'boundary'>> = [
+const RUSSIAN_PLANS: ConversationTemplate[] = [
   {
     title: 'Расскажи о своём опыте',
     mission: 'Расскажите о личном опыте по теме урока и спросите собеседника о его опыте.',
@@ -81,8 +86,33 @@ export function freeConversationPlan(input: PlanInput): FreeConversationPlan {
   const catalog = input.language === 'ru' ? RUSSIAN_PLANS : ENGLISH_PLANS;
   const selected = catalog[pickIndex(`${input.lessonId ?? ''}:${input.lessonTitle ?? ''}`) % catalog.length];
   const level = levelName(input.levelId);
+  const lesson = input.language === 'en'
+    ? requireEnglishLesson(input.levelId, input.lessonId)
+    : requireRussianLesson(input.levelId, input.lessonId);
   const boundary = input.language === 'ru'
     ? `Свободный разговор · ${level} · не повторяйте готовые реплики урока`
     : `Free conversation · ${level} · do not repeat the lesson script`;
-  return { ...selected, boundary };
+  return {
+    ...selected,
+    boundary,
+    lessonTitle: lesson?.title || input.lessonTitle || `${level} conversation practice`,
+    lessonSituation: lesson?.situation || input.situation || '',
+    lessonExamples: lesson?.sentences.slice(0, 3).map(sentence => 'en' in sentence ? sentence.en : sentence.text) || [],
+  };
+}
+
+function requireEnglishLesson(levelId: number, lessonId?: string) {
+  // Lazy require keeps the standalone conversation plan lightweight for non-course surfaces.
+  // The selected level always wins over the lesson that opened the chat.
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { SENTENCE_LESSONS } = require('./courseContent') as typeof import('./courseContent');
+  return SENTENCE_LESSONS.find(lesson => lesson.id === lessonId && lesson.levelId === levelId)
+    || SENTENCE_LESSONS.find(lesson => lesson.levelId === levelId);
+}
+
+function requireRussianLesson(levelId: number, lessonId?: string) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { RUSSIAN_LESSONS } = require('./languages/russian') as typeof import('./languages/russian');
+  return RUSSIAN_LESSONS.find(lesson => lesson.id === lessonId && lesson.levelId === levelId)
+    || RUSSIAN_LESSONS.find(lesson => lesson.levelId === levelId);
 }
