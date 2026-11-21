@@ -1,6 +1,6 @@
 import { MANAGEMENT_BUILD } from '@/lib/features';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, BackHandler, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
@@ -13,7 +13,7 @@ import {
   useAudioRecorder,
   useAudioRecorderState,
 } from 'expo-audio';
-import { Check, Headphones, Languages, Lightbulb, Mic, Smile, Pause, Play, Send, ShieldCheck, Sparkles, Square, Timer, Trash2, UserRound, Volume2 } from 'lucide-react-native';
+import { BarChart3, Check, Headphones, Languages, Lightbulb, Mic, Smile, Pause, Play, Send, ShieldCheck, Sparkles, Square, Timer, Trash2, UserRound, Volume2, X } from 'lucide-react-native';
 import {
   currentChatUserId,
   deleteConversationForMe,
@@ -34,6 +34,7 @@ import { ChatBackButton } from '@/components/ChatBackButton';
 import { KeyboardAttachedView } from '@/components/KeyboardAttachedView';
 import { ONLINE_AUDIO_DISABLED_MESSAGE, ONLINE_AUDIO_ENABLED } from '@/lib/onlineAudioPolicy';
 import { freeConversationPlan } from '@/lib/freeConversation';
+import { evaluateHumanConversation, type HumanConversationEvaluation } from '@/lib/humanConversationEvaluation';
 
 const containsRtlScript = (value: string) => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(value);
 
@@ -84,6 +85,20 @@ function VoiceMessage({ message }: { message: DirectMessage }) {
   );
 }
 
+function EvaluationCard({ evaluation, onClose }: { evaluation: HumanConversationEvaluation; onClose: () => void }) {
+  const metric = (label: string, value: number) => <View style={styles.metric}><Text style={styles.metricLabel}>{label}</Text><View style={styles.metricTrack}><View style={[styles.metricFill, { width: `${value}%` }]} /></View><Text style={styles.metricValue}>{value}٪</Text></View>;
+  return (
+    <View style={styles.evaluationCard}>
+      <View style={styles.evaluationHeader}><View><Text style={styles.evaluationKicker}>گزارش پایان مکالمه</Text><Text style={styles.evaluationTitle}>تحلیل تمرین شما</Text></View><Pressable accessibilityRole="button" accessibilityLabel="بستن گزارش" onPress={onClose} style={styles.closeReport}><X size={17} color={Colors.neutral[400]} /></Pressable></View>
+      <View style={styles.overallRow}><View style={styles.overallCircle}><Text style={styles.overallValue}>{evaluation.overall}</Text><Text style={styles.overallUnit}>٪</Text></View><View style={styles.overallCopy}><Text style={styles.overallLabel}>امتیاز کلی</Text><Text style={styles.overallDetail}>{evaluation.messagesAnalyzed} پیام و {evaluation.wordsSpoken} واژه تحلیل شد.</Text></View></View>
+      <View style={styles.metrics}>{metric('روانی', evaluation.fluency)}{metric('واژگان', evaluation.vocabulary)}{metric('تعامل', evaluation.interaction)}{metric('شفافیت', evaluation.clarity)}</View>
+      <View style={styles.feedbackBlock}><Text style={styles.feedbackHeading}>نقاط قوت</Text>{evaluation.strengths.map(item => <Text key={item} style={styles.feedbackLine}>✓ {item}</Text>)}</View>
+      <View style={styles.feedbackBlock}><Text style={styles.feedbackHeading}>خطاها و پیشنهاد اصلاح</Text>{evaluation.errors.length ? evaluation.errors.slice(0, 4).map(item => <View key={item.title} style={styles.errorItem}><Text style={styles.errorTitle}>{item.title}</Text><Text style={styles.errorDetail}>{item.detail}</Text>{item.correction ? <Text style={styles.errorCorrection}>{item.correction}</Text> : null}</View>) : <Text style={styles.feedbackLine}>خطای مهمی برای اصلاح پیدا نشد.</Text>}</View>
+      <View style={styles.nextPractice}><Sparkles size={15} color={Colors.primary[400]} /><Text style={styles.nextPracticeText}>{evaluation.nextPractice}</Text></View>
+    </View>
+  );
+}
+
 export default function HumanConversationScreen() {
   const router = useRouter();
   const { conversationId, name, lessonId, lessonTitle, levelId, situation, language } = useLocalSearchParams<{ conversationId: string; name?: string; lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
@@ -127,6 +142,7 @@ export default function HumanConversationScreen() {
   const [showCoach, setShowCoach] = useState(false);
   const [assisting, setAssisting] = useState<HumanAssistMode | null>(null);
   const [assistResult, setAssistResult] = useState<HumanAssistResult | null>(null);
+  const [showEvaluation, setShowEvaluation] = useState(false);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(recorder, 250);
   const textMessageCount = messages.filter(message => message.type === 'text' && !!message.body).length;
@@ -134,6 +150,7 @@ export default function HumanConversationScreen() {
   const activeFreePrompt = freePlan && freeStep < freePlan.prompts.length ? freePlan.prompts[freeStep] : null;
   const roomLevel = levelId ? `سطح ${String(levelId)}` : 'سطح آزاد';
   const roomTopic = String(situation || freePlan?.title || 'گفت‌وگوی روزمره');
+  const evaluation = useMemo<HumanConversationEvaluation>(() => evaluateHumanConversation(messages, myId, language === 'ru' ? 'ru' : 'en'), [language, messages, myId]);
 
   const addMessage = (message: DirectMessage) => {
     setMessages((current) => current.some((item) => item.id === message.id) ? current : [...current, message]);
@@ -292,6 +309,7 @@ export default function HumanConversationScreen() {
         <View style={styles.avatar}><UserRound size={22} color={Colors.primary[300]} /></View>
         <View style={styles.headerText}><Text style={[styles.name, containsRtlScript(name || 'مخاطب واقعی') ? styles.rtlText : styles.ltrText]}>{name || 'مخاطب واقعی'}</Text><View style={styles.onlineRow}><View style={styles.onlineDot} /><Text style={styles.status}>آمادهٔ مکالمه</Text></View></View>
         <Pressable accessibilityRole="button" accessibilityLabel="حذف این مخاطب و گفتگو" accessibilityState={{ disabled: sending }} style={styles.deleteButton} onPress={confirmDeleteConversation} disabled={sending}><Trash2 size={18} color={Colors.error[300]} /></Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="نمایش گزارش مکالمه" style={styles.reportButton} onPress={() => setShowEvaluation(true)}><BarChart3 size={18} color={Colors.primary[400]} /></Pressable>
         <ShieldCheck size={20} color={Colors.success[400]} />
       </View>
 
@@ -332,6 +350,7 @@ export default function HumanConversationScreen() {
             ) : null}
             <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
             <View style={styles.turnBanner}><View style={styles.turnIcon}><Mic size={15} color={Colors.primary[400]} /></View><View style={styles.turnCopy}><Text style={styles.turnTitle}>مکالمه را طبیعی ادامه دهید</Text><Text style={styles.turnText}>اشتباه‌ها مکالمه را متوقف نمی‌کنند؛ بعداً بازخورد می‌گیرید.</Text></View></View>
+            {showEvaluation ? <EvaluationCard evaluation={evaluation} onClose={() => setShowEvaluation(false)} /> : null}
           {!messages.length ? (
             <View style={styles.empty}><Text style={styles.emptyEmoji}>👋</Text><Text style={styles.emptyTitle}>گفتگو را شروع کنید</Text><Text style={styles.emptyDesc}>یک سلام ساده انگلیسی بهترین شروع است.</Text></View>
           ) : messages.map((message) => {
@@ -406,6 +425,7 @@ const styles = StyleSheet.create({
   onlineDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.success[500] },
   status: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[600], textAlign: 'right' },
   deleteButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: Colors.error[500] + '12', alignItems: 'center', justifyContent: 'center' },
+  reportButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: Colors.primary[500] + '12', alignItems: 'center', justifyContent: 'center' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   centerText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[500] },
   roomBar: { marginHorizontal: Spacing.md, marginTop: Spacing.md, padding: Spacing.md, borderRadius: Radius.xl, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E3E7F3', shadowColor: '#312E81', shadowOpacity: 0.07, shadowRadius: 14, shadowOffset: { width: 0, height: 5 }, elevation: 2, gap: 7 },
@@ -428,6 +448,33 @@ const styles = StyleSheet.create({
   turnCopy: { flex: 1, gap: 2 },
   turnTitle: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Colors.primary[700], textAlign: 'right' },
   turnText: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 17, color: Colors.neutral[300], textAlign: 'right' },
+  evaluationCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.primary[500] + '28', gap: 12, shadowColor: '#312E81', shadowOpacity: 0.08, shadowRadius: 16, shadowOffset: { width: 0, height: 6 }, elevation: 3 },
+  evaluationHeader: { flexDirection: 'row-reverse', alignItems: 'flex-start', justifyContent: 'space-between' },
+  evaluationKicker: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[400], textAlign: 'right' },
+  evaluationTitle: { fontFamily: Typography.boldFontFamily, fontSize: 17, color: Colors.neutral[0], textAlign: 'right', marginTop: 2 },
+  closeReport: { width: 30, height: 30, borderRadius: 15, backgroundColor: '#F5F6FB', alignItems: 'center', justifyContent: 'center' },
+  overallRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 12, padding: 10, borderRadius: Radius.lg, backgroundColor: Colors.primary[500] + '0A' },
+  overallCircle: { width: 68, height: 68, borderRadius: 34, borderWidth: 5, borderColor: Colors.primary[400], alignItems: 'center', justifyContent: 'center' },
+  overallValue: { fontFamily: Typography.boldFontFamily, fontSize: 21, color: Colors.primary[700], lineHeight: 24 },
+  overallUnit: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[400] },
+  overallCopy: { flex: 1, gap: 3 },
+  overallLabel: { fontFamily: Typography.boldFontFamily, fontSize: 14, color: Colors.neutral[0], textAlign: 'right' },
+  overallDetail: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300], textAlign: 'right' },
+  metrics: { gap: 8 },
+  metric: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
+  metricLabel: { width: 48, fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300], textAlign: 'right' },
+  metricTrack: { flex: 1, height: 7, borderRadius: 4, backgroundColor: '#EEF0F6', overflow: 'hidden' },
+  metricFill: { height: '100%', borderRadius: 4, backgroundColor: Colors.primary[400] },
+  metricValue: { width: 31, fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.primary[600], textAlign: 'left' },
+  feedbackBlock: { gap: 5 },
+  feedbackHeading: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Colors.neutral[0], textAlign: 'right' },
+  feedbackLine: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.neutral[300], textAlign: 'right' },
+  errorItem: { padding: 8, borderRadius: Radius.md, backgroundColor: '#FFF7F7', borderWidth: 1, borderColor: '#FDE0E0', gap: 2 },
+  errorTitle: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Colors.error[400], textAlign: 'right' },
+  errorDetail: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 17, color: Colors.neutral[300], textAlign: 'right' },
+  errorCorrection: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 17, color: Colors.primary[600], textAlign: 'right' },
+  nextPractice: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, padding: 9, borderRadius: Radius.md, backgroundColor: Colors.primary[500] + '0A' },
+  nextPracticeText: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 18, color: Colors.primary[700], textAlign: 'right' },
   freePlanCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.warning[500] + '0B', borderWidth: 1, borderColor: Colors.warning[500] + '25', gap: 6 },
   freePlanHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
   freePlanKicker: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.warning[300], textAlign: 'right' },
