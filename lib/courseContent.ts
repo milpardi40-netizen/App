@@ -70,7 +70,7 @@ export interface SentenceLesson {
   teachingFa?: string;
   durationMinutes: number;
   sentences: CourseSentence[];
-  dialogue: Array<{ speaker: 'learner' | 'partner'; text: string; fa: string }>;
+  dialogue: Array<{ speaker: 'learner' | 'partner'; role?: 'learner' | 'partner'; text: string; fa: string }>;
   /** Thematic unit metadata is currently populated for Communication English. */
   unitId?: string;
   unitTitle?: string;
@@ -723,6 +723,11 @@ export const SENTENCE_LESSONS: SentenceLesson[] = insertLabLessons(
   baseSentenceLessons,
   labLessonsOf('en').map(englishLabLesson),
   'en',
-).map((lesson, index) => ({ ...lesson, order: index + 1 }));
+).map((lesson, index) => ({
+  ...lesson,
+  order: index + 1,
+  // Keep the role explicit at the runtime boundary, even for legacy lesson sources.
+  dialogue: lesson.dialogue.map(line => ({ ...line, role: line.speaker })),
+}));
 
 export const getSentenceLesson = (id: string) => SENTENCE_LESSONS.find((lesson) => lesson.id === id);

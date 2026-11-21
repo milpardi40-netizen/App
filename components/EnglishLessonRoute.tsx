@@ -64,6 +64,7 @@ import { PAID_AI_ENABLED, PAID_AI_DISABLED_MESSAGE } from '@/lib/paidAI';
 import { ENGLISH_NATURAL_SPEECH_RATE, ENGLISH_NORMAL_SPEECH_RATE, ENGLISH_SLOW_SPEECH_RATE, playResponsiveSpeech, stopResponsiveSpeech, warmSpeech } from '@/lib/responsiveSpeech';
 import { ensureRecordedAudio } from '@/lib/content/coreAudio';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
+import type { LessonConversationSession } from '@/lib/lessonConversation';
 import { B1_INDEPENDENT_UNITS } from '@/lib/courseContentB1Independent';
 import { B2_UPPER_INTERMEDIATE_UNITS } from '@/lib/courseContentB2UpperIntermediate';
 import { C1_ADVANCED_UNITS } from '@/lib/courseContentC1Advanced';
@@ -71,6 +72,7 @@ import { C1_TOPIC_PRACTICE, C1_SCENARIOS, C1_APPLICATION_PRACTICE } from '@/lib/
 import { C1_ADDITIONAL_APPLICATION } from '@/lib/englishC1AppliedAssessment';
 import { B2_GUIDANCE, B2_PRODUCTION } from '@/lib/englishB2Practice';
 import { A2_FOUNDATION_LESSONS } from '@/lib/courseContentA2Foundation';
+import { conversationPracticeForLesson } from '@/lib/branchingConversation';
 
 const stages = ENGLISH_ENGINE_STEPS;
 
@@ -129,6 +131,7 @@ export default function SentenceLessonScreen() {
   const [resetting, setResetting] = useState(false);
   const [reload, setReload] = useState(0);
   const [attemptEvidence, setAttemptEvidence] = useState<Record<string, boolean> | undefined>();
+  const [conversation, setConversation] = useState<LessonConversationSession | undefined>();
   const completing=useRef(false);
   const loadedLesson=useRef<string|null>(null);
   const attempt = useRef<LessonAttempt | undefined>(undefined);
@@ -170,6 +173,7 @@ export default function SentenceLessonScreen() {
       if (!alive || screenRun.current !== run) return;
       attempt.current = saved.attempt;
       setAttemptEvidence(saved.attempt ? (saved.attemptEvidence ?? {}) : undefined);
+      setConversation(saved.conversation);
       setStage(Math.min(saved.stage, stages.length - 1));
       setSentenceIndex(Math.min(saved.sentenceIndex, lesson.sentences.length - 1));
       setRevealed(saved.revealed);
@@ -190,12 +194,12 @@ export default function SentenceLessonScreen() {
     let currentSave = true;
     const run = screenRun.current;
     if (sessionReady && loadedLesson.current === lesson.id && !completing.current && !resettingRef.current && !sessionError) {
-      void saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence })
+      void saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence, conversation })
         .then(() => { if (currentSave && screenRun.current === run) setSessionError(''); })
         .catch(() => { if (currentSave && screenRun.current === run) setSessionError('جلسه ذخیره نشد؛ درس را دوباره باز کنید.'); });
     }
     return () => { currentSave = false; };
-  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, evidencePassed, attemptEvidence, resetting, sessionError]);
+  }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, evidencePassed, attemptEvidence, resetting, sessionError]);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(recorder, 250);
   const [evaluatingSpeech, setEvaluatingSpeech] = useState(false);
@@ -418,6 +422,10 @@ export default function SentenceLessonScreen() {
       setStage((value) => { trackStageReached('en', lesson.id, value + 1); return value + 1; });
       setSentenceIndex(0);
       setRevealed(false);
+      return;
+    }
+    if (!conversation?.completed) {
+      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
       return;
     }
     if (saving) return;
@@ -687,11 +695,15 @@ export default function SentenceLessonScreen() {
         )}
         {stage === 9 && <LessonConversationRoom
           key={lesson.id}
+          lessonId={lesson.id}
           dialogue={lesson.dialogue}
           fallback={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
           locale="en-US"
           onSpeak={speakConversationLine}
           onStop={stopConversationSpeech}
+          initialSession={conversation}
+          onSessionChange={setConversation}
+          semanticPractice={conversationPracticeForLesson(lesson, 'en-US')}
         />}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}
       </View>

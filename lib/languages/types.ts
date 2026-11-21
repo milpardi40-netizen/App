@@ -17,7 +17,7 @@ export interface LearningLesson {
   teachingFa?: string;
   checks?: Array<{ promptFa: string; choices: string[]; correctIndex: number; explanationFa: string }>;
   sentences: LearningSentence[];
-  dialogue: Array<{ speaker: string; text: string; fa: string }>;
+  dialogue: Array<{ speaker: string; role?: 'learner' | 'partner'; text: string; fa: string }>;
 }
 export interface LanguageDefinition {
   id: LanguageId;

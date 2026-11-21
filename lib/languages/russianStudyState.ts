@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
 import { STARTER_CHECKS_REVISION } from './russianPreA1';
 import { RUSSIAN_LESSONS, RUSSIAN_LESSON_STAGES } from './russian';
+import { isLessonConversationSession, type LessonConversationSession } from '../lessonConversation';
 
 export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
 
@@ -17,6 +18,8 @@ export interface RussianLessonSession {
   revealed: boolean;
   answers: Record<string, number>;
   showCheckAnswers: boolean;
+  /** Durable progress of the lesson-scoped scripted conversation; no audio is stored. */
+  conversation?: LessonConversationSession;
 }
 
 interface RussianStudyState {
@@ -59,7 +62,8 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
   if (stage === null
     || !Number.isInteger(session.sentenceIndex) || session.sentenceIndex! < 0 || session.sentenceIndex! >= lesson.sentences.length
     || typeof session.revealed !== 'boolean' || typeof session.showCheckAnswers !== 'boolean'
-    || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)) {
+    || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)
+    || (session.conversation !== undefined && !isLessonConversationSession(session.conversation))) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   // Validate the stored shape even for retired questions, but never grade a previous meaning.
@@ -81,6 +85,7 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     revealed: session.revealed,
     answers,
     showCheckAnswers: !retiredChecks && session.showCheckAnswers,
+    ...(session.conversation ? { conversation: session.conversation } : {}),
   };
 }
 

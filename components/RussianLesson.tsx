@@ -37,6 +37,7 @@ import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } f
 import { bandReadinessForLevel } from '@/lib/content/readiness';
 
 import type { RussianLessonSession } from '@/lib/languages/russianStudyState';
+import type { LessonConversationSession } from '@/lib/lessonConversation';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
 import { ensureRecordedAudio } from '@/lib/content/coreAudio';
@@ -52,6 +53,7 @@ import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
 import { bridgeRulesForLesson } from '@/lib/languages/russianPersianBridge';
 import { recordStudyDay } from '@/lib/studyStreak';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
+import { conversationPracticeForLesson } from '@/lib/branchingConversation';
 
 const stages = RUSSIAN_LESSON_STAGES;
 
@@ -104,6 +106,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const [revealed, setRevealed] = useState(false);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showCheckAnswers, setShowCheckAnswers] = useState(false);
+  const [conversation, setConversation] = useState<LessonConversationSession | undefined>();
   const [sessionReady, setSessionReady] = useState(false);
   const [sessionError, setSessionError] = useState('');
   const [completionError, setCompletionError] = useState('');
@@ -182,6 +185,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       setRevealed(saved.revealed);
       setAnswers(saved.answers);
       setShowCheckAnswers(saved.showCheckAnswers);
+      setConversation(saved.conversation);
       setSpeechError('');
       setSessionReady(true);
       trackLessonStarted('ru', lesson.id);
@@ -199,11 +203,11 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: RussianLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
+    const nextSession: RussianLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers, conversation };
     void saveRussianLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
-  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
+  }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
   const speak = useCallback((text: string, rate = narrationRate('ru-RU', 'listen')) => {
     setSpeechError('');
@@ -309,6 +313,11 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       // Main sentences are spoken by the effect; practice keeps its existing behavior.
       if (nextStage === 3) speak(lesson.sentences[0].text, pace('normal'));
       else if (nextStage !== 1) void stopRussianSpeech();
+      return;
+    }
+
+    if (!conversation?.completed) {
+      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
       return;
     }
 
@@ -547,11 +556,15 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
 
         {stage === 9 && <LessonConversationRoom
           key={lesson.id}
+          lessonId={lesson.id}
           dialogue={lesson.dialogue}
           fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
           locale="ru-RU"
           onSpeak={speakConversationLine}
           onStop={stopConversationSpeech}
+          initialSession={conversation}
+          onSessionChange={setConversation}
+          semanticPractice={conversationPracticeForLesson(lesson, 'ru-RU')}
         />}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}

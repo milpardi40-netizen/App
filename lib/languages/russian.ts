@@ -81,6 +81,26 @@ export interface RussianCourseLesson extends LearningLesson {
   module?: string;
 }
 
+const EXPLICIT_LEARNER_SPEAKERS = new Set(['learner', 'زبان‌آموز', 'زبانآموز', 'you', 'you (learner)']);
+
+/**
+ * Source lessons historically stored free-form speaker names. Convert them once at the
+ * catalogue boundary into a stable learner/partner role without rewriting hundreds of
+ * authored dialogue records. Explicit learner labels win; otherwise the second named
+ * speaker is the learner, matching the authored partner-opens/learner-replies convention.
+ */
+function withConversationRoles(dialogue: LearningLesson['dialogue']): LearningLesson['dialogue'] {
+  const names = [...new Set(dialogue.map(line => line.speaker).filter(Boolean))];
+  const explicit = names.find(name => EXPLICIT_LEARNER_SPEAKERS.has(name.toLocaleLowerCase('fa-IR')));
+  const inferredLearner = explicit ?? names[1] ?? null;
+  return dialogue.map((line, index) => ({
+    ...line,
+    role: inferredLearner
+      ? line.speaker === inferredLearner ? 'learner' as const : 'partner' as const
+      : index % 2 === 1 ? 'learner' as const : 'partner' as const,
+  }));
+}
+
 export const RUSSIAN_A1_MODULES = [
   'ساختار جمله',
   'ضمیر و مالکیت',
@@ -265,14 +285,14 @@ function russianLabLesson(lab: LabLesson): RussianCourseLesson {
       ...(sentence.pattern ? { pattern: sentence.pattern } : {}),
       vocabulary: sentence.vocabulary,
     })),
-    dialogue: lab.dialogue, checks: lab.checks,
+    dialogue: withConversationRoles(lab.dialogue), checks: lab.checks,
   };
 }
 
 const russianBaseLessons: readonly RussianCourseLesson[] = RUSSIAN_STARTER_LESSONS.map((item, index) => {
   const level = RUSSIAN_LESSON_LEVELS[item.id];
   if (!level) throw new Error(`Russian lesson ${item.id} has no level assignment.`);
-  return { ...item, ...level, order: index + 1 };
+  return { ...item, ...level, order: index + 1, dialogue: withConversationRoles(item.dialogue) };
 });
 
 export const RUSSIAN_LESSONS: readonly RussianCourseLesson[] = insertLabLessons(

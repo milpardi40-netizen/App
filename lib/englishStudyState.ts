@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import type { Skill } from './englishSupplement/content';
 import { ENGLISH_ENGINE_STEPS } from './englishLearningEngine';
 import { LESSON_STAGE_VERSION, resumeStage } from './lessonStages';
+import { isLessonConversationSession, type LessonConversationSession } from './lessonConversation';
 
 export const STUDY_KEY = 'english_study_state_v1';
 
@@ -24,6 +25,8 @@ export interface LessonSession {
   attempt?: LessonAttempt;
   /** Correct checks in this attempt, distinct from the learner's historical evidence. */
   attemptEvidence?: Record<string, boolean>;
+  /** Durable progress of the lesson-scoped scripted conversation; no audio is stored. */
+  conversation?: LessonConversationSession;
 }
 
 export interface CourseLessonEvidence {
@@ -65,7 +68,8 @@ export function parseStudy(raw: string | null): StudyState {
         || !Number.isSafeInteger(value.attempt.generation) || value.attempt.generation < 1
         || typeof value.attempt.id !== 'string' || !value.attempt.id || value.attempt.id.length > 128))
       || (value.attemptEvidence !== undefined && (!value.attempt || !isRecord(value.attemptEvidence)
-        || Object.values(value.attemptEvidence).some(result => typeof result !== 'boolean'))))) {
+        || Object.values(value.attemptEvidence).some(result => typeof result !== 'boolean')))
+      || (value.conversation !== undefined && !isLessonConversationSession(value.conversation)))) {
     throw Error('اطلاعات جلسه خوانده نشد؛ داده‌های قبلی بازنویسی نشدند.');
   }
 
