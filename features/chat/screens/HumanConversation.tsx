@@ -15,6 +15,7 @@ import {
   recoverSupportConversation,
   subscribeToMessages,
   unsubscribeFromMessages,
+  respondConversationLevel,
   type DirectMessage,
 } from '@/lib/conversations';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
@@ -23,6 +24,7 @@ import { KeyboardAttachedView } from '@/components/KeyboardAttachedView';
 import { freeConversationPlan } from '@/lib/freeConversation';
 import { evaluateHumanConversation, type HumanConversationEvaluation } from '@/lib/humanConversationEvaluation';
 import SpeakCheck from '@/components/SpeakCheck';
+import { conversationLevel } from '@/lib/conversationLevels';
 
 const containsRtlScript = (value: string) => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(value);
 
@@ -89,10 +91,12 @@ function EvaluationCard({ evaluation, onClose }: { evaluation: HumanConversation
 
 export default function HumanConversationScreen() {
   const router = useRouter();
-  const { conversationId, name, lessonId, lessonTitle, levelId, situation, language } = useLocalSearchParams<{ conversationId: string; name?: string; lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
+  const { conversationId, name, lessonId, lessonTitle, levelId, situation, language, conversationLevel: selectedLevel, pendingLevelId, pendingLevelRequestedBy } = useLocalSearchParams<{ conversationId: string; name?: string; lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string; conversationLevel?: string; pendingLevelId?: string; pendingLevelRequestedBy?: string }>();
+  const chosenConversationLevel = selectedLevel !== undefined ? Number(selectedLevel) : (pendingLevelId !== undefined ? Number(pendingLevelId) : undefined);
+  const chosenLevel = conversationLevel(chosenConversationLevel);
   const freePlan = lessonTitle ? freeConversationPlan({
     language: language === 'ru' ? 'ru' : 'en',
-    levelId: Number(levelId || 1),
+    levelId: chosenConversationLevel ?? Number(levelId || 1),
     lessonId: String(lessonId || ''),
     lessonTitle: String(lessonTitle),
     situation: String(situation || ''),
@@ -128,15 +132,30 @@ export default function HumanConversationScreen() {
   const [error, setError] = useState<string | null>(null);
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
   const [showEvaluation, setShowEvaluation] = useState(false);
+  const [levelBusy, setLevelBusy] = useState(false);
   const myTurnMessages = messages.filter(message => message.senderId === myId && (message.type === 'text' || message.type === 'voice'));
   const partnerTurnMessages = messages.filter(message => message.senderId !== myId && (message.type === 'text' || message.type === 'voice'));
   const freeStep = freePlan ? Math.min(myTurnMessages.length, freePlan.prompts.length) : 0;
   const activeFreePrompt = freePlan && freeStep < freePlan.prompts.length ? freePlan.prompts[freeStep] : null;
   const myTurn = myTurnMessages.length <= partnerTurnMessages.length;
   const activeTurnPrompt = freePlan ? (freeStep === 0 ? freePlan.starter : activeFreePrompt || 'حالا یک پرسش مرتبط از هم‌صحبت بپرس.') : 'به موضوع درس پاسخ بده و گفت‌وگو را ادامه بده.';
-  const roomLevel = levelId ? `سطح ${String(levelId)}` : 'سطح آزاد';
+  const roomLevel = chosenConversationLevel !== undefined ? `سطح ${chosenLevel.label}` : 'سطح انتخاب‌نشده';
   const roomTopic = String(situation || freePlan?.title || 'گفت‌وگوی روزمره');
   const evaluation = useMemo<HumanConversationEvaluation>(() => evaluateHumanConversation(messages, myId, language === 'ru' ? 'ru' : 'en'), [language, messages, myId]);
+  const hasIncomingLevelRequest = pendingLevelId !== undefined && pendingLevelRequestedBy && myId && pendingLevelRequestedBy !== myId;
+
+  const respondToLevel = async (accept: boolean) => {
+    if (levelBusy) return;
+    setLevelBusy(true);
+    try {
+      await respondConversationLevel(conversationId, accept);
+      setError(null);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'پاسخ به درخواست سطح انجام نشد.');
+    } finally {
+      setLevelBusy(false);
+    }
+  };
 
   const addMessage = (message: DirectMessage) => {
     setMessages((current) => current.some((item) => item.id === message.id) ? current : [...current, message]);
@@ -290,6 +309,14 @@ export default function HumanConversationScreen() {
                 {activeFreePrompt ? <Text style={styles.freePlanPrompt}>پاسخ باید به این پرسش مرتبط باشد: {activeFreePrompt}</Text> : null}
               </View>
             ) : null}
+            {hasIncomingLevelRequest ? <View style={styles.levelRequestCard}>
+              <Text style={styles.levelRequestTitle}>درخواست سطح مکالمه</Text>
+              <Text style={styles.levelRequestText}>مخاطب شما پیشنهاد داده است در سطح {conversationLevel(Number(pendingLevelId)).label} مکالمه کنید. با قبول، مأموریت‌های همهٔ درس‌های این سطح فعال می‌شود.</Text>
+              <View style={styles.levelRequestActions}>
+                <Pressable style={[styles.levelAccept, levelBusy && styles.disabled]} disabled={levelBusy} onPress={() => void respondToLevel(true)}><Text style={styles.levelAcceptText}>قبول سطح</Text></Pressable>
+                <Pressable style={[styles.levelReject, levelBusy && styles.disabled]} disabled={levelBusy} onPress={() => void respondToLevel(false)}><Text style={styles.levelRejectText}>رد درخواست</Text></Pressable>
+              </View>
+            </View> : null}
             <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
             <View style={[styles.turnBanner, !myTurn && styles.turnBannerWaiting]}><View style={styles.turnIcon}><Mic size={15} color={myTurn ? Colors.primary[400] : Colors.success[400]} /></View><View style={styles.turnCopy}><Text style={styles.turnTitle}>{myTurn ? 'فقط پاسخ مرتبط با مأموریت' : 'در حال گوش دادن به هم‌صحبت'}</Text><Text style={styles.turnText}>{myTurn ? 'پاسخ را گفتاری یا نوشتاری بفرست؛ پیام آزاد و خارج از موضوع ارسال نمی‌شود.' : 'پس از پاسخ هم‌صحبت، نوبت شما به‌صورت خودکار باز می‌شود.'}</Text></View></View>
             {showEvaluation ? <EvaluationCard evaluation={evaluation} onClose={() => setShowEvaluation(false)} /> : null}
@@ -426,6 +453,14 @@ const styles = StyleSheet.create({
   useSuggestionText: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.onColor },
   alternative: { fontFamily: Typography.latinFontFamily, fontSize: 12, fontWeight: '800', color: Colors.primary[200], textAlign: 'left', writingDirection: 'ltr', paddingVertical: 3 },
   missionCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '35', gap: 7 },
+  levelRequestCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.accent[500] + '12', borderWidth: 1, borderColor: Colors.accent[500] + '35', gap: 8 },
+  levelRequestTitle: { fontFamily: Typography.boldFontFamily, fontSize: 14, color: Colors.neutral[0], textAlign: 'right' },
+  levelRequestText: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.neutral[300], textAlign: 'right' },
+  levelRequestActions: { flexDirection: 'row-reverse', gap: 8 },
+  levelAccept: { flex: 1, minHeight: 40, borderRadius: Radius.md, backgroundColor: Colors.primary[500], alignItems: 'center', justifyContent: 'center' },
+  levelAcceptText: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Colors.onColor },
+  levelReject: { flex: 1, minHeight: 40, borderRadius: Radius.md, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.neutral[700], alignItems: 'center', justifyContent: 'center' },
+  levelRejectText: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Colors.neutral[300] },
   promptBox: { borderRadius: Radius.lg, padding: 11, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.primary[500] + '25', gap: 5 },
   promptLabel: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Colors.primary[600], textAlign: 'right' },
   modeSwitch: { minHeight: 42, paddingHorizontal: Spacing.md, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'flex-start', gap: 7 },
