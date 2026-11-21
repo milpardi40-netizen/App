@@ -8,7 +8,6 @@ import SpeakCheck from '@/components/SpeakCheck';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { Typography } from '@/lib/theme';
-import { scoreSpeech } from '@/lib/speechScore';
 import { toPersianDigits as fa } from '@/lib/format';
 import { normalizeLessonConversation, type LessonConversationSession } from '@/lib/lessonConversation';
 import { evaluateSemanticResponse, type BranchingConversation } from '@/lib/branchingConversation';
@@ -31,8 +30,6 @@ type Props = {
   semanticPractice?: BranchingConversation | null;
 };
 
-/** A turn passes at the same bar the speaking test uses, so the two stages never disagree. */
-const PASS = 70;
 /** How long the other person appears to type before their bubble lands. Short, but it kills the “card flip” feel. */
 const TYPING_MS = 620;
 const LEARNER_LABELS = new Set(['learner', 'شما', 'زبان‌آموز', 'زبانآموز']);
@@ -189,9 +186,11 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
       fail(semantic.feedback);
       return;
     }
-    const scored = scoreSpeech(current.text, answer);
-    if (scored.score >= PASS) { setDraft(''); succeed(); return; }
-    fail('چند واژه از جمله شنیده نشد؛ متنِ پاسخ را کامل‌تر بنویس.');
+    // This room is a conversation rehearsal, not a second pronunciation exam.
+    // Once the learner has made one attempt, the turn advances; pronunciation
+    // feedback belongs to the speaking stage immediately before this room.
+    if (answer.trim()) { setDraft(''); succeed(); return; }
+    fail('یک پاسخ کوتاه بگو یا بنویس تا گفت‌وگو ادامه پیدا کند.');
   };
 
   // Asked from the learner's own tap, so both the browser and native permission prompt are user-initiated.
@@ -287,8 +286,8 @@ export default function LessonConversationRoom({ dialogue, fallback, locale, onS
               {!typed ? (
                 <SpeakCheck key={`${index}-${attempts}-${current.text}`} text={current.text} locale={locale} accent={Palette.primary} title="بگو" autoStart onResult={result => {
                   if (currentRule) { submitAnswer(result.heard); return; }
-                  if (result.score >= PASS) { succeed(); return; }
-                  fail('واژه‌هایِ قرمز را واضح‌تر بگو و دوباره تلاش کن.');
+                  if (result.heard.trim()) { succeed(); return; }
+                  fail('یک پاسخ کوتاه بگو تا گفت‌وگو ادامه پیدا کند.');
                 }} />
               ) : null}
               <View style={styles.turnRow}>

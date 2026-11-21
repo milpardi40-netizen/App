@@ -1,7 +1,7 @@
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, Share, StyleSheet, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Copy, Link2, QrCode, RefreshCw, Send, ShieldCheck, UserPlus } from 'lucide-react-native';
 import {
   claimRealContactInvite,
@@ -27,6 +27,7 @@ const INVITE_MESSAGES: Record<string, (code: string) => string> = {
 
 export default function InviteContactScreen() {
   const router = useRouter();
+  const { lessonId, lessonTitle, levelId, situation, language: routeLanguage } = useLocalSearchParams<{ lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
   const [mode, setMode] = useState<'invite' | 'join'>('invite');
   const [language, setLanguage] = useState<ResumeLanguage>(null);
   useEffect(() => { let alive = true; void readResumeSnapshot().then(snapshot => { if (alive) setLanguage(snapshot?.language ?? null); }).catch(() => undefined); return () => { alive = false; }; }, []);
@@ -79,7 +80,7 @@ export default function InviteContactScreen() {
     setError(null);
     try {
       const conversationId = await claimRealContactInvite(code);
-      router.replace({ pathname: '/conversations/human/[conversationId]', params: { conversationId } } as never);
+      router.replace({ pathname: '/conversations/human/[conversationId]', params: { conversationId, lessonId, lessonTitle, levelId, situation, language: routeLanguage } } as never);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'اتصال مخاطب انجام نشد.');
     } finally {
@@ -161,4 +162,3 @@ const styles = StyleSheet.create({
   security: { marginTop: Spacing.lg, borderRadius: Radius.lg, padding: Spacing.md, backgroundColor: Colors.success[500] + '0D', flexDirection: 'row-reverse', alignItems: 'flex-start', gap: 8 },
   securityText: { flex: 1, fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[500], textAlign: 'right', lineHeight: 19 },
 });
-

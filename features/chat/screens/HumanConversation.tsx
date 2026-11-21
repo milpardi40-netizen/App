@@ -129,6 +129,9 @@ export default function HumanConversationScreen() {
   const [assistResult, setAssistResult] = useState<HumanAssistResult | null>(null);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(recorder, 250);
+  const textMessageCount = messages.filter(message => message.type === 'text' && !!message.body).length;
+  const freeStep = freePlan ? Math.min(textMessageCount, freePlan.prompts.length) : 0;
+  const activeFreePrompt = freePlan && freeStep < freePlan.prompts.length ? freePlan.prompts[freeStep] : null;
 
   const addMessage = (message: DirectMessage) => {
     setMessages((current) => current.some((item) => item.id === message.id) ? current : [...current, message]);
@@ -307,8 +310,9 @@ export default function HumanConversationScreen() {
                 <View style={styles.freePlanHeader}><Sparkles size={15} color={Colors.warning[400]} /><Text style={styles.freePlanKicker}>مأموریت مکالمهٔ آزاد · بدون تکرار دیالوگ درس</Text></View>
                 <Text style={styles.freePlanTitle}>{freePlan.title}</Text>
                 <Text style={styles.freePlanMission}>{freePlan.mission}</Text>
-                <Text style={styles.freePlanStarter}>{freePlan.starter}</Text>
-                {freePlan.prompts.map(prompt => <Text key={prompt} style={styles.freePlanPrompt}>• {prompt}</Text>)}
+                <Text style={styles.freePlanStep}>{freeStep < freePlan.prompts.length ? `نوبت ${freeStep + 1} از ${freePlan.prompts.length}` : 'حالا آزاد ادامه بده'}</Text>
+                <Text style={styles.freePlanStarter}>{freeStep === 0 ? freePlan.starter : activeFreePrompt || 'حالا با یک پرسش تازه ادامه بده.'}</Text>
+                {activeFreePrompt ? <Text style={styles.freePlanPrompt}>راهنمای این نوبت: {activeFreePrompt}</Text> : null}
               </View>
             ) : null}
             <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
@@ -396,6 +400,7 @@ const styles = StyleSheet.create({
   freePlanTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
   freePlanMission: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, lineHeight: 20, color: Colors.neutral[300], textAlign: 'right' },
   freePlanStarter: { fontFamily: Typography.latinFontFamily, fontSize: 14, lineHeight: 20, color: Colors.neutral[100], textAlign: 'left', writingDirection: 'ltr', backgroundColor: Colors.neutral[900], borderRadius: Radius.md, padding: Spacing.sm },
+  freePlanStep: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400], textAlign: 'right' },
   freePlanPrompt: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 18, color: Colors.neutral[400], textAlign: 'right' },
   empty: { flex: 1, minHeight: 300, alignItems: 'center', justifyContent: 'center' },
   emptyEmoji: { fontSize: 42 },

@@ -180,14 +180,14 @@ export default function ConversationsHome() {
                 <ChevronLeft size={20} color={Colors.neutral[500]} />
               </Pressable>
             ))}
-            <Pressable style={styles.addAnother} onPress={() => router.push('/conversations/invite' as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
+            <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
           </View>
         ) : (
           <View style={styles.emptyContacts}>
             <View style={styles.peopleIcon}><UserRound size={30} color={Colors.primary[400]} /></View>
             <Text style={styles.emptyTitle}>{contactsError ? 'دریافت مخاطبان انجام نشد' : 'هنوز مخاطبی اضافه نکرده‌اید'}</Text>
             <Text style={styles.emptyDesc}>{contactsError || 'دوست مسلط به این زبان را با کد دعوت اضافه کنید و در محیطی خصوصی تمرین کنید.'}</Text>
-            <Pressable style={styles.inviteButton} onPress={() => router.push('/conversations/invite' as never)}>
+            <Pressable style={styles.inviteButton} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}>
               <Plus size={19} color={Colors.onColor} />
               <Text style={styles.inviteText}>افزودن مخاطب واقعی</Text>
             </Pressable>
