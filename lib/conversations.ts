@@ -14,16 +14,6 @@ export interface RealContact {
   avatarEmoji: string;
   englishLevel: string;
   lastSeen: string | null;
-  activeLevelId: number | null;
-  pendingLevelId: number | null;
-  pendingLevelRequestedBy: string | null;
-}
-
-export interface ConversationLevelRequest {
-  conversationId: string;
-  levelId: number;
-  requestedBy: string;
-  createdAt: string;
 }
 
 export interface DirectMessage {
@@ -166,28 +156,6 @@ export async function claimRealContactInvite(code: string, displayName = 'زبا
   return data;
 }
 
-export async function requestConversationLevel(conversationId: string, levelId: number): Promise<void> {
-  const { error } = await chatDb().rpc('request_conversation_level', { p_conversation_id: conversationId, p_level_id: levelId });
-  if (error) throw new Error(readableSupabaseError(error));
-}
-
-export async function respondConversationLevel(conversationId: string, accept: boolean): Promise<number | null> {
-  const { data, error } = await chatDb().rpc('respond_conversation_level', { p_conversation_id: conversationId, p_accept: accept });
-  if (error) throw new Error(readableSupabaseError(error));
-  return typeof data === 'number' ? data : null;
-}
-
-export async function listConversationLevelRequests(): Promise<ConversationLevelRequest[]> {
-  const { data, error } = await chatDb().rpc('list_conversation_level_requests');
-  if (error) throw new Error(readableSupabaseError(error));
-  return (data || []).map((row: { conversation_id: string; level_id: number; requested_by: string; created_at: string }) => ({
-    conversationId: row.conversation_id,
-    levelId: row.level_id,
-    requestedBy: row.requested_by,
-    createdAt: row.created_at,
-  }));
-}
-
 export async function listRealContacts(includeDeleted = false): Promise<RealContact[]> {
   const currentUser = await ensureChatIdentity();
   const { data: accessControl, error: accessError } = await chatDb()
@@ -200,7 +168,7 @@ export async function listRealContacts(includeDeleted = false): Promise<RealCont
 
   const { data, error } = await chatDb()
     .from('learning_contacts')
-    .select('conversation_id,created_at,contact_id,conversations(active_level_id,pending_level_id,pending_level_requested_by)')
+    .select('conversation_id,created_at,contact_id')
     .order('created_at', { ascending: false });
   if (error) throw new Error(readableSupabaseError(error));
 
@@ -237,9 +205,6 @@ export async function listRealContacts(includeDeleted = false): Promise<RealCont
       avatarEmoji: contact.avatar_emoji || '🙂',
       englishLevel: contact.english_level || 'Foundation',
       lastSeen: contact.last_seen ?? null,
-      activeLevelId: (row.conversations as { active_level_id?: number | null } | null)?.active_level_id ?? null,
-      pendingLevelId: (row.conversations as { pending_level_id?: number | null } | null)?.pending_level_id ?? null,
-      pendingLevelRequestedBy: (row.conversations as { pending_level_requested_by?: string | null } | null)?.pending_level_requested_by ?? null,
     } satisfies RealContact];
   });
 }

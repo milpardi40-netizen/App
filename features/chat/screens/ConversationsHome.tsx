@@ -10,7 +10,7 @@ import { StarterBottomNav } from '@/components/StarterBottomNav';
 import { NEW_COURSES } from '@/lib/languages/newCourses';
 import { readResumeSnapshot, type ResumeLanguage } from '@/lib/appResume';
 import { PageNavigation } from '@/components/PageNavigation';
-import { deleteConversationForMe, ensureSupportConversation, listRealContacts, requestConversationLevel, type RealContact } from '@/lib/conversations';
+import { deleteConversationForMe, ensureSupportConversation, listRealContacts, type RealContact } from '@/lib/conversations';
 import { readableSupabaseError } from '@/lib/errors';
 import { isSupabaseConfigured } from '@/lib/pairing';
 import { SupabaseSetupNotice } from '@/components/SupabaseSetupNotice';
@@ -18,7 +18,6 @@ import { ChatAlertSettingsCard } from '@/components/ChatAlertSettingsCard';
 import { MANAGEMENT_BUILD } from '@/lib/features';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { freeConversationPlan } from '@/lib/freeConversation';
-import { CONVERSATION_LEVELS } from '@/lib/conversationLevels';
 
 export default function ConversationsHome() {
   const router = useRouter();
@@ -35,7 +34,6 @@ export default function ConversationsHome() {
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [contactsError, setContactsError] = useState<string | null>(null);
   const [deletingConversationId, setDeletingConversationId] = useState<string | null>(null);
-  const [levelRequestingId, setLevelRequestingId] = useState<string | null>(null);
 
   const configured = isSupabaseConfigured();
   const [openingSupport, setOpeningSupport] = useState(false);
@@ -75,26 +73,6 @@ export default function ConversationsHome() {
         },
       ],
     );
-  };
-
-  const chooseConversationLevel = (contact: RealContact) => {
-    if (levelRequestingId) return;
-    Alert.alert('انتخاب سطح مکالمه', `سطحی را برای مکالمه با «${contact.displayName}» پیشنهاد بدهید.`, [
-      ...CONVERSATION_LEVELS.map(level => ({
-        text: `${level.label} — ${level.description}`,
-        onPress: () => {
-          setLevelRequestingId(contact.conversationId);
-          void requestConversationLevel(contact.conversationId, level.id)
-            .then(() => {
-              setContacts(current => current.map(item => item.conversationId === contact.conversationId ? { ...item, pendingLevelId: level.id } : item));
-              router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, conversationLevel: String(level.id), lessonTitle, levelId, situation, language, lessonId } } as never);
-            })
-            .catch(cause => setContactsError(cause instanceof Error ? cause.message : 'درخواست سطح ارسال نشد.'))
-            .finally(() => setLevelRequestingId(null));
-        },
-      })),
-      { text: 'انصراف', style: 'cancel' },
-    ]);
   };
 
   useFocusEffect(
@@ -182,14 +160,12 @@ export default function ConversationsHome() {
               <Pressable
                 key={contact.id}
                 style={styles.contactCard}
-                onPress={() => contact.pendingLevelId !== null
-                  ? router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, conversationLevel: String(contact.pendingLevelId), pendingLevelId: String(contact.pendingLevelId), pendingLevelRequestedBy: contact.pendingLevelRequestedBy || '', lessonTitle, levelId, situation, language, lessonId } } as never)
-                  : chooseConversationLevel(contact)}
+                onPress={() => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, lessonTitle, levelId, situation, language, lessonId } } as never)}
               >
                 <View style={styles.realAvatar}><Text style={styles.realAvatarText}>{contact.avatarEmoji}</Text></View>
                 <View style={styles.realContactText}>
                   <Text style={styles.realContactName}>{contact.displayName}</Text>
-                  <Text style={styles.realContactStatus}>{contact.activeLevelId !== null ? `سطح فعال مکالمه · ${CONVERSATION_LEVELS[contact.activeLevelId]?.label || 'نامشخص'}` : contact.pendingLevelId !== null ? `درخواست سطح ${CONVERSATION_LEVELS[contact.pendingLevelId]?.label || ''} در انتظار تأیید` : `مخاطب واقعی · ${contact.englishLevel}`}</Text>
+                  <Text style={styles.realContactStatus}>مخاطب واقعی · {contact.englishLevel}</Text>
                 </View>
                 <Pressable
                   accessibilityRole="button"
@@ -204,7 +180,6 @@ export default function ConversationsHome() {
                 <ChevronLeft size={20} color={Colors.neutral[500]} />
               </Pressable>
             ))}
-            <Text style={styles.levelHint}>با لمس هر مخاطب، یکی از سطح‌های Pre-A1 تا C1 را پیشنهاد بدهید.</Text>
             <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
           </View>
         ) : (
@@ -252,7 +227,6 @@ const styles = StyleSheet.create({
   sectionLabel: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[200], textAlign: 'right' },
   sectionRow: { marginTop: Spacing.sm, flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' },
   sectionHint: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
-  levelHint: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, lineHeight: 19, color: Colors.primary[300], textAlign: 'right', backgroundColor: Colors.primary[500] + '0D', borderRadius: Radius.md, padding: Spacing.sm },
   lessonContextCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.accent[500] + '12', borderWidth: 1, borderColor: Colors.accent[500] + '35', gap: 4 },
   lessonContextKicker: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.accent[300], textAlign: 'right' },
   lessonContextTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
