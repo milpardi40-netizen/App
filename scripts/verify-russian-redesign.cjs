@@ -12,97 +12,123 @@ const es = require('esbuild');
       b.onLoad({filter:/.*/,namespace:'qa'}, a => ({contents:a.path === 'store' ? 'export const createCourseProgressStore=()=>({});' : 'export default {getItem:async k=>globalThis.storage.get(k)??null,setItem:async(k,v)=>globalThis.storage.set(k,v),removeItem:async k=>globalThis.storage.delete(k)}'}));
     } }] });
   const mod = {exports:{}}; new Function('module','exports',result.outputFiles[0].text)(mod,mod.exports); const x = mod.exports;
-  const ids = 'hello name yes-no i-am numbers-1-10 please-thanks this-is i-have family where-is drinks time places shopping health days people adjectives colors family-more numbers-teens questions food week home city work review'.split(' ').map(s => `ru-pre-${s}`);
-  const lessons = x.RUSSIAN_LESSONS, starter = lessons.filter(l => l.levelId === 0), letters = new Set();
-  assert.deepEqual(starter.map(l=>l.id), ids);
+  const ids = [
+    'ru-pre-01-hello', 'ru-pre-02-bye', 'ru-pre-03-yes-no', 'ru-pre-04-i-am',
+    'ru-pre-05-numbers', 'ru-pre-06-how-are-you', 'ru-pre-07-i-have', 'ru-pre-08-please-thankyou',
+    'ru-pre-09-this-is', 'ru-pre-10-review', 'ru-pre-11-at-home', 'ru-pre-12-people',
+    'ru-pre-13-every-day', 'ru-pre-14-i-like',
+  ];
+  const lessons = x.RUSSIAN_LESSONS, starter = lessons.filter(l => l.levelId === 0);
+  assert.deepEqual(starter.map(l => l.id), ids);
   starter.forEach(lesson => {
-    const step = x.starterStep(lesson.id); for (const letter of step.letters) { assert(!letters.has(letter)); letters.add(letter); }
-    assert.deepEqual(lesson.sentences.map(s=>s.id),Array.from({length:8},(_,i)=>`${lesson.id}-${String(i+1).padStart(2,'0')}`));
-    for (const word of step.read) for (const ch of word.text.toUpperCase().match(/[А-ЯЁ]/g)) assert(letters.has(ch), `${lesson.id} requires untaught ${ch}`);
-    assert.deepEqual(lesson.sentences.slice(6).map(s=>s.text),step.read.map(w=>w.text));
-    const [hearing, situation, reading] = lesson.checks;
-    assert.equal(hearing.choices[hearing.correctIndex],step.oral[2].fa);
-    assert(situation.choices.every(c=>step.oral.some(l=>l.text === c && l.pronunciation)));
-    assert(reading.promptFa.includes(step.read[1].text)); assert.equal(reading.choices[reading.correctIndex],step.read[1].fa);
+    assert.equal(x.starterStep(lesson.id), undefined);
+    assert.deepEqual(lesson.sentences.map(s => s.id), Array.from({ length: 8 }, (_, i) => `${lesson.id}-${String(i + 1).padStart(2, '0')}`));
+    assert.equal(lesson.dialogue.length, 4);
+    assert.equal(lesson.checks.length, 3);
+    for (const q of lesson.checks) {
+      assert.equal(q.choices.length, 4);
+      assert(q.correctIndex >= 0 && q.correctIndex < 4);
+    }
   });
-  assert.deepEqual([...letters].sort(),[...x.RUSSIAN_ALPHABET].sort());
-  for (const [mode,n] of [['exam',20],['practice',10],['warmup',28]]) {
-    for (const seed of [1,2,7,'2026-11-18']) {
-      const items = x.russianStarterRound(lessons,mode,seed); assert.equal(items.length,n);
+  for (const [mode, n] of [['exam', 20], ['practice', 10], ['warmup', 14]]) {
+    for (const seed of [1, 2, 7, '2026-11-18']) {
+      const items = x.russianStarterRound(lessons, mode, seed);
+      assert.equal(items.length, n);
       for (const item of items) {
         const index = Number(item.sentenceId.slice(-2));
-        assert((item.kind === 'listen' && index <= 6) || (item.kind === 'truefalse' && index > 6));
+        assert(index >= 1 && index <= 8);
+        assert(item.kind === 'listen' || item.kind === 'truefalse');
       }
     }
   }
   let paths = 0;
-  for (const l of lessons) for (const starter of ['learner','partner']) {
+  for (const l of lessons) for (const starterRole of ['learner', 'partner']) {
     const scene = x.exchangeForLesson(l);
-    const allowed = new Set([...l.sentences, ...l.dialogue].map(line=>line.text+'|'+line.fa));
+    const allowed = new Set([...l.sentences, ...l.dialogue].map(line => line.text + '|' + line.fa));
     function visit(picks) {
-      const path={starter,picks}, view=x.exchangeView(scene,path); assert(x.validExchangePath(scene,path));
-      assert(view.history.every(h => allowed.has(h.line.text+'|'+h.line.fa)), `Out-of-lesson model in ${l.id}`);
-      if (view.history.length) assert.equal(view.history[0].who,starter);
-      for(let i=1;i<view.history.length;i++) assert.notEqual(view.history[i].who,view.history[i-1].who);
+      const path = { starter: starterRole, picks }, view = x.exchangeView(scene, path);
+      assert(x.validExchangePath(scene, path));
+      assert(view.history.every(h => allowed.has(h.line.text + '|' + h.line.fa)), `Out-of-lesson model in ${l.id}`);
+      if (view.history.length) assert.equal(view.history[0].who, starterRole);
+      for (let i = 1; i < view.history.length; i++) assert.notEqual(view.history[i].who, view.history[i - 1].who);
 
-      if(view.complete) {
+      if (view.complete) {
         paths++;
-        if(l.levelId===1) assert.deepEqual(view.history.map(h=>h.line.text),l.dialogue.map(d=>d.text));
+        if (l.levelId === 1) assert.deepEqual(view.history.map(h => h.line.text), l.dialogue.map(d => d.text));
         return;
       }
-      assert(view.options.every(m => x.replyPhrases(m.say).every(t=>allowed.has(t+'|'+m.say.fa))));
-      assert(view.options.length>=1); assert.equal(new Set(view.options.map(m=>x.plainRussian(m.reply?.text ?? m.say.text))).size,view.options.length,l.id);
-      view.options.forEach((m,i)=>{ assert.equal(x.matchExchangeReply(m.say.text, view.options),i,`${l.id}: ${m.say.text}`); const n=x.exchangeView(scene,{starter,picks:[...picks,i]}); assert.equal(n.history.at(-1).line.text,m.reply?.text ?? m.say.text); visit([...picks,i]); });
+      assert(view.options.every(m => x.replyPhrases(m.say).every(t => allowed.has(t + '|' + m.say.fa))));
+      assert(view.options.length >= 1);
+      assert.equal(new Set(view.options.map(m => x.plainRussian(m.reply?.text ?? m.say.text))).size, view.options.length, l.id);
+      view.options.forEach((m, i) => {
+        assert.equal(x.matchExchangeReply(m.say.text, view.options), i, `${l.id}: ${m.say.text}`);
+        const nextView = x.exchangeView(scene, { starter: starterRole, picks: [...picks, i] });
+        assert.equal(nextView.history.at(-1).line.text, m.reply?.text ?? m.say.text);
+        visit([...picks, i]);
+      });
     }
-    visit([]); assert.equal(x.exchangeView(scene,{starter,picks:[15]}),null);
+    visit([]);
+    assert.equal(x.exchangeView(scene, { starter: starterRole, picks: [15] }), null);
   }
-  // Pre-A1 «ч и й: this is / this is not» opens the finale itself: the two alternatives the learner heard in
-  // spoken slots 2–5, each with its own partner reply. The lines are taken from the lesson rather than repeated
-  // in this file, because the level's content is the single source of truth; what is under test is the resolver:
-  // two options, an exact match for each, nothing matched by a near-miss, and a reply that belongs to the
-  // branch that was chosen.
-  const l=lessons.find(l=>l.id==='ru-pre-this-is'), scene=x.exchangeForLesson(l), turn=x.exchangeView(scene,{starter:'partner',picks:[]});
-  assert.deepEqual(turn.options.map(o=>o.say.text),[l.sentences[1].text,l.sentences[3].text]);
-  const said=turn.options.map(o=>x.plainRussian(o.say.text));
-  assert.equal(new Set(said).size,2);
-  for(const [text,i] of [[said[0],0],[said[1],1],
-    // a line heard with its first word dropped, or one letter short, is not an answer to this prompt
-    [said[0].split(' ')[0],-1],['не '+said[1].split(' ').pop(),-1],[said[0]+' или '+said[1].split(' ').pop(),-1],['это вода',-1],['',-1]])
-    assert.equal(x.matchExchangeReply(text,turn.options),i,`${text} against ${said.join(' / ')}`);
-  assert.equal(x.exchangeView(scene,{starter:'learner',picks:[0]}).history.at(-1).line.text,l.sentences[2].text);
-  assert.equal(x.exchangeView(scene,{starter:'learner',picks:[1]}).history.at(-1).line.text,l.sentences[4].text);
-  // the drink choice lives in its own lesson now: its opening question is legal there, not here; a bare
-  // word from the middle of the sentence is a near-miss, not a match.
-  const drinkLesson=lessons.find(d=>d.id==='ru-pre-drinks'), drinkTurn=x.exchangeView(x.exchangeForLesson(drinkLesson),{starter:'learner',picks:[]});
-  const drinkSaid=x.plainRussian(drinkTurn.options[0].say.text);
-  assert.equal(x.matchExchangeReply(drinkSaid,drinkTurn.options),0);
-  assert.equal(x.matchExchangeReply(drinkSaid.split(' ')[1],drinkTurn.options),-1);
-  assert(!x.validExchangePath(scene,{starter:'partner',picks:[1],said:{0:said[0]}}));
-  assert(x.validExchangePath(scene,{starter:'partner',picks:[1],said:{0:said[1]}}));
-  const all = new Set(x.VERBS.map(v=>v.lemma)); assert.equal(all.size,x.VERBS.length);
-  for(const v of x.VERBS) { assert(v.fa && v.forms.length && v.examples.length && v.level>=0 && v.level<=5); for(const s of v.examples) assert(s.fa && x.gapFor(s.text,s.form).includes('____'), v.lemma); }
-  for(const l of lessons) for(const v of x.lessonVerbs(l.id)) assert(all.has(v));
-  assert.deepEqual(x.GRAMMAR_BANDS.map((_,i)=>x.GRAMMAR_UNITS.some(u=>u.level===i)),Array(6).fill(true));
-  assert(x.relatedUnits(l).some(u=>u.id==='want')); assert(x.lessonVerbs(l.id).includes('хотеть'));
-  for(const u of x.GRAMMAR_UNITS){ assert(u.choices.includes(u.answer)&&new Set(u.choices).size===u.choices.length); assert(u.examples.length>=2&&u.examples.every(s=>s.pronunciation&&s.fa)); }
-  for(const platform of ['web','android']) {
-    global.__RN_OS__=platform; global.storage=new Map(); global.window={localStorage:{getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)}};
-    const key=x.RUSSIAN_STUDY_STORAGE_KEY, old={stage:9,stageVersion:2,sentenceIndex:5,revealed:true,answers:{0:1},showCheckAnswers:true};
-    const other=lessons.find(l=>l.levelId===5).id;
-    storage.set(key,JSON.stringify({schema:1,sessions:{[l.id]:old,[other]:old}})); storage.set('sentence_course_progress_ru_v2','existing-completions-and-cards');
-    const loaded=await x.loadRussianPositions(); assert(!loaded.unreadable); assert.deepEqual(loaded.sessions[l.id].answers,{}); assert.equal(loaded.sessions[l.id].showCheckAnswers,false); assert.equal(loaded.sessions[l.id].sentenceIndex,5); assert.equal(loaded.sessions[l.id].stage,9); assert.deepEqual(loaded.sessions[other].answers,old.answers);
-    // The ladder is exactly RUSSIAN_LESSON_STAGES long, so a legacy save on the old speaking-check stage
-    // (10, before the blitz round was dropped) migrates down and never escapes the ladder. A turn-exchange
-    // is live dialogue state, not session state: whatever a stale save carries with it is dropped.
-    const ladder=x.RUSSIAN_LESSON_STAGES.length;
-    const beginner=lessons.find(l=>l.levelId===1).id;
-    storage.set(key,JSON.stringify({schema:1,sessions:{[beginner]:{stage:ladder-1,stageVersion:undefined,sentenceIndex:5,revealed:true,answers:{0:3},showCheckAnswers:true,exchange:{starter:'partner',picks:[0]}}}}));
-    const migrated=await x.loadRussianLessonSession(beginner);
-    assert.equal(migrated.stage,ladder-2);assert.deepEqual(migrated.answers,{});assert.equal(migrated.exchange,undefined);assert.equal(migrated.showCheckAnswers,false);
-    storage.set(key,JSON.stringify({schema:1,sessions:{[l.id]:{...old,stage:ladder,stageVersion:undefined}}})); assert.equal((await x.loadRussianLessonSession(l.id)).stage,ladder-1);
-    await x.saveRussianLessonSession(l.id,{...old,stage:ladder-1,exchange:{starter:'partner',picks:[1],said:{0:'я хочу воду'}}});
-    const saved=await x.loadRussianLessonSession(l.id); assert.equal(saved.stage,ladder-1); assert.deepEqual(saved.answers,old.answers); assert(saved.showCheckAnswers); assert.equal(saved.exchange,undefined);
-    await x.resetRussianLessonSession(l.id); assert.equal((await x.loadRussianLessonSession(l.id)).stage,0); assert.equal(storage.get('sentence_course_progress_ru_v2'),'existing-completions-and-cards');
+  // Test exact exchange matching and near-miss rejection on a Pre-A1 lesson dialogue.
+  const l = lessons.find(l => l.id === 'ru-pre-14-i-like'), scene = x.exchangeForLesson(l);
+  const turn = x.exchangeView(scene, { starter: 'partner', picks: [] });
+  assert.deepEqual(turn.options.map(o => o.say.text), [l.dialogue[1].text]);
+  const expectedReply = x.plainRussian(turn.options[0].say.text);
+  for (const [text, i] of [[expectedReply, 0], [expectedReply.split(' ')[0], -1], ['нет спасибо', -1], ['', -1]])
+    assert.equal(x.matchExchangeReply(text, turn.options), i);
+  assert.equal(x.exchangeView(scene, { starter: 'learner', picks: [0] }).history.at(-1).line.text, l.dialogue[1].text);
+  assert(x.validExchangePath(scene, { starter: 'partner', picks: [0], said: { 0: expectedReply } }));
+  assert(!x.validExchangePath(scene, { starter: 'partner', picks: [0], said: { 0: 'нет' } }));
+
+  const all = new Set(x.VERBS.map(v => v.lemma));
+  assert.equal(all.size, x.VERBS.length);
+  for (const v of x.VERBS) {
+    assert(v.fa && v.forms.length && v.examples.length && v.level >= 0 && v.level <= 5);
+    for (const s of v.examples) assert(s.fa && x.gapFor(s.text, s.form).includes('____'), v.lemma);
   }
-  console.log(`PASS: 28 stable steps / 33 decodable letters; ${paths} complete paths across all ${lessons.length} lessons; ${x.VERBS.length} verbs; ${x.GRAMMAR_UNITS.length} guided units; both session backends and both starter modes.`);
-})().catch(e=>{console.error(e);process.exitCode=1});
+  for (const l of lessons) for (const v of x.lessonVerbs(l.id)) assert(all.has(v));
+  assert.deepEqual(x.GRAMMAR_BANDS.map((_, i) => x.GRAMMAR_UNITS.some(u => u.level === i)), Array(6).fill(true));
+  assert(x.relatedUnits(l).some(u => u.id === 'want'));
+  assert(x.lessonVerbs(l.id).includes('хотеть'));
+  for (const u of x.GRAMMAR_UNITS) {
+    assert(u.choices.includes(u.answer) && new Set(u.choices).size === u.choices.length);
+    assert(u.examples.length >= 2 && u.examples.every(s => s.pronunciation && s.fa));
+  }
+  for (const platform of ['web', 'android']) {
+    global.__RN_OS__ = platform;
+    global.storage = new Map();
+    global.window = { localStorage: { getItem: k => storage.get(k) ?? null, setItem: (k, v) => storage.set(k, v), removeItem: k => storage.delete(k) } };
+    const key = x.RUSSIAN_STUDY_STORAGE_KEY, old = { stage: 9, stageVersion: 2, sentenceIndex: 5, revealed: true, answers: { 0: 1 }, showCheckAnswers: true };
+    const other = lessons.find(l => l.levelId === 5).id;
+    storage.set(key, JSON.stringify({ schema: 1, sessions: { [l.id]: old, [other]: old } }));
+    storage.set('sentence_course_progress_ru_v2', 'existing-completions-and-cards');
+    const loaded = await x.loadRussianPositions();
+    assert(!loaded.unreadable);
+    assert.deepEqual(loaded.sessions[l.id].answers, {});
+    assert.equal(loaded.sessions[l.id].showCheckAnswers, false);
+    assert.equal(loaded.sessions[l.id].sentenceIndex, 5);
+    assert.equal(loaded.sessions[l.id].stage, 9);
+    assert.deepEqual(loaded.sessions[other].answers, old.answers);
+    const ladder = x.RUSSIAN_LESSON_STAGES.length;
+    const beginner = lessons.find(l => l.levelId === 1).id;
+    storage.set(key, JSON.stringify({ schema: 1, sessions: { [beginner]: { stage: ladder - 1, stageVersion: undefined, sentenceIndex: 5, revealed: true, answers: { 0: 3 }, showCheckAnswers: true, exchange: { starter: 'partner', picks: [0] } } } }));
+    const migrated = await x.loadRussianLessonSession(beginner);
+    assert.equal(migrated.stage, ladder - 2);
+    assert.deepEqual(migrated.answers, {});
+    assert.equal(migrated.exchange, undefined);
+    assert.equal(migrated.showCheckAnswers, false);
+    storage.set(key, JSON.stringify({ schema: 1, sessions: { [l.id]: { ...old, stage: ladder, stageVersion: undefined } } }));
+    assert.equal((await x.loadRussianLessonSession(l.id)).stage, ladder - 1);
+    await x.saveRussianLessonSession(l.id, { ...old, stage: ladder - 1, exchange: { starter: 'partner', picks: [0], said: { 0: 'да пожалуйста я люблю чай' } } });
+    const saved = await x.loadRussianLessonSession(l.id);
+    assert.equal(saved.stage, ladder - 1);
+    assert.deepEqual(saved.answers, old.answers);
+    assert(saved.showCheckAnswers);
+    assert.equal(saved.exchange, undefined);
+    await x.resetRussianLessonSession(l.id);
+    assert.equal((await x.loadRussianLessonSession(l.id)).stage, 0);
+    assert.equal(storage.get('sentence_course_progress_ru_v2'), 'existing-completions-and-cards');
+  }
+  console.log(`PASS: 14 Pre-A1 steps (English-aligned); ${paths} complete paths across all ${lessons.length} lessons; ${x.VERBS.length} verbs; ${x.GRAMMAR_UNITS.length} guided units; both session backends.`);
+})().catch(e => { console.error(e); process.exitCode = 1; });

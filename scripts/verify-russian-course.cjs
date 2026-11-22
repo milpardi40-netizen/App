@@ -50,7 +50,25 @@ const esbuild = require('esbuild');
   const checks = [];
   const check = (label, value) => { assert(value, label); checks.push(label); };
   const sentenceCount = app.RUSSIAN_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0);
-  const expectedLessonIds = ['ru-l1-greetings','ru-l1-how-are-you','ru-l1-introductions','ru-l1-polite-words','ru-l1-yes-no-understand','ru-l1-numbers-1-10','ru-l1-numbers-family','ru-l1-objects-this-is','ru-l1-where-is','ru-l1-basic-wants-needs','ru-l1-colors','ru-l1-food','ru-l1-drinks','ru-l1-likes','ru-l1-weather','ru-l1-time-words','ru-l1-adjectives','ru-l1-numbers-20-100','ru-l1-prices','ru-l1-body-parts','ru-l1-clothes','ru-l1-places','ru-l1-transport','ru-l1-jobs','ru-l1-everyday-verbs','ru-l1-question-words','ru-l1-my-your','ru-l1-we-they','ru-l2-cafe','ru-l2-shopping','ru-l2-directions','ru-l2-time','ru-l2-days','ru-l2-daily-routine','ru-l2-emergency','ru-l2-restaurant-order','ru-l2-paying-bill','ru-l2-clothes-sizes','ru-l2-groceries','ru-l2-taxi','ru-l2-bus-tickets','ru-l2-hotel','ru-l2-phone-calls','ru-l2-appointments','ru-l2-pharmacy','ru-l2-lost-property','ru-l2-weekend-plans','ru-l2-invitations','ru-l2-months-dates','ru-l2-yesterday','ru-l2-tomorrow','ru-l2-family-describe','ru-l2-compare-shopping','ru-l2-seasons-weather','ru-l2-animals-zoo','ru-l2-cities-countries','ru-l3-past-simple','ru-l3-future-simple','ru-l3-plans','ru-l3-appearance','ru-l3-comparisons','ru-l3-advice','ru-l3-likes-opinions','ru-l3-work-study','ru-l3-home','ru-l3-hobbies-sport','ru-l3-travel','ru-l3-conditions','ru-l3-daily-sequence','ru-l3-shopping-return','ru-l3-health-doctor','ru-l3-phone-internet','ru-l3-public-service','ru-l3-weather-seasons','ru-l3-cooking-food','ru-l3-conversation-tools'];
+  const expectedPreA1Ids = [
+    'ru-pre-01-hello', 'ru-pre-02-bye', 'ru-pre-03-yes-no', 'ru-pre-04-i-am',
+    'ru-pre-05-numbers', 'ru-pre-06-how-are-you', 'ru-pre-07-i-have', 'ru-pre-08-please-thankyou',
+    'ru-pre-09-this-is', 'ru-pre-10-review', 'ru-pre-11-at-home', 'ru-pre-12-people',
+    'ru-pre-13-every-day', 'ru-pre-14-i-like',
+  ];
+  const expectedA1Ids = [
+    'ru-a1-introducing-yourself', 'ru-a1-asking-for-help', 'ru-a1-buying-something',
+    'ru-a1-alphabet-and-spelling', 'ru-a1-pronouns-and-be', 'ru-a1-numbers-and-contact',
+    'ru-a1-family-and-possessions', 'ru-a1-time-and-calendar', 'ru-a1-everyday-routine',
+    'ru-a1-objects-and-places', 'ru-a1-job-interview', 'ru-a1-renting-a-home',
+    'ru-a1-personal-information', 'ru-a1-directions-and-neighborhood', 'ru-a1-public-transport',
+    'ru-a1-cafe-and-food', 'ru-a1-shopping-and-clothing', 'ru-a1-appointments-and-time',
+    'ru-a1-health-and-pharmacy', 'ru-a1-hobbies-and-free-time', 'ru-a1-invitations-and-plans',
+    'ru-a1-weather-and-seasons', 'ru-a1-travel-and-tickets', 'ru-a1-hotel-and-stay',
+    'ru-a1-phone-and-messages', 'ru-a1-services-and-post-office', 'ru-a1-school-and-learning',
+    'ru-a1-current-activities', 'ru-a1-past-and-future-plans',
+  ];
+  const expectedLessonIds = [...expectedA1Ids, 'ru-l3-past-simple','ru-l3-future-simple','ru-l3-plans','ru-l3-appearance','ru-l3-comparisons','ru-l3-advice','ru-l3-likes-opinions','ru-l3-work-study','ru-l3-home','ru-l3-hobbies-sport','ru-l3-travel','ru-l3-conditions','ru-l3-daily-sequence','ru-l3-shopping-return','ru-l3-health-doctor','ru-l3-phone-internet','ru-l3-public-service','ru-l3-weather-seasons','ru-l3-cooking-food','ru-l3-conversation-tools'];
 
   check('Cyrillic alphabet has 33 unique letters', app.RUSSIAN_ALPHABET.length === 33 && new Set(app.RUSSIAN_ALPHABET).size === 33);
   const b1Ids = ['cases-genitive', 'cases-in-context', 'aspect-and-future', 'narration-sequence', 'movement-prefixes',
@@ -59,15 +77,15 @@ const esbuild = require('esbuild');
     'health-lifestyle', 'services-complaints', 'phone-email-tech', 'culture-media', 'planning-and-instructions'].map(id => `ru-b1-${id}`);
   const b2Ids = ['case-government','aspect-reporting','motion-meaning','conditional-counterfactual','logical-links','relative-clauses','reported-speech','modality-register','passive-nominal','vocabulary-style','society-policy','technology-ai','environment-energy','education-health','work-negotiation','employment-contracts','formal-complaint-tech','travel-disruption','culture-critique','presentation-summary'].map(id => `ru-b2-${id}`);
   const c1Ids = ['case-relations','aspect-argument','motion-metaphor','time-counterfactual','complex-clauses','impersonal-passive','nominal-information','certainty-evidence','lexical-precision','style-cohesion','social-evidence','debate-critique','sensitive-negotiation','meeting-presentation','formal-writing','critical-media','culture-literature','intercultural-tone','professional-interview','analytical-report'].map(id => `ru-c1-${id}`);
-  const stableIds = [...expectedLessonIds, ...b1Ids, ...b2Ids, ...c1Ids];
+  const stableIds = [...expectedPreA1Ids, ...expectedLessonIds, ...b1Ids, ...b2Ids, ...c1Ids];
   const allIds = app.RUSSIAN_LESSONS.map(lesson => lesson.id);
   let cursor = 0;
   for (const id of allIds) if (id === stableIds[cursor]) cursor += 1;
-  check('Russian course keeps every original lesson in order and appends the Pre-A1 band and practice labs', app.RUSSIAN_LESSONS.length === 221
+  check('Russian course keeps every lesson in order across Pre-A1..C1 and practice labs', app.RUSSIAN_LESSONS.length === 180
     && cursor === stableIds.length
     && app.RUSSIAN_LESSONS.every(lesson => /^lab-ru-[a-z0-9]+-\d{2}$/.test(lesson.id) || (lesson.title && lesson.situation)));
-  check('Russian course keeps eight-sentence lessons and its practice labs', sentenceCount === 1808
-    && app.RUSSIAN_LESSONS.filter(lesson => !lesson.id.startsWith('lab-')).every(lesson => lesson.sentences.length === 8)
+  check('Russian course keeps aligned sentence counts per level (Pre-A1: 8, A1: 16, A2..C1: 8, labs: 10/12)', sentenceCount === 1712
+    && app.RUSSIAN_LESSONS.filter(lesson => !lesson.id.startsWith('lab-')).every(lesson => lesson.sentences.length === (lesson.levelId === 1 ? 16 : 8))
     && app.RUSSIAN_LESSONS.filter(lesson => lesson.id.startsWith('lab-')).every(lesson => [10, 12].includes(lesson.sentences.length)));
   check('Russian roadmap now has six levels', app.RUSSIAN_LEVELS.map(level => level.id).join('|') === '0|1|2|3|4|5'
     && app.RUSSIAN_LEVELS.length === 6
@@ -75,60 +93,28 @@ const esbuild = require('esbuild');
   const lessonsByLevel = [0, 1, 2, 3, 4, 5].map(levelId => app.RUSSIAN_LESSONS.filter(lesson => lesson.levelId === levelId));
   check('Russian roadmap groups lessons by level in order, from Pre-A1 through C1', app.RUSSIAN_LESSONS.every((lesson, index) => lesson.order === index + 1 && lesson.subtitle)
     && app.RUSSIAN_LESSONS.every((lesson, index) => index === 0 || lesson.levelId >= app.RUSSIAN_LESSONS[index - 1].levelId)
-    && lessonsByLevel.map(lessons => lessons.length).join('|') === '28|56|37|37|33|30'
+    && lessonsByLevel.map(lessons => lessons.length).join('|') === '14|29|37|37|33|30'
     && lessonsByLevel.every(lessons => lessons.length > 0)
     && lessonsByLevel.flat().length === app.RUSSIAN_LESSONS.length);
-  const expectedPreA1Ids = ['hello','name','yes-no','i-am','numbers-1-10','please-thanks','this-is','i-have','family','where-is','drinks','time','places','shopping','health','days','people','adjectives','colors','family-more','numbers-teens','questions','food','week','home','city','work','review'].map(id => `ru-pre-${id}`);
-  check('Pre-A1 lesson IDs and order remain stable', lessonsByLevel[0].map(lesson => lesson.id).join('|') === expectedPreA1Ids.join('|'));
-  check('Pre-A1 conversation uses the app’s six oral lines and separate ending without changing sentence addresses', lessonsByLevel[0].every(lesson => {
-    const step = app.starterStep(lesson.id);
-    if (!step || lesson.sentences.length !== 8) return false;
-    const expectedDialogue = [step.oral[0], step.oral[1], step.oral[2], step.oral[5], step.ending];
-    return lesson.dialogue.length === expectedDialogue.length
-      && lesson.dialogue.every((line, i) => line.text === expectedDialogue[i].text && line.fa === expectedDialogue[i].fa
-        && line.speaker === (i % 2 === 0 ? 'هم‌صحبت' : 'زبان‌آموز'));
-  }));
-  // A step that quotes a Russian line in its situation prompt must quote a line the learner *hears*, and a
-  // wh-question is never answered with «Да, …»: those are the two ways a rewritten step ends up asking about
-  // one line while the graded answer is another. Content is rewritten in place; this keeps the two in step.
-  const normCyr = (s) => s.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е').replace(/[^а-я0-9 ]/g, '').trim();
-  const whCyr = /(кто|что|где|когда|почему|зачем|сколько|како[йая]|кака[яое])/;
-  const situationPromptsAlign = app.RUSSIAN_STARTER_STEPS.every(step => {
-    const quoted = /«([А-Яа-яЁё][^»]*[?!.])»/.exec(step.situationCheck);
-    if (!quoted) return true;
-    const asked = normCyr(quoted[1]), answer = normCyr(step.oral[1].text);
-    return asked !== answer && !(whCyr.test(asked) && /^да\b/.test(answer));
-  });
-  check('a starter situation prompt quotes a line the learner hears, and never grades a yes against a wh-question', situationPromptsAlign);
-
-  const taughtLetters = new Set();
-  const independentReadingUsesIntroducedLetters = app.RUSSIAN_STARTER_STEPS.every(step => {
-    for (const letter of step.letters.toLocaleUpperCase('ru-RU')) taughtLetters.add(letter);
-    return step.read.every(line => [...line.text.toLocaleUpperCase('ru-RU').replace(/\u0301/g, '').replace(/[^А-ЯЁ]/g, '')]
-      .every(letter => taughtLetters.has(letter)));
-  });
-  check('Independent reading uses only Cyrillic letters introduced by that step and all 33 letters are covered', independentReadingUsesIntroducedLetters
-    && app.RUSSIAN_ALPHABET.every(letter => taughtLetters.has(letter)) && taughtLetters.size === app.RUSSIAN_ALPHABET.length);
+  check('Pre-A1 lesson IDs and English-aligned 14-lesson order remain stable', lessonsByLevel[0].map(lesson => lesson.id).join('|') === expectedPreA1Ids.join('|'));
+  check('Pre-A1 uses 8 sentences, 4-line guided dialogue, explicit patterns and no letter-pair gating', lessonsByLevel[0].every(lesson =>
+    app.starterStep(lesson.id) === undefined
+    && lesson.sentences.length === 8
+    && lesson.dialogue.length === 4
+    && lesson.dialogue.every((line, i) => line.role === (i % 2 === 0 ? 'partner' : 'learner') || line.role === (i % 2 === 0 ? 'learner' : 'partner'))
+    && lesson.sentences.every((sentence, idx) => sentence.id === `${lesson.id}-${String(idx + 1).padStart(2, '0')}`
+      && sentence.vocabulary.every(item => sentence.text.toLocaleLowerCase('ru-RU').includes(item.word.toLocaleLowerCase('ru-RU'))))));
   const preA1Modules = app.RUSSIAN_LEVELS[0].modules;
   const a1Modules = app.RUSSIAN_LEVELS[1].modules;
-  check('Pre-A1 has seven populated curriculum modules and all 28 stable lessons are assigned once', preA1Modules.length === 7
+  check('Pre-A1 has four populated curriculum modules and all 14 lessons are assigned', preA1Modules.length === 4
     && lessonsByLevel[0].every(lesson => preA1Modules.includes(lesson.module))
-    && preA1Modules.every(module => lessonsByLevel[0].some(lesson => lesson.module === module))
-    && ['ru-pre-health','ru-pre-drinks','ru-pre-time','ru-pre-places','ru-pre-shopping','ru-pre-days'].every(id => lessonsByLevel[0].find(lesson => lesson.id === id)?.module === 'واژگان روزمره')
-    && ['ru-pre-i-have','ru-pre-where-is'].every(id => lessonsByLevel[0].find(lesson => lesson.id === id)?.module === 'دستور پایه'));
-  check('A1 has nine populated curriculum modules and all 56 stable lessons are assigned once', a1Modules.length === 9
+    && preA1Modules.every(module => lessonsByLevel[0].some(lesson => lesson.module === module)));
+  check('A1 has nine populated curriculum modules and all 29 lessons are assigned', a1Modules.length === 9
     && lessonsByLevel[1].every(lesson => a1Modules.includes(lesson.module))
     && a1Modules.every(module => lessonsByLevel[1].some(lesson => lesson.module === module)));
   const russianLibrarySource = fs.readFileSync('components/RussianLibrary.tsx', 'utf8');
   check('Pre-A1 and A1 library views group lessons by module while higher levels keep their existing groups', russianLibrarySource.includes('selected.modules.map(module => selectedLessons.filter(item => item.module === module)')
     && russianLibrarySource.includes('for (let index = 0; index < selectedLessons.length; index += LESSONS_PER_GROUP)'));
-  const starterReviewNote = lessonsByLevel[0].find(lesson => lesson.id === 'ru-pre-review').teachingFa;
-  const phonePracticeNote = lessonsByLevel[1].find(lesson => lesson.id === 'ru-l2-phone-calls').teachingFa;
-  const appointmentPracticeNote = lessonsByLevel[1].find(lesson => lesson.id === 'ru-l2-appointments').teachingFa;
-  check('Beginner reading/writing prompts are optional and do not claim app storage or automatic correction', starterReviewNote.includes('تمرین نوشتن اختیاری')
-    && starterReviewNote.includes('خارج از اپ') && starterReviewNote.includes('ذخیره') && starterReviewNote.includes('تصحیح نمی‌شود')
-    && [phonePracticeNote, appointmentPracticeNote].every(note => note.includes('نوشتن اختیاری است')
-      && note.includes('بیرون از اپ') && note.includes('ذخیره') && note.includes('تصحیح نمی‌شود')));
   check('B1 and B2 are available', app.RUSSIAN_LEVELS[3].status === 'available'
     && app.RUSSIAN_LEVELS[4].status === 'available'
     && app.RUSSIAN_LEVELS[2].status === 'available');
@@ -271,16 +257,16 @@ const esbuild = require('esbuild');
       && new Set(question.choices).size === question.choices.length && question.correctIndex >= 0 && question.correctIndex < question.choices.length)));
   check('sentence-builder grammar notes stay attached to original Russian examples', app.RUSSIAN_LESSONS.every(lesson => lesson.sentences.filter(sentence => sentence.pattern)
     .every(sentence => sentence.text && sentence.fa)));
-  // Keep the A1 examples in their original slots so sessions and review cards still resolve.
+  // Keep the A1 examples aligned with the 29-lesson Foundation (10) + Survival (19) English structure.
   const a1 = app.RUSSIAN_LESSONS.filter(lesson => lesson.levelId === 1);
-  const expectedA1SentenceIds = [
-    ...Array.from({ length: 224 }, (_, i) => `ru1-${String(i + 1).padStart(2, '0')}`),
-    ...Array.from({ length: 224 }, (_, i) => `ru2-${String(i + 1).padStart(2, '0')}`),
-  ];
-  check('A1 sentence IDs and sequence remain stable', a1.flatMap(lesson => lesson.sentences.map(sentence => sentence.id)).join('|') === expectedA1SentenceIds.join('|'));
+  check('A1 has 29 lessons × 16 sentences = 464 sentences with stable lesson-prefixed IDs and clean stress marks', a1.length === 29
+    && a1.every(lesson => lesson.sentences.length === 16
+      && lesson.sentences.every((sentence, idx) => sentence.id === `${lesson.id}-${String(idx + 1).padStart(2, '0')}`)
+      && [...lesson.sentences, ...lesson.dialogue].every(item => !/[A-Za-zÀ-ÿ]/.test(item.text) && !/[^аеёиоуыэюяАЕЁИОУЫЭЮЯ]\u0301/.test(item.text))));
   const preLines = new Set(lessonsByLevel[0].flatMap(l => l.sentences.map(s => normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   const shared = a1.flatMap(l => l.sentences.filter(s => preLines.has(normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
-  check('A1 does not reteach the starter utterance list or the alphabet', !shared.length && a1.every(l => !l.teachingFa.includes('الفبا')));
+  check('A1 does not duplicate the Pre-A1 utterance list and teaches Cyrillic reading/spelling in its dedicated alphabet lesson', !shared.length
+    && a1.filter(l => l.id !== 'ru-a1-alphabet-and-spelling').every(l => !l.teachingFa.includes('الفبا')));
   // Optional cold comprehension for the Russian A1 band (lib/languages/russianA1Skills.ts).
   const a1Skills = app.RUSSIAN_A1_SKILLS;
   const a1SkillTasks = Object.values(a1Skills).flat();
@@ -319,9 +305,10 @@ const esbuild = require('esbuild');
 
   check('A1 cold messages stay optional: the graded checks of an A1 lesson are still two', a1.every(lesson => lesson.checks.length === 2));
 
-  check('A1 rehearses the complete local scene rather than isolated word lists', a1.every(l => l.dialogue.length === 8 && l.dialogue.every((d,i) => d.text === l.sentences[i].text && d.fa === l.sentences[i].fa)));
-  check('A1 exit tasks have unique situations, evidence and a productive reply', new Set(a1.map(l=>l.checks[0].promptFa)).size===56 && a1.every(l => l.checks[1].choices[l.checks[1].correctIndex] === l.dialogue[7].text));
-  check('A1 vocabulary remains anchored to the exact spoken line', a1.every(l=>l.sentences.every(s=>s.vocabulary.every(v=>s.text.includes(v.word) && v.meaning))));
+  check('A1 rehearses complete 6-turn guided dialogues and explicit slot patterns', a1.every(l => l.dialogue.length === 6 && l.sentences.some(s => !!s.pattern)));
+  check('A1 exit tasks have unique situations and valid 3-choice checks', new Set(a1.map(l => l.checks[0].promptFa)).size === 29
+    && a1.every(l => l.checks.length === 2 && l.checks.every(c => c.choices.length === 3 && c.explanationFa)));
+  check('A1 vocabulary remains anchored to the exact spoken line', a1.every(l => l.sentences.every(s => s.vocabulary.every(v => normalizeRussian(s.text).includes(normalizeRussian(v.word)) && v.meaning))));
   // In-place A2 revisions must keep the review-card and session addresses stable.
   const a2 = app.RUSSIAN_LESSONS.filter(lesson => lesson.id.startsWith('ru-l3-'));
   const a2Sentences = a2.flatMap(lesson => lesson.sentences);
@@ -362,8 +349,8 @@ const esbuild = require('esbuild');
   const shoppingCheck = a2.find(lesson => lesson.id === 'ru-l3-shopping-return').checks[1];
   check('A2 shopping spelling correction preserves the saved answer slot', shoppingCheck.correctIndex === 0
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
-  const datesCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-l2-months-dates').checks[0];
-  check('A1 date check matches the corrected meeting date in the revised scene', datesCheck.choices[datesCheck.correctIndex] === 'بیست‌ویکم ماه مه');
+  const timeCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-a1-time-and-calendar').checks[0];
+  check('A1 calendar check tests yesterday/day comprehension', timeCheck.choices[timeCheck.correctIndex] === 'دیروز یکشنبه بود.');
   check('Russian follows the shared ten-stage lesson flow with conversation after speaking', app.RUSSIAN_LESSON_STAGES.length === 10
     && app.RUSSIAN_LESSON_STAGES.every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa

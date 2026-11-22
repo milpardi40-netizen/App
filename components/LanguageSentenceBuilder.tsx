@@ -32,10 +32,12 @@ function normalize(value: string) {
   return value.replace(/\s+([,.;:!?])/g, '$1').trim();
 }
 
-export default function LanguageSentenceBuilder({ sentence, placeholder }: {
+export default function LanguageSentenceBuilder({ sentence, placeholder, guided = false }: {
   sentence: LearningSentence;
   /** Shown in the empty answer area before the learner picks a word. */
   placeholder: string;
+  /** Absolute-beginner mode: keep the target sentence visible above the word bank. */
+  guided?: boolean;
 }) {
   const pieces = useMemo(() => scramble(sentence), [sentence.id, sentence.text]);
   const [selected, setSelected] = useState<number[]>([]);
@@ -60,6 +62,10 @@ export default function LanguageSentenceBuilder({ sentence, placeholder }: {
   return (
     <View style={styles.card}>
       <Text style={styles.kicker}>ساخت جمله از واژه‌های همین درس</Text>
+      {guided ? <View style={styles.guidedCard}>
+        <Text style={styles.guidedLabel}>جملهٔ درست</Text>
+        <Text style={styles.guidedSentence}>{sentence.text}</Text>
+      </View> : null}
       <Text style={styles.translation}>{sentence.fa}</Text>
       <View accessibilityLabel="جملهٔ ساخته‌شده" style={styles.answerArea}>
         {selected.length ? selected.map((id, position) => {
@@ -81,6 +87,9 @@ export default function LanguageSentenceBuilder({ sentence, placeholder }: {
 
 const styles = StyleSheet.create({
   card: { width: '100%', backgroundColor: Palette.surface, borderRadius: 18, borderWidth: 1, borderColor: Palette.border, padding: 16, gap: 12, marginTop: 18 },
+  guidedCard: { borderRadius: 12, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: Palette.border, paddingHorizontal: 12, paddingVertical: 10, gap: 4 },
+  guidedLabel: { fontFamily: Typography.fontFamily, fontSize: 11, fontWeight: '400', color: Palette.primary, textAlign: 'right', writingDirection: 'rtl' },
+  guidedSentence: { fontFamily: 'Times New Roman', fontSize: 18, lineHeight: 26, fontWeight: '800', color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
   kicker: { fontFamily: Typography.fontFamily, fontSize: 12, fontWeight: '400', color: Palette.primary, textAlign: 'right', writingDirection: 'rtl' },
   translation: { fontFamily: Typography.fontFamily, fontSize: 17, lineHeight: 28, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
   answerArea: { minHeight: 76, borderRadius: 13, borderWidth: 1, borderColor: Palette.primary, backgroundColor: Palette.primarySoft, padding: 10, flexDirection: 'row', flexWrap: 'wrap', gap: 7, alignItems: 'center' },

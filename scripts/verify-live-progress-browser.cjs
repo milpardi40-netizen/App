@@ -31,7 +31,7 @@ const assert = require('node:assert/strict');
       localStorage.setItem('milo_local_profile_v1', JSON.stringify({ fullName: 'Offline Test', email: 'local@example.test', code: '123456',
         createdAt: now, verifiedAt: now, lastSeenAt: now }));
       localStorage.setItem('russian_lesson_sessions_v1', JSON.stringify({ schema: 1, sessions: {
-        'ru-pre-hello': { stage: 4, stageVersion: 2, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false, updatedAt: now },
+        'ru-pre-01-hello': { stage: 4, stageVersion: 2, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false, updatedAt: now },
       } }));
     });
     const map = `${origin}/App/learn/ru/library?level=0`;
@@ -48,23 +48,23 @@ const assert = require('node:assert/strict');
       assert.ok(box.width > 160 && box.fill > 0 && Math.abs(box.right) < 1, JSON.stringify(box));
       assert.ok(Math.abs(box.fill - box.width * box.pct / 100) < 1, 'pixels must agree with the accessible percentage');
     }
-    assert.ok((await page.locator('body').innerText()).includes('۰ از ۱۷ درس · ۱ نیمه‌تمام'));
+    assert.ok((await page.locator('body').innerText()).includes('۰ از ۱۴ درس · ۱ نیمه‌تمام'));
     // Simulate data arriving while the page is still focused. No remount is required.
     await page.evaluate(() => {
       const key = 'russian_lesson_sessions_v1', data = JSON.parse(localStorage.getItem(key));
-      data.sessions['ru-pre-hello'].stage = 8; localStorage.setItem(key, JSON.stringify(data)); window.dispatchEvent(new Event('storage'));
+      data.sessions['ru-pre-01-hello'].stage = 8; localStorage.setItem(key, JSON.stringify(data)); window.dispatchEvent(new Event('storage'));
     });
-    await waitPercent(100 * 8 / (11 * 17) - .05);
+    await waitPercent(100 * 8 / (11 * 14) - .05);
     await page.getByText('ادامهٔ درس این سطح', {exact:true}).click();
     await page.getByText('ادامه', {exact:true}).last().click();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem('russian_lesson_sessions_v1')).sessions['ru-pre-hello'].stage === 9);
-    await page.goBack(); await waitPercent(100 * 9 / (11 * 17) - .05);
-    await page.reload(); await waitPercent(100 * 9 / (11 * 17) - .05);
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem('russian_lesson_sessions_v1')).sessions['ru-pre-01-hello'].stage === 9);
+    await page.goBack(); await waitPercent(100 * 9 / (11 * 14) - .05);
+    await page.reload(); await waitPercent(100 * 9 / (11 * 14) - .05);
     await page.goto(`${origin}/App/profile`);
     await page.getByRole('tab', { name: 'زبان‌ها' }).click();
     await page.getByText('روسی', {exact:true}).first().waitFor();
     const text = await page.locator('body').innerText();
-    assert.ok(text.includes('۰ از ۲۰۳ درس · ۱ نیمه‌تمام') && text.includes('۰ از ۱۷ درس · ۱ نیمه‌تمام'));
+    assert.ok(text.includes('۰ از ۱۸۰ درس · ۱ نیمه‌تمام') && text.includes('۰ از ۱۴ درس · ۱ نیمه‌تمام'));
     assert.deepEqual(errors, []);
     console.log('PASS: Russian Pre-A1 at mobile width in RTL/LTR; storage refresh, real lesson advance, back, reload, and profile.');
   } finally { await browser.close(); }

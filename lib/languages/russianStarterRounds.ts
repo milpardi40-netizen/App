@@ -1,8 +1,7 @@
 import { buildLessonPractice, type PracticeItem } from '../lessonPractice';
 import type { LearningLesson } from './types';
 
-/** Level-wide Pre-A1 practice tests the same skills as the lessons. Spoken chunks never
- * become spelling/order tasks. The daily variation pack is intentionally not this syllabus. */
+/** Level-wide Pre-A1 practice tests the same listening & recognition skills across all 8 sentences of each lesson. */
 export function russianStarterRound(lessons: readonly Pick<LearningLesson, 'id' | 'sentences'>[], mode: 'warmup'|'exam'|'practice', seed: number | string) {
   const starter = lessons.filter(l => l.id.startsWith('ru-pre-'));
   if (!starter.length) return [];
@@ -13,13 +12,24 @@ export function russianStarterRound(lessons: readonly Pick<LearningLesson, 'id' 
   for (let i = 0; i < count; i++) {
     const lesson = starter[(i + (mode === 'warmup' ? 0 : offset % starter.length)) % starter.length];
     const read = (i + offset) % 3 === 0;
-    if (read) {
-      const pair = lesson.sentences.slice(6), idx = (offset + i) % 2;
-      const sentence = pair[idx], isTrue = (offset + i) % 4 < 2;
-      result.push({ id: `${sentence.id}-read-${i}`, kind: 'truefalse', sentenceId: sentence.id, answerText: sentence.text,
-        answerFa: sentence.fa, speakText: sentence.text, isTrue, shownFa: pair[isTrue ? idx : 1-idx].fa });
+    if (read && lesson.sentences.length >= 2) {
+      const idx = (offset + i) % lesson.sentences.length;
+      const otherIdx = (idx + 1) % lesson.sentences.length;
+      const sentence = lesson.sentences[idx];
+      const other = lesson.sentences[otherIdx];
+      const isTrue = (offset + i) % 4 < 2;
+      result.push({
+        id: `${sentence.id}-read-${i}`,
+        kind: 'truefalse',
+        sentenceId: sentence.id,
+        answerText: sentence.text,
+        answerFa: sentence.fa,
+        speakText: sentence.text,
+        isTrue,
+        shownFa: isTrue ? sentence.fa : other.fa,
+      });
     } else {
-      const [item] = buildLessonPractice({ id: lesson.id, sentences: lesson.sentences.slice(0,6) }, { count: 1, kinds: ['listen'], seedSalt: `${mode}/${salt}/${i}` });
+      const [item] = buildLessonPractice({ id: lesson.id, sentences: lesson.sentences }, { count: 1, kinds: ['listen'], seedSalt: `${mode}/${salt}/${i}` });
       if (item) result.push({ ...item, id: `${item.id}/${i}` });
     }
   }

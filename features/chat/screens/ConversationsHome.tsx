@@ -10,26 +10,28 @@ import { StarterBottomNav } from '@/components/StarterBottomNav';
 import { NEW_COURSES } from '@/lib/languages/newCourses';
 import { readResumeSnapshot, type ResumeLanguage } from '@/lib/appResume';
 import { PageNavigation } from '@/components/PageNavigation';
-import { deleteConversationForMe, ensureSupportConversation, listRealContacts, type RealContact } from '@/lib/conversations';
+import { deleteConversationForMe, ensureSupportConversation, listRealContacts, syncMyEnglishLevel, type RealContact } from '@/lib/conversations';
+import {
+  cefrOfLevel,
+  encodeCourseLevels,
+  highestLevelOf,
+  levelMeta,
+  myAllCompletedLevels,
+  parseStoredCourseLevels,
+  type SharedLanguage,
+} from '@/lib/sharedLevel';
 import { readableSupabaseError } from '@/lib/errors';
 import { isSupabaseConfigured } from '@/lib/pairing';
 import { SupabaseSetupNotice } from '@/components/SupabaseSetupNotice';
 import { ChatAlertSettingsCard } from '@/components/ChatAlertSettingsCard';
 import { MANAGEMENT_BUILD } from '@/lib/features';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
-import { freeConversationPlan } from '@/lib/freeConversation';
+import { timeAgo } from '@/lib/format';
 
 export default function ConversationsHome() {
   const router = useRouter();
   const { lessonId, lessonTitle, levelId, situation, language } = useLocalSearchParams<{ lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
   const lessonContext = lessonTitle ? { title: String(lessonTitle), level: levelId ? String(levelId) : '', situation: situation ? String(situation) : '', language: language ? String(language) : '' } : null;
-  const freePlan = lessonContext ? freeConversationPlan({
-    language: lessonContext.language === 'ru' ? 'ru' : 'en',
-    levelId: Number(lessonContext.level || 1),
-    lessonId: String(lessonId || ''),
-    lessonTitle: lessonContext.title,
-    situation: lessonContext.situation,
-  }) : null;
   const [contacts, setContacts] = useState<RealContact[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [contactsError, setContactsError] = useState<string | null>(null);
@@ -39,14 +41,27 @@ export default function ConversationsHome() {
   const [openingSupport, setOpeningSupport] = useState(false);
   // The conversation hub is shared by every language; keep the learner's own course navigation under it.
   const [activeLanguage, setActiveLanguage] = useState<ResumeLanguage>(null);
-  useEffect(() => { let alive = true; void readResumeSnapshot().then(snapshot => { if (alive) setActiveLanguage(snapshot?.language ?? null); }).catch(() => undefined); return () => { alive = false; }; }, []);
+  const [selectedLang, setSelectedLang] = useState<SharedLanguage>(language === 'ru' ? 'ru' : 'en');
+  useEffect(() => {
+    let alive = true;
+    void readResumeSnapshot()
+      .then((snapshot) => {
+        if (!alive) return;
+        const lang = snapshot?.language ?? null;
+        setActiveLanguage(lang);
+        if (!language && lang === 'ru') setSelectedLang('ru');
+      })
+      .catch(() => undefined);
+    return () => { alive = false; };
+  }, [language]);
+  const convLanguage: SharedLanguage = language === 'ru' ? 'ru' : language === 'en' ? 'en' : selectedLang;
   const homePath = activeLanguage && activeLanguage !== 'en' ? `/learn/${activeLanguage}` : activeLanguage === 'en' ? '/lang' : '/languages';
 
   const openSupport = () => {
     if (openingSupport) return;
     setOpeningSupport(true);
     ensureSupportConversation()
-      .then((conversationId) => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId, name: 'پشتیبانی Milo' } } as never))
+      .then((conversationId) => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId, name: 'پشتیبانی Milo', support: '1' } } as never))
       .catch((cause) => setContactsError(readableSupabaseError(cause)))
       .finally(() => setOpeningSupport(false));
   };
@@ -84,6 +99,16 @@ export default function ConversationsHome() {
         setContactsError(null);
         return;
       }
+      // Publish my completed levels for both English and Russian so any partner
+      // can compute the highest level we have both completed.
+      void (async () => {
+        try {
+          const allLevels = await myAllCompletedLevels();
+          await syncMyEnglishLevel(encodeCourseLevels(allLevels));
+        } catch {
+          // Offline or profile not ready; the partner keeps the last synced level.
+        }
+      })();
       let active = true;
       setLoadingContacts(true);
       listRealContacts()
@@ -123,21 +148,35 @@ export default function ConversationsHome() {
             <Text style={styles.lessonContextMeta}>{lessonContext.language === 'ru' ? 'روسی' : 'انگلیسی'}{lessonContext.level ? ` · سطح ${lessonContext.level}` : ''}</Text>
           </View>
         ) : null}
-        {freePlan ? (
-          <View style={styles.freePlanCard}>
-            <View style={styles.freePlanHeader}>
-              <Sparkles size={18} color={Colors.warning[400]} />
-              <Text style={styles.freePlanKicker}>مکالمهٔ آزاد — محتوای مستقل</Text>
-            </View>
-            <Text style={styles.freePlanTitle}>{freePlan.title}</Text>
-            <Text style={styles.freePlanMission}>{freePlan.mission}</Text>
-            <Text style={styles.freePlanStarter}>{freePlan.starter}</Text>
-            <View style={styles.promptList}>
-              {freePlan.prompts.map(prompt => <Text key={prompt} style={styles.promptItem}>• {prompt}</Text>)}
-            </View>
-            <Text style={styles.boundary}>{freePlan.boundary}</Text>
+        <View style={styles.practiceCard}>
+          <View style={styles.practiceHeader}>
+            <Sparkles size={18} color={Colors.primary[300]} />
+            <Text style={styles.practiceKicker}>تمرین مکالمهٔ سطح‌محور</Text>
           </View>
-        ) : null}
+          <Text style={styles.practiceTitle}>۳ تا ۶ نوبت، متناسب با سطح مشترک</Text>
+          <Text style={styles.practiceText}>سطح مکالمه به‌صورت خودکار روی بالاترین سطحی تنظیم می‌شود که هر دو نفر کامل کرده‌اید؛ تعداد نوبت‌ها و سختی مأموریت‌ها هم با همان سطح هماهنگ می‌شود.</Text>
+          {!lessonContext ? (
+            <View style={styles.langToggleRow}>
+              <Text style={styles.langToggleLabel}>زبان مکالمه:</Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityState={{ selected: convLanguage === 'en' }}
+                onPress={() => setSelectedLang('en')}
+                style={[styles.langChip, convLanguage === 'en' && styles.langChipActive]}
+              >
+                <Text style={[styles.langChipText, convLanguage === 'en' && styles.langChipTextActive]}>انگلیسی</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityState={{ selected: convLanguage === 'ru' }}
+                onPress={() => setSelectedLang('ru')}
+                style={[styles.langChip, convLanguage === 'ru' && styles.langChipActive]}
+              >
+                <Text style={[styles.langChipText, convLanguage === 'ru' && styles.langChipTextActive]}>روسی</Text>
+              </Pressable>
+            </View>
+          ) : null}
+        </View>
         {configured && MANAGEMENT_BUILD ? <ChatAlertSettingsCard /> : null}
         {configured && (
           <Pressable accessibilityRole="button" style={styles.supportButton} disabled={openingSupport} onPress={openSupport}>
@@ -156,30 +195,42 @@ export default function ConversationsHome() {
           <View style={styles.loadingContacts}><ActivityIndicator color={Colors.primary[400]} /><Text style={styles.loadingText}>در حال دریافت مخاطبان…</Text></View>
         ) : contacts.length ? (
           <View style={styles.contactsList}>
-            {contacts.map((contact) => (
-              <Pressable
-                key={contact.id}
-                style={styles.contactCard}
-                onPress={() => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, lessonTitle, levelId, situation, language, lessonId } } as never)}
-              >
-                <View style={styles.realAvatar}><Text style={styles.realAvatarText}>{contact.avatarEmoji}</Text></View>
-                <View style={styles.realContactText}>
-                  <Text style={styles.realContactName}>{contact.displayName}</Text>
-                  <Text style={styles.realContactStatus}>مخاطب واقعی · {contact.englishLevel}</Text>
-                </View>
+            {contacts.map((contact) => {
+              const parsed = parseStoredCourseLevels(contact.englishLevel)[convLanguage];
+              const highest = highestLevelOf(parsed.completed);
+              const badgeLevelId = highest ?? 0;
+              const badgeColor = levelMeta(badgeLevelId, convLanguage).color;
+              const levelSummary = highest !== null ? `تکمیل‌شده: ${cefrOfLevel(highest)}` : 'شروع: Pre-A1';
+              return (
                 <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={`حذف مخاطب و گفتگو با ${contact.displayName}`}
-                  hitSlop={8}
-                  style={styles.deleteContact}
-                  disabled={deletingConversationId === contact.conversationId}
-                  onPress={event => { event.stopPropagation(); confirmDelete(contact); }}
+                  key={contact.id}
+                  style={styles.contactCard}
+                  onPress={() => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, lessonTitle, levelId, situation, language: convLanguage, lessonId, lastSeen: contact.lastSeen ?? '', partnerLevel: contact.englishLevel } } as never)}
                 >
-                  {deletingConversationId === contact.conversationId ? <ActivityIndicator size="small" color={Colors.error[300]} /> : <Trash2 size={17} color={Colors.error[300]} />}
+                  <View style={styles.realAvatar}><Text style={styles.realAvatarText}>{contact.avatarEmoji}</Text></View>
+                  <View style={styles.realContactText}>
+                    <View style={styles.realContactTop}>
+                      <Text style={styles.realContactName}>{contact.displayName}</Text>
+                      <View style={[styles.contactLevelPill, { backgroundColor: badgeColor + '26', borderColor: badgeColor + '70' }]}>
+                        <Text style={[styles.contactLevelText, { color: badgeColor }]}>{cefrOfLevel(badgeLevelId)}</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.realContactStatus}>{contact.lastSeen && Date.now() - new Date(contact.lastSeen).getTime() < 5 * 60 * 1000 ? 'آنلاین' : contact.lastSeen ? `آخرین بازدید ${timeAgo(contact.lastSeen)}` : 'مخاطب واقعی'} · {levelSummary}</Text>
+                  </View>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={`حذف مخاطب و گفتگو با ${contact.displayName}`}
+                    hitSlop={8}
+                    style={styles.deleteContact}
+                    disabled={deletingConversationId === contact.conversationId}
+                    onPress={event => { event.stopPropagation(); confirmDelete(contact); }}
+                  >
+                    {deletingConversationId === contact.conversationId ? <ActivityIndicator size="small" color={Colors.error[300]} /> : <Trash2 size={17} color={Colors.error[300]} />}
+                  </Pressable>
+                  <ChevronLeft size={20} color={Colors.neutral[500]} />
                 </Pressable>
-                <ChevronLeft size={20} color={Colors.neutral[500]} />
-              </Pressable>
-            ))}
+              );
+            })}
             <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
           </View>
         ) : (
@@ -232,15 +283,17 @@ const styles = StyleSheet.create({
   lessonContextTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
   lessonContextText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, lineHeight: 21, color: Colors.neutral[400], textAlign: 'right' },
   lessonContextMeta: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.success[400], textAlign: 'right', marginTop: 3 },
-  freePlanCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.warning[500] + '35', gap: 7 },
-  freePlanHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
-  freePlanKicker: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.warning[300], textAlign: 'right' },
-  freePlanTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
-  freePlanMission: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[300], textAlign: 'right' },
-  freePlanStarter: { fontFamily: Typography.latinFontFamily, fontSize: 15, lineHeight: 22, color: Colors.neutral[100], textAlign: 'left', writingDirection: 'ltr', backgroundColor: Colors.neutral[900], borderRadius: Radius.md, padding: Spacing.sm },
-  promptList: { gap: 3 },
-  promptItem: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, lineHeight: 20, color: Colors.neutral[400], textAlign: 'right' },
-  boundary: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.success[400], textAlign: 'right' },
+  practiceCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.primary[500] + '35', gap: 7 },
+  practiceHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  practiceKicker: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.primary[300], textAlign: 'right' },
+  practiceTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  practiceText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, lineHeight: 21, color: Colors.neutral[300], textAlign: 'right' },
+  langToggleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8, marginTop: 4 },
+  langToggleLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[400] },
+  langChip: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.neutral[900], borderWidth: 1, borderColor: Colors.neutral[700] },
+  langChipActive: { backgroundColor: Colors.primary[500] + '28', borderColor: Colors.primary[400] },
+  langChipText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[400] },
+  langChipTextActive: { color: Colors.primary[200], fontWeight: Typography.weights.bold },
   emmaCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.accent[500] + '50', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.md },
   avatarWrap: { position: 'relative' },
   emmaAvatar: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.accent[500] + '20' },
@@ -261,7 +314,10 @@ const styles = StyleSheet.create({
   realAvatar: { width: 46, height: 46, borderRadius: 23, backgroundColor: Colors.primary[500] + '15', alignItems: 'center', justifyContent: 'center' },
   realAvatarText: { fontSize: 25 },
   realContactText: { flex: 1 },
+  realContactTop: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
   realContactName: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  contactLevelPill: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: Radius.full, borderWidth: 1 },
+  contactLevelText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '800', writingDirection: 'ltr' },
   realContactStatus: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.success[400], textAlign: 'right', marginTop: 3 },
   deleteContact: { width: 36, height: 36, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.error[500] + '10', borderWidth: 1, borderColor: Colors.error[500] + '25' },
   addAnother: { minHeight: 44, borderRadius: Radius.lg, borderWidth: 1, borderColor: Colors.primary[500] + '35', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 6 },

@@ -266,6 +266,50 @@ export async function sendTextMessage(conversationId: string, body: string): Pro
   return mapMessage(data);
 }
 
+/**
+ * System markers sync the shared conversation plan (e.g. the chosen lesson) and
+ * are never rendered as chat content. The push trigger only announces a new
+ * message without leaking the marker body.
+ */
+export async function sendSystemMessage(conversationId: string, body: string): Promise<DirectMessage> {
+  const user = await ensureChatIdentity();
+  const clean = body.trim();
+  if (!clean) throw new Error('پیام خالی است.');
+  const { data, error } = await chatDb()
+    .from('messages')
+    .insert({ conversation_id: conversationId, sender_id: user.id, message_type: 'system', body: clean })
+    .select('*')
+    .single();
+  if (error || !data) throw new Error(readableSupabaseError(error));
+  return mapMessage(data);
+}
+
+/** Publish my current course level so a conversation partner can compute our shared level. */
+export async function syncMyEnglishLevel(cefr: string): Promise<void> {
+  const user = await ensureChatIdentity();
+  const { error } = await chatDb().from('profiles').update({ english_level: cefr }).eq('id', user.id);
+  if (error) throw new Error(readableSupabaseError(error));
+}
+
+/** The other participant's stored level for one direct conversation, when readable. */
+export async function getPartnerEnglishLevel(conversationId: string): Promise<string | null> {
+  const user = await ensureChatIdentity();
+  const { data: row, error } = await chatDb()
+    .from('learning_contacts')
+    .select('contact_id')
+    .eq('conversation_id', conversationId)
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (error || !row) return null;
+  const { data: profile, error: profileError } = await chatDb()
+    .from('profiles')
+    .select('english_level')
+    .eq('id', row.contact_id)
+    .maybeSingle();
+  if (profileError) return null;
+  return profile?.english_level ?? null;
+}
+
 export async function sendVoiceMessage(
   conversationId: string,
   audioUri: string,

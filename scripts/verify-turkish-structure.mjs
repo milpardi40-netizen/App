@@ -267,10 +267,10 @@ const EXPECTED_B1_SURVIVAL_TITLES = [
 // 1. Preserve English and Russian untouched baselines
 check(english.SENTENCE_LESSONS.length === 274, 'English baseline lesson count (274 at release 14) holds');
 check(english.SENTENCE_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 4852, 'English baseline sentence count (4852 at release 14) holds');
-// Russian grew on purpose in the Pre-A1/A1 spec-alignment work (docs/RU-PRE-A1-A1-SPEC-ALIGNMENT-FA.md §11):
-// 28 Pre-A1 steps + 56 A1 lessons. These numbers are the frozen baseline Turkish work must not disturb.
-check(russian.RUSSIAN_LESSONS.length === 221, 'Russian baseline lesson count (221 after the spec-alignment batches) is untouched');
-check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1808, 'Russian baseline sentence count (1808 after the spec-alignment batches) is untouched');
+// Russian Pre-A1 and A1 were aligned to the English pedagogical model:
+// 14 Pre-A1 lessons (8 sentences each) + 29 A1 lessons (16 sentences each).
+check(russian.RUSSIAN_LESSONS.length === 180, 'Russian baseline lesson count (180 after English-aligned Pre-A1/A1) holds');
+check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1712, 'Russian baseline sentence count (1712 after English-aligned Pre-A1/A1) holds');
 
 // 2. Alphabet, levels, and A1 + A2 syllabus structure
 check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ', 'Turkish 29-letter alphabet is exact');
