@@ -1,7 +1,8 @@
 import { isLanguageEnabled, MANAGEMENT_BUILD, RUSSIAN_ONLY_BUILD } from '@/lib/features';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, AppState, BackHandler, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, AppState, BackHandler, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { BarChart3, ChevronLeft, Mic2, Send, Sparkles, UserRound, X } from 'lucide-react-native';
 import {
@@ -33,6 +34,7 @@ import {
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { ChatBackButton } from '@/components/ChatBackButton';
 import { KeyboardAttachedView } from '@/components/KeyboardAttachedView';
+import { KeyboardEvents } from '@/components/KeyboardRuntime';
 import { formatTime, timeAgo, toPersianDigits as fa } from '@/lib/format';
 import {
   answerIndexInSession,
@@ -167,8 +169,8 @@ function TurnConversationScreen({
   partnerLevel,
 }: RouteParams) {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
-  const composerHeight = useRef(0);
   const [messages, setMessages] = useState<DirectMessage[]>([]);
   const [myId, setMyId] = useState<string | null>(null);
   const [input, setInput] = useState('');
@@ -371,23 +373,20 @@ function TurnConversationScreen({
   }, [router]);
 
   // The composer is translated over the transcript when the keyboard opens.
-  // Reserve exactly the hidden height so the newest bubble stays visible.
+  // Reserve the lifted keyboard height so the newest bubble stays visible.
   useEffect(() => {
-    const measure = (keyboardTop: number) => {
-      const node = scrollRef.current as unknown as { measureInWindow?: (callback: (x: number, y: number, width: number, height: number) => void) => void } | null;
-      if (!node?.measureInWindow) return;
-      node.measureInWindow((_x, y, _w, h) => {
-        const composerTop = keyboardTop - composerHeight.current - (Platform.OS === 'android' ? 36 : 0);
-        setKeyboardInset(Math.max(0, Math.round(y + h - composerTop)));
-        setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 60);
-      });
+    if (Platform.OS === 'web') return;
+    const showSub = KeyboardEvents.addListener('keyboardDidShow', event => {
+      const lift = Math.max(0, Math.round(event.height - (Platform.OS === 'ios' ? insets.bottom : 0)));
+      setKeyboardInset(lift);
+      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 60);
+    });
+    const hideSub = KeyboardEvents.addListener('keyboardDidHide', () => setKeyboardInset(0));
+    return () => {
+      showSub.remove();
+      hideSub.remove();
     };
-    const subscriptions = [
-      Keyboard.addListener('keyboardDidShow', event => measure(event.endCoordinates.screenY)),
-      Keyboard.addListener('keyboardDidHide', () => setKeyboardInset(0)),
-    ];
-    return () => subscriptions.forEach(subscription => subscription.remove());
-  }, []);
+  }, [insets.bottom]);
 
   useEffect(() => { setError(null); }, [state.missionIndex, state.slot]);
 
@@ -660,7 +659,7 @@ function TurnConversationScreen({
             ) : null}
           </ScrollView>
 
-          <KeyboardAttachedView onLayout={event => { composerHeight.current = event.nativeEvent.layout.height; }}>
+          <KeyboardAttachedView>
             <View style={styles.answerCard}>
               {state.finished || ended ? (
                 <View style={styles.endedRow}>
