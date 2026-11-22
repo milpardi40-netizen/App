@@ -546,69 +546,75 @@ function TurnConversationScreen({
         )
       ) : (
         <>
-          <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
-            <View style={styles.statusTop}>
-              <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
-                <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
-                <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>{state.finished ? 'مکالمه کامل شد' : ended ? 'مکالمه پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب است'}</Text>
+          <View style={styles.topStage}>
+            <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
+              <View style={styles.statusTop}>
+                <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
+                  <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
+                  <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>{state.finished ? 'مکالمه کامل شد' : ended ? 'مکالمه پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب است'}</Text>
+                </View>
+                <View style={styles.statusRightMeta}>
+                  {plan.difficultyLabel ? (
+                    <View style={styles.difficultyBadge}>
+                      <Text style={styles.difficultyBadgeText}>{plan.difficultyLabel}</Text>
+                    </View>
+                  ) : null}
+                  <Text style={styles.turnCount}>{fa(state.completedTurns)} از {fa(plan.turns.length)} نوبت</Text>
+                </View>
               </View>
-              <View style={styles.statusRightMeta}>
-                {plan.difficultyLabel ? (
-                  <View style={styles.difficultyBadge}>
-                    <Text style={styles.difficultyBadgeText}>{plan.difficultyLabel}</Text>
-                  </View>
+              <View style={styles.lessonRow}>
+                <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
+                  <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
+                </View>
+                <Text style={styles.topicLine} numberOfLines={1}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
+                {lessonPlan ? (
+                  <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
+                    <Text style={styles.changeLessonText}>تغییر درس</Text>
+                  </Pressable>
                 ) : null}
-                <Text style={styles.turnCount}>{fa(state.completedTurns)} از {fa(plan.turns.length)} نوبت</Text>
+              </View>
+              <View style={styles.progressRow}>
+                <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
+                <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
               </View>
             </View>
-            <View style={styles.lessonRow}>
-              <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
-                <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
-              </View>
-              <Text style={styles.topicLine}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
-              {lessonPlan ? (
-                <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
-                  <Text style={styles.changeLessonText}>تغییر درس</Text>
-                </Pressable>
-              ) : null}
-            </View>
-            {lessonPlan ? <Text style={styles.situationLine}>{plan.missionFa}</Text> : null}
-            <View style={styles.progressRow}>
-              <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
-              <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
-            </View>
-          </View>
 
-          <View style={styles.missionCard}>
-            <View style={styles.missionHeader}>
-              <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
-              {state.currentTurn ? <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View> : null}
+            <View style={styles.missionCard}>
+              <View style={styles.missionHeader}>
+                <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
+                {state.currentTurn ? <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View> : null}
+              </View>
+              {state.currentPrompt ? (
+                <>
+                  <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
+                  <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
+                  {lessonPlan && state.currentPrompt.cues.length > 0 ? (
+                    <View style={styles.cueRow}>
+                      {state.currentPrompt.cues.slice(0, 4).map(cue => (
+                        <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
+                      ))}
+                    </View>
+                  ) : null}
+                </>
+              ) : (
+                <Text style={styles.missionText}>همهٔ نوبت‌های این تمرین انجام شد. با «گزارش مکالمه» نتیجه را ببین.</Text>
+              )}
             </View>
-            {state.currentPrompt ? (
-              <>
-                <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
-                <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
-                {lessonPlan && state.currentPrompt.cues.length > 0 ? (
-                  <View style={styles.cueRow}>
-                    {state.currentPrompt.cues.slice(0, 4).map(cue => (
-                      <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
-                    ))}
-                  </View>
-                ) : null}
-              </>
-            ) : (
-              <Text style={styles.missionText}>همهٔ نوبت‌های این تمرین انجام شد. با «گزارش مکالمه» نتیجه را ببین.</Text>
-            )}
           </View>
 
           <ScrollView
             ref={scrollRef}
             style={styles.messages}
-            contentContainerStyle={[styles.messageContent, keyboardInset > 0 && { paddingBottom: keyboardInset + Spacing.md }]}
+            contentContainerStyle={[styles.messageContent, keyboardInset > 0 && { paddingBottom: keyboardInset + Spacing.sm }]}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
             onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
           >
+            {lessonPlan ? (
+              <View style={styles.lessonIntroCard}>
+                <Text style={styles.lessonIntroText}>{plan.missionFa}</Text>
+              </View>
+            ) : null}
             {state.sessionStart > 0 ? (
               <View style={styles.historyNote}>
                 <Text style={styles.historyNoteText}>این تمرین از پیام‌های تازه شروع می‌شود؛ {fa(state.sessionStart)} پیام قبلی این گفت‌وگو در این تمرین نمایش داده نمی‌شود.</Text>
@@ -675,12 +681,17 @@ function TurnConversationScreen({
               ) : (
                 <>
                   <View style={styles.modeRow}>
-                    <Text style={styles.modeLabel}>پاسخ:</Text>
-                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
-                      <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
-                    </Pressable>
-                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
-                      <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
+                    <View style={styles.modeGroup}>
+                      <Text style={styles.modeLabel}>پاسخ:</Text>
+                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
+                        <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
+                      </Pressable>
+                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
+                        <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
+                      </Pressable>
+                    </View>
+                    <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButton} onPress={confirmEnd}>
+                      <Text style={styles.endButtonText}>پایان مکالمه</Text>
                     </Pressable>
                   </View>
 
@@ -726,10 +737,6 @@ function TurnConversationScreen({
                       <Text style={styles.waitingText}>نوبت مخاطب است؛ منتظر پاسخ او بمان.</Text>
                     </View>
                   )}
-
-                  <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButton} onPress={confirmEnd}>
-                    <Text style={styles.endButtonText}>پایان مکالمه</Text>
-                  </Pressable>
                 </>
               )}
             </View>
@@ -746,52 +753,54 @@ function TurnConversationScreen({
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#F7F8FC' },
-  header: { paddingTop: 13, paddingHorizontal: Spacing.md, paddingBottom: 12, minHeight: 70, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
-  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.primary[500] + '15', borderWidth: 1, borderColor: Colors.primary[500] + '30', alignItems: 'center', justifyContent: 'center' },
+  header: { paddingTop: 9, paddingHorizontal: Spacing.md, paddingBottom: 9, minHeight: 56, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
+  avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.primary[500] + '15', borderWidth: 1, borderColor: Colors.primary[500] + '30', alignItems: 'center', justifyContent: 'center' },
   headerText: { flex: 1 },
   name: { fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[0] },
-  statusRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, marginTop: 3 },
+  statusRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, marginTop: 2 },
   onlineDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.success[500] },
   onlineDotOff: { backgroundColor: Colors.neutral[500] },
   statusText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[600], textAlign: 'right' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   centerText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
-  statusCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 8, shadowColor: '#1E1B4B', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 2 }, elevation: 2 },
+  topStage: { backgroundColor: '#F7F8FC', paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: '#E6E9F2', gap: 6 },
+  statusCard: { marginHorizontal: Spacing.md, marginTop: 6, paddingHorizontal: 12, paddingVertical: 8, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 5, shadowColor: '#1E1B4B', shadowOpacity: 0.04, shadowRadius: 6, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   statusTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   statusRightMeta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
-  turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 10, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12' },
+  turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, paddingHorizontal: 9, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12' },
   turnPillMine: { backgroundColor: Colors.primary[500] + '14' },
-  turnDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.success[500] },
+  turnDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.success[500] },
   turnDotMine: { backgroundColor: Colors.primary[500] },
   turnPillText: { fontFamily: Typography.fontFamily, fontSize: 11, fontWeight: Typography.weights.bold, color: Colors.success[700] },
   turnPillTextMine: { color: Colors.primary[600] },
   turnCount: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300] },
   lessonRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
-  levelBadge: { minWidth: 38, height: 24, borderRadius: 12, paddingHorizontal: 9, alignItems: 'center', justifyContent: 'center' },
+  levelBadge: { minWidth: 36, height: 22, borderRadius: 11, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center' },
   levelBadgeText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '800', color: '#FFFFFF', textAlign: 'left', writingDirection: 'ltr' },
-  difficultyBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#E2E8F0' },
-  difficultyBadgeText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[200] },
-  topicLine: { flex: 1, fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
-  changeLesson: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.primary[500] + '12', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
+  difficultyBadge: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#E2E8F0' },
+  difficultyBadgeText: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.neutral[200] },
+  topicLine: { flex: 1, fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  changeLesson: { paddingHorizontal: 9, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: Colors.primary[500] + '12', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
   changeLessonText: { fontFamily: Typography.fontFamily, fontSize: 10, fontWeight: Typography.weights.bold, color: Colors.primary[600] },
-  situationLine: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 18, color: Colors.neutral[300], textAlign: 'right' },
   progressRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  progressTrack: { flex: 1, height: 6, borderRadius: 3, backgroundColor: '#EEF0F6', overflow: 'hidden' },
+  progressTrack: { flex: 1, height: 5, borderRadius: 3, backgroundColor: '#EEF0F6', overflow: 'hidden' },
   progressFill: { height: '100%', borderRadius: 3, backgroundColor: Colors.primary[400] },
   progressText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[600], width: 34, textAlign: 'left' },
-  missionCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 6 },
+  missionCard: { marginHorizontal: Spacing.md, paddingHorizontal: 12, paddingVertical: 8, borderRadius: Radius.lg, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 4 },
   missionHeader: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
   missionKicker: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.warning[700], textAlign: 'right' },
-  missionFocusPill: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
+  missionFocusPill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
   missionFocus: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.warning[700] },
-  missionText: { fontFamily: Typography.latinFontFamily, fontSize: 16, lineHeight: 24, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
-  missionHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.neutral[200], textAlign: 'right' },
-  cueRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 2 },
-  cuePill: { paddingHorizontal: 9, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E6DEC8' },
-  cueText: { fontFamily: Typography.latinFontFamily, fontSize: 11, fontWeight: '600', color: '#334155', writingDirection: 'ltr' },
+  missionText: { fontFamily: Typography.latinFontFamily, fontSize: 15, lineHeight: 21, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
+  missionHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 16, color: Colors.neutral[200], textAlign: 'right' },
+  cueRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginTop: 2 },
+  cuePill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E6DEC8' },
+  cueText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '600', color: '#334155', writingDirection: 'ltr' },
   messages: { flex: 1 },
-  messageContent: { paddingHorizontal: Spacing.md, paddingTop: Spacing.sm, paddingBottom: Spacing.md, gap: Spacing.sm },
-  empty: { minHeight: 120, alignItems: 'center', justifyContent: 'center', gap: 4 },
+  messageContent: { paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 10, gap: 8 },
+  lessonIntroCard: { paddingHorizontal: 11, paddingVertical: 8, borderRadius: Radius.md, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2' },
+  lessonIntroText: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: Colors.neutral[300], textAlign: 'right' },
+  empty: { minHeight: 100, alignItems: 'center', justifyContent: 'center', gap: 4 },
   emptyTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[200] },
   emptyDesc: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600], textAlign: 'center' },
   historyNote: { padding: 9, borderRadius: Radius.md, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#E2E8F0' },
@@ -808,28 +817,29 @@ const styles = StyleSheet.create({
   time: { fontFamily: Typography.fontFamily, fontSize: 9, color: '#6B7280', marginTop: 3, textAlign: 'left' },
   voiceRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   voiceText: { fontFamily: Typography.fontFamily, fontSize: 12, color: '#475569' },
-  feedbackCard: { flexDirection: 'row-reverse', alignItems: 'flex-start', gap: Spacing.sm, marginTop: Spacing.xs, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
-  scoreBadge: { minWidth: 50, height: 34, borderRadius: 17, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.primary[500] + '12' },
-  scoreText: { fontFamily: Typography.fontFamily, fontSize: 13, fontWeight: Typography.weights.bold, color: Colors.primary[600] },
-  feedbackCopy: { flex: 1, gap: 3 },
+  feedbackCard: { flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm, marginTop: 2, padding: 10, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
+  scoreBadge: { minWidth: 48, minHeight: 34, borderRadius: 17, paddingHorizontal: 8, paddingVertical: 4, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.primary[500] + '12' },
+  scoreText: { fontFamily: Typography.boldFontFamily, fontSize: 12, lineHeight: 18, color: Colors.primary[600], includeFontPadding: false },
+  feedbackCopy: { flex: 1, gap: 2 },
   feedbackKicker: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.neutral[500], textAlign: 'right' },
-  feedbackPositive: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.success[700], textAlign: 'right' },
-  feedbackCorrection: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.warning[700], textAlign: 'right' },
+  feedbackPositive: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 17, color: Colors.success[700], textAlign: 'right' },
+  feedbackCorrection: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 17, color: Colors.warning[700], textAlign: 'right' },
   finishedCard: { marginTop: Spacing.xs, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: Colors.success[500] + '0D', borderWidth: 1, borderColor: Colors.success[500] + '25', gap: 3 },
   finishedTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.success[700], textAlign: 'right' },
   finishedText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
-  answerCard: { padding: Spacing.md, paddingBottom: 12, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 8 },
-  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
-  modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], marginLeft: 3 },
-  modeButton: { minHeight: 30, borderRadius: Radius.full, paddingHorizontal: 12, justifyContent: 'center', backgroundColor: '#F5F6FB' },
+  answerCard: { paddingHorizontal: 12, paddingTop: 8, paddingBottom: 6, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 6 },
+  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  modeGroup: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], marginLeft: 2 },
+  modeButton: { minHeight: 28, borderRadius: Radius.full, paddingHorizontal: 11, justifyContent: 'center', backgroundColor: '#F5F6FB' },
   modeButtonActive: { backgroundColor: Colors.primary[500] + '18', borderWidth: 1, borderColor: Colors.primary[500] + '35' },
   modeButtonText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[500] },
   modeButtonTextActive: { color: Colors.primary[600], fontFamily: Typography.boldFontFamily },
-  input: { minHeight: 48, maxHeight: 96, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
-  submitButton: { minHeight: 44, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
+  input: { minHeight: 42, maxHeight: 84, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 8, paddingBottom: 7, fontSize: Typography.sizes.sm, lineHeight: 20, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
+  submitButton: { minHeight: 40, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   submitButtonText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: '#FFFFFF' },
-  endButton: { minHeight: 32, alignItems: 'center', justifyContent: 'center' },
-  endButtonText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.error[300] },
+  endButton: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: Radius.full },
+  endButtonText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.error[300] },
   waitingRow: { minHeight: 52, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   waitingText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
   endedRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
