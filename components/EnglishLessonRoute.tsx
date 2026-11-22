@@ -139,6 +139,19 @@ export default function SentenceLessonScreen() {
   const resettingRef = useRef(false);
   const screenRun = useRef(0);
   const [audioNotice, setAudioNotice] = useState('');
+  const [lessonMicReady, setLessonMicReady] = useState(false);
+  const narratorTokenRef = useRef(0);
+  const narratorFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearNarratorFallback = () => {
+    if (narratorFallbackRef.current) {
+      clearTimeout(narratorFallbackRef.current);
+      narratorFallbackRef.current = null;
+    }
+  };
+  useEffect(() => () => {
+    clearNarratorFallback();
+    narratorTokenRef.current += 1;
+  }, []);
   const timer=useEnglishStudyTimer(sessionReady && !resetting && !celebration && !chunkCelebration && !!getSentenceLesson(id || ''));
   useEffect(() => {
     let alive = true;
@@ -250,26 +263,56 @@ export default function SentenceLessonScreen() {
   useEffect(() => {
     if (!sessionReady || loadedLesson.current !== lesson.id || !current) return;
     if (stage !== 1 && stage !== 3) {
+      clearNarratorFallback();
+      narratorTokenRef.current += 1;
+      setLessonMicReady(false);
       if (stage !== 7) void stopResponsiveSpeech();
       return;
     }
     setAudioNotice('');
+    setLessonMicReady(false);
+    clearNarratorFallback();
+    const token = ++narratorTokenRef.current;
+    const armMic = () => {
+      if (narratorTokenRef.current !== token) return;
+      clearNarratorFallback();
+      setLessonMicReady(true);
+    };
+    narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, current.en.length * 130)));
     playResponsiveSpeech({
       text: current.en, locale: 'en-US', rate: ENGLISH_NORMAL_SPEECH_RATE,
-      onError: () => setAudioNotice('پخش خودکار ممکن نشد. یکی از دکمه‌های پخش را بزنید و صدای دستگاه را بررسی کنید.'),
+      onDone: armMic,
+      onError: () => {
+        setAudioNotice('پخش خودکار ممکن نشد. یکی از دکمه‌های پخش را بزنید و صدای دستگاه را بررسی کنید.');
+        armMic();
+      },
     });
   }, [lesson.id, sessionReady, stage, sentenceIndex, current?.en]);
 
   const speak = (text: string, rate?: number, onDone?: () => void) => {
     setAudioNotice('');
+    const shouldArmLessonMic = (stage === 1 || stage === 3) && !onDone;
+    let finish = onDone;
+    if (shouldArmLessonMic) {
+      setLessonMicReady(false);
+      clearNarratorFallback();
+      const token = ++narratorTokenRef.current;
+      const armMic = () => {
+        if (narratorTokenRef.current !== token) return;
+        clearNarratorFallback();
+        setLessonMicReady(true);
+      };
+      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
+      finish = armMic;
+    }
     playResponsiveSpeech({
       text,
       locale: 'en-US',
       rate,
-      onDone,
+      onDone: finish,
       onError: () => {
         setAudioNotice('پخش صدا ممکن نشد. صدای دستگاه و اجازهٔ پخش مرورگر را بررسی کنید.');
-        onDone?.();
+        finish?.();
       },
     });
   };
@@ -556,6 +599,7 @@ export default function SentenceLessonScreen() {
               text={current.en}
               locale="en-US"
               accent={Colors.success[400]}
+              autoStart={lessonMicReady}
               onResult={result => {
                 if (sentenceIndex < chunkLastIndex) {
                   scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
@@ -606,6 +650,7 @@ export default function SentenceLessonScreen() {
                 text={current.en}
                 locale="en-US"
                 accent={Colors.success[400]}
+                autoStart={lessonMicReady}
                 onResult={result => {
                   if (sentenceIndex < lesson.sentences.length - 1) {
                     const nextIdx = sentenceIndex + 1;
@@ -613,7 +658,6 @@ export default function SentenceLessonScreen() {
                       setSentenceIndex(nextIdx);
                       setSpeechResult(null);
                       setSpeechError(null);
-                      speak(lesson.sentences[nextIdx].en);
                     });
                   }
                 }}

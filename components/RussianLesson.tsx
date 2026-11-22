@@ -210,23 +210,59 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
   }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
+  const [lessonMicReady, setLessonMicReady] = useState(false);
+  const stageRef = useRef(stage);
+  stageRef.current = stage;
+  const narratorTokenRef = useRef(0);
+  const narratorFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearNarratorFallback = useCallback(() => {
+    if (narratorFallbackRef.current) {
+      clearTimeout(narratorFallbackRef.current);
+      narratorFallbackRef.current = null;
+    }
+  }, []);
+  useEffect(() => () => {
+    clearNarratorFallback();
+    narratorTokenRef.current += 1;
+  }, [clearNarratorFallback]);
+
   const speak = useCallback((text: string, rate = narrationRate('ru-RU', 'listen'), onDone?: () => void) => {
     setSpeechError('');
+    const shouldArmMic = (stageRef.current === 1 || stageRef.current === 3) && !onDone;
+    let finish = onDone;
+    if (shouldArmMic) {
+      setLessonMicReady(false);
+      clearNarratorFallback();
+      const token = ++narratorTokenRef.current;
+      const armMic = () => {
+        if (narratorTokenRef.current !== token) return;
+        clearNarratorFallback();
+        setLessonMicReady(true);
+      };
+      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
+      finish = armMic;
+    }
     void playRussianSpeech(text, rate, () => {
       setSpeechError('صدای روسی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.');
-      onDone?.();
-    }, onDone);
-  }, []);
+      finish?.();
+    }, finish);
+  }, [clearNarratorFallback]);
   const speakConversationLine = useCallback((text: string, onDone: () => void) => {
     void playRussianSpeech(text, narrationRate('ru-RU', 'normal'), onDone, onDone);
   }, []);
   const stopConversationSpeech = useCallback(() => { void stopRussianSpeech(); }, []);
 
-  // Read the visible main sentence on entry, resume, and each sentence change.
+  // Read the visible main sentence on entry, resume, and each sentence change (stage 1 & shadowing stage 3).
   useEffect(() => {
-    if (!sessionReady || stage !== 1 || !current) return;
-    speak(current.text, pace('normal'));
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak]);
+    if (!sessionReady || !current) return;
+    if (stage !== 1 && stage !== 3) {
+      clearNarratorFallback();
+      narratorTokenRef.current += 1;
+      setLessonMicReady(false);
+      return;
+    }
+    speak(current.text, stage === 3 ? .68 : pace('normal'));
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak, clearNarratorFallback]);
 
   const startCurrentLessonFromBeginning = () => {
     if (saving || completing.current || restartPending.current) return;
@@ -421,6 +457,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             text={current.text}
             locale="ru-RU"
             accent={Palette.success}
+            autoStart={lessonMicReady}
             onResult={result => {
               if (sentenceIndex < lesson.sentences.length - 1) {
                 scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
@@ -463,9 +500,10 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
               text={current.text}
               locale="ru-RU"
               accent={Palette.success}
+              autoStart={lessonMicReady}
               onResult={result => {
                 if (sentenceIndex < lesson.sentences.length - 1) {
-                  scheduleOnPass(result, () => selectSentence(sentenceIndex + 1, .68));
+                  scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
                 }
               }}
             />

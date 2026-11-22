@@ -233,26 +233,62 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
   }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
+  const [lessonMicReady, setLessonMicReady] = useState(false);
+  const stageRef = useRef(stage);
+  stageRef.current = stage;
+  const narratorTokenRef = useRef(0);
+  const narratorFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearNarratorFallback = useCallback(() => {
+    if (narratorFallbackRef.current) {
+      clearTimeout(narratorFallbackRef.current);
+      narratorFallbackRef.current = null;
+    }
+  }, []);
+  useEffect(() => () => {
+    clearNarratorFallback();
+    narratorTokenRef.current += 1;
+  }, [clearNarratorFallback]);
+
   const speak = useCallback((text: string, rate = narrationRate(course.locale, 'normal'), onDone?: () => void) => {
     setSpeechError('');
+    const shouldArmMic = (stageRef.current === 1 || stageRef.current === 3) && !onDone;
+    let finish = onDone;
+    if (shouldArmMic) {
+      setLessonMicReady(false);
+      clearNarratorFallback();
+      const token = ++narratorTokenRef.current;
+      const armMic = () => {
+        if (narratorTokenRef.current !== token) return;
+        clearNarratorFallback();
+        setLessonMicReady(true);
+      };
+      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
+      finish = armMic;
+    }
     void playStarterSpeech(
       course.locale,
       text,
       rate,
       () => {
         setSpeechError('پخش صدا ممکن نشد؛ موتور گفتار و بستهٔ صوتی این زبان را در تنظیمات دستگاه بررسی کنید.');
-        onDone?.();
+        finish?.();
       },
       () => setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد. تنظیمات گفتار دستگاه را بررسی کنید.'),
-      onDone,
+      finish,
     );
-  }, [course.locale]);
+  }, [course.locale, clearNarratorFallback]);
 
-  // Read the visible main sentence on entry, resume, and each sentence change.
+  // Read the visible main sentence on entry, resume, and each sentence change (stage 1 & shadowing stage 3).
   useEffect(() => {
-    if (!sessionReady || stage !== 1 || !current) return;
-    speak(current.text, pace('normal'));
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak]);
+    if (!sessionReady || !current) return;
+    if (stage !== 1 && stage !== 3) {
+      clearNarratorFallback();
+      narratorTokenRef.current += 1;
+      setLessonMicReady(false);
+      return;
+    }
+    speak(current.text, stage === 3 ? pace('slow') : pace('normal'));
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak, clearNarratorFallback]);
 
   const startCurrentLessonFromBeginning = () => {
     if (saving || completing.current || restartPending.current) return;
@@ -441,6 +477,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
             text={current.text}
             locale={course.locale}
             accent={Palette.success}
+            autoStart={lessonMicReady}
             onResult={result => {
               if (sentenceIndex < lesson.sentences.length - 1) {
                 scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
@@ -484,9 +521,10 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
               text={current.text}
               locale={course.locale}
               accent={Palette.success}
+              autoStart={lessonMicReady}
               onResult={result => {
                 if (sentenceIndex < lesson.sentences.length - 1) {
-                  scheduleOnPass(result, () => selectSentence(sentenceIndex + 1, .68));
+                  scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
                 }
               }}
             />
