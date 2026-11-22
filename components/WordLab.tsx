@@ -74,6 +74,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [voiceError, setVoiceError] = useState('');
+  const [recallMicReady, setRecallMicReady] = useState(true);
   const playback = useRef(0);
   /** Hand-off from the word to its sentence; any manual tap cancels it so nothing plays twice. */
   const autoChain = useRef(0);
@@ -142,14 +143,14 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     const onError = () => setVoiceError('صدای این دستگاه برای این زبان در دسترس نیست؛ متن و ترجمه همچنان دیده می‌شوند.');
     if (language === 'ru') {
       await new Promise<void>(resolve => {
-        playRussianSpeech(spokenTarget(item), rate, onError, () => resolve());
-        setTimeout(resolve, 4000);
+        const timer = setTimeout(resolve, 4000);
+        void playRussianSpeech(spokenTarget(item), rate, onError, () => { clearTimeout(timer); resolve(); });
       });
       return;
     }
     await new Promise<void>(resolve => {
-      playStarterSpeech(locale, spokenTarget(item), rate, onError);
-      setTimeout(resolve, 4000);
+      const timer = setTimeout(resolve, 4000);
+      void playStarterSpeech(locale, spokenTarget(item), rate, onError, undefined, () => { clearTimeout(timer); resolve(); });
     });
   }, [language, locale]);
 
@@ -161,14 +162,14 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     const onError = () => setVoiceError('صدای این دستگاه برای این زبان در دسترس نیست؛ متن و ترجمه همچنان دیده می‌شوند.');
     if (language === 'ru') {
       await new Promise<void>(resolve => {
-        playRussianSpeech(text, rate, onError, () => resolve());
-        setTimeout(resolve, 6000);
+        const timer = setTimeout(resolve, 6000);
+        void playRussianSpeech(text, rate, onError, () => { clearTimeout(timer); resolve(); });
       });
       return;
     }
     await new Promise<void>(resolve => {
-      playStarterSpeech(locale, text, rate, onError);
-      setTimeout(resolve, 6000);
+      const timer = setTimeout(resolve, 6000);
+      void playStarterSpeech(locale, text, rate, onError, undefined, () => { clearTimeout(timer); resolve(); });
     });
   }, [language, locale]);
 
@@ -192,6 +193,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     setSpoken(false);
     setSpokenScore(null);
     setAutoAdvancing(false);
+    setRecallMicReady(true);
     setError('');
     setVoiceError('');
     stopAll();
@@ -389,7 +391,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
               locale={locale}
               accent={C.primary}
               title={hasSpokenSentence(word) ? `جملهٔ ${languageName} را بگو` : `واژهٔ ${languageName} را بگو`}
-              autoStart
+              autoStart={recallMicReady}
               onResult={result => {
                 setError('');
                 setSpokenScore(result.score);
@@ -402,10 +404,10 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
               }}
             />
             <View style={styles.rowButtons}>
-              <Pressable accessibilityRole="button" onPress={() => void playSentence(word)} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
+              <Pressable accessibilityRole="button" onPress={() => { setRecallMicReady(false); void playSentence(word).finally(() => setRecallMicReady(true)); }} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
                 <Volume2 size={14} color={C.primaryDark} /><Text style={styles.ghostText}>جمله را بشنو</Text>
               </Pressable>
-              <Pressable accessibilityRole="button" onPress={() => void playOnce(word)} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
+              <Pressable accessibilityRole="button" onPress={() => { setRecallMicReady(false); void playOnce(word).finally(() => setRecallMicReady(true)); }} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
                 <Volume2 size={14} color={C.primaryDark} /><Text style={styles.ghostText}>واژه را بشنو</Text>
               </Pressable>
             </View>

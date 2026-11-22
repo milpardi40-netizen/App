@@ -139,7 +139,7 @@ export default function SentenceLessonScreen() {
   const resettingRef = useRef(false);
   const screenRun = useRef(0);
   const [audioNotice, setAudioNotice] = useState('');
-  const [lessonMicReady, setLessonMicReady] = useState(false);
+  const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
   const narratorTokenRef = useRef(0);
   const narratorFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clearNarratorFallback = () => {
@@ -259,60 +259,64 @@ export default function SentenceLessonScreen() {
 
   useFocusEffect(useCallback(() => () => { void stopResponsiveSpeech(); }, []));
 
-  // Read the sentence currently visible, without advancing the lesson automatically.
-  useEffect(() => {
-    if (!sessionReady || loadedLesson.current !== lesson.id || !current) return;
-    if (stage !== 1 && stage !== 3) {
-      clearNarratorFallback();
-      narratorTokenRef.current += 1;
-      setLessonMicReady(false);
-      if (stage !== 7) void stopResponsiveSpeech();
-      return;
-    }
+  const speakForTarget = (text: string, rate: number | undefined, targetKey: string | null) => {
     setAudioNotice('');
-    setLessonMicReady(false);
+    setMicReadyKey(null);
     clearNarratorFallback();
     const token = ++narratorTokenRef.current;
     const armMic = () => {
       if (narratorTokenRef.current !== token) return;
       clearNarratorFallback();
-      setLessonMicReady(true);
+      if (targetKey) setMicReadyKey(targetKey);
     };
-    narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, current.en.length * 130)));
+    if (targetKey) {
+      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
+    }
     playResponsiveSpeech({
-      text: current.en, locale: 'en-US', rate: ENGLISH_NORMAL_SPEECH_RATE,
+      text,
+      locale: 'en-US',
+      rate,
       onDone: armMic,
       onError: () => {
         setAudioNotice('پخش خودکار ممکن نشد. یکی از دکمه‌های پخش را بزنید و صدای دستگاه را بررسی کنید.');
         armMic();
       },
     });
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.en]);
+  };
+
+  // Read the sentence currently visible, without advancing the lesson automatically.
+  useEffect(() => {
+    if (!sessionReady || loadedLesson.current !== lesson.id || !current) return;
+    if (stage === 1 || stage === 3) {
+      speakForTarget(current.en, ENGLISH_NORMAL_SPEECH_RATE, `${stage}:${current.id}`);
+      return;
+    }
+    if (stage === 5 && vocabulary.length) {
+      const first = vocabulary[0];
+      speakForTarget(first.word, ENGLISH_NORMAL_SPEECH_RATE, `5:0:${first.word}`);
+      return;
+    }
+    clearNarratorFallback();
+    narratorTokenRef.current += 1;
+    setMicReadyKey(null);
+    if (stage !== 7) void stopResponsiveSpeech();
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.en, vocabulary]);
 
   const speak = (text: string, rate?: number, onDone?: () => void) => {
     setAudioNotice('');
-    const shouldArmLessonMic = (stage === 1 || stage === 3) && !onDone;
-    let finish = onDone;
-    if (shouldArmLessonMic) {
-      setLessonMicReady(false);
-      clearNarratorFallback();
-      const token = ++narratorTokenRef.current;
-      const armMic = () => {
-        if (narratorTokenRef.current !== token) return;
-        clearNarratorFallback();
-        setLessonMicReady(true);
-      };
-      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-      finish = armMic;
+    const targetKey = (stage === 1 || stage === 3) && !onDone && current ? `${stage}:${current.id}` : null;
+    if (targetKey) {
+      speakForTarget(text, rate, targetKey);
+      return;
     }
     playResponsiveSpeech({
       text,
       locale: 'en-US',
       rate,
-      onDone: finish,
+      onDone,
       onError: () => {
         setAudioNotice('پخش صدا ممکن نشد. صدای دستگاه و اجازهٔ پخش مرورگر را بررسی کنید.');
-        finish?.();
+        onDone?.();
       },
     });
   };
@@ -599,7 +603,7 @@ export default function SentenceLessonScreen() {
               text={current.en}
               locale="en-US"
               accent={Colors.success[400]}
-              autoStart={lessonMicReady}
+              autoStart={micReadyKey === `1:${current.id}`}
               onResult={result => {
                 if (sentenceIndex < chunkLastIndex) {
                   scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
@@ -650,7 +654,7 @@ export default function SentenceLessonScreen() {
                 text={current.en}
                 locale="en-US"
                 accent={Colors.success[400]}
-                autoStart={lessonMicReady}
+                autoStart={micReadyKey === `3:${current.id}`}
                 onResult={result => {
                   if (sentenceIndex < lesson.sentences.length - 1) {
                     const nextIdx = sentenceIndex + 1;
@@ -705,9 +709,14 @@ export default function SentenceLessonScreen() {
                     text={item.word}
                     locale="en-US"
                     accent={Colors.success[400]}
+                    autoStart={micReadyKey === `5:${vocabIndex}:${item.word}`}
                     onResult={result => {
                       if (vocabIndex < vocabulary.length - 1) {
-                        scheduleOnPass(result, () => scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0)));
+                        const nextVocab = vocabulary[vocabIndex + 1];
+                        scheduleOnPass(result, () => {
+                          scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0));
+                          speakForTarget(nextVocab.word, ENGLISH_NORMAL_SPEECH_RATE, `5:${vocabIndex + 1}:${nextVocab.word}`);
+                        });
                       }
                     }}
                   />

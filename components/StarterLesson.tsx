@@ -233,7 +233,9 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
   }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
-  const [lessonMicReady, setLessonMicReady] = useState(false);
+  const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
+  const activeMicTargetRef = useRef<string | null>(null);
+  activeMicTargetRef.current = (stage === 1 || stage === 3) && current ? `${stage}:${current.id}` : null;
   const stageRef = useRef(stage);
   stageRef.current = stage;
   const narratorTokenRef = useRef(0);
@@ -249,21 +251,18 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     narratorTokenRef.current += 1;
   }, [clearNarratorFallback]);
 
-  const speak = useCallback((text: string, rate = narrationRate(course.locale, 'normal'), onDone?: () => void) => {
+  const speakForTarget = useCallback((text: string, rate: number, targetKey: string | null) => {
     setSpeechError('');
-    const shouldArmMic = (stageRef.current === 1 || stageRef.current === 3) && !onDone;
-    let finish = onDone;
-    if (shouldArmMic) {
-      setLessonMicReady(false);
+    setMicReadyKey(null);
+    clearNarratorFallback();
+    const token = ++narratorTokenRef.current;
+    const armMic = () => {
+      if (narratorTokenRef.current !== token) return;
       clearNarratorFallback();
-      const token = ++narratorTokenRef.current;
-      const armMic = () => {
-        if (narratorTokenRef.current !== token) return;
-        clearNarratorFallback();
-        setLessonMicReady(true);
-      };
+      if (targetKey) setMicReadyKey(targetKey);
+    };
+    if (targetKey) {
       narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-      finish = armMic;
     }
     void playStarterSpeech(
       course.locale,
@@ -271,24 +270,48 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       rate,
       () => {
         setSpeechError('پخش صدا ممکن نشد؛ موتور گفتار و بستهٔ صوتی این زبان را در تنظیمات دستگاه بررسی کنید.');
-        finish?.();
+        armMic();
       },
       () => setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد. تنظیمات گفتار دستگاه را بررسی کنید.'),
-      finish,
+      armMic,
     );
   }, [course.locale, clearNarratorFallback]);
+
+  const speak = useCallback((text: string, rate = narrationRate(course.locale, 'normal'), onDone?: () => void) => {
+    setSpeechError('');
+    if (!onDone && activeMicTargetRef.current) {
+      speakForTarget(text, rate, activeMicTargetRef.current);
+      return;
+    }
+    void playStarterSpeech(
+      course.locale,
+      text,
+      rate,
+      () => {
+        setSpeechError('پخش صدا ممکن نشد؛ موتور گفتار و بستهٔ صوتی این زبان را در تنظیمات دستگاه بررسی کنید.');
+        onDone?.();
+      },
+      () => setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد. تنظیمات گفتار دستگاه را بررسی کنید.'),
+      onDone,
+    );
+  }, [course.locale, speakForTarget]);
 
   // Read the visible main sentence on entry, resume, and each sentence change (stage 1 & shadowing stage 3).
   useEffect(() => {
     if (!sessionReady || !current) return;
-    if (stage !== 1 && stage !== 3) {
-      clearNarratorFallback();
-      narratorTokenRef.current += 1;
-      setLessonMicReady(false);
+    if (stage === 1 || stage === 3) {
+      speakForTarget(current.text, stage === 3 ? pace('slow') : pace('normal'), `${stage}:${current.id}`);
       return;
     }
-    speak(current.text, stage === 3 ? pace('slow') : pace('normal'));
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak, clearNarratorFallback]);
+    if (stage === 5 && vocabulary.length) {
+      const first = vocabulary[0];
+      speakForTarget(first.word.word, pace('normal'), `5:0:${first.word.word}`);
+      return;
+    }
+    clearNarratorFallback();
+    narratorTokenRef.current += 1;
+    setMicReadyKey(null);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.text, vocabulary, speakForTarget, clearNarratorFallback]);
 
   const startCurrentLessonFromBeginning = () => {
     if (saving || completing.current || restartPending.current) return;
@@ -305,10 +328,14 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     setLoadingRetry(value => value + 1);
   };
   const selectSentence = (index: number, rate = narrationRate(course.locale, 'listen')) => {
+    if (index === sentenceIndex) {
+      const item = lesson.sentences[index];
+      if (item) speakForTarget(item.text, rate, (stage === 1 || stage === 3) ? `${stage}:${item.id}` : null);
+      return;
+    }
     setSentenceIndex(index);
     setRevealed(false);
     setSpeechError('');
-    speak(lesson.sentences[index].text, rate);
   };
 
   const [listenRun, setListenRun] = useState(0);
@@ -477,7 +504,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
             text={current.text}
             locale={course.locale}
             accent={Palette.success}
-            autoStart={lessonMicReady}
+            autoStart={micReadyKey === `1:${current.id}`}
             onResult={result => {
               if (sentenceIndex < lesson.sentences.length - 1) {
                 scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
@@ -521,7 +548,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
               text={current.text}
               locale={course.locale}
               accent={Palette.success}
-              autoStart={lessonMicReady}
+              autoStart={micReadyKey === `3:${current.id}`}
               onResult={result => {
                 if (sentenceIndex < lesson.sentences.length - 1) {
                   scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
@@ -548,15 +575,20 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           <View style={styles.vocabList} onLayout={event => { vocabListOffsetRef.current = event.nativeEvent.layout.y; }}>{vocabulary.map(({ word, sentence }, vocabIndex) => <View key={`${word.word}-${sentence.id}`} onLayout={event => { vocabCardYsRef.current[vocabIndex] = event.nativeEvent.layout.y; }} style={styles.vocabCard}>
             <View style={styles.vocabTop}><Text style={styles.vocabWord}>{word.word}</Text><Text style={styles.vocabMeaning}>{word.meaning}</Text></View>
             <Text style={styles.vocabExample}>{sentence.text}</Text><Text keepColor style={styles.vocabExampleFa}>{sentence.fa}</Text>
-            <Pressable accessibilityRole="button" accessibilityLabel={`شنیدن مثال: ${sentence.text}`} style={styles.bubbleSound} onPress={() => speak(sentence.text)}><Volume2 size={16} color={Palette.primary} /></Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel={`شنیدن مثال: ${sentence.text}`} style={styles.bubbleSound} onPress={() => speakForTarget(sentence.text, pace('normal'), `5:${vocabIndex}:${word.word}`)}><Volume2 size={16} color={Palette.primary} /></Pressable>
             <SpeakCheck
               compact
               text={word.word}
               locale={course.locale}
               accent={Palette.success}
+              autoStart={micReadyKey === `5:${vocabIndex}:${word.word}`}
               onResult={result => {
                 if (vocabIndex < vocabulary.length - 1) {
-                  scheduleOnPass(result, () => scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0)));
+                  const nextVocab = vocabulary[vocabIndex + 1];
+                  scheduleOnPass(result, () => {
+                    scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0));
+                    speakForTarget(nextVocab.word.word, pace('normal'), `5:${vocabIndex + 1}:${nextVocab.word.word}`);
+                  });
                 }
               }}
             />

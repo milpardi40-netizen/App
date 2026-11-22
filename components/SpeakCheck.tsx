@@ -75,9 +75,13 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const autoStartedFor = useRef('');
   const startRef = useRef<null | (() => Promise<void>)>(null);
   useEffect(() => {
-    if (!autoStart || !text || autoStartedFor.current === text) return;
+    if (!autoStart) {
+      autoStartedFor.current = '';
+      return;
+    }
+    if (!text || autoStartedFor.current === text) return;
     autoStartedFor.current = text;
-    const handle = setTimeout(() => { void startRef.current?.(); }, 420);
+    const handle = setTimeout(() => { void startRef.current?.(); }, 180);
     return () => clearTimeout(handle);
   }, [autoStart, text]);
 
