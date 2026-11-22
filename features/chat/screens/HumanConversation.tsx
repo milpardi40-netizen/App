@@ -1,7 +1,7 @@
-import { MANAGEMENT_BUILD } from '@/lib/features';
+import { isLanguageEnabled, MANAGEMENT_BUILD, RUSSIAN_ONLY_BUILD } from '@/lib/features';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, BackHandler, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, AppState, BackHandler, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { BarChart3, ChevronLeft, Mic2, Send, Sparkles, UserRound, X } from 'lucide-react-native';
 import {
@@ -39,6 +39,7 @@ import {
   buildTurnConversationPlan,
   evaluateTurnConversation,
   feedbackForTurnAnswer,
+  hasTargetLanguageText,
   isAnswerOnMission,
   promptFor,
   turnStateFromMessages,
@@ -178,13 +179,17 @@ function TurnConversationScreen({
   const [ended, setEnded] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [keyboardInset, setKeyboardInset] = useState(0);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [now, setNow] = useState(Date.now());
-  // Real-contact conversations (both English and Russian) are scoped to the
+  // Real-contact conversations are scoped to ONE conversation language and the
   // highest CEFR level both learners have completed. The lesson-room entry
   // (lessonId param) preserves its dedicated scenario plan.
   const hasLessonContext = Boolean(lessonId);
-  const initialLang: SharedLanguage = language === 'ru' ? 'ru' : 'en';
-  const [pickerLang, setPickerLang] = useState<SharedLanguage>(initialLang);
+  const singleLanguage: SharedLanguage = !isLanguageEnabled('ru')
+    ? 'en'
+    : (RUSSIAN_ONLY_BUILD || !isLanguageEnabled('en') || language === 'ru')
+      ? 'ru'
+      : 'en';
   const [myCompletedByLang, setMyCompletedByLang] = useState<{ en: CourseLevelId[]; ru: CourseLevelId[] } | null>(null);
   const [partnerRawLevel, setPartnerRawLevel] = useState<string | null | undefined>(partnerLevel);
   const [pickingLesson, setPickingLesson] = useState(false);
@@ -213,12 +218,12 @@ function TurnConversationScreen({
   const levelsReady = myCompletedByLang !== null && partnerRawLevel !== undefined;
   const partnerParsed = useMemo(() => parseStoredCourseLevels(partnerRawLevel), [partnerRawLevel]);
   const levelMatch = useMemo(() => sharedCompletedLevel(
-    myCompletedByLang?.[pickerLang] ?? [],
-    partnerParsed[pickerLang].completed,
-  ), [myCompletedByLang, partnerParsed, pickerLang]);
+    myCompletedByLang?.[singleLanguage] ?? [],
+    partnerParsed[singleLanguage].completed,
+  ), [myCompletedByLang, partnerParsed, singleLanguage]);
   const sharedLevelId = levelMatch.sharedLevelId;
   const sharedProfile = useMemo(() => levelProfileFor(sharedLevelId), [sharedLevelId]);
-  const sharedLessons = useMemo(() => lessonsOfLevel(sharedLevelId, pickerLang), [sharedLevelId, pickerLang]);
+  const sharedLessons = useMemo(() => lessonsOfLevel(sharedLevelId, singleLanguage), [sharedLevelId, singleLanguage]);
 
   // The latest lesson selection arrives as a system marker both clients read.
   // Lesson ids across English and Russian are disjoint, so either client
@@ -239,22 +244,22 @@ function TurnConversationScreen({
 
   const fallbackPlan = useMemo<TurnConversationPlan>(() => buildTurnConversationPlan({
     conversationId,
-    language,
+    language: singleLanguage,
     lessonTitle,
     situation,
     levelId: Number(levelId || 1),
-  }), [conversationId, language, lessonTitle, situation, levelId]);
+  }), [conversationId, singleLanguage, lessonTitle, situation, levelId]);
 
   const lessonPlan = useMemo<TurnConversationPlan | null>(() => (
-    chosenLesson && !hasLessonContext
+    chosenLesson && !hasLessonContext && isLanguageEnabled(chosenLesson.language)
       ? buildLessonTurnPlan(chosenLesson, chosenLesson.language)
       : null
   ), [chosenLesson, hasLessonContext]);
 
   const plan = lessonPlan ?? fallbackPlan;
-  const effectiveLanguage: SharedLanguage = chosenLesson && !hasLessonContext
+  const effectiveLanguage: SharedLanguage = chosenLesson && !hasLessonContext && isLanguageEnabled(chosenLesson.language)
     ? chosenLesson.language
-    : (language === 'ru' ? 'ru' : pickerLang);
+    : singleLanguage;
   const showPicker = !hasLessonContext && (pickingLesson || !lessonPlan);
   const sessionBoundaryAt = lessonPlan ? lessonSelection?.at ?? null : null;
   const planLevelId = lessonPlan && chosenLesson ? chosenLesson.levelId : Number(levelId || 1);
@@ -284,16 +289,51 @@ function TurnConversationScreen({
     const missionIndex = Math.floor(index / 2);
     const slot: TurnSlot = index % 2 === 0 ? 0 : 1;
     const prompt = promptFor(plan, missionIndex, slot);
-    return prompt ? feedbackForTurnAnswer(latestMyAnswer.body || '', prompt) : null;
+    if (!prompt) return null;
+    const base = feedbackForTurnAnswer(latestMyAnswer.body || '', prompt);
+    if (!isAnswerOnMission(latestMyAnswer.body || '', prompt)) {
+      return {
+        ...base,
+        positive: 'پیام شما برای مخاطب ارسال شد.',
+        correction: base.correction,
+      };
+    }
+    return base;
   }, [latestMyAnswer, state, plan]);
 
-  const addMessage = useCallback((message: DirectMessage) => {
-    setMessages(current => (current.some(item => item.id === message.id) ? current : [...current, message]));
+  const mergeMessages = useCallback((rows: DirectMessage[]) => {
+    setMessages((current) => {
+      if (!rows.length) return current;
+      const byId = new Map(current.map(item => [item.id, item]));
+      let changed = false;
+      for (const row of rows) {
+        if (!byId.has(row.id)) {
+          byId.set(row.id, row);
+          changed = true;
+        }
+      }
+      if (!changed) return current;
+      return [...byId.values()].sort(
+        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt) || a.id.localeCompare(b.id),
+      );
+    });
   }, []);
+
+  const addMessage = useCallback((message: DirectMessage) => {
+    mergeMessages([message]);
+  }, [mergeMessages]);
 
   useEffect(() => {
     let active = true;
     let channel: ReturnType<typeof subscribeToMessages> | null = null;
+    const syncMessages = async () => {
+      try {
+        const rows = await listMessages(conversationId);
+        if (active) mergeMessages(rows);
+      } catch {
+        // Keep current transcript if a background refresh fails transiently.
+      }
+    };
     Promise.all([listMessages(conversationId), currentChatUserId()])
       .then(([rows, userId]) => {
         if (!active) return;
@@ -304,11 +344,17 @@ function TurnConversationScreen({
       })
       .catch(cause => { if (active) setError(cause instanceof Error ? cause.message : 'گفت‌وگو باز نشد.'); })
       .finally(() => { if (active) setLoading(false); });
+    const pollTimer = setInterval(() => { void syncMessages(); }, 4000);
+    const appStateSub = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') void syncMessages();
+    });
     return () => {
       active = false;
+      clearInterval(pollTimer);
+      appStateSub.remove();
       void unsubscribeFromMessages(channel);
     };
-  }, [conversationId, addMessage]);
+  }, [conversationId, addMessage, mergeMessages]);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 30000);
@@ -338,8 +384,8 @@ function TurnConversationScreen({
       });
     };
     const subscriptions = [
-      Keyboard.addListener('keyboardDidShow', event => measure(event.endCoordinates.screenY)),
-      Keyboard.addListener('keyboardDidHide', () => setKeyboardInset(0)),
+      Keyboard.addListener('keyboardDidShow', event => { setKeyboardOpen(true); measure(event.endCoordinates.screenY); }),
+      Keyboard.addListener('keyboardDidHide', () => { setKeyboardOpen(false); setKeyboardInset(0); }),
     ];
     return () => subscriptions.forEach(subscription => subscription.remove());
   }, []);
@@ -352,8 +398,8 @@ function TurnConversationScreen({
   const sendAnswer = async (raw: string) => {
     const clean = raw.trim();
     if (!clean || sending || !state.myTurn || !state.currentPrompt || state.finished || ended) return;
-    if (!isAnswerOnMission(clean, state.currentPrompt)) {
-      setError('این پاسخ به مأموریت این نوبت مرتبط نیست. به پرسش فعلی پاسخ بده و یک جزئیات مرتبط اضافه کن.');
+    if (!hasTargetLanguageText(clean, effectiveLanguage)) {
+      setError(`برای تمرین، پاسخ را به ${effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} بنویس.`);
       setInput(clean);
       setInputMode('text');
       return;
@@ -419,33 +465,18 @@ function TurnConversationScreen({
       ) : showPicker ? (
         levelsReady ? (
           <ScrollView style={styles.picker} contentContainerStyle={styles.pickerContent} showsVerticalScrollIndicator={false}>
-            <View style={[styles.sharedCard, { borderTopColor: levelMeta(sharedLevelId, pickerLang).color, borderTopWidth: 3 }]}>
+            <View style={[styles.sharedCard, { borderTopColor: levelMeta(sharedLevelId, singleLanguage).color, borderTopWidth: 3 }]}>
               <View style={styles.sharedTopRow}>
                 <Text style={styles.sharedKicker}>سطح مشترک شما</Text>
-                <View style={styles.pickerLangSwitch}>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: pickerLang === 'en' }}
-                    onPress={() => setPickerLang('en')}
-                    style={[styles.pickerLangChip, pickerLang === 'en' && styles.pickerLangChipActive]}
-                  >
-                    <Text style={[styles.pickerLangText, pickerLang === 'en' && styles.pickerLangTextActive]}>انگلیسی</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: pickerLang === 'ru' }}
-                    onPress={() => setPickerLang('ru')}
-                    style={[styles.pickerLangChip, pickerLang === 'ru' && styles.pickerLangChipActive]}
-                  >
-                    <Text style={[styles.pickerLangText, pickerLang === 'ru' && styles.pickerLangTextActive]}>روسی</Text>
-                  </Pressable>
+                <View style={styles.pickerLangBadge}>
+                  <Text style={styles.pickerLangBadgeText}>{singleLanguage === 'ru' ? 'روسی' : 'انگلیسی'}</Text>
                 </View>
               </View>
               <View style={styles.sharedLevelRow}>
-                <View style={[styles.levelBadge, { backgroundColor: levelMeta(sharedLevelId, pickerLang).color }]}>
+                <View style={[styles.levelBadge, { backgroundColor: levelMeta(sharedLevelId, singleLanguage).color }]}>
                   <Text style={styles.levelBadgeText}>{cefrOfLevel(sharedLevelId)}</Text>
                 </View>
-                <Text style={styles.sharedLevelTitle}>{levelMeta(sharedLevelId, pickerLang).title}</Text>
+                <Text style={styles.sharedLevelTitle}>{levelMeta(sharedLevelId, singleLanguage).title}</Text>
                 <View style={styles.difficultyBadge}>
                   <Text style={styles.difficultyBadgeText}>{sharedProfile.turnLabelFa}</Text>
                 </View>
@@ -475,7 +506,7 @@ function TurnConversationScreen({
             </View>
 
             <View style={styles.lessonListHeader}>
-              <Text style={styles.lessonListTitle}>درس‌های {pickerLang === 'ru' ? 'روسی' : 'انگلیسی'} سطح {cefrOfLevel(sharedLevelId)}</Text>
+              <Text style={styles.lessonListTitle}>درس‌های {singleLanguage === 'ru' ? 'روسی' : 'انگلیسی'} سطح {cefrOfLevel(sharedLevelId)}</Text>
               <Text style={styles.lessonListCount}>{fa(sharedLessons.length)} درس</Text>
             </View>
             {sharedLessons.map((lesson, index) => {
@@ -491,8 +522,8 @@ function TurnConversationScreen({
                 >
                   <View style={styles.lessonCardTop}>
                     <View style={styles.lessonTitleWrap}>
-                      <View style={[styles.lessonOrderBadge, { backgroundColor: levelMeta(sharedLevelId, pickerLang).color + '18' }]}>
-                        <Text style={[styles.lessonOrderText, { color: levelMeta(sharedLevelId, pickerLang).color }]}>{fa(index + 1)}</Text>
+                      <View style={[styles.lessonOrderBadge, { backgroundColor: levelMeta(sharedLevelId, singleLanguage).color + '18' }]}>
+                        <Text style={[styles.lessonOrderText, { color: levelMeta(sharedLevelId, singleLanguage).color }]}>{fa(index + 1)}</Text>
                       </View>
                       <Text style={styles.lessonTitle}>{lesson.title}</Text>
                     </View>
@@ -517,49 +548,58 @@ function TurnConversationScreen({
         )
       ) : (
         <>
-          <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
+          <View style={[styles.statusCard, keyboardOpen && styles.statusCardCompact, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
             <View style={styles.statusTop}>
               <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
                 <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
                 <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>{state.finished ? 'مکالمه کامل شد' : ended ? 'مکالمه پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب است'}</Text>
               </View>
               <View style={styles.statusRightMeta}>
-                {plan.difficultyLabel ? (
+                {!keyboardOpen && plan.difficultyLabel ? (
                   <View style={styles.difficultyBadge}>
                     <Text style={styles.difficultyBadgeText}>{plan.difficultyLabel}</Text>
                   </View>
                 ) : null}
                 <Text style={styles.turnCount}>{fa(state.completedTurns)} از {fa(plan.turns.length)} نوبت</Text>
+                {keyboardOpen && lessonPlan ? (
+                  <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => { Keyboard.dismiss(); setPickingLesson(true); }} style={styles.changeLesson}>
+                    <Text style={styles.changeLessonText}>تغییر درس</Text>
+                  </Pressable>
+                ) : null}
               </View>
             </View>
-            <View style={styles.lessonRow}>
-              <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
-                <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
-              </View>
-              <Text style={styles.topicLine}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
-              {lessonPlan ? (
-                <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => { setPickerLang(effectiveLanguage); setPickingLesson(true); }} style={styles.changeLesson}>
-                  <Text style={styles.changeLessonText}>تغییر درس</Text>
-                </Pressable>
-              ) : null}
-            </View>
-            {lessonPlan ? <Text style={styles.situationLine}>{plan.missionFa}</Text> : null}
-            <View style={styles.progressRow}>
-              <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
-              <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
-            </View>
+            {!keyboardOpen ? (
+              <>
+                <View style={styles.lessonRow}>
+                  <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
+                    <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
+                  </View>
+                  <Text style={styles.topicLine}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
+                  {lessonPlan ? (
+                    <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
+                      <Text style={styles.changeLessonText}>تغییر درس</Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+                {lessonPlan ? <Text style={styles.situationLine}>{plan.missionFa}</Text> : null}
+                <View style={styles.progressRow}>
+                  <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
+                  <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
+                </View>
+              </>
+            ) : null}
           </View>
 
-          <View style={styles.missionCard}>
+          <View style={[styles.missionCard, keyboardOpen && styles.missionCardCompact]}>
             <View style={styles.missionHeader}>
               <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
               {state.currentTurn ? <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View> : null}
             </View>
             {state.currentPrompt ? (
               <>
-                <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
-                <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
-                {lessonPlan && state.currentPrompt.cues.length > 0 ? (
+                <Text style={styles.missionText} numberOfLines={keyboardOpen ? 2 : undefined}>{state.currentPrompt.text}</Text>
+                <Text style={styles.missionHint} numberOfLines={keyboardOpen ? 1 : undefined}>{state.currentPrompt.hint}</Text>
+                {!keyboardOpen && lessonPlan && state.currentPrompt.cues.length > 0 ? (
                   <View style={styles.cueRow}>
                     {state.currentPrompt.cues.slice(0, 4).map(cue => (
                       <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
@@ -631,7 +671,7 @@ function TurnConversationScreen({
           </ScrollView>
 
           <KeyboardAttachedView onLayout={event => { composerHeight.current = event.nativeEvent.layout.height; }}>
-            <View style={styles.answerCard}>
+            <View style={[styles.answerCard, keyboardOpen && styles.answerCardCompact]}>
               {state.finished || ended ? (
                 <View style={styles.endedRow}>
                   <View style={styles.endedCopy}>
@@ -646,12 +686,17 @@ function TurnConversationScreen({
               ) : (
                 <>
                   <View style={styles.modeRow}>
-                    <Text style={styles.modeLabel}>پاسخ:</Text>
-                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
-                      <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
-                    </Pressable>
-                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
-                      <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
+                    <View style={styles.modeGroup}>
+                      <Text style={styles.modeLabel}>پاسخ:</Text>
+                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
+                        <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
+                      </Pressable>
+                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
+                        <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
+                      </Pressable>
+                    </View>
+                    <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButtonInline} onPress={confirmEnd}>
+                      <Text style={styles.endButtonText}>پایان مکالمه</Text>
                     </Pressable>
                   </View>
 
@@ -659,10 +704,10 @@ function TurnConversationScreen({
 
                   {state.myTurn ? (
                     inputMode === 'text' ? (
-                      <>
+                      <View style={styles.composeRow}>
                         <TextInput
                           accessibilityLabel="پاسخ این نوبت"
-                          style={[styles.input, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]}
+                          style={[styles.input, styles.composeInput, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]}
                           value={input}
                           onChangeText={setInput}
                           placeholder="پاسخ این نوبت را بنویس…"
@@ -675,14 +720,14 @@ function TurnConversationScreen({
                           accessibilityRole="button"
                           accessibilityLabel="ثبت پاسخ"
                           accessibilityState={{ disabled: sending || !input.trim() }}
-                          style={[styles.submitButton, (sending || !input.trim()) && styles.disabled]}
+                          style={[styles.submitButtonCompact, (sending || !input.trim()) && styles.disabled]}
                           disabled={sending || !input.trim()}
                           onPress={() => void sendAnswer(input)}
                         >
                           {sending ? <ActivityIndicator size="small" color="#FFFFFF" /> : <Send size={16} color="#FFFFFF" />}
-                          <Text style={styles.submitButtonText}>ثبت پاسخ</Text>
+                          <Text style={styles.submitButtonText}>ارسال</Text>
                         </Pressable>
-                      </>
+                      </View>
                     ) : (
                       <VoiceAnswerInput
                         locale={effectiveLanguage === 'ru' ? 'ru-RU' : 'en-US'}
@@ -697,10 +742,6 @@ function TurnConversationScreen({
                       <Text style={styles.waitingText}>نوبت مخاطب است؛ منتظر پاسخ او بمان.</Text>
                     </View>
                   )}
-
-                  <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButton} onPress={confirmEnd}>
-                    <Text style={styles.endButtonText}>پایان مکالمه</Text>
-                  </Pressable>
                 </>
               )}
             </View>
@@ -728,6 +769,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   centerText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
   statusCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 8, shadowColor: '#1E1B4B', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 2 }, elevation: 2 },
+  statusCardCompact: { marginTop: 4, paddingVertical: 6, paddingHorizontal: Spacing.sm, gap: 0 },
   statusTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   statusRightMeta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
   turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 10, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12' },
@@ -751,6 +793,7 @@ const styles = StyleSheet.create({
   progressFill: { height: '100%', borderRadius: 3, backgroundColor: Colors.primary[400] },
   progressText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[600], width: 34, textAlign: 'left' },
   missionCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 6 },
+  missionCardCompact: { marginTop: 4, paddingVertical: 7, paddingHorizontal: Spacing.sm, gap: 3 },
   missionHeader: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
   missionKicker: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.warning[700], textAlign: 'right' },
   missionFocusPill: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
@@ -790,16 +833,20 @@ const styles = StyleSheet.create({
   finishedTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.success[700], textAlign: 'right' },
   finishedText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
   answerCard: { padding: Spacing.md, paddingBottom: 12, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 8 },
-  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  answerCardCompact: { paddingVertical: 8, paddingHorizontal: Spacing.sm, gap: 6 },
+  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  modeGroup: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
   modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], marginLeft: 3 },
   modeButton: { minHeight: 30, borderRadius: Radius.full, paddingHorizontal: 12, justifyContent: 'center', backgroundColor: '#F5F6FB' },
   modeButtonActive: { backgroundColor: Colors.primary[500] + '18', borderWidth: 1, borderColor: Colors.primary[500] + '35' },
   modeButtonText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[500] },
   modeButtonTextActive: { color: Colors.primary[600], fontFamily: Typography.boldFontFamily },
-  input: { minHeight: 48, maxHeight: 96, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
-  submitButton: { minHeight: 44, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
+  composeRow: { flexDirection: 'row-reverse', alignItems: 'flex-end', gap: 8 },
+  input: { minHeight: 44, maxHeight: 84, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 9, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
+  composeInput: { flex: 1 },
+  submitButtonCompact: { minHeight: 44, paddingHorizontal: 14, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 6 },
   submitButtonText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: '#FFFFFF' },
-  endButton: { minHeight: 32, alignItems: 'center', justifyContent: 'center' },
+  endButtonInline: { minHeight: 28, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center' },
   endButtonText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.error[300] },
   waitingRow: { minHeight: 52, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   waitingText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
@@ -815,11 +862,8 @@ const styles = StyleSheet.create({
   sharedCard: { padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E4E7F2', gap: 9, shadowColor: '#1E1B4B', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 2 }, elevation: 2 },
   sharedTopRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   sharedKicker: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Colors.primary[600], textAlign: 'right' },
-  pickerLangSwitch: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
-  pickerLangChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: '#F4F6FB', borderWidth: 1, borderColor: '#E2E6F0' },
-  pickerLangChipActive: { backgroundColor: Colors.primary[500] + '18', borderColor: Colors.primary[400] },
-  pickerLangText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300] },
-  pickerLangTextActive: { color: Colors.primary[600], fontWeight: Typography.weights.bold },
+  pickerLangBadge: { paddingHorizontal: 11, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: Colors.primary[100], borderWidth: 1, borderColor: Colors.primary[400] },
+  pickerLangBadgeText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[700], fontWeight: Typography.weights.bold },
   sharedLevelRow: { flexDirection: 'row-reverse', alignItems: 'center', flexWrap: 'wrap', gap: 8 },
   sharedLevelTitle: { flex: 1, fontFamily: Typography.latinFontFamily, fontSize: Typography.sizes.md, fontWeight: '800', color: Colors.neutral[0], textAlign: 'left', writingDirection: 'ltr' },
   compareRow: { flexDirection: 'row-reverse', gap: 8 },

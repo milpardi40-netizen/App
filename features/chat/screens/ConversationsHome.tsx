@@ -24,7 +24,7 @@ import { readableSupabaseError } from '@/lib/errors';
 import { isSupabaseConfigured } from '@/lib/pairing';
 import { SupabaseSetupNotice } from '@/components/SupabaseSetupNotice';
 import { ChatAlertSettingsCard } from '@/components/ChatAlertSettingsCard';
-import { MANAGEMENT_BUILD } from '@/lib/features';
+import { isLanguageEnabled, MANAGEMENT_BUILD, RUSSIAN_ONLY_BUILD } from '@/lib/features';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { timeAgo } from '@/lib/format';
 
@@ -41,20 +41,29 @@ export default function ConversationsHome() {
   const [openingSupport, setOpeningSupport] = useState(false);
   // The conversation hub is shared by every language; keep the learner's own course navigation under it.
   const [activeLanguage, setActiveLanguage] = useState<ResumeLanguage>(null);
-  const [selectedLang, setSelectedLang] = useState<SharedLanguage>(language === 'ru' ? 'ru' : 'en');
   useEffect(() => {
     let alive = true;
     void readResumeSnapshot()
       .then((snapshot) => {
         if (!alive) return;
-        const lang = snapshot?.language ?? null;
-        setActiveLanguage(lang);
-        if (!language && lang === 'ru') setSelectedLang('ru');
+        setActiveLanguage(snapshot?.language ?? null);
       })
       .catch(() => undefined);
     return () => { alive = false; };
-  }, [language]);
-  const convLanguage: SharedLanguage = language === 'ru' ? 'ru' : language === 'en' ? 'en' : selectedLang;
+  }, []);
+  const russianAvailable = isLanguageEnabled('ru');
+  const englishAvailable = !RUSSIAN_ONLY_BUILD && isLanguageEnabled('en');
+  const convLanguage: SharedLanguage = !russianAvailable
+    ? 'en'
+    : !englishAvailable
+      ? 'ru'
+      : language === 'ru'
+        ? 'ru'
+        : language === 'en'
+          ? 'en'
+          : activeLanguage === 'ru'
+            ? 'ru'
+            : 'en';
   const homePath = activeLanguage && activeLanguage !== 'en' ? `/learn/${activeLanguage}` : activeLanguage === 'en' ? '/lang' : '/languages';
 
   const openSupport = () => {
@@ -158,22 +167,11 @@ export default function ConversationsHome() {
           {!lessonContext ? (
             <View style={styles.langToggleRow}>
               <Text style={styles.langToggleLabel}>زبان مکالمه:</Text>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityState={{ selected: convLanguage === 'en' }}
-                onPress={() => setSelectedLang('en')}
-                style={[styles.langChip, convLanguage === 'en' && styles.langChipActive]}
-              >
-                <Text style={[styles.langChipText, convLanguage === 'en' && styles.langChipTextActive]}>انگلیسی</Text>
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityState={{ selected: convLanguage === 'ru' }}
-                onPress={() => setSelectedLang('ru')}
-                style={[styles.langChip, convLanguage === 'ru' && styles.langChipActive]}
-              >
-                <Text style={[styles.langChipText, convLanguage === 'ru' && styles.langChipTextActive]}>روسی</Text>
-              </Pressable>
+              <View style={[styles.langChip, styles.langChipActive]}>
+                <Text style={[styles.langChipText, styles.langChipTextActive]}>
+                  {convLanguage === 'ru' ? 'روسی' : 'انگلیسی'}
+                </Text>
+              </View>
             </View>
           ) : null}
         </View>
@@ -291,9 +289,9 @@ const styles = StyleSheet.create({
   langToggleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8, marginTop: 4 },
   langToggleLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[400] },
   langChip: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.neutral[900], borderWidth: 1, borderColor: Colors.neutral[700] },
-  langChipActive: { backgroundColor: Colors.primary[500] + '28', borderColor: Colors.primary[400] },
-  langChipText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[400] },
-  langChipTextActive: { color: Colors.primary[200], fontWeight: Typography.weights.bold },
+  langChipActive: { backgroundColor: Colors.primary[100], borderColor: Colors.primary[400] },
+  langChipText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[200] },
+  langChipTextActive: { color: Colors.primary[700], fontWeight: Typography.weights.bold },
   emmaCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.accent[500] + '50', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.md },
   avatarWrap: { position: 'relative' },
   emmaAvatar: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.accent[500] + '20' },

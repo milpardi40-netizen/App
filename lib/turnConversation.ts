@@ -522,20 +522,52 @@ export const tokensOf = (text: string) => text
 
 const contentWordsOf = (text: string) => tokensOf(text).filter(word => word.length > 2 && !STOP_WORDS.has(word));
 
+const matchesCueToken = (wordTokens: readonly string[], normalizedText: string, cue: string) => {
+  const cleanCue = cue.toLowerCase();
+  if (normalizedText.includes(` ${cleanCue} `)) return true;
+  if (cleanCue.length >= 4 && !cleanCue.includes(' ')) {
+    const stem = cleanCue.slice(0, 4);
+    return wordTokens.some(token => token.length >= 4 && token.startsWith(stem));
+  }
+  return false;
+};
+
 const cueHitsOf = (answer: string, cues: readonly string[]) => {
-  const normalized = ` ${tokensOf(answer).join(' ')} `;
-  return cues.reduce((count, cue) => count + (normalized.includes(` ${cue.toLowerCase()} `) ? 1 : 0), 0);
+  const tokens = tokensOf(answer);
+  const normalized = ` ${tokens.join(' ')} `;
+  return cues.reduce((count, cue) => count + (matchesCueToken(tokens, normalized, cue) ? 1 : 0), 0);
 };
 
 const promptHitsOf = (answer: string, prompt: string) => {
-  const words = new Set(tokensOf(answer));
-  return [...new Set(contentWordsOf(prompt))].filter(word => words.has(word)).length;
+  const tokens = tokensOf(answer);
+  const words = new Set(tokens);
+  return [...new Set(contentWordsOf(prompt))].filter((word) => {
+    if (words.has(word)) return true;
+    if (word.length >= 4) {
+      const stem = word.slice(0, 4);
+      return tokens.some(token => token.length >= 4 && token.startsWith(stem));
+    }
+    return false;
+  }).length;
 };
 
 const conceptHitsOf = (answer: string, concepts: readonly (readonly string[])[]) => {
-  const normalized = ` ${tokensOf(answer).join(' ')} `;
-  return concepts.filter(group => group.some(word => normalized.includes(` ${word.toLowerCase()} `))).length;
+  const tokens = tokensOf(answer);
+  const normalized = ` ${tokens.join(' ')} `;
+  return concepts.filter(group => group.some(word => matchesCueToken(tokens, normalized, word))).length;
 };
+
+/**
+ * True when a learner message contains text in the conversation's target
+ * language (or digits), so pure off-language Persian chat is caught cleanly
+ * while genuine short greetings and natural learner replies can be sent.
+ */
+export function hasTargetLanguageText(answer: string, language: TurnConversationLanguage): boolean {
+  const clean = answer.trim();
+  if (!clean) return false;
+  if (language === 'ru') return /[\u0400-\u04FF0-9]/.test(clean);
+  return /[A-Za-z0-9]/.test(clean);
+}
 
 /** Blocks free chat and off-mission messages before they are sent. */
 export function isAnswerOnMission(answer: string, prompt: TurnPrompt): boolean {

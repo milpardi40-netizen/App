@@ -315,7 +315,11 @@ const isQuestionSentence = (text: string, language: SharedLanguage) => {
   return language === 'ru' ? QUESTION_START_RU.test(clean) : QUESTION_START_EN.test(clean);
 };
 
-const contentWordsOf = (text: string) => [...new Set(tokensOf(text).filter(word => word.length > 2))];
+const SHORT_KEY_WORDS = new Set([
+  'am', 'is', 'are', 'do', 'go', 'my', 'we', 'he', 'she', 'no', 'hi',
+  'я', 'ты', 'мы', 'вы', 'он', 'да', 'не', 'на', 'от', 'из',
+]);
+const contentWordsOf = (text: string) => [...new Set(tokensOf(text).filter(word => word.length > 2 || SHORT_KEY_WORDS.has(word)))];
 
 function pickLessonSentences(lesson: SharedLesson, count: number, minWordsFloor: number): SharedSentence[] {
   const rich = lesson.sentences.filter(sentence => tokensOf(sentence.targetText).length >= minWordsFloor);
