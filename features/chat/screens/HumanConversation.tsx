@@ -94,7 +94,6 @@ export default function HumanConversationScreen() {
   const router = useRouter();
   const { conversationId, name, lessonId, lessonTitle, levelId, situation, language, conversationLevel: selectedLevel, pendingLevelId, pendingLevelRequestedBy } = useLocalSearchParams<{ conversationId: string; name?: string; lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string; conversationLevel?: string; pendingLevelId?: string; pendingLevelRequestedBy?: string }>();
   const [serverConversationLevel, setServerConversationLevel] = useState<number | null>(null);
-  const [activeLevelStartedAt, setActiveLevelStartedAt] = useState<string | null>(null);
   const chosenConversationLevel = selectedLevel !== undefined ? Number(selectedLevel) : (pendingLevelId !== undefined ? Number(pendingLevelId) : serverConversationLevel ?? undefined);
   const chosenLevel = conversationLevel(chosenConversationLevel);
   const freePlan = chosenConversationLevel !== undefined || lessonTitle ? freeConversationPlan({
@@ -136,11 +135,8 @@ export default function HumanConversationScreen() {
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('text');
   const [showEvaluation, setShowEvaluation] = useState(false);
   const [levelBusy, setLevelBusy] = useState(false);
-  // Voice recordings belong to the old chat composer. A practice room is transcript-only;
-  // old audio must not advance the turn or reappear as an audio bubble.
-  const practiceMessages = messages.filter(message => message.type !== 'voice' && (!activeLevelStartedAt || message.createdAt >= activeLevelStartedAt));
-  const myTurnMessages = practiceMessages.filter(message => message.senderId === myId && message.type === 'text');
-  const partnerTurnMessages = practiceMessages.filter(message => message.senderId !== myId && message.type === 'text');
+  const myTurnMessages = messages.filter(message => message.senderId === myId && (message.type === 'text' || message.type === 'voice'));
+  const partnerTurnMessages = messages.filter(message => message.senderId !== myId && (message.type === 'text' || message.type === 'voice'));
   const freeStep = freePlan ? Math.min(myTurnMessages.length, freePlan.prompts.length) : 0;
   const activeFreePrompt = freePlan && freeStep < freePlan.prompts.length ? freePlan.prompts[freeStep] : null;
   const myTurn = myTurnMessages.length <= partnerTurnMessages.length;
@@ -148,8 +144,8 @@ export default function HumanConversationScreen() {
     ? (freePlan.lessonExamples[freeStep] || (freeStep === 0 ? freePlan.starter : activeFreePrompt || 'حالا یک پرسش مرتبط از هم‌صحبت بپرس.'))
     : 'به موضوع درس پاسخ بده و گفت‌وگو را ادامه بده.';
   const roomLevel = chosenConversationLevel !== undefined ? `سطح ${chosenLevel.label}` : 'سطح انتخاب‌نشده';
-  const roomTopic = String(freePlan?.lessonTitle || situation || 'گفت‌وگوی درس‌محور');
-  const evaluation = useMemo<HumanConversationEvaluation>(() => evaluateHumanConversation(practiceMessages, myId, language === 'ru' ? 'ru' : 'en'), [language, practiceMessages, myId]);
+  const roomTopic = String(situation || freePlan?.title || 'گفت‌وگوی روزمره');
+  const evaluation = useMemo<HumanConversationEvaluation>(() => evaluateHumanConversation(messages, myId, language === 'ru' ? 'ru' : 'en'), [language, messages, myId]);
   const hasIncomingLevelRequest = pendingLevelId !== undefined && pendingLevelRequestedBy && myId && pendingLevelRequestedBy !== myId;
 
   const respondToLevel = async (accept: boolean) => {
@@ -177,8 +173,7 @@ export default function HumanConversationScreen() {
         if (!active) return;
         setMessages(rows);
         setMyId(userId);
-        setServerConversationLevel(activeLevel.levelId);
-        setActiveLevelStartedAt(activeLevel.startedAt);
+        setServerConversationLevel(activeLevel);
         channel = subscribeToMessages(conversationId, addMessage);
         setError(null);
       })
@@ -293,7 +288,7 @@ export default function HumanConversationScreen() {
         <Text style={styles.roomTopic}>{roomTopic}</Text>
         <View style={styles.roomMetaRow}>
           <View style={styles.metaChip}><Text style={styles.metaChipText}>{roomLevel}</Text></View>
-          <View style={styles.metaChip}><Timer size={13} color={Colors.neutral[400]} /><Text style={styles.metaChipText}>درس‌های {chosenLevel.label}</Text></View>
+          <View style={styles.metaChip}><Timer size={13} color={Colors.neutral[400]} /><Text style={styles.metaChipText}>مکالمهٔ آزاد</Text></View>
           <View style={styles.metaChip}><Volume2 size={13} color={Colors.success[400]} /><Text style={styles.metaChipText}>نوبتی</Text></View>
         </View>
       </View>
@@ -333,9 +328,9 @@ export default function HumanConversationScreen() {
             <View style={styles.privateNote}><ShieldCheck size={14} color={Colors.success[400]} /><Text style={styles.privateText}>فقط شما و این مخاطب پیام‌ها را می‌بینید.</Text></View>
             <View style={[styles.turnBanner, !myTurn && styles.turnBannerWaiting]}><View style={styles.turnIcon}><Mic size={15} color={myTurn ? Colors.primary[400] : Colors.success[400]} /></View><View style={styles.turnCopy}><Text style={styles.turnTitle}>{myTurn ? 'فقط پاسخ مرتبط با مأموریت' : 'در حال گوش دادن به هم‌صحبت'}</Text><Text style={styles.turnText}>{myTurn ? 'پاسخ را گفتاری یا نوشتاری بفرست؛ پیام آزاد و خارج از موضوع ارسال نمی‌شود.' : 'پس از پاسخ هم‌صحبت، نوبت شما به‌صورت خودکار باز می‌شود.'}</Text></View></View>
             {showEvaluation ? <EvaluationCard evaluation={evaluation} onClose={() => setShowEvaluation(false)} /> : null}
-          {!practiceMessages.length ? (
+          {!messages.length ? (
             <View style={styles.empty}><Text style={styles.emptyEmoji}>👋</Text><Text style={styles.emptyTitle}>گفتگو را شروع کنید</Text><Text style={styles.emptyDesc}>یک سلام ساده انگلیسی بهترین شروع است.</Text></View>
-          ) : practiceMessages.map((message) => {
+          ) : messages.map((message) => {
             const mine = message.senderId === myId;
             return (
               <View key={message.id} style={[styles.bubble, mine ? styles.mine : styles.theirs]}>
