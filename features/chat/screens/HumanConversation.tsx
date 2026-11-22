@@ -179,7 +179,6 @@ function TurnConversationScreen({
   const [ended, setEnded] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [keyboardInset, setKeyboardInset] = useState(0);
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [now, setNow] = useState(Date.now());
   // Real-contact conversations are scoped to ONE conversation language and the
   // highest CEFR level both learners have completed. The lesson-room entry
@@ -384,8 +383,8 @@ function TurnConversationScreen({
       });
     };
     const subscriptions = [
-      Keyboard.addListener('keyboardDidShow', event => { setKeyboardOpen(true); measure(event.endCoordinates.screenY); }),
-      Keyboard.addListener('keyboardDidHide', () => { setKeyboardOpen(false); setKeyboardInset(0); }),
+      Keyboard.addListener('keyboardDidShow', event => measure(event.endCoordinates.screenY)),
+      Keyboard.addListener('keyboardDidHide', () => setKeyboardInset(0)),
     ];
     return () => subscriptions.forEach(subscription => subscription.remove());
   }, []);
@@ -548,58 +547,49 @@ function TurnConversationScreen({
         )
       ) : (
         <>
-          <View style={[styles.statusCard, keyboardOpen && styles.statusCardCompact, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
+          <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
             <View style={styles.statusTop}>
               <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
                 <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
                 <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>{state.finished ? 'مکالمه کامل شد' : ended ? 'مکالمه پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب است'}</Text>
               </View>
               <View style={styles.statusRightMeta}>
-                {!keyboardOpen && plan.difficultyLabel ? (
+                {plan.difficultyLabel ? (
                   <View style={styles.difficultyBadge}>
                     <Text style={styles.difficultyBadgeText}>{plan.difficultyLabel}</Text>
                   </View>
                 ) : null}
                 <Text style={styles.turnCount}>{fa(state.completedTurns)} از {fa(plan.turns.length)} نوبت</Text>
-                {keyboardOpen && lessonPlan ? (
-                  <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => { Keyboard.dismiss(); setPickingLesson(true); }} style={styles.changeLesson}>
-                    <Text style={styles.changeLessonText}>تغییر درس</Text>
-                  </Pressable>
-                ) : null}
               </View>
             </View>
-            {!keyboardOpen ? (
-              <>
-                <View style={styles.lessonRow}>
-                  <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
-                    <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
-                  </View>
-                  <Text style={styles.topicLine}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
-                  {lessonPlan ? (
-                    <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
-                      <Text style={styles.changeLessonText}>تغییر درس</Text>
-                    </Pressable>
-                  ) : null}
-                </View>
-                {lessonPlan ? <Text style={styles.situationLine}>{plan.missionFa}</Text> : null}
-                <View style={styles.progressRow}>
-                  <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
-                  <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
-                </View>
-              </>
-            ) : null}
+            <View style={styles.lessonRow}>
+              <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
+                <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
+              </View>
+              <Text style={styles.topicLine}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
+              {lessonPlan ? (
+                <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
+                  <Text style={styles.changeLessonText}>تغییر درس</Text>
+                </Pressable>
+              ) : null}
+            </View>
+            {lessonPlan ? <Text style={styles.situationLine}>{plan.missionFa}</Text> : null}
+            <View style={styles.progressRow}>
+              <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
+              <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
+            </View>
           </View>
 
-          <View style={[styles.missionCard, keyboardOpen && styles.missionCardCompact]}>
+          <View style={styles.missionCard}>
             <View style={styles.missionHeader}>
               <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
               {state.currentTurn ? <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View> : null}
             </View>
             {state.currentPrompt ? (
               <>
-                <Text style={styles.missionText} numberOfLines={keyboardOpen ? 2 : undefined}>{state.currentPrompt.text}</Text>
-                <Text style={styles.missionHint} numberOfLines={keyboardOpen ? 1 : undefined}>{state.currentPrompt.hint}</Text>
-                {!keyboardOpen && lessonPlan && state.currentPrompt.cues.length > 0 ? (
+                <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
+                <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
+                {lessonPlan && state.currentPrompt.cues.length > 0 ? (
                   <View style={styles.cueRow}>
                     {state.currentPrompt.cues.slice(0, 4).map(cue => (
                       <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
@@ -671,7 +661,7 @@ function TurnConversationScreen({
           </ScrollView>
 
           <KeyboardAttachedView onLayout={event => { composerHeight.current = event.nativeEvent.layout.height; }}>
-            <View style={[styles.answerCard, keyboardOpen && styles.answerCardCompact]}>
+            <View style={styles.answerCard}>
               {state.finished || ended ? (
                 <View style={styles.endedRow}>
                   <View style={styles.endedCopy}>
@@ -686,17 +676,12 @@ function TurnConversationScreen({
               ) : (
                 <>
                   <View style={styles.modeRow}>
-                    <View style={styles.modeGroup}>
-                      <Text style={styles.modeLabel}>پاسخ:</Text>
-                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
-                        <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
-                      </Pressable>
-                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
-                        <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
-                      </Pressable>
-                    </View>
-                    <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButtonInline} onPress={confirmEnd}>
-                      <Text style={styles.endButtonText}>پایان مکالمه</Text>
+                    <Text style={styles.modeLabel}>پاسخ:</Text>
+                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
+                      <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
+                    </Pressable>
+                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
+                      <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
                     </Pressable>
                   </View>
 
@@ -704,10 +689,10 @@ function TurnConversationScreen({
 
                   {state.myTurn ? (
                     inputMode === 'text' ? (
-                      <View style={styles.composeRow}>
+                      <>
                         <TextInput
                           accessibilityLabel="پاسخ این نوبت"
-                          style={[styles.input, styles.composeInput, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]}
+                          style={[styles.input, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]}
                           value={input}
                           onChangeText={setInput}
                           placeholder="پاسخ این نوبت را بنویس…"
@@ -720,14 +705,14 @@ function TurnConversationScreen({
                           accessibilityRole="button"
                           accessibilityLabel="ثبت پاسخ"
                           accessibilityState={{ disabled: sending || !input.trim() }}
-                          style={[styles.submitButtonCompact, (sending || !input.trim()) && styles.disabled]}
+                          style={[styles.submitButton, (sending || !input.trim()) && styles.disabled]}
                           disabled={sending || !input.trim()}
                           onPress={() => void sendAnswer(input)}
                         >
                           {sending ? <ActivityIndicator size="small" color="#FFFFFF" /> : <Send size={16} color="#FFFFFF" />}
-                          <Text style={styles.submitButtonText}>ارسال</Text>
+                          <Text style={styles.submitButtonText}>ثبت پاسخ</Text>
                         </Pressable>
-                      </View>
+                      </>
                     ) : (
                       <VoiceAnswerInput
                         locale={effectiveLanguage === 'ru' ? 'ru-RU' : 'en-US'}
@@ -742,6 +727,10 @@ function TurnConversationScreen({
                       <Text style={styles.waitingText}>نوبت مخاطب است؛ منتظر پاسخ او بمان.</Text>
                     </View>
                   )}
+
+                  <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButton} onPress={confirmEnd}>
+                    <Text style={styles.endButtonText}>پایان مکالمه</Text>
+                  </Pressable>
                 </>
               )}
             </View>
@@ -769,7 +758,6 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   centerText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
   statusCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 8, shadowColor: '#1E1B4B', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 2 }, elevation: 2 },
-  statusCardCompact: { marginTop: 4, paddingVertical: 6, paddingHorizontal: Spacing.sm, gap: 0 },
   statusTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   statusRightMeta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
   turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 10, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12' },
@@ -793,7 +781,6 @@ const styles = StyleSheet.create({
   progressFill: { height: '100%', borderRadius: 3, backgroundColor: Colors.primary[400] },
   progressText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[600], width: 34, textAlign: 'left' },
   missionCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 6 },
-  missionCardCompact: { marginTop: 4, paddingVertical: 7, paddingHorizontal: Spacing.sm, gap: 3 },
   missionHeader: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
   missionKicker: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.warning[700], textAlign: 'right' },
   missionFocusPill: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
@@ -833,20 +820,16 @@ const styles = StyleSheet.create({
   finishedTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.success[700], textAlign: 'right' },
   finishedText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
   answerCard: { padding: Spacing.md, paddingBottom: 12, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 8 },
-  answerCardCompact: { paddingVertical: 8, paddingHorizontal: Spacing.sm, gap: 6 },
-  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
-  modeGroup: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
   modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], marginLeft: 3 },
   modeButton: { minHeight: 30, borderRadius: Radius.full, paddingHorizontal: 12, justifyContent: 'center', backgroundColor: '#F5F6FB' },
   modeButtonActive: { backgroundColor: Colors.primary[500] + '18', borderWidth: 1, borderColor: Colors.primary[500] + '35' },
   modeButtonText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[500] },
   modeButtonTextActive: { color: Colors.primary[600], fontFamily: Typography.boldFontFamily },
-  composeRow: { flexDirection: 'row-reverse', alignItems: 'flex-end', gap: 8 },
-  input: { minHeight: 44, maxHeight: 84, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 9, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
-  composeInput: { flex: 1 },
-  submitButtonCompact: { minHeight: 44, paddingHorizontal: 14, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  input: { minHeight: 48, maxHeight: 96, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
+  submitButton: { minHeight: 44, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   submitButtonText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: '#FFFFFF' },
-  endButtonInline: { minHeight: 28, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center' },
+  endButton: { minHeight: 32, alignItems: 'center', justifyContent: 'center' },
   endButtonText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.error[300] },
   waitingRow: { minHeight: 52, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   waitingText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
