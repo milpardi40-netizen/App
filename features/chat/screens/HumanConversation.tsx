@@ -243,7 +243,9 @@ function TurnConversationScreen({
     return selected;
   }, [messages]);
   const chosenLessonId = lessonSelection?.lessonId ?? null;
-  const chosenLesson = useMemo(() => findSharedLesson(chosenLessonId), [chosenLessonId]);
+  const rawChosenLesson = useMemo(() => findSharedLesson(chosenLessonId), [chosenLessonId]);
+  // Never let a previous English lesson marker hijack a Russian conversation (or vice versa).
+  const chosenLesson = rawChosenLesson && rawChosenLesson.language === singleLanguage ? rawChosenLesson : null;
 
   const fallbackPlan = useMemo<TurnConversationPlan>(() => buildTurnConversationPlan({
     conversationId,
@@ -733,7 +735,7 @@ function TurnConversationScreen({
                           style={[styles.input, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]}
                           value={input}
                           onChangeText={setInput}
-                          placeholder="پاسخ این نوبت را بنویس…"
+                          placeholder={effectiveLanguage === 'ru' ? 'پاسخ روسی این نوبت را به خط سیریلیک بنویس…' : 'پاسخ انگلیسی این نوبت را بنویس…'}
                           placeholderTextColor={Colors.neutral[600]}
                           multiline
                           maxLength={320}

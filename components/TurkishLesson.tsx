@@ -194,9 +194,12 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
   }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
-  const speak = useCallback((text: string, rate = 0.78) => {
+  const speak = useCallback((text: string, rate = 0.78, onDone?: () => void) => {
     setSpeechError('');
-    void playTurkishSpeech(text, rate, () => setSpeechError('صدای ترکی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.'));
+    void playTurkishSpeech(text, rate, () => {
+      setSpeechError('صدای ترکی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.');
+      onDone?.();
+    }, onDone);
   }, []);
 
   // Read the visible main sentence on entry, resume, and each sentence change.
@@ -511,7 +514,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
 
         {stage >= 8 && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
-            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="tr-TR" accent={Palette.success} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('tr', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
+            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="tr-TR" accent={Palette.success} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('tr', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
             { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
           {false ? null : <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>

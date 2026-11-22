@@ -10,22 +10,23 @@ import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 
 type Item = { id: string; text: string; fa?: string };
 export type SpeakDrillResult = { points?: number; average: number; scores: Record<string, number> };
-type Props = { items: Item[]; locale: string; accent?: string; onSpeak?: (text: string) => void; /** Called once when the learner reaches the result page. */ onFinish?: (result: SpeakDrillResult) => void };
+type Props = { items: Item[]; locale: string; accent?: string; onSpeak?: (text: string, onDone?: () => void) => void; /** Called once when the learner reaches the result page. */ onFinish?: (result: SpeakDrillResult) => void };
 
 const PASS_THRESHOLD = 70;
 const AUTO_ADVANCE_MS = 950;
 
 /**
  * «آزمون گفتاری» — a speaking checkpoint shared across all 6 languages:
- * the learner says every phrase, sentence, or word one by one, earns points and streak
- * bonuses on pass (≥ 70%), automatically advances to the next item, and sees a full
- * score + points summary at the end.
+ * for each item, the device speaks the target text first, automatically opens the microphone
+ * right after playback finishes, awards points and streak bonuses on pass (≥ 70%),
+ * automatically advances to the next item and repeats, and shows a full summary at the end.
  */
 export default function SpeakDrill({ items, locale, accent = Palette.primary, onSpeak, onFinish }: Props) {
   const [index, setIndex] = useState(0);
   const [scores, setScores] = useState<Record<string, number>>({});
   const [points, setPoints] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [micReady, setMicReady] = useState(false);
   const [passNotice, setPassNotice] = useState<{ score: number; gained: number; last: boolean } | null>(null);
   const [done, setDone] = useState(false);
 
@@ -34,6 +35,8 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
   itemsRef.current = items;
   const onFinishRef = useRef(onFinish);
   onFinishRef.current = onFinish;
+  const onSpeakRef = useRef(onSpeak);
+  onSpeakRef.current = onSpeak;
 
   const indexRef = useRef(0);
   const scoresRef = useRef<Record<string, number>>({});
@@ -42,6 +45,8 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
   const awardedIdsRef = useRef<Set<string>>(new Set());
   const doneRef = useRef(false);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const speakFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const speakTokenRef = useRef(0);
 
   const clearPendingAdvance = useCallback(() => {
     if (advanceTimerRef.current) {
@@ -50,11 +55,43 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     }
   }, []);
 
-  useEffect(() => () => clearPendingAdvance(), [clearPendingAdvance]);
+  const clearSpeakFallback = useCallback(() => {
+    if (speakFallbackRef.current) {
+      clearTimeout(speakFallbackRef.current);
+      speakFallbackRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => () => {
+    clearPendingAdvance();
+    clearSpeakFallback();
+    speakTokenRef.current += 1;
+  }, [clearPendingAdvance, clearSpeakFallback]);
+
+  const speakAndOpenMic = useCallback((text: string) => {
+    clearSpeakFallback();
+    const token = ++speakTokenRef.current;
+    const openMic = () => {
+      if (speakTokenRef.current !== token || doneRef.current) return;
+      clearSpeakFallback();
+      setMicReady(true);
+    };
+    const speaker = onSpeakRef.current;
+    if (!speaker) {
+      setMicReady(true);
+      return;
+    }
+    setMicReady(false);
+    const fallbackMs = Math.min(7500, Math.max(2500, text.length * 140));
+    speakFallbackRef.current = setTimeout(openMic, fallbackMs);
+    speaker(text, openMic);
+  }, [clearSpeakFallback]);
 
   // Key reset on item IDs (not parent array identity) so parent re-renders never wipe progress or cancel auto-advance.
   useEffect(() => {
     clearPendingAdvance();
+    clearSpeakFallback();
+    speakTokenRef.current += 1;
     indexRef.current = 0;
     scoresRef.current = {};
     streakRef.current = 0;
@@ -65,9 +102,10 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     pointsRef.current = 0;
     setPoints(0);
     setStreak(0);
+    setMicReady(false);
     setPassNotice(null);
     setDone(false);
-  }, [itemsKey, clearPendingAdvance]);
+  }, [itemsKey, clearPendingAdvance, clearSpeakFallback]);
 
   const completeQuiz = useCallback((latestScores: Record<string, number>) => {
     clearPendingAdvance();
@@ -152,10 +190,18 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     return values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : 0;
   }, [items, scores]);
 
+  // Auto-pronounce each item first, then automatically open the microphone right after playback finishes.
+  useEffect(() => {
+    if (done || !current) return;
+    speakAndOpenMic(current.text);
+  }, [done, current?.id, current?.text, speakAndOpenMic]);
+
   if (!items.length) return null;
 
   const restart = () => {
     clearPendingAdvance();
+    clearSpeakFallback();
+    speakTokenRef.current += 1;
     indexRef.current = 0;
     scoresRef.current = {};
     streakRef.current = 0;
@@ -166,6 +212,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
     pointsRef.current = 0;
     setPoints(0);
     setStreak(0);
+    setMicReady(false);
     setPassNotice(null);
     setDone(false);
   };
@@ -223,8 +270,8 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
       </View>
       <Text style={styles.sentence}>{current.text}</Text>
       {current.fa ? <Text keepColor style={styles.persian}>{current.fa}</Text> : null}
-      {onSpeak ? <Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونه" style={styles.listen} onPress={() => onSpeak(current.text)}><Volume2 size={16} color={accent} /><Text keepColor style={[styles.listenText, { color: accent }]}>شنیدن نمونه</Text></Pressable> : null}
-      <SpeakCheck key={current.id} text={current.text} locale={locale} accent={accent} title="بگو" onResult={onResult} />
+      {onSpeak ? <Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونه" style={styles.listen} onPress={() => speakAndOpenMic(current.text)}><Volume2 size={16} color={accent} /><Text keepColor style={[styles.listenText, { color: accent }]}>شنیدن نمونه</Text></Pressable> : null}
+      <SpeakCheck key={current.id} text={current.text} locale={locale} accent={accent} title="بگو" autoStart={micReady && !passNotice} onResult={onResult} />
       {passNotice ? (
         <View style={styles.passBanner}>
           <CheckCircle2 size={16} color="#15803D" />

@@ -233,9 +233,19 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
   }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
-  const speak = useCallback((text: string, rate = narrationRate(course.locale, 'normal')) => {
+  const speak = useCallback((text: string, rate = narrationRate(course.locale, 'normal'), onDone?: () => void) => {
     setSpeechError('');
-    void playStarterSpeech(course.locale, text, rate, () => setSpeechError('پخش صدا ممکن نشد؛ موتور گفتار و بستهٔ صوتی این زبان را در تنظیمات دستگاه بررسی کنید.'), () => setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد. تنظیمات گفتار دستگاه را بررسی کنید.'));
+    void playStarterSpeech(
+      course.locale,
+      text,
+      rate,
+      () => {
+        setSpeechError('پخش صدا ممکن نشد؛ موتور گفتار و بستهٔ صوتی این زبان را در تنظیمات دستگاه بررسی کنید.');
+        onDone?.();
+      },
+      () => setSpeechError('صدای منطقه‌ای تأیید نشد؛ تلفظ ممکن است با لهجهٔ انتخاب‌شده متفاوت باشد. تنظیمات گفتار دستگاه را بررسی کنید.'),
+      onDone,
+    );
   }, [course.locale]);
 
   // Read the visible main sentence on entry, resume, and each sentence change.
@@ -550,7 +560,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
 
         {stage >= 8 && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
-            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale={course.locale} accent={Palette.success} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome(course.id, lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
+            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale={course.locale} accent={Palette.success} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome(course.id, lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
             { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
           {false ? null : <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>

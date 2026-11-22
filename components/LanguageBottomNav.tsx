@@ -15,6 +15,7 @@ export interface LanguageNavItem {
   path: string;
   label: string;
   icon: LucideIcon;
+  params?: Record<string, string>;
 }
 
 export function LanguageBottomNav({ items, rootPath }: {
@@ -30,8 +31,12 @@ export function LanguageBottomNav({ items, rootPath }: {
       {items.map(item => {
         const active = item.path === rootPath ? pathname === rootPath : pathname.startsWith(item.path);
         const Icon = item.icon;
+        const open = () => {
+          if (item.params) router.replace({ pathname: item.path, params: item.params } as never);
+          else router.replace(item.path as never);
+        };
         return (
-          <Pressable key={item.path} accessibilityRole="button" accessibilityState={{ selected: active }} style={styles.item} onPress={() => router.replace(item.path as never)}>
+          <Pressable key={item.path} accessibilityRole="button" accessibilityState={{ selected: active }} style={styles.item} onPress={open}>
             <View style={[styles.iconWrap, active && styles.iconWrapActive]}><Icon size={19} color={active ? Palette.primary : Palette.muted} strokeWidth={active ? 2.4 : 2} /></View>
             <Text style={[styles.label, active && styles.labelActive]}>{item.label}</Text>
           </Pressable>

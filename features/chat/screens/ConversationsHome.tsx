@@ -41,7 +41,7 @@ export default function ConversationsHome() {
   const [openingSupport, setOpeningSupport] = useState(false);
   // The conversation hub is shared by every language; keep the learner's own course navigation under it.
   const [activeLanguage, setActiveLanguage] = useState<ResumeLanguage>(null);
-  useEffect(() => {
+  const refreshResumeLanguage = useCallback(() => {
     let alive = true;
     void readResumeSnapshot()
       .then((snapshot) => {
@@ -51,6 +51,7 @@ export default function ConversationsHome() {
       .catch(() => undefined);
     return () => { alive = false; };
   }, []);
+  useEffect(() => refreshResumeLanguage(), [refreshResumeLanguage]);
   const russianAvailable = isLanguageEnabled('ru');
   const englishAvailable = !RUSSIAN_ONLY_BUILD && isLanguageEnabled('en');
   const convLanguage: SharedLanguage = !russianAvailable
@@ -64,7 +65,9 @@ export default function ConversationsHome() {
           : activeLanguage === 'ru'
             ? 'ru'
             : 'en';
-  const homePath = activeLanguage && activeLanguage !== 'en' ? `/learn/${activeLanguage}` : activeLanguage === 'en' ? '/lang' : '/languages';
+  const navLanguage: ResumeLanguage = language === 'ru' ? 'ru' : language === 'en' ? 'en' : activeLanguage;
+  const homePath = navLanguage && navLanguage !== 'en' ? `/learn/${navLanguage}` : navLanguage === 'en' ? '/lang' : '/languages';
+  const isRussian = convLanguage === 'ru';
 
   const openSupport = () => {
     if (openingSupport) return;
@@ -101,12 +104,13 @@ export default function ConversationsHome() {
 
   useFocusEffect(
     useCallback(() => {
+      const stopResume = refreshResumeLanguage();
       // Nothing to fetch without a real project; show the setup checklist
       // instead of a failed request.
       if (!configured) {
         setLoadingContacts(false);
         setContactsError(null);
-        return;
+        return stopResume;
       }
       // Publish my completed levels for both English and Russian so any partner
       // can compute the highest level we have both completed.
@@ -132,8 +136,8 @@ export default function ConversationsHome() {
         .finally(() => {
           if (active) setLoadingContacts(false);
         });
-      return () => { active = false; };
-    }, [configured]),
+      return () => { active = false; stopResume(); };
+    }, [configured, refreshResumeLanguage]),
   );
 
   return (
@@ -141,8 +145,8 @@ export default function ConversationsHome() {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View style={styles.headerCopy}>
-            <Text style={styles.title}>مکالمه</Text>
-            <Text style={styles.subtitle}>تمرین واقعی، بدون ترس از اشتباه</Text>
+            <Text style={styles.title}>{isRussian ? 'مکالمهٔ روسی' : 'مکالمه'}</Text>
+            <Text style={styles.subtitle}>{isRussian ? 'گفت‌وگوی واقعی و گام‌به‌گام به زبان روسی' : 'تمرین واقعی انگلیسی، بدون ترس از اشتباه'}</Text>
           </View>
           <PageNavigation tone="dark" backFallback={homePath} />
         </View>
@@ -160,16 +164,20 @@ export default function ConversationsHome() {
         <View style={styles.practiceCard}>
           <View style={styles.practiceHeader}>
             <Sparkles size={18} color={Colors.primary[300]} />
-            <Text style={styles.practiceKicker}>تمرین مکالمهٔ سطح‌محور</Text>
+            <Text style={styles.practiceKicker}>{isRussian ? 'تمرین مکالمهٔ سطح‌محور روسی' : 'تمرین مکالمهٔ سطح‌محور'}</Text>
           </View>
-          <Text style={styles.practiceTitle}>۳ تا ۶ نوبت، متناسب با سطح مشترک</Text>
-          <Text style={styles.practiceText}>سطح مکالمه به‌صورت خودکار روی بالاترین سطحی تنظیم می‌شود که هر دو نفر کامل کرده‌اید؛ تعداد نوبت‌ها و سختی مأموریت‌ها هم با همان سطح هماهنگ می‌شود.</Text>
+          <Text style={styles.practiceTitle}>{isRussian ? '۳ تا ۶ نوبت روسی، متناسب با سطح مشترک' : '۳ تا ۶ نوبت، متناسب با سطح مشترک'}</Text>
+          <Text style={styles.practiceText}>
+            {isRussian
+              ? 'موضوعات از درس‌های Pre-A1 تا C1 روسی (از الفبا و احوال‌پرسی تا گفت‌وگوی آزاد) انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک روسی شما و مخاطب تنظیم می‌شود.'
+              : 'سطح مکالمه به‌صورت خودکار روی بالاترین سطحی تنظیم می‌شود که هر دو نفر کامل کرده‌اید؛ تعداد نوبت‌ها و سختی مأموریت‌ها هم با همان سطح هماهنگ می‌شود.'}
+          </Text>
           {!lessonContext ? (
             <View style={styles.langToggleRow}>
               <Text style={styles.langToggleLabel}>زبان مکالمه:</Text>
               <View style={[styles.langChip, styles.langChipActive]}>
                 <Text style={[styles.langChipText, styles.langChipTextActive]}>
-                  {convLanguage === 'ru' ? 'روسی' : 'انگلیسی'}
+                  {isRussian ? 'روسی (Русский)' : 'انگلیسی (English)'}
                 </Text>
               </View>
             </View>
@@ -229,14 +237,14 @@ export default function ConversationsHome() {
                 </Pressable>
               );
             })}
-            <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
+            <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
           </View>
         ) : (
           <View style={styles.emptyContacts}>
             <View style={styles.peopleIcon}><UserRound size={30} color={Colors.primary[400]} /></View>
             <Text style={styles.emptyTitle}>{contactsError ? 'دریافت مخاطبان انجام نشد' : 'هنوز مخاطبی اضافه نکرده‌اید'}</Text>
-            <Text style={styles.emptyDesc}>{contactsError || 'دوست مسلط به این زبان را با کد دعوت اضافه کنید و در محیطی خصوصی تمرین کنید.'}</Text>
-            <Pressable style={styles.inviteButton} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}>
+            <Text style={styles.emptyDesc}>{contactsError || (isRussian ? 'دوست روسی‌زبان یا هم‌مسیر یادگیری روسی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های روسی تمرین کنید.' : 'دوست مسلط به انگلیسی را با کد دعوت اضافه کنید و در محیطی خصوصی تمرین کنید.')}</Text>
+            <Pressable style={styles.inviteButton} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}>
               <Plus size={19} color={Colors.onColor} />
               <Text style={styles.inviteText}>افزودن مخاطب واقعی</Text>
             </Pressable>
@@ -250,17 +258,17 @@ export default function ConversationsHome() {
         <View style={styles.assistCard}>
           <Sparkles size={21} color={Colors.warning[400]} />
           <View style={styles.assistText}>
-            <Text style={styles.assistTitle}>کمک هوشمند کنار گفتگوی واقعی</Text>
-            <Text style={styles.assistDesc}>قبل از ارسال، ترجمه، اصلاح جمله و پیشنهاد پاسخ فقط برای شما نمایش داده می‌شود.</Text>
+            <Text style={styles.assistTitle}>{isRussian ? 'کمک هوشمند کنار گفتگوی روسی' : 'کمک هوشمند کنار گفتگوی واقعی'}</Text>
+            <Text style={styles.assistDesc}>{isRussian ? 'قبل از ارسال پیام روسی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.' : 'قبل از ارسال، ترجمه، اصلاح جمله و پیشنهاد پاسخ فقط برای شما نمایش داده می‌شود.'}</Text>
           </View>
         </View>
 
         <View style={styles.modeRow}>
-          <View style={styles.modeCard}><MessageCircle size={20} color={Colors.success[400]} /><Text style={styles.modeTitle}>پیام متنی</Text><Text style={styles.modeDesc}>با اصلاح اختیاری</Text></View>
-          <View style={styles.modeCard}><Mic2 size={20} color={Colors.error[300]} /><Text style={styles.modeTitle}>پیام صوتی</Text><Text style={styles.modeDesc}>تمرین تلفظ طبیعی</Text></View>
+          <View style={styles.modeCard}><MessageCircle size={20} color={Colors.success[400]} /><Text style={styles.modeTitle}>{isRussian ? 'پیام متنی روسی' : 'پیام متنی'}</Text><Text style={styles.modeDesc}>{isRussian ? 'با خط سیریلیک و بررسی هدف' : 'با اصلاح اختیاری'}</Text></View>
+          <View style={styles.modeCard}><Mic2 size={20} color={Colors.error[300]} /><Text style={styles.modeTitle}>{isRussian ? 'پیام صوتی روسی' : 'پیام صوتی'}</Text><Text style={styles.modeDesc}>{isRussian ? 'تشخیص و تمرین تلفظ روسی' : 'تمرین تلفظ طبیعی'}</Text></View>
         </View>
       </ScrollView>
-      {activeLanguage === 'ru' ? <RussianBottomNav /> : activeLanguage === 'tr' ? <TurkishBottomNav /> : activeLanguage && activeLanguage !== 'en' && NEW_COURSES[activeLanguage as keyof typeof NEW_COURSES] ? <StarterBottomNav course={NEW_COURSES[activeLanguage as keyof typeof NEW_COURSES]} /> : <AppBottomNav />}
+      {navLanguage === 'ru' ? <RussianBottomNav /> : navLanguage === 'tr' ? <TurkishBottomNav /> : navLanguage && navLanguage !== 'en' && NEW_COURSES[navLanguage as keyof typeof NEW_COURSES] ? <StarterBottomNav course={NEW_COURSES[navLanguage as keyof typeof NEW_COURSES]} /> : <AppBottomNav />}
     </View>
   );
 }

@@ -70,6 +70,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const [useRecorded, setUseRecorded] = useState(false);
   const [autoSwitched, setAutoSwitched] = useState(false);
   const [spokenScore, setSpokenScore] = useState<number | null>(null);
+  const [autoAdvancing, setAutoAdvancing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [voiceError, setVoiceError] = useState('');
@@ -78,6 +79,8 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const autoChain = useRef(0);
   /** One automatic pass per card, even if the effect is re-run by a strict-mode render. */
   const autoPlayed = useRef('');
+  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoAdvancedCard = useRef('');
 
   useEffect(() => {
     let alive = true;
@@ -127,6 +130,10 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const stopAll = useCallback(() => {
     autoChain.current += 1;
     playback.current += 1;
+    if (autoAdvanceTimer.current) {
+      clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = null;
+    }
     void stopLabSpeech(language);
   }, [language]);
 
@@ -184,6 +191,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const resetWord = useCallback(() => {
     setSpoken(false);
     setSpokenScore(null);
+    setAutoAdvancing(false);
     setError('');
     setVoiceError('');
     stopAll();
@@ -207,6 +215,23 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     goNext();
   }, [word, progress, spoken, saving, language, goNext]);
 
+  const autoAdvanceAfterPass = useCallback(() => {
+    if (!word || !progress) return;
+    const cardKey = `${word.id}:${index}`;
+    if (autoAdvancedCard.current === cardKey) return;
+    autoAdvancedCard.current = cardKey;
+    setAutoAdvancing(true);
+    const nextProgress = rateWordCard(progress, word.id, 'good', true, new Date());
+    setProgress(nextProgress);
+    void saveWordProgress(language, nextProgress).catch(() => undefined);
+    void markPlanStep('speak').catch(() => undefined);
+    if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current);
+    autoAdvanceTimer.current = setTimeout(() => {
+      autoAdvanceTimer.current = null;
+      goNext();
+    }, 900);
+  }, [goNext, index, language, progress, word]);
+
   /**
    * Every time a card enters the listening step — the first card and every card after a rating —
    * the phone speaks it once in one pass: the word and its Persian meaning, then the sentence that
@@ -222,9 +247,14 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     void (async () => {
       await playOnce(word);
       if (autoChain.current !== token) return;
-      if (!hasSpokenSentence(word)) return;
-      setPhase('sentence');
-      await playSentence(word);
+      if (hasSpokenSentence(word)) {
+        setPhase('sentence');
+        await playSentence(word);
+        if (autoChain.current !== token) return;
+      }
+      await new Promise<void>(resolve => setTimeout(resolve, 350));
+      if (autoChain.current !== token) return;
+      setPhase('recall');
     })();
   }, [phase, word, index, playOnce, playSentence]);
 
@@ -363,8 +393,12 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
               onResult={result => {
                 setError('');
                 setSpokenScore(result.score);
-                if (result.score >= 70) setSpoken(true);
-                else setError('نزدیک بود؛ یک بار دیگر آهسته‌تر و واضح‌تر بگو.');
+                if (result.score >= 70) {
+                  setSpoken(true);
+                  autoAdvanceAfterPass();
+                } else {
+                  setError('نزدیک بود؛ یک بار دیگر آهسته‌تر و واضح‌تر بگو.');
+                }
               }}
             />
             <View style={styles.rowButtons}>
@@ -375,7 +409,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
                 <Volume2 size={14} color={C.primaryDark} /><Text style={styles.ghostText}>واژه را بشنو</Text>
               </Pressable>
             </View>
-            {spoken ? <View style={styles.okBox}><Check size={15} color={C.success} /><Text style={styles.okText}>درست گفتی؛ گفتار موفق ثبت شد.</Text></View> : null}
+            {spoken ? <View style={styles.okBox}><Check size={15} color={C.success} /><Text style={styles.okText}>{autoAdvancing ? 'درست گفتی؛ انتقال خودکار به واژهٔ بعدی…' : 'درست گفتی؛ گفتار موفق ثبت شد.'}</Text></View> : null}
             {!spoken && spokenScore !== null ? <Text style={styles.hintWarm}>راهنمایی: {firstLetterHint(word)} · آهسته‌تر بگو یا این واژه را بعداً تمرین کن.</Text> : null}
             {!!error && <Text style={styles.hintError}>{error}</Text>}
             {!!voiceError && <Text style={styles.hintWarm}>{voiceError}</Text>}

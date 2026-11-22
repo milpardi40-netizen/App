@@ -30,8 +30,12 @@ export function AppBottomNav() {
           ? pathname === '/lang'
           : pathname === item.path || pathname.startsWith(`${item.path}/`);
         const Icon = item.icon;
+        const open = () => {
+          if (item.path === '/conversations') router.replace({ pathname: '/conversations', params: { language: 'en' } } as never);
+          else router.replace(item.path as never);
+        };
         return (
-          <Pressable key={item.path} accessibilityRole="button" accessibilityState={{ selected: active }} style={styles.item} onPress={() => router.replace(item.path as never)}>
+          <Pressable key={item.path} accessibilityRole="button" accessibilityState={{ selected: active }} style={styles.item} onPress={open}>
             <View style={[styles.iconWrap, active && styles.iconWrapActive]}>
               <Icon size={19} color={active ? Palette.primary : Palette.muted} strokeWidth={active ? 2.4 : 2} />
               {item.path === '/conversations' && chatUnreadCount > 0 && (

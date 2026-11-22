@@ -65,9 +65,11 @@ export default function InviteContactScreen() {
     void createInvite();
   }, [configured]);
 
+  const effectiveLanguage = (typeof routeLanguage === 'string' && INVITE_MESSAGES[routeLanguage]) ? routeLanguage : (language ?? 'en');
+
   const shareInvite = async () => {
     if (!inviteCode) return;
-    await Share.share({ message: (INVITE_MESSAGES[language ?? 'en'] ?? INVITE_MESSAGES.en)(inviteCode) });
+    await Share.share({ message: (INVITE_MESSAGES[effectiveLanguage] ?? INVITE_MESSAGES.en)(inviteCode) });
   };
 
   const claimInvite = async () => {
@@ -80,7 +82,7 @@ export default function InviteContactScreen() {
     setError(null);
     try {
       const conversationId = await claimRealContactInvite(code);
-      router.replace({ pathname: '/conversations/human/[conversationId]', params: { conversationId, lessonId, lessonTitle, levelId, situation, language: routeLanguage } } as never);
+      router.replace({ pathname: '/conversations/human/[conversationId]', params: { conversationId, lessonId, lessonTitle, levelId, situation, language: effectiveLanguage } } as never);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'اتصال مخاطب انجام نشد.');
     } finally {
