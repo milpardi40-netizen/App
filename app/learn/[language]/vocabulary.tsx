@@ -14,13 +14,13 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
  */
 const WordLab = lazy(() => import('@/components/WordLab'));
 
-/** «واژه‌ها» for the newer courses. German has the word lab; French/Spanish keep their lesson flow. */
+/** «واژه‌ها» for the courses with the word lab (German, English). French/Spanish keep their lesson flow. */
 export default function LanguageVocabularyRoute() {
   const { language } = useLocalSearchParams<{ language: string }>();
-  if (language === 'de') {
+  if (language === 'de' || language === 'en') {
     return (
       <Suspense fallback={<View style={labLoading.root} accessibilityRole="progressbar"><ActivityIndicator size="large" color="#4338CA" /></View>}>
-        <WordLab language="de" />
+        <WordLab language={language} />
       </Suspense>
     );
   }

@@ -156,7 +156,7 @@ export const RUSSIAN_LEVELS: readonly RussianCourseLevel[] = [
     id: 0,
     title: 'Absolute Beginner',
     cefr: 'Pre-A1',
-    description: 'آغاز از صفر: نخستین واژه‌ها، سلام و خداحافظی، بله و نه، «من هستم» و «من دارم»، عددها، ضمیرهای ساده و جمله‌های کوتاه روزمره — ۱۴ درس یکپارچه بدون تکرار',
+    description: 'آغاز از صفر مطلق در ۸ بخش تدریجی: اولین کلمات، کلمات پایه، عبارت‌های ساده، ترکیب کلمات، اولین جمله‌ها، سؤال‌های ساده، جمله‌های روزمره و مکالمات ابتدایی — ۲۸ درس پیوسته با دستور زبان تدریجی',
     color: '#94a3b8',
     modules: RUSSIAN_PRE_A1_MODULES,
     status: 'available',

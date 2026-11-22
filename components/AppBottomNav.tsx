@@ -2,7 +2,7 @@ import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { usePathname, useRouter } from 'expo-router';
-import { BookOpen, MessageCircle, RefreshCw, Volume2 } from 'lucide-react-native';
+import { BookOpen, ClipboardList, MessageCircle, RefreshCw, Sparkles, Volume2 } from 'lucide-react-native';
 import { Radius, Typography } from '@/lib/theme';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { getChatUnreadCount, subscribeToChatUnreadCount } from '@/lib/chatNotificationState';
@@ -10,7 +10,9 @@ import { getChatUnreadCount, subscribeToChatUnreadCount } from '@/lib/chatNotifi
 const items = [
   { path: '/lang', label: 'یادگیری', icon: BookOpen },
   { path: '/learn/en/pronunciation', label: 'تلفظ', icon: Volume2 },
+  { path: '/learn/en/vocabulary', label: 'واژه‌ها', icon: Sparkles },
   { path: '/conversations', label: 'مکالمه', icon: MessageCircle },
+  { path: '/lang/library', label: 'درس‌ها', icon: ClipboardList },
   { path: '/review', label: 'مرور', icon: RefreshCw },
 ] as const;
 
@@ -24,7 +26,9 @@ export function AppBottomNav() {
   return (
     <View style={styles.shell}>
       {items.map((item) => {
-        const active = pathname === item.path || pathname.startsWith(`${item.path}/`);
+        const active = item.path === '/lang'
+          ? pathname === '/lang'
+          : pathname === item.path || pathname.startsWith(`${item.path}/`);
         const Icon = item.icon;
         return (
           <Pressable key={item.path} accessibilityRole="button" accessibilityState={{ selected: active }} style={styles.item} onPress={() => router.replace(item.path as never)}>
@@ -44,14 +48,15 @@ export function AppBottomNav() {
   );
 }
 
+/** RTL navigation bar matching RussianBottomNav / LanguageBottomNav: the first item is rendered on the right. */
 const styles = StyleSheet.create({
   shell: {
-    minHeight: 60,
+    minHeight: 72,
     marginHorizontal: 12,
     marginBottom: 10,
-    paddingTop: 8,
-    paddingBottom: 9,
-    paddingHorizontal: 14,
+    paddingTop: 9,
+    paddingBottom: 11,
+    paddingHorizontal: 12,
     flexDirection: 'row-reverse',
     alignItems: 'center',
     justifyContent: 'space-around',

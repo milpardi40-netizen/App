@@ -16,10 +16,11 @@
  * A target that cannot satisfy these rules is dropped rather than shown half-correct, and
  * `scripts/verify-word-lab-core.mjs` prints both the accepted words and the dropped targets.
  */
+import { SENTENCE_LESSONS } from '../courseContent';
 import { NEW_COURSES } from './newCourses';
 import { RUSSIAN_LESSONS } from './russian';
 
-export type WordLabLanguageId = 'de' | 'ru';
+export type WordLabLanguageId = 'de' | 'ru' | 'en';
 
 export interface CoreWord {
   id: string;
@@ -79,29 +80,59 @@ const RU_TARGETS: readonly string[] = [
   // سلام، ادب و پاسخ کوتاه
   'приве́т', 'здра́вствуйте', 'пока́', 'до свида́ния', 'спаси́бо', 'пожа́луйста', 'извини́те', 'да', 'нет', 'хорошо́',
   // خودم و مخاطبم
-  'я', 'ты', 'вы', 'мы', 'мой', 'и́мя', 'живу́',
+  'я', 'ты', 'вы', 'мы', 'он', 'она́', 'они́', 'мой', 'и́мя', 'живу́',
   // عدد
-  'оди́н', 'два', 'три', 'пять', 'шесть', 'семь', 'де́вять', 'де́сять', 'два́дцать',
+  'оди́н', 'три', 'пять', 'семь', 'де́вять', 'де́сять', 'два́дцать',
   // کافه و غذا
-  'вода́', 'чай', 'ко́фе', 'хлеб', 'молоко́', 'мя́со', 'о́вощи', 'фру́кты', 'горя́чий', 'есть', 'пить', 'хочу́', 'вку́сно',
-  // خانواده
-  'семья́', 'мать', 'оте́ц', 'брат', 'сестра́', 'сын', 'дочь',
+  'вода́', 'чай', 'ко́фе', 'хлеб', 'молоко́', 'сыр', 'суп', 'мя́со', 'горя́чий', 'есть', 'хочу́', 'вку́сный', 'люблю́',
+  // خانواده و دوست
+  'семья́', 'ма́ма', 'па́па', 'брат', 'сестра́', 'сын', 'дочь', 'друг', 'кот', 'соба́ка',
   // خانه و وسایل
-  'дом', 'кварти́ра', 'стол', 'окно́', 'кни́га', 'телефо́н', 'су́мка', 'ключ',
+  'дом', 'ко́мната', 'кварти́ра', 'стол', 'окно́', 'кни́га', 'ру́чка', 'телефо́н', 'су́мка', 'ключ',
   // زمان
-  'вре́мя', 'день', 'сего́дня', 'за́втра', 'вчера́', 'у́тро', 'ве́чер', 'ночь', 'неде́ля', 'понеде́льник', 'вто́рник', 'воскресе́нье', 'ме́сяц', 'час', 'сейча́с', 'когда́',
+  'вре́мя', 'день', 'сего́дня', 'за́втра', 'вчера́', 'у́тро', 'понеде́льник', 'вто́рник', 'воскресе́нье', 'ме́сяц', 'час', 'сейча́с', 'когда́',
   // مکان و پرسش
-  'где', 'что', 'кто', 'как', 'ско́лько', 'здесь', 'там', 'далеко́', 'ря́дом', 'го́род', 'туале́т', 'ме́сто', 'по́чта', 'магази́н',
+  'где', 'что', 'кто', 'как', 'ско́лько', 'здесь', 'далеко́', 'ря́дом', 'у́лица', 'туале́т', 'ме́сто', 'по́чта', 'магази́н',
   // رفت‌وآمد
-  'метро́', 'авто́бус', 'по́езд', 'такси́', 'биле́т', 'маши́на',
+  'авто́бус', 'по́езд', 'такси́', 'биле́т',
   // کار، درس و پول
-  'рабо́та', 'шко́ла', 'уро́к', 'учи́тель', 'вопро́с', 'язы́к', 'письмо́', 'но́мер', 'компью́тер', 'повтори́те', 'сто́ит', 'до́рого',
+  'уро́к', 'учи́тель', 'студе́нт', 'вопро́с', 'язы́к', 'письмо́', 'но́мер', 'повтори́те', 'зна́ю', 'чита́ю', 'сто́ит', 'до́рого',
   // توصیف
-  'хоро́ший', 'плохо́й', 'но́вый', 'большо́й', 'ма́ленький', 'краси́вый', 'холо́дно', 'тепло́', 'кра́сный', 'о́чень',
+  'хоро́ший', 'но́вый', 'большо́й', 'ма́ленький', 'краси́вый', 'холо́дно', 'тепло́', 'кра́сный', 'о́чень',
   // نیاز و توانایی
-  'ну́жно', 'мо́жно', 'могу́', 'помо́щь', 'помоги́те', 'спать', 'до́ма',
+  'ну́жно', 'мо́жно', 'могу́', 'помо́щь', 'спать', 'до́ма',
   // سلامت
-  'врач', 'апте́ка', 'бо́льно',
+  'врач', 'апте́ка',
+];
+
+/** The teaching order of the English core (Pre-A1 & A1). */
+const EN_TARGETS: readonly string[] = [
+  // سلام، ادب و پاسخ کوتاه
+  'hello', 'hi', 'good morning', 'goodbye', 'bye', 'please', 'thank', 'sorry', 'yes', 'no',
+  // خودم و مخاطبم
+  'I', 'you', 'he', 'she', 'we', 'they', 'my', 'your', 'our', 'name', 'live',
+  // عدد
+  'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'twenty',
+  // کافه و غذا
+  'water', 'tea', 'coffee', 'milk', 'bread', 'rice', 'meat', 'fruit', 'breakfast', 'lunch', 'dinner', 'cup', 'eat', 'want', 'like', 'fresh',
+  // خانواده و افراد
+  'family', 'mother', 'son', 'daughter', 'brother', 'sister', 'friend', 'parents', 'baby', 'dog',
+  // خانه و وسایل
+  'house', 'home', 'room', 'kitchen', 'bedroom', 'bathroom', 'table', 'chair', 'door', 'window', 'book', 'pen', 'phone', 'bag', 'keys', 'clock',
+  // زمان
+  'time', 'day', 'today', 'tomorrow', 'morning', 'afternoon', 'evening', 'night', 'week', 'Monday', 'Friday', 'Saturday', 'Sunday', 'month', 'year', 'now', 'early', 'late', 'when',
+  // مکان و پرسش
+  'where', 'who', 'how', 'street', 'city', 'station', 'park', 'store', 'shop', 'market', 'library', 'restroom', 'near', 'far', 'here',
+  // رفت‌وآمد
+  'bus', 'train', 'taxi', 'car', 'ticket', 'map', 'walk', 'go',
+  // کار، درس و پول
+  'work', 'job', 'office', 'school', 'class', 'lesson', 'teacher', 'student', 'question', 'answer', 'word', 'sentence', 'read', 'write', 'speak', 'understand', 'learn', 'study', 'computer', 'cost', 'pay', 'cash', 'card', 'price',
+  // توصیف
+  'good', 'fine', 'happy', 'tired', 'new', 'old', 'big', 'small', 'tall', 'cold', 'red', 'blue', 'white', 'friendly', 'ready',
+  // نیاز و توانایی
+  'need', 'help', 'can', 'find', 'open', 'close',
+  // سلامت
+  'hospital', 'pharmacy', 'clinic', 'nurse',
 ];
 
 /** Short Persian cues; only for words whose form or register needs one. */
@@ -222,6 +253,29 @@ const RU_CORE_GLOSS: Record<string, string> = {
   месяц: 'ماه (۳۰ روز).',
 };
 
+const EN_NOTES: Record<string, string> = {
+  hello: 'سلام خنثی و همه‌کاره؛ «Hi» دوستانه‌تر است.',
+  hi: 'سلام کوتاه و دوستانه.',
+  goodbye: 'خداحافظی کامل و کمی رسمی؛ «Bye» دوستانه‌تر است.',
+  please: 'هم به معنی «لطفاً» و هم «خواهش می‌کنم».',
+  sorry: 'برای عذرخواهی کوتاه یا عذرخواستن.',
+  i: 'در انگلیسی همیشه با حرف بزرگ «I» نوشته می‌شود.',
+  you: 'هم برای «تو» (مفرد) و هم «شما» (جمع/رسمی) یکسان است.',
+  home: 'برای «در خانه» بدون حرف اضافه می‌آید: at home / go home.',
+  restroom: 'مودبانه‌ترین واژه برای دستشویی در مکان‌های عمومی.',
+  can: 'فعل کمکی «توانستن»؛ شکلش با همهٔ ضمیرها یکی است.',
+};
+
+const EN_CORE_GLOSS: Record<string, string> = {
+  i: 'من',
+  'good morning': 'صبح بخیر',
+  thank: 'تشکر کردن',
+  no: 'نه',
+  one: 'یک',
+  two: 'دو',
+  three: 'سه',
+};
+
 /**
  * One string is folded many times while the lab is built — once per target for every course sentence —
  * so the result is cached. `fold` is pure, and a course only holds a few thousand distinct strings.
@@ -262,10 +316,25 @@ function authoredGloss(glosses: Record<string, string>, key: string): string | u
 type CourseSentence = { text: string; fa: string; pronunciation: string; vocabulary?: Array<{ word: string; meaning: string }> };
 type CourseLesson = { id: string; title: string; levelId: number; sentences: CourseSentence[]; learningMode?: string };
 
+let cachedEnglishLessons: CourseLesson[] | null = null;
+
 function courseLessons(language: WordLabLanguageId): readonly CourseLesson[] {
-  return language === 'de'
-    ? (NEW_COURSES.de.lessons as unknown as readonly CourseLesson[])
-    : (RUSSIAN_LESSONS as unknown as readonly CourseLesson[]);
+  if (language === 'de') return NEW_COURSES.de.lessons as unknown as readonly CourseLesson[];
+  if (language === 'ru') return RUSSIAN_LESSONS as unknown as readonly CourseLesson[];
+  if (!cachedEnglishLessons) {
+    cachedEnglishLessons = SENTENCE_LESSONS.map(lesson => ({
+      id: lesson.id,
+      title: lesson.title,
+      levelId: lesson.levelId,
+      sentences: lesson.sentences.map(sentence => ({
+        text: sentence.en,
+        fa: sentence.fa,
+        pronunciation: sentence.pronunciation,
+        vocabulary: sentence.vocabulary,
+      })),
+    }));
+  }
+  return cachedEnglishLessons;
 }
 
 /** Generated review lessons mix quoted frequency words into filler sentences; they teach nothing. */
@@ -427,10 +496,12 @@ function build(
 export const CORE_WORDS: Record<WordLabLanguageId, readonly CoreWord[]> = {
   de: build('de', DE_TARGETS, DE_NOTES, DE_CORE_GLOSS),
   ru: build('ru', RU_TARGETS, RU_NOTES, RU_CORE_GLOSS),
+  en: build('en', EN_TARGETS, EN_NOTES, EN_CORE_GLOSS),
 };
 
 /** Targets the shipped course could not supply a full sentence for, listed for the verify script. */
 export const UNRESOLVED_CORE_TARGETS: Record<WordLabLanguageId, readonly string[]> = {
   de: DE_TARGETS.filter(target => !CORE_WORDS.de.some(word => fold(word.target) === fold(target))),
   ru: RU_TARGETS.filter(target => !CORE_WORDS.ru.some(word => fold(word.target) === fold(target))),
+  en: EN_TARGETS.filter(target => !CORE_WORDS.en.some(word => fold(word.target) === fold(target))),
 };

@@ -13,10 +13,14 @@ const es = require('esbuild');
     } }] });
   const mod = {exports:{}}; new Function('module','exports',result.outputFiles[0].text)(mod,mod.exports); const x = mod.exports;
   const ids = [
-    'ru-pre-01-hello', 'ru-pre-02-bye', 'ru-pre-03-yes-no', 'ru-pre-04-i-am',
-    'ru-pre-05-numbers', 'ru-pre-06-how-are-you', 'ru-pre-07-i-have', 'ru-pre-08-please-thankyou',
-    'ru-pre-09-this-is', 'ru-pre-10-review', 'ru-pre-11-at-home', 'ru-pre-12-people',
-    'ru-pre-13-every-day', 'ru-pre-14-i-like',
+    'ru-pre-01-hello', 'ru-pre-02-i-you-this-that', 'ru-pre-03-family-home', 'ru-pre-04-food-study-daily',
+    'ru-pre-05-pronouns-family', 'ru-pre-06-people-objects', 'ru-pre-07-food-drinks', 'ru-pre-08-animals-colors',
+    'ru-pre-09-numbers', 'ru-pre-10-days-places', 'ru-pre-11-adjectives', 'ru-pre-12-verbs',
+    'ru-pre-13-greeting-name-phrases', 'ru-pre-14-polite-phrases', 'ru-pre-15-combos-pronoun-demo', 'ru-pre-16-combos-adj-verb',
+    'ru-pre-17-sentences-be-have', 'ru-pre-18-sentences-verbs', 'ru-pre-19-questions-basic', 'ru-pre-20-questions-whose-yesno-count',
+    'ru-pre-21-daily-identity-family-age', 'ru-pre-22-daily-likes-needs-wants', 'ru-pre-23-daily-descriptions',
+    'ru-pre-24-conv-greeting-intro', 'ru-pre-25-conv-family-home', 'ru-pre-26-conv-objects',
+    'ru-pre-27-conv-food-shopping', 'ru-pre-28-conv-classroom',
   ];
   const lessons = x.RUSSIAN_LESSONS, starter = lessons.filter(l => l.levelId === 0);
   assert.deepEqual(starter.map(l => l.id), ids);
@@ -30,7 +34,7 @@ const es = require('esbuild');
       assert(q.correctIndex >= 0 && q.correctIndex < 4);
     }
   });
-  for (const [mode, n] of [['exam', 20], ['practice', 10], ['warmup', 14]]) {
+  for (const [mode, n] of [['exam', 20], ['practice', 10], ['warmup', 28]]) {
     for (const seed of [1, 2, 7, '2026-11-18']) {
       const items = x.russianStarterRound(lessons, mode, seed);
       assert.equal(items.length, n);
@@ -71,7 +75,7 @@ const es = require('esbuild');
     assert.equal(x.exchangeView(scene, { starter: starterRole, picks: [15] }), null);
   }
   // Test exact exchange matching and near-miss rejection on a Pre-A1 lesson dialogue.
-  const l = lessons.find(l => l.id === 'ru-pre-14-i-like'), scene = x.exchangeForLesson(l);
+  const l = lessons.find(l => l.id === 'ru-pre-18-sentences-verbs'), scene = x.exchangeForLesson(l);
   const turn = x.exchangeView(scene, { starter: 'partner', picks: [] });
   assert.deepEqual(turn.options.map(o => o.say.text), [l.dialogue[1].text]);
   const expectedReply = x.plainRussian(turn.options[0].say.text);
@@ -120,7 +124,7 @@ const es = require('esbuild');
     assert.equal(migrated.showCheckAnswers, false);
     storage.set(key, JSON.stringify({ schema: 1, sessions: { [l.id]: { ...old, stage: ladder, stageVersion: undefined } } }));
     assert.equal((await x.loadRussianLessonSession(l.id)).stage, ladder - 1);
-    await x.saveRussianLessonSession(l.id, { ...old, stage: ladder - 1, exchange: { starter: 'partner', picks: [0], said: { 0: 'да пожалуйста я люблю чай' } } });
+    await x.saveRussianLessonSession(l.id, { ...old, stage: ladder - 1, exchange: { starter: 'partner', picks: [0], said: { 0: 'нет спасибо я хочу воду' } } });
     const saved = await x.loadRussianLessonSession(l.id);
     assert.equal(saved.stage, ladder - 1);
     assert.deepEqual(saved.answers, old.answers);
@@ -130,5 +134,5 @@ const es = require('esbuild');
     assert.equal((await x.loadRussianLessonSession(l.id)).stage, 0);
     assert.equal(storage.get('sentence_course_progress_ru_v2'), 'existing-completions-and-cards');
   }
-  console.log(`PASS: 14 Pre-A1 steps (English-aligned); ${paths} complete paths across all ${lessons.length} lessons; ${x.VERBS.length} verbs; ${x.GRAMMAR_UNITS.length} guided units; both session backends.`);
+  console.log(`PASS: 28 Pre-A1 steps (zero-to-dialogue); ${paths} complete paths across all ${lessons.length} lessons; ${x.VERBS.length} verbs; ${x.GRAMMAR_UNITS.length} guided units; both session backends.`);
 })().catch(e => { console.error(e); process.exitCode = 1; });

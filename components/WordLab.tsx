@@ -4,6 +4,7 @@ import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'reac
 import { useRouter } from 'expo-router';
 import { Check, ChevronLeft, RefreshCw, Sparkles, Volume2, ArrowRight, Play, Mic2, MessageSquareQuote } from 'lucide-react-native';
 import SpeakCheck from '@/components/SpeakCheck';
+import { AppBottomNav } from '@/components/AppBottomNav';
 import { ReviewRatingGrid } from '@/components/ReviewRecall';
 import { speakPersian } from '@/lib/persianSpeech';
 import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
@@ -56,7 +57,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   // The word lab is part of the same narrator as the lesson: one pace ladder for the whole course.
   const pace = useCallback((name: NarrationPace) => narrationRate(locale, name), [locale]);
   const languageName = WORD_LAB_NAME[language];
-  const home = `/learn/${language}` as const;
+  const home = language === 'en' ? '/lang' : `/learn/${language}`;
 
   const [reloadToken, setReloadToken] = useState(0);
   const [phase, setPhase] = useState<Phase>('loading');
@@ -412,6 +413,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
           </View>
         ) : null}
       </ScrollView>
+      {language === 'en' && (phase === 'loading' || phase === 'intro' || phase === 'done') ? <AppBottomNav /> : null}
     </View>
   );
 }

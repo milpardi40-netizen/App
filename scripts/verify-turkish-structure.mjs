@@ -267,10 +267,9 @@ const EXPECTED_B1_SURVIVAL_TITLES = [
 // 1. Preserve English and Russian untouched baselines
 check(english.SENTENCE_LESSONS.length === 274, 'English baseline lesson count (274 at release 14) holds');
 check(english.SENTENCE_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 4852, 'English baseline sentence count (4852 at release 14) holds');
-// Russian Pre-A1 and A1 were aligned to the English pedagogical model:
-// 14 Pre-A1 lessons (8 sentences each) + 29 A1 lessons (16 sentences each).
-check(russian.RUSSIAN_LESSONS.length === 180, 'Russian baseline lesson count (180 after English-aligned Pre-A1/A1) holds');
-check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1712, 'Russian baseline sentence count (1712 after English-aligned Pre-A1/A1) holds');
+// Russian Pre-A1 (28 zero-to-dialogue lessons, 8 sentences each) + 29 A1 lessons (16 sentences each).
+check(russian.RUSSIAN_LESSONS.length === 194, 'Russian baseline lesson count (194 after 28-lesson Pre-A1 redesign) holds');
+check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1824, 'Russian baseline sentence count (1824 after 28-lesson Pre-A1 redesign) holds');
 
 // 2. Alphabet, levels, and A1 + A2 syllabus structure
 check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ', 'Turkish 29-letter alphabet is exact');
