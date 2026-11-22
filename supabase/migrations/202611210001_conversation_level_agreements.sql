@@ -5,7 +5,8 @@ ALTER TABLE public.conversations
   ADD COLUMN IF NOT EXISTS active_level_id integer,
   ADD COLUMN IF NOT EXISTS pending_level_id integer,
   ADD COLUMN IF NOT EXISTS pending_level_requested_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
-  ADD COLUMN IF NOT EXISTS pending_level_created_at timestamptz;
+  ADD COLUMN IF NOT EXISTS pending_level_created_at timestamptz,
+  ADD COLUMN IF NOT EXISTS active_level_started_at timestamptz;
 
 CREATE OR REPLACE FUNCTION public.request_conversation_level(p_conversation_id uuid, p_level_id integer)
 RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
@@ -27,7 +28,7 @@ BEGIN
   SELECT pending_level_id, pending_level_requested_by INTO requested_level, requester FROM public.conversations WHERE id = p_conversation_id;
   IF requested_level IS NULL OR requester IS NULL OR requester = auth.uid() THEN RAISE EXCEPTION 'NO_PENDING_LEVEL_REQUEST'; END IF;
   IF p_accept THEN
-    UPDATE public.conversations SET active_level_id = requested_level, pending_level_id = NULL, pending_level_requested_by = NULL, pending_level_created_at = NULL WHERE id = p_conversation_id;
+    UPDATE public.conversations SET active_level_id = requested_level, active_level_started_at = pg_catalog.now(), pending_level_id = NULL, pending_level_requested_by = NULL, pending_level_created_at = NULL WHERE id = p_conversation_id;
     RETURN requested_level;
   END IF;
   UPDATE public.conversations SET pending_level_id = NULL, pending_level_requested_by = NULL, pending_level_created_at = NULL WHERE id = p_conversation_id;
