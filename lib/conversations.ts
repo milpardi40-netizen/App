@@ -188,16 +188,6 @@ export async function listConversationLevelRequests(): Promise<ConversationLevel
   }));
 }
 
-export async function getConversationActiveLevel(conversationId: string): Promise<number | null> {
-  const { data, error } = await chatDb().from('conversations').select('active_level_id').eq('id', conversationId).maybeSingle();
-  if (error) {
-    // Older production databases can still open the room before the level migration is applied.
-    if (/active_level_id|column .* does not exist|schema cache/i.test(error.message || '')) return null;
-    throw new Error(readableSupabaseError(error));
-  }
-  return typeof data?.active_level_id === 'number' ? data.active_level_id : null;
-}
-
 export async function listRealContacts(includeDeleted = false): Promise<RealContact[]> {
   const currentUser = await ensureChatIdentity();
   const { data: accessControl, error: accessError } = await chatDb()
