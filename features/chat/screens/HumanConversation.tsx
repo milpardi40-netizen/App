@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, AppState, BackHandler, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { BarChart3, ChevronLeft, Mic2, Send, Sparkles, UserRound, X } from 'lucide-react-native';
+import { BarChart3, ChevronDown, ChevronLeft, ChevronUp, Mic2, Send, Sparkles, UserRound, X } from 'lucide-react-native';
 import {
   currentChatUserId,
   getPartnerEnglishLevel,
@@ -181,6 +181,8 @@ function TurnConversationScreen({
   const [ended, setEnded] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [keyboardInset, setKeyboardInset] = useState(0);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [missionExpandedOverride, setMissionExpandedOverride] = useState<boolean | null>(null);
   const [now, setNow] = useState(Date.now());
   // Real-contact conversations are scoped to ONE conversation language and the
   // highest CEFR level both learners have completed. The lesson-room entry
@@ -373,20 +375,29 @@ function TurnConversationScreen({
   }, [router]);
 
   // The composer is translated over the transcript when the keyboard opens.
-  // Reserve the lifted keyboard height so the newest bubble stays visible.
+  // Reserve the lifted keyboard height so the newest bubble stays visible, and
+  // auto-collapse the mission banner so the user can see the conversation clearly.
   useEffect(() => {
     if (Platform.OS === 'web') return;
     const showSub = KeyboardEvents.addListener('keyboardDidShow', event => {
       const lift = Math.max(0, Math.round(event.height - (Platform.OS === 'ios' ? insets.bottom : 0)));
       setKeyboardInset(lift);
+      setKeyboardOpen(true);
+      setMissionExpandedOverride(null);
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 60);
     });
-    const hideSub = KeyboardEvents.addListener('keyboardDidHide', () => setKeyboardInset(0));
+    const hideSub = KeyboardEvents.addListener('keyboardDidHide', () => {
+      setKeyboardInset(0);
+      setKeyboardOpen(false);
+      setMissionExpandedOverride(null);
+    });
     return () => {
       showSub.remove();
       hideSub.remove();
     };
   }, [insets.bottom]);
+
+  const missionExpanded = missionExpandedOverride ?? !keyboardOpen;
 
   useEffect(() => { setError(null); }, [state.missionIndex, state.slot]);
 
@@ -547,31 +558,30 @@ function TurnConversationScreen({
       ) : (
         <>
           <View style={styles.topStage}>
-            <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
+            <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 2.5 }]}>
               <View style={styles.statusTop}>
-                <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
-                  <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
-                  <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>{state.finished ? 'مکالمه کامل شد' : ended ? 'مکالمه پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب است'}</Text>
+                <View style={styles.statusMainGroup}>
+                  <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
+                    <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
+                    <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>
+                      {state.finished ? 'کامل شد' : ended ? 'پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب'}
+                    </Text>
+                  </View>
+                  <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
+                    <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
+                  </View>
+                  <Text style={styles.topicLine} numberOfLines={1}>
+                    {effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · {plan.topicFa}
+                  </Text>
                 </View>
                 <View style={styles.statusRightMeta}>
-                  {plan.difficultyLabel ? (
-                    <View style={styles.difficultyBadge}>
-                      <Text style={styles.difficultyBadgeText}>{plan.difficultyLabel}</Text>
-                    </View>
+                  <Text style={styles.turnCount}>{fa(state.completedTurns)}/{fa(plan.turns.length)}</Text>
+                  {lessonPlan ? (
+                    <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
+                      <Text style={styles.changeLessonText}>تغییر درس</Text>
+                    </Pressable>
                   ) : null}
-                  <Text style={styles.turnCount}>{fa(state.completedTurns)} از {fa(plan.turns.length)} نوبت</Text>
                 </View>
-              </View>
-              <View style={styles.lessonRow}>
-                <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
-                  <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
-                </View>
-                <Text style={styles.topicLine} numberOfLines={1}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
-                {lessonPlan ? (
-                  <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
-                    <Text style={styles.changeLessonText}>تغییر درس</Text>
-                  </Pressable>
-                ) : null}
               </View>
               <View style={styles.progressRow}>
                 <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
@@ -579,26 +589,44 @@ function TurnConversationScreen({
               </View>
             </View>
 
-            <View style={styles.missionCard}>
-              <View style={styles.missionHeader}>
-                <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
-                {state.currentTurn ? <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View> : null}
-              </View>
-              {state.currentPrompt ? (
-                <>
-                  <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
-                  <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
-                  {lessonPlan && state.currentPrompt.cues.length > 0 ? (
-                    <View style={styles.cueRow}>
-                      {state.currentPrompt.cues.slice(0, 4).map(cue => (
-                        <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
-                      ))}
-                    </View>
+            <View style={[styles.missionCard, !missionExpanded && styles.missionCardCompact]}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={missionExpanded ? 'کوچک‌کردن کادر مأموریت' : 'نمایش کامل مأموریت'}
+                onPress={() => setMissionExpandedOverride(!missionExpanded)}
+                style={styles.missionHeader}
+              >
+                <View style={styles.missionHeaderRight}>
+                  <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
+                  {missionExpanded && state.currentTurn ? (
+                    <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View>
                   ) : null}
-                </>
-              ) : (
-                <Text style={styles.missionText}>همهٔ نوبت‌های این تمرین انجام شد. با «گزارش مکالمه» نتیجه را ببین.</Text>
-              )}
+                </View>
+                {!missionExpanded && state.currentPrompt ? (
+                  <Text style={styles.missionPreview} numberOfLines={1}>{state.currentPrompt.text}</Text>
+                ) : null}
+                <View style={styles.missionToggle}>
+                  <Text style={styles.missionToggleText}>{missionExpanded ? 'جمع‌کردن' : 'جزئیات'}</Text>
+                  {missionExpanded ? <ChevronUp size={13} color={Colors.warning[700]} /> : <ChevronDown size={13} color={Colors.warning[700]} />}
+                </View>
+              </Pressable>
+              {missionExpanded ? (
+                state.currentPrompt ? (
+                  <>
+                    <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
+                    <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
+                    {lessonPlan && state.currentPrompt.cues.length > 0 ? (
+                      <View style={styles.cueRow}>
+                        {state.currentPrompt.cues.slice(0, 4).map(cue => (
+                          <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
+                        ))}
+                      </View>
+                    ) : null}
+                  </>
+                ) : (
+                  <Text style={styles.missionText}>همهٔ نوبت‌های این تمرین انجام شد. با «گزارش مکالمه» نتیجه را ببین.</Text>
+                )
+              ) : null}
             </View>
           </View>
 
@@ -763,37 +791,42 @@ const styles = StyleSheet.create({
   statusText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[600], textAlign: 'right' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   centerText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
-  topStage: { backgroundColor: '#F7F8FC', paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: '#E6E9F2', gap: 6 },
-  statusCard: { marginHorizontal: Spacing.md, marginTop: 6, paddingHorizontal: 12, paddingVertical: 8, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 5, shadowColor: '#1E1B4B', shadowOpacity: 0.04, shadowRadius: 6, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  statusTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  statusRightMeta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
-  turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, paddingHorizontal: 9, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12' },
+  topStage: { backgroundColor: '#F7F8FC', paddingBottom: 6, borderBottomWidth: 1, borderBottomColor: '#E6E9F2', gap: 5 },
+  statusCard: { marginHorizontal: Spacing.md, marginTop: 5, paddingHorizontal: 10, paddingVertical: 6, borderRadius: Radius.md, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 4 },
+  statusTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  statusMainGroup: { flex: 1, flexDirection: 'row-reverse', alignItems: 'center', gap: 6, minWidth: 0 },
+  statusRightMeta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, flexShrink: 0 },
+  turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 2.5, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12', flexShrink: 0 },
   turnPillMine: { backgroundColor: Colors.primary[500] + '14' },
-  turnDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.success[500] },
+  turnDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.success[500] },
   turnDotMine: { backgroundColor: Colors.primary[500] },
-  turnPillText: { fontFamily: Typography.fontFamily, fontSize: 11, fontWeight: Typography.weights.bold, color: Colors.success[700] },
+  turnPillText: { fontFamily: Typography.fontFamily, fontSize: 10, fontWeight: Typography.weights.bold, color: Colors.success[700] },
   turnPillTextMine: { color: Colors.primary[600] },
-  turnCount: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300] },
-  lessonRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
-  levelBadge: { minWidth: 36, height: 22, borderRadius: 11, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center' },
-  levelBadgeText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '800', color: '#FFFFFF', textAlign: 'left', writingDirection: 'ltr' },
-  difficultyBadge: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#E2E8F0' },
-  difficultyBadgeText: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.neutral[200] },
-  topicLine: { flex: 1, fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
-  changeLesson: { paddingHorizontal: 9, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: Colors.primary[500] + '12', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
-  changeLessonText: { fontFamily: Typography.fontFamily, fontSize: 10, fontWeight: Typography.weights.bold, color: Colors.primary[600] },
+  turnCount: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.neutral[300], includeFontPadding: false },
+  levelBadge: { minWidth: 32, height: 20, borderRadius: 10, paddingHorizontal: 7, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  levelBadgeText: { fontFamily: Typography.latinFontFamily, fontSize: 9, fontWeight: '800', color: '#FFFFFF', textAlign: 'left', writingDirection: 'ltr' },
+  difficultyBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#E2E8F0' },
+  difficultyBadgeText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[200] },
+  topicLine: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 11, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  changeLesson: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.primary[500] + '12', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
+  changeLessonText: { fontFamily: Typography.fontFamily, fontSize: 9, fontWeight: Typography.weights.bold, color: Colors.primary[600] },
   progressRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  progressTrack: { flex: 1, height: 5, borderRadius: 3, backgroundColor: '#EEF0F6', overflow: 'hidden' },
-  progressFill: { height: '100%', borderRadius: 3, backgroundColor: Colors.primary[400] },
-  progressText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[600], width: 34, textAlign: 'left' },
-  missionCard: { marginHorizontal: Spacing.md, paddingHorizontal: 12, paddingVertical: 8, borderRadius: Radius.lg, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 4 },
-  missionHeader: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
+  progressTrack: { flex: 1, height: 4, borderRadius: 2, backgroundColor: '#EEF0F6', overflow: 'hidden' },
+  progressFill: { height: '100%', borderRadius: 2, backgroundColor: Colors.primary[400] },
+  progressText: { fontFamily: Typography.boldFontFamily, fontSize: 10, lineHeight: 15, color: Colors.primary[600], minWidth: 36, textAlign: 'left', includeFontPadding: false },
+  missionCard: { marginHorizontal: Spacing.md, paddingHorizontal: 10, paddingVertical: 7, borderRadius: Radius.md, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 4 },
+  missionCardCompact: { paddingVertical: 6 },
+  missionHeader: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  missionHeaderRight: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, flexShrink: 0 },
   missionKicker: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.warning[700], textAlign: 'right' },
-  missionFocusPill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
-  missionFocus: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.warning[700] },
-  missionText: { fontFamily: Typography.latinFontFamily, fontSize: 15, lineHeight: 21, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
+  missionFocusPill: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
+  missionFocus: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.warning[700] },
+  missionPreview: { flex: 1, fontFamily: Typography.latinFontFamily, fontSize: 11, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
+  missionToggle: { flexDirection: 'row-reverse', alignItems: 'center', gap: 2, paddingHorizontal: 6, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '14', flexShrink: 0 },
+  missionToggleText: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.warning[700] },
+  missionText: { fontFamily: Typography.latinFontFamily, fontSize: 14, lineHeight: 20, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
   missionHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 16, color: Colors.neutral[200], textAlign: 'right' },
-  cueRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginTop: 2 },
+  cueRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginTop: 1 },
   cuePill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E6DEC8' },
   cueText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '600', color: '#334155', writingDirection: 'ltr' },
   messages: { flex: 1 },
