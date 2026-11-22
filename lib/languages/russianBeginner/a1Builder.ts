@@ -1,26 +1,80 @@
 import { orderChecks } from './checkOrder';
-import type { LearningLesson } from '../types';
+import type { LearningLesson, LearningSentence } from '../types';
 
-/** One authored scene powers listening, shadowing, vocabulary, role play and the exit checks.
- * start is an existing review-card address, never an index into a filtered list. */
-export function scene(id: string, start: number, roles: [string, string], title: string, situation: string, teachingFa: string,
-  lines: readonly [string, string, string][], glossary: Record<string,string>,
-  check: [string, string[], number]): LearningLesson {
-  const prefix = id.startsWith('ru-l1-') ? 'ru1-' : 'ru2-';
-  const sentences = lines.map(([text, fa, pronunciation], i) => {
-    const vocabulary = (text.match(/[А-ЯЁа-яё\u0301-]+/g) ?? []).flatMap(word => {
-      const meaning = glossary[word.toLowerCase().replace(/\u0301/g,'')];
-      return meaning ? [{word,meaning}] : [];
-    });
-    return {id: prefix + String(start+i).padStart(2,'0'), text, fa, pronunciation,
-      vocabulary: vocabulary.length ? vocabulary : [{word: text.replace(/[.!?]+$/, ''), meaning: fa}],
-      ...(i === check[2] ? {pattern: teachingFa} : {})};
+export type A1SentenceTuple = readonly [
+  text: string,
+  fa: string,
+  pronunciation: string,
+  pattern: string,
+  vocabulary: readonly [word: string, meaning: string][],
+];
+
+export type A1DialogueTuple = readonly [
+  speaker: 'هم‌صحبت' | 'زبان‌آموز',
+  text: string,
+  fa: string,
+  pronunciation: string,
+];
+
+export interface A1LessonSpec {
+  id: string;
+  section: 'foundation' | 'survival';
+  title: string;
+  subtitle: string;
+  situation: string;
+  teachingFa: string;
+  durationMinutes?: number;
+  sentences: readonly A1SentenceTuple[];
+  dialogue: readonly A1DialogueTuple[];
+  checks: readonly [
+    { promptFa: string; choices: [string, string, string]; explanationFa: string },
+    { promptFa: string; choices: [string, string, string]; explanationFa: string },
+  ];
+}
+
+export function buildA1Lesson(spec: A1LessonSpec): LearningLesson {
+  const sentences: LearningSentence[] = spec.sentences.map(([text, fa, pronunciation, pattern, vocabulary], index) => ({
+    id: `${spec.id}-${String(index + 1).padStart(2, '0')}`,
+    text,
+    fa,
+    pronunciation,
+    ...(pattern ? { pattern } : {}),
+    vocabulary: vocabulary.map(([word, meaning]) => ({ word, meaning })),
+  }));
+  const dialogue = spec.dialogue.map(([speaker, text, fa, pronunciation]) => ({
+    speaker,
+    role: speaker === 'زبان‌آموز' ? ('learner' as const) : ('partner' as const),
+    text,
+    fa,
+    pronunciation,
+  }));
+  return {
+    id: spec.id,
+    title: spec.title,
+    situation: spec.situation,
+    durationMinutes: spec.durationMinutes ?? 15,
+    teachingFa: spec.teachingFa,
+    sentences,
+    dialogue,
+    checks: orderChecks(
+      spec.checks.map(check => ({
+        promptFa: check.promptFa,
+        choices: [...check.choices],
+        correctIndex: 0,
+        explanationFa: check.explanationFa,
+      })),
+      spec.id,
+    ),
+  };
+}
+
+export const A1_SUBTITLES: Record<string, string> = {};
+export const A1_SECTIONS: Record<string, 'foundation' | 'survival'> = {};
+
+export function registerA1Specs(specs: readonly A1LessonSpec[]): LearningLesson[] {
+  return specs.map(spec => {
+    A1_SUBTITLES[spec.id] = spec.subtitle;
+    A1_SECTIONS[spec.id] = spec.section;
+    return buildA1Lesson(spec);
   });
-  const dialogue = sentences.map(({text, fa, pronunciation}, i) => ({speaker: roles[i % 2], text, fa, pronunciation}));
-  const evidence = sentences[check[2]];
-  return {id, title, situation, durationMinutes: 9, teachingFa, sentences, dialogue, checks: orderChecks([
-    {promptFa: check[0], choices: check[1], correctIndex: 0, explanationFa: `${evidence.text} — ${evidence.fa}`},
-    {promptFa: `نقش تو: «${sentences[7].fa}». در پاسخ به «${sentences[6].text}» چه می‌گویی؟`,
-      choices: [sentences[1].text, sentences[7].text, sentences[3].text], correctIndex: 1, explanationFa: `${sentences[7].text} — ${sentences[7].fa}`},
-  ], start)};
 }

@@ -13,20 +13,10 @@ function script(lines: readonly Line[], i: number): Move[] {
 }
 export function exchangeForLesson(lesson: LearningLesson): Exchange {
   const lines = lesson.dialogue;
-  if (lesson.id.startsWith('ru-pre-')) {
-    // The two alternatives were taught in spoken slots 2–5, and the closing pair
-    // was rehearsed in guided dialogue. No new reading is required at the finale.
-    const tail = script(lines, 3);
-    const paths = [1, 3].map(i => ({say: lesson.sentences[i], reply: lesson.sentences[i+1], next: tail}));
-    // A greeting or a drink request can open a scene without a prompt. A bare
-    // number or a refusal cannot: let the learner ask the opening question instead.
-    const selfStarting = lesson.id === 'ru-pre-hello' || lesson.id === 'ru-pre-this-is' || lesson.id === 'ru-pre-review';
-    return {opening: lines[0], learnerFirst: selfStarting ? paths : script(lines, 0), partnerFirst: paths};
-  }
   // Some supplementary labs repeat the same two recorded lines verbatim. Play that exchange once.
   const local = lines.length === 4 && lines[0].text === lines[2].text && lines[1].text === lines[3].text
     ? lines.slice(0, 2) : lines;
-  return {opening: local[0], learnerFirst: script(local, 0), partnerFirst: script(local, 1)};
+  return { opening: local[0], learnerFirst: script(local, 0), partnerFirst: script(local, 1) };
 }
 
 export function exchangeView(scene: Exchange, path: ExchangePath) {
@@ -37,8 +27,8 @@ export function exchangeView(scene: Exchange, path: ExchangePath) {
     if (!Number.isInteger(i) || !options[i]) return null;
     const choice = options[i];
     const original = path.said?.[n];
-    history.push({ who: 'learner', line: choice.say, ...(original ? {heard: original} : {}) });
-    if (choice.reply) history.push({who: 'partner', line: choice.reply});
+    history.push({ who: 'learner', line: choice.say, ...(original ? { heard: original } : {}) });
+    if (choice.reply) history.push({ who: 'partner', line: choice.reply });
     options = choice.next;
   }
   return { history, options, complete: options.length === 0 };

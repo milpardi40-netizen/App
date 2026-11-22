@@ -474,8 +474,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         {stage === 4 && !starter && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
           <Text style={styles.stageTitle}>ساخت جمله</Text>
-          {showHint && <Text style={styles.stageDesc}>معنی را بخوانید و واژه‌ها را به ترتیب بچینید.</Text>}
-          <RussianSentenceBuilder key={current.id} sentence={current} />
+          {showHint && <Text style={styles.stageDesc}>{lesson.levelId <= 0 ? 'جملهٔ درست بالای صفحه دیده می‌شود؛ فقط واژه‌ها را به ترتیب آن بچینید.' : 'معنی را بخوانید و واژه‌ها را به ترتیب بچینید.'}</Text>}
+          <RussianSentenceBuilder key={current.id} sentence={current} guided={lesson.levelId <= 0} />
           <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${fa(index + 1)}`} onPress={() => setSentenceIndex(index)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
         </View>}
 
