@@ -58,3 +58,32 @@ export function normalizeLessonConversation(
     completed,
   };
 }
+
+const EXPLICIT_LEARNER_SPEAKERS = new Set(['learner', 'you', 'شما', 'زبان‌آموز', 'زبانآموز']);
+
+/**
+ * Ensures every dialogue turn has an explicit `role` ('partner' | 'learner') and distinct
+ * partner/learner speaker names, matching `conversationPracticeForLesson` in `branchingConversation.ts`.
+ */
+export function withInferredDialogueRoles<T extends { speaker: string; role?: LessonConversationRole; text: string; fa: string }>(
+  dialogue: ReadonlyArray<T>,
+): Array<T & { role: LessonConversationRole }> {
+  const valid = dialogue.filter(line => line.text.trim());
+  const names = [...new Set(valid.map(line => line.speaker.trim()).filter(Boolean))];
+  const explicit = valid.find(line => line.role === 'learner')?.speaker.trim()
+    ?? names.find(name => EXPLICIT_LEARNER_SPEAKERS.has(name.toLocaleLowerCase('fa-IR')));
+  const inferredLearner = explicit ?? (names.length >= 2 ? names[1] : null);
+
+  return valid.map((line, index) => {
+    const trimmedSpeaker = line.speaker.trim();
+    const role: LessonConversationRole = line.role
+      ? line.role
+      : inferredLearner
+        ? (trimmedSpeaker === inferredLearner ? 'learner' : 'partner')
+        : (index % 2 === 1 ? 'learner' : 'partner');
+    const speaker = names.length <= 1
+      ? (role === 'learner' ? 'شما' : trimmedSpeaker || 'هم‌صحبت')
+      : (trimmedSpeaker || (role === 'learner' ? 'شما' : 'هم‌صحبت'));
+    return { ...line, speaker, role };
+  });
+}
