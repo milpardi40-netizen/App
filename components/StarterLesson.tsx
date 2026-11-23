@@ -303,6 +303,8 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     );
   }, [course.locale, speakForTarget]);
 
+  const firstVocabWord = vocabulary[0]?.word.word ?? '';
+
   // Read the visible main sentence on entry, resume, and each sentence change (stage 1 & shadowing stage 3).
   useEffect(() => {
     if (!sessionReady || !current) return;
@@ -310,15 +312,14 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       speakForTarget(current.text, stage === 3 ? pace('slow') : pace('normal'), `${stage}:${current.id}`);
       return;
     }
-    if (stage === 5 && vocabulary.length) {
-      const first = vocabulary[0];
-      speakForTarget(first.word.word, pace('normal'), `5:0:${first.word.word}`);
+    if (stage === 5 && firstVocabWord) {
+      speakForTarget(firstVocabWord, pace('normal'), `5:0:${firstVocabWord}`);
       return;
     }
     clearNarratorFallback();
     narratorTokenRef.current += 1;
     setMicReadyKey(null);
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.text, vocabulary, speakForTarget, clearNarratorFallback]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.text, firstVocabWord, speakForTarget, clearNarratorFallback]);
 
   const startCurrentLessonFromBeginning = () => {
     if (saving || completing.current || restartPending.current) return;
@@ -412,9 +413,8 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       setStage(nextStage);
       setSentenceIndex(0);
       setRevealed(false);
-      // Main sentences are spoken by the effect; practice keeps its existing behavior.
-      if (nextStage === 3) speak(lesson.sentences[0].text, pace('normal'));
-      else if (nextStage !== 1) void stopStarterSpeech();
+      // Main sentences are spoken by the effect; stop audio when leaving speaking/vocab stages.
+      if (nextStage !== 1 && nextStage !== 3 && nextStage !== 5) void stopStarterSpeech();
       return;
     }
 

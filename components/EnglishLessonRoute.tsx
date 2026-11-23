@@ -147,16 +147,16 @@ export default function SentenceLessonScreen() {
   const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
   const narratorTokenRef = useRef(0);
   const narratorFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const clearNarratorFallback = () => {
+  const clearNarratorFallback = useCallback(() => {
     if (narratorFallbackRef.current) {
       clearTimeout(narratorFallbackRef.current);
       narratorFallbackRef.current = null;
     }
-  };
+  }, []);
   useEffect(() => () => {
     clearNarratorFallback();
     narratorTokenRef.current += 1;
-  }, []);
+  }, [clearNarratorFallback]);
   const timer=useEnglishStudyTimer(sessionReady && !resetting && !celebration && !chunkCelebration && !!getSentenceLesson(id || ''));
   useEffect(() => {
     let alive = true;
@@ -243,7 +243,7 @@ export default function SentenceLessonScreen() {
     playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone });
   }, []);
   const stopConversationSpeech = useCallback(() => { void stopResponsiveSpeech(); }, []);
-  const vocabulary = getLessonVocabulary(lesson);
+  const vocabulary = useMemo(() => getLessonVocabulary(lesson), [lesson]);
   // One pattern per slot: the same «I am + feeling» repeated eight times is noise, not teaching.
   // Pre-A1 lessons are built around 1–2 slots, so the grammar stage shows each slot once.
   const grammarPatterns = useMemo(() => {
@@ -264,7 +264,7 @@ export default function SentenceLessonScreen() {
 
   useFocusEffect(useCallback(() => () => { void stopResponsiveSpeech(); }, []));
 
-  const speakForTarget = (text: string, rate: number | undefined, targetKey: string | null) => {
+  const speakForTarget = useCallback((text: string, rate: number | undefined, targetKey: string | null) => {
     setAudioNotice('');
     setMicReadyKey(null);
     clearNarratorFallback();
@@ -287,7 +287,9 @@ export default function SentenceLessonScreen() {
         armMic();
       },
     });
-  };
+  }, [clearNarratorFallback]);
+
+  const firstVocabWord = vocabulary[0]?.word ?? '';
 
   // Read the sentence currently visible, without advancing the lesson automatically.
   useEffect(() => {
@@ -296,16 +298,15 @@ export default function SentenceLessonScreen() {
       speakForTarget(current.en, ENGLISH_NORMAL_SPEECH_RATE, `${stage}:${current.id}`);
       return;
     }
-    if (stage === 5 && vocabulary.length) {
-      const first = vocabulary[0];
-      speakForTarget(first.word, ENGLISH_NORMAL_SPEECH_RATE, `5:0:${first.word}`);
+    if (stage === 5 && firstVocabWord) {
+      speakForTarget(firstVocabWord, ENGLISH_NORMAL_SPEECH_RATE, `5:0:${firstVocabWord}`);
       return;
     }
     clearNarratorFallback();
     narratorTokenRef.current += 1;
     setMicReadyKey(null);
-    if (stage !== 7) void stopResponsiveSpeech();
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.en, vocabulary]);
+    if (stage !== 9) void stopResponsiveSpeech();
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.en, firstVocabWord, speakForTarget, clearNarratorFallback]);
 
   const speak = (text: string, rate?: number, onDone?: () => void) => {
     setAudioNotice('');

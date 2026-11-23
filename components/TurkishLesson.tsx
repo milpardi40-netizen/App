@@ -248,6 +248,8 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
     }, onDone);
   }, [speakForTarget]);
 
+  const firstVocabWord = vocabulary[0]?.word.word ?? '';
+
   // Read the visible main sentence on entry, resume, and each sentence change (stage 1 & shadowing stage 3).
   useEffect(() => {
     if (!sessionReady || !current) return;
@@ -255,15 +257,14 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
       speakForTarget(current.text, stage === 3 ? .68 : NORMAL_SPEECH_RATE, `${stage}:${current.id}`);
       return;
     }
-    if (stage === 5 && vocabulary.length) {
-      const first = vocabulary[0];
-      speakForTarget(first.word.word, NORMAL_SPEECH_RATE, `5:0:${first.word.word}`);
+    if (stage === 5 && firstVocabWord) {
+      speakForTarget(firstVocabWord, NORMAL_SPEECH_RATE, `5:0:${firstVocabWord}`);
       return;
     }
     clearNarratorFallback();
     narratorTokenRef.current += 1;
     setMicReadyKey(null);
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.text, vocabulary, speakForTarget, clearNarratorFallback]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.text, firstVocabWord, speakForTarget, clearNarratorFallback]);
 
   const startCurrentLessonFromBeginning = () => {
     if (saving || completing.current || restartPending.current) return;
@@ -355,8 +356,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
       setStage(nextStage);
       setSentenceIndex(0);
       setRevealed(false);
-      if (nextStage === 3) speak(lesson.sentences[0].text, NORMAL_SPEECH_RATE);
-      else if (nextStage !== 1) void stopTurkishSpeech();
+      if (nextStage !== 1 && nextStage !== 3 && nextStage !== 5) void stopTurkishSpeech();
       return;
     }
 

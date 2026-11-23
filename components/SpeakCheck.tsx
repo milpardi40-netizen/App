@@ -52,6 +52,8 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const settledRef = useRef(false);
   const stoppingByUser = useRef(false);
   const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const emptyRetries = useRef(0);
+  const busyRetries = useRef(0);
   const targetRef = useRef(text);
   targetRef.current = text;
   const onResultRef = useRef(onResult);
@@ -64,6 +66,8 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     finalRef.current = '';
     lastHeardRef.current = '';
     settledRef.current = false;
+    emptyRetries.current = 0;
+    busyRetries.current = 0;
   }, [text]);
   useEffect(() => () => {
     generation.current++;
@@ -73,15 +77,33 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   }, [text]);
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
+  const prevAutoStart = useRef(false);
   const startRef = useRef<null | (() => Promise<void>)>(null);
+  const listeningRef = useRef(false);
+  useEffect(() => { listeningRef.current = listening; }, [listening]);
   useEffect(() => {
+    const wasAutoStart = prevAutoStart.current;
+    prevAutoStart.current = autoStart;
     if (!autoStart) {
       autoStartedFor.current = '';
+      if (retryTimer.current) {
+        clearTimeout(retryTimer.current);
+        retryTimer.current = null;
+      }
+      if (wasAutoStart && micOwner === owner.current) {
+        generation.current++;
+        settledRef.current = true;
+        micOwner = null;
+        listeningRef.current = false;
+        setListening(false);
+        setPartial('');
+        void ExpoSpeechRecognitionModule.abort?.();
+      }
       return;
     }
     if (!text || autoStartedFor.current === text) return;
     autoStartedFor.current = text;
-    const handle = setTimeout(() => { void startRef.current?.(); }, 180);
+    const handle = setTimeout(() => { void startRef.current?.(); }, 420);
     return () => clearTimeout(handle);
   }, [autoStart, text]);
 
@@ -89,11 +111,13 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     const scored = scoreSpeech(targetRef.current, heard);
     setResult(scored);
     if (!heard.trim()) {
-      // Keep the automatic conversation on this learner turn until speech is actually heard.
+      // Allow at most one automatic retry on silence so a quiet room never triggers a busy/rate-limit loop.
       const retry = autoStart && !singleAttempt && !stoppingByUser.current;
+      const shouldRetry = retry && emptyRetries.current < 1;
       stoppingByUser.current = false;
       if (singleAttempt) onResultRef.current?.(scored);
-      if (retry && !retryTimer.current) {
+      if (shouldRetry && !retryTimer.current) {
+        emptyRetries.current += 1;
         retryTimer.current = setTimeout(() => {
           retryTimer.current = null;
           void startRef.current?.();
@@ -104,10 +128,8 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     const id = locale.split('-')[0];
     if (isLanguageId(id)) void addPracticeActivity(id, localDay(), { spoken: 1, scoreSum: scored.score }).catch(() => undefined);
     onResultRef.current?.(scored);
-  }, [autoStart, locale]);
+  }, [autoStart, singleAttempt, locale]);
 
-  const listeningRef = useRef(false);
-  useEffect(() => { listeningRef.current = listening; }, [listening]);
   useSpeechRecognitionEvent('start', () => {
     if (micOwner !== owner.current) return;
     listeningRef.current = true;
@@ -149,20 +171,37 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     listeningRef.current = false;
     setListening(false);
     setPartial('');
-    const code = event.error;
+    const code = event.error as string;
     settledRef.current = true; micOwner = null;
-    if (code === 'no-speech') { finish(''); return; }
+    if (code === 'no-speech' || code === 'speech-timeout') { finish(''); return; }
     if (code === 'aborted') return;
+    if (code === 'busy') {
+      if (busyRetries.current < 1 && !stoppingByUser.current && !retryTimer.current) {
+        busyRetries.current += 1;
+        retryTimer.current = setTimeout(() => {
+          retryTimer.current = null;
+          void startRef.current?.();
+        }, 450);
+        return;
+      }
+      setError('میکروفن لحظه‌ای مشغول بود؛ دوباره «بگو» را بزنید.');
+      return;
+    }
     setError(code === 'not-allowed' || code === 'service-not-allowed'
       ? 'اجازهٔ میکروفن یا تشخیص گفتار داده نشده است؛ از تنظیمات دستگاه فعالش کنید.'
       : code === 'language-not-supported'
         ? 'تشخیص گفتار این زبان روی دستگاه شما در دسترس نیست.'
         : code === 'network'
           ? 'برای تشخیص گفتار این زبان، اتصال اینترنت لازم است.'
-          : 'تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
+          : code === 'audio-capture'
+            ? 'میکروفن دستگاه در دسترس نیست؛ بررسی کنید برنامهٔ دیگری از آن استفاده نکند.'
+            : code === 'too-many-requests'
+              ? 'درخواست‌های گفتاری زیاد شد؛ چند لحظه صبر کنید و دوباره «بگو» را بزنید.'
+              : 'تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
   });
 
   const start = useCallback(async () => {
+    if (micOwner === owner.current && listeningRef.current) return;
     if (retryTimer.current) clearTimeout(retryTimer.current);
     retryTimer.current = null;
     stoppingByUser.current = false;
@@ -217,7 +256,12 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={listening ? 'پایان گفتن' : result ? 'دوباره بگو' : 'شروع گفتن'}
-        onPress={() => listening ? stop() : void start()}
+        onPress={() => {
+          if (listening) { stop(); return; }
+          emptyRetries.current = 0;
+          busyRetries.current = 0;
+          void start();
+        }}
         style={({ pressed }) => [styles.button, compact && styles.buttonCompact, { backgroundColor: listening ? '#B91C1C' : accent }, pressed && styles.buttonPressed]}
       >
         {listening ? <Square size={compact ? 13 : 16} color="#FFFFFF" fill="#FFFFFF" /> : result ? <RefreshCw size={compact ? 15 : 18} color="#FFFFFF" /> : <Mic2 size={compact ? 16 : 19} color="#FFFFFF" />}
