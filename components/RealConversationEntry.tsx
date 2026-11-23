@@ -11,7 +11,7 @@ export default function RealConversationEntry({
   levelId,
   situation,
 }: {
-  language: 'en' | 'ru' | 'tr' | 'de' | 'fr' | 'es';
+  language: 'en' | 'ru' | 'tr' | 'de' | 'fr' | 'es' | 'ar';
   lessonId: string;
   lessonTitle: string;
   levelId: number;

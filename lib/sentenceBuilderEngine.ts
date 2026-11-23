@@ -47,17 +47,21 @@ export interface SentenceDiagnosis {
 }
 
 const LEAD_PUNCT = /^[¿¡«„“"'(]+/;
-const TRAIL_PUNCT = /[.,!?;:…»“"')]+$/;
+const TRAIL_PUNCT = /[.,!?;:…»“"')؟،؛]+$/;
 
-/** Strip combining stress marks (e.g. Russian а́) and surrounding punctuation for fair order comparison. */
+/** Strip combining stress marks (e.g. Russian а́), Arabic harakat, and surrounding punctuation for fair order comparison. */
 export function normalizeBuilderToken(value: string): string {
   return value
     .normalize('NFC')
-    .replace(/[\u0300\u0301]/g, '')
+    .replace(/[\u0300\u0301\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '')
+    .replace(/[أإآٱ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/[ىی]/g, 'ي')
+    .replace(/ک/g, 'ك')
     .replace(/ё/g, 'е')
     .replace(/[’‘`]/g, "'")
     .toLocaleLowerCase()
-    .replace(/^[¿¡«„“"'(\s]+|[.,!?;:…»“"')\s]+$/g, '')
+    .replace(/^[¿¡«„“"'(\s]+|[.,!?;:…»“"')؟،؛\s]+$/g, '')
     .trim();
 }
 
@@ -87,6 +91,8 @@ const CLAUSE_BREAKERS = new Set([
   'porque', 'aunque', 'cuando', 'si', 'sin', 'por', 'pero', 'y', 'que', 'para',
   // Turkish
   'çünkü', 'ama', 'fakat', 'ancak', 'eğer', 'rağmen', 'için', 've', 'veya', 'ki',
+  // Arabic
+  'لأن', 'لان', 'ولكن', 'لكن', 'عندما', 'إذا', 'اذا', 'لو', 'بينما', 'حتى', 'ثم', 'أو', 'او', 'الذي', 'التي',
 ]);
 
 function matchesVocabulary(label: string, anchors: readonly VocabularyAnchor[]): boolean {

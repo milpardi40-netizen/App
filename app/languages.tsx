@@ -38,6 +38,7 @@ const languageArtwork: Record<string, number> = {
   de: require('../assets/images/language-de-watercolor.jpg'),
   fr: require('../assets/images/language-fr-watercolor.jpg'),
   es: require('../assets/images/language-es-watercolor.jpg'),
+  ar: require('../assets/images/language-ar-watercolor.jpg'),
 };
 
 const learningSteps = [
@@ -65,6 +66,7 @@ export default function LanguagesHome() {
       prefetchLater([() => import('@/components/routes/NewCourseHomeScreen')], 900),
       prefetchLater([() => import('@/components/RussianHome')], 2600),
       prefetchLater([() => import('@/components/TurkishHome')], 4200),
+      prefetchLater([() => import('@/components/arabic/ArabicHomeScreen')], 5600),
     ];
     return () => stops.forEach(stop => stop());
   }, []);

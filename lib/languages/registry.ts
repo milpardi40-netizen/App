@@ -88,6 +88,16 @@ export const LANGUAGE_REGISTRY = [
     status: 'starter',
     home: '/learn/es',
   },
+  {
+    id: 'ar',
+    name: 'عربی',
+    nativeName: 'العربية',
+    speechLocale: 'ar-SA',
+    accent: '#0F766E',
+    description: 'عربی فصیح معاصر؛ از اولین کلمات و خط حرکات‌دار تا مکالمهٔ روزمره',
+    status: 'starter',
+    home: '/learn/ar',
+  },
 ] as const satisfies readonly LanguageRegistryEntry[];
 
 /** Union of the registered language codes; TypeScript narrows every consumer. */
@@ -108,7 +118,7 @@ export const ADMIN_SCOPE_IDS: readonly string[] = ['en', 'tr'];
 export const STARTS_FROM_ZERO: ReadonlySet<string> = new Set(['de', 'fr', 'es']);
 
 /** Languages that have hand-written route files under app/learn/<id>. */
-export const DEDICATED_LANGUAGE_PAGES: ReadonlySet<string> = new Set(['ru']);
+export const DEDICATED_LANGUAGE_PAGES: ReadonlySet<string> = new Set(['ru', 'ar']);
 
 export const NATIVE_DEFAULT_SCOPE: readonly LanguageId[] =
   LANGUAGE_IDS.filter(id => !NATIVE_SCOPE_EXCLUSIONS.has(id));

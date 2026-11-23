@@ -4,6 +4,7 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } fro
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { ChevronLeft, MessageCircle, Mic2, Plus, QrCode, ShieldCheck, Sparkles, Trash2, UserRound } from 'lucide-react-native';
 import { AppBottomNav } from '@/components/AppBottomNav';
+import { ArabicBottomNav } from '@/components/arabic/ArabicBottomNav';
 import { RussianBottomNav } from '@/components/RussianBottomNav';
 import { TurkishBottomNav } from '@/components/TurkishBottomNav';
 import { StarterBottomNav } from '@/components/StarterBottomNav';
@@ -46,7 +47,7 @@ type ConversationCopy = {
   voiceDesc: string;
 };
 
-const CONVERSATION_COPY: Record<SharedLanguage, ConversationCopy> = {
+const CONVERSATION_COPY: Record<SharedLanguage | 'ar', ConversationCopy> = {
   en: {
     shortName: 'انگلیسی',
     headerTitle: 'مکالمه',
@@ -143,10 +144,29 @@ const CONVERSATION_COPY: Record<SharedLanguage, ConversationCopy> = {
     voiceTitle: 'پیام صوتی اسپانیایی',
     voiceDesc: 'تشخیص و تمرین تلفظ اسپانیایی',
   },
+  ar: {
+    shortName: 'عربی',
+    headerTitle: 'مکالمهٔ عربی',
+    headerSubtitle: 'گفت‌وگوی واقعی و گام‌به‌گام به زبان عربی',
+    chipLabel: 'عربی (العربية)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور عربی',
+    practiceTitle: '۳ تا ۶ نوبت عربی، متناسب با سطح مشترک',
+    practiceText: 'موضوعات از درس‌های Pre-A1 تا C1 عربی (از حروف و احوال‌پرسی تا گفت‌وگوی آزاد) انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک عربی شما و مخاطب تنظیم می‌شود.',
+    emptyDesc: 'دوست مسلط یا هم‌مسیر یادگیری عربی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های عربی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی عربی',
+    assistDesc: 'قبل از ارسال پیام عربی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی عربی',
+    textDesc: 'با خط عربی و بررسی هدف',
+    voiceTitle: 'پیام صوتی عربی',
+    voiceDesc: 'تشخیص و تمرین تلفظ عربی',
+  },
 };
 
 const toSharedLanguage = (value: string | null | undefined): SharedLanguage | null =>
-  isLanguageId(value) ? (value as SharedLanguage) : null;
+  value && value !== 'ar' && isLanguageId(value) ? (value as SharedLanguage) : null;
+
+const toCopyLanguage = (value: string | null | undefined): SharedLanguage | 'ar' | null =>
+  isLanguageId(value) ? (value as SharedLanguage | 'ar') : null;
 
 export default function ConversationsHome() {
   const router = useRouter();
@@ -172,6 +192,7 @@ export default function ConversationsHome() {
     return () => { alive = false; };
   }, []);
   useEffect(() => refreshResumeLanguage(), [refreshResumeLanguage]);
+  const requestedCopyLang = toCopyLanguage(typeof language === 'string' ? language : undefined);
   const requestedLang = toSharedLanguage(typeof language === 'string' ? language : undefined);
   const candidateLang = requestedLang ?? toSharedLanguage(activeLanguage);
   const convLanguage: SharedLanguage = RUSSIAN_ONLY_BUILD
@@ -181,10 +202,11 @@ export default function ConversationsHome() {
       : isLanguageEnabled('en')
         ? 'en'
         : 'ru';
-  const navLanguage: ResumeLanguage = requestedLang ?? activeLanguage;
+  const navLanguage: ResumeLanguage = requestedCopyLang ?? activeLanguage;
+  const displayCopyLang: SharedLanguage | 'ar' = !RUSSIAN_ONLY_BUILD && navLanguage === 'ar' && isLanguageEnabled('ar') ? 'ar' : convLanguage;
   const homePath = navLanguage && navLanguage !== 'en' ? `/learn/${navLanguage}` : navLanguage === 'en' ? '/lang' : '/languages';
-  const copy = CONVERSATION_COPY[convLanguage];
-  const lessonLangCopy = CONVERSATION_COPY[toSharedLanguage(lessonContext?.language) ?? convLanguage];
+  const copy = CONVERSATION_COPY[displayCopyLang];
+  const lessonLangCopy = CONVERSATION_COPY[toCopyLanguage(lessonContext?.language) ?? displayCopyLang];
 
   const openSupport = () => {
     if (openingSupport) return;
@@ -381,7 +403,7 @@ export default function ConversationsHome() {
           <View style={styles.modeCard}><Mic2 size={20} color={Colors.error[300]} /><Text style={styles.modeTitle}>{copy.voiceTitle}</Text><Text style={styles.modeDesc}>{copy.voiceDesc}</Text></View>
         </View>
       </ScrollView>
-      {navLanguage === 'ru' ? <RussianBottomNav /> : navLanguage === 'tr' ? <TurkishBottomNav /> : navLanguage && navLanguage !== 'en' && NEW_COURSES[navLanguage as keyof typeof NEW_COURSES] ? <StarterBottomNav course={NEW_COURSES[navLanguage as keyof typeof NEW_COURSES]} /> : <AppBottomNav />}
+      {navLanguage === 'ar' ? <ArabicBottomNav /> : navLanguage === 'ru' ? <RussianBottomNav /> : navLanguage === 'tr' ? <TurkishBottomNav /> : navLanguage && navLanguage !== 'en' && NEW_COURSES[navLanguage as keyof typeof NEW_COURSES] ? <StarterBottomNav course={NEW_COURSES[navLanguage as keyof typeof NEW_COURSES]} /> : <AppBottomNav />}
     </View>
   );
 }

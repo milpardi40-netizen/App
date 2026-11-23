@@ -51,6 +51,7 @@ function computeEffectiveScore(attemptScores: readonly number[], mistakes: numbe
  * and produces a final non-repeatable honest evaluation.
  */
 export default function SpeakDrill({ items, locale, accent = Palette.primary, onSpeak, onFinish }: Props) {
+  const isRtlLocale = locale.toLowerCase().startsWith('ar');
   const [index, setIndex] = useState(0);
   const [scores, setScores] = useState<Record<string, number>>({});
   const [attemptMap, setAttemptMap] = useState<Record<string, ItemAttemptSummary>>({});
@@ -362,7 +363,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
                   {attemptCount === 0 ? '۰٪' : `${fa(value)}٪`}
                 </Text>
                 <View style={styles.listTextCol}>
-                  <Text style={styles.listText} numberOfLines={2}>{fa(i + 1)}. {item.text}</Text>
+                  <Text style={[styles.listText, isRtlLocale && styles.rtlListText]} numberOfLines={2}>{fa(i + 1)}. {item.text}</Text>
                   <Text style={styles.listSubNote}>{statusNote}</Text>
                 </View>
               </View>
@@ -404,7 +405,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
           ) : null}
         </View>
       </View>
-      <Text style={styles.sentence}>{current.text}</Text>
+      <Text style={[styles.sentence, isRtlLocale && styles.rtlSentence]}>{current.text}</Text>
       {current.fa ? <Text keepColor style={styles.persian}>{current.fa}</Text> : null}
       {onSpeak ? <Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونه" style={styles.listen} onPress={() => speakAndOpenMic(current.text)}><Volume2 size={16} color={accent} /><Text keepColor style={[styles.listenText, { color: accent }]}>شنیدن نمونه</Text></Pressable> : null}
       <SpeakCheck key={current.id} text={current.text} locale={locale} accent={accent} title="بگو" autoStart={micReady && !passNotice} onResult={onResult} />
@@ -458,6 +459,7 @@ const styles = StyleSheet.create({
   streakPillText: { fontFamily: Typography.fontFamily, fontSize: 11, fontWeight: '700', color: '#C2410C', writingDirection: 'rtl' },
   counter: { fontFamily: Typography.fontFamily, fontSize: 11, color: Palette.muted, writingDirection: 'rtl' },
   sentence: { fontFamily: Typography.latinFontFamily, fontSize: 21, fontWeight: '800', color: Palette.ink, textAlign: 'center', lineHeight: 32, writingDirection: 'ltr' },
+  rtlSentence: { fontFamily: Typography.boldFontFamily, writingDirection: 'rtl' },
   persian: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.muted, textAlign: 'center', writingDirection: 'rtl' },
   listen: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 7, borderRadius: 999, backgroundColor: Palette.primarySoft },
   listenText: { fontFamily: Typography.fontFamily, fontSize: 12, writingDirection: 'rtl' },
@@ -474,6 +476,7 @@ const styles = StyleSheet.create({
   listScore: { width: 48, fontSize: 14, fontWeight: '800', textAlign: 'center' },
   listTextCol: { flex: 1, gap: 2 },
   listText: { fontFamily: Typography.latinFontFamily, fontSize: 14, color: '#334155', writingDirection: 'ltr', textAlign: 'left' },
+  rtlListText: { fontFamily: Typography.boldFontFamily, writingDirection: 'rtl', textAlign: 'right' },
   listSubNote: { fontFamily: Typography.fontFamily, fontSize: 11, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   missedWordsLine: { fontFamily: Typography.latinFontFamily, fontSize: 11.5, color: '#B91C1C', textAlign: 'right', writingDirection: 'rtl', paddingRight: 4 },
 });

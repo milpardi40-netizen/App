@@ -5,14 +5,21 @@
 export function tokens(text: string) {
   return text
     .toLowerCase()
-    // Lesson text carries stress/accent marks as combining characters (Russian «Ира́на», French «é» typed as e + ´).
-    // Recognisers never return them, and a combining mark is not a letter, so without folding it the word was
-    // split in two («ир» + «ана») and could never match. Decompose and drop every combining mark on both sides.
+    // Lesson text carries stress/accent marks as combining characters (Russian «Ира́на», French «é» typed as e + ´),
+    // and Arabic educational text carries harakat/tashkeel (\u064B-\u065F, \u0670) that STT engines omit.
+    // Strip Arabic diacritics and fold Arabic/Persian keyboard variants (أإآٱ -> ا, ة -> ه, ىی -> ي, ک -> ك) cleanly.
+    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '')
+    .replace(/[أإآٱ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/[ىی]/g, 'ي')
+    .replace(/ک/g, 'ك')
+    .replace(/ؤ/g, 'و')
+    .replace(/ئ/g, 'ي')
     .replace(/ç/g, 's')
     .normalize('NFD')
     .replace(/\p{M}/gu, '')
     .replace(/ё/g, 'е')
-    .replace(/[’'`´]/g, '')
+    .replace(/[’'`´؟،؛]/g, '')
     .replace(/[^\p{L}\p{N}\s]/gu, ' ')
     .split(/\s+/)
     .filter(Boolean);

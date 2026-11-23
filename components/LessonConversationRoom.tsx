@@ -177,7 +177,7 @@ function buildFallbackRule(line: ChatLine): SemanticTurn {
     promptFa: line.fa || line.text,
     targetText: line.text,
     concepts: words.length ? words.slice(0, 2).map(w => [w]) : [[line.text]],
-    expectedQuestion: /[?¿]/.test(line.text),
+    expectedQuestion: /[?¿؟]/.test(line.text),
   };
 }
 
@@ -195,6 +195,7 @@ export default function LessonConversationRoom({
   semanticPractice,
   levelId,
 }: Props) {
+  const isRtlTarget = locale.toLowerCase().startsWith('ar');
   const lines = useMemo<ChatLine[]>(() => {
     const real = dialogue.filter(line => line.text.trim());
     if (real.length) {
@@ -448,11 +449,12 @@ export default function LessonConversationRoom({
     });
 
     const isPreOrA1 = activeLevel === 'Pre-A1' || activeLevel === 'A1';
+    const isArabic = locale.toLowerCase().startsWith('ar');
     const repeatedSourceLine = isPreOrA1 && scoreSpeech(activeFollowUp.learnerSourceLine, trimmed).score >= 60;
     const shortConfirmWord = isPreOrA1 && activeFollowUp.move.id === 'confirm'
-      && /^(yes|yeah|ok|okay|sure|ja|klar|oui|sí|si|evet|tamam|да|конечно)[!.]?$/i.test(trimmed);
+      && /^(yes|yeah|ok|okay|sure|ja|klar|oui|sí|si|evet|tamam|да|конечно|نعم|أجل|بلى|حسناً|حسنا|تمام)[!.]?$/i.test(trimmed);
     const isWhyOrMean = activeFollowUp.move.id === 'why' || activeFollowUp.move.id === 'mean';
-    const reasonableFreeAnswer = isWhyOrMean && trimmed.split(/\s+/).length >= 2 && !/[\u0600-\u06FF]/.test(trimmed);
+    const reasonableFreeAnswer = isWhyOrMean && trimmed.split(/\s+/).length >= 2 && (isArabic ? !/[پچژگ]/.test(trimmed) : !/[\u0600-\u06FF]/.test(trimmed));
 
     if (matchedOptIdx === -1 && !repeatedSourceLine && !shortConfirmWord && !reasonableFreeAnswer) {
       fail('پاسخت به پرسشِ هم‌صحبت واضح نبود؛ یکی از مسیرهای پاسخ را بگو یا بنویس.', {
@@ -758,7 +760,7 @@ export default function LessonConversationRoom({
                       <Pressable accessibilityRole="button" accessibilityLabel={`شنیدنِ خط ${fa(at + 1)}`} onPress={() => speak(line.text, at)} style={styles.replay}><Volume2 size={15} color={Palette.primary} /></Pressable>
                     )}
                   </View>
-                  <Text style={styles.lineText}>{bubbleText}</Text>
+                  <Text style={[styles.lineText, isRtlTarget && styles.rtlText]}>{bubbleText}</Text>
                   {bubbleFa ? <Text style={styles.lineFa}>{bubbleFa}</Text> : null}
                   {isLearnerBubble && actual?.correction ? (
                     <Text style={styles.correctionHint}>عبارت طبیعی‌تر: {actual.correction}</Text>
@@ -775,7 +777,7 @@ export default function LessonConversationRoom({
                         </Pressable>
                       ) : null}
                     </View>
-                    <Text style={styles.lineText}>{extra.text}</Text>
+                    <Text style={[styles.lineText, isRtlTarget && styles.rtlText]}>{extra.text}</Text>
                     {extra.fa ? <Text style={styles.lineFa}>{extra.fa}</Text> : null}
                   </View>
                 ))}
@@ -816,7 +818,7 @@ export default function LessonConversationRoom({
                   const text = fillLine(opt.text, activeFollowUp.learnerSourceLine);
                   return (
                     <Pressable key={`fu-opt-${idx}`} accessibilityRole="button" onPress={() => submitFollowUpAnswer(text)} style={styles.choiceBtn}>
-                      <Text style={styles.choiceForeign}>{text}</Text>
+                      <Text style={[styles.choiceForeign, isRtlTarget && styles.rtlText]}>{text}</Text>
                       <Text style={styles.choiceFa}>{opt.fa}</Text>
                     </Pressable>
                   );
@@ -827,7 +829,7 @@ export default function LessonConversationRoom({
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(true); setNote(''); }}><Text style={styles.linkText}>با نوشتن</Text></Pressable>
                 ) : (
                   <View style={styles.compose}>
-                    <TextInput value={draft} onChangeText={setDraft} onSubmitEditing={sendTyped} returnKeyType="send" placeholder="واکنش خودت را بنویس" placeholderTextColor={Palette.muted} accessibilityLabel="پاسخ به پرسش هم‌صحبت" style={styles.input} />
+                    <TextInput value={draft} onChangeText={setDraft} onSubmitEditing={sendTyped} returnKeyType="send" placeholder="واکنش خودت را بنویس" placeholderTextColor={Palette.muted} accessibilityLabel="پاسخ به پرسش هم‌صحبت" style={[styles.input, isRtlTarget && styles.rtlInput]} />
                     <Pressable accessibilityRole="button" accessibilityLabel="ارسال پاسخ" onPress={sendTyped} style={styles.send}><Send size={16} color="#FFFFFF" /></Pressable>
                   </View>
                 )}
@@ -844,7 +846,7 @@ export default function LessonConversationRoom({
               {revealed ? (
                 <View style={styles.revealBox}>
                   <Text style={styles.revealLabel}>الگوی کمکی (برای تمرین دوباره بگو یا بنویس):</Text>
-                  <Text style={styles.turnTarget}>{current.text}</Text>
+                  <Text style={[styles.turnTarget, isRtlTarget && styles.rtlText]}>{current.text}</Text>
                 </View>
               ) : hintOpen ? (
                 <View style={styles.hintBox}>
@@ -867,16 +869,16 @@ export default function LessonConversationRoom({
                 <View style={styles.diagnosticCard}>
                   {diagnostic.partnerPushback ? (
                     <View style={styles.pushbackBox}>
-                      <Text style={styles.pushbackPartner}>{partnerName}: {diagnostic.partnerPushback.text}</Text>
+                      <Text style={[styles.pushbackPartner, isRtlTarget && styles.rtlText]}>{partnerName}: {diagnostic.partnerPushback.text}</Text>
                       <Text style={styles.pushbackFa}>{diagnostic.partnerPushback.fa}</Text>
                     </View>
                   ) : null}
                   <Text style={styles.diagHeard}>شنیده/ثبت‌شده: «{diagnostic.heard || '—'}»</Text>
                   {diagnostic.wordResults && diagnostic.wordResults.length > 0 ? (
-                    <View style={styles.wordBar}>
+                    <View style={[styles.wordBar, isRtlTarget && styles.rtlWordBar]}>
                       {diagnostic.wordResults.map((w, wi) => (
                         <View key={`${w.word}-${wi}`} style={[styles.wordChip, w.state === 'ok' ? styles.wMatch : w.state === 'near' ? styles.wClose : styles.wMiss]}>
-                          <Text style={styles.wordChipText}>{w.word}</Text>
+                          <Text style={[styles.wordChipText, isRtlTarget && styles.rtlWordChipText]}>{w.word}</Text>
                         </View>
                       ))}
                     </View>
@@ -888,7 +890,7 @@ export default function LessonConversationRoom({
                 <View style={styles.choiceList}>
                   {currentRule.choices.map((ch: Choice, idx: number) => (
                     <Pressable key={`choice-${index}-${idx}`} accessibilityRole="button" onPress={() => submitAnswer(ch.text, 'choice')} style={styles.choiceBtn}>
-                      <Text style={styles.choiceForeign}>{ch.text}</Text>
+                      <Text style={[styles.choiceForeign, isRtlTarget && styles.rtlText]}>{ch.text}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -1045,6 +1047,10 @@ const styles = StyleSheet.create({
   scorePill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 3, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 999, backgroundColor: '#ECFDF5' },
   scorePillText: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: '#047857' },
   lineText: { fontFamily: 'Times New Roman', fontSize: 18, lineHeight: 28, fontWeight: '700', color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
+  rtlText: { fontFamily: Typography.boldFontFamily, textAlign: 'right', writingDirection: 'rtl' },
+  rtlInput: { fontFamily: Typography.fontFamily, textAlign: 'right', writingDirection: 'rtl' },
+  rtlWordBar: { flexDirection: 'row-reverse' },
+  rtlWordChipText: { fontFamily: Typography.boldFontFamily, writingDirection: 'rtl' },
   lineFa: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 22, color: Palette.text, textAlign: 'right', writingDirection: 'rtl' },
   correctionHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: '#B45309', textAlign: 'right', writingDirection: 'rtl', marginTop: 2 },
   replay: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4, padding: 4 },

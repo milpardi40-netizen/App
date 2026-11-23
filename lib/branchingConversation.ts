@@ -1,7 +1,7 @@
 import { scoreSpeech, tokens, type SpeakCheckResult } from './speechScore';
 export type SpeechWordResult = SpeakCheckResult['words'][number];
 
-export type BranchingLocale = 'en-US' | 'ru-RU' | 'tr-TR' | 'de-DE' | 'fr-FR' | 'es-ES';
+export type BranchingLocale = 'en-US' | 'ru-RU' | 'tr-TR' | 'de-DE' | 'fr-FR' | 'es-ES' | 'ar-SA';
 export type ConversationLevel = 'Pre-A1' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 export type ConversationMode = 'guided' | 'controlled' | 'semi-free' | 'semantic' | 'branching' | 'open-roleplay';
 
@@ -63,6 +63,8 @@ const STOP = new Set([
   // Spanish
   'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'yo', 'tú', 'él', 'ella', 'nosotros', 'vosotros', 'ellos',
   'y', 'o', 'en', 'a', 'al', 'de', 'del', 'para', 'por', 'con', 'es', 'soy', 'son', 'está', 'estoy', 'muy',
+  // Arabic (normalized, unvowelled)
+  'في', 'من', 'الي', 'علي', 'عن', 'مع', 'هذا', 'هذه', 'انا', 'انت', 'هو', 'هي', 'نحن', 'انتم', 'هم', 'و', 'او', 'ان', 'ال', 'جدا',
 ]);
 
 const NEGATION_TOKENS = new Set([
@@ -72,6 +74,7 @@ const NEGATION_TOKENS = new Set([
   'nein', 'nicht', 'kein', 'keine', 'keinen', 'keinem', 'nie', 'niemals', 'nichts',
   'non', 'ne', 'pas', 'jamais', 'rien', 'aucun', 'aucune',
   'nunca', 'jamás', 'nada', 'ningún', 'ninguna', 'tampoco',
+  'لا', 'ليس', 'ليست', 'لن', 'لم', 'كلا', 'ابدا',
 ]);
 
 const QUESTION_WORDS = new Set([
@@ -81,6 +84,7 @@ const QUESTION_WORDS = new Set([
   'was', 'wo', 'wohin', 'woher', 'wann', 'wer', 'wen', 'wem', 'warum', 'wie', 'welche', 'welcher', 'welches', 'kann', 'können', 'darf',
   'quoi', 'où', 'quand', 'qui', 'pourquoi', 'comment', 'quel', 'quelle', 'quels', 'quelles', 'combien', 'pouvez', 'puis',
   'qué', 'dónde', 'adónde', 'cuándo', 'quién', 'quiénes', 'cómo', 'cuál', 'cuáles', 'cuánto', 'cuánta', 'puedo', 'puede', 'puedes',
+  'ما', 'ماذا', 'اين', 'متي', 'لماذا', 'كيف', 'هل', 'كم', 'اي', 'ايه',
 ]);
 
 const SYNONYM_GROUPS: ReadonlyArray<readonly string[]> = [
@@ -116,6 +120,12 @@ const SYNONYM_GROUPS: ReadonlyArray<readonly string[]> = [
   ['gracias', 'muchas gracias'],
   ['sí', 'claro', 'vale', 'bueno', 'por supuesto'],
   ['perdón', 'disculpe', 'lo siento'],
+  ['مرحبا', 'اهلا', 'السلام عليكم', 'صباح الخير', 'مساء الخير'],
+  ['مع السلامه', 'الي اللقاء', 'وداعا'],
+  ['شكرا', 'شكرا جزيلا'],
+  ['نعم', 'اجل', 'بلي', 'بالطبع', 'حسنا', 'تمام'],
+  ['عفوا', 'المعذره', 'اسف', 'اسفه'],
+  ['اريد', 'اود', 'احتاج'],
 ];
 
 const SYNONYM_LOOKUP = new Map<string, readonly string[]>();
@@ -158,9 +168,15 @@ const PUSHBACK_BY_LOCALE: Record<BranchingLocale, { unclear: { text: string; fa:
   },
   'es-ES': {
     unclear: { text: 'Perdón, no lo entendí bien. ¿Puede decirlo con más claridad?', fa: 'ببخشید، درست متوجه نشدم. واضح‌تر و متناسب با نوبت بگو.' },
-    polarity: { text: 'Un momento, ¿quiere decir que sí o que no?', fa: 'یک لحظه، منظورت بله است یا خیر؟' },
+    polarity: { text: 'Un momento, ¿quiere decir que sí o que no?', fa: 'یک لحظه، منظورت مثبت است یا منفی؟ با نوبت هم‌خوانی ندارد.' },
     question: { text: '¿Está haciendo una pregunta?', fa: 'آیا سؤال می‌پرسی؟ با لحن یا ساختار پرسشی بگو.' },
     short: { text: '¿Podría explicarlo de forma más completa?', fa: 'می‌توانی کمی کامل‌تر توضیح بدهی؟' },
+  },
+  'ar-SA': {
+    unclear: { text: 'عَفْوًا، لَمْ أَفْهَمْ جَيِّدًا. هَلْ يُمْكِنُكَ أَنْ تَقُولَ ذَلِكَ بِوُضُوحٍ أَكْثَرَ؟', fa: 'ببخشید، کامل متوجه نشدم. لطفاً واضح‌تر و متناسب با موضوع بگو.' },
+    polarity: { text: 'لَحْظَةً، هَلْ تَقْصِدُ نَعَمْ أَمْ لَا؟', fa: 'یک لحظه، منظورت مثبت است یا منفی؟ با پاسخ این نوبت نمی‌خواند.' },
+    question: { text: 'هَلْ تَطْرَحُ سُؤَالًا؟ حَاوِلْ صِيَاغَتَهُ كَسُؤَالٍ.', fa: 'آیا سؤال می‌پرسی؟ با لحن یا واژهٔ پرسشی بیان کن.' },
+    short: { text: 'هَلْ يُمْكِنُكَ التَّوْضِيحُ بِشَكْلٍ أَكْمَلَ قَلِيلًا؟', fa: 'می‌توانی کمی کامل‌تر توضیح بدهی؟' },
   },
 };
 
@@ -200,12 +216,12 @@ function overlapScore(expected: string, heard: string) {
 function detectPolarity(text: string): 'positive' | 'negative' | 'neutral' {
   const words = normalize(text).split(' ').filter(Boolean);
   if (words.some(w => NEGATION_TOKENS.has(w))) return 'negative';
-  if (words.some(w => ['yes', 'yeah', 'sure', 'да', 'конечно', 'evet', 'ja', 'oui', 'sí'].includes(w))) return 'positive';
+  if (words.some(w => ['yes', 'yeah', 'sure', 'да', 'конечно', 'evet', 'ja', 'oui', 'sí', 'نعم', 'اجل', 'بلي', 'حسنا', 'تمام'].includes(w))) return 'positive';
   return 'neutral';
 }
 
 function looksLikeQuestion(text: string): boolean {
-  if (/[?¿]/.test(text)) return true;
+  if (/[?¿؟]/.test(text)) return true;
   const words = normalize(text).split(' ').filter(Boolean);
   return words.some(w => QUESTION_WORDS.has(w));
 }
@@ -213,6 +229,12 @@ function looksLikeQuestion(text: string): boolean {
 function scriptIssue(text: string, locale: BranchingLocale, targetText?: string): string | null {
   const trimmed = text.trim();
   if (!trimmed) return 'هنوز پاسخی ثبت نشده است.';
+  if (locale === 'ar-SA') {
+    if (/[پچژگ]/.test(trimmed)) return 'لطفاً به زبان عربی پاسخ بده، نه فارسی.';
+    if (/^(.)\1{3,}$/.test(trimmed.replace(/\s+/g, ''))) return 'پاسخ نامفهوم یا تکراری است؛ یک جملهٔ واقعی بگو یا بنویس.';
+    if (!/[\u0621-\u064A\u0671-\u06D3]/.test(trimmed)) return 'این بخش مکالمهٔ عربی است؛ لطفاً با خط و واژه‌های عربی پاسخ بده.';
+    return null;
+  }
   if (/[\u0600-\u06FF]/.test(trimmed)) return 'لطفاً به زبان همین درس پاسخ بده، نه فارسی.';
   if (/^(.)\1{3,}$/.test(trimmed.replace(/\s+/g, ''))) return 'پاسخ نامفهوم یا تکراری است؛ یک جملهٔ واقعی بگو یا بنویس.';
   const lettersOnly = trimmed.replace(/[^a-zA-Z\u0400-\u04FFçğıöşüÇĞİÖŞÜäöüßÄÖÜàâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸáéíóúñüÁÉÍÓÚÑÜ]/g, '');
