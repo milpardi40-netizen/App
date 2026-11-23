@@ -1,4 +1,5 @@
 import { isLanguageEnabled, MANAGEMENT_BUILD, RUSSIAN_ONLY_BUILD } from '@/lib/features';
+import { findLanguageEntry, isLanguageId } from '@/lib/languages/registry';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, AppState, BackHandler, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -54,6 +55,24 @@ import VoiceAnswerInput from '@/components/VoiceAnswerInput';
 import SupportConversation from './SupportConversation';
 
 const containsRtlScript = (value: string) => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(value);
+
+const LANGUAGE_LABELS_FA: Record<SharedLanguage, string> = {
+  en: 'انگلیسی',
+  ru: 'روسی',
+  tr: 'ترکی استانبولی',
+  de: 'آلمانی',
+  fr: 'فرانسوی',
+  es: 'اسپانیایی',
+};
+
+const TEXT_PLACEHOLDER_BY_LANG: Record<SharedLanguage, string> = {
+  en: 'پاسخ انگلیسی این نوبت را بنویس…',
+  ru: 'پاسخ روسی این نوبت را به خط سیریلیک بنویس…',
+  tr: 'پاسخ ترکی استانبولی این نوبت را بنویس…',
+  de: 'پاسخ آلمانی این نوبت را بنویس…',
+  fr: 'پاسخ فرانسوی این نوبت را بنویس…',
+  es: 'پاسخ اسپانیایی این نوبت را بنویس…',
+};
 
 type RouteParams = {
   conversationId: string;
@@ -188,12 +207,15 @@ function TurnConversationScreen({
   // highest CEFR level both learners have completed. The lesson-room entry
   // (lessonId param) preserves its dedicated scenario plan.
   const hasLessonContext = Boolean(lessonId);
-  const singleLanguage: SharedLanguage = !isLanguageEnabled('ru')
-    ? 'en'
-    : (RUSSIAN_ONLY_BUILD || !isLanguageEnabled('en') || language === 'ru')
-      ? 'ru'
-      : 'en';
-  const [myCompletedByLang, setMyCompletedByLang] = useState<{ en: CourseLevelId[]; ru: CourseLevelId[] } | null>(null);
+  const requestedLanguage = isLanguageId(language) ? (language as SharedLanguage) : null;
+  const singleLanguage: SharedLanguage = RUSSIAN_ONLY_BUILD
+    ? 'ru'
+    : requestedLanguage && isLanguageEnabled(requestedLanguage)
+      ? requestedLanguage
+      : isLanguageEnabled('en')
+        ? 'en'
+        : 'ru';
+  const [myCompletedByLang, setMyCompletedByLang] = useState<Record<SharedLanguage, CourseLevelId[]> | null>(null);
   const [partnerRawLevel, setPartnerRawLevel] = useState<string | null | undefined>(partnerLevel);
   const [pickingLesson, setPickingLesson] = useState(false);
   const [choosingLesson, setChoosingLesson] = useState(false);
@@ -207,7 +229,7 @@ function TurnConversationScreen({
         setMyCompletedByLang(levels);
         void syncMyEnglishLevel(encodeCourseLevels(levels)).catch(() => undefined);
       })
-      .catch(() => { if (active) setMyCompletedByLang({ en: [], ru: [] }); });
+      .catch(() => { if (active) setMyCompletedByLang({ en: [], ru: [], tr: [], de: [], fr: [], es: [] }); });
     if (partnerLevel !== undefined) {
       setPartnerRawLevel(partnerLevel);
     } else {
@@ -370,11 +392,11 @@ function TurnConversationScreen({
     if (Platform.OS !== 'android') return;
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
       if (router.canGoBack()) router.back();
-      else router.replace('/conversations' as never);
+      else router.replace({ pathname: '/conversations', params: { language: singleLanguage } } as never);
       return true;
     });
     return () => subscription.remove();
-  }, [router]);
+  }, [router, singleLanguage]);
 
   // The composer is translated over the transcript when the keyboard opens.
   // Reserve the lifted keyboard height so the newest bubble stays visible, and
@@ -410,7 +432,7 @@ function TurnConversationScreen({
     const clean = raw.trim();
     if (!clean || sending || !state.myTurn || !state.currentPrompt || state.finished || ended) return;
     if (!hasTargetLanguageText(clean, effectiveLanguage)) {
-      setError(`برای تمرین، پاسخ را به ${effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} بنویس.`);
+      setError(`برای تمرین، پاسخ را به ${LANGUAGE_LABELS_FA[effectiveLanguage]} بنویس.`);
       setInput(clean);
       setInputMode('text');
       return;
@@ -460,7 +482,7 @@ function TurnConversationScreen({
   return (
     <View style={styles.root}>
       <View style={styles.header}>
-        <ChatBackButton fallback="/conversations" />
+        <ChatBackButton fallback={`/conversations?language=${singleLanguage}`} />
         <View style={styles.avatar}><UserRound size={21} color={Colors.primary[300]} /></View>
         <View style={styles.headerText}>
           <Text style={[styles.name, containsRtlScript(name || 'مخاطب') ? styles.rtlText : styles.ltrText]}>{name || 'مخاطب'}</Text>
@@ -480,7 +502,7 @@ function TurnConversationScreen({
               <View style={styles.sharedTopRow}>
                 <Text style={styles.sharedKicker}>سطح مشترک شما</Text>
                 <View style={styles.pickerLangBadge}>
-                  <Text style={styles.pickerLangBadgeText}>{singleLanguage === 'ru' ? 'روسی' : 'انگلیسی'}</Text>
+                  <Text style={styles.pickerLangBadgeText}>{LANGUAGE_LABELS_FA[singleLanguage]}</Text>
                 </View>
               </View>
               <View style={styles.sharedLevelRow}>
@@ -517,7 +539,7 @@ function TurnConversationScreen({
             </View>
 
             <View style={styles.lessonListHeader}>
-              <Text style={styles.lessonListTitle}>درس‌های {singleLanguage === 'ru' ? 'روسی' : 'انگلیسی'} سطح {cefrOfLevel(sharedLevelId)}</Text>
+              <Text style={styles.lessonListTitle}>درس‌های {LANGUAGE_LABELS_FA[singleLanguage]} سطح {cefrOfLevel(sharedLevelId)}</Text>
               <Text style={styles.lessonListCount}>{fa(sharedLessons.length)} درس</Text>
             </View>
             {sharedLessons.map((lesson, index) => {
@@ -573,7 +595,7 @@ function TurnConversationScreen({
                     <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
                   </View>
                   <Text style={styles.topicLine} numberOfLines={1}>
-                    {effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · {plan.topicFa}
+                    {LANGUAGE_LABELS_FA[effectiveLanguage]} · {plan.topicFa}
                   </Text>
                 </View>
                 <View style={styles.statusRightMeta}>
@@ -735,7 +757,7 @@ function TurnConversationScreen({
                           style={[styles.input, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]}
                           value={input}
                           onChangeText={setInput}
-                          placeholder={effectiveLanguage === 'ru' ? 'پاسخ روسی این نوبت را به خط سیریلیک بنویس…' : 'پاسخ انگلیسی این نوبت را بنویس…'}
+                          placeholder={TEXT_PLACEHOLDER_BY_LANG[effectiveLanguage]}
                           placeholderTextColor={Colors.neutral[600]}
                           multiline
                           maxLength={320}
@@ -755,7 +777,7 @@ function TurnConversationScreen({
                       </>
                     ) : (
                       <VoiceAnswerInput
-                        locale={effectiveLanguage === 'ru' ? 'ru-RU' : 'en-US'}
+                        locale={findLanguageEntry(effectiveLanguage)?.speechLocale ?? 'en-US'}
                         contextualStrings={[...(state.currentPrompt?.cues ?? [])]}
                         disabled={sending}
                         onTranscript={text => void sendAnswer(text)}
@@ -775,7 +797,7 @@ function TurnConversationScreen({
       )}
 
       {showReport ? (
-        <TurnReportCard report={report} plan={plan} onClose={() => setShowReport(false)} onBack={() => router.replace('/conversations' as never)} />
+        <TurnReportCard report={report} plan={plan} onClose={() => setShowReport(false)} onBack={() => router.replace({ pathname: '/conversations', params: { language: singleLanguage } } as never)} />
       ) : null}
     </View>
   );

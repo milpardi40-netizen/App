@@ -93,7 +93,7 @@ export default function InviteContactScreen() {
   return (
     <View style={styles.root}>
       <View style={styles.header}>
-        <PageNavigation tone="dark" backFallback="/conversations" />
+        <PageNavigation tone="dark" backFallback={`/conversations?language=${effectiveLanguage}`} />
         <View style={styles.headerText}><Text style={styles.title}>افزودن مخاطب واقعی</Text><Text style={styles.subtitle}>اتصال فقط با تأیید دوطرفه</Text></View>
       </View>
 

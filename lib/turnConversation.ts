@@ -9,7 +9,7 @@ import type { DirectMessage } from './conversations';
  * missions in the same order. Progress is shown on a 0–100 scale.
  */
 
-export type TurnConversationLanguage = 'en' | 'ru';
+export type TurnConversationLanguage = 'en' | 'ru' | 'tr' | 'de' | 'fr' | 'es';
 export type TurnSlot = 0 | 1;
 
 export type TurnPrompt = {
@@ -300,6 +300,402 @@ const RUSSIAN_SCENARIOS: readonly TurnScenario[] = [
   },
 ];
 
+const TURKISH_SCENARIOS: readonly TurnScenario[] = [
+  {
+    id: 'daily-routine',
+    titleFa: 'روزمرهٔ من',
+    missionFa: 'دربارهٔ روزهای معمولی و عادت‌های خود صحبت کنید.',
+    topicFa: 'روزمره',
+    cues: ['sabah', 'iş', 'genellikle', 'hafta sonu', 'kahvaltı', 'yorgun', 'erken', 'ev', 'gün'],
+    opening: 'Sıradan bir günün nasıl geçiyor?',
+    personal: 'Günün en çok sevdiğin bir bölümünü anlat.',
+    reason: 'Günün bu bölümünün senin için neden önemli olduğunu açıkla.',
+    problem: 'Günlük düzenini zorlaştıran bir şeyi anlat.',
+    close: 'Daha iyi bir gün için küçük bir değişiklik öner.',
+  },
+  {
+    id: 'travel',
+    titleFa: 'سفر',
+    missionFa: 'دربارهٔ یک سفر واقعی یا رویایی صحبت کنید.',
+    topicFa: 'سفر',
+    cues: ['yolculuk', 'seyahat', 'şehir', 'deniz', 'dağ', 'uçak', 'otel', 'yaz', 'yurt dışı', 'yer'],
+    opening: 'Hayatındaki en güzel seyahat hangisiydi?',
+    personal: 'O seyahatten bir yeri ayrıntılı olarak anlat.',
+    reason: 'O yolculuğun senin için neden önemli olduğunu açıkla.',
+    problem: 'Seyahatte yaşadığın bir sorunu anlat.',
+    close: 'Arkadaşının bir sonraki seyahati için bir yer öner.',
+  },
+  {
+    id: 'food',
+    titleFa: 'غذا و آشپزی',
+    missionFa: 'دربارهٔ غذا، سلیقه و تجربهٔ آشپزی صحبت کنید.',
+    topicFa: 'غذا',
+    cues: ['yemek', 'pişirmek', 'tat', 'restoran', 'akşam yemeği', 'acılı', 'tatlı', 'tarif', 'yemek', 'mutfak'],
+    opening: 'Hangi yemeği iyi pişirebiliyorsun?',
+    personal: 'Asla unutamayacağın bir yemeği anlat.',
+    reason: 'Yemeğin insanları neden bir araya getirdiğini açıkla.',
+    problem: 'Yemek yaparken yaptığın bir hatayı anlat.',
+    close: 'Arkadaşını en sevdiğin yemeklerden birini denemeye davet et.',
+  },
+  {
+    id: 'work-study',
+    titleFa: 'کار و درس',
+    missionFa: 'دربارهٔ کار، درس و اهداف حرفه‌ای صحبت کنید.',
+    topicFa: 'کار و درس',
+    cues: ['iş', 'çalışmak', 'okul', 'öğretmen', 'proje', 'hedef', 'öğrenmek', 'görev', 'ders'],
+    opening: 'İş veya eğitim için neler yapıyorsun?',
+    personal: 'Gurur duyduğun bir proje ya da görevi anlat.',
+    reason: 'İşinde veya derslerinde en çok neyi sevdiğini açıkla.',
+    problem: 'İş veya eğitim hayatındaki bir zorluğu anlat.',
+    close: 'Arkadaşının öğrenebileceği yeni bir beceri öner.',
+  },
+  {
+    id: 'hobbies',
+    titleFa: 'سرگرمی و وقت آزاد',
+    missionFa: 'دربارهٔ کارهایی که برای خوشحالی انجام می‌دهید صحبت کنید.',
+    topicFa: 'وقت آزاد',
+    cues: ['hobi', 'müzik', 'spor', 'kitap', 'film', 'oyun', 'hafta sonu', 'dinlenmek', 'boş zaman'],
+    opening: 'Boş zamanlarında neler yapıyorsun?',
+    personal: 'Zamanın nasıl geçtiğini unutturan bir hobini anlat.',
+    reason: 'Bu hobinin sana neden iyi geldiğini açıkla.',
+    problem: 'Yeni bir şey denemek isteyip yapamadığın bir zamanı anlat.',
+    close: 'Arkadaşını hobini birlikte denemeye davet et.',
+  },
+  {
+    id: 'health',
+    titleFa: 'سلامت و سبک زندگی',
+    missionFa: 'دربارهٔ سلامت، عادت‌ها و انرژی روزانه صحبت کنید.',
+    topicFa: 'سلامت',
+    cues: ['sağlık', 'uyku', 'spor', 'su', 'doktor', 'yorgun', 'enerji', 'yürüyüş', 'stres', 'alışkanlık'],
+    opening: 'Sağlıklı kalmak için neler yapıyorsun?',
+    personal: 'Gurur duyduğun sağlıklı bir alışkanlığını anlat.',
+    reason: 'Uykunun veya sporun senin için neden önemli olduğunu açıkla.',
+    problem: 'Değiştirmek istediğin sağlıksız bir alışkanlığı anlat.',
+    close: 'Arkadaşın için küçük ve sağlıklı bir değişiklik öner.',
+  },
+  {
+    id: 'city',
+    titleFa: 'شهر و محله',
+    missionFa: 'دربارهٔ جایی که زندگی می‌کنید و کارهای آنجا صحبت کنید.',
+    topicFa: 'شهر',
+    cues: ['şehir', 'mahalle', 'sokak', 'park', 'mağaza', 'ulaşım', 'sakin', 'kalabalık', 'yaşamak', 'yer'],
+    opening: 'Yaşadığın şehir veya mahalle nasıl bir yer?',
+    personal: 'Şehrindeki en sevdiğin yeri anlat.',
+    reason: 'Orada yaşamayı neden sevdiğini açıkla.',
+    problem: 'Şehrinde değiştirmek istediğin bir şeyi anlat.',
+    close: 'Arkadaşının mutlaka görmesi gereken bir yer öner.',
+  },
+  {
+    id: 'plans',
+    titleFa: 'برنامه‌ها و آینده',
+    missionFa: 'دربارهٔ برنامه‌های واقعی و اهداف آینده صحبت کنید.',
+    topicFa: 'برنامه‌ها',
+    cues: ['plan', 'gelecek', 'hedef', 'gelecek yıl', 'ummak', 'istemek', 'öğrenmek', 'seyahat', 'hayal', 'ay'],
+    opening: 'Bu yılki en önemli hedefin nedir?',
+    personal: 'Seni heyecanlandıran bir planını anlat.',
+    reason: 'Bu hedefin senin için neden önemli olduğunu açıkla.',
+    problem: 'Planını engelleyebilecek bir durumu anlat.',
+    close: 'Arkadaşının hedefi için ilk bir adım öner.',
+  },
+];
+
+const GERMAN_SCENARIOS: readonly TurnScenario[] = [
+  {
+    id: 'daily-routine',
+    titleFa: 'روزمرهٔ من',
+    missionFa: 'دربارهٔ روزهای معمولی و عادت‌های خود صحبت کنید.',
+    topicFa: 'روزمره',
+    cues: ['morgen', 'arbeit', 'normalerweise', 'wochenende', 'frühstück', 'müde', 'früh', 'haus', 'tag'],
+    opening: 'Wie sieht dein normaler Tag aus?',
+    personal: 'Beschreibe einen Teil deines Tages, den du wirklich magst.',
+    reason: 'Erkläre, warum dieser Teil des Tages dir wichtig ist.',
+    problem: 'Beschreibe eine Sache, die deinen Alltag schwierig macht.',
+    close: 'Schlage eine kleine Veränderung für einen besseren Tag vor.',
+  },
+  {
+    id: 'travel',
+    titleFa: 'سفر',
+    missionFa: 'دربارهٔ یک سفر واقعی یا رویایی صحبت کنید.',
+    topicFa: 'سفر',
+    cues: ['reise', 'reisen', 'stadt', 'meer', 'berg', 'flug', 'hotel', 'sommer', 'ausland', 'ort'],
+    opening: 'Was war die beste Reise deines Lebens?',
+    personal: 'Beschreibe einen Ort von dieser Reise genau.',
+    reason: 'Erkläre, warum diese Reise für dich wichtig war.',
+    problem: 'Beschreibe ein Problem, das du auf einer Reise hattest.',
+    close: 'Schlage deinem Partner ein Ziel für die nächste Reise vor.',
+  },
+  {
+    id: 'food',
+    titleFa: 'غذا و آشپزی',
+    missionFa: 'دربارهٔ غذا، سلیقه و تجربهٔ آشپزی صحبت کنید.',
+    topicFa: 'غذا',
+    cues: ['essen', 'kochen', 'gericht', 'geschmack', 'restaurant', 'abendessen', 'scharf', 'süß', 'rezept'],
+    opening: 'Welches Gericht kannst du gut kochen?',
+    personal: 'Beschreibe ein Essen, das du nie vergessen wirst.',
+    reason: 'Erkläre, warum Essen Menschen zusammenbringt.',
+    problem: 'Beschreibe einen Fehler, den du beim Kochen gemacht hast.',
+    close: 'Lade deinen Partner ein, eines deiner Lieblingsgerichte zu probieren.',
+  },
+  {
+    id: 'work-study',
+    titleFa: 'کار و درس',
+    missionFa: 'دربارهٔ کار، درس و اهداف حرفه‌ای صحبت کنید.',
+    topicFa: 'کار و درس',
+    cues: ['arbeit', 'studium', 'schule', 'lehrer', 'projekt', 'ziel', 'lernen', 'aufgabe', 'beruf'],
+    opening: 'Was machst du beruflich oder im Studium?',
+    personal: 'Beschreibe ein Projekt oder eine Aufgabe, auf die du stolz bist.',
+    reason: 'Erkläre, was dir an deiner Arbeit oder deinem Studium am meisten gefällt.',
+    problem: 'Beschreibe eine Herausforderung bei der Arbeit oder im Studium.',
+    close: 'Schlage eine Fähigkeit vor, die dein Partner als Nächstes lernen könnte.',
+  },
+  {
+    id: 'hobbies',
+    titleFa: 'سرگرمی و وقت آزاد',
+    missionFa: 'دربارهٔ کارهایی که برای خوشحالی انجام می‌دهید صحبت کنید.',
+    topicFa: 'وقت آزاد',
+    cues: ['hobby', 'musik', 'sport', 'buch', 'film', 'spiel', 'wochenende', 'entspannen', 'freizeit'],
+    opening: 'Was machst du in deiner Freizeit?',
+    personal: 'Beschreibe ein Hobby, bei dem du die Zeit vergisst.',
+    reason: 'Erkläre, warum dieses Hobby gut für dich ist.',
+    problem: 'Erzähle von etwas Neuem, das du ausprobieren wolltest, aber nicht konntest.',
+    close: 'Lade deinen Partner ein, dein Hobby mit dir auszuprobieren.',
+  },
+  {
+    id: 'health',
+    titleFa: 'سلامت و سبک زندگی',
+    missionFa: 'دربارهٔ سلامت، عادت‌ها و انرژی روزانه صحبت کنید.',
+    topicFa: 'سلامت',
+    cues: ['gesundheit', 'schlaf', 'sport', 'wasser', 'arzt', 'müde', 'energie', 'spazieren', 'stress', 'gewohnheit'],
+    opening: 'Was machst du, um gesund zu bleiben?',
+    personal: 'Beschreibe eine gesunde Gewohnheit, auf die du stolz bist.',
+    reason: 'Erkläre, warum Schlaf oder Bewegung für dich wichtig sind.',
+    problem: 'Beschreibe eine ungesunde Gewohnheit, die du ändern möchtest.',
+    close: 'Schlage deinem Partner eine kleine gesunde Veränderung vor.',
+  },
+  {
+    id: 'city',
+    titleFa: 'شهر و محله',
+    missionFa: 'دربارهٔ جایی که زندگی می‌کنید و کارهای آنجا صحبت کنید.',
+    topicFa: 'شهر',
+    cues: ['stadt', 'viertel', 'straße', 'park', 'laden', 'verkehr', 'ruhig', 'leben', 'ort'],
+    opening: 'Wie ist deine Stadt oder dein Viertel?',
+    personal: 'Beschreibe deinen Lieblingsort in deiner Stadt.',
+    reason: 'Erkläre, warum du gerne dort lebst.',
+    problem: 'Beschreibe eine Sache, die du an deiner Stadt ändern würdest.',
+    close: 'Empfiehl deinem Partner einen Ort zum Besuchen.',
+  },
+  {
+    id: 'plans',
+    titleFa: 'برنامه‌ها و آینده',
+    missionFa: 'دربارهٔ برنامه‌های واقعی و اهداف آینده صحبت کنید.',
+    topicFa: 'برنامه‌ها',
+    cues: ['plan', 'zukunft', 'ziel', 'nächstes jahr', 'hoffen', 'wollen', 'lernen', 'reisen', 'traum', 'monat'],
+    opening: 'Was ist dein wichtigstes Ziel für dieses Jahr?',
+    personal: 'Beschreibe einen Plan, auf den du dich freust.',
+    reason: 'Erkläre, warum dieses Ziel dir wichtig ist.',
+    problem: 'Beschreibe etwas, das deinen Plan aufhalten könnte.',
+    close: 'Schlage einen ersten Schritt für das Ziel deines Partners vor.',
+  },
+];
+
+const FRENCH_SCENARIOS: readonly TurnScenario[] = [
+  {
+    id: 'daily-routine',
+    titleFa: 'روزمرهٔ من',
+    missionFa: 'دربارهٔ روزهای معمولی و عادت‌های خود صحبت کنید.',
+    topicFa: 'روزمره',
+    cues: ['matin', 'travail', 'habitude', 'week-end', 'petit déjeuner', 'fatigué', 'tôt', 'maison', 'journée'],
+    opening: 'À quoi ressemble ta journée habituelle ?',
+    personal: 'Décris un moment de ta journée que tu aimes vraiment.',
+    reason: 'Explique pourquoi ce moment est important pour toi.',
+    problem: 'Décris une chose qui rend ton quotidien difficile.',
+    close: 'Suggère un petit changement pour passer une meilleure journée.',
+  },
+  {
+    id: 'travel',
+    titleFa: 'سفر',
+    missionFa: 'دربارهٔ یک سفر واقعی یا رویایی صحبت کنید.',
+    topicFa: 'سفر',
+    cues: ['voyage', 'voyager', 'ville', 'mer', 'montagne', 'vol', 'hôtel', 'été', 'étranger', 'endroit'],
+    opening: 'Quel est le plus beau voyage que tu aies fait ?',
+    personal: 'Décris un endroit de ce voyage en détail.',
+    reason: 'Explique pourquoi ce voyage était important pour toi.',
+    problem: 'Décris un problème que tu as rencontré en voyage.',
+    close: 'Suggère une destination pour le prochain voyage de ton partenaire.',
+  },
+  {
+    id: 'food',
+    titleFa: 'غذا و آشپزی',
+    missionFa: 'دربارهٔ غذا، سلیقه و تجربهٔ آشپزی صحبت کنید.',
+    topicFa: 'غذا',
+    cues: ['nourriture', 'cuisiner', 'plat', 'goût', 'restaurant', 'dîner', 'épicé', 'sucré', 'recette', 'repas'],
+    opening: 'Quel plat sais-tu bien cuisiner ?',
+    personal: 'Décris un repas que tu n’oublieras jamais.',
+    reason: 'Explique pourquoi la cuisine rassemble les gens.',
+    problem: 'Décris une erreur que tu as faite en cuisinant.',
+    close: 'Invite ton partenaire à goûter un de tes plats préférés.',
+  },
+  {
+    id: 'work-study',
+    titleFa: 'کار و درس',
+    missionFa: 'دربارهٔ کار، درس و اهداف حرفه‌ای صحبت کنید.',
+    topicFa: 'کار و درس',
+    cues: ['travail', 'études', 'école', 'professeur', 'projet', 'objectif', 'apprendre', 'tâche', 'métier'],
+    opening: 'Que fais-tu dans la vie, tu travailles ou tu étudies ?',
+    personal: 'Décris un projet ou une tâche dont tu es fier.',
+    reason: 'Explique ce que tu apprécies le plus dans ton travail ou tes études.',
+    problem: 'Décris une difficulté dans ton travail ou tes études.',
+    close: 'Suggère une compétence que ton partenaire pourrait apprendre.',
+  },
+  {
+    id: 'hobbies',
+    titleFa: 'سرگرمی و وقت آزاد',
+    missionFa: 'دربارهٔ کارهایی که برای خوشحالی انجام می‌دهید صحبت کنید.',
+    topicFa: 'وقت آزاد',
+    cues: ['loisir', 'musique', 'sport', 'livre', 'film', 'jeu', 'week-end', 'détendre', 'temps libre'],
+    opening: 'Que fais-tu pendant ton temps libre ?',
+    personal: 'Décris un passe-temps qui te fait oublier l’heure.',
+    reason: 'Explique pourquoi cette activité est bonne pour toi.',
+    problem: 'Raconte une fois où tu as voulu essayer quelque chose de nouveau sans pouvoir.',
+    close: 'Invite ton partenaire à essayer ton activité avec toi.',
+  },
+  {
+    id: 'health',
+    titleFa: 'سلامت و سبک زندگی',
+    missionFa: 'دربارهٔ سلامت، عادت‌ها و انرژی روزانه صحبت کنید.',
+    topicFa: 'سلامت',
+    cues: ['santé', 'sommeil', 'sport', 'eau', 'médecin', 'fatigué', 'énergie', 'marcher', 'stress', 'habitude'],
+    opening: 'Que fais-tu pour rester en bonne santé ?',
+    personal: 'Décris une bonne habitude dont tu es fier.',
+    reason: 'Explique pourquoi le sommeil ou le sport compte pour toi.',
+    problem: 'Décris une mauvaise habitude que tu veux changer.',
+    close: 'Suggère un petit changement sain à ton partenaire.',
+  },
+  {
+    id: 'city',
+    titleFa: 'شهر و محله',
+    missionFa: 'دربارهٔ جایی که زندگی می‌کنید و کارهای آنجا صحبت کنید.',
+    topicFa: 'شهر',
+    cues: ['ville', 'quartier', 'rue', 'parc', 'magasin', 'transport', 'calme', 'animé', 'habiter', 'endroit'],
+    opening: 'Comment est ta ville ou ton quartier ?',
+    personal: 'Décris ton endroit préféré dans ta ville.',
+    reason: 'Explique pourquoi tu aimes vivre là-bas.',
+    problem: 'Décris une chose que tu voudrais changer dans ta ville.',
+    close: 'Recommande un endroit que ton partenaire devrait visiter.',
+  },
+  {
+    id: 'plans',
+    titleFa: 'برنامه‌ها و آینده',
+    missionFa: 'دربارهٔ برنامه‌های واقعی و اهداف آینده صحبت کنید.',
+    topicFa: 'برنامه‌ها',
+    cues: ['projet', 'avenir', 'objectif', 'année prochaine', 'espérer', 'vouloir', 'apprendre', 'voyager', 'rêve', 'mois'],
+    opening: 'Quel est ton principal objectif pour cette année ?',
+    personal: 'Décris un projet qui te motive vraiment.',
+    reason: 'Explique pourquoi cet objectif est important pour toi.',
+    problem: 'Décris un obstacle qui pourrait freiner ton projet.',
+    close: 'Suggère une première étape pour l’objectif de ton partenaire.',
+  },
+];
+
+const SPANISH_SCENARIOS: readonly TurnScenario[] = [
+  {
+    id: 'daily-routine',
+    titleFa: 'روزمرهٔ من',
+    missionFa: 'دربارهٔ روزهای معمولی و عادت‌های خود صحبت کنید.',
+    topicFa: 'روزمره',
+    cues: ['mañana', 'trabajo', 'normalmente', 'fin de semana', 'desayuno', 'cansado', 'temprano', 'casa', 'día'],
+    opening: '¿Cómo es un día normal para ti?',
+    personal: 'Describe una parte de tu día que disfrutas mucho.',
+    reason: 'Explica por qué esa parte del día es importante para ti.',
+    problem: 'Describe algo que hace difícil tu rutina diaria.',
+    close: 'Sugiere un pequeño cambio para tener un mejor día.',
+  },
+  {
+    id: 'travel',
+    titleFa: 'سفر',
+    missionFa: 'دربارهٔ یک سفر واقعی یا رویایی صحبت کنید.',
+    topicFa: 'سفر',
+    cues: ['viaje', 'viajar', 'ciudad', 'playa', 'montaña', 'vuelo', 'hotel', 'verano', 'extranjero', 'lugar'],
+    opening: '¿Cuál ha sido el mejor viaje de tu vida?',
+    personal: 'Describe en detalle un lugar de ese viaje.',
+    reason: 'Explica por qué ese viaje fue importante para ti.',
+    problem: 'Describe un problema que hayas tenido al viajar.',
+    close: 'Sugiere un destino para el próximo viaje de tu compañero.',
+  },
+  {
+    id: 'food',
+    titleFa: 'غذا و آشپزی',
+    missionFa: 'دربارهٔ غذا، سلیقه و تجربهٔ آشپزی صحبت کنید.',
+    topicFa: 'غذا',
+    cues: ['comida', 'cocinar', 'plato', 'sabor', 'restaurante', 'cena', 'picante', 'dulce', 'receta', 'comer'],
+    opening: '¿Qué plato sabes cocinar bien?',
+    personal: 'Describe una comida que nunca olvidarás.',
+    reason: 'Explica por qué la comida une a las personas.',
+    problem: 'Describe un error que hayas cometido al cocinar.',
+    close: 'Invita a tu compañero a probar uno de tus platos favoritos.',
+  },
+  {
+    id: 'work-study',
+    titleFa: 'کار و درس',
+    missionFa: 'دربارهٔ کار، درس و اهداف حرفه‌ای صحبت کنید.',
+    topicFa: 'کار و درس',
+    cues: ['trabajo', 'estudio', 'escuela', 'profesor', 'proyecto', 'meta', 'aprender', 'tarea', 'oficio'],
+    opening: '¿A qué te dedicas, trabajas o estudias?',
+    personal: 'Describe un proyecto o una tarea de la que estés orgulloso.',
+    reason: 'Explica qué es lo que más te gusta de tu trabajo o estudio.',
+    problem: 'Describe un desafío en tu trabajo o tus estudios.',
+    close: 'Sugiere una habilidad que tu compañero podría aprender.',
+  },
+  {
+    id: 'hobbies',
+    titleFa: 'سرگرمی و وقت آزاد',
+    missionFa: 'دربارهٔ کارهایی که برای خوشحالی انجام می‌دهید صحبت کنید.',
+    topicFa: 'وقت آزاد',
+    cues: ['pasatiempo', 'música', 'deporte', 'libro', 'película', 'juego', 'fin de semana', 'descansar', 'tiempo libre'],
+    opening: '¿Qué haces en tu tiempo libre?',
+    personal: 'Describe un pasatiempo que te hace perder la noción del tiempo.',
+    reason: 'Explica por qué este pasatiempo es bueno para ti.',
+    problem: 'Cuenta una vez que quisiste probar algo nuevo pero no pudiste.',
+    close: 'Invita a tu compañero a probar tu pasatiempo contigo.',
+  },
+  {
+    id: 'health',
+    titleFa: 'سلامت و سبک زندگی',
+    missionFa: 'دربارهٔ سلامت، عادت‌ها و انرژی روزانه صحبت کنید.',
+    topicFa: 'سلامت',
+    cues: ['salud', 'sueño', 'ejercicio', 'agua', 'médico', 'cansado', 'energía', 'caminar', 'estrés', 'hábito'],
+    opening: '¿Qué haces para mantenerte saludable?',
+    personal: 'Describe un hábito saludable del que estés orgulloso.',
+    reason: 'Explica por qué dormir bien o hacer ejercicio es importante para ti.',
+    problem: 'Describe un mal hábito que quieras cambiar.',
+    close: 'Sugiere un pequeño cambio saludable para tu compañero.',
+  },
+  {
+    id: 'city',
+    titleFa: 'شهر و محله',
+    missionFa: 'دربارهٔ جایی که زندگی می‌کنید و کارهای آنجا صحبت کنید.',
+    topicFa: 'شهر',
+    cues: ['ciudad', 'barrio', 'calle', 'parque', 'tienda', 'transporte', 'tranquilo', 'vivir', 'lugar'],
+    opening: '¿Cómo es tu ciudad o tu barrio?',
+    personal: 'Describe tu lugar favorito en tu ciudad.',
+    reason: 'Explica por qué te gusta vivir allí.',
+    problem: 'Describe algo que cambiarías de tu ciudad.',
+    close: 'Recomienda un lugar que tu compañero debería visitar.',
+  },
+  {
+    id: 'plans',
+    titleFa: 'برنامه‌ها و آینده',
+    missionFa: 'دربارهٔ برنامه‌های واقعی و اهداف آینده صحبت کنید.',
+    topicFa: 'برنامه‌ها',
+    cues: ['plan', 'futuro', 'meta', 'próximo año', 'esperar', 'querer', 'aprender', 'viajar', 'sueño', 'mes'],
+    opening: '¿Cuál es tu meta principal para este año?',
+    personal: 'Describe un plan que te entusiasme mucho.',
+    reason: 'Explica por qué esta meta es importante para ti.',
+    problem: 'Describe algo que podría frenar tu plan.',
+    close: 'Sugiere un primer paso para la meta de tu compañero.',
+  },
+];
+
 /** Any-of groups for the expected communicative move of each turn half. */
 const ENGLISH_CONCEPTS: readonly (readonly (readonly string[])[])[] = [
   [['what', 'how', 'when', 'where', 'why', 'do', 'does', 'is', 'are']],
@@ -327,6 +723,58 @@ const RUSSIAN_CONCEPTS: readonly (readonly (readonly string[])[])[] = [
   [['следующий', 'шаг', 'спасибо', 'благодарю', 'ещё', 'надеюсь', 'желаю', 'увидимся']],
 ];
 
+const TURKISH_CONCEPTS: readonly (readonly (readonly string[])[])[] = [
+  [['ne', 'nasıl', 'neden', 'ne zaman', 'nerede', 'kim', 'sen', 'siz', 'anlat']],
+  [['ben', 'benim', 'biz', 'sen', 'senin', 'genellikle', 'çünkü', 'ne', 'nasıl']],
+  [['ben', 'biz', 'benim', 'bir gün', 'genellikle', 'dün', 'hatırlıyorum', 'zaman']],
+  [['sen', 'senin', 'örnek', 'neden', 'nasıl', 'ne', 'anlat', 'ilginç', 'gerçekten']],
+  [['çünkü', 'önemli', 'yardım', 'bence', 'hissediyorum', 'benim için', 'anlamlı']],
+  [['katılıyorum', 'katılmıyorum', 'bence', 'çünkü', 'ama', 'aynı', 'farklı', 'doğru']],
+  [['sorun', 'zor', 'bazen', 'zorluk', 'her zaman', 'deniyorum', 'engel']],
+  [['çözüm', 'denemek', 'yardım', 'olabilir', 'eğer', 'öneririm', 'belki']],
+  [['biz', 'ikimiz', 'konuştuk', 'dedik', 'öğrendik', 'bugün', 'hakkında']],
+  [['sonraki', 'adım', 'teşekkürler', 'teşekkür', 'yine', 'umarım', 'görüşürüz']],
+];
+
+const GERMAN_CONCEPTS: readonly (readonly (readonly string[])[])[] = [
+  [['was', 'wie', 'wann', 'wo', 'warum', 'wer', 'du', 'sie', 'ist', 'sind']],
+  [['ich', 'mein', 'mir', 'wir', 'du', 'dein', 'normalerweise', 'weil', 'was', 'wie']],
+  [['ich', 'mein', 'wir', 'letzte', 'gestern', 'normalerweise', 'einmal', 'erinnere']],
+  [['du', 'dein', 'beispiel', 'warum', 'wie', 'was', 'erzähl', 'wirklich', 'interessant']],
+  [['weil', 'wichtig', 'hilft', 'macht', 'fühle', 'denke', 'für mich', 'bedeutet']],
+  [['stimme zu', 'nicht einverstanden', 'denke', 'weil', 'aber', 'gleich', 'anders', 'stimmt']],
+  [['problem', 'schwierig', 'schwer', 'manchmal', 'herausforderung', 'wenn', 'immer', 'versuche']],
+  [['lösung', 'versuchen', 'helfen', 'könnte', 'sollte', 'vielleicht', 'wenn', 'vorschlagen']],
+  [['wir', 'beide', 'gesprochen', 'gesagt', 'gelernt', 'heute', 'über']],
+  [['nächste', 'schritt', 'danke', 'vielen dank', 'wieder', 'hoffe', 'wünsche', 'sehen']],
+];
+
+const FRENCH_CONCEPTS: readonly (readonly (readonly string[])[])[] = [
+  [['quel', 'quelle', 'comment', 'quand', 'où', 'pourquoi', 'qui', 'tu', 'vous', 'est']],
+  [['je', 'mon', 'ma', 'nous', 'tu', 'ton', 'd’habitude', 'parce que', 'quoi', 'comment']],
+  [['je', 'mon', 'nous', 'hier', 'd’habitude', 'une fois', 'quand', 'souviens']],
+  [['tu', 'ton', 'exemple', 'pourquoi', 'comment', 'quoi', 'raconte', 'vraiment', 'intéressant']],
+  [['parce que', 'important', 'aide', 'fait', 'sens', 'pense', 'pour moi', 'compte']],
+  [['d’accord', 'pas d’accord', 'pense', 'parce que', 'mais', 'pareil', 'différent', 'vrai']],
+  [['problème', 'difficile', 'dur', 'parfois', 'défi', 'quand', 'toujours', 'essaie']],
+  [['solution', 'essayer', 'aider', 'pourrait', 'devrait', 'peut-être', 'si', 'suggérer']],
+  [['nous', 'tous les deux', 'parlé', 'dit', 'appris', 'aujourd’hui', 'sur']],
+  [['prochaine', 'étape', 'merci', 'encore', 'espère', 'souhaite', 'bientôt']],
+];
+
+const SPANISH_CONCEPTS: readonly (readonly (readonly string[])[])[] = [
+  [['qué', 'cómo', 'cuándo', 'dónde', 'por qué', 'quién', 'tú', 'usted', 'es', 'son']],
+  [['yo', 'mi', 'nosotros', 'tú', 'tu', 'normalmente', 'porque', 'qué', 'cómo']],
+  [['yo', 'mi', 'nosotros', 'ayer', 'normalmente', 'una vez', 'cuando', 'recuerdo']],
+  [['tú', 'tu', 'ejemplo', 'por qué', 'cómo', 'qué', 'cuéntame', 'realmente', 'interesante']],
+  [['porque', 'importante', 'ayuda', 'hace', 'siento', 'pienso', 'para mí', 'importa']],
+  [['de acuerdo', 'no estoy de acuerdo', 'pienso', 'porque', 'pero', 'igual', 'diferente', 'cierto']],
+  [['problema', 'difícil', 'duro', 'a veces', 'desafío', 'cuando', 'siempre', 'intento']],
+  [['solución', 'intentar', 'ayudar', 'podría', 'debería', 'quizás', 'si', 'sugiero']],
+  [['nosotros', 'ambos', 'hablamos', 'dijimos', 'aprendimos', 'hoy', 'sobre']],
+  [['siguiente', 'paso', 'gracias', 'otra vez', 'espero', 'deseo', 'vemos']],
+];
+
 const FOCUS_LABELS = ['شروع گفت‌وگو', 'تجربهٔ شخصی', 'دلیل و نظر', 'مشکل و راه‌حل', 'جمع‌بندی و پایان'] as const;
 
 const ENGLISH_TEMPLATES = {
@@ -346,6 +794,76 @@ const RUSSIAN_TEMPLATES = {
   firstClose: 'Подведи итог разговора в одном-двух предложениях.',
   closeSuffix: ' Затем поблагодари партнёра.',
 };
+
+const TURKISH_TEMPLATES = {
+  secondOpen: 'Soruyu cevapla, ardından arkadaşına aynı soruyu sor.',
+  secondShare: 'Verdiği örneğe tepki ver ve konuyla ilgili bir soru sor.',
+  secondReason: 'Nazikçe katıldığını ya da katılmadığını belirt ve bir neden söyle.',
+  secondProblem: 'Pratik bir çözüm öner ve bunun işe yarayıp yaramayacağını sor.',
+  firstClose: 'Konuşmayı bir veya iki cümleyle özetle.',
+  closeSuffix: ' Ardından arkadaşına teşekkür et.',
+};
+
+const GERMAN_TEMPLATES = {
+  secondOpen: 'Beantworte die Frage und stelle deinem Partner dieselbe Frage.',
+  secondShare: 'Reagiere auf das Beispiel und stelle eine Nachfrage dazu.',
+  secondReason: 'Stimme höflich zu oder widersprich und nenne einen Grund.',
+  secondProblem: 'Schlage eine praktische Lösung vor und frage, ob sie hilft.',
+  firstClose: 'Fasse das Gespräch in ein oder zwei Sätzen zusammen.',
+  closeSuffix: ' Danke danach deinem Partner.',
+};
+
+const FRENCH_TEMPLATES = {
+  secondOpen: 'Réponds à la question, puis pose la même question à ton partenaire.',
+  secondShare: 'Réagis à son exemple et pose une question pour en savoir plus.',
+  secondReason: 'Exprime poliment ton accord ou ton désaccord avec une raison.',
+  secondProblem: 'Propose une solution pratique et demande si cela aiderait.',
+  firstClose: 'Résume la conversation en une ou deux phrases.',
+  closeSuffix: ' Puis remercie ton partenaire.',
+};
+
+const SPANISH_TEMPLATES = {
+  secondOpen: 'Responde la pregunta y luego hazle la misma pregunta a tu compañero.',
+  secondShare: 'Reacciona a su ejemplo y haz una pregunta adicional sobre él.',
+  secondReason: 'Muestra acuerdo o desacuerdo con educación y da una razón.',
+  secondProblem: 'Ofrece una solución práctica y pregunta si ayudaría.',
+  firstClose: 'Resume la conversación en una o dos frases.',
+  closeSuffix: ' Luego dale las gracias a tu compañero.',
+};
+
+const TEMPLATES_BY_LANGUAGE = {
+  en: ENGLISH_TEMPLATES,
+  ru: RUSSIAN_TEMPLATES,
+  tr: TURKISH_TEMPLATES,
+  de: GERMAN_TEMPLATES,
+  fr: FRENCH_TEMPLATES,
+  es: SPANISH_TEMPLATES,
+} as const;
+
+const CONCEPTS_BY_LANGUAGE = {
+  en: ENGLISH_CONCEPTS,
+  ru: RUSSIAN_CONCEPTS,
+  tr: TURKISH_CONCEPTS,
+  de: GERMAN_CONCEPTS,
+  fr: FRENCH_CONCEPTS,
+  es: SPANISH_CONCEPTS,
+} as const;
+
+const SCENARIOS_BY_LANGUAGE = {
+  en: ENGLISH_SCENARIOS,
+  ru: RUSSIAN_SCENARIOS,
+  tr: TURKISH_SCENARIOS,
+  de: GERMAN_SCENARIOS,
+  fr: FRENCH_SCENARIOS,
+  es: SPANISH_SCENARIOS,
+} as const;
+
+export function normalizeTurnLanguage(language?: string): TurnConversationLanguage {
+  if (language === 'ru' || language === 'tr' || language === 'de' || language === 'fr' || language === 'es') {
+    return language;
+  }
+  return 'en';
+}
 
 const clamp = (value: number, min = 0, max = 100) => Math.max(min, Math.min(max, Math.round(value)));
 const hashOf = (value: string) => [...value].reduce((sum, char) => (sum * 31 + char.charCodeAt(0)) >>> 0, 7);
@@ -367,8 +885,8 @@ function promptOf(
 }
 
 function buildTurns(scenario: TurnScenario, language: TurnConversationLanguage): ConversationTurn[] {
-  const templates = language === 'ru' ? RUSSIAN_TEMPLATES : ENGLISH_TEMPLATES;
-  const concepts = language === 'ru' ? RUSSIAN_CONCEPTS : ENGLISH_CONCEPTS;
+  const templates = TEMPLATES_BY_LANGUAGE[language];
+  const concepts = CONCEPTS_BY_LANGUAGE[language];
   const cues = scenario.cues;
   const minWords = [3, 3, 4, 4, 4, 4, 4, 4, 3, 3];
 
@@ -479,8 +997,8 @@ export type TurnPlanInput = {
  * both participants always get the same scenario, missions and turn order.
  */
 export function buildTurnConversationPlan(input: TurnPlanInput): TurnConversationPlan {
-  const language: TurnConversationLanguage = input.language === 'ru' ? 'ru' : 'en';
-  const catalog = language === 'ru' ? RUSSIAN_SCENARIOS : ENGLISH_SCENARIOS;
+  const language = normalizeTurnLanguage(input.language);
+  const catalog = SCENARIOS_BY_LANGUAGE[language];
   const seed = input.conversationId || `${input.lessonTitle ?? ''}:${input.situation ?? ''}`;
   const scenario = catalog[hashOf(seed) % catalog.length];
   return {
@@ -509,6 +1027,10 @@ const STOP_WORDS = new Set([
   'this', 'that', 'in', 'on', 'at', 'for', 'with', 'my', 'your', 'me', 'do', 'does', 'did', 'be', 'will',
   'и', 'а', 'но', 'это', 'этот', 'эта', 'я', 'мы', 'вы', 'ты', 'он', 'она', 'они', 'в', 'на', 'к', 'с', 'у',
   'из', 'за', 'что', 'как', 'не', 'да', 'нет',
+  've', 'bir', 'bu', 'şu', 'o', 'ben', 'sen', 'biz', 'siz', 'onlar', 'için', 'ile', 'de', 'da', 'mi', 'mı', 'mu', 'mü', 'ne', 'ama',
+  'der', 'die', 'das', 'ein', 'eine', 'und', 'oder', 'ich', 'du', 'wir', 'ihr', 'sie', 'er', 'es', 'ist', 'sind', 'bin', 'in', 'auf', 'mit', 'für', 'zu', 'von', 'nicht', 'aber',
+  'le', 'la', 'les', 'un', 'une', 'des', 'et', 'ou', 'je', 'tu', 'il', 'elle', 'nous', 'vous', 'ils', 'elles', 'est', 'sont', 'suis', 'dans', 'sur', 'avec', 'pour', 'pas', 'mais', 'que', 'qui',
+  'el', 'los', 'las', 'una', 'y', 'yo', 'tú', 'él', 'ella', 'nosotros', 'ustedes', 'ellos', 'son', 'estoy', 'en', 'con', 'para', 'por', 'del', 'no', 'pero', 'como',
 ]);
 
 const GENERIC_ANSWERS = /^(?:hi|hello|hey|ok|okay|thanks|thank you|bye|good|cool|سلام|مرسی|خداحافظ|خوب| باشه)$/i;
@@ -566,6 +1088,9 @@ export function hasTargetLanguageText(answer: string, language: TurnConversation
   const clean = answer.trim();
   if (!clean) return false;
   if (language === 'ru') return /[\u0400-\u04FF0-9]/.test(clean);
+  if (language === 'tr' || language === 'de' || language === 'fr' || language === 'es') {
+    return /[A-Za-z\u00C0-\u024F0-9]/.test(clean);
+  }
   return /[A-Za-z0-9]/.test(clean);
 }
 

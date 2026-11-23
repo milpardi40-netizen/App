@@ -8,7 +8,7 @@ export function StarterBottomNav({course}: {course: StarterCourse}) {
     {path:course.home,label:'یادگیری',icon:BookOpen},
     {path:`${course.home}/pronunciation`,label:'تلفظ',icon:Volume2},
     ...words,
-    {path:'/conversations',label:'مکالمه',icon:MessageCircle},
+    {path:'/conversations',label:'مکالمه',icon:MessageCircle,params:{language:course.id}},
     {path:`${course.home}/library`,label:'درس‌ها',icon:ClipboardList},
     {path:`${course.home}/review`,label:'مرور',icon:RefreshCw},
   ]} />;
