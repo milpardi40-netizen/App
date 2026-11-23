@@ -21,7 +21,7 @@ import StarterWritingPractice from '@/components/StarterWritingPractice';
 import StarterA1Skill from '@/components/StarterA1Skill';
 import SpeakCheck from '@/components/SpeakCheck';
 import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
-import { isStarterBridgeLanguage, starterBridgeRulesForLesson } from '@/lib/languages/starterPersianBridge';
+import { isStarterBridgeLanguage, starterBridgeFor, starterBridgeRulesForLesson } from '@/lib/languages/starterPersianBridge';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
@@ -167,8 +167,15 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const listeningTask = skills.find(task => task.kind === 'listening');
   const readingTask = skills.find(task => task.kind === 'reading');
   const a2Patterns = lesson.levelId === 2 ? a2GrammarPatterns(course.id, lesson.id) : lesson.levelId === 3 ? b1GrammarPatterns(course.id, lesson.id) : lesson.levelId === 4 ? b2GrammarPatterns(course.id, lesson.id) : [];
-  const currentPattern = a2Patterns.find(pattern => pattern.example === sentenceIndex + 1)?.form ?? current.pattern;
+  const matchedPatternEntry = a2Patterns.find(pattern => pattern.example === sentenceIndex + 1) ?? a2Patterns[0];
+  const currentPattern = matchedPatternEntry?.form ?? current.pattern ?? lesson.sentences.find(s => s.pattern)?.pattern;
+  const currentPatternExplanation = matchedPatternEntry?.explanationFa;
   const grammarPatterns = lesson.sentences.flatMap(sentence => sentence.pattern ? [{ sentence, pattern: sentence.pattern }] : []);
+  const [builtSentences, setBuiltSentences] = useState<Record<string, boolean>>({});
+  const markBuiltSentence = useCallback((sentenceId: string) => {
+    setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
+  }, []);
+  useEffect(() => { setBuiltSentences({}); }, [lesson.id]);
 
   // Warm up the device speech engine so the first target sentence is not delayed.
   useEffect(() => {
@@ -559,14 +566,39 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           {a1 ? <PracticeNavigation index={sentenceIndex} count={lesson.sentences.length} onChange={index => selectSentence(index, .68)} /> : <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`${unit} ${fa(index + 1)}`} onPress={() => selectSentence(index, .68)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>}
         </View>}
 
-        {stage === 4 && <View style={styles.centerStage}>
-          <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
-          <Text style={styles.stageTitle}>{foundation ? `انتخاب ${unit}` : 'ساخت جمله'}</Text>
-          {showHint && <Text style={styles.stageDesc}>{foundation ? `معنی ثبت‌شده را بخوانید و ${unit} مربوط به همان نمونهٔ درس را انتخاب کنید.` : 'معنی را بخوانید و واژه‌ها را به ترتیب بچینید.'}</Text>}
-          {foundation || current.text.trim().replace(/\s+([!?.;,:])/g, '$1').split(/\s+/).length === 1 ? <StarterWordChoice key={current.id} sentence={current} sentences={lesson.sentences} /> : <LanguageSentenceBuilder key={current.id} sentence={current} placeholder="واژه‌ها را به ترتیب انتخاب کنید" />}
-          <PracticeNavigation index={sentenceIndex} count={lesson.sentences.length} onChange={setSentenceIndex} />
-          {a1 && <StarterWritingPractice key={current.id} sentence={current} />}
-        </View>}
+        {stage === 4 && (() => {
+          const bridgeRule = bridgeLanguage ? starterBridgeFor(bridgeLanguage, current).rule : undefined;
+          return (
+            <View style={styles.centerStage}>
+              <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
+              <Text style={styles.stageTitle}>{foundation ? `انتخاب ${unit}` : 'ساخت جمله'}</Text>
+              {showHint && <Text style={styles.stageDesc}>{foundation ? `معنی ثبت‌شده را بخوانید و ${unit} مربوط به همان نمونهٔ درس را انتخاب کنید.` : lesson.levelId <= 0 ? 'جملهٔ درست و الگویش بالای صفحه دیده می‌شود؛ واژه‌ها را به ترتیب آن بچینید.' : 'الگوی ساختار و واژه‌های کلیدی را ببینید و جمله را بسازید.'}</Text>}
+              {foundation || current.text.trim().replace(/\s+([!?.;,:])/g, '$1').split(/\s+/).length === 1 ? (
+                <StarterWordChoice key={current.id} sentence={current} sentences={lesson.sentences} />
+              ) : (
+                <LanguageSentenceBuilder
+                  key={current.id}
+                  sentence={current}
+                  placeholder="واژه‌ها را به ترتیب انتخاب کنید"
+                  guided={lesson.levelId <= 0}
+                  pattern={currentPattern}
+                  explanation={currentPatternExplanation}
+                  bridge={bridgeRule ? { title: bridgeRule.title, summary: bridgeRule.note } : undefined}
+                  lessonNote={teachingNote}
+                  levelId={lesson.levelId}
+                  sentenceIndex={sentenceIndex}
+                  sentenceCount={lesson.sentences.length}
+                  builtCount={Object.keys(builtSentences).length}
+                  onSpeak={text => speak(text)}
+                  onBuilt={markBuiltSentence}
+                  onNextSentence={sentenceIndex < lesson.sentences.length - 1 ? () => setSentenceIndex(sentenceIndex + 1) : undefined}
+                />
+              )}
+              <PracticeNavigation index={sentenceIndex} count={lesson.sentences.length} onChange={setSentenceIndex} />
+              {a1 && <StarterWritingPractice key={current.id} sentence={current} />}
+            </View>
+          );
+        })()}
 
         {stage === 5 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
@@ -622,7 +654,21 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           </> : <>
             <Text style={styles.stageTitle}>مکالمهٔ هدایت‌شده</Text>
             {showHint && <Text style={styles.stageDesc}>نقش خود را بگویید، سپس نمونه را بشنوید.</Text>}
-            <LanguageDialoguePractice key={lesson.id} dialogue={starterDisplayDialogue(lesson)} onSpeak={speak} languageLabel={course.name} locale={course.locale} branchPool={lesson.sentences} productive defaultMode={modeForLevel(lesson.levelId)} />
+            <LanguageDialoguePractice
+              key={lesson.id}
+              lessonId={lesson.id}
+              levelId={lesson.levelId}
+              situation={lesson.situation}
+              dialogue={starterDisplayDialogue(lesson)}
+              onSpeak={speak}
+              onSpeakDone={(text, onDone) => speak(text, undefined, onDone)}
+              onStop={() => { void stopStarterSpeech(); }}
+              languageLabel={course.name}
+              locale={course.locale}
+              branchPool={lesson.sentences}
+              productive
+              defaultMode={modeForLevel(lesson.levelId)}
+            />
             {readingTask && <StarterA1Skill key={`${lesson.id}-reading`} task={readingTask} onSpeak={speak} />}
             {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} explicit={lesson.levelId === 3 ? b1Production(course.id, lesson.id) : lesson.levelId === 4 ? b2Production(course.id, lesson.id) : undefined} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
           </>}

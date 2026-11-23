@@ -1,6 +1,7 @@
-import { tokens } from './speechScore';
+import { scoreSpeech, tokens, type SpeakCheckResult } from './speechScore';
+export type SpeechWordResult = SpeakCheckResult['words'][number];
 
-export type BranchingLocale = 'en-US' | 'ru-RU';
+export type BranchingLocale = 'en-US' | 'ru-RU' | 'tr-TR' | 'de-DE' | 'fr-FR' | 'es-ES';
 export type ConversationLevel = 'Pre-A1' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 export type ConversationMode = 'guided' | 'controlled' | 'semi-free' | 'semantic' | 'branching' | 'open-roleplay';
 
@@ -17,6 +18,8 @@ export type SemanticTurn = {
   chunks?: string[];
   branches?: SemanticBranch[];
   fallbackReply?: { text: string; fa: string };
+  expectedPolarity?: 'positive' | 'negative' | 'neutral';
+  expectedQuestion?: boolean;
 };
 export type BranchingConversation = {
   level: ConversationLevel;
@@ -28,96 +31,413 @@ export type SemanticResult = {
   score: number;
   feedback: string;
   branchReply?: { text: string; fa: string };
+  conceptScore?: number;
+  lexicalScore?: number;
+  missingConcepts?: string[];
+  polarityMismatch?: boolean;
+  questionMissing?: boolean;
+  partnerPushback?: { text: string; fa: string };
+  wordResults?: SpeechWordResult[];
 };
 
-const normalize = (value: string) => tokens(value).join(' ');
+const normalize = (value: string) =>
+  tokens(value.replace(/[\u0300\u0301]/g, '').replace(/ё/g, 'е')).join(' ');
 const wordSet = (value: string) => new Set(normalize(value).split(' ').filter(Boolean));
+
 const STOP = new Set([
+  // English
   'the', 'a', 'an', 'is', 'am', 'are', 'was', 'were', 'to', 'of', 'and', 'or', 'i', 'you', 'we', 'they', 'it',
-  'this', 'that', 'in', 'on', 'at', 'for', 'with', 'my', 'your', 'me', 'do', 'does', 'did', 'be', 'will',
+  'this', 'that', 'in', 'on', 'at', 'for', 'with', 'my', 'your', 'me', 'do', 'does', 'did', 'be', 'will', 'would',
+  'have', 'has', 'had', 'he', 'she', 'his', 'her', 'our', 'their', 'so', 'very', 'just',
+  // Russian
   'и', 'а', 'но', 'это', 'этот', 'эта', 'я', 'мы', 'вы', 'ты', 'он', 'она', 'они', 'в', 'на', 'к', 'с', 'у',
-  'из', 'за', 'что', 'как', 'не', 'да', 'нет',
+  'из', 'за', 'что', 'как', 'по', 'о', 'об', 'от', 'до', 'для', 'же', 'бы', 'ли', 'мне', 'тебе', 'вам', 'мой', 'моя',
+  // Turkish
+  'bir', 've', 'bu', 'şu', 'o', 'ben', 'sen', 'biz', 'siz', 'onlar', 'için', 'ile', 'da', 'de', 'ki', 'ama', 'çok',
+  // German
+  'der', 'die', 'das', 'ein', 'eine', 'einen', 'einem', 'einer', 'ich', 'du', 'sie', 'er', 'es', 'wir', 'ihr',
+  'und', 'oder', 'in', 'im', 'an', 'am', 'auf', 'mit', 'zu', 'zum', 'zur', 'von', 'für', 'ist', 'sind', 'bin', 'sehr',
+  // French
+  'le', 'la', 'les', 'un', 'une', 'des', 'du', 'de', 'je', 'tu', 'il', 'elle', 'nous', 'vous', 'ils', 'elles',
+  'et', 'ou', 'en', 'à', 'au', 'aux', 'dans', 'pour', 'avec', 'sur', 'est', 'suis', 'sont', 'très', 'ce', 'cette',
+  // Spanish
+  'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'yo', 'tú', 'él', 'ella', 'nosotros', 'vosotros', 'ellos',
+  'y', 'o', 'en', 'a', 'al', 'de', 'del', 'para', 'por', 'con', 'es', 'soy', 'son', 'está', 'estoy', 'muy',
 ]);
+
+const NEGATION_TOKENS = new Set([
+  'no', 'not', "don't", "doesn't", "didn't", "won't", "can't", 'cannot', 'never', 'nothing', 'neither', "isn't", "aren't", "wasn't", "weren't",
+  'не', 'нет', 'ни', 'никогда', 'ничего', 'нельзя',
+  'hayır', 'yok', 'değil', 'asla', 'hiç',
+  'nein', 'nicht', 'kein', 'keine', 'keinen', 'keinem', 'nie', 'niemals', 'nichts',
+  'non', 'ne', 'pas', 'jamais', 'rien', 'aucun', 'aucune',
+  'nunca', 'jamás', 'nada', 'ningún', 'ninguna', 'tampoco',
+]);
+
+const QUESTION_WORDS = new Set([
+  'what', 'where', 'when', 'who', 'whom', 'whose', 'why', 'how', 'which', 'can', 'could', 'would', 'will', 'do', 'does', 'did', 'is', 'are', 'am',
+  'что', 'где', 'когда', 'кто', 'куда', 'откуда', 'почему', 'зачем', 'как', 'какой', 'какая', 'какие', 'сколько', 'можно', 'ли',
+  'ne', 'nerede', 'nereye', 'nereden', 'ne zaman', 'kim', 'kime', 'neden', 'niçin', 'nasıl', 'hangi', 'kaç', 'mi', 'mı', 'mu', 'mü',
+  'was', 'wo', 'wohin', 'woher', 'wann', 'wer', 'wen', 'wem', 'warum', 'wie', 'welche', 'welcher', 'welches', 'kann', 'können', 'darf',
+  'quoi', 'où', 'quand', 'qui', 'pourquoi', 'comment', 'quel', 'quelle', 'quels', 'quelles', 'combien', 'pouvez', 'puis',
+  'qué', 'dónde', 'adónde', 'cuándo', 'quién', 'quiénes', 'cómo', 'cuál', 'cuáles', 'cuánto', 'cuánta', 'puedo', 'puede', 'puedes',
+]);
+
+const SYNONYM_GROUPS: ReadonlyArray<readonly string[]> = [
+  ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening'],
+  ['bye', 'goodbye', 'see you'],
+  ['thanks', 'thank you', 'appreciate'],
+  ['yes', 'yeah', 'sure', 'of course', 'okay', 'ok', 'certainly'],
+  ['sorry', 'excuse me', 'apologize'],
+  ['want', 'would like', 'need'],
+  ['привет', 'здравствуй', 'здравствуйте', 'доброе утро', 'добрый день', 'добрый вечер'],
+  ['пока', 'до свидания', 'увидимся'],
+  ['спасибо', 'благодарю'],
+  ['да', 'конечно', 'хорошо', 'ладно'],
+  ['извините', 'простите', 'извини'],
+  ['хочу', 'хотел', 'хотела', 'нужно', 'надо'],
+  ['merhaba', 'selam', 'günaydın', 'iyi günler', 'iyi akşamlar'],
+  ['hoşça kal', 'güle güle', 'görüşürüz'],
+  ['teşekkürler', 'teşekkür ederim', 'sağ ol', 'sağ olun'],
+  ['evet', 'tabii', 'tamam', 'olur'],
+  ['pardon', 'özür dilerim', 'affedersiniz'],
+  ['hallo', 'guten tag', 'guten morgen', 'guten abend'],
+  ['tschüss', 'auf wiedersehen', 'bis bald'],
+  ['danke', 'vielen dank'],
+  ['ja', 'klar', 'natürlich', 'gerne', 'gut'],
+  ['entschuldigung', 'tut mir leid'],
+  ['bonjour', 'salut', 'bonsoir'],
+  ['au revoir', 'à bientôt'],
+  ['merci', 'merci beaucoup'],
+  ['oui', 'bien sûr', 'accord'],
+  ['pardon', 'excusez-moi', 'désolé', 'désolée'],
+  ['hola', 'buenos días', 'buenas tardes', 'buenas noches'],
+  ['adiós', 'hasta luego', 'nos vemos'],
+  ['gracias', 'muchas gracias'],
+  ['sí', 'claro', 'vale', 'bueno', 'por supuesto'],
+  ['perdón', 'disculpe', 'lo siento'],
+];
+
+const SYNONYM_LOOKUP = new Map<string, readonly string[]>();
+for (const group of SYNONYM_GROUPS) {
+  for (const item of group) {
+    SYNONYM_LOOKUP.set(normalize(item), group);
+  }
+}
+
+const PUSHBACK_BY_LOCALE: Record<BranchingLocale, { unclear: { text: string; fa: string }; polarity: { text: string; fa: string }; question: { text: string; fa: string }; short: { text: string; fa: string } }> = {
+  'en-US': {
+    unclear: { text: 'Sorry, I did not quite catch that. Could you say it clearly?', fa: 'متوجه نشدم؛ می‌توانی دقیق‌تر و متناسب با موضوع بگویی؟' },
+    polarity: { text: 'Wait — yes or no? That sounded like the opposite of what we were agreeing on.', fa: 'صبر کن — منظورت مثبت بود یا منفی؟ با پاسخ مورد انتظار این نوبت نمی‌خواند.' },
+    question: { text: 'Are you asking me a question? Try phrasing it clearly as a question.', fa: 'آیا سؤال می‌پرسی؟ لطفاً با لحن یا واژهٔ پرسشی بپرس.' },
+    short: { text: 'Could you explain that a bit more completely?', fa: 'می‌توانی کمی کامل‌تر و با جزئیات بیشتری توضیح بدهی؟' },
+  },
+  'ru-RU': {
+    unclear: { text: 'Извини́те, я не совсе́м по́нял. Скажи́те, пожа́луйста, точне́е.', fa: 'ببخشید، دقیق متوجه نشدم. لطفاً واضح‌تر و متناسب با نوبت بگو.' },
+    polarity: { text: 'Подожди́те, вы име́ете в виду́ «да» и́ли «нет»?', fa: 'صبر کن، منظورت مثبت است یا منفی؟ قطبیت جمله با هدف نوبت نمی‌خواند.' },
+    question: { text: 'Э́то вопро́с? Попро́буйте спроси́ть ещё раз как вопро́с.', fa: 'آیا این پرسش است؟ لطفاً با واژه یا لحن پرسشی بپرس.' },
+    short: { text: 'Не могли́ бы вы отве́тить бо́лее подро́бно?', fa: 'می‌توانی کمی کامل‌تر و با جزئیات بیشتری پاسخ بدهی؟' },
+  },
+  'tr-TR': {
+    unclear: { text: 'Pardon, tam anlayamadım. Daha açık söyler misiniz?', fa: 'ببخشید، کامل متوجه نشدم. واضح‌تر و متناسب با موضوع بگو.' },
+    polarity: { text: 'Bir dakika, evet mi hayır mı demek istediniz?', fa: 'یک لحظه، منظورت مثبت بود یا منفی؟ با نوبت هم‌خوانی ندارد.' },
+    question: { text: 'Bunu soru olarak mı soruyorsunuz?', fa: 'آیا می‌پرسی؟ با لحن یا نشانهٔ پرسش بیان کن.' },
+    short: { text: 'Biraz daha ayrıntılı açıklayabilir misiniz?', fa: 'می‌توانی کمی کامل‌تر توضیح بدهی؟' },
+  },
+  'de-DE': {
+    unclear: { text: 'Entschuldigung, das habe ich nicht verstanden. Könnten Sie es klarer sagen?', fa: 'ببخشید، متوجه نشدم. واضح‌تر و متناسب با نوبت بگو.' },
+    polarity: { text: 'Moment, meinen Sie ja oder nein?', fa: 'یک لحظه، منظورت مثبت است یا منفی؟' },
+    question: { text: 'Stellen Sie gerade eine Frage?', fa: 'آیا سؤال می‌پرسی؟ جمله را به‌صورت پرسشی بگو.' },
+    short: { text: 'Könnten Sie das etwas ausführlicher sagen?', fa: 'می‌توانی کمی کامل‌تر توضیح بدهی؟' },
+  },
+  'fr-FR': {
+    unclear: { text: 'Pardon, je n’ai pas bien compris. Pouvez-vous le dire plus clairement ?', fa: 'ببخشید، درست متوجه نشدم. واضح‌تر و متناسب با نوبت بگو.' },
+    polarity: { text: 'Attendez, vous voulez dire oui ou non ?', fa: 'صبر کن، منظورت بله است یا خیر؟' },
+    question: { text: 'Vous posez une question ?', fa: 'آیا سؤال می‌پرسی؟ با لحن یا ساختار پرسشی بگو.' },
+    short: { text: 'Pourriez-vous développer un peu plus ?', fa: 'می‌توانی کمی کامل‌تر توضیح بدهی؟' },
+  },
+  'es-ES': {
+    unclear: { text: 'Perdón, no lo entendí bien. ¿Puede decirlo con más claridad?', fa: 'ببخشید، درست متوجه نشدم. واضح‌تر و متناسب با نوبت بگو.' },
+    polarity: { text: 'Un momento, ¿quiere decir que sí o que no?', fa: 'یک لحظه، منظورت بله است یا خیر؟' },
+    question: { text: '¿Está haciendo una pregunta?', fa: 'آیا سؤال می‌پرسی؟ با لحن یا ساختار پرسشی بگو.' },
+    short: { text: '¿Podría explicarlo de forma más completa?', fa: 'می‌توانی کمی کامل‌تر توضیح بدهی؟' },
+  },
+};
+
+function matchesTokenOrStem(heardTokens: readonly string[], option: string): boolean {
+  const optNorm = normalize(option);
+  if (!optNorm) return false;
+  const optParts = optNorm.split(' ').filter(Boolean);
+  if (optParts.length > 1) {
+    const joined = heardTokens.join(' ');
+    return joined.includes(optNorm);
+  }
+  const target = optParts[0];
+  return heardTokens.some(tok => {
+    if (tok === target) return true;
+    // Allow close inflectional/conjugation stems on longer words (Russian/Turkish/German/French/Spanish)
+    if (target.length >= 5 && tok.length >= 5) {
+      const prefix = Math.min(target.length - 1, tok.length - 1, 5);
+      return prefix >= 4 && tok.slice(0, prefix) === target.slice(0, prefix);
+    }
+    return false;
+  });
+}
+
 const containsAny = (text: string, options: string[]) => {
-  const normalized = normalize(text);
-  return options.some(option => normalize(option).split(' ').every(token => normalized.includes(token)));
+  const heardTokens = normalize(text).split(' ').filter(Boolean);
+  if (!heardTokens.length) return false;
+  return options.some(option => matchesTokenOrStem(heardTokens, option));
 };
 
 function overlapScore(expected: string, heard: string) {
   const expectedWords = [...wordSet(expected)].filter(word => !STOP.has(word) && word.length > 1);
   if (!expectedWords.length) return normalize(expected) === normalize(heard) ? 1 : 0;
-  const heardWords = wordSet(heard);
-  return expectedWords.filter(word => heardWords.has(word)).length / expectedWords.length;
+  const heardTokens = normalize(heard).split(' ').filter(Boolean);
+  return expectedWords.filter(word => matchesTokenOrStem(heardTokens, word)).length / expectedWords.length;
+}
+
+function detectPolarity(text: string): 'positive' | 'negative' | 'neutral' {
+  const words = normalize(text).split(' ').filter(Boolean);
+  if (words.some(w => NEGATION_TOKENS.has(w))) return 'negative';
+  if (words.some(w => ['yes', 'yeah', 'sure', 'да', 'конечно', 'evet', 'ja', 'oui', 'sí'].includes(w))) return 'positive';
+  return 'neutral';
+}
+
+function looksLikeQuestion(text: string): boolean {
+  if (/[?¿]/.test(text)) return true;
+  const words = normalize(text).split(' ').filter(Boolean);
+  return words.some(w => QUESTION_WORDS.has(w));
+}
+
+function scriptIssue(text: string, locale: BranchingLocale, targetText?: string): string | null {
+  const trimmed = text.trim();
+  if (!trimmed) return 'هنوز پاسخی ثبت نشده است.';
+  if (/[\u0600-\u06FF]/.test(trimmed)) return 'لطفاً به زبان همین درس پاسخ بده، نه فارسی.';
+  if (/^(.)\1{3,}$/.test(trimmed.replace(/\s+/g, ''))) return 'پاسخ نامفهوم یا تکراری است؛ یک جملهٔ واقعی بگو یا بنویس.';
+  const lettersOnly = trimmed.replace(/[^a-zA-Z\u0400-\u04FFçğıöşüÇĞİÖŞÜäöüßÄÖÜàâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸáéíóúñüÁÉÍÓÚÑÜ]/g, '');
+  if (!lettersOnly) return 'حرف یا واژهٔ معتبری در پاسخ دیده نشد.';
+  if (locale === 'ru-RU' && targetText && /[\u0400-\u04FF]/.test(targetText) && !/[\u0400-\u04FF]/.test(trimmed)) {
+    return 'این بخش مکالمهٔ روسی است؛ لطفاً با خط و واژه‌های روسی پاسخ بده.';
+  }
+  return null;
 }
 
 export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, locale: BranchingLocale, level: ConversationLevel): SemanticResult {
   const answer = heard.trim();
+  const pushback = PUSHBACK_BY_LOCALE[locale] ?? PUSHBACK_BY_LOCALE['en-US'];
+
+  // Exact choice match on Pre-A1 / A1 guided selection
+  if (rule.choices?.length) {
+    const matchedChoice = rule.choices.find(choice => normalize(choice.text) === normalize(answer));
+    if (matchedChoice) {
+      if (matchedChoice.correct) {
+        return {
+          accepted: true,
+          score: 100,
+          conceptScore: 1,
+          lexicalScore: 1,
+          missingConcepts: [],
+          feedback: 'درست است؛ انتخاب و پاسخ دقیقاً متناسب با موقعیت بود.',
+          branchReply: rule.fallbackReply,
+          wordResults: rule.targetText ? scoreSpeech(rule.targetText, answer).words : undefined,
+        };
+      }
+      return {
+        accepted: false,
+        score: 20,
+        conceptScore: 0,
+        lexicalScore: 0,
+        missingConcepts: [],
+        feedback: 'این گزینه پاسخِ نوبت دیگری است و با سؤال یا موقعیت فعلی نمی‌خواند؛ دوباره انتخاب کن.',
+        partnerPushback: pushback.unclear,
+      };
+    }
+  }
+
+  const invalid = scriptIssue(answer, locale, rule.targetText);
+  if (invalid) {
+    return {
+      accepted: false,
+      score: 0,
+      conceptScore: 0,
+      lexicalScore: 0,
+      missingConcepts: [],
+      feedback: invalid,
+      partnerPushback: pushback.unclear,
+    };
+  }
+
+  const wordResults = rule.targetText ? scoreSpeech(rule.targetText, answer).words : undefined;
   const concepts = rule.concepts.length ? rule.concepts : [[]];
-  const covered = concepts.filter(group => containsAny(answer, group)).length;
+  const missingConcepts: string[] = [];
+  let covered = 0;
+  for (const group of concepts) {
+    if (!group.length || containsAny(answer, group)) {
+      covered += 1;
+    } else {
+      missingConcepts.push(group[0]);
+    }
+  }
+
   const conceptScore = covered / concepts.length;
   const lexicalScore = rule.targetText ? overlapScore(rule.targetText, answer) : conceptScore;
   const branch = rule.branches?.find(item => item.match.every(group => containsAny(answer, group)));
-  const lengthCredit = answer.length >= (locale === 'ru-RU' ? 8 : 12) ? 10 : 0;
-  const score = Math.round((Math.max(conceptScore, lexicalScore) * 70) + (lexicalScore * 20) + lengthCredit);
-  const threshold = level === 'Pre-A1' ? 95 : level === 'A1' ? 65 : level === 'A2' ? 65 : level === 'B1' ? 70 : 75;
-  const accepted = rule.choices?.length
-    ? rule.choices.some(choice => choice.correct && normalize(choice.text) === normalize(answer))
-    : score >= threshold && (conceptScore >= 0.55 || lexicalScore >= 0.6);
+
+  // Polarity guard (e.g., saying "no" when the turn asks for "yes" or vice-versa)
+  const expectedPol = rule.expectedPolarity ?? 'neutral';
+  const heardPol = detectPolarity(answer);
+  if (expectedPol !== 'neutral' && heardPol !== 'neutral' && expectedPol !== heardPol) {
+    return {
+      accepted: false,
+      score: Math.min(28, Math.round(lexicalScore * 35)),
+      conceptScore,
+      lexicalScore,
+      missingConcepts,
+      polarityMismatch: true,
+      feedback: 'قطبیت پاسخ (مثبت/منفی) برعکسِ هدف این نوبت است؛ جمله را اصلاح کن.',
+      partnerPushback: pushback.polarity,
+      wordResults,
+    };
+  }
+
+  // Question guard for A2–C1
+  const questionMissing = Boolean(rule.expectedQuestion && level !== 'Pre-A1' && level !== 'A1' && !looksLikeQuestion(answer));
+
+  // Advanced-level depth guard: B2/C1 responses to full turns cannot pass with 1–2 words unless an authored branch matched
+  const heardWordCount = normalize(answer).split(' ').filter(Boolean).length;
+  const targetWordCount = rule.targetText ? normalize(rule.targetText).split(' ').filter(Boolean).length : 0;
+  if ((level === 'B2' || level === 'C1') && !branch && targetWordCount >= 7 && heardWordCount <= 2) {
+    return {
+      accepted: false,
+      score: Math.min(35, Math.round(conceptScore * 40)),
+      conceptScore,
+      lexicalScore,
+      missingConcepts,
+      feedback: 'در سطح پیشرفته پاسخ خیلی کوتاه است؛ منظورت را با جملهٔ کامل و دلیل بیان کن.',
+      partnerPushback: pushback.short,
+      wordResults,
+    };
+  }
+
+  // Balanced composite: concepts (60%) + lexical overlap (30%) + form/question/length adequacy (10%)
+  const minLength = level === 'Pre-A1' ? 2 : level === 'A1' ? 4 : level === 'A2' ? 8 : 12;
+  const formCredit = (answer.length >= minLength ? 5 : 0) + (!questionMissing ? 5 : 0);
+  const rawScore = Math.round(conceptScore * 60 + lexicalScore * 30 + formCredit - (questionMissing ? 15 : 0));
+  const score = Math.max(0, Math.min(100, rawScore));
+
+  const threshold = level === 'Pre-A1' ? 68 : level === 'A1' ? 68 : level === 'A2' ? 70 : level === 'B1' ? 72 : level === 'B2' ? 75 : 78;
+  const minConceptRatio = concepts.length >= 2 ? 0.6 : 0.99;
+  const accepted = !questionMissing && score >= threshold && (conceptScore >= minConceptRatio || lexicalScore >= 0.72);
+
   if (accepted) {
+    const feedback = score >= 88
+      ? (level === 'B2' || level === 'C1' ? 'دقیق، طبیعی و متناسب با لحن و بافت موقعیت.' : 'عالی؛ واضح و متناسب با موقعیت پاسخ دادی.')
+      : 'منظور پیام منتقل شد؛ می‌توانی در دور بعد با واژه‌های کامل‌تر دقیق‌ترش کنی.';
     return {
       accepted: true,
       score,
-      feedback: level === 'B2' || level === 'C1' ? 'منظور، لحن و مسیر پاسخ مناسب بود.' : level === 'Pre-A1' || level === 'A1' ? 'آفرین؛ پاسخ مناسب موقعیت بود.' : 'منظور پاسخ درست منتقل شد.',
+      conceptScore,
+      lexicalScore,
+      missingConcepts,
+      feedback,
       branchReply: branch?.reply ?? rule.fallbackReply,
+      wordResults,
     };
   }
-  const missing = Math.max(1, concepts.length - covered);
+
+  if (questionMissing) {
+    return {
+      accepted: false,
+      score,
+      conceptScore,
+      lexicalScore,
+      missingConcepts,
+      questionMissing: true,
+      feedback: 'این نوبت نیازمند پرسش است؛ با واژهٔ پرسشی یا لحن سؤال بیانش کن.',
+      partnerPushback: pushback.question,
+      wordResults,
+    };
+  }
+
+  const missingNote = missingConcepts.length
+    ? `بخش‌های جاافتاده: ${missingConcepts.slice(0, 3).map(w => `«${w}»`).join('، ')}`
+    : 'بخش‌های اصلی جمله هنوز کامل منتقل نشده‌اند.';
   return {
     accepted: false,
     score,
-    feedback: missing > 0
-      ? `پاسخ قابل فهم است، اما ${missing === 1 ? 'یک بخش مهم' : 'چند بخش مهم'} از منظور موقعیت کامل نشد.`
-      : 'پاسخ به موقعیت نزدیک بود؛ آن را روشن‌تر و کامل‌تر بیان کن.',
+    conceptScore,
+    lexicalScore,
+    missingConcepts,
+    feedback: `پاسخ هنوز برای این نوبت کامل نیست (${score}٪). ${missingNote}`,
+    partnerPushback: pushback.unclear,
+    wordResults,
   };
 }
 
-const EN_B1: BranchingConversation = {
-  level: 'B1', mode: 'semantic', turns: {
-    1: { promptFa: 'زمان فعلی مناسب نیست؛ یک زمان جایگزین پیشنهاد بده.', concepts: [['not', "can't", 'busy', 'unavailable'], ['wednesday', 'thursday', 'friday', 'afternoon', 'tomorrow', 'later']], fallbackReply: { text: 'That works for me. What time would be best for you?', fa: 'این زمان برای من مناسب است. چه ساعتی برایت بهتر است؟' } },
-    3: { promptFa: 'زمان پیشنهادی را تأیید کن و بگو که منتظر جلسه هستی.', concepts: [['works', 'perfect', 'good', 'fine', 'okay'], ['see you', 'looking forward', 'meet', 'meeting']], fallbackReply: { text: 'Great. I will send a calendar invitation shortly.', fa: 'عالی است. به‌زودی دعوت‌نامهٔ تقویم را می‌فرستم.' } },
-  },
-};
 const EN_B2: BranchingConversation = {
   level: 'B2', mode: 'branching', turns: {
-    1: { promptFa: 'به پیشنهاد همکار پاسخ بده: موافقت، مخالفت مؤدبانه، یا درخواست اطلاعات بیشتر.', concepts: [['agree', 'support', 'reasonable', 'yes', 'disagree', 'concern', 'however', 'but', 'more', 'information', 'clarify', 'why']], branches: [{ match: [['agree', 'support', 'reasonable', 'yes']], reply: { text: 'Good. Then let us agree on the budget and timeline.', fa: 'خوب است. پس دربارهٔ بودجه و زمان‌بندی توافق کنیم.' } }, { match: [['disagree', 'concern', 'however', 'but']], reply: { text: 'I understand your concern. What alternative do you suggest?', fa: 'نگرانی‌ات را درک می‌کنم. چه گزینهٔ دیگری پیشنهاد می‌کنی؟' } }, { match: [['more', 'information', 'clarify', 'why']], reply: { text: 'Of course. I can explain the costs and expected results.', fa: 'حتماً. می‌توانم هزینه‌ها و نتایج مورد انتظار را توضیح دهم.' } }], fallbackReply: { text: 'Could you explain your position a little more?', fa: 'می‌توانی دیدگاهت را کمی بیشتر توضیح بدهی؟' } },
-    3: { promptFa: 'یک راه‌حل عملی پیشنهاد بده و دلیل کوتاهی برای آن بیاور.', concepts: [['could', 'should', 'suggest', 'recommend', 'propose', 'try'], ['because', 'since', 'so', 'reduce', 'improve', 'cost', 'risk']], fallbackReply: { text: 'That sounds practical. Let us define the next step.', fa: 'عملی به نظر می‌رسد. بیایید گام بعدی را مشخص کنیم.' } },
-  },
-};
-const RU_B1: BranchingConversation = {
-  level: 'B1', mode: 'semantic', turns: {
-    1: { promptFa: 'نظر خود را بگو و حداقل یک دلیل اضافه کن.', concepts: [['думаю', 'считаю', 'мнение', 'по-моему', 'я'], ['потому', 'так как', 'поскольку', 'потому что', 'из-за']], fallbackReply: { text: 'Понятно. А можете привести пример?', fa: 'متوجه شدم. می‌توانید یک مثال بزنید؟' } },
-    3: { promptFa: 'یک پیشنهاد یا راه‌حل مشخص ارائه کن.', concepts: [['можно', 'стоит', 'предлагаю', 'лучше', 'нужно', 'давайте'], ['сделать', 'попробовать', 'изменить', 'начать', 'решить']], fallbackReply: { text: 'Хорошо, давайте обсудим этот вариант.', fa: 'خوب است، بیایید این گزینه را بررسی کنیم.' } },
-  },
-};
-const RU_B2: BranchingConversation = {
-  level: 'B2', mode: 'branching', turns: {
-    1: { promptFa: 'با لحن رسمی موضع خود را بیان کن و یک دلیل یا پیامد اضافه کن.', concepts: [['согласен', 'согласна', 'поддерживаю', 'считаю', 'думаю', 'однако', 'но'], ['потому', 'поскольку', 'поэтому', 'риск', 'стоимость', 'результат', 'последствие']], branches: [{ match: [['согласен', 'согласна', 'поддерживаю']], reply: { text: 'Тогда давайте согласуем сроки и ответственность.', fa: 'پس بیایید زمان‌بندی و مسئولیت را مشخص کنیم.' } }, { match: [['однако', 'но']], reply: { text: 'Понимаю. Какой вариант вы предлагаете вместо этого?', fa: 'متوجه‌ام. در عوض چه گزینه‌ای پیشنهاد می‌کنید؟' } }], fallbackReply: { text: 'Не могли бы вы уточнить свою позицию?', fa: 'ممکن است موضع خود را دقیق‌تر توضیح دهید؟' } },
-    3: { promptFa: 'یک راه‌حل مشروط ارائه کن و پیامد احتمالی آن را توضیح بده.', concepts: [['если', 'можно', 'стоит', 'предлагаю', 'лучше'], ['будет', 'сможем', 'позволит', 'снизит', 'увеличит', 'поможет']], fallbackReply: { text: 'Это разумный вариант. Давайте проверим его на практике.', fa: 'این گزینهٔ منطقی‌ای است. بیایید آن را در عمل بررسی کنیم.' } },
+    1: {
+      promptFa: 'دیدگاهت را دربارهٔ سیاست تازه بگو: حمایت با دلیل، نگرانی، یا درخواست توضیح بیشتر.',
+      concepts: [['agree', 'support', 'reasonable', 'yes', 'disagree', 'concern', 'however', 'but', 'more', 'information', 'clarify', 'why']],
+      branches: [
+        { match: [['agree', 'support', 'reasonable', 'yes']], reply: { text: 'The cost is my main concern.', fa: 'نگرانی اصلی من هزینهٔ آن است.' } },
+        { match: [['disagree', 'concern', 'however', 'but']], reply: { text: 'I understand your concern. What alternative do you suggest?', fa: 'نگرانی‌ات را درک می‌کنم. چه گزینهٔ دیگری پیشنهاد می‌کنی؟' } },
+        { match: [['more', 'information', 'clarify', 'why']], reply: { text: 'Of course. I can explain the costs and expected results.', fa: 'حتماً. می‌توانم هزینه‌ها و نتایج مورد انتظار را توضیح دهم.' } },
+      ],
+      fallbackReply: { text: 'Could you explain your position a little more?', fa: 'می‌توانی دیدگاهت را کمی بیشتر توضیح بدهی؟' },
+    },
+    3: {
+      promptFa: 'در پاسخ به نگرانی هزینه، یک راه‌حل میانه یا آزمایشی پیشنهاد بده.',
+      concepts: [['could', 'should', 'suggest', 'recommend', 'propose', 'try', 'start'], ['smaller', 'trial', 'reduce', 'improve', 'cost', 'risk', 'budget']],
+      fallbackReply: { text: 'That might be a reasonable compromise.', fa: 'این می‌تواند یک مصالحهٔ منطقی باشد.' },
+    },
   },
 };
 
 const DEFINITIONS: Record<string, BranchingConversation> = {
-  'communication-negotiating-project-priorities': EN_B1,
   'b2-survival-society-negotiation': EN_B2,
-  'coherent-opinions': RU_B1,
-  'modality-register': RU_B2,
 };
 
 const LEVEL_BY_ID: Record<number, ConversationLevel> = { 0: 'Pre-A1', 1: 'A1', 2: 'A2', 3: 'B1', 4: 'B2', 5: 'C1' };
 const modeFor = (level: ConversationLevel): ConversationMode => level === 'Pre-A1' ? 'guided' : level === 'A1' ? 'controlled' : level === 'A2' ? 'semi-free' : level === 'B1' ? 'semantic' : level === 'B2' ? 'branching' : 'open-roleplay';
-const contentWords = (text: string) => [...wordSet(text)].filter(word => !STOP.has(word) && word.length > 2);
 
-/** Generates a level-appropriate conversation contract for every catalog lesson, without a manual ID registry. */
+function expandConcept(word: string): string[] {
+  const syn = SYNONYM_LOOKUP.get(word);
+  return syn ? [...new Set([word, ...syn])] : [word];
+}
+
+function buildRequiredConcepts(target: string, level: ConversationLevel): string[][] {
+  const words = normalize(target)
+    .split(' ')
+    .filter(w => w.length > 1 && !STOP.has(w) && !NEGATION_TOKENS.has(w));
+  const unique = [...new Set(words)];
+  if (!unique.length) {
+    const raw = normalize(target).split(' ').filter(Boolean);
+    return raw.length ? [expandConcept(raw[0])] : [[target]];
+  }
+  const desiredCount = level === 'Pre-A1' ? Math.min(2, unique.length) : level === 'A1' || level === 'A2' ? Math.min(2, unique.length) : Math.min(3, unique.length);
+  // Pick the most informative (longest) distinct words in natural sentence order
+  const ranked = [...unique]
+    .map((word, idx) => ({ word, idx, weight: word.length }))
+    .sort((a, b) => b.weight - a.weight)
+    .slice(0, desiredCount)
+    .sort((a, b) => a.idx - b.idx);
+  return ranked.map(item => expandConcept(item.word));
+}
+
+function deterministicShuffleChoices(choices: Choice[], seedKey: string): Choice[] {
+  const list = [...choices];
+  let seed = [...seedKey].reduce((sum, ch) => sum + ch.charCodeAt(0), 19);
+  for (let i = list.length - 1; i > 0; i -= 1) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const j = seed % (i + 1);
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  return list;
+}
+
+/** Generates a level-appropriate, non-trivial conversation contract for every catalog lesson across all 6 languages. */
 export function conversationPracticeForLesson(
   lesson: { id: string; levelId: number; sentences: ReadonlyArray<{ text?: string; en?: string; fa: string }>; dialogue?: ReadonlyArray<{ text: string; fa: string; role?: string; speaker?: string }> },
   locale: BranchingLocale,
@@ -132,17 +452,33 @@ export function conversationPracticeForLesson(
   lines.forEach((line, index) => {
     if (line.role !== 'learner' && line.speaker !== 'learner') return;
     const target = line.text.trim();
-    const words = contentWords(target);
-    const distractors = lines.filter(candidate => candidate !== line && candidate.role !== 'learner' && candidate.text.trim()).slice(0, 2).map(candidate => ({ text: candidate.text, correct: false }));
-    const choices = (level === 'Pre-A1' || level === 'A1')
-      ? [{ text: target, correct: true }, ...distractors].slice(0, 3)
+    const distractorPool = [
+      ...lines.filter(candidate => candidate !== line && normalize(candidate.text) !== normalize(target) && candidate.text.trim()),
+      ...lesson.sentences
+        .map(s => ({ text: (s.text || s.en || '').trim(), fa: s.fa }))
+        .filter(s => s.text && normalize(s.text) !== normalize(target)),
+    ];
+    const seen = new Set<string>([normalize(target)]);
+    const distractors: Choice[] = [];
+    for (const candidate of distractorPool) {
+      const key = normalize(candidate.text);
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      distractors.push({ text: candidate.text, correct: false });
+      if (distractors.length >= 2) break;
+    }
+    const choices = (level === 'Pre-A1' || level === 'A1') && distractors.length > 0
+      ? deterministicShuffleChoices([{ text: target, correct: true }, ...distractors], `${lesson.id}:${index}:${locale}`)
       : undefined;
+
     turns[index] = {
       promptFa: line.fa || target,
       targetText: target,
-      concepts: words.length ? [words] : [[target]],
+      concepts: buildRequiredConcepts(target, level),
       choices,
-      chunks: level === 'A1' ? target.split(/\s+/).filter(Boolean) : undefined,
+      chunks: (level === 'Pre-A1' || level === 'A1') ? target.split(/\s+/).filter(Boolean) : undefined,
+      expectedPolarity: detectPolarity(target),
+      expectedQuestion: /[?¿]/.test(target),
     };
   });
   const generated: BranchingConversation = { level, mode, turns };
@@ -151,7 +487,13 @@ export function conversationPracticeForLesson(
   const mergedTurns = { ...generated.turns };
   Object.entries(explicit.turns).forEach(([key, turn]) => {
     const index = Number(key);
-    mergedTurns[index] = { ...turn, targetText: generated.turns[index]?.targetText };
+    const base = generated.turns[index];
+    mergedTurns[index] = {
+      ...turn,
+      targetText: base?.targetText,
+      expectedPolarity: turn.expectedPolarity ?? base?.expectedPolarity,
+      expectedQuestion: turn.expectedQuestion ?? base?.expectedQuestion,
+    };
   });
   return { ...explicit, turns: mergedTurns };
 }

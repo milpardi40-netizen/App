@@ -51,7 +51,7 @@ import LessonCelebration, { type CelebrationStats } from '@/components/LessonCel
 import { finishLessonRewards } from '@/lib/lessonRewards';
 import { trackLessonCompleted, trackLessonStarted, trackStageReached } from '@/lib/analyticsSession';
 import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
-import { bridgeRulesForLesson } from '@/lib/languages/russianPersianBridge';
+import { bridgeFor, bridgeRulesForLesson } from '@/lib/languages/russianPersianBridge';
 import { recordStudyDay } from '@/lib/studyStreak';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
 import { conversationPracticeForLesson } from '@/lib/branchingConversation';
@@ -70,6 +70,11 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   useEffect(() => { warmRussianSpeech(); void ensureRecordedAudio('ru'); }, []);
   const starter = starterStep(lesson.id);
   const [expandedProductionFor, setExpandedProductionFor] = useState<string | null>(null);
+  const [builtSentences, setBuiltSentences] = useState<Record<string, boolean>>({});
+  const markBuiltSentence = useCallback((sentenceId: string) => {
+    setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
+  }, []);
+  useEffect(() => { setBuiltSentences({}); }, [lesson.id]);
   const [stage, setStage] = useState(0);
   const [sentenceIndex, setSentenceIndex] = useState(0);
 
@@ -531,13 +536,32 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         </View>}
 
         {stage === 4 && starter && <RussianStarterReading key={lesson.id} words={starter.read} letters={starter.letters} speak={speak} />}
-        {stage === 4 && !starter && <View style={styles.centerStage}>
-          <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
-          <Text style={styles.stageTitle}>ساخت جمله</Text>
-          {showHint && <Text style={styles.stageDesc}>{lesson.levelId <= 0 ? 'جملهٔ درست بالای صفحه دیده می‌شود؛ فقط واژه‌ها را به ترتیب آن بچینید.' : 'معنی را بخوانید و واژه‌ها را به ترتیب بچینید.'}</Text>}
-          <RussianSentenceBuilder key={current.id} sentence={current} guided={lesson.levelId <= 0} />
-          <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${fa(index + 1)}`} onPress={() => setSentenceIndex(index)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
-        </View>}
+        {stage === 4 && !starter && (() => {
+          const bridgeRule = bridgeFor(current).rule;
+          return (
+            <View style={styles.centerStage}>
+              <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
+              <Text style={styles.stageTitle}>ساخت جمله</Text>
+              {showHint && <Text style={styles.stageDesc}>{lesson.levelId <= 0 ? 'جملهٔ درست و الگویش بالای صفحه دیده می‌شود؛ واژه‌ها را به ترتیب آن بچینید.' : 'الگوی ساختار و واژه‌های کلیدی را ببینید و جمله را بسازید.'}</Text>}
+              <RussianSentenceBuilder
+                key={current.id}
+                sentence={current}
+                guided={lesson.levelId <= 0}
+                pattern={current.pattern || grammarPatterns[0]?.pattern}
+                bridge={bridgeRule ? { title: bridgeRule.title, summary: bridgeRule.note } : undefined}
+                lessonNote={lesson.teachingFa}
+                levelId={lesson.levelId}
+                sentenceIndex={sentenceIndex}
+                sentenceCount={lesson.sentences.length}
+                builtCount={Object.keys(builtSentences).length}
+                onSpeak={text => speak(text)}
+                onBuilt={markBuiltSentence}
+                onNextSentence={sentenceIndex < lesson.sentences.length - 1 ? () => setSentenceIndex(sentenceIndex + 1) : undefined}
+              />
+              <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${fa(index + 1)}`} onPress={() => setSentenceIndex(index)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
+            </View>
+          );
+        })()}
 
         {stage === 5 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
@@ -624,6 +648,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <LessonConversationRoom
             key={lesson.id}
             lessonId={lesson.id}
+            levelId={lesson.levelId}
             situation={lesson.situation}
             partnerRole="طرف مقابل"
             dialogue={lesson.dialogue}

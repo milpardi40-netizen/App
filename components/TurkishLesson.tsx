@@ -20,7 +20,7 @@ import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
 import TurkishSentenceBuilder from '@/components/TurkishSentenceBuilder';
 import TurkishDialoguePractice from '@/components/TurkishDialoguePractice';
 import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
-import { turkishBridgeRulesForLesson } from '@/lib/languages/turkishPersianBridge';
+import { turkishBridgeFor, turkishBridgeRulesForLesson } from '@/lib/languages/turkishPersianBridge';
 import { modeForLevel } from '@/components/LanguageDialoguePractice';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
@@ -58,6 +58,11 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   const { levelReplay } = useLocalSearchParams<{ levelReplay?: string }>();
   const courseLevel = TURKISH_LEVELS.find(item => item.id === lesson.levelId) ?? TURKISH_LEVELS[0];
   useEffect(() => { void ensureRecordedAudio('tr'); }, []);
+  const [builtSentences, setBuiltSentences] = useState<Record<string, boolean>>({});
+  const markBuiltSentence = useCallback((sentenceId: string) => {
+    setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
+  }, []);
+  useEffect(() => { setBuiltSentences({}); }, [lesson.id]);
   const [stage, setStage] = useState(0);
   const [sentenceIndex, setSentenceIndex] = useState(0);
 
@@ -502,19 +507,38 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
           <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`${unitLabel} ${fa(index + 1)}`} onPress={() => selectSentence(index, .68)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
         </View>}
 
-        {stage === 4 && <View style={styles.centerStage}>
-          <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
-          {lesson.learningMode === 'words' ? <>
-            <Text style={styles.stageTitle}>یادآوری واژهٔ مستقل</Text>
-            {showHint && <Text style={styles.stageDesc}>معنی را حدس بزنید، سپس پاسخ را ببینید.</Text>}
-            <View style={styles.sentenceCard}><Text style={styles.turkishSentence}>{current.text}</Text><Pressable accessibilityRole="button" accessibilityState={{ expanded: revealed }} style={styles.showAnswersButton} onPress={() => setRevealed(value => !value)}><Text style={styles.showAnswersText}>{revealed ? 'پنهان‌کردن معنی' : 'نمایش معنی'}</Text></Pressable>{revealed ? <><View style={styles.divider} /><Text keepColor style={styles.persian}>{current.fa}</Text><Text style={styles.patternText}>{current.pattern ?? 'واژهٔ مستقل'}</Text></> : null}</View>
-          </> : <>
-            <Text style={styles.stageTitle}>{lesson.learningMode === 'chunks' ? 'ساخت ترکیب کوتاه' : 'ساخت جمله'}</Text>
-            {showHint && <Text style={styles.stageDesc}>{lesson.learningMode === 'chunks' ? 'معنی را بخوانید و واژه‌های همان ترکیب را به ترتیب بچینید.' : 'معنی را بخوانید و واژه‌ها را به ترتیب بچینید.'}</Text>}
-            <TurkishSentenceBuilder key={current.id} sentence={current} />
-          </>}
-          <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`${unitLabel} ${fa(index + 1)}`} onPress={() => { setSentenceIndex(index); setRevealed(false); }} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
-        </View>}
+        {stage === 4 && (() => {
+          const bridgeRule = turkishBridgeFor(current).rule;
+          return (
+            <View style={styles.centerStage}>
+              <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
+              {lesson.learningMode === 'words' ? <>
+                <Text style={styles.stageTitle}>یادآوری واژهٔ مستقل</Text>
+                {showHint && <Text style={styles.stageDesc}>معنی را حدس بزنید، سپس پاسخ را ببینید.</Text>}
+                <View style={styles.sentenceCard}><Text style={styles.turkishSentence}>{current.text}</Text><Pressable accessibilityRole="button" accessibilityState={{ expanded: revealed }} style={styles.showAnswersButton} onPress={() => setRevealed(value => !value)}><Text style={styles.showAnswersText}>{revealed ? 'پنهان‌کردن معنی' : 'نمایش معنی'}</Text></Pressable>{revealed ? <><View style={styles.divider} /><Text keepColor style={styles.persian}>{current.fa}</Text><Text style={styles.patternText}>{current.pattern ?? 'واژهٔ مستقل'}</Text></> : null}</View>
+              </> : <>
+                <Text style={styles.stageTitle}>{lesson.learningMode === 'chunks' ? 'ساخت ترکیب کوتاه' : 'ساخت جمله'}</Text>
+                {showHint && <Text style={styles.stageDesc}>{lesson.learningMode === 'chunks' ? 'معنی و الگوی ساختار را ببینید و واژه‌های همان ترکیب را بچینید.' : lesson.levelId <= 0 ? 'جملهٔ درست و الگویش بالای صفحه دیده می‌شود؛ واژه‌ها را به ترتیب آن بچینید.' : 'الگوی ساختار و واژه‌های کلیدی را ببینید و جمله را بسازید.'}</Text>}
+                <TurkishSentenceBuilder
+                  key={current.id}
+                  sentence={current}
+                  guided={lesson.levelId <= 0}
+                  pattern={current.pattern || grammarPatterns[0]?.pattern}
+                  bridge={bridgeRule ? { title: bridgeRule.title, summary: bridgeRule.note } : undefined}
+                  lessonNote={lesson.teachingFa}
+                  levelId={lesson.levelId}
+                  sentenceIndex={sentenceIndex}
+                  sentenceCount={lesson.sentences.length}
+                  builtCount={Object.keys(builtSentences).length}
+                  onSpeak={text => speak(text)}
+                  onBuilt={markBuiltSentence}
+                  onNextSentence={sentenceIndex < lesson.sentences.length - 1 ? () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); } : undefined}
+                />
+              </>}
+              <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`${unitLabel} ${fa(index + 1)}`} onPress={() => { setSentenceIndex(index); setRevealed(false); }} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
+            </View>
+          );
+        })()}
 
         {stage === 5 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
@@ -570,7 +594,19 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
             <View style={styles.bigIcon}><MessageCircle size={34} color={Palette.primary} /></View>
             <Text style={styles.stageTitle}>مکالمهٔ هدایت‌شده</Text>
             {showHint && <Text style={styles.stageDesc}>نقش خود را بگویید، سپس نمونه را بشنوید.</Text>}
-            <TurkishDialoguePractice key={lesson.id} dialogue={lesson.dialogue} onSpeak={speak} locale="tr-TR" branchPool={lesson.sentences} defaultMode={modeForLevel(lesson.levelId)} />
+            <TurkishDialoguePractice
+              key={lesson.id}
+              lessonId={lesson.id}
+              levelId={lesson.levelId}
+              situation={lesson.situation}
+              dialogue={lesson.dialogue}
+              onSpeak={speak}
+              onSpeakDone={(text, onDone) => speak(text, undefined, onDone)}
+              onStop={() => { void stopTurkishSpeech(); }}
+              locale="tr-TR"
+              branchPool={lesson.sentences}
+              defaultMode={modeForLevel(lesson.levelId)}
+            />
             {lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
           </>}
         </View>}

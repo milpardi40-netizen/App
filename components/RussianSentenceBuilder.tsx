@@ -1,7 +1,8 @@
-import type { LearningSentence } from '@/lib/languages/types';
-import LanguageSentenceBuilder from '@/components/LanguageSentenceBuilder';
+import LanguageSentenceBuilder, { type LanguageSentenceBuilderProps } from '@/components/LanguageSentenceBuilder';
 
-/** Russian word-order practice. Layout is shared; only the hint differs. */
-export default function RussianSentenceBuilder({ sentence, guided = false }: { sentence: LearningSentence; guided?: boolean }) {
-  return <LanguageSentenceBuilder sentence={sentence} guided={guided} placeholder="واژه‌ها را به ترتیب جمله انتخاب کنید." />;
+type Props = Omit<LanguageSentenceBuilderProps, 'placeholder'>;
+
+/** Russian word-order & structural sentence builder. */
+export default function RussianSentenceBuilder({ guided = false, ...rest }: Props) {
+  return <LanguageSentenceBuilder {...rest} guided={guided} placeholder="واژه‌ها را به ترتیب جمله انتخاب کنید." />;
 }

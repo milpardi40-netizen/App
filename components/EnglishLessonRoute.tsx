@@ -82,6 +82,11 @@ export default function SentenceLessonScreen() {
   const { id, fromStart } = useLocalSearchParams<{ id: string; fromStart?: string }>();
   const lesson = getSentenceLesson(id || '') ?? SENTENCE_LESSONS[0];
   const courseLevel = COURSE_LEVELS.find(item => item.id === lesson.levelId) ?? COURSE_LEVELS[0];
+  const [builtSentences, setBuiltSentences] = useState<Record<string, boolean>>({});
+  const markBuiltSentence = useCallback((sentenceId: string) => {
+    setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
+  }, []);
+  useEffect(() => { setBuiltSentences({}); }, [lesson.id]);
   const [evidencePassed, setEvidencePassed] = useState(false);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [chunkCelebration, setChunkCelebration] = useState<{ chunk: number; total: number; done: number; nextStart: number } | null>(null);
@@ -680,8 +685,21 @@ export default function SentenceLessonScreen() {
           <View style={styles.centerStage}>
             <View style={styles.bigIcon}><RotateCcw size={33} color={Colors.success[400]} /></View>
             <Text style={styles.stageTitle}>ساخت جمله</Text>
-            {showHint && <Text style={styles.stageDesc}>{(lesson.levelId <= 0) ? 'جمله را ببینید و واژه‌ها را به همان ترتیب بچینید.' : 'معنی را بخوانید و واژه‌ها را به ترتیب بچینید.'}</Text>}
-            <EnglishSentenceBuilder sentence={current} guided={lesson.levelId <= 0} />
+            {showHint && <Text style={styles.stageDesc}>{(lesson.levelId <= 0) ? 'جمله و الگویش را ببینید و واژه‌ها را به همان ترتیب بچینید.' : 'الگوی ساختار و واژه‌های کلیدی را ببینید و جمله را بسازید.'}</Text>}
+            <EnglishSentenceBuilder
+              sentence={current}
+              guided={lesson.levelId <= 0}
+              pattern={current.pattern || grammarPatterns[0]?.pattern || lessonTopics?.[0]}
+              explanation={B2_GUIDANCE[lesson.id]?.[0] || c1Unit?.topics[0]?.[5]}
+              lessonNote={lesson.teachingFa}
+              levelId={lesson.levelId}
+              sentenceIndex={sentenceIndex}
+              sentenceCount={lesson.sentences.length}
+              builtCount={Object.keys(builtSentences).length}
+              onSpeak={text => speak(text)}
+              onBuilt={markBuiltSentence}
+              onNextSentence={sentenceIndex < lesson.sentences.length - 1 ? () => setSentenceIndex(sentenceIndex + 1) : undefined}
+            />
             <View style={styles.dots}>
               {lesson.sentences.map((sentence, index) => (
                 <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${index + 1}`} onPress={() => setSentenceIndex(index)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />
@@ -760,6 +778,7 @@ export default function SentenceLessonScreen() {
           <LessonConversationRoom
             key={lesson.id}
             lessonId={lesson.id}
+            levelId={lesson.levelId}
             situation={lesson.situation}
             partnerRole="طرف مقابل"
             dialogue={lesson.dialogue}
