@@ -7,7 +7,6 @@ import SpeakCheck, { type SpeakCheckResult } from '@/components/SpeakCheck';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
-import { type SpeechLevel } from '@/lib/speechTiming';
 
 type Item = { id: string; text: string; fa?: string };
 export type ItemAttemptSummary = {
@@ -28,8 +27,6 @@ type Props = {
   items: Item[];
   locale: string;
   accent?: string;
-  level?: SpeechLevel;
-  levelId?: number;
   onSpeak?: (text: string, onDone?: () => void) => void;
   /** Called once when the learner reaches the result page. */
   onFinish?: (result: SpeakDrillResult) => void;
@@ -49,11 +46,11 @@ function computeEffectiveScore(attemptScores: readonly number[], mistakes: numbe
 
 /**
  * «آزمون گفتاری» — a speaking checkpoint shared across all 6 languages:
- * for each item, the device speaks the target text first, automatically opens the microphone
- * with level- and length-calibrated timing, records every real attempt (including mistakes),
+ * for each item, the device speaks the target text first, automatically opens the microphone,
+ * records every real attempt (including mistakes),
  * and produces a final non-repeatable honest evaluation.
  */
-export default function SpeakDrill({ items, locale, accent = Palette.primary, level, levelId, onSpeak, onFinish }: Props) {
+export default function SpeakDrill({ items, locale, accent = Palette.primary, onSpeak, onFinish }: Props) {
   const [index, setIndex] = useState(0);
   const [scores, setScores] = useState<Record<string, number>>({});
   const [attemptMap, setAttemptMap] = useState<Record<string, ItemAttemptSummary>>({});
@@ -410,7 +407,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, le
       <Text style={styles.sentence}>{current.text}</Text>
       {current.fa ? <Text keepColor style={styles.persian}>{current.fa}</Text> : null}
       {onSpeak ? <Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونه" style={styles.listen} onPress={() => speakAndOpenMic(current.text)}><Volume2 size={16} color={accent} /><Text keepColor style={[styles.listenText, { color: accent }]}>شنیدن نمونه</Text></Pressable> : null}
-      <SpeakCheck key={current.id} text={current.text} locale={locale} accent={accent} title="بگو" level={level} levelId={levelId} autoStart={micReady && !passNotice} onResult={onResult} />
+      <SpeakCheck key={current.id} text={current.text} locale={locale} accent={accent} title="بگو" autoStart={micReady && !passNotice} onResult={onResult} />
       {passNotice ? (
         <View style={styles.passBanner}>
           <CheckCircle2 size={16} color="#15803D" />

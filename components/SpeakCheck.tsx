@@ -31,9 +31,11 @@ type Props = {
   autoStart?: boolean;
   /** Conversation mode: report even an empty attempt instead of forcing another recording. */
   singleAttempt?: boolean;
-  /** Learner CEFR level used to scale speaking and thinking-pause headroom. */
+  /** Learner CEFR level used to scale speaking and thinking-pause headroom (when adaptiveTiming is enabled). */
   level?: SpeechLevel;
   levelId?: number;
+  /** Enable level/length-calibrated timing and countdown hint (used exclusively in «اتاق مکالمه»). */
+  adaptiveTiming?: boolean;
 };
 
 let micOwner: symbol | null = null;
@@ -43,7 +45,7 @@ let micOwner: symbol | null = null;
  * each expected word is shown green (heard) or red (missed) together with a percentage.
  * Works on Android/iOS through the native recogniser and on web through the browser's Web Speech API.
  */
-export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false, level, levelId }: Props) {
+export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false }: Props) {
   const owner = useRef(Symbol('practice'));
   const generation = useRef(0);
   const [listening, setListening] = useState(false);
@@ -160,7 +162,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     listeningRef.current = true;
     setListening(true);
     setError('');
-    if (Platform.OS === 'web') {
+    if (adaptiveTiming && Platform.OS === 'web') {
       clearListenTimers();
       maxListenTimer.current = setTimeout(() => {
         if (micOwner === owner.current && listeningRef.current) {
@@ -179,7 +181,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     const bestTranscript = ranked[0] ?? transcript;
     if (bestTranscript) lastHeardRef.current = bestTranscript;
 
-    if (Platform.OS === 'web' && bestTranscript) {
+    if (adaptiveTiming && Platform.OS === 'web' && bestTranscript) {
       if (silenceFinishTimer.current) clearTimeout(silenceFinishTimer.current);
       silenceFinishTimer.current = setTimeout(() => {
         if (micOwner === owner.current && listeningRef.current) {
@@ -190,7 +192,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     }
 
     if (event.isFinal) {
-      if (Platform.OS === 'web' && bestTranscript) {
+      if (adaptiveTiming && Platform.OS === 'web' && bestTranscript) {
         const clean = bestTranscript.trim();
         if (clean && segmentsRef.current[segmentsRef.current.length - 1] !== clean) {
           segmentsRef.current.push(clean);
@@ -206,7 +208,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         finish(combined);
       }
     } else {
-      const prefix = segmentsRef.current.length ? `${segmentsRef.current.join(' ')} ` : '';
+      const prefix = adaptiveTiming && segmentsRef.current.length ? `${segmentsRef.current.join(' ')} ` : '';
       setPartial(`${prefix}${transcript}`.trim());
     }
   });
@@ -287,26 +289,38 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       if (micOwner && micOwner !== owner.current) { setError('ابتدا تمرین گفتاری فعال را پایان دهید.'); return; }
       if (!permission.granted) { setError('برای تمرین گفتاری، اجازهٔ میکروفن لازم است.'); return; }
       micOwner = owner.current;
-      const windowTiming = timingRef.current;
-      ExpoSpeechRecognitionModule.start({
-        lang: locale,
-        interimResults: true,
-        continuous: Platform.OS === 'web',
-        maxAlternatives: 5,
-        contextualStrings: [text],
-        requiresOnDeviceRecognition: false,
-        addsPunctuation: false,
-        androidIntentOptions: {
-          EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS: windowTiming.minimumMs,
-          EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.completeSilenceMs,
-          EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.possiblyCompleteSilenceMs,
-        },
-      });
+      if (adaptiveTiming) {
+        const windowTiming = timingRef.current;
+        ExpoSpeechRecognitionModule.start({
+          lang: locale,
+          interimResults: true,
+          continuous: Platform.OS === 'web',
+          maxAlternatives: 5,
+          contextualStrings: [text],
+          requiresOnDeviceRecognition: false,
+          addsPunctuation: false,
+          androidIntentOptions: {
+            EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS: windowTiming.minimumMs,
+            EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.completeSilenceMs,
+            EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.possiblyCompleteSilenceMs,
+          },
+        });
+      } else {
+        ExpoSpeechRecognitionModule.start({
+          lang: locale,
+          interimResults: true,
+          continuous: false,
+          maxAlternatives: 5,
+          contextualStrings: [text],
+          requiresOnDeviceRecognition: false,
+          addsPunctuation: false,
+        });
+      }
     } catch {
       if (micOwner === owner.current) micOwner = null;
       setError('تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
     }
-  }, [locale, text, clearListenTimers]);
+  }, [locale, text, adaptiveTiming, clearListenTimers]);
 
   startRef.current = start;
   const stop = useCallback(() => { stoppingByUser.current = true; clearListenTimers(); ExpoSpeechRecognitionModule.stop(); }, [clearListenTimers]);
@@ -317,7 +331,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   return (
     <View style={[styles.wrap, compact && styles.wrapCompact]}>
       {!compact && <Text style={styles.title}>{title ?? 'بگو · Speak'}</Text>}
-      {(listening || result) ? <Text style={styles.hint}>{listening ? `در حال شنیدن… (تا حدود ${fa(timing.maxWindowSeconds)} ثانیه فرصت دارید)` : result ? feedbackFor(result.score, result.words.filter(w => w.state === 'near').length) : ''}</Text> : null}
+      {(listening || result) ? <Text style={styles.hint}>{listening ? (adaptiveTiming ? `در حال شنیدن… (تا حدود ${fa(timing.maxWindowSeconds)} ثانیه فرصت دارید)` : 'در حال شنیدن…') : result ? feedbackFor(result.score, result.words.filter(w => w.state === 'near').length) : ''}</Text> : null}
       {result ? (
         <View style={styles.wordsRow}>
           {result.words.map((item, index) => <Pressable key={`${item.word}-${index}`} accessibilityRole="button" accessibilityLabel={`شنیدن آهستهٔ ${item.word}`} onPress={() => sayWord(item.word)}><Text keepColor style={[styles.word, item.state === 'ok' ? styles.wordOk : item.state === 'near' ? styles.wordNear : styles.wordMiss]}>{item.word}</Text></Pressable>)}

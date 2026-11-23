@@ -799,6 +799,7 @@ export default function LessonConversationRoom({
                   accent={Palette.primary}
                   title="پاسخ بگو"
                   level={activeLevel}
+                  adaptiveTiming
                   autoStart
                   onResult={result => {
                     if (!result.heard.trim()) {
@@ -901,6 +902,7 @@ export default function LessonConversationRoom({
                   accent={Palette.primary}
                   title="بگو"
                   level={activeLevel}
+                  adaptiveTiming
                   autoStart
                   onResult={result => {
                     if (!result.heard.trim()) {
