@@ -590,6 +590,19 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
               {revealed ? <><View style={styles.divider} /><Text keepColor style={styles.persian}>{current.fa}</Text></> : null}
             </View>
             <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`واژه ${fa(index + 1)}`} accessibilityState={{ selected: index === sentenceIndex }} onPress={() => { setSentenceIndex(index); setRevealed(false); }} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
+            <TurkishDialoguePractice
+              key={lesson.id}
+              lessonId={lesson.id}
+              levelId={lesson.levelId}
+              situation={lesson.situation}
+              dialogue={lesson.dialogue}
+              onSpeak={speak}
+              onSpeakDone={(text, onDone) => speak(text, undefined, onDone)}
+              onStop={() => { void stopTurkishSpeech(); }}
+              locale="tr-TR"
+              branchPool={lesson.sentences}
+              defaultMode={modeForLevel(lesson.levelId)}
+            />
           </> : <>
             <View style={styles.bigIcon}><MessageCircle size={34} color={Palette.primary} /></View>
             <Text style={styles.stageTitle}>مکالمهٔ هدایت‌شده</Text>
@@ -613,7 +626,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
 
         {stage >= 8 && <View style={styles.centerStage}>
                     {(() => { const finalSections: FinalSection[] = [
-            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="tr-TR" accent={Palette.success} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('tr', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
+            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} levelId={lesson.levelId} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="tr-TR" accent={Palette.success} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('tr', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
             { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
           {false ? null : <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>

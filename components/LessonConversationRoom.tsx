@@ -447,14 +447,18 @@ export default function LessonConversationRoom({
       return s.score >= 65;
     });
 
+    const isPreOrA1 = activeLevel === 'Pre-A1' || activeLevel === 'A1';
+    const repeatedSourceLine = isPreOrA1 && scoreSpeech(activeFollowUp.learnerSourceLine, trimmed).score >= 60;
+    const shortConfirmWord = isPreOrA1 && activeFollowUp.move.id === 'confirm'
+      && /^(yes|yeah|ok|okay|sure|ja|klar|oui|sí|si|evet|tamam|да|конечно)[!.]?$/i.test(trimmed);
     const isWhyOrMean = activeFollowUp.move.id === 'why' || activeFollowUp.move.id === 'mean';
     const reasonableFreeAnswer = isWhyOrMean && trimmed.split(/\s+/).length >= 2 && !/[\u0600-\u06FF]/.test(trimmed);
 
-    if (matchedOptIdx === -1 && !reasonableFreeAnswer) {
+    if (matchedOptIdx === -1 && !repeatedSourceLine && !shortConfirmWord && !reasonableFreeAnswer) {
       fail('پاسخت به پرسشِ هم‌صحبت واضح نبود؛ یکی از مسیرهای پاسخ را بگو یا بنویس.', {
         heard: trimmed,
         score: 25,
-        feedback: 'هم‌صحبت منتظر توضیح کوتاهِ همین پرسش است.',
+        feedback: 'هم‌صحبت منتظر پاسخ کوتاه به همین پرسش است.',
       });
       return;
     }
@@ -782,18 +786,23 @@ export default function LessonConversationRoom({
           {activeFollowUp ? (
             <View style={styles.turnCard}>
               <Text style={styles.turnTitle}>واکنش سریع به هم‌صحبت</Text>
-              <Text style={styles.turnPrompt}>{fillLine(activeFollowUp.move.askFa, activeFollowUp.learnerSourceLine)}</Text>
+              <Text style={styles.turnPrompt}>
+                {activeLevel === 'Pre-A1'
+                  ? `هم‌صحبت مطمئن می‌شود درست شنیده است: ${fillLine(activeFollowUp.move.askFa, activeFollowUp.learnerSourceLine)} (می‌توانی همان جملهٔ خودت را دوباره بگویی یا یکی از گزینه‌ها را بزنی)`
+                  : fillLine(activeFollowUp.move.askFa, activeFollowUp.learnerSourceLine)}
+              </Text>
               {!typed ? (
                 <SpeakCheck
                   key={`fu-${activeFollowUp.afterTurn}-${attempts}`}
-                  text={fillLine(activeFollowUp.move.options[0].text, activeFollowUp.learnerSourceLine)}
+                  text={activeLevel === 'Pre-A1' ? activeFollowUp.learnerSourceLine : fillLine(activeFollowUp.move.options[0].text, activeFollowUp.learnerSourceLine)}
                   locale={locale}
                   accent={Palette.primary}
                   title="پاسخ بگو"
+                  level={activeLevel}
                   autoStart
                   onResult={result => {
                     if (!result.heard.trim()) {
-                      fail('صدایی دریافت نشد؛ دوباره بگو یا بنویس.');
+                      setNote('صدایی دریافت نشد؛ بدون عجله دوباره «پاسخ بگو» را بزنید یا یکی از گزینه‌ها را انتخاب کنید.');
                       return;
                     }
                     submitFollowUpAnswer(result.heard);
@@ -891,14 +900,11 @@ export default function LessonConversationRoom({
                   locale={locale}
                   accent={Palette.primary}
                   title="بگو"
+                  level={activeLevel}
                   autoStart
                   onResult={result => {
                     if (!result.heard.trim()) {
-                      fail('صدایی دریافت نشد؛ نزدیک‌تر به میکروفن بگو یا از نوشتن استفاده کن.', {
-                        heard: '',
-                        score: 0,
-                        feedback: 'هیچ گفتاری تشخیص داده نشد.',
-                      });
+                      setNote('صدایی دریافت نشد؛ بدون عجله دوباره «بگو» را بزنید یا از نوشتن/گزینه‌ها استفاده کنید.');
                       return;
                     }
                     submitAnswer(result.heard, 'voice');
@@ -908,6 +914,13 @@ export default function LessonConversationRoom({
               ) : null}
 
               <View style={styles.turnRow}>
+                {(activeLevel === 'Pre-A1' || activeLevel === 'A1') ? (
+                  <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => speak(current.text, -4)}>
+                    <Volume2 size={14} color={Palette.primary} />
+                    <Text style={styles.linkText}>شنیدن نمونه</Text>
+                  </Pressable>
+                ) : null}
+
                 {!typed ? (
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(true); setNote(''); }}>
                     <Text style={styles.linkText}>با نوشتن</Text>

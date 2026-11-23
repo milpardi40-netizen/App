@@ -268,7 +268,8 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
     };
   }
 
-  const wordResults = rule.targetText ? scoreSpeech(rule.targetText, answer).words : undefined;
+  const speechEval = rule.targetText ? scoreSpeech(rule.targetText, answer) : undefined;
+  const wordResults = speechEval?.words;
   const concepts = rule.concepts.length ? rule.concepts : [[]];
   const missingConcepts: string[] = [];
   let covered = 0;
@@ -280,8 +281,15 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
     }
   }
 
-  const conceptScore = covered / concepts.length;
-  const lexicalScore = rule.targetText ? overlapScore(rule.targetText, answer) : conceptScore;
+  const rawConceptScore = covered / concepts.length;
+  const phoneticMatch = speechEval ? speechEval.score / 100 : 0;
+  // In Pre-A1 and A1, close phonetic/STT recognition of short beginner words counts toward concept coverage.
+  const conceptScore = (level === 'Pre-A1' || level === 'A1') && phoneticMatch >= 0.65
+    ? Math.max(rawConceptScore, phoneticMatch)
+    : rawConceptScore;
+  const lexicalScore = rule.targetText
+    ? Math.max(overlapScore(rule.targetText, answer), level === 'Pre-A1' ? phoneticMatch : level === 'A1' ? phoneticMatch * 0.9 : 0)
+    : conceptScore;
   const branch = rule.branches?.find(item => item.match.every(group => containsAny(answer, group)));
 
   // Polarity guard (e.g., saying "no" when the turn asks for "yes" or vice-versa)
@@ -321,14 +329,18 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
   }
 
   // Balanced composite: concepts (60%) + lexical overlap (30%) + form/question/length adequacy (10%)
-  const minLength = level === 'Pre-A1' ? 2 : level === 'A1' ? 4 : level === 'A2' ? 8 : 12;
+  const minLength = level === 'Pre-A1' ? 1 : level === 'A1' ? 2 : level === 'A2' ? 6 : level === 'B1' ? 10 : 12;
   const formCredit = (answer.length >= minLength ? 5 : 0) + (!questionMissing ? 5 : 0);
   const rawScore = Math.round(conceptScore * 60 + lexicalScore * 30 + formCredit - (questionMissing ? 15 : 0));
   const score = Math.max(0, Math.min(100, rawScore));
 
-  const threshold = level === 'Pre-A1' ? 68 : level === 'A1' ? 68 : level === 'A2' ? 70 : level === 'B1' ? 72 : level === 'B2' ? 75 : 78;
-  const minConceptRatio = concepts.length >= 2 ? 0.6 : 0.99;
-  const accepted = !questionMissing && score >= threshold && (conceptScore >= minConceptRatio || lexicalScore >= 0.72);
+  const threshold = level === 'Pre-A1' ? 55 : level === 'A1' ? 62 : level === 'A2' ? 68 : level === 'B1' ? 72 : level === 'B2' ? 75 : 78;
+  const minConceptRatio = level === 'Pre-A1'
+    ? 0.5
+    : level === 'A1'
+      ? (concepts.length >= 2 ? 0.5 : 0.99)
+      : (concepts.length >= 2 ? 0.6 : 0.99);
+  const accepted = !questionMissing && score >= threshold && (conceptScore >= minConceptRatio || lexicalScore >= (level === 'Pre-A1' ? 0.6 : 0.72));
 
   if (accepted) {
     const feedback = score >= 88
@@ -416,7 +428,12 @@ function buildRequiredConcepts(target: string, level: ConversationLevel): string
     const raw = normalize(target).split(' ').filter(Boolean);
     return raw.length ? [expandConcept(raw[0])] : [[target]];
   }
-  const desiredCount = level === 'Pre-A1' ? Math.min(2, unique.length) : level === 'A1' || level === 'A2' ? Math.min(2, unique.length) : Math.min(3, unique.length);
+  const rawWords = normalize(target).split(' ').filter(Boolean);
+  const desiredCount = level === 'Pre-A1'
+    ? (rawWords.length <= 4 ? 1 : Math.min(2, unique.length))
+    : level === 'A1' || level === 'A2'
+      ? Math.min(2, unique.length)
+      : Math.min(3, unique.length);
   // Pick the most informative (longest) distinct words in natural sentence order
   const ranked = [...unique]
     .map((word, idx) => ({ word, idx, weight: word.length }))
@@ -444,10 +461,18 @@ export function conversationPracticeForLesson(
 ): BranchingConversation {
   const level = LEVEL_BY_ID[Math.max(0, Math.min(5, lesson.levelId))] ?? 'A1';
   const mode = modeFor(level);
-  const lines: Array<{ text: string; fa: string; role?: string; speaker?: string }> = (lesson.dialogue?.length
+  const rawLines: Array<{ text: string; fa: string; role?: string; speaker?: string }> = (lesson.dialogue?.length
     ? lesson.dialogue.map(line => ({ ...line, text: line.text.trim() }))
     : lesson.sentences.map((sentence, index) => ({ text: sentence.text || sentence.en || '', fa: sentence.fa, role: index % 2 ? 'learner' : 'partner' })))
     .filter(line => line.text.trim());
+  const explicitLearnerSpeaker = rawLines.find(l => l.role === 'learner')?.speaker
+    ?? rawLines.find(l => l.speaker && /^(learner|you|شما|زبان‌آموز|زبانآموز)$/i.test(l.speaker.trim()))?.speaker;
+  const distinctSpeakers = [...new Set(rawLines.map(l => l.speaker).filter(Boolean) as string[])];
+  const inferredLearnerSpeaker = explicitLearnerSpeaker ?? distinctSpeakers[1] ?? null;
+  const lines = rawLines.map((line, index) => ({
+    ...line,
+    role: line.role ?? (inferredLearnerSpeaker ? (line.speaker === inferredLearnerSpeaker ? 'learner' : 'partner') : (index % 2 === 1 ? 'learner' : 'partner')),
+  }));
   const turns: Record<number, SemanticTurn> = {};
   lines.forEach((line, index) => {
     if (line.role !== 'learner' && line.speaker !== 'learner') return;

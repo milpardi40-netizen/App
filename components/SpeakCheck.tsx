@@ -10,6 +10,7 @@ import { Mic2, RefreshCw, Square, Volume2 } from 'lucide-react-native';
 import * as Speech from '@/lib/courseSpeech';
 import { toPersianDigits as fa } from '@/lib/format';
 import { scoreSpeech, tokens, type SpeakCheckResult, type SpeakWordState } from '@/lib/speechScore';
+import { computeSpeechTiming, type SpeechLevel } from '@/lib/speechTiming';
 export { scoreSpeech, type SpeakCheckResult, type SpeakWordState };
 
 function feedbackFor(score: number, nearCount = 0) {
@@ -30,6 +31,9 @@ type Props = {
   autoStart?: boolean;
   /** Conversation mode: report even an empty attempt instead of forcing another recording. */
   singleAttempt?: boolean;
+  /** Learner CEFR level used to scale speaking and thinking-pause headroom. */
+  level?: SpeechLevel;
+  levelId?: number;
 };
 
 let micOwner: symbol | null = null;
@@ -39,19 +43,25 @@ let micOwner: symbol | null = null;
  * each expected word is shown green (heard) or red (missed) together with a percentage.
  * Works on Android/iOS through the native recogniser and on web through the browser's Web Speech API.
  */
-export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false }: Props) {
+export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false, level, levelId }: Props) {
   const owner = useRef(Symbol('practice'));
   const generation = useRef(0);
   const [listening, setListening] = useState(false);
   const [partial, setPartial] = useState('');
   const [result, setResult] = useState<SpeakCheckResult | null>(null);
   const [error, setError] = useState('');
+  const timing = computeSpeechTiming({ text, level, levelId });
+  const timingRef = useRef(timing);
+  timingRef.current = timing;
   const finalRef = useRef('');
+  const segmentsRef = useRef<string[]>([]);
   /** Last transcript of any kind; some Android recognisers end without ever flagging a result as final. */
   const lastHeardRef = useRef('');
   const settledRef = useRef(false);
   const stoppingByUser = useRef(false);
   const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const silenceFinishTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const maxListenTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const emptyRetries = useRef(0);
   const busyRetries = useRef(0);
   const targetRef = useRef(text);
@@ -59,11 +69,23 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const onResultRef = useRef(onResult);
   onResultRef.current = onResult;
 
+  const clearListenTimers = useCallback(() => {
+    if (silenceFinishTimer.current) {
+      clearTimeout(silenceFinishTimer.current);
+      silenceFinishTimer.current = null;
+    }
+    if (maxListenTimer.current) {
+      clearTimeout(maxListenTimer.current);
+      maxListenTimer.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     setResult(null);
     setPartial('');
     setError('');
     finalRef.current = '';
+    segmentsRef.current = [];
     lastHeardRef.current = '';
     settledRef.current = false;
     emptyRetries.current = 0;
@@ -71,10 +93,11 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   }, [text]);
   useEffect(() => () => {
     generation.current++;
+    clearListenTimers();
     if (retryTimer.current) clearTimeout(retryTimer.current);
     retryTimer.current = null;
     if (micOwner === owner.current) { micOwner = null; void ExpoSpeechRecognitionModule.abort?.(); }
-  }, [text]);
+  }, [text, clearListenTimers]);
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
   const prevAutoStart = useRef(false);
@@ -92,6 +115,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       }
       if (wasAutoStart && micOwner === owner.current) {
         generation.current++;
+        clearListenTimers();
         settledRef.current = true;
         micOwner = null;
         listeningRef.current = false;
@@ -105,9 +129,10 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     autoStartedFor.current = text;
     const handle = setTimeout(() => { void startRef.current?.(); }, 420);
     return () => clearTimeout(handle);
-  }, [autoStart, text]);
+  }, [autoStart, text, clearListenTimers]);
 
   const finish = useCallback((heard: string) => {
+    clearListenTimers();
     const scored = scoreSpeech(targetRef.current, heard);
     setResult(scored);
     if (!heard.trim()) {
@@ -128,13 +153,22 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     const id = locale.split('-')[0];
     if (isLanguageId(id)) void addPracticeActivity(id, localDay(), { spoken: 1, scoreSum: scored.score }).catch(() => undefined);
     onResultRef.current?.(scored);
-  }, [autoStart, singleAttempt, locale]);
+  }, [autoStart, singleAttempt, locale, clearListenTimers]);
 
   useSpeechRecognitionEvent('start', () => {
     if (micOwner !== owner.current) return;
     listeningRef.current = true;
     setListening(true);
     setError('');
+    if (Platform.OS === 'web') {
+      clearListenTimers();
+      maxListenTimer.current = setTimeout(() => {
+        if (micOwner === owner.current && listeningRef.current) {
+          stoppingByUser.current = true;
+          ExpoSpeechRecognitionModule.stop();
+        }
+      }, timingRef.current.maxWindowMs);
+    }
   });
   useSpeechRecognitionEvent('result', event => {
     if (micOwner !== owner.current || settledRef.current) return;
@@ -144,21 +178,46 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     const ranked = [...alternatives].sort((a, b) => scoreSpeech(targetRef.current, b).score - scoreSpeech(targetRef.current, a).score);
     const bestTranscript = ranked[0] ?? transcript;
     if (bestTranscript) lastHeardRef.current = bestTranscript;
+
+    if (Platform.OS === 'web' && bestTranscript) {
+      if (silenceFinishTimer.current) clearTimeout(silenceFinishTimer.current);
+      silenceFinishTimer.current = setTimeout(() => {
+        if (micOwner === owner.current && listeningRef.current) {
+          stoppingByUser.current = true;
+          ExpoSpeechRecognitionModule.stop();
+        }
+      }, timingRef.current.completeSilenceMs);
+    }
+
     if (event.isFinal) {
-      finalRef.current = bestTranscript;
+      if (Platform.OS === 'web' && bestTranscript) {
+        const clean = bestTranscript.trim();
+        if (clean && segmentsRef.current[segmentsRef.current.length - 1] !== clean) {
+          segmentsRef.current.push(clean);
+        }
+        finalRef.current = segmentsRef.current.join(' ').trim();
+      } else {
+        finalRef.current = bestTranscript;
+      }
       // On some devices the final result arrives after «end»; score it now if «end» didn't already settle a transcript.
       if (!listeningRef.current && !settledRef.current) {
-        if (bestTranscript) { settledRef.current = true; micOwner = null; }
-        finish(bestTranscript);
+        const combined = finalRef.current || bestTranscript;
+        if (combined) { settledRef.current = true; micOwner = null; }
+        finish(combined);
       }
-    } else setPartial(transcript);
+    } else {
+      const prefix = segmentsRef.current.length ? `${segmentsRef.current.join(' ')} ` : '';
+      setPartial(`${prefix}${transcript}`.trim());
+    }
   });
   useSpeechRecognitionEvent('end', () => {
     if (micOwner !== owner.current || settledRef.current) return;
+    clearListenTimers();
     listeningRef.current = false;
     setListening(false);
     setPartial('');
-    const heard = finalRef.current || lastHeardRef.current;
+    const segmentJoined = segmentsRef.current.join(' ').trim();
+    const heard = finalRef.current || segmentJoined || lastHeardRef.current;
     if (heard) { settledRef.current = true; micOwner = null; }
     else { // Some Android recognisers deliver their final transcript just after end.
       const token = generation.current;
@@ -168,12 +227,17 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   });
   useSpeechRecognitionEvent('error', event => {
     if (micOwner !== owner.current || settledRef.current) return;
+    clearListenTimers();
     listeningRef.current = false;
     setListening(false);
     setPartial('');
     const code = event.error as string;
     settledRef.current = true; micOwner = null;
-    if (code === 'no-speech' || code === 'speech-timeout') { finish(''); return; }
+    if (code === 'no-speech' || code === 'speech-timeout') {
+      const segmentJoined = segmentsRef.current.join(' ').trim();
+      finish(finalRef.current || segmentJoined || lastHeardRef.current || '');
+      return;
+    }
     if (code === 'aborted') return;
     if (code === 'busy') {
       if (busyRetries.current < 1 && !stoppingByUser.current && !retryTimer.current) {
@@ -202,12 +266,14 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
 
   const start = useCallback(async () => {
     if (micOwner === owner.current && listeningRef.current) return;
+    clearListenTimers();
     if (retryTimer.current) clearTimeout(retryTimer.current);
     retryTimer.current = null;
     stoppingByUser.current = false;
     setError('');
     setResult(null);
     finalRef.current = '';
+    segmentsRef.current = [];
     lastHeardRef.current = '';
     settledRef.current = false;
     const token = ++generation.current;
@@ -221,15 +287,29 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       if (micOwner && micOwner !== owner.current) { setError('ابتدا تمرین گفتاری فعال را پایان دهید.'); return; }
       if (!permission.granted) { setError('برای تمرین گفتاری، اجازهٔ میکروفن لازم است.'); return; }
       micOwner = owner.current;
-      ExpoSpeechRecognitionModule.start({ lang: locale, interimResults: true, continuous: false, maxAlternatives: 5, contextualStrings: [text], requiresOnDeviceRecognition: false, addsPunctuation: false });
+      const windowTiming = timingRef.current;
+      ExpoSpeechRecognitionModule.start({
+        lang: locale,
+        interimResults: true,
+        continuous: Platform.OS === 'web',
+        maxAlternatives: 5,
+        contextualStrings: [text],
+        requiresOnDeviceRecognition: false,
+        addsPunctuation: false,
+        androidIntentOptions: {
+          EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS: windowTiming.minimumMs,
+          EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.completeSilenceMs,
+          EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.possiblyCompleteSilenceMs,
+        },
+      });
     } catch {
       if (micOwner === owner.current) micOwner = null;
       setError('تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
     }
-  }, [locale, text]);
+  }, [locale, text, clearListenTimers]);
 
   startRef.current = start;
-  const stop = useCallback(() => { stoppingByUser.current = true; ExpoSpeechRecognitionModule.stop(); }, []);
+  const stop = useCallback(() => { stoppingByUser.current = true; clearListenTimers(); ExpoSpeechRecognitionModule.stop(); }, [clearListenTimers]);
   const sayWord = useCallback((word: string) => { try { Speech.stop(); Speech.speak(word, { language: locale, rate: 0.6 }); } catch { /* no tts */ } }, [locale]);
   const missed = result ? result.words.filter(w => w.state !== 'ok' && tokens(w.word).length) : [];
   const sayMissed = useCallback(() => { if (!missed.length) return; try { Speech.stop(); Speech.speak(missed.map(w => w.word).join(', '), { language: locale, rate: 0.6 }); } catch { /* no tts */ } }, [missed, locale]);
@@ -237,7 +317,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   return (
     <View style={[styles.wrap, compact && styles.wrapCompact]}>
       {!compact && <Text style={styles.title}>{title ?? 'بگو · Speak'}</Text>}
-      {(listening || result) ? <Text style={styles.hint}>{listening ? 'در حال شنیدن…' : result ? feedbackFor(result.score, result.words.filter(w => w.state === 'near').length) : ''}</Text> : null}
+      {(listening || result) ? <Text style={styles.hint}>{listening ? `در حال شنیدن… (تا حدود ${fa(timing.maxWindowSeconds)} ثانیه فرصت دارید)` : result ? feedbackFor(result.score, result.words.filter(w => w.state === 'near').length) : ''}</Text> : null}
       {result ? (
         <View style={styles.wordsRow}>
           {result.words.map((item, index) => <Pressable key={`${item.word}-${index}`} accessibilityRole="button" accessibilityLabel={`شنیدن آهستهٔ ${item.word}`} onPress={() => sayWord(item.word)}><Text keepColor style={[styles.word, item.state === 'ok' ? styles.wordOk : item.state === 'near' ? styles.wordNear : styles.wordMiss]}>{item.word}</Text></Pressable>)}
