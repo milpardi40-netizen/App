@@ -10,6 +10,9 @@ const esbuild = require('esbuild');
       contents: [
         "export { SENTENCE_LESSONS } from './lib/courseContent';",
         "export { RUSSIAN_LESSONS } from './lib/languages/russian';",
+        "export { TURKISH_LESSONS } from './lib/languages/turkish';",
+        "export { NEW_COURSES } from './lib/languages/newCourses';",
+        "export { starterDisplayDialogue } from './lib/languages/starterEditorial';",
         "export * from './lib/lessonConversation';",
       ].join('\n'),
       resolveDir: process.cwd(),
@@ -34,10 +37,10 @@ const esbuild = require('esbuild');
   });
   const mod = { exports: {} };
   new Function('module', 'exports', require('node:fs').readFileSync(output, 'utf8'))(mod, mod.exports);
-  const { SENTENCE_LESSONS, RUSSIAN_LESSONS, normalizeLessonConversation, isLessonConversationSession } = mod.exports;
+  const { SENTENCE_LESSONS, RUSSIAN_LESSONS, TURKISH_LESSONS, NEW_COURSES, starterDisplayDialogue, normalizeLessonConversation, isLessonConversationSession, withInferredDialogueRoles } = mod.exports;
   const check = (condition, message) => assert.ok(condition, message);
 
-  check(SENTENCE_LESSONS.length > 0 && RUSSIAN_LESSONS.length > 0, 'both course catalogues load');
+  check(SENTENCE_LESSONS.length > 0 && RUSSIAN_LESSONS.length > 0 && TURKISH_LESSONS.length > 0, 'all course catalogues load');
   for (const lesson of SENTENCE_LESSONS) {
     check(lesson.dialogue.length >= 2, `English ${lesson.id} has a dialogue`);
     check(lesson.dialogue.every(line => line.text.trim() && line.fa.trim()), `English ${lesson.id} dialogue lines are complete`);
@@ -51,6 +54,18 @@ const esbuild = require('esbuild');
     const partnerSpeakers = new Set(lesson.dialogue.filter(line => line.role === 'partner').map(line => line.speaker));
     check(learnerSpeakers.size === 1 && partnerSpeakers.size >= 1, `Russian ${lesson.id} has one explicit learner and at least one partner role`);
   }
+  for (const [id, course] of [['tr', { lessons: TURKISH_LESSONS }], ...['de', 'fr', 'es'].map(code => [code, NEW_COURSES[code]])]) {
+    for (const lesson of course.lessons) {
+      const sourceDialogue = id === 'tr' ? lesson.dialogue : starterDisplayDialogue(lesson);
+      if (sourceDialogue.length) {
+        const roled = withInferredDialogueRoles(sourceDialogue);
+        check(roled.length >= 2 && roled.every(line => line.text.trim() && line.fa.trim()), `${id} ${lesson.id} dialogue lines are complete`);
+        check(new Set(roled.map(line => line.role)).size === 2, `${id} ${lesson.id} resolves distinct partner and learner roles`);
+      } else {
+        check(lesson.sentences.length >= 2, `${id} ${lesson.id} fallback sentences provide conversation turns`);
+      }
+    }
+  }
 
   const restored = normalizeLessonConversation({ started: true, currentTurn: 3, myRole: 'learner', attempts: 2, revealed: true, completed: false }, 5, ['partner', 'learner'], 'learner');
   check(isLessonConversationSession(restored), 'conversation session is serializable and valid');
@@ -61,8 +76,14 @@ const esbuild = require('esbuild');
   const room = fs.readFileSync('components/LessonConversationRoom.tsx', 'utf8');
   const english = fs.readFileSync('components/EnglishLessonRoute.tsx', 'utf8');
   const russian = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
+  const starter = fs.readFileSync('components/StarterLesson.tsx', 'utf8');
+  const turkish = fs.readFileSync('components/TurkishLesson.tsx', 'utf8');
+  const arabic = fs.readFileSync('components/arabic/ArabicLessonScreen.tsx', 'utf8');
   check(room.includes('normalizeLessonConversation') && room.includes('onSessionChange') && room.includes('initialSession'), 'room hydrates and emits durable state');
-  check(english.includes('conversation?.completed') && english.includes('onSessionChange={setConversation}'), 'English completion requires the conversation and persists it');
-  check(russian.includes('conversation?.completed') && russian.includes('onSessionChange={setConversation}'), 'Russian completion requires the conversation and persists it');
-  console.log(`PASS: ${SENTENCE_LESSONS.length} English and ${RUSSIAN_LESSONS.length} Russian lessons have explicit conversation roles, durable resume state and completion gates.`);
+  check(room.includes("'listen-echo'") && room.includes("'natural-flow'") && room.includes('saveLessonOutcome') && !room.includes('امتحان شفاهی'), 'room uses conversation-centered listen-echo/natural-flow modes without exam framing');
+  for (const [label, src] of [['English', english], ['Russian', russian], ['DE/FR/ES', starter], ['Turkish', turkish], ['Arabic', arabic]]) {
+    check(src.includes('onSessionChange={setConversation}') && src.includes('initialSession={conversation}') && src.includes('<LessonConversationRoom') && src.includes('<RealConversationEntry'), `${label} wires LessonConversationRoom with durable session persistence`);
+    check(!src.includes('ابتدا تمرین مکالمهٔ همین درس را کامل کنید'), `${label} keeps the conversation room optional instead of blocking lesson completion`);
+  }
+  console.log(`PASS: ${SENTENCE_LESSONS.length} English, ${RUSSIAN_LESSONS.length} Russian, ${TURKISH_LESSONS.length} Turkish, and DE/FR/ES lessons have explicit conversation roles, durable resume state, and conversation-centered listen-and-speak practice.`);
 })().catch(error => { console.error(error); process.exit(1); });

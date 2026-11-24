@@ -5,7 +5,7 @@ const items: readonly LanguageNavItem[] = [
   { path: '/learn/ru', label: 'یادگیری', icon: BookOpen },
   { path: '/learn/ru/pronunciation', label: 'تلفظ', icon: Volume2 },
   { path: '/learn/ru/vocabulary', label: 'واژهها', icon: Sparkles },
-  { path: '/conversations', label: 'مکالمه', icon: MessageCircle },
+  { path: '/conversations', label: 'مکالمه', icon: MessageCircle, params: { language: 'ru' } },
   { path: '/learn/ru/library', label: 'درس‌ها', icon: ClipboardList },
   { path: '/learn/ru/review', label: 'مرور', icon: RefreshCw },
 ];

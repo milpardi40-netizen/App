@@ -489,7 +489,14 @@ export { default as asyncStorage } from '${STUBS}/async-storage.js';
   const bottomNavShellStyle = englishBottomNavSource.match(/shell:\s*\{([^}]+)\}/)?.[1] ?? '';
   check('English Today heading stays right-aligned in RTL without changing its labels', /flexDirection:\s*'row-reverse'/.test(todayHeaderStyle) && englishHomeSource.includes('styles.sectionHeader') && englishHomeSource.includes('برنامهٔ امروز'));
   check('English level cards show unique vocabulary counts calculated from each level', /metrics\.vocabularyCount/.test(englishHomeSource) && englishHomeSource.includes('واژهٔ یکتا') && /stats\.vocabularyCount/.test(englishLibrarySource) && englishLibrarySource.includes('واژهٔ یکتا'));
-  check('English bottom navigation places Learning on the right, Feedback in the center, and Review on the left', /flexDirection:\s*'row-reverse'/.test(bottomNavShellStyle) && /path:\s*'\/lang',\s*label:\s*'یادگیری'/.test(englishBottomNavSource) && /path:\s*'\/feedback',\s*label:\s*'پیشنهادات'/.test(englishBottomNavSource) && /path:\s*'\/review',\s*label:\s*'مرور'/.test(englishBottomNavSource));
+  check('English bottom navigation mirrors Russian 6-tab RTL layout (Learning -> Pronunciation -> Vocabulary -> Conversations -> Lessons -> Review)',
+    /flexDirection:\s*'row-reverse'/.test(bottomNavShellStyle)
+    && /path:\s*'\/lang',\s*label:\s*'یادگیری'/.test(englishBottomNavSource)
+    && /path:\s*'\/learn\/en\/pronunciation',\s*label:\s*'تلفظ'/.test(englishBottomNavSource)
+    && /path:\s*'\/learn\/en\/vocabulary',\s*label:\s*'واژه‌ها'/.test(englishBottomNavSource)
+    && /path:\s*'\/conversations',\s*label:\s*'مکالمه'/.test(englishBottomNavSource)
+    && /path:\s*'\/lang\/library',\s*label:\s*'درس‌ها'/.test(englishBottomNavSource)
+    && /path:\s*'\/review',\s*label:\s*'مرور'/.test(englishBottomNavSource));
   check('Learners can start or resume directly from any selected English, Russian, or Turkish level',
     englishLibrarySource.includes('levelStartButton') && englishLibrarySource.includes('startSelectedLevel') && englishLibrarySource.includes('levelStartLesson')
     && russianLibrarySource.includes('levelStartButton') && russianLibrarySource.includes('openLesson(levelStartLesson.id)')

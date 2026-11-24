@@ -18,3 +18,9 @@ export function KeyboardAwareScrollView({ children, ...props }: React.PropsWithC
   const { bottomOffset: _bottomOffset, enabled: _enabled, extraKeyboardSpace: _extraKeyboardSpace, ...scrollProps } = props;
   return <ScrollView {...scrollProps}>{children}</ScrollView>;
 }
+
+export const KeyboardEvents = {
+  addListener: (_event: 'keyboardWillShow' | 'keyboardDidShow' | 'keyboardWillHide' | 'keyboardDidHide', _callback: (event: { height: number }) => void) => ({
+    remove: () => undefined,
+  }),
+};

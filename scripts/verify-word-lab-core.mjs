@@ -59,9 +59,9 @@ const check = (label, value) => { assert(value, label); checks.push(label); };
 const fold = (value) => value.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '')
   .replace(/ё/g, 'е').replace(/[«».,!?—–:;"'()]/g, '').replace(/ʹ|’|´/g, '').replace(/\s+/g, ' ').trim();
 
-const FLOOR = { de: 154, ru: 118 };
+const FLOOR = { de: 154, ru: 118, en: 130 };
 
-for (const language of ['de', 'ru']) {
+for (const language of ['de', 'ru', 'en']) {
   const core = app.CORE_WORDS[language];
   const cards = app.WORD_LAB_WORDS[language];
   const unresolved = app.UNRESOLVED_CORE_TARGETS[language];
@@ -98,7 +98,7 @@ for (const language of ['de', 'ru']) {
     return tokens.length >= 2 && fold(spoken) !== fold(card.target);
   }));
   check(`${language}: card ids are unique (${cards.length} cards)`, new Set(cards.map(card => card.id)).size === cards.length);
-  check(`${language}: the narrator locale follows the language`, /^(de|ru)-/.test(app.WORD_LAB_LOCALE[language]));
+  check(`${language}: the narrator locale follows the language`, /^(de|ru|en)-/.test(app.WORD_LAB_LOCALE[language]));
 
   console.log(`${language}: ${cards.length} cards · ${core.length} curated · ${unresolved.length} unresolved · ` +
     `${withoutSentence.length} curated without sentence · ${withSentence.length} with sentence`);

@@ -4,6 +4,7 @@ import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'reac
 import { useRouter } from 'expo-router';
 import { Check, ChevronLeft, RefreshCw, Sparkles, Volume2, ArrowRight, Play, Mic2, MessageSquareQuote } from 'lucide-react-native';
 import SpeakCheck from '@/components/SpeakCheck';
+import { AppBottomNav } from '@/components/AppBottomNav';
 import { ReviewRatingGrid } from '@/components/ReviewRecall';
 import { speakPersian } from '@/lib/persianSpeech';
 import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
@@ -56,7 +57,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   // The word lab is part of the same narrator as the lesson: one pace ladder for the whole course.
   const pace = useCallback((name: NarrationPace) => narrationRate(locale, name), [locale]);
   const languageName = WORD_LAB_NAME[language];
-  const home = `/learn/${language}` as const;
+  const home = language === 'en' ? '/lang' : `/learn/${language}`;
 
   const [reloadToken, setReloadToken] = useState(0);
   const [phase, setPhase] = useState<Phase>('loading');
@@ -69,14 +70,18 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const [useRecorded, setUseRecorded] = useState(false);
   const [autoSwitched, setAutoSwitched] = useState(false);
   const [spokenScore, setSpokenScore] = useState<number | null>(null);
+  const [autoAdvancing, setAutoAdvancing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [voiceError, setVoiceError] = useState('');
+  const [recallMicReady, setRecallMicReady] = useState(true);
   const playback = useRef(0);
   /** Hand-off from the word to its sentence; any manual tap cancels it so nothing plays twice. */
   const autoChain = useRef(0);
   /** One automatic pass per card, even if the effect is re-run by a strict-mode render. */
   const autoPlayed = useRef('');
+  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoAdvancedCard = useRef('');
 
   useEffect(() => {
     let alive = true;
@@ -126,6 +131,10 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const stopAll = useCallback(() => {
     autoChain.current += 1;
     playback.current += 1;
+    if (autoAdvanceTimer.current) {
+      clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = null;
+    }
     void stopLabSpeech(language);
   }, [language]);
 
@@ -134,14 +143,14 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     const onError = () => setVoiceError('صدای این دستگاه برای این زبان در دسترس نیست؛ متن و ترجمه همچنان دیده می‌شوند.');
     if (language === 'ru') {
       await new Promise<void>(resolve => {
-        playRussianSpeech(spokenTarget(item), rate, onError, () => resolve());
-        setTimeout(resolve, 4000);
+        const timer = setTimeout(resolve, 4000);
+        void playRussianSpeech(spokenTarget(item), rate, onError, () => { clearTimeout(timer); resolve(); });
       });
       return;
     }
     await new Promise<void>(resolve => {
-      playStarterSpeech(locale, spokenTarget(item), rate, onError);
-      setTimeout(resolve, 4000);
+      const timer = setTimeout(resolve, 4000);
+      void playStarterSpeech(locale, spokenTarget(item), rate, onError, undefined, () => { clearTimeout(timer); resolve(); });
     });
   }, [language, locale]);
 
@@ -153,14 +162,14 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     const onError = () => setVoiceError('صدای این دستگاه برای این زبان در دسترس نیست؛ متن و ترجمه همچنان دیده می‌شوند.');
     if (language === 'ru') {
       await new Promise<void>(resolve => {
-        playRussianSpeech(text, rate, onError, () => resolve());
-        setTimeout(resolve, 6000);
+        const timer = setTimeout(resolve, 6000);
+        void playRussianSpeech(text, rate, onError, () => { clearTimeout(timer); resolve(); });
       });
       return;
     }
     await new Promise<void>(resolve => {
-      playStarterSpeech(locale, text, rate, onError);
-      setTimeout(resolve, 6000);
+      const timer = setTimeout(resolve, 6000);
+      void playStarterSpeech(locale, text, rate, onError, undefined, () => { clearTimeout(timer); resolve(); });
     });
   }, [language, locale]);
 
@@ -183,6 +192,8 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
   const resetWord = useCallback(() => {
     setSpoken(false);
     setSpokenScore(null);
+    setAutoAdvancing(false);
+    setRecallMicReady(true);
     setError('');
     setVoiceError('');
     stopAll();
@@ -206,6 +217,23 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     goNext();
   }, [word, progress, spoken, saving, language, goNext]);
 
+  const autoAdvanceAfterPass = useCallback(() => {
+    if (!word || !progress) return;
+    const cardKey = `${word.id}:${index}`;
+    if (autoAdvancedCard.current === cardKey) return;
+    autoAdvancedCard.current = cardKey;
+    setAutoAdvancing(true);
+    const nextProgress = rateWordCard(progress, word.id, 'good', true, new Date());
+    setProgress(nextProgress);
+    void saveWordProgress(language, nextProgress).catch(() => undefined);
+    void markPlanStep('speak').catch(() => undefined);
+    if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current);
+    autoAdvanceTimer.current = setTimeout(() => {
+      autoAdvanceTimer.current = null;
+      goNext();
+    }, 900);
+  }, [goNext, index, language, progress, word]);
+
   /**
    * Every time a card enters the listening step — the first card and every card after a rating —
    * the phone speaks it once in one pass: the word and its Persian meaning, then the sentence that
@@ -221,9 +249,14 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
     void (async () => {
       await playOnce(word);
       if (autoChain.current !== token) return;
-      if (!hasSpokenSentence(word)) return;
-      setPhase('sentence');
-      await playSentence(word);
+      if (hasSpokenSentence(word)) {
+        setPhase('sentence');
+        await playSentence(word);
+        if (autoChain.current !== token) return;
+      }
+      await new Promise<void>(resolve => setTimeout(resolve, 350));
+      if (autoChain.current !== token) return;
+      setPhase('recall');
     })();
   }, [phase, word, index, playOnce, playSentence]);
 
@@ -358,23 +391,27 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
               locale={locale}
               accent={C.primary}
               title={hasSpokenSentence(word) ? `جملهٔ ${languageName} را بگو` : `واژهٔ ${languageName} را بگو`}
-              autoStart
+              autoStart={recallMicReady}
               onResult={result => {
                 setError('');
                 setSpokenScore(result.score);
-                if (result.score >= 70) setSpoken(true);
-                else setError('نزدیک بود؛ یک بار دیگر آهسته‌تر و واضح‌تر بگو.');
+                if (result.score >= 70) {
+                  setSpoken(true);
+                  autoAdvanceAfterPass();
+                } else {
+                  setError('نزدیک بود؛ یک بار دیگر آهسته‌تر و واضح‌تر بگو.');
+                }
               }}
             />
             <View style={styles.rowButtons}>
-              <Pressable accessibilityRole="button" onPress={() => void playSentence(word)} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
+              <Pressable accessibilityRole="button" onPress={() => { setRecallMicReady(false); void playSentence(word).finally(() => setRecallMicReady(true)); }} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
                 <Volume2 size={14} color={C.primaryDark} /><Text style={styles.ghostText}>جمله را بشنو</Text>
               </Pressable>
-              <Pressable accessibilityRole="button" onPress={() => void playOnce(word)} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
+              <Pressable accessibilityRole="button" onPress={() => { setRecallMicReady(false); void playOnce(word).finally(() => setRecallMicReady(true)); }} style={({ pressed }) => [styles.ghostButton, pressed && styles.pressed]}>
                 <Volume2 size={14} color={C.primaryDark} /><Text style={styles.ghostText}>واژه را بشنو</Text>
               </Pressable>
             </View>
-            {spoken ? <View style={styles.okBox}><Check size={15} color={C.success} /><Text style={styles.okText}>درست گفتی؛ گفتار موفق ثبت شد.</Text></View> : null}
+            {spoken ? <View style={styles.okBox}><Check size={15} color={C.success} /><Text style={styles.okText}>{autoAdvancing ? 'درست گفتی؛ انتقال خودکار به واژهٔ بعدی…' : 'درست گفتی؛ گفتار موفق ثبت شد.'}</Text></View> : null}
             {!spoken && spokenScore !== null ? <Text style={styles.hintWarm}>راهنمایی: {firstLetterHint(word)} · آهسته‌تر بگو یا این واژه را بعداً تمرین کن.</Text> : null}
             {!!error && <Text style={styles.hintError}>{error}</Text>}
             {!!voiceError && <Text style={styles.hintWarm}>{voiceError}</Text>}
@@ -412,6 +449,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
           </View>
         ) : null}
       </ScrollView>
+      {language === 'en' && (phase === 'loading' || phase === 'intro' || phase === 'done') ? <AppBottomNav /> : null}
     </View>
   );
 }

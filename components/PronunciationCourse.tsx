@@ -9,6 +9,7 @@ import { speechTagFor } from '@/lib/speechLanguage';
 import { ArrowLeft, ChevronLeft, ChevronRight, RotateCcw, Volume2 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { AppBottomNav } from '@/components/AppBottomNav';
+import { ArabicBottomNav } from '@/components/arabic/ArabicBottomNav';
 import { RussianBottomNav } from '@/components/RussianBottomNav';
 import { TurkishBottomNav } from '@/components/TurkishBottomNav';
 import { PageNavigation } from '@/components/PageNavigation';
@@ -161,7 +162,13 @@ export function PronunciationCourse({ language }: { language: PronunciationLangu
 
   const bottomNav = isNewLanguage(language)
     ? <StarterBottomNav course={NEW_COURSES[language]} />
-    : language === 'ru' ? <RussianBottomNav /> : language === 'tr' ? <TurkishBottomNav /> : <AppBottomNav />;
+    : language === 'ar'
+      ? <ArabicBottomNav />
+      : language === 'ru'
+        ? <RussianBottomNav />
+        : language === 'tr'
+          ? <TurkishBottomNav />
+          : <AppBottomNav />;
 
   if (!unit) {
     return (

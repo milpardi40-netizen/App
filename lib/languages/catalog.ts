@@ -1,5 +1,6 @@
 import type { LanguageDefinition } from './types';
 import { SENTENCE_LESSONS } from '../courseContent';
+import { ARABIC_LESSONS } from '../arabic/content';
 import { RUSSIAN_LESSONS, russianProgress } from './russian';
 import { TURKISH_LESSONS, turkishProgress } from './turkish';
 import { NEW_COURSES } from './newCourses';
@@ -18,6 +19,7 @@ const LESSON_TOTALS: Record<string, number> = {
   en: SENTENCE_LESSONS.length,
   ru: RUSSIAN_LESSONS.length,
   tr: TURKISH_LESSONS.length,
+  ar: ARABIC_LESSONS.length,
   ...STARTER_COURSE_TOTALS,
 };
 

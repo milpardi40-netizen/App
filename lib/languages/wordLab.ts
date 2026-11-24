@@ -1,11 +1,13 @@
+import { SENTENCE_LESSONS } from '../courseContent';
 import { RUSSIAN_LESSONS } from './russian';
 import { NEW_COURSES } from './newCourses';
 import { CORE_WORDS } from './wordLabCore';
 import ruFrequency from '@/lib/content/frequency/ru.json';
 import deFrequency from '@/lib/content/frequency/de.json';
+import enFrequency from '@/lib/content/frequency/en.json';
 
 /**
- * «واژه‌ها» — the word library behind the word lab, for Russian and German.
+ * «واژه‌ها» — the word library behind the word lab, for Russian, German, and English.
  *
  * Words come only from the shipped courses, so every card teaches something the learner has already
  * met in a lesson and keeps the course's own Persian gloss. Cards are ordered by real frequency
@@ -13,7 +15,7 @@ import deFrequency from '@/lib/content/frequency/de.json';
  * generated frequency placeholders with the generic gloss «واژهٔ پرتکرار» are excluded, because
  * they teach a citation form instead of a usable meaning.
  */
-export type WordLabLanguage = 'ru' | 'de';
+export type WordLabLanguage = 'ru' | 'de' | 'en';
 
 export interface WordLabWord {
   id: string;
@@ -65,6 +67,7 @@ export function normalizeWord(word: string): string {
     .replace(/ё/g, 'е')
     .replace(/[´`’'!?.,;:«»„“”¿¡]/g, '')
     .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .replace(/[-\s]+/g, ' ')
     .trim();
   normalized.set(word, next);
   return next;
@@ -78,7 +81,7 @@ const ranks: Partial<Record<WordLabLanguage, Map<string, number>>> = {};
 function rankFor(language: WordLabLanguage): Map<string, number> {
   const cached = ranks[language];
   if (cached) return cached;
-  const list = (language === 'ru' ? ruFrequency : deFrequency) as readonly string[];
+  const list = (language === 'ru' ? ruFrequency : language === 'de' ? deFrequency : enFrequency) as readonly string[];
   const rank = new Map<string, number>(list.map((word, index) => [normalizeWord(word), index + 1]));
   ranks[language] = rank;
   return rank;
@@ -123,18 +126,29 @@ const DE_NOTES: Record<string, string> = {
   deutsch: 'نام زبان با حرف بزرگ نوشته می‌شود: «Deutsch».',
 };
 
+const EN_NOTES: Record<string, string> = {
+  hello: 'سلام خنثی و همه‌کاره؛ «Hi» دوستانه‌تر است.',
+  hi: 'سلام کوتاه و دوستانه.',
+  goodbye: 'خداحافظی کامل؛ «Bye» کوتاه و روزمره است.',
+  please: 'هم «لطفاً» است هم «خواهش می‌کنم».',
+  sorry: 'برای عذرخواهی کوتاه و مودبانه.',
+  you: 'هم برای «تو» و هم برای «شما» به کار می‌رود.',
+  home: 'برای «در خانه» بدون حرف اضافه می‌آید: at home / go home.',
+};
+
 /** German nouns that carry a useful article hint in the shipped course; everything else stays a plain gloss. */
 const NOUNS = new Set(['wasser', 'buch', 'haus', 'schule', 'mutter', 'vater', 'bruder', 'schwester', 'freund', 'freundin', 'arbeit', 'stadt', 'tag', 'morgen', 'abend', 'nacht', 'jahr', 'zeit', 'kind', 'name', 'stift', 'telefon', 'tisch', 'geld', 'uhr', 'frage', 'wort', 'satz', 'sprache', 'rechnung', 'kaffee', 'tee', 'milch', 'brot']);
 
 function noteFor(language: WordLabLanguage, target: string, fa: string): string {
   const key = normalizeWord(target);
-  const notes = language === 'ru' ? RU_NOTES : DE_NOTES;
+  const notes = language === 'ru' ? RU_NOTES : language === 'de' ? DE_NOTES : EN_NOTES;
   const override = notes[key];
   if (override) return override;
   if (language === 'ru' && /[´]/.test(target)) return '«´» علامت تکیه است؛ همان واژه را با همین تکیه بگو.';
   if (language === 'ru' && /[ьъ]/.test(target)) return '«ь/ъ» نشانهٔ سیریلیک است، نه صدای جدا.';
   if (language === 'de' && NOUNS.has(key)) return `اسم است و حرف تعریف می‌گیرد: «${fa}».`;
-  return `یعنی «${fa}»؛ یک بار در ${language === 'ru' ? 'روسی' : 'آلمانی'} شنیده می‌شود، بعد معنی فارسی‌اش.`;
+  const langName = language === 'ru' ? 'روسی' : language === 'de' ? 'آلمانی' : 'انگلیسی';
+  return `یعنی «${fa}»؛ یک بار در ${langName} شنیده می‌شود، بعد معنی فارسی‌اش.`;
 }
 
 interface Candidate {
@@ -157,12 +171,21 @@ function collect(language: WordLabLanguage): Candidate[] {
         }
       }
     }
-  } else {
+  } else if (language === 'de') {
     for (const lesson of NEW_COURSES.de.lessons) {
       for (const sentence of lesson.sentences) {
         for (const item of sentence.vocabulary ?? []) {
           if (!usableWord(item.word, item.meaning)) continue;
           out.push({ target: item.word, fa: item.meaning, exampleTarget: sentence.text, exampleFa: sentence.fa, levelId: lesson.levelId });
+        }
+      }
+    }
+  } else {
+    for (const lesson of SENTENCE_LESSONS) {
+      for (const sentence of lesson.sentences) {
+        for (const item of sentence.vocabulary ?? []) {
+          if (!usableWord(item.word, item.meaning)) continue;
+          out.push({ target: item.word, fa: item.meaning, exampleTarget: sentence.en, exampleFa: sentence.fa, levelId: lesson.levelId });
         }
       }
     }
@@ -248,12 +271,12 @@ function labFor(language: WordLabLanguage): readonly WordLabWord[] {
   return lab;
 }
 export const WORD_LAB_WORDS: Record<WordLabLanguage, readonly WordLabWord[]> = {} as Record<WordLabLanguage, readonly WordLabWord[]>;
-for (const language of ['de', 'ru'] as const) {
+for (const language of ['de', 'ru', 'en'] as const) {
   Object.defineProperty(WORD_LAB_WORDS, language, { get: () => labFor(language), enumerable: true });
 }
 
-export const WORD_LAB_LOCALE: Record<WordLabLanguage, string> = { ru: 'ru-RU', de: 'de-DE' };
-export const WORD_LAB_NAME: Record<WordLabLanguage, string> = { ru: 'روسی', de: 'آلمانی' };
+export const WORD_LAB_LOCALE: Record<WordLabLanguage, string> = { ru: 'ru-RU', de: 'de-DE', en: 'en-US' };
+export const WORD_LAB_NAME: Record<WordLabLanguage, string> = { ru: 'روسی', de: 'آلمانی', en: 'انگلیسی' };
 
 /** The exact string passed to the speech recogniser; punctuation is ignored by the scorer anyway. */
 export function spokenTarget(word: WordLabWord): string {

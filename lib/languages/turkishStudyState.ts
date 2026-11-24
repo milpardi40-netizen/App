@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
 import { TURKISH_LESSONS, TURKISH_LESSON_STAGES } from './turkish';
+import { isLessonConversationSession, type LessonConversationSession } from '../lessonConversation';
 
 export const TURKISH_STUDY_STORAGE_KEY = 'turkish_lesson_sessions_v1';
 
@@ -15,6 +16,8 @@ export interface TurkishLessonSession {
   revealed: boolean;
   answers: Record<string, number>;
   showCheckAnswers: boolean;
+  /** Durable progress of the lesson-scoped scripted conversation; no audio is stored. */
+  conversation?: LessonConversationSession;
 }
 
 interface TurkishStudyState {
@@ -63,6 +66,7 @@ function validateSession(lessonId: string, value: unknown): TurkishLessonSession
     || !Number.isInteger(session.sentenceIndex) || session.sentenceIndex! < 0 || session.sentenceIndex! >= lesson.sentences.length
     || typeof session.revealed !== 'boolean' || typeof session.showCheckAnswers !== 'boolean'
     || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)
+    || (session.conversation !== undefined && !isLessonConversationSession(session.conversation))
   ) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس ترکی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
@@ -83,6 +87,7 @@ function validateSession(lessonId: string, value: unknown): TurkishLessonSession
     revealed: session.revealed,
     answers,
     showCheckAnswers: session.showCheckAnswers,
+    ...(session.conversation ? { conversation: session.conversation } : {}),
   };
 }
 

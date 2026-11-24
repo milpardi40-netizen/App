@@ -365,6 +365,19 @@ export default function LearningHome() {
             </View>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="باز کردن واژه‌خانهٔ انگلیسی"
+              style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]}
+              onPress={() => router.push('/learn/en/vocabulary' as never)}
+            >
+              <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><Sparkles size={18} color={HomeColors.accent} /></View>
+              <View style={styles.quickCopy}>
+                <Text style={styles.quickTitle}>واژه‌خانهٔ انگلیسی</Text>
+                <Text style={styles.quickDesc}>ببین، یک بار بشنو، بعد از فارسی بگو</Text>
+              </View>
+              <ChevronLeft size={17} color={HomeColors.muted} />
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="باز کردن کارگاه تلفظ انگلیسی"
               accessibilityHint="تمرین صداهای انگلیسی، تکیه و آهنگ جمله؛ بدون ضبط میکروفن"
               style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]}

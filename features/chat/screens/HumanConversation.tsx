@@ -1,9 +1,11 @@
-import { MANAGEMENT_BUILD } from '@/lib/features';
+import { isLanguageEnabled, MANAGEMENT_BUILD, RUSSIAN_ONLY_BUILD } from '@/lib/features';
+import { findLanguageEntry, isLanguageId } from '@/lib/languages/registry';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, BackHandler, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, AppState, BackHandler, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { BarChart3, ChevronLeft, Mic2, Send, Sparkles, UserRound, X } from 'lucide-react-native';
+import { BarChart3, ChevronDown, ChevronLeft, ChevronUp, Mic2, Send, Sparkles, UserRound, X } from 'lucide-react-native';
 import {
   currentChatUserId,
   getPartnerEnglishLevel,
@@ -33,12 +35,14 @@ import {
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { ChatBackButton } from '@/components/ChatBackButton';
 import { KeyboardAttachedView } from '@/components/KeyboardAttachedView';
+import { KeyboardEvents } from '@/components/KeyboardRuntime';
 import { formatTime, timeAgo, toPersianDigits as fa } from '@/lib/format';
 import {
   answerIndexInSession,
   buildTurnConversationPlan,
   evaluateTurnConversation,
   feedbackForTurnAnswer,
+  hasTargetLanguageText,
   isAnswerOnMission,
   promptFor,
   turnStateFromMessages,
@@ -51,6 +55,24 @@ import VoiceAnswerInput from '@/components/VoiceAnswerInput';
 import SupportConversation from './SupportConversation';
 
 const containsRtlScript = (value: string) => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(value);
+
+const LANGUAGE_LABELS_FA: Record<SharedLanguage, string> = {
+  en: 'انگلیسی',
+  ru: 'روسی',
+  tr: 'ترکی استانبولی',
+  de: 'آلمانی',
+  fr: 'فرانسوی',
+  es: 'اسپانیایی',
+};
+
+const TEXT_PLACEHOLDER_BY_LANG: Record<SharedLanguage, string> = {
+  en: 'پاسخ انگلیسی این نوبت را بنویس…',
+  ru: 'پاسخ روسی این نوبت را به خط سیریلیک بنویس…',
+  tr: 'پاسخ ترکی استانبولی این نوبت را بنویس…',
+  de: 'پاسخ آلمانی این نوبت را بنویس…',
+  fr: 'پاسخ فرانسوی این نوبت را بنویس…',
+  es: 'پاسخ اسپانیایی این نوبت را بنویس…',
+};
 
 type RouteParams = {
   conversationId: string;
@@ -166,8 +188,8 @@ function TurnConversationScreen({
   partnerLevel,
 }: RouteParams) {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
-  const composerHeight = useRef(0);
   const [messages, setMessages] = useState<DirectMessage[]>([]);
   const [myId, setMyId] = useState<string | null>(null);
   const [input, setInput] = useState('');
@@ -178,14 +200,22 @@ function TurnConversationScreen({
   const [ended, setEnded] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [keyboardInset, setKeyboardInset] = useState(0);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [missionExpandedOverride, setMissionExpandedOverride] = useState<boolean | null>(null);
   const [now, setNow] = useState(Date.now());
-  // Real-contact conversations (both English and Russian) are scoped to the
+  // Real-contact conversations are scoped to ONE conversation language and the
   // highest CEFR level both learners have completed. The lesson-room entry
   // (lessonId param) preserves its dedicated scenario plan.
   const hasLessonContext = Boolean(lessonId);
-  const initialLang: SharedLanguage = language === 'ru' ? 'ru' : 'en';
-  const [pickerLang, setPickerLang] = useState<SharedLanguage>(initialLang);
-  const [myCompletedByLang, setMyCompletedByLang] = useState<{ en: CourseLevelId[]; ru: CourseLevelId[] } | null>(null);
+  const requestedLanguage = isLanguageId(language) ? (language as SharedLanguage) : null;
+  const singleLanguage: SharedLanguage = RUSSIAN_ONLY_BUILD
+    ? 'ru'
+    : requestedLanguage && isLanguageEnabled(requestedLanguage)
+      ? requestedLanguage
+      : isLanguageEnabled('en')
+        ? 'en'
+        : 'ru';
+  const [myCompletedByLang, setMyCompletedByLang] = useState<Record<SharedLanguage, CourseLevelId[]> | null>(null);
   const [partnerRawLevel, setPartnerRawLevel] = useState<string | null | undefined>(partnerLevel);
   const [pickingLesson, setPickingLesson] = useState(false);
   const [choosingLesson, setChoosingLesson] = useState(false);
@@ -199,7 +229,7 @@ function TurnConversationScreen({
         setMyCompletedByLang(levels);
         void syncMyEnglishLevel(encodeCourseLevels(levels)).catch(() => undefined);
       })
-      .catch(() => { if (active) setMyCompletedByLang({ en: [], ru: [] }); });
+      .catch(() => { if (active) setMyCompletedByLang({ en: [], ru: [], tr: [], de: [], fr: [], es: [] }); });
     if (partnerLevel !== undefined) {
       setPartnerRawLevel(partnerLevel);
     } else {
@@ -213,12 +243,12 @@ function TurnConversationScreen({
   const levelsReady = myCompletedByLang !== null && partnerRawLevel !== undefined;
   const partnerParsed = useMemo(() => parseStoredCourseLevels(partnerRawLevel), [partnerRawLevel]);
   const levelMatch = useMemo(() => sharedCompletedLevel(
-    myCompletedByLang?.[pickerLang] ?? [],
-    partnerParsed[pickerLang].completed,
-  ), [myCompletedByLang, partnerParsed, pickerLang]);
+    myCompletedByLang?.[singleLanguage] ?? [],
+    partnerParsed[singleLanguage].completed,
+  ), [myCompletedByLang, partnerParsed, singleLanguage]);
   const sharedLevelId = levelMatch.sharedLevelId;
   const sharedProfile = useMemo(() => levelProfileFor(sharedLevelId), [sharedLevelId]);
-  const sharedLessons = useMemo(() => lessonsOfLevel(sharedLevelId, pickerLang), [sharedLevelId, pickerLang]);
+  const sharedLessons = useMemo(() => lessonsOfLevel(sharedLevelId, singleLanguage), [sharedLevelId, singleLanguage]);
 
   // The latest lesson selection arrives as a system marker both clients read.
   // Lesson ids across English and Russian are disjoint, so either client
@@ -235,26 +265,28 @@ function TurnConversationScreen({
     return selected;
   }, [messages]);
   const chosenLessonId = lessonSelection?.lessonId ?? null;
-  const chosenLesson = useMemo(() => findSharedLesson(chosenLessonId), [chosenLessonId]);
+  const rawChosenLesson = useMemo(() => findSharedLesson(chosenLessonId), [chosenLessonId]);
+  // Never let a previous English lesson marker hijack a Russian conversation (or vice versa).
+  const chosenLesson = rawChosenLesson && rawChosenLesson.language === singleLanguage ? rawChosenLesson : null;
 
   const fallbackPlan = useMemo<TurnConversationPlan>(() => buildTurnConversationPlan({
     conversationId,
-    language,
+    language: singleLanguage,
     lessonTitle,
     situation,
     levelId: Number(levelId || 1),
-  }), [conversationId, language, lessonTitle, situation, levelId]);
+  }), [conversationId, singleLanguage, lessonTitle, situation, levelId]);
 
   const lessonPlan = useMemo<TurnConversationPlan | null>(() => (
-    chosenLesson && !hasLessonContext
+    chosenLesson && !hasLessonContext && isLanguageEnabled(chosenLesson.language)
       ? buildLessonTurnPlan(chosenLesson, chosenLesson.language)
       : null
   ), [chosenLesson, hasLessonContext]);
 
   const plan = lessonPlan ?? fallbackPlan;
-  const effectiveLanguage: SharedLanguage = chosenLesson && !hasLessonContext
+  const effectiveLanguage: SharedLanguage = chosenLesson && !hasLessonContext && isLanguageEnabled(chosenLesson.language)
     ? chosenLesson.language
-    : (language === 'ru' ? 'ru' : pickerLang);
+    : singleLanguage;
   const showPicker = !hasLessonContext && (pickingLesson || !lessonPlan);
   const sessionBoundaryAt = lessonPlan ? lessonSelection?.at ?? null : null;
   const planLevelId = lessonPlan && chosenLesson ? chosenLesson.levelId : Number(levelId || 1);
@@ -284,16 +316,51 @@ function TurnConversationScreen({
     const missionIndex = Math.floor(index / 2);
     const slot: TurnSlot = index % 2 === 0 ? 0 : 1;
     const prompt = promptFor(plan, missionIndex, slot);
-    return prompt ? feedbackForTurnAnswer(latestMyAnswer.body || '', prompt) : null;
+    if (!prompt) return null;
+    const base = feedbackForTurnAnswer(latestMyAnswer.body || '', prompt);
+    if (!isAnswerOnMission(latestMyAnswer.body || '', prompt)) {
+      return {
+        ...base,
+        positive: 'پیام شما برای مخاطب ارسال شد.',
+        correction: base.correction,
+      };
+    }
+    return base;
   }, [latestMyAnswer, state, plan]);
 
-  const addMessage = useCallback((message: DirectMessage) => {
-    setMessages(current => (current.some(item => item.id === message.id) ? current : [...current, message]));
+  const mergeMessages = useCallback((rows: DirectMessage[]) => {
+    setMessages((current) => {
+      if (!rows.length) return current;
+      const byId = new Map(current.map(item => [item.id, item]));
+      let changed = false;
+      for (const row of rows) {
+        if (!byId.has(row.id)) {
+          byId.set(row.id, row);
+          changed = true;
+        }
+      }
+      if (!changed) return current;
+      return [...byId.values()].sort(
+        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt) || a.id.localeCompare(b.id),
+      );
+    });
   }, []);
+
+  const addMessage = useCallback((message: DirectMessage) => {
+    mergeMessages([message]);
+  }, [mergeMessages]);
 
   useEffect(() => {
     let active = true;
     let channel: ReturnType<typeof subscribeToMessages> | null = null;
+    const syncMessages = async () => {
+      try {
+        const rows = await listMessages(conversationId);
+        if (active) mergeMessages(rows);
+      } catch {
+        // Keep current transcript if a background refresh fails transiently.
+      }
+    };
     Promise.all([listMessages(conversationId), currentChatUserId()])
       .then(([rows, userId]) => {
         if (!active) return;
@@ -304,11 +371,17 @@ function TurnConversationScreen({
       })
       .catch(cause => { if (active) setError(cause instanceof Error ? cause.message : 'گفت‌وگو باز نشد.'); })
       .finally(() => { if (active) setLoading(false); });
+    const pollTimer = setInterval(() => { void syncMessages(); }, 4000);
+    const appStateSub = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') void syncMessages();
+    });
     return () => {
       active = false;
+      clearInterval(pollTimer);
+      appStateSub.remove();
       void unsubscribeFromMessages(channel);
     };
-  }, [conversationId, addMessage]);
+  }, [conversationId, addMessage, mergeMessages]);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 30000);
@@ -319,30 +392,36 @@ function TurnConversationScreen({
     if (Platform.OS !== 'android') return;
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
       if (router.canGoBack()) router.back();
-      else router.replace('/conversations' as never);
+      else router.replace({ pathname: '/conversations', params: { language: singleLanguage } } as never);
       return true;
     });
     return () => subscription.remove();
-  }, [router]);
+  }, [router, singleLanguage]);
 
   // The composer is translated over the transcript when the keyboard opens.
-  // Reserve exactly the hidden height so the newest bubble stays visible.
+  // Reserve the lifted keyboard height so the newest bubble stays visible, and
+  // auto-collapse the mission banner so the user can see the conversation clearly.
   useEffect(() => {
-    const measure = (keyboardTop: number) => {
-      const node = scrollRef.current as unknown as { measureInWindow?: (callback: (x: number, y: number, width: number, height: number) => void) => void } | null;
-      if (!node?.measureInWindow) return;
-      node.measureInWindow((_x, y, _w, h) => {
-        const composerTop = keyboardTop - composerHeight.current - (Platform.OS === 'android' ? 36 : 0);
-        setKeyboardInset(Math.max(0, Math.round(y + h - composerTop)));
-        setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 60);
-      });
+    if (Platform.OS === 'web') return;
+    const showSub = KeyboardEvents.addListener('keyboardDidShow', event => {
+      const lift = Math.max(0, Math.round(event.height - (Platform.OS === 'ios' ? insets.bottom : 0)));
+      setKeyboardInset(lift);
+      setKeyboardOpen(true);
+      setMissionExpandedOverride(null);
+      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 60);
+    });
+    const hideSub = KeyboardEvents.addListener('keyboardDidHide', () => {
+      setKeyboardInset(0);
+      setKeyboardOpen(false);
+      setMissionExpandedOverride(null);
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
     };
-    const subscriptions = [
-      Keyboard.addListener('keyboardDidShow', event => measure(event.endCoordinates.screenY)),
-      Keyboard.addListener('keyboardDidHide', () => setKeyboardInset(0)),
-    ];
-    return () => subscriptions.forEach(subscription => subscription.remove());
-  }, []);
+  }, [insets.bottom]);
+
+  const missionExpanded = missionExpandedOverride ?? !keyboardOpen;
 
   useEffect(() => { setError(null); }, [state.missionIndex, state.slot]);
 
@@ -352,8 +431,8 @@ function TurnConversationScreen({
   const sendAnswer = async (raw: string) => {
     const clean = raw.trim();
     if (!clean || sending || !state.myTurn || !state.currentPrompt || state.finished || ended) return;
-    if (!isAnswerOnMission(clean, state.currentPrompt)) {
-      setError('این پاسخ به مأموریت این نوبت مرتبط نیست. به پرسش فعلی پاسخ بده و یک جزئیات مرتبط اضافه کن.');
+    if (!hasTargetLanguageText(clean, effectiveLanguage)) {
+      setError(`برای تمرین، پاسخ را به ${LANGUAGE_LABELS_FA[effectiveLanguage]} بنویس.`);
       setInput(clean);
       setInputMode('text');
       return;
@@ -403,7 +482,7 @@ function TurnConversationScreen({
   return (
     <View style={styles.root}>
       <View style={styles.header}>
-        <ChatBackButton fallback="/conversations" />
+        <ChatBackButton fallback={`/conversations?language=${singleLanguage}`} />
         <View style={styles.avatar}><UserRound size={21} color={Colors.primary[300]} /></View>
         <View style={styles.headerText}>
           <Text style={[styles.name, containsRtlScript(name || 'مخاطب') ? styles.rtlText : styles.ltrText]}>{name || 'مخاطب'}</Text>
@@ -419,33 +498,18 @@ function TurnConversationScreen({
       ) : showPicker ? (
         levelsReady ? (
           <ScrollView style={styles.picker} contentContainerStyle={styles.pickerContent} showsVerticalScrollIndicator={false}>
-            <View style={[styles.sharedCard, { borderTopColor: levelMeta(sharedLevelId, pickerLang).color, borderTopWidth: 3 }]}>
+            <View style={[styles.sharedCard, { borderTopColor: levelMeta(sharedLevelId, singleLanguage).color, borderTopWidth: 3 }]}>
               <View style={styles.sharedTopRow}>
                 <Text style={styles.sharedKicker}>سطح مشترک شما</Text>
-                <View style={styles.pickerLangSwitch}>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: pickerLang === 'en' }}
-                    onPress={() => setPickerLang('en')}
-                    style={[styles.pickerLangChip, pickerLang === 'en' && styles.pickerLangChipActive]}
-                  >
-                    <Text style={[styles.pickerLangText, pickerLang === 'en' && styles.pickerLangTextActive]}>انگلیسی</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: pickerLang === 'ru' }}
-                    onPress={() => setPickerLang('ru')}
-                    style={[styles.pickerLangChip, pickerLang === 'ru' && styles.pickerLangChipActive]}
-                  >
-                    <Text style={[styles.pickerLangText, pickerLang === 'ru' && styles.pickerLangTextActive]}>روسی</Text>
-                  </Pressable>
+                <View style={styles.pickerLangBadge}>
+                  <Text style={styles.pickerLangBadgeText}>{LANGUAGE_LABELS_FA[singleLanguage]}</Text>
                 </View>
               </View>
               <View style={styles.sharedLevelRow}>
-                <View style={[styles.levelBadge, { backgroundColor: levelMeta(sharedLevelId, pickerLang).color }]}>
+                <View style={[styles.levelBadge, { backgroundColor: levelMeta(sharedLevelId, singleLanguage).color }]}>
                   <Text style={styles.levelBadgeText}>{cefrOfLevel(sharedLevelId)}</Text>
                 </View>
-                <Text style={styles.sharedLevelTitle}>{levelMeta(sharedLevelId, pickerLang).title}</Text>
+                <Text style={styles.sharedLevelTitle}>{levelMeta(sharedLevelId, singleLanguage).title}</Text>
                 <View style={styles.difficultyBadge}>
                   <Text style={styles.difficultyBadgeText}>{sharedProfile.turnLabelFa}</Text>
                 </View>
@@ -475,7 +539,7 @@ function TurnConversationScreen({
             </View>
 
             <View style={styles.lessonListHeader}>
-              <Text style={styles.lessonListTitle}>درس‌های {pickerLang === 'ru' ? 'روسی' : 'انگلیسی'} سطح {cefrOfLevel(sharedLevelId)}</Text>
+              <Text style={styles.lessonListTitle}>درس‌های {LANGUAGE_LABELS_FA[singleLanguage]} سطح {cefrOfLevel(sharedLevelId)}</Text>
               <Text style={styles.lessonListCount}>{fa(sharedLessons.length)} درس</Text>
             </View>
             {sharedLessons.map((lesson, index) => {
@@ -491,8 +555,8 @@ function TurnConversationScreen({
                 >
                   <View style={styles.lessonCardTop}>
                     <View style={styles.lessonTitleWrap}>
-                      <View style={[styles.lessonOrderBadge, { backgroundColor: levelMeta(sharedLevelId, pickerLang).color + '18' }]}>
-                        <Text style={[styles.lessonOrderText, { color: levelMeta(sharedLevelId, pickerLang).color }]}>{fa(index + 1)}</Text>
+                      <View style={[styles.lessonOrderBadge, { backgroundColor: levelMeta(sharedLevelId, singleLanguage).color + '18' }]}>
+                        <Text style={[styles.lessonOrderText, { color: levelMeta(sharedLevelId, singleLanguage).color }]}>{fa(index + 1)}</Text>
                       </View>
                       <Text style={styles.lessonTitle}>{lesson.title}</Text>
                     </View>
@@ -517,69 +581,92 @@ function TurnConversationScreen({
         )
       ) : (
         <>
-          <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 3 }]}>
-            <View style={styles.statusTop}>
-              <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
-                <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
-                <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>{state.finished ? 'مکالمه کامل شد' : ended ? 'مکالمه پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب است'}</Text>
-              </View>
-              <View style={styles.statusRightMeta}>
-                {plan.difficultyLabel ? (
-                  <View style={styles.difficultyBadge}>
-                    <Text style={styles.difficultyBadgeText}>{plan.difficultyLabel}</Text>
+          <View style={styles.topStage}>
+            <View style={[styles.statusCard, { borderTopColor: planMeta.color, borderTopWidth: 2.5 }]}>
+              <View style={styles.statusTop}>
+                <View style={styles.statusMainGroup}>
+                  <View style={[styles.turnPill, state.myTurn && !ended && styles.turnPillMine]}>
+                    <View style={[styles.turnDot, state.myTurn && !ended && styles.turnDotMine]} />
+                    <Text style={[styles.turnPillText, state.myTurn && !ended && styles.turnPillTextMine]}>
+                      {state.finished ? 'کامل شد' : ended ? 'پایان یافت' : state.myTurn ? 'نوبت شماست' : 'نوبت مخاطب'}
+                    </Text>
                   </View>
-                ) : null}
-                <Text style={styles.turnCount}>{fa(state.completedTurns)} از {fa(plan.turns.length)} نوبت</Text>
+                  <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
+                    <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
+                  </View>
+                  <Text style={styles.topicLine} numberOfLines={1}>
+                    {LANGUAGE_LABELS_FA[effectiveLanguage]} · {plan.topicFa}
+                  </Text>
+                </View>
+                <View style={styles.statusRightMeta}>
+                  <Text style={styles.turnCount}>{fa(state.completedTurns)}/{fa(plan.turns.length)}</Text>
+                  {lessonPlan ? (
+                    <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => setPickingLesson(true)} style={styles.changeLesson}>
+                      <Text style={styles.changeLessonText}>تغییر درس</Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+              </View>
+              <View style={styles.progressRow}>
+                <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
+                <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
               </View>
             </View>
-            <View style={styles.lessonRow}>
-              <View style={[styles.levelBadge, { backgroundColor: planMeta.color }]}>
-                <Text style={styles.levelBadgeText}>{plan.levelLabel}</Text>
-              </View>
-              <Text style={styles.topicLine}>{effectiveLanguage === 'ru' ? 'روسی' : 'انگلیسی'} · درس: {plan.topicFa}</Text>
-              {lessonPlan ? (
-                <Pressable accessibilityRole="button" accessibilityLabel="تغییر درس" onPress={() => { setPickerLang(effectiveLanguage); setPickingLesson(true); }} style={styles.changeLesson}>
-                  <Text style={styles.changeLessonText}>تغییر درس</Text>
-                </Pressable>
+
+            <View style={[styles.missionCard, !missionExpanded && styles.missionCardCompact]}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={missionExpanded ? 'کوچک‌کردن کادر مأموریت' : 'نمایش کامل مأموریت'}
+                onPress={() => setMissionExpandedOverride(!missionExpanded)}
+                style={styles.missionHeader}
+              >
+                <View style={styles.missionHeaderRight}>
+                  <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
+                  {missionExpanded && state.currentTurn ? (
+                    <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View>
+                  ) : null}
+                </View>
+                {!missionExpanded && state.currentPrompt ? (
+                  <Text style={styles.missionPreview} numberOfLines={1}>{state.currentPrompt.text}</Text>
+                ) : null}
+                <View style={styles.missionToggle}>
+                  <Text style={styles.missionToggleText}>{missionExpanded ? 'جمع‌کردن' : 'جزئیات'}</Text>
+                  {missionExpanded ? <ChevronUp size={13} color={Colors.warning[700]} /> : <ChevronDown size={13} color={Colors.warning[700]} />}
+                </View>
+              </Pressable>
+              {missionExpanded ? (
+                state.currentPrompt ? (
+                  <>
+                    <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
+                    <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
+                    {lessonPlan && state.currentPrompt.cues.length > 0 ? (
+                      <View style={styles.cueRow}>
+                        {state.currentPrompt.cues.slice(0, 4).map(cue => (
+                          <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
+                        ))}
+                      </View>
+                    ) : null}
+                  </>
+                ) : (
+                  <Text style={styles.missionText}>همهٔ نوبت‌های این تمرین انجام شد. با «گزارش مکالمه» نتیجه را ببین.</Text>
+                )
               ) : null}
             </View>
-            {lessonPlan ? <Text style={styles.situationLine}>{plan.missionFa}</Text> : null}
-            <View style={styles.progressRow}>
-              <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.max(3, state.progress)}%` }]} /></View>
-              <Text style={styles.progressText}>{fa(state.progress)}٪</Text>
-            </View>
-          </View>
-
-          <View style={styles.missionCard}>
-            <View style={styles.missionHeader}>
-              <Text style={styles.missionKicker}>مأموریت این نوبت</Text>
-              {state.currentTurn ? <View style={styles.missionFocusPill}><Text style={styles.missionFocus}>{state.currentTurn.focusFa}</Text></View> : null}
-            </View>
-            {state.currentPrompt ? (
-              <>
-                <Text style={styles.missionText}>{state.currentPrompt.text}</Text>
-                <Text style={styles.missionHint}>{state.currentPrompt.hint}</Text>
-                {lessonPlan && state.currentPrompt.cues.length > 0 ? (
-                  <View style={styles.cueRow}>
-                    {state.currentPrompt.cues.slice(0, 4).map(cue => (
-                      <View key={cue} style={styles.cuePill}><Text style={styles.cueText}>{cue}</Text></View>
-                    ))}
-                  </View>
-                ) : null}
-              </>
-            ) : (
-              <Text style={styles.missionText}>همهٔ نوبت‌های این تمرین انجام شد. با «گزارش مکالمه» نتیجه را ببین.</Text>
-            )}
           </View>
 
           <ScrollView
             ref={scrollRef}
             style={styles.messages}
-            contentContainerStyle={[styles.messageContent, keyboardInset > 0 && { paddingBottom: keyboardInset + Spacing.md }]}
+            contentContainerStyle={[styles.messageContent, keyboardInset > 0 && { paddingBottom: keyboardInset + Spacing.sm }]}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
             onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
           >
+            {lessonPlan ? (
+              <View style={styles.lessonIntroCard}>
+                <Text style={styles.lessonIntroText}>{plan.missionFa}</Text>
+              </View>
+            ) : null}
             {state.sessionStart > 0 ? (
               <View style={styles.historyNote}>
                 <Text style={styles.historyNoteText}>این تمرین از پیام‌های تازه شروع می‌شود؛ {fa(state.sessionStart)} پیام قبلی این گفت‌وگو در این تمرین نمایش داده نمی‌شود.</Text>
@@ -630,7 +717,7 @@ function TurnConversationScreen({
             ) : null}
           </ScrollView>
 
-          <KeyboardAttachedView onLayout={event => { composerHeight.current = event.nativeEvent.layout.height; }}>
+          <KeyboardAttachedView>
             <View style={styles.answerCard}>
               {state.finished || ended ? (
                 <View style={styles.endedRow}>
@@ -646,12 +733,17 @@ function TurnConversationScreen({
               ) : (
                 <>
                   <View style={styles.modeRow}>
-                    <Text style={styles.modeLabel}>پاسخ:</Text>
-                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
-                      <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
-                    </Pressable>
-                    <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
-                      <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
+                    <View style={styles.modeGroup}>
+                      <Text style={styles.modeLabel}>پاسخ:</Text>
+                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'text' }} style={[styles.modeButton, inputMode === 'text' && styles.modeButtonActive]} onPress={() => setInputMode('text')}>
+                        <Text style={[styles.modeButtonText, inputMode === 'text' && styles.modeButtonTextActive]}>نوشتاری</Text>
+                      </Pressable>
+                      <Pressable accessibilityRole="button" accessibilityState={{ selected: inputMode === 'voice' }} style={[styles.modeButton, inputMode === 'voice' && styles.modeButtonActive]} onPress={() => setInputMode('voice')}>
+                        <Text style={[styles.modeButtonText, inputMode === 'voice' && styles.modeButtonTextActive]}>گفتاری</Text>
+                      </Pressable>
+                    </View>
+                    <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButton} onPress={confirmEnd}>
+                      <Text style={styles.endButtonText}>پایان مکالمه</Text>
                     </Pressable>
                   </View>
 
@@ -665,7 +757,7 @@ function TurnConversationScreen({
                           style={[styles.input, containsRtlScript(input || 'پاسخ') ? styles.rtlText : styles.ltrText]}
                           value={input}
                           onChangeText={setInput}
-                          placeholder="پاسخ این نوبت را بنویس…"
+                          placeholder={TEXT_PLACEHOLDER_BY_LANG[effectiveLanguage]}
                           placeholderTextColor={Colors.neutral[600]}
                           multiline
                           maxLength={320}
@@ -685,7 +777,7 @@ function TurnConversationScreen({
                       </>
                     ) : (
                       <VoiceAnswerInput
-                        locale={effectiveLanguage === 'ru' ? 'ru-RU' : 'en-US'}
+                        locale={findLanguageEntry(effectiveLanguage)?.speechLocale ?? 'en-US'}
                         contextualStrings={[...(state.currentPrompt?.cues ?? [])]}
                         disabled={sending}
                         onTranscript={text => void sendAnswer(text)}
@@ -697,10 +789,6 @@ function TurnConversationScreen({
                       <Text style={styles.waitingText}>نوبت مخاطب است؛ منتظر پاسخ او بمان.</Text>
                     </View>
                   )}
-
-                  <Pressable accessibilityRole="button" accessibilityLabel="پایان مکالمه" style={styles.endButton} onPress={confirmEnd}>
-                    <Text style={styles.endButtonText}>پایان مکالمه</Text>
-                  </Pressable>
                 </>
               )}
             </View>
@@ -709,7 +797,7 @@ function TurnConversationScreen({
       )}
 
       {showReport ? (
-        <TurnReportCard report={report} plan={plan} onClose={() => setShowReport(false)} onBack={() => router.replace('/conversations' as never)} />
+        <TurnReportCard report={report} plan={plan} onClose={() => setShowReport(false)} onBack={() => router.replace({ pathname: '/conversations', params: { language: singleLanguage } } as never)} />
       ) : null}
     </View>
   );
@@ -717,52 +805,59 @@ function TurnConversationScreen({
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#F7F8FC' },
-  header: { paddingTop: 13, paddingHorizontal: Spacing.md, paddingBottom: 12, minHeight: 70, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
-  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.primary[500] + '15', borderWidth: 1, borderColor: Colors.primary[500] + '30', alignItems: 'center', justifyContent: 'center' },
+  header: { paddingTop: 9, paddingHorizontal: Spacing.md, paddingBottom: 9, minHeight: 56, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E8EAF2', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
+  avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.primary[500] + '15', borderWidth: 1, borderColor: Colors.primary[500] + '30', alignItems: 'center', justifyContent: 'center' },
   headerText: { flex: 1 },
   name: { fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[0] },
-  statusRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, marginTop: 3 },
+  statusRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, marginTop: 2 },
   onlineDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.success[500] },
   onlineDotOff: { backgroundColor: Colors.neutral[500] },
   statusText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[600], textAlign: 'right' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   centerText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
-  statusCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 8, shadowColor: '#1E1B4B', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 2 }, elevation: 2 },
-  statusTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  statusRightMeta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
-  turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 10, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12' },
+  topStage: { backgroundColor: '#F7F8FC', paddingBottom: 6, borderBottomWidth: 1, borderBottomColor: '#E6E9F2', gap: 5 },
+  statusCard: { marginHorizontal: Spacing.md, marginTop: 5, paddingHorizontal: 10, paddingVertical: 6, borderRadius: Radius.md, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2', gap: 4 },
+  statusTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  statusMainGroup: { flex: 1, flexDirection: 'row-reverse', alignItems: 'center', gap: 6, minWidth: 0 },
+  statusRightMeta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, flexShrink: 0 },
+  turnPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 2.5, borderRadius: Radius.full, backgroundColor: Colors.success[500] + '12', flexShrink: 0 },
   turnPillMine: { backgroundColor: Colors.primary[500] + '14' },
-  turnDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.success[500] },
+  turnDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.success[500] },
   turnDotMine: { backgroundColor: Colors.primary[500] },
-  turnPillText: { fontFamily: Typography.fontFamily, fontSize: 11, fontWeight: Typography.weights.bold, color: Colors.success[700] },
+  turnPillText: { fontFamily: Typography.fontFamily, fontSize: 10, fontWeight: Typography.weights.bold, color: Colors.success[700] },
   turnPillTextMine: { color: Colors.primary[600] },
-  turnCount: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300] },
-  lessonRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
-  levelBadge: { minWidth: 38, height: 24, borderRadius: 12, paddingHorizontal: 9, alignItems: 'center', justifyContent: 'center' },
-  levelBadgeText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '800', color: '#FFFFFF', textAlign: 'left', writingDirection: 'ltr' },
+  turnCount: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.neutral[300], includeFontPadding: false },
+  levelBadge: { minWidth: 32, height: 20, borderRadius: 10, paddingHorizontal: 7, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  levelBadgeText: { fontFamily: Typography.latinFontFamily, fontSize: 9, fontWeight: '800', color: '#FFFFFF', textAlign: 'left', writingDirection: 'ltr' },
   difficultyBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#E2E8F0' },
   difficultyBadgeText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[200] },
-  topicLine: { flex: 1, fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
-  changeLesson: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.primary[500] + '12', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
-  changeLessonText: { fontFamily: Typography.fontFamily, fontSize: 10, fontWeight: Typography.weights.bold, color: Colors.primary[600] },
-  situationLine: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 18, color: Colors.neutral[300], textAlign: 'right' },
+  topicLine: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 11, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  changeLesson: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.primary[500] + '12', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
+  changeLessonText: { fontFamily: Typography.fontFamily, fontSize: 9, fontWeight: Typography.weights.bold, color: Colors.primary[600] },
   progressRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  progressTrack: { flex: 1, height: 6, borderRadius: 3, backgroundColor: '#EEF0F6', overflow: 'hidden' },
-  progressFill: { height: '100%', borderRadius: 3, backgroundColor: Colors.primary[400] },
-  progressText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[600], width: 34, textAlign: 'left' },
-  missionCard: { marginHorizontal: Spacing.md, marginTop: Spacing.sm, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 6 },
-  missionHeader: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' },
+  progressTrack: { flex: 1, height: 4, borderRadius: 2, backgroundColor: '#EEF0F6', overflow: 'hidden' },
+  progressFill: { height: '100%', borderRadius: 2, backgroundColor: Colors.primary[400] },
+  progressText: { fontFamily: Typography.boldFontFamily, fontSize: 10, lineHeight: 15, color: Colors.primary[600], minWidth: 36, textAlign: 'left', includeFontPadding: false },
+  missionCard: { marginHorizontal: Spacing.md, paddingHorizontal: 10, paddingVertical: 7, borderRadius: Radius.md, backgroundColor: '#FFFCF5', borderWidth: 1, borderColor: Colors.warning[500] + '40', gap: 4 },
+  missionCardCompact: { paddingVertical: 6 },
+  missionHeader: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  missionHeaderRight: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, flexShrink: 0 },
   missionKicker: { fontFamily: Typography.boldFontFamily, fontSize: 10, color: Colors.warning[700], textAlign: 'right' },
-  missionFocusPill: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
-  missionFocus: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.warning[700] },
-  missionText: { fontFamily: Typography.latinFontFamily, fontSize: 16, lineHeight: 24, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
-  missionHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.neutral[200], textAlign: 'right' },
-  cueRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 2 },
-  cuePill: { paddingHorizontal: 9, paddingVertical: 3, borderRadius: Radius.full, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E6DEC8' },
-  cueText: { fontFamily: Typography.latinFontFamily, fontSize: 11, fontWeight: '600', color: '#334155', writingDirection: 'ltr' },
+  missionFocusPill: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '18' },
+  missionFocus: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.warning[700] },
+  missionPreview: { flex: 1, fontFamily: Typography.latinFontFamily, fontSize: 11, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
+  missionToggle: { flexDirection: 'row-reverse', alignItems: 'center', gap: 2, paddingHorizontal: 6, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: Colors.warning[500] + '14', flexShrink: 0 },
+  missionToggleText: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.warning[700] },
+  missionText: { fontFamily: Typography.latinFontFamily, fontSize: 14, lineHeight: 20, fontWeight: '700', color: '#1F2937', textAlign: 'left', writingDirection: 'ltr' },
+  missionHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 16, color: Colors.neutral[200], textAlign: 'right' },
+  cueRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginTop: 1 },
+  cuePill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E6DEC8' },
+  cueText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '600', color: '#334155', writingDirection: 'ltr' },
   messages: { flex: 1 },
-  messageContent: { paddingHorizontal: Spacing.md, paddingTop: Spacing.sm, paddingBottom: Spacing.md, gap: Spacing.sm },
-  empty: { minHeight: 120, alignItems: 'center', justifyContent: 'center', gap: 4 },
+  messageContent: { paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 10, gap: 8 },
+  lessonIntroCard: { paddingHorizontal: 11, paddingVertical: 8, borderRadius: Radius.md, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2' },
+  lessonIntroText: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: Colors.neutral[300], textAlign: 'right' },
+  empty: { minHeight: 100, alignItems: 'center', justifyContent: 'center', gap: 4 },
   emptyTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[200] },
   emptyDesc: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600], textAlign: 'center' },
   historyNote: { padding: 9, borderRadius: Radius.md, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#E2E8F0' },
@@ -779,28 +874,29 @@ const styles = StyleSheet.create({
   time: { fontFamily: Typography.fontFamily, fontSize: 9, color: '#6B7280', marginTop: 3, textAlign: 'left' },
   voiceRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   voiceText: { fontFamily: Typography.fontFamily, fontSize: 12, color: '#475569' },
-  feedbackCard: { flexDirection: 'row-reverse', alignItems: 'flex-start', gap: Spacing.sm, marginTop: Spacing.xs, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
-  scoreBadge: { minWidth: 50, height: 34, borderRadius: 17, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.primary[500] + '12' },
-  scoreText: { fontFamily: Typography.fontFamily, fontSize: 13, fontWeight: Typography.weights.bold, color: Colors.primary[600] },
-  feedbackCopy: { flex: 1, gap: 3 },
+  feedbackCard: { flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm, marginTop: 2, padding: 10, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Colors.primary[500] + '25' },
+  scoreBadge: { minWidth: 48, minHeight: 34, borderRadius: 17, paddingHorizontal: 8, paddingVertical: 4, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.primary[500] + '12' },
+  scoreText: { fontFamily: Typography.boldFontFamily, fontSize: 12, lineHeight: 18, color: Colors.primary[600], includeFontPadding: false },
+  feedbackCopy: { flex: 1, gap: 2 },
   feedbackKicker: { fontFamily: Typography.fontFamily, fontSize: 9, color: Colors.neutral[500], textAlign: 'right' },
-  feedbackPositive: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.success[700], textAlign: 'right' },
-  feedbackCorrection: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 19, color: Colors.warning[700], textAlign: 'right' },
+  feedbackPositive: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 17, color: Colors.success[700], textAlign: 'right' },
+  feedbackCorrection: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 17, color: Colors.warning[700], textAlign: 'right' },
   finishedCard: { marginTop: Spacing.xs, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: Colors.success[500] + '0D', borderWidth: 1, borderColor: Colors.success[500] + '25', gap: 3 },
   finishedTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.success[700], textAlign: 'right' },
   finishedText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
-  answerCard: { padding: Spacing.md, paddingBottom: 12, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 8 },
-  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
-  modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], marginLeft: 3 },
-  modeButton: { minHeight: 30, borderRadius: Radius.full, paddingHorizontal: 12, justifyContent: 'center', backgroundColor: '#F5F6FB' },
+  answerCard: { paddingHorizontal: 12, paddingTop: 8, paddingBottom: 6, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 6 },
+  modeRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  modeGroup: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], marginLeft: 2 },
+  modeButton: { minHeight: 28, borderRadius: Radius.full, paddingHorizontal: 11, justifyContent: 'center', backgroundColor: '#F5F6FB' },
   modeButtonActive: { backgroundColor: Colors.primary[500] + '18', borderWidth: 1, borderColor: Colors.primary[500] + '35' },
   modeButtonText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[500] },
   modeButtonTextActive: { color: Colors.primary[600], fontFamily: Typography.boldFontFamily },
-  input: { minHeight: 48, maxHeight: 96, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 8, fontSize: Typography.sizes.sm, lineHeight: 22, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
-  submitButton: { minHeight: 44, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
+  input: { minHeight: 42, maxHeight: 84, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', paddingHorizontal: Spacing.md, paddingTop: 8, paddingBottom: 7, fontSize: Typography.sizes.sm, lineHeight: 20, color: Colors.neutral[0], textAlignVertical: 'center', includeFontPadding: false },
+  submitButton: { minHeight: 40, borderRadius: Radius.md, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   submitButtonText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: '#FFFFFF' },
-  endButton: { minHeight: 32, alignItems: 'center', justifyContent: 'center' },
-  endButtonText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.error[300] },
+  endButton: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: Radius.full },
+  endButtonText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.error[300] },
   waitingRow: { minHeight: 52, borderRadius: Radius.md, backgroundColor: '#F7F8FC', borderWidth: 1, borderColor: '#E3E7F3', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7 },
   waitingText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
   endedRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.sm },
@@ -815,11 +911,8 @@ const styles = StyleSheet.create({
   sharedCard: { padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E4E7F2', gap: 9, shadowColor: '#1E1B4B', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 2 }, elevation: 2 },
   sharedTopRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   sharedKicker: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Colors.primary[600], textAlign: 'right' },
-  pickerLangSwitch: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
-  pickerLangChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: '#F4F6FB', borderWidth: 1, borderColor: '#E2E6F0' },
-  pickerLangChipActive: { backgroundColor: Colors.primary[500] + '18', borderColor: Colors.primary[400] },
-  pickerLangText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.neutral[300] },
-  pickerLangTextActive: { color: Colors.primary[600], fontWeight: Typography.weights.bold },
+  pickerLangBadge: { paddingHorizontal: 11, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: Colors.primary[100], borderWidth: 1, borderColor: Colors.primary[400] },
+  pickerLangBadgeText: { fontFamily: Typography.fontFamily, fontSize: 10, color: Colors.primary[700], fontWeight: Typography.weights.bold },
   sharedLevelRow: { flexDirection: 'row-reverse', alignItems: 'center', flexWrap: 'wrap', gap: 8 },
   sharedLevelTitle: { flex: 1, fontFamily: Typography.latinFontFamily, fontSize: Typography.sizes.md, fontWeight: '800', color: Colors.neutral[0], textAlign: 'left', writingDirection: 'ltr' },
   compareRow: { flexDirection: 'row-reverse', gap: 8 },

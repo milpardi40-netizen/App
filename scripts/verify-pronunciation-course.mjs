@@ -36,6 +36,7 @@ const verify = (condition, message) => { check(condition, message); checks += 1;
 const { pronunciationUnits, PRONUNCIATION_LANGUAGES } = app.course;
 const { LANGUAGE_IDS } = app.registry;
 const persian = /[\u0600-\u06FF]/;
+const persianOnly = /[پچژگ]/;
 const targetLanguages = LANGUAGE_IDS;
 
 verify(targetLanguages.every(language => pronunciationUnits(language).length >= 4), 'every registered language ships a multi-unit pronunciation workshop (no language is an exception)');
@@ -47,7 +48,11 @@ for (const language of targetLanguages) {
   verify(units.every(unit => unit.title && unit.explanationFa && unit.focusFa && unit.practiceFa && unit.practiceText && unit.practiceMeaningFa), `${language} units include title, focus, instruction and practice sentence`);
   verify(units.every(unit => unit.examples.length >= 3), `${language} units carry at least three listening examples`);
   verify(units.every(unit => unit.examples.every(example => example.text && example.meaningFa && example.focusFa)), `${language} examples carry text, meaning and listening focus`);
-  verify(units.every(unit => unit.examples.every(example => !persian.test(example.text)) && !persian.test(unit.practiceText)), `${language} sample sentences stay in the target language`);
+  if (language === 'ar') {
+    verify(units.every(unit => unit.examples.every(example => persian.test(example.text) && !persianOnly.test(example.text)) && persian.test(unit.practiceText) && !persianOnly.test(unit.practiceText)), 'ar sample sentences stay in Arabic script without Persian letters');
+  } else {
+    verify(units.every(unit => unit.examples.every(example => !persian.test(example.text)) && !persian.test(unit.practiceText)), `${language} sample sentences stay in the target language`);
+  }
   verify(units.every(unit => persian.test(unit.explanationFa) && persian.test(unit.practiceFa)), `${language} guidance is still written in Persian`);
   verify(units.every(unit => unit.practiceText.length <= 120), `${language} practice sentences stay short enough for slow speech`);
 }

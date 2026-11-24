@@ -9,7 +9,21 @@ import { Platform } from 'react-native';
  */
 export interface SpeakingOutcome { attemptedOnly?: true; points?: number; average: number; scores: Record<string, number>; at: string }
 export interface AssessmentOutcome { attemptedOnly?: true; correct: number; total: number; at: string }
-export interface LessonOutcome { speaking?: SpeakingOutcome; assessment?: AssessmentOutcome }
+export interface OralExamOutcome {
+  mode: 'listen-echo' | 'natural-flow' | 'oral-exam' | 'guided-practice';
+  overall: number;
+  bestOverall: number;
+  pronunciation: number;
+  semantic: number;
+  independence: number;
+  interaction: number;
+  grade: 'A' | 'B' | 'C' | 'needs-work';
+  passed: boolean;
+  voiceTurns: number;
+  totalTurns: number;
+  at: string;
+}
+export interface LessonOutcome { speaking?: SpeakingOutcome; assessment?: AssessmentOutcome; oralExam?: OralExamOutcome }
 
 const KEY = 'milo_lesson_outcomes_v1';
 /** Sentences spoken below this score go to the review deck. */
@@ -43,9 +57,17 @@ export function saveLessonOutcome(course: string, lessonId: string, patch: Parti
   queue = queue.then(async () => {
     const all = await readAll();
     const key = keyOf(course, lessonId);
+    const prevOral = all[key]?.oralExam;
+    const nextOral = patch.oralExam
+      ? {
+          ...patch.oralExam,
+          bestOverall: Math.max(patch.oralExam.bestOverall, patch.oralExam.overall, prevOral?.bestOverall ?? 0),
+        }
+      : undefined;
     all[key] = { ...(all[key] ?? {}),
       ...(patch.speaking ? { speaking: { ...patch.speaking, attemptedOnly: true } } : {}),
       ...(patch.assessment ? { assessment: { ...patch.assessment, attemptedOnly: true } } : {}),
+      ...(nextOral ? { oralExam: nextOral } : {}),
     };
     // One result per catalogue lesson/task, not one entry per replay. Do not evict other courses.
     await writeAll(all);

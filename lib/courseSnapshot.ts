@@ -44,6 +44,18 @@ async function sourceFor(id: LanguageId): Promise<Source> {
     const [c, s] = await Promise.all([import('./languages/turkish'), import('./languages/turkishStudyState')]);
     return { answerKey: id => shuffleChecks(id, c.TURKISH_LESSONS.find(l => l.id === id)?.checks).map(q => q.correctIndex), lessons: c.TURKISH_LESSONS, levels: c.TURKISH_LEVELS, read: c.turkishProgress.getCourseProgress, stages: c.TURKISH_LESSON_STAGES.length, positions: s.loadTurkishPositions };
   }
+  if (id === 'ar') {
+    const [{ ARABIC_LESSONS, ARABIC_LEVELS }, { ARABIC_ENGINE_STEPS, arabicLessonToLearningLesson }, { getArabicProgress }, { loadArabicStudy }] = await Promise.all([
+      import('./arabic/content'), import('./arabic/engine'), import('./arabic/progress'), import('./arabic/studyState'),
+    ]);
+    return {
+      lessons: ARABIC_LESSONS.map(l => ({ ...arabicLessonToLearningLesson(l), levelId: l.levelId, order: l.order })),
+      levels: ARABIC_LEVELS,
+      read: getArabicProgress,
+      stages: ARABIC_ENGINE_STEPS.length,
+      positions: async () => ({ sessions: (await loadArabicStudy()).sessions, unreadable: false }),
+    };
+  }
   const [{ NEW_COURSES }, { ENGLISH_ENGINE_STEPS }] = await Promise.all([import('./languages/newCourses'), import('./englishLearningEngine')]);
   const c = NEW_COURSES[id];
   const { starterDisplayChecks } = await import('./languages/starterEditorial');

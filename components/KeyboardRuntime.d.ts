@@ -23,3 +23,9 @@ export function KeyboardAwareScrollView(
     extraKeyboardSpace?: number;
   }>,
 ): React.ReactElement;
+export const KeyboardEvents: {
+  addListener: (
+    event: 'keyboardWillShow' | 'keyboardDidShow' | 'keyboardWillHide' | 'keyboardDidHide',
+    callback: (event: { height: number }) => void,
+  ) => { remove: () => void };
+};

@@ -10,7 +10,7 @@
  * existing lesson content is never modified. Texts are plain, high-frequency, level-neutral phrases.
  */
 
-export type FollowUpLanguage = 'en' | 'ru' | 'tr' | 'de' | 'fr' | 'es';
+export type FollowUpLanguage = 'en' | 'ru' | 'tr' | 'de' | 'fr' | 'es' | 'ar';
 
 export interface FollowUpOption {
   /** Learner reaction; `{line}` is replaced by the learner's previous line (without final punctuation). */
@@ -158,6 +158,28 @@ const MOVES: Record<FollowUpLanguage, readonly FollowUpMove[]> = {
     { id: 'mean', ask: 'Perdón, ¿qué quiere decir?', askFa: 'ببخشید، منظورتان چیست؟', options: [
       { text: 'Quiero decir: {line}', fa: 'منظورم این است: (جمله‌ات را تکرار کن)', after: { text: 'Ah, ahora entiendo.', fa: 'آها، حالا می‌فهمم.' } },
       { text: 'En pocas palabras: {line}', fa: 'به زبان ساده: (جمله‌ات را تکرار کن)', after: { text: 'Vale, ahora está claro.', fa: 'باشد، حالا روشن است.' } },
+    ] },
+  ],
+  ar: [
+    { id: 'repeat', ask: 'عَفْوًا، هَلْ يُمْكِنُكَ إِعَادَةُ ذَلِكَ؟', askFa: 'ببخشید، می‌توانید دوباره بگویید؟', options: [
+      { text: 'بِالتَّأْكِيدِ. {line}', fa: 'حتماً. (جمله‌ات را تکرار کن)', after: { text: 'شُكْرًا، فَهِمْتُ.', fa: 'ممنون، متوجه شدم.' } },
+      { text: 'نَعَمْ، بِبُطْءٍ: {line}', fa: 'بله، آهسته: (جمله‌ات را تکرار کن)', after: { text: 'مُمْتَازٌ، شُكْرًا لَكَ.', fa: 'عالی، ممنون.' } },
+    ] },
+    { id: 'confirm', ask: 'هَلْ قُلْتَ «{line}»؟', askFa: 'گفتید «{line}»؟', options: [
+      { text: 'نَعَمْ، بِالضَّبْطِ.', fa: 'بله، دقیقاً.', after: { text: 'حَسَنًا، جَيِّدٌ جِدًّا.', fa: 'باشد، خیلی خوب.' } },
+      { text: 'نَعَمْ — {line}', fa: 'بله — (جمله‌ات را تکرار کن)', after: { text: 'تَمَامٌ، شُكْرًا.', fa: 'روشن شد، ممنون.' } },
+    ] },
+    { id: 'slow', ask: 'بِبُطْءٍ أَكْثَرَ مِنْ فَضْلِكَ.', askFa: 'لطفاً کمی آهسته‌تر.', options: [
+      { text: 'عَفْوًا. {line}', fa: 'ببخشید. (آهسته تکرار کن)', after: { text: 'الْآنَ فَهِمْتُ، شُكْرًا.', fa: 'حالا فهمیدم، ممنون.' } },
+      { text: 'لَا مُشْكِلَةَ: {line}', fa: 'مشکلی نیست: (آهسته تکرار کن)', after: { text: 'رَائِعٌ، شُكْرًا لَكَ.', fa: 'عالی، ممنون.' } },
+    ] },
+    { id: 'why', ask: 'حَقًّا؟ لِمَاذَا؟', askFa: 'جدی؟ چرا؟', options: [
+      { text: 'لِأَنَّهُ مُهِمٌّ بِالنِّسْبَةِ لِي.', fa: 'چون برایم مهم است.', after: { text: 'فَهِمْتُ، هَذَا مَنْطِقِيٌّ.', fa: 'می‌فهمم، منطقی است.' } },
+      { text: 'هَكَذَا فَقَطْ!', fa: 'همین‌طوری!', after: { text: 'حَسَنًا، اتَّفَقْنَا!', fa: 'خب، باشد!' } },
+    ] },
+    { id: 'mean', ask: 'عَفْوًا، مَاذَا تَعْنِي؟', askFa: 'ببخشید، منظورتان چیست؟', options: [
+      { text: 'أَعْنِي: {line}', fa: 'منظورم این است: (جمله‌ات را تکرار کن)', after: { text: 'آهْ، الْآنَ فَهِمْتُ.', fa: 'آها، حالا فهمیدم.' } },
+      { text: 'بِبَسَاطَةٍ: {line}', fa: 'به زبان ساده: (جمله‌ات را تکرار کن)', after: { text: 'حَسَنًا، الْأَمْرُ وَاضِحٌ الْآنَ.', fa: 'باشد، حالا روشن است.' } },
     ] },
   ],
 };

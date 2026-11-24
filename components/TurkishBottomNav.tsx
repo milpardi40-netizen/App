@@ -4,7 +4,7 @@ import { LanguageBottomNav, type LanguageNavItem } from '@/components/LanguageBo
 const items: readonly LanguageNavItem[] = [
   { path: '/learn/tr', label: 'یادگیری', icon: BookOpen },
   { path: '/learn/tr/pronunciation', label: 'تلفظ', icon: Volume2 },
-  { path: '/conversations', label: 'مکالمه', icon: MessageCircle },
+  { path: '/conversations', label: 'مکالمه', icon: MessageCircle, params: { language: 'tr' } },
   { path: '/learn/tr/library', label: 'درس‌ها', icon: ClipboardList },
   { path: '/learn/tr/review', label: 'مرور', icon: RefreshCw },
 ];

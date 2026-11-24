@@ -1,7 +1,8 @@
-import type { LearningSentence } from '@/lib/languages/types';
-import LanguageSentenceBuilder from '@/components/LanguageSentenceBuilder';
+import LanguageSentenceBuilder, { type LanguageSentenceBuilderProps } from '@/components/LanguageSentenceBuilder';
 
-/** Turkish word-order practice. Layout is shared; only the hint differs. */
-export default function TurkishSentenceBuilder({ sentence }: { sentence: LearningSentence }) {
-  return <LanguageSentenceBuilder sentence={sentence} placeholder="واژه‌ها را به ترتیب جملهٔ ترکی استانبولی انتخاب کنید." />;
+type Props = Omit<LanguageSentenceBuilderProps, 'placeholder'>;
+
+/** Turkish word-order & structural sentence builder. */
+export default function TurkishSentenceBuilder(props: Props) {
+  return <LanguageSentenceBuilder {...props} placeholder="واژه‌ها را به ترتیب جملهٔ ترکی استانبولی انتخاب کنید." />;
 }

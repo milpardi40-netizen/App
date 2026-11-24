@@ -3,6 +3,7 @@ import { progressLabel } from '@/lib/levelProgress';
 import { syncPersonalLearningData } from '@/lib/personalLearningSync';
 import { lessonUnit } from '@/lib/lessonUnits';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
+import { AppBottomNav } from '@/components/AppBottomNav';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -361,6 +362,7 @@ export default function EnglishLessonList() {
           {!!error && <Pressable accessibilityRole="button" onPress={retry}><Text accessibilityRole="alert" style={styles.error}>{error} تلاش دوباره</Text></Pressable>}
         </View>
       </ScrollView>
+      <AppBottomNav />
     </View>
   );
 }

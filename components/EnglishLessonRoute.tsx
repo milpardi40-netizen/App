@@ -82,6 +82,11 @@ export default function SentenceLessonScreen() {
   const { id, fromStart } = useLocalSearchParams<{ id: string; fromStart?: string }>();
   const lesson = getSentenceLesson(id || '') ?? SENTENCE_LESSONS[0];
   const courseLevel = COURSE_LEVELS.find(item => item.id === lesson.levelId) ?? COURSE_LEVELS[0];
+  const [builtSentences, setBuiltSentences] = useState<Record<string, boolean>>({});
+  const markBuiltSentence = useCallback((sentenceId: string) => {
+    setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
+  }, []);
+  useEffect(() => { setBuiltSentences({}); }, [lesson.id]);
   const [evidencePassed, setEvidencePassed] = useState(false);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [chunkCelebration, setChunkCelebration] = useState<{ chunk: number; total: number; done: number; nextStart: number } | null>(null);
@@ -139,6 +144,19 @@ export default function SentenceLessonScreen() {
   const resettingRef = useRef(false);
   const screenRun = useRef(0);
   const [audioNotice, setAudioNotice] = useState('');
+  const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
+  const narratorTokenRef = useRef(0);
+  const narratorFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearNarratorFallback = useCallback(() => {
+    if (narratorFallbackRef.current) {
+      clearTimeout(narratorFallbackRef.current);
+      narratorFallbackRef.current = null;
+    }
+  }, []);
+  useEffect(() => () => {
+    clearNarratorFallback();
+    narratorTokenRef.current += 1;
+  }, [clearNarratorFallback]);
   const timer=useEnglishStudyTimer(sessionReady && !resetting && !celebration && !chunkCelebration && !!getSentenceLesson(id || ''));
   useEffect(() => {
     let alive = true;
@@ -225,7 +243,7 @@ export default function SentenceLessonScreen() {
     playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone });
   }, []);
   const stopConversationSpeech = useCallback(() => { void stopResponsiveSpeech(); }, []);
-  const vocabulary = getLessonVocabulary(lesson);
+  const vocabulary = useMemo(() => getLessonVocabulary(lesson), [lesson]);
   // One pattern per slot: the same «I am + feeling» repeated eight times is noise, not teaching.
   // Pre-A1 lessons are built around 1–2 slots, so the grammar stage shows each slot once.
   const grammarPatterns = useMemo(() => {
@@ -246,23 +264,67 @@ export default function SentenceLessonScreen() {
 
   useFocusEffect(useCallback(() => () => { void stopResponsiveSpeech(); }, []));
 
+  const speakForTarget = useCallback((text: string, rate: number | undefined, targetKey: string | null) => {
+    setAudioNotice('');
+    setMicReadyKey(null);
+    clearNarratorFallback();
+    const token = ++narratorTokenRef.current;
+    const armMic = () => {
+      if (narratorTokenRef.current !== token) return;
+      clearNarratorFallback();
+      if (targetKey) setMicReadyKey(targetKey);
+    };
+    if (targetKey) {
+      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
+    }
+    playResponsiveSpeech({
+      text,
+      locale: 'en-US',
+      rate,
+      onDone: armMic,
+      onError: () => {
+        setAudioNotice('پخش خودکار ممکن نشد. یکی از دکمه‌های پخش را بزنید و صدای دستگاه را بررسی کنید.');
+        armMic();
+      },
+    });
+  }, [clearNarratorFallback]);
+
+  const firstVocabWord = vocabulary[0]?.word ?? '';
+
   // Read the sentence currently visible, without advancing the lesson automatically.
   useEffect(() => {
     if (!sessionReady || loadedLesson.current !== lesson.id || !current) return;
-    if (stage !== 1 && stage !== 3) {
-      if (stage !== 7) void stopResponsiveSpeech();
+    if (stage === 1 || stage === 3) {
+      speakForTarget(current.en, ENGLISH_NORMAL_SPEECH_RATE, `${stage}:${current.id}`);
       return;
     }
-    setAudioNotice('');
-    playResponsiveSpeech({
-      text: current.en, locale: 'en-US', rate: ENGLISH_NORMAL_SPEECH_RATE,
-      onError: () => setAudioNotice('پخش خودکار ممکن نشد. یکی از دکمه‌های پخش را بزنید و صدای دستگاه را بررسی کنید.'),
-    });
-  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.en]);
+    if (stage === 5 && firstVocabWord) {
+      speakForTarget(firstVocabWord, ENGLISH_NORMAL_SPEECH_RATE, `5:0:${firstVocabWord}`);
+      return;
+    }
+    clearNarratorFallback();
+    narratorTokenRef.current += 1;
+    setMicReadyKey(null);
+    if (stage !== 9) void stopResponsiveSpeech();
+  }, [lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.en, firstVocabWord, speakForTarget, clearNarratorFallback]);
 
-  const speak = (text: string, rate?: number) => {
+  const speak = (text: string, rate?: number, onDone?: () => void) => {
     setAudioNotice('');
-    playResponsiveSpeech({ text, locale: 'en-US', rate, onError: () => setAudioNotice('پخش صدا ممکن نشد. صدای دستگاه و اجازهٔ پخش مرورگر را بررسی کنید.') });
+    const targetKey = (stage === 1 || stage === 3) && !onDone && current ? `${stage}:${current.id}` : null;
+    if (targetKey) {
+      speakForTarget(text, rate, targetKey);
+      return;
+    }
+    playResponsiveSpeech({
+      text,
+      locale: 'en-US',
+      rate,
+      onDone,
+      onError: () => {
+        setAudioNotice('پخش صدا ممکن نشد. صدای دستگاه و اجازهٔ پخش مرورگر را بررسی کنید.');
+        onDone?.();
+      },
+    });
   };
 
   const startCurrentLessonFromBeginning = async () => {
@@ -425,10 +487,6 @@ export default function SentenceLessonScreen() {
       setRevealed(false);
       return;
     }
-    if (!conversation?.completed) {
-      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
-      return;
-    }
     if (saving) return;
     completing.current=true;
     setSaving(true);
@@ -547,6 +605,7 @@ export default function SentenceLessonScreen() {
               text={current.en}
               locale="en-US"
               accent={Colors.success[400]}
+              autoStart={micReadyKey === `1:${current.id}`}
               onResult={result => {
                 if (sentenceIndex < chunkLastIndex) {
                   scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
@@ -597,6 +656,7 @@ export default function SentenceLessonScreen() {
                 text={current.en}
                 locale="en-US"
                 accent={Colors.success[400]}
+                autoStart={micReadyKey === `3:${current.id}`}
                 onResult={result => {
                   if (sentenceIndex < lesson.sentences.length - 1) {
                     const nextIdx = sentenceIndex + 1;
@@ -604,7 +664,6 @@ export default function SentenceLessonScreen() {
                       setSentenceIndex(nextIdx);
                       setSpeechResult(null);
                       setSpeechError(null);
-                      speak(lesson.sentences[nextIdx].en);
                     });
                   }
                 }}
@@ -623,8 +682,21 @@ export default function SentenceLessonScreen() {
           <View style={styles.centerStage}>
             <View style={styles.bigIcon}><RotateCcw size={33} color={Colors.success[400]} /></View>
             <Text style={styles.stageTitle}>ساخت جمله</Text>
-            {showHint && <Text style={styles.stageDesc}>{(lesson.levelId <= 0) ? 'جمله را ببینید و واژه‌ها را به همان ترتیب بچینید.' : 'معنی را بخوانید و واژه‌ها را به ترتیب بچینید.'}</Text>}
-            <EnglishSentenceBuilder sentence={current} guided={lesson.levelId <= 0} />
+            {showHint && <Text style={styles.stageDesc}>{(lesson.levelId <= 0) ? 'جمله و الگویش را ببینید و واژه‌ها را به همان ترتیب بچینید.' : 'الگوی ساختار و واژه‌های کلیدی را ببینید و جمله را بسازید.'}</Text>}
+            <EnglishSentenceBuilder
+              sentence={current}
+              guided={lesson.levelId <= 0}
+              pattern={current.pattern || grammarPatterns[0]?.pattern || lessonTopics?.[0]}
+              explanation={B2_GUIDANCE[lesson.id]?.[0] || c1Unit?.topics[0]?.[5]}
+              lessonNote={lesson.teachingFa}
+              levelId={lesson.levelId}
+              sentenceIndex={sentenceIndex}
+              sentenceCount={lesson.sentences.length}
+              builtCount={Object.keys(builtSentences).length}
+              onSpeak={text => speak(text)}
+              onBuilt={markBuiltSentence}
+              onNextSentence={sentenceIndex < lesson.sentences.length - 1 ? () => setSentenceIndex(sentenceIndex + 1) : undefined}
+            />
             <View style={styles.dots}>
               {lesson.sentences.map((sentence, index) => (
                 <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${index + 1}`} onPress={() => setSentenceIndex(index)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />
@@ -652,9 +724,14 @@ export default function SentenceLessonScreen() {
                     text={item.word}
                     locale="en-US"
                     accent={Colors.success[400]}
+                    autoStart={micReadyKey === `5:${vocabIndex}:${item.word}`}
                     onResult={result => {
                       if (vocabIndex < vocabulary.length - 1) {
-                        scheduleOnPass(result, () => scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0)));
+                        const nextVocab = vocabulary[vocabIndex + 1];
+                        scheduleOnPass(result, () => {
+                          scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0));
+                          speakForTarget(nextVocab.word, ENGLISH_NORMAL_SPEECH_RATE, `5:${vocabIndex + 1}:${nextVocab.word}`);
+                        });
                       }
                     }}
                   />
@@ -683,7 +760,7 @@ export default function SentenceLessonScreen() {
         {(stage === 7 || stage === 8) && (
           <View style={styles.centerStage}>
                         {(() => { const finalSections: FinalSection[] = [
-            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={text => speak(text)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
+            { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
               { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
             {false ? null : evidencePassed
               ? CORE_LESSON_EVIDENCE[lesson.id]
@@ -697,7 +774,9 @@ export default function SentenceLessonScreen() {
         {stage === 9 && <>
           <LessonConversationRoom
             key={lesson.id}
+            courseId="en"
             lessonId={lesson.id}
+            levelId={lesson.levelId}
             situation={lesson.situation}
             partnerRole="طرف مقابل"
             dialogue={lesson.dialogue}

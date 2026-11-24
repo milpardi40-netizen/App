@@ -247,10 +247,10 @@ export async function listMessages(conversationId: string): Promise<DirectMessag
     .from('messages')
     .select('*')
     .eq('conversation_id', conversationId)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
     .limit(200);
   if (error) throw new Error(readableSupabaseError(error));
-  return (data || []).map(mapMessage);
+  return (data || []).reverse().map(mapMessage);
 }
 
 export async function sendTextMessage(conversationId: string, body: string): Promise<DirectMessage> {

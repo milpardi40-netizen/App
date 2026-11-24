@@ -14,6 +14,14 @@ import {
   type RussianCourseLesson,
 } from './languages/russian';
 import {
+  TURKISH_LESSONS,
+  TURKISH_LEVELS,
+  findTurkishLesson,
+  turkishProgress,
+  type TurkishCourseLesson,
+} from './languages/turkish';
+import { NEW_COURSES, type StarterLesson } from './languages/newCourses';
+import {
   tokensOf,
   type ConversationTurn,
   type TurnConversationLanguage,
@@ -22,7 +30,7 @@ import {
 } from './turnConversation';
 
 /**
- * Level-scoped conversation practice for English & Russian.
+ * Level-scoped conversation practice for every shipped language.
  *
  * When two learners connect, their conversation is scoped to ONE shared level:
  * the highest level BOTH learners have completed (or Pre-A1 when at least one
@@ -87,7 +95,13 @@ export function levelProfileFor(levelId: number): LevelDifficultyProfile {
 
 export function levelMeta(levelId: number, language: SharedLanguage = 'en') {
   const id = clampLevel(levelId);
-  const list = language === 'ru' ? RUSSIAN_LEVELS : COURSE_LEVELS;
+  const list = language === 'ru'
+    ? RUSSIAN_LEVELS
+    : language === 'tr'
+      ? TURKISH_LEVELS
+      : (language === 'de' || language === 'fr' || language === 'es')
+        ? NEW_COURSES[language].levels
+        : COURSE_LEVELS;
   return list.find(level => level.id === id) ?? list[0];
 }
 
@@ -119,10 +133,16 @@ export function effectiveLevelOf(completedLevels: readonly CourseLevelId[]): Cou
   return highestLevelOf(completedLevels) ?? 0;
 }
 
-/** Encode completed levels for both courses in one compact string stored in `profiles.english_level`. */
-export function encodeCourseLevels(levels: { en: readonly CourseLevelId[]; ru: readonly CourseLevelId[] }): string {
+/** Encode completed levels across courses in one compact string stored in `profiles.english_level`. */
+export function encodeCourseLevels(
+  levels: { en: readonly CourseLevelId[]; ru: readonly CourseLevelId[] } & Partial<Record<SharedLanguage, readonly CourseLevelId[]>>,
+): string {
   const format = (ids: readonly CourseLevelId[]) => (ids.length ? [...new Set(ids)].sort((a, b) => a - b).join(',') : '-');
-  return `en:${format(levels.en)};ru:${format(levels.ru)}`;
+  const keys: SharedLanguage[] = ['en', 'ru'];
+  for (const extra of ['tr', 'de', 'fr', 'es'] as const) {
+    if (levels[extra] !== undefined) keys.push(extra);
+  }
+  return keys.map(key => `${key}:${format(levels[key] ?? [])}`).join(';');
 }
 
 function parseLevelList(raw: string): CourseLevelId[] {
@@ -136,36 +156,44 @@ function parseLevelList(raw: string): CourseLevelId[] {
   return [...out].sort((a, b) => a - b);
 }
 
+export type StoredCourseLevels = Record<SharedLanguage, { completed: CourseLevelId[]; known: boolean }>;
+
+function emptyStoredCourseLevels(): StoredCourseLevels {
+  return {
+    en: { completed: [], known: false },
+    ru: { completed: [], known: false },
+    tr: { completed: [], known: false },
+    de: { completed: [], known: false },
+    fr: { completed: [], known: false },
+    es: { completed: [], known: false },
+  };
+}
+
 /**
  * Parse `profiles.english_level` back into completed levels per language.
- * Handles both the structured `en:0,1;ru:0` format and legacy single CEFR strings.
+ * Handles both the structured `en:0,1;ru:0;...` format and legacy single CEFR strings.
  * Legacy `'Foundation'` (never synced) maps to empty completed levels (starts safely at Pre-A1).
  */
-export function parseStoredCourseLevels(value?: string | null): {
-  en: { completed: CourseLevelId[]; known: boolean };
-  ru: { completed: CourseLevelId[]; known: boolean };
-} {
+export function parseStoredCourseLevels(value?: string | null): StoredCourseLevels {
   const clean = (value || '').trim();
-  if (/^(?:en|ru):/i.test(clean)) {
-    const result = {
-      en: { completed: [] as CourseLevelId[], known: false },
-      ru: { completed: [] as CourseLevelId[], known: false },
-    };
+  if (/^(?:en|ru|tr|de|fr|es):/i.test(clean)) {
+    const result = emptyStoredCourseLevels();
     for (const segment of clean.split(';')) {
       const [lang, rawList = ''] = segment.split(':');
       const key = lang?.trim().toLowerCase();
-      if (key === 'en' || key === 'ru') {
+      if (key === 'en' || key === 'ru' || key === 'tr' || key === 'de' || key === 'fr' || key === 'es') {
         result[key] = { completed: parseLevelList(rawList), known: true };
       }
     }
     return result;
   }
+  const result = emptyStoredCourseLevels();
   const index = CEFR_LEVELS.findIndex(level => level.toLowerCase() === clean.toLowerCase());
   if (index >= 0) {
     const through = Array.from({ length: index + 1 }, (_, i) => i as CourseLevelId);
-    return { en: { completed: through, known: true }, ru: { completed: [], known: false } };
+    result.en = { completed: through, known: true };
   }
-  return { en: { completed: [], known: false }, ru: { completed: [], known: false } };
+  return result;
 }
 
 /** Map a stored profile level string to an effective level id for one language. */
@@ -211,6 +239,15 @@ export async function myCompletedLevels(language: SharedLanguage = 'en'): Promis
       const progress = await russianProgress.getCourseProgress();
       return completedLevelIdsFromProgress(RUSSIAN_LESSONS, progress.completedLessonIds);
     }
+    if (language === 'tr') {
+      const progress = await turkishProgress.getCourseProgress();
+      return completedLevelIdsFromProgress(TURKISH_LESSONS, progress.completedLessonIds);
+    }
+    if (language === 'de' || language === 'fr' || language === 'es') {
+      const course = NEW_COURSES[language];
+      const progress = await course.progress.getCourseProgress();
+      return completedLevelIdsFromProgress(course.lessons, progress.completedLessonIds);
+    }
     const progress = await readLocalProgress();
     return completedLevelIdsFromProgress(SENTENCE_LESSONS, progress.completedLessonIds);
   } catch {
@@ -218,9 +255,16 @@ export async function myCompletedLevels(language: SharedLanguage = 'en'): Promis
   }
 }
 
-export async function myAllCompletedLevels(): Promise<{ en: CourseLevelId[]; ru: CourseLevelId[] }> {
-  const [en, ru] = await Promise.all([myCompletedLevels('en'), myCompletedLevels('ru')]);
-  return { en, ru };
+export async function myAllCompletedLevels(): Promise<Record<SharedLanguage, CourseLevelId[]>> {
+  const [en, ru, tr, de, fr, es] = await Promise.all([
+    myCompletedLevels('en'),
+    myCompletedLevels('ru'),
+    myCompletedLevels('tr'),
+    myCompletedLevels('de'),
+    myCompletedLevels('fr'),
+    myCompletedLevels('es'),
+  ]);
+  return { en, ru, tr, de, fr, es };
 }
 
 export async function myCurrentLevelId(language: SharedLanguage = 'en'): Promise<CourseLevelId> {
@@ -250,10 +294,13 @@ function fromEnglishLesson(lesson: SentenceLesson): SharedLesson {
   };
 }
 
-function fromRussianLesson(lesson: RussianCourseLesson): SharedLesson {
+function fromTextLesson(
+  lesson: RussianCourseLesson | TurkishCourseLesson | StarterLesson,
+  language: Exclude<SharedLanguage, 'en'>,
+): SharedLesson {
   return {
     id: lesson.id,
-    language: 'ru',
+    language,
     levelId: lesson.levelId,
     order: lesson.order,
     title: lesson.title,
@@ -271,10 +318,36 @@ function fromRussianLesson(lesson: RussianCourseLesson): SharedLesson {
 
 export function findSharedLesson(lessonId?: string | null): SharedLesson | null {
   if (!lessonId) return null;
+  if (lessonId.startsWith('tr')) {
+    const tr = findTurkishLesson(lessonId);
+    if (tr) return fromTextLesson(tr, 'tr');
+  }
+  if (lessonId.startsWith('de-')) {
+    const de = NEW_COURSES.de.lessons.find(item => item.id === lessonId);
+    if (de) return fromTextLesson(de, 'de');
+  }
+  if (lessonId.startsWith('fr-')) {
+    const fr = NEW_COURSES.fr.lessons.find(item => item.id === lessonId);
+    if (fr) return fromTextLesson(fr, 'fr');
+  }
+  if (lessonId.startsWith('es-')) {
+    const es = NEW_COURSES.es.lessons.find(item => item.id === lessonId);
+    if (es) return fromTextLesson(es, 'es');
+  }
+  if (lessonId.startsWith('ru-')) {
+    const ru = findRussianLesson(lessonId);
+    if (ru) return fromTextLesson(ru, 'ru');
+  }
   const en = getSentenceLesson(lessonId);
   if (en) return fromEnglishLesson(en);
   const ru = findRussianLesson(lessonId);
-  if (ru) return fromRussianLesson(ru);
+  if (ru) return fromTextLesson(ru, 'ru');
+  const tr = findTurkishLesson(lessonId);
+  if (tr) return fromTextLesson(tr, 'tr');
+  for (const id of ['de', 'fr', 'es'] as const) {
+    const match = NEW_COURSES[id].lessons.find(item => item.id === lessonId);
+    if (match) return fromTextLesson(match, id);
+  }
   return null;
 }
 
@@ -287,7 +360,19 @@ export function lessonsOfLevel(levelId: number, language: SharedLanguage = 'en')
     return RUSSIAN_LESSONS
       .filter(lesson => lesson.levelId === id && lesson.sentences.length >= minSentences)
       .sort((a, b) => a.order - b.order)
-      .map(fromRussianLesson);
+      .map(lesson => fromTextLesson(lesson, 'ru'));
+  }
+  if (language === 'tr') {
+    return TURKISH_LESSONS
+      .filter(lesson => lesson.levelId === id && lesson.sentences.length >= minSentences)
+      .sort((a, b) => a.order - b.order)
+      .map(lesson => fromTextLesson(lesson, 'tr'));
+  }
+  if (language === 'de' || language === 'fr' || language === 'es') {
+    return NEW_COURSES[language].lessons
+      .filter(lesson => lesson.levelId === id && lesson.sentences.length >= minSentences)
+      .sort((a, b) => a.order - b.order)
+      .map(lesson => fromTextLesson(lesson, language));
   }
   return SENTENCE_LESSONS
     .filter(lesson => lesson.levelId === id && lesson.sentences.length >= minSentences)
@@ -308,14 +393,31 @@ const FOCUS_BY_TURN_COUNT: Record<number, readonly string[]> = {
 
 const QUESTION_START_EN = /^(what|where|when|why|how|who|whom|whose|which|can|could|do|does|did|are|is|am|was|were|will|would|have|has|had|shall|should|may)\b/i;
 const QUESTION_START_RU = /^(кто|что|где|куда|откуда|когда|почему|зачем|как|какой|какая|какое|какие|сколько|можно|есть)\b/i;
+const QUESTION_START_TR = /^(ne|nerede|nereye|nereden|ne zaman|neden|niçin|niye|nasıl|kim|hangi|kaç)\b|\b(mi|mı|mu|mü|misin|mısın|musun|müsün)\b/i;
+const QUESTION_START_DE = /^(was|wo|wohin|woher|wann|warum|wieso|wie|wer|wen|wem|welche|welcher|welches|kann|kannst|können|hast|haben|bist|sind|ist)\b/i;
+const QUESTION_START_FR = /^(quel|quelle|quels|quelles|quoi|où|quand|pourquoi|comment|qui|combien|est-ce)\b/i;
+const QUESTION_START_ES = /^(¿|qué|dónde|adónde|cuándo|por qué|cómo|quién|quiénes|cuál|cuáles|cuánto|cuántos)\b/i;
 
 const isQuestionSentence = (text: string, language: SharedLanguage) => {
   const clean = text.trim();
   if (/[?؟]\s*$/.test(clean)) return true;
-  return language === 'ru' ? QUESTION_START_RU.test(clean) : QUESTION_START_EN.test(clean);
+  if (language === 'ru') return QUESTION_START_RU.test(clean);
+  if (language === 'tr') return QUESTION_START_TR.test(clean);
+  if (language === 'de') return QUESTION_START_DE.test(clean);
+  if (language === 'fr') return QUESTION_START_FR.test(clean);
+  if (language === 'es') return QUESTION_START_ES.test(clean);
+  return QUESTION_START_EN.test(clean);
 };
 
-const contentWordsOf = (text: string) => [...new Set(tokensOf(text).filter(word => word.length > 2))];
+const SHORT_KEY_WORDS = new Set([
+  'am', 'is', 'are', 'do', 'go', 'my', 'we', 'he', 'she', 'no', 'hi',
+  'я', 'ты', 'мы', 'вы', 'он', 'да', 'не', 'на', 'от', 'из',
+  'ev', 'su', 'ne', 'bu', 'şu', 'az', 'iş',
+  'ja', 'du', 'er', 'es', 'wo', 'da',
+  'je', 'tu', 'il', 'où', 'et', 'si',
+  'sí', 'yo', 'tú', 'té', 'el', 'la', 'un', 'mi', 'ir',
+]);
+const contentWordsOf = (text: string) => [...new Set(tokensOf(text).filter(word => word.length > 2 || SHORT_KEY_WORDS.has(word)))];
 
 function pickLessonSentences(lesson: SharedLesson, count: number, minWordsFloor: number): SharedSentence[] {
   const rich = lesson.sentences.filter(sentence => tokensOf(sentence.targetText).length >= minWordsFloor);
@@ -387,10 +489,12 @@ function lessonPrompt(
   profile: LevelDifficultyProfile,
   hint: string,
 ): TurnPrompt {
-  const wordCount = tokensOf(sentence.targetText).length;
+  const sentenceTokens = tokensOf(sentence.targetText);
+  const wordCount = sentenceTokens.length;
   const concepts: (readonly string[])[] = [];
   const sentenceWords = contentWordsOf(sentence.targetText);
   if (sentenceWords.length) concepts.push(sentenceWords);
+  else if (sentenceTokens.length) concepts.push(sentenceTokens);
   if (sentence.pattern) {
     const patternWords = contentWordsOf(sentence.pattern.replace(/\+/g, ' '));
     if (patternWords.length) concepts.push(patternWords);
@@ -407,23 +511,28 @@ function lessonPrompt(
   };
 }
 
-function toSharedLesson(lesson: SharedLesson | SentenceLesson | RussianCourseLesson, language?: string): SharedLesson {
+function toSharedLesson(
+  lesson: SharedLesson | SentenceLesson | RussianCourseLesson | TurkishCourseLesson | StarterLesson,
+  language?: string,
+): SharedLesson {
   if ('language' in lesson && 'sentences' in lesson && lesson.sentences[0] && 'targetText' in lesson.sentences[0]) {
     return lesson as SharedLesson;
   }
-  if (language === 'ru' || (lesson.sentences[0] && 'text' in lesson.sentences[0])) {
-    return fromRussianLesson(lesson as RussianCourseLesson);
+  if (lesson.sentences[0] && 'text' in lesson.sentences[0]) {
+    const lang: Exclude<SharedLanguage, 'en'> =
+      language === 'tr' || language === 'de' || language === 'fr' || language === 'es' ? language : 'ru';
+    return fromTextLesson(lesson as RussianCourseLesson | TurkishCourseLesson | StarterLesson, lang);
   }
   return fromEnglishLesson(lesson as SentenceLesson);
 }
 
 /**
- * Turn plan built from one real lesson (English or Russian): the topic,
+ * Turn plan built from one real lesson in any supported language: the topic,
  * mission, cues, turn count and difficulty come from that lesson and its
  * CEFR level. Both participants get the identical plan.
  */
 export function buildLessonTurnPlan(
-  rawLesson: SharedLesson | SentenceLesson | RussianCourseLesson,
+  rawLesson: SharedLesson | SentenceLesson | RussianCourseLesson | TurkishCourseLesson | StarterLesson,
   language?: string,
 ): TurnConversationPlan {
   const lesson = toSharedLesson(rawLesson, language);

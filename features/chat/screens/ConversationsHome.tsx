@@ -4,6 +4,7 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } fro
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { ChevronLeft, MessageCircle, Mic2, Plus, QrCode, ShieldCheck, Sparkles, Trash2, UserRound } from 'lucide-react-native';
 import { AppBottomNav } from '@/components/AppBottomNav';
+import { ArabicBottomNav } from '@/components/arabic/ArabicBottomNav';
 import { RussianBottomNav } from '@/components/RussianBottomNav';
 import { TurkishBottomNav } from '@/components/TurkishBottomNav';
 import { StarterBottomNav } from '@/components/StarterBottomNav';
@@ -24,9 +25,148 @@ import { readableSupabaseError } from '@/lib/errors';
 import { isSupabaseConfigured } from '@/lib/pairing';
 import { SupabaseSetupNotice } from '@/components/SupabaseSetupNotice';
 import { ChatAlertSettingsCard } from '@/components/ChatAlertSettingsCard';
-import { MANAGEMENT_BUILD } from '@/lib/features';
+import { isLanguageEnabled, MANAGEMENT_BUILD, RUSSIAN_ONLY_BUILD } from '@/lib/features';
+import { isLanguageId } from '@/lib/languages/registry';
 import { Colors, Radius, Spacing, Typography } from '@/lib/theme';
 import { timeAgo } from '@/lib/format';
+
+type ConversationCopy = {
+  shortName: string;
+  headerTitle: string;
+  headerSubtitle: string;
+  chipLabel: string;
+  practiceKicker: string;
+  practiceTitle: string;
+  practiceText: string;
+  emptyDesc: string;
+  assistTitle: string;
+  assistDesc: string;
+  textTitle: string;
+  textDesc: string;
+  voiceTitle: string;
+  voiceDesc: string;
+};
+
+const CONVERSATION_COPY: Record<SharedLanguage | 'ar', ConversationCopy> = {
+  en: {
+    shortName: 'انگلیسی',
+    headerTitle: 'مکالمه',
+    headerSubtitle: 'تمرین واقعی انگلیسی، بدون ترس از اشتباه',
+    chipLabel: 'انگلیسی (English)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور',
+    practiceTitle: '۳ تا ۶ نوبت، متناسب با سطح مشترک',
+    practiceText: 'سطح مکالمه به‌صورت خودکار روی بالاترین سطحی تنظیم می‌شود که هر دو نفر کامل کرده‌اید؛ تعداد نوبت‌ها و سختی مأموریت‌ها هم با همان سطح هماهنگ می‌شود.',
+    emptyDesc: 'دوست مسلط به انگلیسی را با کد دعوت اضافه کنید و در محیطی خصوصی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی واقعی',
+    assistDesc: 'قبل از ارسال، ترجمه، اصلاح جمله و پیشنهاد پاسخ فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی',
+    textDesc: 'با اصلاح اختیاری',
+    voiceTitle: 'پیام صوتی',
+    voiceDesc: 'تمرین تلفظ طبیعی',
+  },
+  ru: {
+    shortName: 'روسی',
+    headerTitle: 'مکالمهٔ روسی',
+    headerSubtitle: 'گفت‌وگوی واقعی و گام‌به‌گام به زبان روسی',
+    chipLabel: 'روسی (Русский)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور روسی',
+    practiceTitle: '۳ تا ۶ نوبت روسی، متناسب با سطح مشترک',
+    practiceText: 'موضوعات از درس‌های Pre-A1 تا C1 روسی (از الفبا و احوال‌پرسی تا گفت‌وگوی آزاد) انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک روسی شما و مخاطب تنظیم می‌شود.',
+    emptyDesc: 'دوست روسی‌زبان یا هم‌مسیر یادگیری روسی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های روسی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی روسی',
+    assistDesc: 'قبل از ارسال پیام روسی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی روسی',
+    textDesc: 'با خط سیریلیک و بررسی هدف',
+    voiceTitle: 'پیام صوتی روسی',
+    voiceDesc: 'تشخیص و تمرین تلفظ روسی',
+  },
+  tr: {
+    shortName: 'ترکی استانبولی',
+    headerTitle: 'مکالمهٔ ترکی استانبولی',
+    headerSubtitle: 'گفت‌وگوی واقعی و گام‌به‌گام به زبان ترکی استانبولی',
+    chipLabel: 'ترکی استانبولی (Türkçe)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور ترکی استانبولی',
+    practiceTitle: '۳ تا ۶ نوبت ترکی استانبولی، متناسب با سطح مشترک',
+    practiceText: 'موضوعات از درس‌های Pre-A1 تا C1 ترکی استانبولی انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک ترکی شما و مخاطب تنظیم می‌شود.',
+    emptyDesc: 'دوست مسلط یا هم‌مسیر یادگیری ترکی استانبولی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های ترکی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی ترکی استانبولی',
+    assistDesc: 'قبل از ارسال پیام ترکی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی ترکی',
+    textDesc: 'با بررسی هدف و ساختار',
+    voiceTitle: 'پیام صوتی ترکی',
+    voiceDesc: 'تشخیص و تمرین تلفظ ترکی',
+  },
+  de: {
+    shortName: 'آلمانی',
+    headerTitle: 'مکالمهٔ آلمانی',
+    headerSubtitle: 'گفت‌وگوی واقعی و گام‌به‌گام به زبان آلمانی',
+    chipLabel: 'آلمانی (Deutsch)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور آلمانی',
+    practiceTitle: '۳ تا ۶ نوبت آلمانی، متناسب با سطح مشترک',
+    practiceText: 'موضوعات از درس‌های Pre-A1 تا C1 آلمانی انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک آلمانی شما و مخاطب تنظیم می‌شود.',
+    emptyDesc: 'دوست مسلط یا هم‌مسیر یادگیری آلمانی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های آلمانی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی آلمانی',
+    assistDesc: 'قبل از ارسال پیام آلمانی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی آلمانی',
+    textDesc: 'با بررسی هدف و ساختار',
+    voiceTitle: 'پیام صوتی آلمانی',
+    voiceDesc: 'تشخیص و تمرین تلفظ آلمانی',
+  },
+  fr: {
+    shortName: 'فرانسوی',
+    headerTitle: 'مکالمهٔ فرانسوی',
+    headerSubtitle: 'گفت‌وگوی واقعی و گام‌به‌گام به زبان فرانسوی',
+    chipLabel: 'فرانسوی (Français)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور فرانسوی',
+    practiceTitle: '۳ تا ۶ نوبت فرانسوی، متناسب با سطح مشترک',
+    practiceText: 'موضوعات از درس‌های Pre-A1 تا C1 فرانسوی انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک فرانسوی شما و مخاطب تنظیم می‌شود.',
+    emptyDesc: 'دوست مسلط یا هم‌مسیر یادگیری فرانسوی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های فرانسوی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی فرانسوی',
+    assistDesc: 'قبل از ارسال پیام فرانسوی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی فرانسوی',
+    textDesc: 'با بررسی هدف و ساختار',
+    voiceTitle: 'پیام صوتی فرانسوی',
+    voiceDesc: 'تشخیص و تمرین تلفظ فرانسوی',
+  },
+  es: {
+    shortName: 'اسپانیایی',
+    headerTitle: 'مکالمهٔ اسپانیایی',
+    headerSubtitle: 'گفت‌وگوی واقعی و گام‌به‌گام به زبان اسپانیایی',
+    chipLabel: 'اسپانیایی (Español)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور اسپانیایی',
+    practiceTitle: '۳ تا ۶ نوبت اسپانیایی، متناسب با سطح مشترک',
+    practiceText: 'موضوعات از درس‌های Pre-A1 تا C1 اسپانیایی انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک اسپانیایی شما و مخاطب تنظیم می‌شود.',
+    emptyDesc: 'دوست مسلط یا هم‌مسیر یادگیری اسپانیایی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های اسپانیایی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی اسپانیایی',
+    assistDesc: 'قبل از ارسال پیام اسپانیایی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی اسپانیایی',
+    textDesc: 'با بررسی هدف و ساختار',
+    voiceTitle: 'پیام صوتی اسپانیایی',
+    voiceDesc: 'تشخیص و تمرین تلفظ اسپانیایی',
+  },
+  ar: {
+    shortName: 'عربی',
+    headerTitle: 'مکالمهٔ عربی',
+    headerSubtitle: 'گفت‌وگوی واقعی و گام‌به‌گام به زبان عربی',
+    chipLabel: 'عربی (العربية)',
+    practiceKicker: 'تمرین مکالمهٔ سطح‌محور عربی',
+    practiceTitle: '۳ تا ۶ نوبت عربی، متناسب با سطح مشترک',
+    practiceText: 'موضوعات از درس‌های Pre-A1 تا C1 عربی (از حروف و احوال‌پرسی تا گفت‌وگوی آزاد) انتخاب می‌شوند و سختی نوبت‌ها روی بالاترین سطح مشترک عربی شما و مخاطب تنظیم می‌شود.',
+    emptyDesc: 'دوست مسلط یا هم‌مسیر یادگیری عربی خود را با کد دعوت اضافه کنید تا بر اساس درس‌های عربی تمرین کنید.',
+    assistTitle: 'کمک هوشمند کنار گفتگوی عربی',
+    assistDesc: 'قبل از ارسال پیام عربی، بازخورد گام‌به‌گام، راهنمای واژه‌های کلیدی و ترجمه فقط برای شما نمایش داده می‌شود.',
+    textTitle: 'پیام متنی عربی',
+    textDesc: 'با خط عربی و بررسی هدف',
+    voiceTitle: 'پیام صوتی عربی',
+    voiceDesc: 'تشخیص و تمرین تلفظ عربی',
+  },
+};
+
+const toSharedLanguage = (value: string | null | undefined): SharedLanguage | null =>
+  value && value !== 'ar' && isLanguageId(value) ? (value as SharedLanguage) : null;
+
+const toCopyLanguage = (value: string | null | undefined): SharedLanguage | 'ar' | null =>
+  isLanguageId(value) ? (value as SharedLanguage | 'ar') : null;
 
 export default function ConversationsHome() {
   const router = useRouter();
@@ -41,21 +181,32 @@ export default function ConversationsHome() {
   const [openingSupport, setOpeningSupport] = useState(false);
   // The conversation hub is shared by every language; keep the learner's own course navigation under it.
   const [activeLanguage, setActiveLanguage] = useState<ResumeLanguage>(null);
-  const [selectedLang, setSelectedLang] = useState<SharedLanguage>(language === 'ru' ? 'ru' : 'en');
-  useEffect(() => {
+  const refreshResumeLanguage = useCallback(() => {
     let alive = true;
     void readResumeSnapshot()
       .then((snapshot) => {
         if (!alive) return;
-        const lang = snapshot?.language ?? null;
-        setActiveLanguage(lang);
-        if (!language && lang === 'ru') setSelectedLang('ru');
+        setActiveLanguage(snapshot?.language ?? null);
       })
       .catch(() => undefined);
     return () => { alive = false; };
-  }, [language]);
-  const convLanguage: SharedLanguage = language === 'ru' ? 'ru' : language === 'en' ? 'en' : selectedLang;
-  const homePath = activeLanguage && activeLanguage !== 'en' ? `/learn/${activeLanguage}` : activeLanguage === 'en' ? '/lang' : '/languages';
+  }, []);
+  useEffect(() => refreshResumeLanguage(), [refreshResumeLanguage]);
+  const requestedCopyLang = toCopyLanguage(typeof language === 'string' ? language : undefined);
+  const requestedLang = toSharedLanguage(typeof language === 'string' ? language : undefined);
+  const candidateLang = requestedLang ?? toSharedLanguage(activeLanguage);
+  const convLanguage: SharedLanguage = RUSSIAN_ONLY_BUILD
+    ? 'ru'
+    : candidateLang && isLanguageEnabled(candidateLang)
+      ? candidateLang
+      : isLanguageEnabled('en')
+        ? 'en'
+        : 'ru';
+  const navLanguage: ResumeLanguage = requestedCopyLang ?? activeLanguage;
+  const displayCopyLang: SharedLanguage | 'ar' = !RUSSIAN_ONLY_BUILD && navLanguage === 'ar' && isLanguageEnabled('ar') ? 'ar' : convLanguage;
+  const homePath = navLanguage && navLanguage !== 'en' ? `/learn/${navLanguage}` : navLanguage === 'en' ? '/lang' : '/languages';
+  const copy = CONVERSATION_COPY[displayCopyLang];
+  const lessonLangCopy = CONVERSATION_COPY[toCopyLanguage(lessonContext?.language) ?? displayCopyLang];
 
   const openSupport = () => {
     if (openingSupport) return;
@@ -92,12 +243,13 @@ export default function ConversationsHome() {
 
   useFocusEffect(
     useCallback(() => {
+      const stopResume = refreshResumeLanguage();
       // Nothing to fetch without a real project; show the setup checklist
       // instead of a failed request.
       if (!configured) {
         setLoadingContacts(false);
         setContactsError(null);
-        return;
+        return stopResume;
       }
       // Publish my completed levels for both English and Russian so any partner
       // can compute the highest level we have both completed.
@@ -123,8 +275,8 @@ export default function ConversationsHome() {
         .finally(() => {
           if (active) setLoadingContacts(false);
         });
-      return () => { active = false; };
-    }, [configured]),
+      return () => { active = false; stopResume(); };
+    }, [configured, refreshResumeLanguage]),
   );
 
   return (
@@ -132,8 +284,8 @@ export default function ConversationsHome() {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View style={styles.headerCopy}>
-            <Text style={styles.title}>مکالمه</Text>
-            <Text style={styles.subtitle}>تمرین واقعی، بدون ترس از اشتباه</Text>
+            <Text style={styles.title}>{copy.headerTitle}</Text>
+            <Text style={styles.subtitle}>{copy.headerSubtitle}</Text>
           </View>
           <PageNavigation tone="dark" backFallback={homePath} />
         </View>
@@ -145,35 +297,24 @@ export default function ConversationsHome() {
             <Text style={styles.lessonContextKicker}>موضوع مرجع درس — فقط برای انتخاب سناریو</Text>
             <Text style={styles.lessonContextTitle}>{lessonContext.title}</Text>
             <Text style={styles.lessonContextText}>{lessonContext.situation || 'موضوع کلی درس برای شروع یک گفت‌وگوی تازه.'}</Text>
-            <Text style={styles.lessonContextMeta}>{lessonContext.language === 'ru' ? 'روسی' : 'انگلیسی'}{lessonContext.level ? ` · سطح ${lessonContext.level}` : ''}</Text>
+            <Text style={styles.lessonContextMeta}>{lessonLangCopy.shortName}{lessonContext.level ? ` · سطح ${lessonContext.level}` : ''}</Text>
           </View>
         ) : null}
         <View style={styles.practiceCard}>
           <View style={styles.practiceHeader}>
             <Sparkles size={18} color={Colors.primary[300]} />
-            <Text style={styles.practiceKicker}>تمرین مکالمهٔ سطح‌محور</Text>
+            <Text style={styles.practiceKicker}>{copy.practiceKicker}</Text>
           </View>
-          <Text style={styles.practiceTitle}>۳ تا ۶ نوبت، متناسب با سطح مشترک</Text>
-          <Text style={styles.practiceText}>سطح مکالمه به‌صورت خودکار روی بالاترین سطحی تنظیم می‌شود که هر دو نفر کامل کرده‌اید؛ تعداد نوبت‌ها و سختی مأموریت‌ها هم با همان سطح هماهنگ می‌شود.</Text>
+          <Text style={styles.practiceTitle}>{copy.practiceTitle}</Text>
+          <Text style={styles.practiceText}>{copy.practiceText}</Text>
           {!lessonContext ? (
             <View style={styles.langToggleRow}>
               <Text style={styles.langToggleLabel}>زبان مکالمه:</Text>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityState={{ selected: convLanguage === 'en' }}
-                onPress={() => setSelectedLang('en')}
-                style={[styles.langChip, convLanguage === 'en' && styles.langChipActive]}
-              >
-                <Text style={[styles.langChipText, convLanguage === 'en' && styles.langChipTextActive]}>انگلیسی</Text>
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityState={{ selected: convLanguage === 'ru' }}
-                onPress={() => setSelectedLang('ru')}
-                style={[styles.langChip, convLanguage === 'ru' && styles.langChipActive]}
-              >
-                <Text style={[styles.langChipText, convLanguage === 'ru' && styles.langChipTextActive]}>روسی</Text>
-              </Pressable>
+              <View style={[styles.langChip, styles.langChipActive]}>
+                <Text style={[styles.langChipText, styles.langChipTextActive]}>
+                  {copy.chipLabel}
+                </Text>
+              </View>
             </View>
           ) : null}
         </View>
@@ -231,14 +372,14 @@ export default function ConversationsHome() {
                 </Pressable>
               );
             })}
-            <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
+            <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
           </View>
         ) : (
           <View style={styles.emptyContacts}>
             <View style={styles.peopleIcon}><UserRound size={30} color={Colors.primary[400]} /></View>
             <Text style={styles.emptyTitle}>{contactsError ? 'دریافت مخاطبان انجام نشد' : 'هنوز مخاطبی اضافه نکرده‌اید'}</Text>
-            <Text style={styles.emptyDesc}>{contactsError || 'دوست مسلط به این زبان را با کد دعوت اضافه کنید و در محیطی خصوصی تمرین کنید.'}</Text>
-            <Pressable style={styles.inviteButton} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language } } as never)}>
+            <Text style={styles.emptyDesc}>{contactsError || copy.emptyDesc}</Text>
+            <Pressable style={styles.inviteButton} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}>
               <Plus size={19} color={Colors.onColor} />
               <Text style={styles.inviteText}>افزودن مخاطب واقعی</Text>
             </Pressable>
@@ -252,17 +393,17 @@ export default function ConversationsHome() {
         <View style={styles.assistCard}>
           <Sparkles size={21} color={Colors.warning[400]} />
           <View style={styles.assistText}>
-            <Text style={styles.assistTitle}>کمک هوشمند کنار گفتگوی واقعی</Text>
-            <Text style={styles.assistDesc}>قبل از ارسال، ترجمه، اصلاح جمله و پیشنهاد پاسخ فقط برای شما نمایش داده می‌شود.</Text>
+            <Text style={styles.assistTitle}>{copy.assistTitle}</Text>
+            <Text style={styles.assistDesc}>{copy.assistDesc}</Text>
           </View>
         </View>
 
         <View style={styles.modeRow}>
-          <View style={styles.modeCard}><MessageCircle size={20} color={Colors.success[400]} /><Text style={styles.modeTitle}>پیام متنی</Text><Text style={styles.modeDesc}>با اصلاح اختیاری</Text></View>
-          <View style={styles.modeCard}><Mic2 size={20} color={Colors.error[300]} /><Text style={styles.modeTitle}>پیام صوتی</Text><Text style={styles.modeDesc}>تمرین تلفظ طبیعی</Text></View>
+          <View style={styles.modeCard}><MessageCircle size={20} color={Colors.success[400]} /><Text style={styles.modeTitle}>{copy.textTitle}</Text><Text style={styles.modeDesc}>{copy.textDesc}</Text></View>
+          <View style={styles.modeCard}><Mic2 size={20} color={Colors.error[300]} /><Text style={styles.modeTitle}>{copy.voiceTitle}</Text><Text style={styles.modeDesc}>{copy.voiceDesc}</Text></View>
         </View>
       </ScrollView>
-      {activeLanguage === 'ru' ? <RussianBottomNav /> : activeLanguage === 'tr' ? <TurkishBottomNav /> : activeLanguage && activeLanguage !== 'en' && NEW_COURSES[activeLanguage as keyof typeof NEW_COURSES] ? <StarterBottomNav course={NEW_COURSES[activeLanguage as keyof typeof NEW_COURSES]} /> : <AppBottomNav />}
+      {navLanguage === 'ar' ? <ArabicBottomNav /> : navLanguage === 'ru' ? <RussianBottomNav /> : navLanguage === 'tr' ? <TurkishBottomNav /> : navLanguage && navLanguage !== 'en' && NEW_COURSES[navLanguage as keyof typeof NEW_COURSES] ? <StarterBottomNav course={NEW_COURSES[navLanguage as keyof typeof NEW_COURSES]} /> : <AppBottomNav />}
     </View>
   );
 }
@@ -291,9 +432,9 @@ const styles = StyleSheet.create({
   langToggleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8, marginTop: 4 },
   langToggleLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[400] },
   langChip: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: Radius.full, backgroundColor: Colors.neutral[900], borderWidth: 1, borderColor: Colors.neutral[700] },
-  langChipActive: { backgroundColor: Colors.primary[500] + '28', borderColor: Colors.primary[400] },
-  langChipText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[400] },
-  langChipTextActive: { color: Colors.primary[200], fontWeight: Typography.weights.bold },
+  langChipActive: { backgroundColor: Colors.primary[100], borderColor: Colors.primary[400] },
+  langChipText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[200] },
+  langChipTextActive: { color: Colors.primary[700], fontWeight: Typography.weights.bold },
   emmaCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.accent[500] + '50', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.md },
   avatarWrap: { position: 'relative' },
   emmaAvatar: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.accent[500] + '20' },

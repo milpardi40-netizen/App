@@ -133,7 +133,7 @@ const flush = () => new Promise((r) => setImmediate(r));
         drills++;
       }
     }
-  const lesson = x.findRussianLesson('ru-pre-14-i-like'),
+  const lesson = x.findRussianLesson('ru-pre-18-sentences-verbs'),
     verb = x.VERBS.find((v) => v.lemma === 'хотеть');
   assert.equal(x.studyExamples(verb, 0, lesson)[0].source, 'از همین درس');
   // …and that claim must be true for every beginner lesson: a «from this very lesson» example has to
@@ -188,22 +188,22 @@ const flush = () => new Promise((r) => setImmediate(r));
   assert.equal(starts[0].recordingOptions.persist, false);
   result('это мама', false);
   assert.equal(saved.length, 0);
-  result('хочешь чай');
+  result('чай или кофе');
   result('чаю');
   await flush();
   assert.equal(saved.length, 0, 'wait for native end');
   end();
   await flush();
-  assert.equal(speech.text, 'Да, пожа́луйста. Я люблю́ чай.');
-  assert.equal(saved.at(-1).said[0], 'хочешь чай');
+  assert.equal(speech.text, 'Нет, спаси́бо. Я хочу́ во́ду.');
+  assert.equal(saved.at(-1).said[0], 'чай или кофе');
   assert(!recording);
   done();
   await flush();
   assert(recording);
   end();
-  result('это для тебя это хорошо');
+  result('сок или кофе');
   await flush();
-  assert.equal(speech.text, 'Да, о́чень хорошо́. Спаси́бо!');
+  assert.equal(speech.text, 'Я люблю́ ко́фе!');
   done();
   await job;
   assert.equal(starts.length, 2);
@@ -307,17 +307,17 @@ const flush = () => new Promise((r) => setImmediate(r));
   await assert.rejects(job, /پخش نشد/);
   assert(!recording);
   assert.equal(saved.length, count);
-  const resumed = { starter: 'partner', picks: [0], said: { 0: 'да пожалуйста я люблю чай' } };
+  const resumed = { starter: 'partner', picks: [0], said: { 0: 'нет спасибо я хочу воду' } };
   job = begin(resumed, true);
   await flush();
-  assert.equal(speech.text, 'Э́то для тебя́. Э́то хорошо́?');
+  assert.equal(speech.text, 'Сок и́ли ко́фе?');
   done();
   await flush();
-  result('да очень хорошо спасибо');
+  result('я люблю кофе');
   end();
   await flush();
   await job;
-  assert.equal(saved.at(-1).said[0], 'да пожалуйста я люблю чай');
+  assert.equal(saved.at(-1).said[0], 'нет спасибо я хочу воду');
   assert.equal(saved.at(-1).picks.length, 2);
   const card = x.verbVoiceCards(verb, 0)[0];
   const answers = [], phases = [], ctrl = new AbortController();
