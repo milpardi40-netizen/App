@@ -10,7 +10,7 @@ import { Platform } from 'react-native';
 export interface SpeakingOutcome { attemptedOnly?: true; points?: number; average: number; scores: Record<string, number>; at: string }
 export interface AssessmentOutcome { attemptedOnly?: true; correct: number; total: number; at: string }
 export interface OralExamOutcome {
-  mode: 'oral-exam' | 'guided-practice';
+  mode: 'listen-echo' | 'natural-flow' | 'oral-exam' | 'guided-practice';
   overall: number;
   bestOverall: number;
   pronunciation: number;

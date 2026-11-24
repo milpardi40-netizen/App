@@ -358,12 +358,12 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
 
   const rawConceptScore = covered / concepts.length;
   const phoneticMatch = speechEval ? speechEval.score / 100 : 0;
-  // In Pre-A1 and A1, close phonetic/STT recognition of short beginner words counts toward concept coverage.
-  const conceptScore = (level === 'Pre-A1' || level === 'A1') && phoneticMatch >= 0.65
+  // Credit close phonetic/STT matches of short beginner words or near-exact spoken lesson lines across all levels.
+  const conceptScore = ((level === 'Pre-A1' || level === 'A1') && phoneticMatch >= 0.65) || phoneticMatch >= 0.82
     ? Math.max(rawConceptScore, phoneticMatch)
     : rawConceptScore;
   const lexicalScore = rule.targetText
-    ? Math.max(overlapScore(rule.targetText, answer), level === 'Pre-A1' ? phoneticMatch : level === 'A1' ? phoneticMatch * 0.9 : 0)
+    ? Math.max(overlapScore(rule.targetText, answer), level === 'Pre-A1' ? phoneticMatch : level === 'A1' ? phoneticMatch * 0.9 : phoneticMatch >= 0.82 ? phoneticMatch * 0.92 : 0)
     : conceptScore;
   const branch = rule.branches?.find(item => item.match.every(group => containsAny(answer, group)));
 
@@ -384,8 +384,14 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
     };
   }
 
-  // Question guard for A2–C1
-  const questionMissing = Boolean(rule.expectedQuestion && level !== 'Pre-A1' && level !== 'A1' && !looksLikeQuestion(answer));
+  // Question guard for A2–C1 (speech recognition rarely emits '?', so skip when spoken match is already high)
+  const questionMissing = Boolean(
+    rule.expectedQuestion
+    && level !== 'Pre-A1'
+    && level !== 'A1'
+    && !looksLikeQuestion(answer)
+    && phoneticMatch < 0.72,
+  );
 
   // Advanced-level depth guard: B2/C1 responses to full turns cannot pass with 1–2 words unless an authored branch matched
   const heardWordCount = normalize(answer).split(' ').filter(Boolean).length;
@@ -404,7 +410,10 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
   }
 
   // Balanced composite: concepts (60%) + lexical overlap (30%) + form/question/length adequacy (10%)
-  const minLength = level === 'Pre-A1' ? 1 : level === 'A1' ? 2 : level === 'A2' ? 6 : level === 'B1' ? 10 : 12;
+  const baseMinLength = level === 'Pre-A1' ? 1 : level === 'A1' ? 2 : level === 'A2' ? 6 : level === 'B1' ? 10 : 12;
+  const minLength = rule.targetText
+    ? Math.min(baseMinLength, Math.max(1, Math.floor(rule.targetText.trim().length * 0.7)))
+    : baseMinLength;
   const formCredit = (answer.length >= minLength ? 5 : 0) + (!questionMissing ? 5 : 0);
   const rawScore = Math.round(conceptScore * 60 + lexicalScore * 30 + formCredit - (questionMissing ? 15 : 0));
   const score = Math.max(0, Math.min(100, rawScore));
