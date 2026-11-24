@@ -97,7 +97,7 @@ const GLOBAL_FONT_BUMP = 1;
 const SENTENCE_FONT_BUMP = 2;
 const SENTENCE_FONT_THRESHOLD = 17;
 
-function presentationStyle(style: TextProps['style'], extra?: TextStyle, keepColor = false, textScale = 1): TextStyle | undefined {
+function presentationStyle(style: TextProps['style'], extra?: TextStyle, keepColor = false, textScale = 1, noFontBump = false): TextStyle | undefined {
   const flat = StyleSheet.flatten([style, extra]) as TextStyle | undefined;
   const out: TextStyle = {};
   let color = keepColor ? flat?.color : readingColor(flat?.color);
@@ -105,19 +105,21 @@ function presentationStyle(style: TextProps['style'], extra?: TextStyle, keepCol
   if (color !== undefined && color !== flat?.color) out.color = color;
   const baseSize = flat?.fontSize;
   if (typeof baseSize === 'number' && baseSize > 0) {
-    const bump = baseSize >= SENTENCE_FONT_THRESHOLD ? SENTENCE_FONT_BUMP : GLOBAL_FONT_BUMP;
+    const bump = noFontBump ? 0 : (baseSize >= SENTENCE_FONT_THRESHOLD ? SENTENCE_FONT_BUMP : GLOBAL_FONT_BUMP);
     const bumpedSize = baseSize + bump;
     out.fontSize = textScale !== 1
       ? Math.round(bumpedSize * textScale * 10) / 10
       : bumpedSize;
     if (typeof flat?.lineHeight === 'number' && flat.lineHeight > 0) {
-      const bumpedLineHeight = Math.round(flat.lineHeight * (bumpedSize / baseSize) * 10) / 10;
+      const bumpedLineHeight = bump === 0
+        ? flat.lineHeight
+        : Math.round(flat.lineHeight * (bumpedSize / baseSize) * 10) / 10;
       out.lineHeight = textScale !== 1
         ? Math.round(bumpedLineHeight * textScale * 10) / 10
         : bumpedLineHeight;
     }
   } else if (textScale !== 1) {
-    const size = 14 + GLOBAL_FONT_BUMP;
+    const size = 14 + (noFontBump ? 0 : GLOBAL_FONT_BUMP);
     out.fontSize = Math.round(size * textScale * 10) / 10;
     if (flat?.lineHeight) out.lineHeight = Math.round(flat.lineHeight * textScale * 10) / 10;
   }
@@ -198,12 +200,17 @@ function styleMixedChildren(children: React.ReactNode): React.ReactNode {
 }
 
 /** Preserve the outer Text, all accessibility/interaction props and layout. */
-export type LocalizedTextProps = TextProps & { /** Keep the style's own colour (accent text such as the lesson translation). */ keepColor?: boolean };
-export const LocalizedText = forwardRef<NativeText, LocalizedTextProps>(function LocalizedText({ style, children, keepColor, ...props }, ref) {
+export type LocalizedTextProps = TextProps & {
+  /** Keep the style's own colour (accent text such as the lesson translation). */
+  keepColor?: boolean;
+  /** Opt out of the global font-size bump so tight UI rows keep their original size. */
+  noFontBump?: boolean;
+};
+export const LocalizedText = forwardRef<NativeText, LocalizedTextProps>(function LocalizedText({ style, children, keepColor, noFontBump, ...props }, ref) {
   const content = childrenText(children);
   const script = scriptStyle(content);
   const textScale = useContext(TextScaleContext);
-  return <NativeText ref={ref} {...props} style={[style, script, presentationStyle(style, script, keepColor, textScale)]}>
+  return <NativeText ref={ref} {...props} style={[style, script, presentationStyle(style, script, keepColor, textScale, noFontBump)]}>
     {textScript(content) === 'persian' && clusters(content).some(isForeignCluster) ? styleMixedChildren(children) : children}
   </NativeText>;
 });
