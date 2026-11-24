@@ -2,10 +2,15 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const originalBase = require('./app.json').expo;
-// GitHub Pages keeps /App; managed root-domain builds opt into a root URL.
-const rootBase = process.env.EXPO_PUBLIC_WEB_ROOT === 'true'
-  ? { ...originalBase, experiments: { ...originalBase.experiments, baseUrl: '' } }
-  : originalBase;
+// GitHub Pages keeps /App; managed root-domain builds or unified site exports opt into a custom baseUrl.
+const customBaseUrl = typeof process.env.EXPO_PUBLIC_WEB_BASE_URL === 'string'
+  ? process.env.EXPO_PUBLIC_WEB_BASE_URL
+  : null;
+const rootBase = customBaseUrl !== null
+  ? { ...originalBase, experiments: { ...originalBase.experiments, baseUrl: customBaseUrl } }
+  : process.env.EXPO_PUBLIC_WEB_ROOT === 'true'
+    ? { ...originalBase, experiments: { ...originalBase.experiments, baseUrl: '' } }
+    : originalBase;
 // CI builds get a monotonically increasing Android versionCode (and a matching
 // version name) so in-app updates can tell newer APKs from installed ones.
 const ciVersionCode = Number.parseInt(process.env.MILO_VERSION_CODE || '', 10);

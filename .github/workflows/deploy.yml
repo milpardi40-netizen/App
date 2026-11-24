@@ -46,12 +46,14 @@ jobs:
           KEY=$(node -e "const c=require('./config/supabase.public.json');process.stdout.write(c.EXPO_PUBLIC_SUPABASE_ANON_KEY||'')")
           echo "EXPO_PUBLIC_SUPABASE_URL=${URL}" >> $GITHUB_ENV
           echo "EXPO_PUBLIC_SUPABASE_ANON_KEY=${KEY}" >> $GITHUB_ENV
-      - name: Export web app
-        run: npm run build:web
+      - name: Export website and web app
+        env:
+          EXPO_PUBLIC_WEB_BASE_URL: /App/app
+        run: npm run build:site
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: dist/site
 
   deploy:
     environment:
