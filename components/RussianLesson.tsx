@@ -29,9 +29,8 @@ import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
 import RussianSentenceBuilder from '@/components/RussianSentenceBuilder';
-import { GrammarLink, Hear } from '@/components/RussianWorkshopUI';
-import RussianStarterReading, { ListenCue } from '@/components/RussianStarterReading';
-import { starterStep } from '@/lib/languages/russianPreA1';
+import { GrammarLink } from '@/components/RussianWorkshopUI';
+import { lessonChunks, loadCompletedChunks, markChunkDone } from '@/lib/lessonChunks';
 import { clearRussianLessonSession, loadRussianLessonSessionWithPresence, saveRussianLessonSession, resetRussianLessonSession } from '@/lib/languages/russianStudyState';
 import { RUSSIAN_LESSONS, RUSSIAN_LEVELS, RUSSIAN_LESSON_STAGES, russianProgress, type RussianCourseLesson } from '@/lib/languages/russian';
 import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } from '@/lib/content/courseAudit';
@@ -68,8 +67,6 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const pace = (name: NarrationPace) => narrationRate('ru-RU', name);
   // Warm the phone voice while the lesson paints, so the first sentence is not late.
   useEffect(() => { warmRussianSpeech(); void ensureRecordedAudio('ru'); }, []);
-  const starter = starterStep(lesson.id);
-  const [expandedProductionFor, setExpandedProductionFor] = useState<string | null>(null);
   const [builtSentences, setBuiltSentences] = useState<Record<string, boolean>>({});
   const markBuiltSentence = useCallback((sentenceId: string) => {
     setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
@@ -130,6 +127,18 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const current = lesson.sentences[sentenceIndex];
   const checks = useMemo(() => shuffleChecks(lesson.id, lesson.checks), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
+  const [doneChunks, setDoneChunks] = useState<number[]>([]);
+  useEffect(() => {
+    let alive = true;
+    void loadCompletedChunks(lesson.id).then(value => { if (alive) setDoneChunks(value); }).catch(() => undefined);
+    return () => { alive = false; };
+  }, [lesson.id]);
+  const chunks = lessonChunks(lesson.id, lesson.sentences.length, doneChunks);
+  useEffect(() => {
+    if (chunks.chunked && sentenceIndex < chunks.start) setSentenceIndex(chunks.start);
+  }, [chunks.chunked, chunks.start, lesson.id]);
+  const chunkLastIndex = chunks.chunked ? chunks.end - 1 : lesson.sentences.length - 1;
+  const [chunkCelebration, setChunkCelebration] = useState<{ chunk: number; total: number; done: number; nextStart: number } | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
   const allChecksPassed = checks.every((question, index) => answers[String(index)] === question.correctIndex);
@@ -138,7 +147,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const listeningSkill = a1Skills.find(task => task.kind === 'listening');
   const readingSkill = a1Skills.find(task => task.kind === 'reading');
 
-  const stageLabel = starter && stage === 4 ? 'خواندن با حرف‌های آشنا' : stages[stage].labelFa;
+  const stageLabel = stages[stage].labelFa;
   const progressPercent = Math.round(((stage + 1) / stages.length) * 100);
   const vocabulary = useMemo(() => {
     const byWord = new Map<string, { word: LearningLessonVocabulary; sentence: RussianCourseLesson['sentences'][number] }>();
@@ -363,10 +372,16 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const next = async () => {
     if (!sessionReady || sessionError || completing.current || saving) return;
     setCompletionError('');
-    if (stage === 1 && sentenceIndex < lesson.sentences.length - 1) {
+    if (stage === 1 && sentenceIndex < chunkLastIndex) {
       const nextIndex = sentenceIndex + 1;
       setSentenceIndex(nextIndex);
       setRevealed(false);
+      return;
+    }
+    if (stage === 1 && chunks.chunked && chunks.end < lesson.sentences.length) {
+      const nextDone = await markChunkDone(lesson.id, chunks.current).catch(() => doneChunks);
+      setDoneChunks(nextDone);
+      setChunkCelebration({ chunk: chunks.current, total: chunks.total, done: lesson.sentences.length, nextStart: chunks.end });
       return;
     }
     if (stage < stages.length - 1) {
@@ -416,7 +431,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
     }
   };
 
-  const timer = useStudyTimer(sessionReady && !celebration, 'ru');
+  const timer = useStudyTimer(sessionReady && !celebration && !chunkCelebration, 'ru');
   if (!sessionReady) return <View style={styles.root}><View style={styles.loadingCard}><ActivityIndicator color={Palette.primary} /><Text accessibilityRole={sessionError ? 'alert' : undefined} style={styles.loadingText}>{sessionError || 'در حال بازیابی جلسهٔ روسی…'}</Text>{sessionError ? <Pressable accessibilityRole="button" style={styles.loadingButton} onPress={() => setLoadingRetry(value => value + 1)}><Text style={styles.loadingButtonText}>تلاش دوباره</Text></Pressable> : null}{sessionError ? <Pressable accessibilityRole="button" style={styles.loadingButton} onPress={() => router.back()}><Text style={styles.loadingButtonText}>بازگشت</Text></Pressable> : null}</View></View>;
 
   return (
@@ -439,6 +454,10 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
                     <View style={styles.stepperNow}><Text style={styles.stepperNowFa}>{stageLabel}</Text></View>
         </View>
         <View style={styles.stepSegments}>{stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}</View>
+        {chunks.chunked ? <View style={styles.chunkBar}>
+          <Text style={styles.chunkText}>بخش {fa(chunks.current)} از {fa(chunks.total)} · جملهٔ {fa(sentenceIndex + 1)} تا {fa(chunks.end)}</Text>
+          <View style={styles.chunkTrack}>{Array.from({ length: chunks.total }).map((_, index) => <View key={index} style={[styles.chunkDot, doneChunks.includes(index + 1) && styles.chunkDotDone, index + 1 === chunks.current && styles.chunkDotNow]} />)}</View>
+        </View> : null}
       </View>
 
       {!!(sessionError || speechError || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || speechError || timer.error}</Text>}
@@ -449,12 +468,10 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <Text style={styles.stageTitle}>{lesson.title}</Text>
           <Text style={styles.situation}>{lesson.situation}</Text>
           {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.sentences.map((sentence, index) => ({ speaker: index % 2 ? 'You' : 'Partner', text: sentence.text, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
-          {starter && <Text style={styles.stageDesc}>{starter.letters ? `حرف‌های تازه: ${[...starter.letters].join(' · ')}. ` : ''}برای گفت‌وگو فقط بشنو و جواب بده؛ خواندنِ مستقل را با دو نوشتهٔ آخر تمرین می‌کنی.</Text>}
           {lesson.teachingFa ? <View style={styles.noteCard}><Text style={styles.noteTitle}>نکتهٔ روسی به فارسی</Text><Text style={styles.noteText}>{lesson.teachingFa}</Text></View> : null}
         </View>}
 
         {stage === 1 && <View style={styles.sentenceStage} onLayout={event => { stageOffsetRef.current = event.nativeEvent.layout.y; }}>
-          {starter && <Text style={styles.stageDesc}>{sentenceIndex < 6 ? 'بشنو و بگو · لازم نیست این عبارت را از روی خط بخوانی.' : 'حالا خودت بخوان · فقط با حرف‌هایی که بلدی.'}</Text>}
           <Text style={styles.counter}>جملهٔ {fa(sentenceIndex + 1)} از {fa(lesson.sentences.length)}</Text>
           <View style={styles.sentenceCard}>
             <Pressable accessibilityRole="button" accessibilityLabel="شنیدن جملهٔ روسی" style={styles.soundButton} onPress={() => speak(current.text)}><Volume2 size={25} color="#FFFFFF" /></Pressable>
@@ -478,7 +495,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             accent={Palette.success}
             autoStart={micReadyKey === `1:${current.id}`}
             onResult={result => {
-              if (sentenceIndex < lesson.sentences.length - 1) {
+              if (sentenceIndex < chunkLastIndex) {
                 scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
               }
             }}
@@ -530,8 +547,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${fa(index + 1)}`} onPress={() => selectSentence(index, .68)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
         </View>}
 
-        {stage === 4 && starter && <RussianStarterReading key={lesson.id} words={starter.read} letters={starter.letters} speak={speak} />}
-        {stage === 4 && !starter && (() => {
+        {stage === 4 && (() => {
           const bridgeRule = bridgeFor(current).rule;
           return (
             <View style={styles.centerStage}>
@@ -604,16 +620,15 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
                     {(() => { const finalSections: FinalSection[] = [
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${fa(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))} locale="ru-RU" accent={Palette.success} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('ru', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
             { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
-          {false ? null : <View style={styles.evidenceCard}>
+          <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>
               <View style={styles.questionHeader}><View style={styles.questionBadge}><Text style={styles.questionBadgeText}>سؤال {fa(index + 1)}</Text></View><View style={styles.questionRule} /></View>
               <Text style={styles.questionPrompt}>{question.promptFa}</Text>
-              {starter && index === 0 && <ListenCue line={starter.oral[2]} speak={speak} />}
               {question.choices.map((choice, choiceIndex) => {
                 const selected = answers[String(index)] === choiceIndex;
                 const shownCorrect = showCheckAnswers && choiceIndex === question.correctIndex;
                 const locked = answers[String(index)] === question.correctIndex || showCheckAnswers;
-                return <View key={`${index}-${choiceIndex}`}>{starter && index === 1 && <View style={{flexDirection:"row-reverse", alignItems:"center", gap:8}}><Hear text={choice} speak={speak} /><Text style={styles.pronunciation}>{starter.oral.find(l => l.text === choice)?.pronunciation}</Text></View>}<Pressable accessibilityRole="radio" accessibilityState={{ checked: selected || shownCorrect, disabled: locked }} disabled={locked} onPress={() => setAnswers(value => ({ ...value, [String(index)]: choiceIndex }))} style={[styles.choice, (selected || shownCorrect) && styles.choiceSelected, shownCorrect && styles.choiceCorrect]}>
+                return <View key={`${index}-${choiceIndex}`}><Pressable accessibilityRole="radio" accessibilityState={{ checked: selected || shownCorrect, disabled: locked }} disabled={locked} onPress={() => setAnswers(value => ({ ...value, [String(index)]: choiceIndex }))} style={[styles.choice, (selected || shownCorrect) && styles.choiceSelected, shownCorrect && styles.choiceCorrect]}>
                   <View style={[styles.choiceIndicator, (selected || shownCorrect) && styles.choiceIndicatorActive]}><Text style={styles.choiceIndicatorText}>{selected || shownCorrect ? '✓' : ''}</Text></View><Text style={[ /[А-Яа-яЁё]/.test(choice) ? styles.choiceRussian : styles.choicePersian, styles.choiceLabel ]}>{choice}</Text>
                 </Pressable></View>;
               })}
@@ -624,7 +639,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
               </View>}
             </View>)}
             {!showCheckAnswers && <Pressable accessibilityRole="button" style={styles.showAnswersButton} onPress={() => setShowCheckAnswers(true)}><Text style={styles.showAnswersText}>نمایش توضیح همهٔ پاسخ‌ها</Text></Pressable>}
-          </View>}
+          </View>
             </> },
           ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
@@ -671,11 +686,25 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             <Text style={styles.previousButtonText}>جمله قبلی</Text>
           </Pressable>}
           <Pressable accessibilityRole="button" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} style={[styles.nextButton, (saving || !!sessionError) && styles.nextButtonDisabled]} onPress={() => void next()}>
-            <Text style={styles.nextText}>{saving ? 'در حال ذخیره…' : stage === 1 && sentenceIndex < lesson.sentences.length - 1 ? 'جملهٔ بعدی' : 'ادامه'}</Text>
+            <Text style={styles.nextText}>{saving ? 'در حال ذخیره…' : stage === 1 && sentenceIndex < chunkLastIndex ? 'جملهٔ بعدی' : 'ادامه'}</Text>
             <ChevronLeft size={20} color="#FFFFFF" />
           </Pressable>
         </View>
       </View>
+      {chunkCelebration ? (
+        <View style={styles.chunkOverlay}>
+          <View style={styles.chunkCard}>
+            <Text style={styles.chunkTitle}>بخش {fa(chunkCelebration.chunk)} از {fa(chunkCelebration.total)} تمام شد</Text>
+            <Text style={styles.chunkBody}>یک برد واقعی گرفتی. اگر وقت داری بخش بعدی را ادامه بده؛ اگر نه، همین‌جا بمان و فردا از بخش بعد شروع کن.</Text>
+            <Pressable accessibilityRole="button" style={styles.chunkPrimary} onPress={() => { setChunkCelebration(null); setSentenceIndex(chunkCelebration.nextStart); }}>
+              <Text style={styles.chunkPrimaryText}>ادامهٔ بخش بعدی</Text>
+            </Pressable>
+            <Pressable accessibilityRole="button" style={styles.chunkSecondary} onPress={() => { setChunkCelebration(null); void markChunkDone(lesson.id, chunkCelebration.chunk).then(setDoneChunks).catch(() => undefined); router.replace('/learn/ru' as never); }}>
+              <Text style={styles.chunkSecondaryText}>ذخیره و بازگشت به خانه</Text>
+            </Pressable>
+          </View>
+        </View>
+      ) : null}
       <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(RUSSIAN_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
       levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: () => { const go = celebration.levelFinished!.onStart; setCelebration(null); go(); } } : undefined} />
     </View>
@@ -721,6 +750,20 @@ const styles = { ...StyleSheet.create({
   stepSegment: { flex: 1, height: 5, borderRadius: 999, backgroundColor: Palette.border },
   stepSegmentDone: { backgroundColor: Palette.primary },
   stepSegmentCurrent: { height: 8, marginTop: -1.5, backgroundColor: Palette.teal },
+  chunkBar: { marginTop: 10, gap: 6 },
+  chunkText: { fontFamily: Typography.fontFamily, fontSize: 11, color: '#475569', textAlign: 'right', writingDirection: 'rtl' },
+  chunkTrack: { flexDirection: 'row-reverse', gap: 5 },
+  chunkDot: { flex: 1, height: 5, borderRadius: 3, backgroundColor: '#E2E8F0' },
+  chunkDotDone: { backgroundColor: '#15803D' },
+  chunkDotNow: { backgroundColor: '#4338CA' },
+  chunkOverlay: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(15,23,42,0.5)', alignItems: 'center', justifyContent: 'center', padding: 24, zIndex: 40 },
+  chunkCard: { width: '100%', maxWidth: 360, borderRadius: 22, backgroundColor: '#FFFFFF', padding: 20, gap: 10, alignItems: 'stretch' },
+  chunkTitle: { fontFamily: Typography.fontFamily, fontSize: 18, color: '#0F172A', textAlign: 'center', writingDirection: 'rtl' },
+  chunkBody: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#475569', textAlign: 'center', writingDirection: 'rtl' },
+  chunkPrimary: { minHeight: 44, borderRadius: 12, backgroundColor: '#4338CA', alignItems: 'center', justifyContent: 'center' },
+  chunkPrimaryText: { fontFamily: Typography.fontFamily, fontSize: 13, color: '#FFFFFF', writingDirection: 'rtl' },
+  chunkSecondary: { minHeight: 40, borderRadius: 12, borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center', justifyContent: 'center' },
+  chunkSecondaryText: { fontFamily: Typography.fontFamily, fontSize: 12, color: '#475569', writingDirection: 'rtl' },
   stepperEnds: { flexDirection: 'row-reverse', justifyContent: 'space-between' },
   stepperEndText: { fontFamily: 'Times New Roman', color: Palette.muted, fontSize: 6, fontWeight: '800', writingDirection: 'ltr' },
   error: { width: '94%', maxWidth: 820, alignSelf: 'center', marginTop: 10, padding: 12, borderRadius: 12, backgroundColor: Palette.dangerSoft, color: Palette.danger, fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, textAlign: 'right', writingDirection: 'rtl' },

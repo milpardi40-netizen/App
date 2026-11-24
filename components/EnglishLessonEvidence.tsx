@@ -12,11 +12,12 @@ import { EnglishPalette } from '@/components/EnglishSupplementTask';
 import { ASSESSMENT_MAX_WIDTH } from '@/components/assessmentLayout';
 
 /** Historical evidence is retained, but restarted attempts track their own checks. */
-export function EnglishLessonEvidence({ lesson, onPassed, attemptEvidence, onAttemptResult }: {
+export function EnglishLessonEvidence({ lesson, onPassed, attemptEvidence, onAttemptResult, onProgress }: {
   lesson: SentenceLesson;
   onPassed: () => void;
   attemptEvidence?: Record<string, boolean>;
   onAttemptResult?: (taskId: string, correct: boolean) => void;
+  onProgress?: (correct: number, total: number) => void;
 }) {
   const goalTasks = CORE_LESSON_EVIDENCE[lesson.id];
   const isCoreEvidence = !!goalTasks;
@@ -49,9 +50,17 @@ export function EnglishLessonEvidence({ lesson, onPassed, attemptEvidence, onAtt
   const [loading, setLoading] = useState(isCoreEvidence && !isNewAttempt);
   const [loadError, setLoadError] = useState('');
   const onPassedRef = useRef(onPassed);
+  const onProgressRef = useRef(onProgress);
   doneRef.current = done;
 
   useEffect(() => { onPassedRef.current = onPassed; }, [onPassed]);
+  useEffect(() => { onProgressRef.current = onProgress; }, [onProgress]);
+
+  useEffect(() => {
+    if (loading || loadError) return;
+    const correct = tasks.filter(item => !!done[item.id]).length;
+    onProgressRef.current?.(correct, tasks.length);
+  }, [done, loadError, loading, tasks]);
 
   useEffect(() => {
     activeRef.current = true;

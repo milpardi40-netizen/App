@@ -89,6 +89,8 @@ export default function SentenceLessonScreen() {
   useEffect(() => { setBuiltSentences({}); }, [lesson.id]);
   const [evidencePassed, setEvidencePassed] = useState(false);
   const speakResult = useRef<SpeakDrillResult | null>(null);
+  const assessmentResult = useRef<{ correct: number; total: number } | null>(null);
+  useEffect(() => { assessmentResult.current = null; }, [lesson.id]);
   const [chunkCelebration, setChunkCelebration] = useState<{ chunk: number; total: number; done: number; nextStart: number } | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
@@ -162,6 +164,7 @@ export default function SentenceLessonScreen() {
     let alive = true;
     const run = ++screenRun.current;
     speakResult.current = null;
+    assessmentResult.current = null;
     loadedLesson.current = null;
     resettingRef.current = false;
     setAudioNotice('');
@@ -342,6 +345,7 @@ export default function SentenceLessonScreen() {
       if (screenRun.current !== run) return;
       const saved = state.sessions[lesson.id];
       attempt.current = saved.attempt;
+      assessmentResult.current = null;
       setAttemptEvidence(saved.attemptEvidence ?? {});
       setStage(saved.stage);
       setSentenceIndex(saved.sentenceIndex);
@@ -497,6 +501,12 @@ export default function SentenceLessonScreen() {
     await completeSentenceLesson(lesson.id, nextLesson?.id);
       const weak = weakSpokenSentences(speakResult.current ? { ...speakResult.current, at: '' } : null);
       for (const sentenceId of weak) await addSentenceToReview(sentenceId, lesson.id).catch(() => undefined);
+      const fallbackAssessmentTotal = CORE_LESSON_EVIDENCE[lesson.id]?.length ?? 2;
+      const assessmentTotal = assessmentResult.current?.total ?? (evidencePassed ? fallbackAssessmentTotal : 0);
+      const assessmentCorrect = assessmentResult.current?.correct ?? (evidencePassed ? fallbackAssessmentTotal : 0);
+      if (assessmentTotal) {
+        void saveLessonOutcome('en', lesson.id, { assessment: { correct: assessmentCorrect, total: assessmentTotal, at: new Date().toISOString() } });
+      }
 
     await saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence });
     void stopResponsiveSpeech();
@@ -505,7 +515,7 @@ export default function SentenceLessonScreen() {
     const rewards = await finishLessonRewards().catch(() => ({ medals: [], studiedDay: '' }));
       const dueReviews = await getDueReviewCards().then(cards => cards.length).catch(() => 0);
     setCelebration({
-      stats: { sentences: lesson.sentences.length, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, speakingAverage: speakResult.current?.average, streak: streak.count, streakExtendedToday: streak.extendedToday },
+      stats: { sentences: lesson.sentences.length, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, speakingAverage: speakResult.current?.average, ...(assessmentTotal ? { assessmentCorrect, assessmentTotal } : {}), streak: streak.count, streakExtendedToday: streak.extendedToday },
       next: () => { if (nextLesson) router.replace({ pathname: '/course/lesson', params: { id: nextLesson.id } } as never); else router.replace('/lang' as never); },
       dueReviews,
       review: () => router.replace('/review' as never),
@@ -719,6 +729,7 @@ export default function SentenceLessonScreen() {
                   </View>
                   <Text style={styles.vocabExample}>{item.exampleEn}</Text>
                   <Text keepColor style={styles.bubbleFa}>{item.exampleFa}</Text>
+                  <Pressable accessibilityRole="button" accessibilityLabel={`شنیدن مثال: ${item.exampleEn}`} style={styles.bubbleSound} onPress={() => speakForTarget(item.exampleEn, ENGLISH_NORMAL_SPEECH_RATE, `5:${vocabIndex}:${item.word}`)}><Volume2 size={16} color={Palette.primary} /></Pressable>
                   <SpeakCheck
                     compact
                     text={item.word}
@@ -762,15 +773,26 @@ export default function SentenceLessonScreen() {
                         {(() => { const finalSections: FinalSection[] = [
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
               { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
-            {false ? null : evidencePassed
+            {evidencePassed
               ? CORE_LESSON_EVIDENCE[lesson.id]
                 ? <Text style={styles.stageDesc}>همهٔ {toPersianDigits(CORE_LESSON_EVIDENCE[lesson.id].length)} سنجشِ این درس با پاسخ درست ثبت شد ✓</Text>
                 : <View><Text style={styles.stageDesc}>شنیداری: ثبت شد ✓</Text><Text style={styles.stageDesc}>نوشتاری: ثبت شد ✓</Text></View>
-              : <EnglishLessonEvidence key={`${lesson.id}-${attempt.current?.id ?? 'legacy'}`} lesson={lesson} attemptEvidence={attemptEvidence} onAttemptResult={(taskId, correct) => { if (!resettingRef.current) setAttemptEvidence(previous => previous ? { ...previous, [taskId]: correct } : previous); }} onPassed={() => { if (!resettingRef.current) setEvidencePassed(true); }} />}
+              : <EnglishLessonEvidence key={`${lesson.id}-${attempt.current?.id ?? 'legacy'}`} lesson={lesson} attemptEvidence={attemptEvidence} onAttemptResult={(taskId, correct) => { if (!resettingRef.current) setAttemptEvidence(previous => previous ? { ...previous, [taskId]: correct } : previous); }} onProgress={(correct, total) => { if (!resettingRef.current) assessmentResult.current = { correct, total }; }} onPassed={() => { if (!resettingRef.current) setEvidencePassed(true); }} />}
               </> },
             ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
           </View>
         )}
+        {stage === 8 && lesson.levelId >= 1 ? <ProductionTask
+          key={`${lesson.id}-production`}
+          source={lesson}
+          explicit={B2_PRODUCTION[lesson.id]}
+          examples={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
+          onSpeak={text => speak(text)}
+          foreignStyle={styles.practiceForeign}
+          accent={Palette.primary}
+        /> : null}
+        {stage === 8 && lesson.levelId >= 4 ? <EnglishB2Scenario key={`${lesson.id}-scenario`} lessonId={lesson.id} speak={speak} scenario={C1_SCENARIOS[lesson.id]} /> : null}
+        {stage === 8 && lesson.levelId >= 5 ? <EnglishC1ExtendedModel key={`${lesson.id}-extended-model`} lessonId={lesson.id} speak={speak} /> : null}
         {stage === 9 && <>
           <LessonConversationRoom
             key={lesson.id}
