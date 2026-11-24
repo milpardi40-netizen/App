@@ -85,6 +85,15 @@ for (const lang of LANGS) {
       const id = `lab-${lang}-${band.toLowerCase()}-${String(n + 1).padStart(2, '0')}`;
       const choices = [...new Set(lessonWords)].slice(0, 3);
       if (choices.length < 2) throw new Error(`${lang}/${band}: not enough words for a check`);
+      const uniqueWords = [...new Set(lessonWords)];
+      const dialogue = uniqueWords.length >= 4
+        ? buildLabDialogue(lang, uniqueWords, all[lang].length)
+        : [
+            { speaker: 'هم‌صحبت', text: sentences[0].text, fa: sentences[0].fa },
+            { speaker: 'زبان‌آموز', text: sentences[1].text, fa: sentences[1].fa },
+            { speaker: 'هم‌صحبت', text: sentences[2]?.text ?? sentences[0].text, fa: sentences[2]?.fa ?? sentences[0].fa },
+            { speaker: 'زبان‌آموز', text: sentences[3]?.text ?? sentences[1].text, fa: sentences[3]?.fa ?? sentences[1].fa },
+          ];
       const lesson: LabLesson = {
         id, levelId: levelIdFor[band], band,
         title: `مرور واژگان پرتکرار · ${band} · ${n + 1}`,
@@ -93,12 +102,7 @@ for (const lang of LANGS) {
         teachingFa: 'هر واژه درون یک جمله دیده میشود؛ نخست جمله را بخوانید، سپس واژههای داخل گیومه را بلند تکرار کنید و در دفترتان بنویسید.',
         durationMinutes: 8,
         sentences,
-        dialogue: [
-          { speaker: 'زبانآموز', text: sentences[0].text, fa: sentences[0].fa },
-          { speaker: 'همراه', text: sentences[1].text, fa: sentences[1].fa },
-          { speaker: 'زبانآموز', text: sentences[0].text, fa: sentences[0].fa },
-          { speaker: 'همراه', text: sentences[1].text, fa: sentences[1].fa },
-        ],
+        dialogue,
         checks: [{
           promptFa: `کدام واژه در نخستین جملهٔ این درس آمده است؟`,
           choices, correctIndex: 0,
@@ -111,6 +115,112 @@ for (const lang of LANGS) {
     }
     rows.push(`| ${lang}/${band} | ${own} | ${wanted} | +${needed} | ${own + needed} | ${Math.min(100, Math.round(((own + needed) / spec.lessons) * 100))}% |`);
   }
+}
+
+function buildLabDialogue(lang: LabLanguage, words: string[], idx: number): LabLesson['dialogue'] {
+  const [w1, w2, w3, w4] = words;
+  const v = idx % 3;
+  if (lang === 'en') {
+    if (v === 0) return [
+      { speaker: 'هم‌صحبت', text: 'Which words from today are we practicing first?', fa: 'امروز اول کدام واژه‌ها را تمرین می‌کنیم؟' },
+      { speaker: 'زبان‌آموز', text: `Let us start with ${w1} and ${w2} in short sentences.`, fa: `بیایید با «${w1}» و «${w2}» در جمله‌های کوتاه شروع کنیم.` },
+      { speaker: 'هم‌صحبت', text: `Sounds good! Do you also remember ${w3}?`, fa: `خوبه! آیا «${w3}» را هم یادت هست؟` },
+      { speaker: 'زبان‌آموز', text: `Yes, both ${w3} and ${w4} are much clearer to me now.`, fa: `بله، الان هم «${w3}» و هم «${w4}» خیلی برایم روشن‌تر شده‌اند.` },
+    ];
+    if (v === 1) return [
+      { speaker: 'هم‌صحبت', text: `Did you notice ${w1} when we went through the examples?`, fa: `وقتی مثال‌ها را مرور کردیم متوجه «${w1}» شدی؟` },
+      { speaker: 'زبان‌آموز', text: `Yes, I saw ${w1} right next to ${w2} in the conversation.`, fa: `بله، در گفت‌وگو «${w1}» را درست کنار «${w2}» دیدم.` },
+      { speaker: 'هم‌صحبت', text: `Great. Can you keep ${w3} in mind for your next reply?`, fa: `عالیه. می‌توانی برای پاسخ بعدی‌ات «${w3}» را هم به خاطر بسپاری؟` },
+      { speaker: 'زبان‌آموز', text: `Sure, I can easily use ${w3} and ${w4} when speaking.`, fa: `حتماً، هنگام صحبت کردن به راحتی می‌توانم از «${w3}» و «${w4}» استفاده کنم.` },
+    ];
+    return [
+      { speaker: 'هم‌صحبت', text: `Let us review ${w1} together before we move on.`, fa: `بیایید قبل از ادامه دادن، «${w1}» را با هم مرور کنیم.` },
+      { speaker: 'زبان‌آموز', text: `Good idea! I already practiced ${w1} and ${w2} aloud.`, fa: `فکر خوبیه! من همین الان «${w1}» و «${w2}» را با صدای بلند تمرین کردم.` },
+      { speaker: 'هم‌صحبت', text: `What about ${w3} and ${w4} from the same group?`, fa: `دربارهٔ «${w3}» و «${w4}» از همین بخش چطور؟` },
+      { speaker: 'زبان‌آموز', text: `They feel natural now, especially when I say ${w3} and ${w4} in context.`, fa: `الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «${w3}» و «${w4}» را در بافت جمله می‌گویم.` },
+    ];
+  }
+  if (lang === 'de') {
+    if (v === 0) return [
+      { speaker: 'هم‌صحبت', text: 'Welche Wörter üben wir heute zuerst im Gespräch?', fa: 'امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟' },
+      { speaker: 'زبان‌آموز', text: `Lass uns mit ${w1} und ${w2} in kurzen Sätzen anfangen.`, fa: `بیایید با «${w1}» و «${w2}» در جمله‌های کوتاه شروع کنیم.` },
+      { speaker: 'هم‌صحبت', text: `Sehr gut! Erinnerst du dich auch noch an ${w3}?`, fa: `خیلی خوب! آیا «${w3}» را هم هنوز یادت هست؟` },
+      { speaker: 'زبان‌آموز', text: `Ja, sowohl ${w3} als auch ${w4} sind mir jetzt viel klarer.`, fa: `بله، الان هم «${w3}» و هم «${w4}» برایم خیلی روشن‌تر شده‌اند.` },
+    ];
+    if (v === 1) return [
+      { speaker: 'هم‌صحبت', text: `Ist dir ${w1} vorhin bei den Beispielen aufgefallen?`, fa: `آیا کمی پیش در مثال‌ها متوجه «${w1}» شدی؟` },
+      { speaker: 'زبان‌آموز', text: `Ja, ich habe ${w1} zusammen mit ${w2} gelesen.`, fa: `بله، «${w1}» را همراه با «${w2}» خواندم.` },
+      { speaker: 'هم‌صحبت', text: `Prima. Kannst du beim Sprechen auch an ${w3} denken?`, fa: `عالیه. می‌توانی موقع صحبت به «${w3}» هم دقت کنی؟` },
+      { speaker: 'زبان‌آموز', text: `Klar, ${w3} und ${w4} fallen mir jetzt ganz leicht.`, fa: `حتماً، الان «${w3}» و «${w4}» خیلی برایم راحت شده‌اند.` },
+    ];
+    return [
+      { speaker: 'هم‌صحبت', text: `Wollen wir ${w1} noch einmal kurz wiederholen?`, fa: `بیایید «${w1}» را یک بار دیگر کوتاه مرور کنیم؟` },
+      { speaker: 'زبان‌آموز', text: `Gern! Ich habe ${w1} und ${w2} schon laut gesprochen.`, fa: `با کمال میل! من «${w1}» و «${w2}» را همین الان بلند تکرار کردم.` },
+      { speaker: 'هم‌صحبت', text: `Und wie sieht es mit ${w3} und ${w4} aus?`, fa: `دربارهٔ «${w3}» و «${w4}» چطور؟` },
+      { speaker: 'زبان‌آموز', text: `Mit ${w3} und ${w4} klingen meine Sätze schon viel natürlicher.`, fa: `با «${w3}» و «${w4}» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند.` },
+    ];
+  }
+  if (lang === 'fr') {
+    if (v === 0) return [
+      { speaker: 'هم‌صحبت', text: 'Quels mots révisons-nous ensemble en premier aujourd’hui ?', fa: 'امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟' },
+      { speaker: 'زبان‌آموز', text: `Commençons avec ${w1} et ${w2} dans des phrases simples.`, fa: `بیایید با «${w1}» و «${w2}» در جمله‌های ساده شروع کنیم.` },
+      { speaker: 'هم‌صحبت', text: `Très bien ! Tu te souviens aussi de ${w3} ?`, fa: `خیلی خوب! «${w3}» را هم یادت هست؟` },
+      { speaker: 'زبان‌آموز', text: `Oui, ${w3} et ${w4} sont beaucoup plus clairs pour moi maintenant.`, fa: `بله، الان «${w3}» و «${w4}» برایم خیلی روشن‌تر شده‌اند.` },
+    ];
+    if (v === 1) return [
+      { speaker: 'هم‌صحبت', text: `Tu as remarqué ${w1} quand nous avons lu les exemples ?`, fa: `وقتی مثال‌ها را خواندیم متوجه «${w1}» شدی؟` },
+      { speaker: 'زبان‌آموز', text: `Oui, j’ai vu ${w1} juste à côté de ${w2} dans le texte.`, fa: `بله، در متن «${w1}» را درست کنار «${w2}» دیدم.` },
+      { speaker: 'هم‌صحبت', text: `Parfait. Tu peux aussi garder ${w3} en tête pour ta réponse ?`, fa: `عالیه. می‌توانی برای پاسخت «${w3}» را هم در ذهن داشته باشی؟` },
+      { speaker: 'زبان‌آموز', text: `Bien sûr, j’arrive facilement à utiliser ${w3} et ${w4} à l’oral.`, fa: `حتماً، در صحبت کردن به راحتی می‌توانم از «${w3}» و «${w4}» استفاده کنم.` },
+    ];
+    return [
+      { speaker: 'هم‌صحبت', text: `On revoit ${w1} rapidement avant de passer à la suite ?`, fa: `قبل از ادامه دادن، «${w1}» را سریع با هم مرور کنیم؟` },
+      { speaker: 'زبان‌آموز', text: `Bonne idée ! J’ai déjà répété ${w1} et ${w2} à voix haute.`, fa: `فکر خوبیه! من همین الان «${w1}» و «${w2}» را با صدای بلند تکرار کردم.` },
+      { speaker: 'هم‌صحبت', text: `Et pour ${w3} et ${w4}, ça va mieux maintenant ?`, fa: `دربارهٔ «${w3}» و «${w4}» چطور، الان راحت‌تر شده؟` },
+      { speaker: 'زبان‌آموز', text: `Oui, en contexte ${w3} et ${w4} me semblent tout à fait naturels.`, fa: `بله، در بافت جمله «${w3}» و «${w4}» کاملاً طبیعی به نظر می‌رسند.` },
+    ];
+  }
+  if (lang === 'es') {
+    if (v === 0) return [
+      { speaker: 'هم‌صحبت', text: '¿Qué palabras vamos a practicar primero en esta conversación?', fa: 'در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟' },
+      { speaker: 'زبان‌آموز', text: `Empecemos con ${w1} y ${w2} en frases cortas.`, fa: `بیایید با «${w1}» و «${w2}» در جمله‌های کوتاه شروع کنیم.` },
+      { speaker: 'هم‌صحبت', text: `¡Muy bien! ¿También recuerdas cómo usar ${w3}?`, fa: `خیلی خوب! یادت هست چطور از «${w3}» هم استفاده کنی؟` },
+      { speaker: 'زبان‌آموز', text: `Sí, tanto ${w3} como ${w4} me quedan mucho más claros ahora.`, fa: `بله، الان هم «${w3}» و هم «${w4}» برایم خیلی روشن‌تر شده‌اند.` },
+    ];
+    if (v === 1) return [
+      { speaker: 'هم‌صحبت', text: `¿Te fijaste en ${w1} cuando leímos los ejemplos?`, fa: `وقتی مثال‌ها را خواندیم به «${w1}» دقت کردی؟` },
+      { speaker: 'زبان‌آموز', text: `Sí, vi ${w1} junto con ${w2} en la misma lección.`, fa: `بله، در همین درس «${w1}» را همراه با «${w2}» دیدم.` },
+      { speaker: 'هم‌صحبت', text: `Genial. ¿Puedes tener en cuenta ${w3} al responder?`, fa: `عالیه. می‌توانی هنگام پاسخ دادن «${w3}» را هم در نظر بگیری؟` },
+      { speaker: 'زبان‌آموز', text: `Claro, ya puedo usar ${w3} y ${w4} con bastante soltura.`, fa: `حتماً، الان می‌توانم «${w3}» و «${w4}» را با روانی خوبی به کار ببرم.` },
+    ];
+    return [
+      { speaker: 'هم‌صحبت', text: `¿Repasamos ${w1} un momento antes de seguir?`, fa: `قبل از ادامه، «${w1}» را یک لحظه با هم مرور کنیم؟` },
+      { speaker: 'زبان‌آموز', text: `¡Buena idea! Ya practiqué ${w1} y ${w2} en voz alta.`, fa: `فکر خوبیه! من «${w1}» و «${w2}» را همین الان با صدای بلند تمرین کردم.` },
+      { speaker: 'هم‌صحبت', text: `¿Y qué tal te sientes con ${w3} y ${w4}?`, fa: `و با «${w3}» و «${w4}» چه حسی داری؟` },
+      { speaker: 'زبان‌آموز', text: `Ahora ${w3} y ${w4} suenan mucho más naturales en contexto.`, fa: `الان «${w3}» و «${w4}» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند.` },
+    ];
+  }
+  if (lang === 'ru') {
+    if (v === 0) return [
+      { speaker: 'هم‌صحبت', text: 'Какие слова мы повторим в разговоре в первую очередь?', fa: 'امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟' },
+      { speaker: 'زبان‌آموز', text: `Давай начнём со слов ${w1} и ${w2} в коротких фразах.`, fa: `بیایید با واژه‌های «${w1}» و «${w2}» در عبارت‌های کوتاه شروع کنیم.` },
+      { speaker: 'هم‌صحبت', text: `Отлично! А слово ${w3} ты тоже помнишь?`, fa: `عالی! واژهٔ «${w3}» را هم یادت هست؟` },
+      { speaker: 'زبان‌آموز', text: `Да, теперь и ${w3}, и ${w4} звучат для меня намного понятнее.`, fa: `بله، الان هم «${w3}» و هم «${w4}» برایم خیلی مفهوم‌تر شده‌اند.` },
+    ];
+    if (v === 1) return [
+      { speaker: 'هم‌صحبت', text: `Ты заметил слово ${w1}, когда мы читали примеры?`, fa: `وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «${w1}» شدی؟` },
+      { speaker: 'زبان‌آموز', text: `Да, я увидел ${w1} рядом со словом ${w2} в этом уроке.`, fa: `بله، در همین درس «${w1}» را کنار واژهٔ «${w2}» دیدم.` },
+      { speaker: 'هم‌صحبت', text: `Хорошо. Сможешь использовать ${w3} в своём ответе?`, fa: `خوبه. می‌توانی در پاسخت از «${w3}» هم استفاده کنی؟` },
+      { speaker: 'زبان‌آموز', text: `Конечно, я уже спокойно говорю ${w3} и ${w4} вслух.`, fa: `حتماً، الان خیلی راحت «${w3}» و «${w4}» را بلند به زبان می‌آورم.` },
+    ];
+    return [
+      { speaker: 'هم‌صحبت', text: `Давай быстро повторим ${w1}, прежде чем пойдём дальше.`, fa: `بیایید قبل از ادامه دادن، «${w1}» را سریع مرور کنیم.` },
+      { speaker: 'زبان‌آموز', text: `Хорошая идея! Я уже произнёс ${w1} и ${w2} вслух.`, fa: `فکر خوبیه! من همین الان «${w1}» و «${w2}» را بلند گفتم.` },
+      { speaker: 'هم‌صحبت', text: `А как насчёт слов ${w3} и ${w4}?`, fa: `دربارهٔ واژه‌های «${w3}» و «${w4}» چطور؟` },
+      { speaker: 'زبان‌آموز', text: `В разговоре ${w3} и ${w4} запоминаются гораздо легче.`, fa: `در گفت‌وگو «${w3}» و «${w4}» خیلی راحت‌تر در ذهن می‌مانند.` },
+    ];
+  }
+  return [];
 }
 
 const outFile = path.resolve('lib/content/labLessons.generated.ts');
