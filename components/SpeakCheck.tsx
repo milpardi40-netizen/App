@@ -36,6 +36,8 @@ type Props = {
   levelId?: number;
   /** Enable level/length-calibrated timing and countdown hint (used exclusively in «اتاق مکالمه»). */
   adaptiveTiming?: boolean;
+  /** Hide target words and missed-word hints (used during real oral exam mode). */
+  blindExam?: boolean;
 };
 
 let micOwner: symbol | null = null;
@@ -45,7 +47,7 @@ let micOwner: symbol | null = null;
  * each expected word is shown green (heard) or red (missed) together with a percentage.
  * Works on Android/iOS through the native recogniser and on web through the browser's Web Speech API.
  */
-export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false }: Props) {
+export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false, blindExam = false }: Props) {
   const owner = useRef(Symbol('practice'));
   const generation = useRef(0);
   const [listening, setListening] = useState(false);
@@ -334,18 +336,18 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   return (
     <View style={[styles.wrap, compact && styles.wrapCompact]}>
       {!compact && <Text style={styles.title}>{title ?? 'بگو · Speak'}</Text>}
-      {(listening || result) ? <Text style={styles.hint}>{listening ? (adaptiveTiming ? `در حال شنیدن… (تا حدود ${fa(timing.maxWindowSeconds)} ثانیه فرصت دارید)` : 'در حال شنیدن…') : result ? feedbackFor(result.score, result.words.filter(w => w.state === 'near').length) : ''}</Text> : null}
-      {result ? (
+      {(listening || (result && !blindExam)) ? <Text style={styles.hint}>{listening ? (adaptiveTiming ? `در حال شنیدن… (تا حدود ${fa(timing.maxWindowSeconds)} ثانیه فرصت دارید)` : 'در حال شنیدن…') : result ? feedbackFor(result.score, result.words.filter(w => w.state === 'near').length) : ''}</Text> : null}
+      {result && !blindExam ? (
         <View style={styles.wordsRow}>
           {result.words.map((item, index) => <Pressable key={`${item.word}-${index}`} accessibilityRole="button" accessibilityLabel={`شنیدن آهستهٔ ${item.word}`} onPress={() => sayWord(item.word)}><Text keepColor style={[styles.word, item.state === 'ok' ? styles.wordOk : item.state === 'near' ? styles.wordNear : styles.wordMiss]}>{item.word}</Text></Pressable>)}
         </View>
       ) : null}
       {listening && partial ? <Text keepColor style={styles.partial}>{partial}</Text> : null}
-      {result?.heard ? <View style={styles.scoreRow}><Text style={styles.scoreLabel}>امتیاز</Text><Text keepColor style={[styles.scoreValue, { color: result.score >= 70 ? '#15803D' : result.score >= 40 ? '#B45309' : '#B91C1C' }]}>{fa(result.score)}٪</Text></View> : null}
+      {result?.heard && !blindExam ? <View style={styles.scoreRow}><Text style={styles.scoreLabel}>امتیاز</Text><Text keepColor style={[styles.scoreValue, { color: result.score >= 70 ? '#15803D' : result.score >= 40 ? '#B45309' : '#B91C1C' }]}>{fa(result.score)}٪</Text></View> : null}
       {/* When the recogniser heard nothing, a percentage would be a fake zero. Say it plainly instead. */}
       {result && !result.heard ? <Text style={styles.hint}>چیزی شنیده نشد. ابتدا نمونه را گوش بده و یک بار دیگر بگو.</Text> : null}
       {result && result.heard ? <Text style={styles.heard}>شنیده شد: <Text keepColor style={styles.heardText}>{result.heard}</Text></Text> : null}
-      {result && missed.length ? <View style={styles.legendRow}>
+      {result && !blindExam && missed.length ? <View style={styles.legendRow}>
         <Pressable accessibilityRole="button" onPress={sayMissed} style={styles.missedButton}><Volume2 size={14} color="#B91C1C" /><Text keepColor style={styles.missedText}>{missed.length === 1 ? 'همین یک واژه را بشنو و دوباره بگو' : `این ${fa(missed.length)} واژه را بشنو و دوباره بگو`}</Text></Pressable>
 
       </View> : null}

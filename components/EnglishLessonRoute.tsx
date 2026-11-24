@@ -487,10 +487,6 @@ export default function SentenceLessonScreen() {
       setRevealed(false);
       return;
     }
-    if (!conversation?.completed) {
-      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
-      return;
-    }
     if (saving) return;
     completing.current=true;
     setSaving(true);
@@ -778,6 +774,7 @@ export default function SentenceLessonScreen() {
         {stage === 9 && <>
           <LessonConversationRoom
             key={lesson.id}
+            courseId="en"
             lessonId={lesson.id}
             levelId={lesson.levelId}
             situation={lesson.situation}

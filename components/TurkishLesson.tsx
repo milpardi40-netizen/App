@@ -375,11 +375,6 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
       return;
     }
 
-    if (!conversation?.completed) {
-      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
-      return;
-    }
-
     void stopTurkishSpeech();
     completing.current = true;
     setSaving(true);
@@ -640,6 +635,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
         {stage === 9 && <>
           <LessonConversationRoom
             key={lesson.id}
+            courseId="tr"
             lessonId={lesson.id}
             levelId={lesson.levelId}
             situation={lesson.situation}

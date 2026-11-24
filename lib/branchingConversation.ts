@@ -25,6 +25,7 @@ export type BranchingConversation = {
   level: ConversationLevel;
   mode: ConversationMode;
   turns: Record<number, SemanticTurn>;
+  allTurns?: Record<number, SemanticTurn>;
 };
 export type SemanticResult = {
   accepted: boolean;
@@ -33,6 +34,7 @@ export type SemanticResult = {
   branchReply?: { text: string; fa: string };
   conceptScore?: number;
   lexicalScore?: number;
+  pronunciationScore?: number;
   missingConcepts?: string[];
   polarityMismatch?: boolean;
   questionMissing?: boolean;
@@ -42,6 +44,16 @@ export type SemanticResult = {
 
 const normalize = (value: string) =>
   tokens(value.replace(/[\u0300\u0301]/g, '').replace(/ё/g, 'е')).join(' ');
+const foldTrDe = (value: string) =>
+  value
+    .replace(/ı/g, 'i')
+    .replace(/ğ/g, 'g')
+    .replace(/ş/g, 's')
+    .replace(/ç/g, 'c')
+    .replace(/ö/g, 'o')
+    .replace(/ü/g, 'u')
+    .replace(/ä/g, 'a')
+    .replace(/ß/g, 'ss');
 const wordSet = (value: string) => new Set(normalize(value).split(' ').filter(Boolean));
 
 const STOP = new Set([
@@ -88,38 +100,70 @@ const QUESTION_WORDS = new Set([
 ]);
 
 const SYNONYM_GROUPS: ReadonlyArray<readonly string[]> = [
+  // English
   ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening'],
-  ['bye', 'goodbye', 'see you'],
-  ['thanks', 'thank you', 'appreciate'],
+  ['bye', 'goodbye', 'see you', 'take care'],
+  ['thanks', 'thank you', 'appreciate', 'many thanks'],
   ['yes', 'yeah', 'sure', 'of course', 'okay', 'ok', 'certainly'],
-  ['sorry', 'excuse me', 'apologize'],
-  ['want', 'would like', 'need'],
+  ['sorry', 'excuse me', 'apologize', 'pardon'],
+  ['want', 'would like', 'need', 'like to'],
+  ['fine', 'good', 'great', 'well', 'okay'],
+  ['name', 'called'],
+  // Russian
   ['привет', 'здравствуй', 'здравствуйте', 'доброе утро', 'добрый день', 'добрый вечер'],
-  ['пока', 'до свидания', 'увидимся'],
-  ['спасибо', 'благодарю'],
-  ['да', 'конечно', 'хорошо', 'ладно'],
+  ['пока', 'до свидания', 'увидимся', 'всего доброго'],
+  ['спасибо', 'благодарю', 'большое спасибо'],
+  ['да', 'конечно', 'хорошо', 'ладно', 'отлично'],
   ['извините', 'простите', 'извини'],
-  ['хочу', 'хотел', 'хотела', 'нужно', 'надо'],
+  ['хочу', 'хотел', 'хотела', 'нужно', 'надо', 'можно', 'мне бы'],
+  ['хорошо', 'нормально', 'прекрасно', 'отлично', 'неплохо'],
+  ['зовут', 'имя'],
+  ['сколько', 'почем', 'цена', 'стоит'],
+  // Turkish
   ['merhaba', 'selam', 'günaydın', 'iyi günler', 'iyi akşamlar'],
-  ['hoşça kal', 'güle güle', 'görüşürüz'],
-  ['teşekkürler', 'teşekkür ederim', 'sağ ol', 'sağ olun'],
-  ['evet', 'tabii', 'tamam', 'olur'],
-  ['pardon', 'özür dilerim', 'affedersiniz'],
-  ['hallo', 'guten tag', 'guten morgen', 'guten abend'],
-  ['tschüss', 'auf wiedersehen', 'bis bald'],
-  ['danke', 'vielen dank'],
-  ['ja', 'klar', 'natürlich', 'gerne', 'gut'],
-  ['entschuldigung', 'tut mir leid'],
+  ['hoşça kal', 'güle güle', 'görüşürüz', 'kendine iyi bak'],
+  ['teşekkürler', 'teşekkür ederim', 'sağ ol', 'sağ olun', 'çok teşekkürler'],
+  ['evet', 'tabii', 'tamam', 'olur', 'elbette'],
+  ['pardon', 'özür dilerim', 'affedersiniz', 'kusura bakmayın'],
+  ['istiyorum', 'isterim', 'lazım', 'ihtiyacım var', 'alabilir miyim'],
+  ['iyiyim', 'iyi', 'harika', 'fena değil', 'güzel', 'çok iyiyim'],
+  ['adım', 'ismim'],
+  ['ne kadar', 'kaç lira', 'fiyatı'],
+  ['lütfen', 'rica ederim'],
+  // German
+  ['hallo', 'guten tag', 'guten morgen', 'guten abend', 'grüß gott'],
+  ['tschüss', 'auf wiedersehen', 'bis bald', 'bis später'],
+  ['danke', 'vielen dank', 'danke schön', 'dankeschön'],
+  ['ja', 'klar', 'natürlich', 'gerne', 'gut', 'einverstanden'],
+  ['entschuldigung', 'tut mir leid', 'verzeihung'],
+  ['möchte', 'will', 'hätte gern', 'brauche'],
+  ['gut', 'super', 'prima', 'bestens', 'ausgezeichnet'],
+  ['heiße', 'name', 'bin'],
+  ['bitte', 'sehr gern', 'gern geschehen'],
+  ['wie viel', 'was kostet', 'preis'],
+  // French
   ['bonjour', 'salut', 'bonsoir'],
-  ['au revoir', 'à bientôt'],
-  ['merci', 'merci beaucoup'],
-  ['oui', 'bien sûr', 'accord'],
+  ['au revoir', 'à bientôt', 'à plus tard'],
+  ['merci', 'merci beaucoup', 'je vous remercie'],
+  ['oui', 'bien sûr', 'accord', 'volontiers'],
   ['pardon', 'excusez-moi', 'désolé', 'désolée'],
+  ['voudrais', 'veux', 'aimerais', 'besoin'],
+  ['bien', 'très bien', 'super', 'parfait', 'ça va'],
+  ['appelle', 'nom', 'suis'],
+  ['combien', 'quel prix', 'coûte'],
+  ['de rien', 'je vous en prie', 'il n’y a pas de quoi'],
+  // Spanish
   ['hola', 'buenos días', 'buenas tardes', 'buenas noches'],
-  ['adiós', 'hasta luego', 'nos vemos'],
+  ['adiós', 'hasta luego', 'nos vemos', 'hasta pronto'],
   ['gracias', 'muchas gracias'],
-  ['sí', 'claro', 'vale', 'bueno', 'por supuesto'],
-  ['perdón', 'disculpe', 'lo siento'],
+  ['sí', 'claro', 'vale', 'bueno', 'por supuesto', 'de acuerdo'],
+  ['perdón', 'disculpe', 'lo siento', 'disculpa'],
+  ['quiero', 'quisiera', 'necesito', 'me gustaría'],
+  ['bien', 'muy bien', 'genial', 'excelente', 'estupendo'],
+  ['llamo', 'nombre', 'soy'],
+  ['cuánto', 'cuesta', 'precio'],
+  ['por favor', 'de nada'],
+  // Arabic
   ['مرحبا', 'اهلا', 'السلام عليكم', 'صباح الخير', 'مساء الخير'],
   ['مع السلامه', 'الي اللقاء', 'وداعا'],
   ['شكرا', 'شكرا جزيلا'],
@@ -186,15 +230,23 @@ function matchesTokenOrStem(heardTokens: readonly string[], option: string): boo
   const optParts = optNorm.split(' ').filter(Boolean);
   if (optParts.length > 1) {
     const joined = heardTokens.join(' ');
-    return joined.includes(optNorm);
+    return joined.includes(optNorm) || foldTrDe(joined).includes(foldTrDe(optNorm));
   }
   const target = optParts[0];
-  return heardTokens.some(tok => {
+  const targetFold = foldTrDe(target);
+  const bigrams: string[] = [];
+  for (let i = 0; i < heardTokens.length - 1; i += 1) {
+    if (heardTokens[i].length <= 2) bigrams.push(`${heardTokens[i]}${heardTokens[i + 1]}`);
+  }
+  const pool = bigrams.length ? [...heardTokens, ...bigrams] : heardTokens;
+  return pool.some(tok => {
     if (tok === target) return true;
-    // Allow close inflectional/conjugation stems on longer words (Russian/Turkish/German/French/Spanish)
-    if (target.length >= 5 && tok.length >= 5) {
-      const prefix = Math.min(target.length - 1, tok.length - 1, 5);
-      return prefix >= 4 && tok.slice(0, prefix) === target.slice(0, prefix);
+    const tokFold = foldTrDe(tok);
+    if (tokFold === targetFold) return true;
+    // Allow close inflectional/conjugation/agglutinative stems (Russian/Turkish/German/French/Spanish)
+    if (targetFold.length >= 4 && tokFold.length >= 4) {
+      const prefix = Math.min(targetFold.length - 1, tokFold.length - 1, 5);
+      return prefix >= 4 && tokFold.slice(0, prefix) === targetFold.slice(0, prefix);
     }
     return false;
   });
@@ -292,6 +344,7 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
 
   const speechEval = rule.targetText ? scoreSpeech(rule.targetText, answer) : undefined;
   const wordResults = speechEval?.words;
+  const pronunciationScore = speechEval?.score;
   const concepts = rule.concepts.length ? rule.concepts : [[]];
   const missingConcepts: string[] = [];
   let covered = 0;
@@ -373,6 +426,7 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
       score,
       conceptScore,
       lexicalScore,
+      pronunciationScore,
       missingConcepts,
       feedback,
       branchReply: branch?.reply ?? rule.fallbackReply,
@@ -386,6 +440,7 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
       score,
       conceptScore,
       lexicalScore,
+      pronunciationScore,
       missingConcepts,
       questionMissing: true,
       feedback: 'این نوبت نیازمند پرسش است؛ با واژهٔ پرسشی یا لحن سؤال بیانش کن.',
@@ -402,6 +457,7 @@ export function evaluateSemanticResponse(rule: SemanticTurn, heard: string, loca
     score,
     conceptScore,
     lexicalScore,
+    pronunciationScore,
     missingConcepts,
     feedback: `پاسخ هنوز برای این نوبت کامل نیست (${score}٪). ${missingNote}`,
     partnerPushback: pushback.unclear,
@@ -496,8 +552,8 @@ export function conversationPracticeForLesson(
     role: line.role ?? (inferredLearnerSpeaker ? (line.speaker === inferredLearnerSpeaker ? 'learner' : 'partner') : (index % 2 === 1 ? 'learner' : 'partner')),
   }));
   const turns: Record<number, SemanticTurn> = {};
+  const allTurns: Record<number, SemanticTurn> = {};
   lines.forEach((line, index) => {
-    if (line.role !== 'learner' && line.speaker !== 'learner') return;
     const target = line.text.trim();
     const distractorPool = [
       ...lines.filter(candidate => candidate !== line && normalize(candidate.text) !== normalize(target) && candidate.text.trim()),
@@ -518,31 +574,38 @@ export function conversationPracticeForLesson(
       ? deterministicShuffleChoices([{ text: target, correct: true }, ...distractors], `${lesson.id}:${index}:${locale}`)
       : undefined;
 
-    turns[index] = {
+    const builtTurn: SemanticTurn = {
       promptFa: line.fa || target,
       targetText: target,
       concepts: buildRequiredConcepts(target, level),
       choices,
       chunks: (level === 'Pre-A1' || level === 'A1') ? target.split(/\s+/).filter(Boolean) : undefined,
       expectedPolarity: detectPolarity(target),
-      expectedQuestion: /[?¿]/.test(target),
+      expectedQuestion: /[?¿؟]/.test(target),
     };
+    allTurns[index] = builtTurn;
+    if (line.role === 'learner' || line.speaker === 'learner') {
+      turns[index] = builtTurn;
+    }
   });
-  const generated: BranchingConversation = { level, mode, turns };
+  const generated: BranchingConversation = { level, mode, turns, allTurns };
   const explicit = DEFINITIONS[lesson.id];
   if (!explicit) return generated;
   const mergedTurns = { ...generated.turns };
+  const mergedAllTurns = { ...generated.allTurns };
   Object.entries(explicit.turns).forEach(([key, turn]) => {
     const index = Number(key);
-    const base = generated.turns[index];
-    mergedTurns[index] = {
+    const base = generated.turns[index] ?? generated.allTurns?.[index];
+    const merged = {
       ...turn,
       targetText: base?.targetText,
       expectedPolarity: turn.expectedPolarity ?? base?.expectedPolarity,
       expectedQuestion: turn.expectedQuestion ?? base?.expectedQuestion,
     };
+    mergedTurns[index] = merged;
+    mergedAllTurns[index] = merged;
   });
-  return { ...explicit, turns: mergedTurns };
+  return { ...explicit, turns: mergedTurns, allTurns: mergedAllTurns };
 }
 
 /** Backwards-compatible lookup for the four authored pilots. */

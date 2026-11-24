@@ -1,7 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule } from 'expo-speech-recognition';
-import { AlertTriangle, Award, Check, CheckCircle2, HelpCircle, Mic2, RefreshCw, Send, ShieldAlert, Sparkles, Trophy, Volume2 } from 'lucide-react-native';
+import {
+  AlertTriangle,
+  Award,
+  Check,
+  CheckCircle2,
+  ClipboardCheck,
+  HelpCircle,
+  Mic2,
+  RefreshCw,
+  Send,
+  ShieldAlert,
+  Sparkles,
+  Trophy,
+  Volume2,
+} from 'lucide-react-native';
 import SpeakCheck from '@/components/SpeakCheck';
 // Both text and input go through the localized wrappers, or the Persian digits and the script-aware
 // font/direction policy would be missing from this screen.
@@ -10,6 +24,7 @@ import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { Typography } from '@/lib/theme';
 import { toPersianDigits as fa } from '@/lib/format';
 import { normalizeLessonConversation, type LessonConversationSession } from '@/lib/lessonConversation';
+import { getLessonOutcome, saveLessonOutcome, type OralExamOutcome } from '@/lib/lessonOutcomes';
 import {
   evaluateSemanticResponse,
   type BranchingConversation,
@@ -20,7 +35,7 @@ import {
   type SpeechWordResult,
 } from '@/lib/branchingConversation';
 import { fillLine, followUpLanguageFromLocale, followUpMoves, type FollowUpMove } from '@/lib/dialogueFollowUps';
-import { scoreSpeech } from '@/lib/speechScore';
+import { scoreSpeech, stripStressMarks } from '@/lib/speechScore';
 
 type ChatLine = { who: string; role?: 'learner' | 'partner'; text: string; fa: string };
 type TurnStatus = 'passed' | 'assisted' | 'skipped';
@@ -30,14 +45,16 @@ type TurnReport = {
   expected: string;
   heard: string;
   score: number;
+  pronunciationScore?: number;
   method: 'voice' | 'typed' | 'choice';
   status: TurnStatus;
   retries: number;
   usedHint: boolean;
   usedReveal: boolean;
   feedback: string;
+  weakWords?: string[];
 };
-type RoomExchangeMode = 'standard' | 'live-challenge';
+type RoomMode = 'oral-exam' | 'guided-practice';
 type ActiveFollowUp = {
   afterTurn: number;
   move: FollowUpMove;
@@ -69,6 +86,7 @@ type Props = {
   onSpeak: (text: string, onDone: () => void) => void;
   onStop?: () => void;
   lessonId: string;
+  courseId?: string;
   situation?: string;
   partnerRole?: string;
   initialSession?: LessonConversationSession;
@@ -78,8 +96,18 @@ type Props = {
   levelId?: number;
 };
 
-const TYPING_MS = 560;
-const LEARNER_LABELS = new Set(['learner', 'شما', 'زبان‌آموز', 'زبانآموز']);
+const TYPING_MS = 520;
+const LEARNER_LABELS = new Set(['learner', 'you', 'شما', 'زبان‌آموز', 'زبانآموز']);
+
+const OPENING_CUES: Record<BranchingLocale, { text: string; fa: string }> = {
+  'en-US': { text: 'All right, let us begin the speaking check. You start.', fa: 'بسیار خب، امتحان شفاهی را شروع می‌کنیم. شما آغاز کنید.' },
+  'de-DE': { text: 'Gut, fangen wir an. Sie beginnen.', fa: 'خوب است، شروع می‌کنیم. شما آغاز کنید.' },
+  'fr-FR': { text: 'Très bien, commençons. C’est à vous.', fa: 'بسیار خب، شروع می‌کنیم. نوبت شماست.' },
+  'es-ES': { text: 'Muy bien, empecemos. Tú comienzas.', fa: 'بسیار خب، شروع می‌کنیم. شما آغاز کنید.' },
+  'tr-TR': { text: 'Harika, başlayalım. İlk söz sizde.', fa: 'عالی، شروع می‌کنیم. نوبت اول با شماست.' },
+  'ru-RU': { text: 'Хорошо, начнём. Ваша очередь.', fa: 'بسیار خب، شروع می‌کنیم. نوبت شماست.' },
+  'ar-SA': { text: 'حَسَنًا، لِنَبْدَأْ. تَفَضَّلْ أَنْتَ بِالْبِدَايَةِ.', fa: 'بسیار خب، شروع می‌کنیم. شما آغاز کنید.' },
+};
 
 const learnerRoleOf = (lines: ChatLine[]) => lines.find(line => line.role === 'learner')?.who
   ?? lines.find(line => LEARNER_LABELS.has(line.who))?.who
@@ -98,73 +126,165 @@ function levelLabelFa(level?: ConversationLevel): string {
   }
 }
 
-function evaluateRoomSummary(reports: readonly TurnReport[]) {
+function gradeBadgeFa(grade: OralExamOutcome['grade']): string {
+  switch (grade) {
+    case 'A': return 'رتبه A · عالی';
+    case 'B': return 'رتبه B · خوب';
+    case 'C': return 'رتبه C · قابل قبول';
+    default: return 'نیاز به تمرین';
+  }
+}
+
+function evaluateRoomSummary(
+  reports: readonly TurnReport[],
+  mode: RoomMode,
+  followUpScore: number | null,
+) {
   if (!reports.length) {
     return {
       tier: 'needs-work' as const,
+      grade: 'needs-work' as const,
       overall: 0,
-      accuracy: 0,
+      semantic: 0,
+      pronunciation: 0,
       independence: 0,
+      interaction: 0,
       activeRate: 0,
       skippedCount: 0,
+      voiceTurns: 0,
       xp: 0,
-      answeredCount: 0,
+      weakWords: [] as string[],
+      weakSentences: [] as string[],
       rankTitle: 'نوبتی از سمت شما ثبت نشد',
       rankSubtitle: 'در این دور نقشی که انتخاب کردید نوبت فعالی نداشت؛ جای نقش‌ها را عوض کنید تا خودتان پاسخ دهید.',
       advice: 'گزینهٔ «جابه‌جایی نقش» را بزنید تا نوبت‌های پاسخ‌گویی به شما برسد.',
+      passed: false,
     };
   }
 
-  const accuracy = Math.round(reports.reduce((sum, item) => sum + item.score, 0) / reports.length);
+  const semantic = Math.round(reports.reduce((sum, item) => sum + item.score, 0) / reports.length);
   const completed = reports.filter(item => item.status !== 'skipped');
   const skippedCount = reports.length - completed.length;
-  const answeredCount = completed.filter(item => item.heard.trim().length > 0).length;
   const activeRate = Math.round((completed.length / reports.length) * 100);
+  const voiceReports = completed.filter(item => item.method === 'voice');
+  const voiceTurns = voiceReports.length;
+
+  // Real oral pronunciation score: strictly reflects spoken voice turns in exam mode.
+  const avgVoicePron = voiceReports.length
+    ? Math.round(voiceReports.reduce((sum, item) => sum + (item.pronunciationScore ?? item.score), 0) / voiceReports.length)
+    : 0;
+  const voiceCoverage = voiceReports.length / reports.length;
+  const pronunciation = mode === 'oral-exam'
+    ? Math.round(avgVoicePron * voiceCoverage)
+    : voiceReports.length
+      ? Math.round(avgVoicePron * Math.max(0.5, voiceCoverage))
+      : Math.round(semantic * 0.45);
 
   const independenceRaw = reports.reduce((sum, item) => {
     if (item.status === 'skipped') return sum;
-    const penalty = (item.usedReveal ? 28 : 0) + (item.usedHint ? 12 : 0) + Math.min(24, item.retries * 8) + (item.method === 'choice' ? 10 : 0);
-    return sum + Math.max(20, 100 - penalty);
+    const typedPenalty = mode === 'oral-exam' && item.method === 'typed' ? 22 : 0;
+    const penalty = (item.usedReveal ? 30 : 0)
+      + (item.usedHint ? 12 : 0)
+      + Math.min(24, item.retries * 9)
+      + (item.method === 'choice' ? 12 : 0)
+      + typedPenalty;
+    return sum + Math.max(15, 100 - penalty);
   }, 0);
   const independence = Math.round(independenceRaw / reports.length);
 
-  const overall = Math.max(0, Math.min(100, Math.round(accuracy * 0.5 + independence * 0.25 + activeRate * 0.25)));
+  const interaction = followUpScore !== null
+    ? Math.round(activeRate * 0.65 + followUpScore * 0.35)
+    : activeRate;
+
+  const rawOverall = mode === 'oral-exam'
+    ? Math.round(semantic * 0.4 + pronunciation * 0.3 + independence * 0.15 + interaction * 0.15)
+    : Math.round(semantic * 0.5 + independence * 0.25 + interaction * 0.25);
+
+  // An unfinished turn caps the grade so skipped answers never look "mastered".
+  const overall = skippedCount > 0 ? Math.min(64, Math.max(0, rawOverall)) : Math.max(0, Math.min(100, rawOverall));
+
+  const grade: OralExamOutcome['grade'] =
+    skippedCount === 0 && overall >= 85 && (mode === 'guided-practice' || voiceTurns >= Math.ceil(reports.length * 0.5))
+      ? 'A'
+      : skippedCount === 0 && overall >= 70
+        ? 'B'
+        : skippedCount === 0 && overall >= 55
+          ? 'C'
+          : 'needs-work';
+
   const tier: 'mastered' | 'acceptable' | 'needs-work' =
-    overall >= 82 && skippedCount === 0
-      ? 'mastered'
-      : overall >= 60 && skippedCount === 0
-        ? 'acceptable'
-        : 'needs-work';
+    grade === 'A' ? 'mastered' : grade === 'B' || grade === 'C' ? 'acceptable' : 'needs-work';
+
+  const passed = grade !== 'needs-work';
 
   const xp = reports.reduce((sum, item) => {
     if (item.status === 'skipped') return sum;
-    if (item.score >= 85 && !item.usedReveal) return sum + 25;
-    if (item.score >= 70) return sum + 16;
-    return sum + 8;
+    const base = item.score >= 85 && !item.usedReveal ? 25 : item.score >= 70 ? 16 : 8;
+    const oralBonus = mode === 'oral-exam' && item.method === 'voice' ? 10 : 0;
+    return sum + base + oralBonus;
   }, 0);
 
-  const rankTitle =
-    tier === 'mastered'
-      ? 'مکالمهٔ مسلط و مستقل'
+  const weakWords = [...new Set(reports.flatMap(r => r.weakWords ?? []))].slice(0, 8);
+  const weakSentences = [...new Set(
+    reports
+      .filter(r => r.status === 'skipped' || r.score < 75 || (r.pronunciationScore !== undefined && r.pronunciationScore < 70))
+      .map(r => r.expected),
+  )];
+
+  const rankTitle = mode === 'oral-exam'
+    ? (grade === 'A'
+      ? 'قبولی ممتاز در امتحان شفاهی'
+      : grade === 'B'
+        ? 'قبولی خوب در امتحان شفاهی'
+        : grade === 'C'
+          ? 'قبولی مرزی در امتحان شفاهی'
+          : 'نیاز به تمرین بیشتر برای قبولی شفاهی')
+    : (tier === 'mastered'
+      ? 'تمرین هدایت‌شده با تسلط کامل'
       : tier === 'acceptable'
-        ? 'مکالمهٔ قابل قبول با چند نکته'
-        : 'نیاز به تمرین بیشتر';
+        ? 'تمرین هدایت‌شدهٔ قابل قبول'
+        : 'نیاز به مرور بیشتر در تمرین');
 
-  const rankSubtitle =
-    tier === 'mastered'
-      ? 'پاسخ‌های واقعی شما دقیق، مستقل و متناسب با نقش و سطح درس بود.'
-      : tier === 'acceptable'
-        ? 'منظور مکالمه منتقل شد، اما در چند نوبت وابستگی به راهنما یا لغزش معنایی وجود داشت.'
-        : skippedCount > 0
-          ? `${fa(skippedCount)} نوبت بدون پاسخ ماند (ناتمام)؛ تا نوبت‌ها کامل نشوند تسلط مکالمه تأیید نمی‌شود.`
-          : 'دقت و استقلال پاسخ‌ها هنوز به حد تسلط نرسیده؛ کارنامهٔ نوبت به نوبت را مرور کن و دوباره تمرین کن.';
+  const rankSubtitle = mode === 'oral-exam'
+    ? (skippedCount > 0
+      ? `${fa(skippedCount)} سؤال بدون پاسخ ماند؛ در امتحان شفاهی برای قبولی باید همهٔ نوبت‌ها را پاسخ دهی.`
+      : voiceTurns === 0
+        ? 'همهٔ پاسخ‌ها با نوشتن ثبت شدند؛ برای امتیاز واقعی گفتار و رتبهٔ عالی، امتحان را با میکروفن بده.'
+        : grade === 'A'
+          ? 'پاسخ‌های شفاهی شما بدون راهنما، روان، دقیق و متناسب با پرسش ممتحن بود.'
+          : grade === 'B'
+            ? 'منظور مکالمه و ساختار جمله به‌خوبی منتقل شد؛ چند واژه یا تلفظ هنوز جای صیقل دارد.'
+            : 'معنای اصلی منتقل شد، اما تکرار خطا یا وضوح گفتار هنوز به سطح تسلط نرسیده است.')
+    : 'این نتیجه مربوط به حالت تمرین هدایت‌شده است؛ برای ثبت رکورد رسمی، «امتحان شفاهی واقعی» را امتحان کن.';
 
-  const weak = reports.filter(item => item.status === 'skipped' || item.score < 72 || item.usedReveal);
-  const advice = !weak.length
-    ? 'تمام نوبت‌ها بدون اتکا به متنِ آماده و با دقت بالا انجام شد. برای تسلط کامل، حالت «چالش زنده» یا جابه‌جایی نقش را امتحان کن.'
-    : `روی ${fa(weak.length)} نوبت نیازمند تمرین تمرکز کن و در دور بعد بدون «نمایش پاسخ» جمله‌ها را بساز.`;
+  const weakCount = reports.filter(item => item.status === 'skipped' || item.score < 72 || item.usedReveal).length;
+  const advice = mode === 'oral-exam'
+    ? (weakCount === 0 && voiceTurns === reports.length
+      ? 'عملکرد شفاهی فوق‌العاده‌ای داشتی! می‌توانی برای تسلط دوطرفه «جابه‌جایی نقش» را هم امتحان کنی.'
+      : voiceTurns < reports.length
+        ? 'سعی کن در دور بعدی همهٔ پاسخ‌ها را با میکروفن بگویی تا نمرهٔ تلفظ و روانی گفتار کامل ثبت شود.'
+        : `روی ${fa(weakCount)} نوبت ضعیف‌تر و واژه‌های مشخص‌شده زیر کار کن و دوباره امتحان بده.`)
+    : 'حالا که با جریان گفت‌وگو آشنا شدی، حالت «امتحان شفاهی واقعی» را بزن تا بدون راهنما نمرهٔ رسمی بگیری.';
 
-  return { tier, overall, accuracy, independence, activeRate, skippedCount, xp, answeredCount, rankTitle, rankSubtitle, advice };
+  return {
+    tier,
+    grade,
+    overall,
+    semantic,
+    pronunciation,
+    independence,
+    interaction,
+    activeRate,
+    skippedCount,
+    voiceTurns,
+    xp,
+    weakWords,
+    weakSentences,
+    rankTitle,
+    rankSubtitle,
+    advice,
+    passed,
+  };
 }
 
 function buildFallbackRule(line: ChatLine): SemanticTurn {
@@ -188,32 +308,21 @@ export default function LessonConversationRoom({
   onSpeak,
   onStop,
   lessonId,
+  courseId,
   situation,
-  partnerRole,
   initialSession,
   onSessionChange,
   semanticPractice,
   levelId,
 }: Props) {
   const isRtlTarget = locale.toLowerCase().startsWith('ar');
+  const resolvedCourseId = courseId ?? locale.split('-')[0].toLowerCase();
+
+  // Keep the lesson's authentic dialogue intact without injecting unrelated trailing sentences.
   const lines = useMemo<ChatLine[]>(() => {
     const real = dialogue.filter(line => line.text.trim());
     if (real.length) {
-      const base = real.map(line => ({ who: line.speaker, role: line.role, text: line.text, fa: line.fa }));
-      if (base.length < 6 && fallback?.length) {
-        const seen = new Set(base.map(line => line.text.trim().toLowerCase()));
-        const extras = fallback.filter(item => item.text.trim() && !seen.has(item.text.trim().toLowerCase()));
-        const partnerWho = base.find(line => line.role === 'partner')?.who ?? base[0].who;
-        const learnerWho = base.find(line => line.role === 'learner')?.who ?? base.find(line => line.who !== partnerWho)?.who ?? 'learner';
-        const needed = Math.min(2, 6 - base.length, extras.length);
-        if (needed >= 2) {
-          base.push(
-            { who: partnerWho, role: 'partner', text: extras[0].text, fa: extras[0].fa },
-            { who: learnerWho, role: 'learner', text: extras[1].text, fa: extras[1].fa },
-          );
-        }
-      }
-      return base;
+      return real.map(line => ({ who: line.speaker, role: line.role, text: line.text, fa: line.fa }));
     }
     const scripted = (fallback ?? []).filter(line => line.text.trim());
     return scripted.map((line, index) => ({
@@ -233,7 +342,7 @@ export default function LessonConversationRoom({
   const roles = useMemo(() => [...new Set(lines.map(line => line.who))], [lines]);
   const declared = learnerRoleOf(lines);
   const [myRole, setMyRole] = useState<string | null>(declared ?? roles[0] ?? null);
-  const [roomMode, setRoomMode] = useState<RoomExchangeMode>('standard');
+  const [roomMode, setRoomMode] = useState<RoomMode>('oral-exam');
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [typing, setTyping] = useState(false);
@@ -252,26 +361,41 @@ export default function LessonConversationRoom({
   const [hydrated, setHydrated] = useState(false);
   const [activeFollowUp, setActiveFollowUp] = useState<ActiveFollowUp | null>(null);
   const [followUpUsed, setFollowUpUsed] = useState(false);
+  const [followUpScore, setFollowUpScore] = useState<number | null>(null);
   const [threadExtras, setThreadExtras] = useState<Record<number, ThreadExtra[]>>({});
+  const [openingCuePlayed, setOpeningCuePlayed] = useState(false);
+  const [previousBest, setPreviousBest] = useState<OralExamOutcome | null>(null);
+  const outcomeSavedRef = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const spokenFor = useRef<number | null>(null);
 
   const activeLevel: ConversationLevel = semanticPractice?.level
     ?? (levelId === 0 ? 'Pre-A1' : levelId === 1 ? 'A1' : levelId === 2 ? 'A2' : levelId === 3 ? 'B1' : levelId === 4 ? 'B2' : levelId === 5 ? 'C1' : 'A1');
 
+  const isExamMode = roomMode === 'oral-exam';
   const current = displayLines[index];
   const currentRule: SemanticTurn | undefined = current
-    ? (semanticPractice?.turns[index] ?? buildFallbackRule(current))
+    ? (semanticPractice?.turns[index] ?? semanticPractice?.allTurns?.[index] ?? buildFallbackRule(current))
     : undefined;
   const isMine = !!current && !!myRole && current.who === myRole;
   const finished = open && index >= lines.length && !activeFollowUp;
   const sent = useMemo(() => displayLines.slice(0, Math.min(index, displayLines.length)), [displayLines, index]);
-  const partnerName = nameOf(lines.find(line => line.who !== myRole)?.who ?? 'partner');
+  const partnerName = isExamMode
+    ? 'ممتحن'
+    : nameOf(lines.find(line => line.who !== myRole)?.who ?? 'partner');
 
   const stall = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clearTimer = () => { if (timer.current) { clearTimeout(timer.current); timer.current = null; } };
   const clearStall = () => { if (stall.current) { clearTimeout(stall.current); stall.current = null; } };
   useEffect(() => () => { clearTimer(); clearStall(); onStop?.(); }, [onStop]);
+
+  useEffect(() => {
+    let active = true;
+    void getLessonOutcome(resolvedCourseId, lessonId).then(outcome => {
+      if (active && outcome?.oralExam) setPreviousBest(outcome.oralExam);
+    });
+    return () => { active = false; };
+  }, [resolvedCourseId, lessonId]);
 
   useEffect(() => {
     const restored = normalizeLessonConversation(initialSession, lines.length, roles, declared);
@@ -291,7 +415,10 @@ export default function LessonConversationRoom({
     setHintOpen(false);
     setActiveFollowUp(null);
     setFollowUpUsed(false);
+    setFollowUpScore(null);
     setThreadExtras({});
+    setOpeningCuePlayed(false);
+    outcomeSavedRef.current = false;
     setHydrated(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonId]);
@@ -362,18 +489,17 @@ export default function LessonConversationRoom({
   }, [activeFollowUp, current, index, isMine, open, showPartner, typing]);
 
   const maybePickFollowUp = useCallback((learnerLine: string, turnIdx: number): ActiveFollowUp | null => {
-    if (roomMode !== 'live-challenge' || followUpUsed) return null;
+    if (!isExamMode || followUpUsed) return null;
     if (turnIdx >= lines.length - 1) return null;
     const lang = followUpLanguageFromLocale(locale);
     if (!lang) return null;
     const moves = followUpMoves(lang);
-    // In Pre-A1/A1 prefer 'repeat' or 'confirm'; in A2–C1 allow 'why' / 'mean' / 'confirm'.
     const pool = activeLevel === 'Pre-A1' || activeLevel === 'A1'
       ? moves.filter(m => m.id === 'repeat' || m.id === 'confirm')
       : moves.filter(m => m.id === 'why' || m.id === 'mean' || m.id === 'confirm');
     const chosen = pool[(turnIdx + lessonId.length) % pool.length] ?? moves[0];
     return { afterTurn: turnIdx, move: chosen, learnerSourceLine: learnerLine };
-  }, [activeLevel, followUpUsed, lessonId.length, lines.length, locale, roomMode]);
+  }, [activeLevel, followUpUsed, isExamMode, lessonId.length, lines.length, locale]);
 
   const completeTurnAndAdvance = useCallback((
     turnIdx: number,
@@ -383,13 +509,15 @@ export default function LessonConversationRoom({
     reply?: { text: string; fa: string },
     expectedText?: string,
   ) => {
+    const cleanActual = stripStressMarks(actualText).trim().toLowerCase();
+    const cleanExpected = expectedText ? stripStressMarks(expectedText).trim().toLowerCase() : '';
     setLearnerActuals(prev => ({
       ...prev,
       [turnIdx]: {
         text: actualText,
         status,
         score,
-        correction: expectedText && score < 88 && actualText.toLowerCase() !== expectedText.toLowerCase() ? expectedText : undefined,
+        correction: expectedText && score < 88 && cleanActual !== cleanExpected ? expectedText : undefined,
       },
     }));
 
@@ -414,7 +542,7 @@ export default function LessonConversationRoom({
           ...prev,
           [turnIdx]: [
             ...(prev[turnIdx] ?? []),
-            { id: `fu-ask-${turnIdx}`, who: 'partner', name: partnerName, text: askText, fa: askFa, tag: 'پرسش غیرمنتظره' },
+            { id: `fu-ask-${turnIdx}`, who: 'partner', name: partnerName, text: askText, fa: askFa, tag: 'پرسش زندهٔ ممتحن' },
           ],
         }));
         speak(askText, -1);
@@ -458,15 +586,16 @@ export default function LessonConversationRoom({
     const reasonableFreeAnswer = isWhyOrMean && trimmed.split(/\s+/).length >= 2 && (isArabic ? !/[پچژگ]/.test(trimmed) : !/[\u0600-\u06FF]/.test(trimmed));
 
     if (matchedOptIdx === -1 && !repeatedSourceLine && !shortConfirmWord && !reasonableFreeAnswer) {
-      fail('پاسخت به پرسشِ هم‌صحبت واضح نبود؛ یکی از مسیرهای پاسخ را بگو یا بنویس.', {
+      fail('پاسخت به پرسشِ ممتحن واضح نبود؛ کوتاه و مستقیم به همین پرسش جواب بده.', {
         heard: trimmed,
         score: 25,
-        feedback: 'هم‌صحبت منتظر پاسخ کوتاه به همین پرسش است.',
+        feedback: 'ممتحن منتظر پاسخ کوتاه به همین پرسش است.',
       });
       return;
     }
 
     const pickedOption = activeFollowUp.move.options[matchedOptIdx >= 0 ? matchedOptIdx : 0];
+    setFollowUpScore(attempts === 0 ? 100 : attempts === 1 ? 80 : 65);
     setThreadExtras(prev => ({
       ...prev,
       [turnIdx]: [
@@ -500,6 +629,11 @@ export default function LessonConversationRoom({
       return;
     }
 
+    const weakWords = (semantic.wordResults ?? [])
+      .filter(w => w.state !== 'ok')
+      .map(w => w.word.replace(/[.,!?;:¿¡؟،؛"«»()]/g, '').trim())
+      .filter(Boolean);
+
     const turnStatus: TurnStatus = (hintOpen || revealed || attempts > 0) ? 'assisted' : 'passed';
     setReports(value => [
       ...value,
@@ -509,12 +643,14 @@ export default function LessonConversationRoom({
         expected: current.text,
         heard: answer.trim(),
         score: semantic.score,
+        pronunciationScore: semantic.pronunciationScore,
         method,
         status: turnStatus,
         retries: attempts,
         usedHint: hintOpen,
         usedReveal: revealed,
         feedback: semantic.feedback,
+        weakWords,
       },
     ]);
     setDraft('');
@@ -525,6 +661,7 @@ export default function LessonConversationRoom({
 
   const skipAsIncomplete = () => {
     if (activeFollowUp) {
+      setFollowUpScore(30);
       setActiveFollowUp(null);
       advance();
       return;
@@ -539,6 +676,7 @@ export default function LessonConversationRoom({
         expected: current.text,
         heard: '',
         score: 0,
+        pronunciationScore: 0,
         method: typed ? 'typed' : 'voice',
         status: 'skipped',
         retries: attempts,
@@ -550,11 +688,15 @@ export default function LessonConversationRoom({
     completeTurnAndAdvance(index, '— (ناتمام)', 'skipped', 0, undefined, current.text);
   };
 
-  const begin = async () => {
+  const begin = async (selectedMode?: RoomMode) => {
     if (starting) return;
+    const chosenMode = selectedMode ?? roomMode;
+    setRoomMode(chosenMode);
     setStarting(true);
     setOpen(true);
     setIndex(0);
+    setOpeningCuePlayed(false);
+    outcomeSavedRef.current = false;
     clearTimer(); clearStall();
     spokenFor.current = null;
     try {
@@ -565,17 +707,28 @@ export default function LessonConversationRoom({
       setNote('میکروفن آماده نشد؛ می‌توانی پاسخت را بنویسی.');
     } finally {
       setStarting(false);
+      // If turn 0 belongs to the learner, play a brief natural examiner greeting first.
+      const firstLine = lines[0];
+      if (firstLine && firstLine.who === (myRole ?? declared ?? roles[0])) {
+        const cue = OPENING_CUES[locale] ?? OPENING_CUES['en-US'];
+        setOpeningCuePlayed(true);
+        speak(cue.text, -5);
+      }
     }
   };
 
-  const restart = () => {
+  const restart = (nextMode?: RoomMode) => {
     clearTimer(); clearStall();
     spokenFor.current = null;
+    if (nextMode) setRoomMode(nextMode);
     setBranchReplies({});
     setLearnerActuals({});
     setThreadExtras({});
     setActiveFollowUp(null);
     setFollowUpUsed(false);
+    setFollowUpScore(null);
+    setOpeningCuePlayed(false);
+    outcomeSavedRef.current = false;
     setIndex(0); setAttempts(0); setRevealed(false); setTyping(false); setSpeakingAt(null);
     setDraft(''); setNote(''); setDiagnostic(null); setReports([]); setHintOpen(false); setChoicePanel(false);
   };
@@ -592,7 +745,32 @@ export default function LessonConversationRoom({
     submitAnswer(draft, 'typed');
   };
 
-  const summary = useMemo(() => evaluateRoomSummary(reports), [reports]);
+  const summary = useMemo(
+    () => evaluateRoomSummary(reports, roomMode, followUpScore),
+    [reports, roomMode, followUpScore],
+  );
+
+  // Persist finished oral exam / practice outcome once so the user keeps a durable record per lesson.
+  useEffect(() => {
+    if (!finished || !reports.length || outcomeSavedRef.current) return;
+    outcomeSavedRef.current = true;
+    const record: OralExamOutcome = {
+      mode: roomMode,
+      overall: summary.overall,
+      bestOverall: Math.max(summary.overall, previousBest?.bestOverall ?? 0),
+      pronunciation: summary.pronunciation,
+      semantic: summary.semantic,
+      independence: summary.independence,
+      interaction: summary.interaction,
+      grade: summary.grade,
+      passed: summary.passed,
+      voiceTurns: summary.voiceTurns,
+      totalTurns: reports.length,
+      at: new Date().toISOString(),
+    };
+    setPreviousBest(prev => (prev ? { ...record, bestOverall: Math.max(record.bestOverall, prev.bestOverall) } : record));
+    void saveLessonOutcome(resolvedCourseId, lessonId, { oralExam: record });
+  }, [finished, lessonId, previousBest?.bestOverall, reports.length, resolvedCourseId, roomMode, summary]);
 
   if (!lines.length) {
     return <View style={styles.wrap}><Text style={styles.emptyNote}>برای این درس گفت‌وگویی ثبت نشده است.</Text></View>;
@@ -600,7 +778,9 @@ export default function LessonConversationRoom({
 
   const hintKeywords = currentRule?.concepts?.map(g => g[0]).filter(Boolean) ?? [];
   const halfTargetHint = current ? `${current.text.split(/\s+/).slice(0, Math.max(1, Math.ceil(current.text.split(/\s+/).length / 2))).join(' ')} …` : '';
-  const hasChoices = Boolean(currentRule?.choices?.length) && (activeLevel === 'Pre-A1' || activeLevel === 'A1');
+  const hasChoices = !isExamMode && Boolean(currentRule?.choices?.length) && (activeLevel === 'Pre-A1' || activeLevel === 'A1');
+  const learnerTurnsTotal = lines.filter(line => line.who === myRole).length;
+  const openingCue = OPENING_CUES[locale] ?? OPENING_CUES['en-US'];
 
   const doneCardTheme = summary.tier === 'mastered'
     ? { card: styles.doneCardGreen, badge: styles.trophyGreen, title: styles.doneTitleGreen, text: styles.doneTextGreen, circle: styles.circleGreen }
@@ -612,34 +792,56 @@ export default function LessonConversationRoom({
     <View style={styles.wrap}>
       {!open ? (
         <View style={styles.invite}>
-          <View style={styles.inviteBadge}>
-            <Sparkles size={14} color={Palette.primary} />
-            <Text style={styles.inviteBadgeText}>اتاق مکالمهٔ واقعی · {levelLabelFa(activeLevel)} · {fa(lines.length)} نوبت</Text>
+          <View style={styles.inviteBadgesRow}>
+            <View style={styles.optionalBadge}>
+              <Text style={styles.optionalBadgeText}>بخش اختیاری</Text>
+            </View>
+            <View style={styles.inviteBadge}>
+              <Sparkles size={14} color={Palette.primary} />
+              <Text style={styles.inviteBadgeText}>اتاق مکالمه و امتحان شفاهی · {levelLabelFa(activeLevel)} · {fa(learnerTurnsTotal)} پرسش</Text>
+            </View>
           </View>
-          <Text style={styles.inviteTitle}>گفت‌وگوی زنده با {partnerName}</Text>
-          {situation ? <Text style={styles.sceneText}>{situation}</Text> : null}
+
+          <Text style={styles.inviteTitle}>آماده‌ای دانش همین درس را زنده امتحان بدهی؟</Text>
+          {situation ? <Text style={styles.sceneText}>موقعیت: {situation}</Text> : null}
           <Text style={styles.inviteText}>
-            هر نوبت بر اساس معنای واقعی، واژه‌های کلیدی، مثبت/منفی بودن و پرسش/پاسخ بررسی می‌شود. اگر پاسخ مبهم باشد هم‌صحبت واکنش نشان می‌دهد و منتظر اصلاح می‌ماند.
+            تکمیل این بخش اجباری نیست و هر زمان بخواهی می‌توانی درس را به پایان برسانی؛ اما اگر وارد شوی، ممتحن صوتی با پرسش‌های زنده از همین درس از تو امتحان شفاهی می‌گیرد و کارنامهٔ ۴ شاخصه (تلفظ، معنا، استقلال، واکنش) برایت صادر می‌کند.
           </Text>
+
+          {previousBest ? (
+            <View style={styles.recordBanner}>
+              <Trophy size={16} color={Palette.primaryDark} />
+              <Text style={styles.recordBannerText}>
+                بهترین رکورد قبلی شما در این درس: {fa(previousBest.bestOverall)}٪ ({gradeBadgeFa(previousBest.grade)})
+              </Text>
+            </View>
+          ) : null}
 
           <View style={styles.modeSelector}>
             <Pressable
               accessibilityRole="button"
-              accessibilityState={{ selected: roomMode === 'standard' }}
-              onPress={() => setRoomMode('standard')}
-              style={[styles.modeCard, roomMode === 'standard' && styles.modeCardOn]}
+              accessibilityState={{ selected: roomMode === 'oral-exam' }}
+              onPress={() => setRoomMode('oral-exam')}
+              style={[styles.modeCard, roomMode === 'oral-exam' && styles.modeCardExamOn]}
             >
-              <Text style={[styles.modeTitle, roomMode === 'standard' && styles.modeTitleOn]}>گفت‌وگوی استاندارد</Text>
-              <Text style={styles.modeDesc}>مسیر اصلی موقعیت با سنجش دقیق هر نوبت</Text>
+              <View style={styles.modeHeadRow}>
+                <ClipboardCheck size={15} color={roomMode === 'oral-exam' ? Palette.primaryDark : Palette.muted} />
+                <Text style={[styles.modeTitle, roomMode === 'oral-exam' && styles.modeTitleOn]}>امتحان شفاهی واقعی</Text>
+              </View>
+              <Text style={styles.modeDesc}>بدون متنِ آماده و تقلب · همراه با پرسش غیرمنتظرهٔ ممتحن و صدور کارنامهٔ رسمی</Text>
             </Pressable>
+
             <Pressable
               accessibilityRole="button"
-              accessibilityState={{ selected: roomMode === 'live-challenge' }}
-              onPress={() => setRoomMode('live-challenge')}
-              style={[styles.modeCard, roomMode === 'live-challenge' && styles.modeCardOn]}
+              accessibilityState={{ selected: roomMode === 'guided-practice' }}
+              onPress={() => setRoomMode('guided-practice')}
+              style={[styles.modeCard, roomMode === 'guided-practice' && styles.modeCardOn]}
             >
-              <Text style={[styles.modeTitle, roomMode === 'live-challenge' && styles.modeTitleOn]}>چالش زنده</Text>
-              <Text style={styles.modeDesc}>با پرسش یا توقف غیرمنتظره از سوی هم‌صحبت</Text>
+              <View style={styles.modeHeadRow}>
+                <HelpCircle size={15} color={roomMode === 'guided-practice' ? Palette.primaryDark : Palette.muted} />
+                <Text style={[styles.modeTitle, roomMode === 'guided-practice' && styles.modeTitleOn]}>تمرین هدایت‌شده</Text>
+              </View>
+              <Text style={styles.modeDesc}>با شنیدن نمونه، سرنخ معنایی و الگوی کمکی برای آماده‌شدن پیش از امتحان</Text>
             </Pressable>
           </View>
 
@@ -653,14 +855,21 @@ export default function LessonConversationRoom({
                   onPress={() => { setMyRole(role); restart(); }}
                   style={[styles.roleChip, role === myRole && styles.roleChipOn]}
                 >
-                  <Text style={[styles.roleChipText, role === myRole && styles.roleChipTextOn]}>{nameOf(role)}</Text>
+                  <Text style={[styles.roleChipText, role === myRole && styles.roleChipTextOn]}>نقش شما: {nameOf(role)}</Text>
                 </Pressable>
               ))}
             </View>
           ) : null}
 
-          <Pressable accessibilityRole="button" accessibilityState={{ disabled: starting }} disabled={starting} style={styles.enter} onPress={() => void begin()}>
-            <Mic2 size={18} color="#FFFFFF" /><Text style={styles.enterText}>شروع مکالمه</Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={{ disabled: starting }}
+            disabled={starting}
+            style={[styles.enter, isExamMode && styles.enterExam]}
+            onPress={() => void begin()}
+          >
+            {isExamMode ? <ClipboardCheck size={18} color="#FFFFFF" /> : <Mic2 size={18} color="#FFFFFF" />}
+            <Text style={styles.enterText}>{isExamMode ? 'شروع امتحان شفاهی' : 'شروع تمرین مکالمه'}</Text>
           </Pressable>
           {starting ? <ActivityIndicator color={Palette.primary} /> : null}
         </View>
@@ -671,21 +880,33 @@ export default function LessonConversationRoom({
               {summary.tier === 'needs-work' ? <AlertTriangle size={22} color="#FFFFFF" /> : <Trophy size={24} color="#FFFFFF" />}
             </View>
             <View style={styles.heroCopy}>
-              {summary.xp > 0 ? (
-                <View style={styles.xpPill}><Award size={13} color={Palette.primary} /><Text style={styles.xpPillText}>+{fa(summary.xp)} امتیاز واقعی مکالمه</Text></View>
-              ) : null}
+              <View style={styles.gradePillsRow}>
+                <View style={styles.xpPill}>
+                  <Award size={13} color={Palette.primary} />
+                  <Text style={styles.xpPillText}>{isExamMode ? gradeBadgeFa(summary.grade) : 'حالت تمرین'}</Text>
+                </View>
+                {summary.xp > 0 ? (
+                  <View style={styles.xpPill}>
+                    <Text style={styles.xpPillText}>+{fa(summary.xp)} امتیاز</Text>
+                  </View>
+                ) : null}
+              </View>
               <Text style={[styles.doneTitle, doneCardTheme.title]}>{summary.rankTitle}</Text>
               <Text style={[styles.doneText, doneCardTheme.text]}>{summary.rankSubtitle}</Text>
             </View>
             <View style={[styles.overallCircle, doneCardTheme.circle]}>
               <Text style={[styles.overallValue, doneCardTheme.title]}>{fa(summary.overall)}٪</Text>
-              <Text style={[styles.overallLabel, doneCardTheme.text]}>ارزیابی واقعی</Text>
+              <Text style={[styles.overallLabel, doneCardTheme.text]}>نمرهٔ واقعی</Text>
             </View>
           </View>
 
           <View style={styles.metricsGrid}>
             <View style={styles.metricBox}>
-              <Text style={styles.metricValue}>{fa(summary.accuracy)}٪</Text>
+              <Text style={styles.metricValue}>{fa(summary.pronunciation)}٪</Text>
+              <Text style={styles.metricLabel}>تلفظ و گفتار</Text>
+            </View>
+            <View style={styles.metricBox}>
+              <Text style={styles.metricValue}>{fa(summary.semantic)}٪</Text>
               <Text style={styles.metricLabel}>دقت معنا</Text>
             </View>
             <View style={styles.metricBox}>
@@ -693,16 +914,36 @@ export default function LessonConversationRoom({
               <Text style={styles.metricLabel}>استقلال پاسخ</Text>
             </View>
             <View style={styles.metricBox}>
-              <Text style={styles.metricValue}>{fa(summary.activeRate)}٪</Text>
-              <Text style={styles.metricLabel}>تکمیل نوبت‌ها</Text>
+              <Text style={styles.metricValue}>{fa(summary.interaction)}٪</Text>
+              <Text style={styles.metricLabel}>تعامل زنده</Text>
             </View>
           </View>
 
           <Text style={[styles.finalHint, doneCardTheme.text]}>{summary.advice}</Text>
 
+          {summary.weakSentences.length > 0 ? (
+            <View style={styles.weakFocusBox}>
+              <Text style={styles.weakFocusTitle}>تمرین پیشنهادی برای تثبیت (بشنو و تکرار کن)</Text>
+              {summary.weakWords.length > 0 ? (
+                <Text style={styles.weakWordsText}>واژه‌های نیازمند دقت بیشتر: {summary.weakWords.join(' · ')}</Text>
+              ) : null}
+              {summary.weakSentences.slice(0, 3).map((sentence, idx) => (
+                <Pressable
+                  key={`weak-sent-${idx}`}
+                  accessibilityRole="button"
+                  onPress={() => speak(sentence, -10 - idx)}
+                  style={styles.weakSentenceBtn}
+                >
+                  <Volume2 size={15} color={Palette.primary} />
+                  <Text style={[styles.weakSentenceText, isRtlTarget && styles.rtlText]}>{sentence}</Text>
+                </Pressable>
+              ))}
+            </View>
+          ) : null}
+
           {reports.length ? (
             <View style={styles.reviewList}>
-              <Text style={styles.reviewHeading}>کارنامهٔ صادقانهٔ نوبت به نوبت</Text>
+              <Text style={styles.reviewHeading}>کارنامهٔ نوبت به نوبت</Text>
               {reports.map(item => {
                 const tier = item.status === 'skipped' ? 'ناتمام' : item.score >= 85 && !item.usedReveal ? 'مسلط' : item.score >= 68 ? 'قابل قبول' : 'ضعیف';
                 const tierColor = item.status === 'skipped' ? '#DC2626' : item.score >= 85 && !item.usedReveal ? Palette.success : item.score >= 68 ? Palette.primary : '#D97706';
@@ -712,7 +953,7 @@ export default function LessonConversationRoom({
                       <View style={styles.reviewTurnWrap}>
                         <CheckCircle2 size={14} color={tierColor} />
                         <Text style={styles.reviewTurn}>
-                          نوبت {fa(item.index + 1)} · {item.method === 'voice' ? 'گفتاری' : item.method === 'choice' ? 'گزینه‌ای' : 'نوشتاری'}
+                          پرسش {fa(item.index + 1)} · {item.method === 'voice' ? 'شفاهی (صدا)' : item.method === 'choice' ? 'گزینه‌ای' : 'نوشتاری'}
                           {item.retries > 0 ? ` · ${fa(item.retries)} تلاش مجدد` : ''}
                         </Text>
                       </View>
@@ -720,10 +961,13 @@ export default function LessonConversationRoom({
                         <Text style={[styles.scoreTagText, { color: tierColor }]}>{tier} · {fa(item.score)}٪</Text>
                       </View>
                     </View>
-                    {item.promptFa ? <Text style={styles.reviewPrompt}>هدف نوبت: {item.promptFa}</Text> : null}
-                    <Text style={styles.reviewHeard}>پاسخ واقعی شما: {item.heard.trim() ? item.heard : '— (ناتمام)'}</Text>
+                    {item.promptFa ? <Text style={styles.reviewPrompt}>موقعیت/هدف: {item.promptFa}</Text> : null}
+                    <Text style={styles.reviewHeard}>پاسخ شما: {item.heard.trim() ? item.heard : '— (ناتمام)'}</Text>
                     <Text style={item.status !== 'skipped' && item.score >= 68 ? styles.successLine : styles.errorLine}>{item.feedback}</Text>
-                    {(item.score < 85 || item.status === 'skipped') ? <Text style={styles.reviewExpected}>الگوی استاندارد: {item.expected}</Text> : null}
+                    <Pressable accessibilityRole="button" onPress={() => speak(item.expected, -20 - item.index)} style={styles.expectedPlayRow}>
+                      <Volume2 size={14} color={Palette.primary} />
+                      <Text style={styles.reviewExpected}>الگوی استاندارد: {item.expected}</Text>
+                    </Pressable>
                   </View>
                 );
               })}
@@ -731,16 +975,52 @@ export default function LessonConversationRoom({
           ) : null}
 
           <View style={styles.doneActions}>
-            <Pressable accessibilityRole="button" style={styles.againButton} onPress={restart}><Text style={styles.againText}>تمرین دوباره</Text></Pressable>
-            {roles.length > 1 ? <Pressable accessibilityRole="button" style={styles.flipDoneButton} onPress={flipRole}><RefreshCw size={15} color={Palette.primary} /><Text style={styles.flipDoneText}>جابه‌جایی نقش</Text></Pressable> : null}
+            {!isExamMode ? (
+              <Pressable accessibilityRole="button" style={styles.againButton} onPress={() => restart('oral-exam')}>
+                <Text style={styles.againText}>حالا امتحان شفاهی واقعی بده</Text>
+              </Pressable>
+            ) : (
+              <Pressable accessibilityRole="button" style={styles.againButton} onPress={() => restart('oral-exam')}>
+                <Text style={styles.againText}>تکرار امتحان برای نمرهٔ بهتر</Text>
+              </Pressable>
+            )}
+            {roles.length > 1 ? (
+              <Pressable accessibilityRole="button" style={styles.flipDoneButton} onPress={flipRole}>
+                <RefreshCw size={15} color={Palette.primary} />
+                <Text style={styles.flipDoneText}>جابه‌جایی نقش</Text>
+              </Pressable>
+            ) : null}
           </View>
         </View>
       ) : (
         <View style={styles.thread}>
+          <View style={styles.liveModeBar}>
+            <View style={[styles.liveModeBadge, isExamMode ? styles.liveExamBadge : styles.livePracticeBadge]}>
+              {isExamMode ? <ClipboardCheck size={13} color="#FFFFFF" /> : <Sparkles size={13} color={Palette.primaryDark} />}
+              <Text style={[styles.liveModeBadgeText, isExamMode && { color: '#FFFFFF' }]}>
+                {isExamMode ? 'امتحان شفاهی واقعی · بدون تقلب' : 'تمرین هدایت‌شده'}
+              </Text>
+            </View>
+            <Text style={styles.turnCounterBadge}>نوبت {fa(index + 1)} از {fa(lines.length)}</Text>
+          </View>
+
           <View style={styles.metaRow} accessibilityLiveRegion="polite">
             <View style={styles.dots}>{lines.map((line, dot) => <View key={`${line.text}-${dot}`} style={[styles.dot, dot < index && styles.dotDone, dot === index && styles.dotNow]} />)}</View>
-            {typing ? <Text style={styles.typingText}>{partnerName} در حال تایپ…</Text> : <Text style={styles.turnCounterBadge}>نوبت {fa(index + 1)} از {fa(lines.length)}</Text>}
+            {typing ? <Text style={styles.typingText}>{partnerName} در حال صحبت…</Text> : null}
           </View>
+
+          {openingCuePlayed ? (
+            <View style={[styles.bubble, styles.theirs]}>
+              <View style={styles.bubbleTop}>
+                <Text style={styles.who}>{partnerName}</Text>
+                <Pressable accessibilityRole="button" accessibilityLabel="شنیدن پیام شروع ممتحن" onPress={() => speak(openingCue.text, -5)} style={styles.replay}>
+                  <Volume2 size={15} color={Palette.primary} />
+                </Pressable>
+              </View>
+              <Text style={[styles.lineText, isRtlTarget && styles.rtlText]}>{openingCue.text}</Text>
+              <Text style={styles.lineFa}>{openingCue.fa}</Text>
+            </View>
+          ) : null}
 
           {sent.map((line, at) => {
             const actual = learnerActuals[at];
@@ -752,7 +1032,7 @@ export default function LessonConversationRoom({
               <View key={`sent-wrap-${at}`} style={styles.sentGroup}>
                 <View style={[styles.bubble, isLearnerBubble ? (actual?.status === 'skipped' ? styles.mineSkipped : styles.mine) : styles.theirs]}>
                   <View style={styles.bubbleTop}>
-                    <Text style={styles.who}>{nameOf(line.who)}</Text>
+                    <Text style={styles.who}>{isLearnerBubble ? 'شما' : partnerName}</Text>
                     {isLearnerBubble ? (
                       actual?.status === 'skipped'
                         ? <ShieldAlert size={14} color="#D97706" />
@@ -788,10 +1068,10 @@ export default function LessonConversationRoom({
 
           {activeFollowUp ? (
             <View style={styles.turnCard}>
-              <Text style={styles.turnTitle}>واکنش سریع به هم‌صحبت</Text>
+              <Text style={styles.turnTitle}>پرسش غیرمنتظرهٔ ممتحن — واکنش سریع بده</Text>
               <Text style={styles.turnPrompt}>
                 {activeLevel === 'Pre-A1'
-                  ? `هم‌صحبت مطمئن می‌شود درست شنیده است: ${fillLine(activeFollowUp.move.askFa, activeFollowUp.learnerSourceLine)} (می‌توانی همان جملهٔ خودت را دوباره بگویی یا یکی از گزینه‌ها را بزنی)`
+                  ? `ممتحن مطمئن می‌شود درست شنیده است: ${fillLine(activeFollowUp.move.askFa, activeFollowUp.learnerSourceLine)}`
                   : fillLine(activeFollowUp.move.askFa, activeFollowUp.learnerSourceLine)}
               </Text>
               {!typed ? (
@@ -800,13 +1080,14 @@ export default function LessonConversationRoom({
                   text={activeLevel === 'Pre-A1' ? activeFollowUp.learnerSourceLine : fillLine(activeFollowUp.move.options[0].text, activeFollowUp.learnerSourceLine)}
                   locale={locale}
                   accent={Palette.primary}
-                  title="پاسخ بگو"
+                  title="پاسخ شفاهی بده"
                   level={activeLevel}
                   adaptiveTiming
                   autoStart
+                  blindExam={isExamMode}
                   onResult={result => {
                     if (!result.heard.trim()) {
-                      setNote('صدایی دریافت نشد؛ بدون عجله دوباره «پاسخ بگو» را بزنید یا یکی از گزینه‌ها را انتخاب کنید.');
+                      setNote('صدایی دریافت نشد؛ بدون عجله دوباره «پاسخ شفاهی بده» را بزن یا با نوشتن جواب بده.');
                       return;
                     }
                     submitFollowUpAnswer(result.heard);
@@ -814,17 +1095,19 @@ export default function LessonConversationRoom({
                   singleAttempt
                 />
               ) : null}
-              <View style={styles.choiceList}>
-                {activeFollowUp.move.options.map((opt, idx) => {
-                  const text = fillLine(opt.text, activeFollowUp.learnerSourceLine);
-                  return (
-                    <Pressable key={`fu-opt-${idx}`} accessibilityRole="button" onPress={() => submitFollowUpAnswer(text)} style={styles.choiceBtn}>
-                      <Text style={[styles.choiceForeign, isRtlTarget && styles.rtlText]}>{text}</Text>
-                      <Text style={styles.choiceFa}>{opt.fa}</Text>
-                    </Pressable>
-                  );
-                })}
-              </View>
+              {!isExamMode ? (
+                <View style={styles.choiceList}>
+                  {activeFollowUp.move.options.map((opt, idx) => {
+                    const text = fillLine(opt.text, activeFollowUp.learnerSourceLine);
+                    return (
+                      <Pressable key={`fu-opt-${idx}`} accessibilityRole="button" onPress={() => submitFollowUpAnswer(text)} style={styles.choiceBtn}>
+                        <Text style={[styles.choiceForeign, isRtlTarget && styles.rtlText]}>{text}</Text>
+                        <Text style={styles.choiceFa}>{opt.fa}</Text>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              ) : null}
               <View style={styles.turnRow}>
                 {!typed ? (
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(true); setNote(''); }}><Text style={styles.linkText}>با نوشتن</Text></Pressable>
@@ -834,22 +1117,29 @@ export default function LessonConversationRoom({
                     <Pressable accessibilityRole="button" accessibilityLabel="ارسال پاسخ" onPress={sendTyped} style={styles.send}><Send size={16} color="#FFFFFF" /></Pressable>
                   </View>
                 )}
+                {attempts >= 1 ? (
+                  <Pressable accessibilityRole="button" style={styles.skipButton} onPress={skipAsIncomplete}>
+                    <Text style={styles.skipText}>عبور از این پرسش</Text>
+                  </Pressable>
+                ) : null}
               </View>
             </View>
           ) : current && isMine ? (
-            <View style={styles.turnCard}>
+            <View style={[styles.turnCard, isExamMode && styles.turnCardExam]}>
               <View style={styles.turnHeaderRow}>
-                <Text style={styles.turnTitle}>نوبت توست · پاسخ واقعی بده</Text>
+                <Text style={styles.turnTitle}>
+                  {isExamMode ? 'پرسش ممتحن · شفاهی پاسخ بده' : 'نوبت توست · پاسخ واقعی بده'}
+                </Text>
                 <Text style={styles.levelBadge}>{levelLabelFa(activeLevel)}</Text>
               </View>
               <Text style={styles.turnPrompt}>{currentRule?.promptFa ?? current.fa}</Text>
 
-              {revealed ? (
+              {!isExamMode && revealed ? (
                 <View style={styles.revealBox}>
                   <Text style={styles.revealLabel}>الگوی کمکی (برای تمرین دوباره بگو یا بنویس):</Text>
                   <Text style={[styles.turnTarget, isRtlTarget && styles.rtlText]}>{current.text}</Text>
                 </View>
-              ) : hintOpen ? (
+              ) : !isExamMode && hintOpen ? (
                 <View style={styles.hintBox}>
                   <Text style={styles.turnHint}>
                     {hintKeywords.length ? `مفاهیم کلیدی مورد انتظار: ${hintKeywords.join(' · ')}` : halfTargetHint}
@@ -857,15 +1147,19 @@ export default function LessonConversationRoom({
                 </View>
               ) : (
                 <Text style={styles.turnHint}>
-                  {activeLevel === 'Pre-A1'
-                    ? 'می‌توانی جمله‌ات را بگویی، بنویسی، یا پاسخ درست را انتخاب کنی.'
-                    : activeLevel === 'B2' || activeLevel === 'C1'
-                      ? 'پاسخ کامل و متناسب با لحن موقعیت ارائه بده (جمله‌های تک‌کلمه‌ای پذیرفته نمی‌شوند).'
-                      : 'منظور این نوبت را کامل به زبان مقصد بگو یا بنویس.'}
+                  {isExamMode
+                    ? (activeLevel === 'Pre-A1' || activeLevel === 'A1'
+                      ? 'متن پاسخ برای سنجش واقعی پنهان است؛ جملهٔ درست را با صدای خودت بگو.'
+                      : 'بدون کمک متنِ آماده، پاسخ کامل و طبیعی خودت را به زبان درس بگو.')
+                    : (activeLevel === 'Pre-A1'
+                      ? 'می‌توانی جمله‌ات را بگویی، بنویسی، یا پاسخ درست را انتخاب کنی.'
+                      : activeLevel === 'B2' || activeLevel === 'C1'
+                        ? 'پاسخ کامل و متناسب با لحن موقعیت ارائه بده (جمله‌های تک‌کلمه‌ای پذیرفته نمی‌شوند).'
+                        : 'منظور این نوبت را کامل به زبان مقصد بگو یا بنویس.')}
                 </Text>
               )}
 
-              {/* Partner pushback + word-level diagnostic on failed attempt */}
+              {/* Partner pushback + word-level diagnostic on failed attempt (word hints hidden in exam mode) */}
               {diagnostic ? (
                 <View style={styles.diagnosticCard}>
                   {diagnostic.partnerPushback ? (
@@ -875,7 +1169,7 @@ export default function LessonConversationRoom({
                     </View>
                   ) : null}
                   <Text style={styles.diagHeard}>شنیده/ثبت‌شده: «{diagnostic.heard || '—'}»</Text>
-                  {diagnostic.wordResults && diagnostic.wordResults.length > 0 ? (
+                  {!isExamMode && diagnostic.wordResults && diagnostic.wordResults.length > 0 ? (
                     <View style={[styles.wordBar, isRtlTarget && styles.rtlWordBar]}>
                       {diagnostic.wordResults.map((w, wi) => (
                         <View key={`${w.word}-${wi}`} style={[styles.wordChip, w.state === 'ok' ? styles.wMatch : w.state === 'near' ? styles.wClose : styles.wMiss]}>
@@ -899,17 +1193,18 @@ export default function LessonConversationRoom({
 
               {!typed ? (
                 <SpeakCheck
-                  key={`${index}-${attempts}-${current.text}`}
+                  key={`${index}-${attempts}-${current.text}-${roomMode}`}
                   text={current.text}
                   locale={locale}
                   accent={Palette.primary}
-                  title="بگو"
+                  title={isExamMode ? 'پاسخ شفاهی به ممتحن' : 'بگو'}
                   level={activeLevel}
                   adaptiveTiming
                   autoStart
+                  blindExam={isExamMode}
                   onResult={result => {
                     if (!result.heard.trim()) {
-                      setNote('صدایی دریافت نشد؛ بدون عجله دوباره «بگو» را بزنید یا از نوشتن/گزینه‌ها استفاده کنید.');
+                      setNote('صدایی دریافت نشد؛ بدون عجله دوباره دکمهٔ صدا را بزن یا از نوشتن استفاده کن.');
                       return;
                     }
                     submitAnswer(result.heard, 'voice');
@@ -919,7 +1214,7 @@ export default function LessonConversationRoom({
               ) : null}
 
               <View style={styles.turnRow}>
-                {(activeLevel === 'Pre-A1' || activeLevel === 'A1') ? (
+                {!isExamMode && (activeLevel === 'Pre-A1' || activeLevel === 'A1') ? (
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => speak(current.text, -4)}>
                     <Volume2 size={14} color={Palette.primary} />
                     <Text style={styles.linkText}>شنیدن نمونه</Text>
@@ -928,7 +1223,7 @@ export default function LessonConversationRoom({
 
                 {!typed ? (
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(true); setNote(''); }}>
-                    <Text style={styles.linkText}>با نوشتن</Text>
+                    <Text style={styles.linkText}>{isExamMode ? 'نوشتن (جایگزین بدون میکروفن)' : 'با نوشتن'}</Text>
                   </Pressable>
                 ) : (
                   <View style={styles.compose}>
@@ -937,10 +1232,10 @@ export default function LessonConversationRoom({
                       onChangeText={setDraft}
                       onSubmitEditing={sendTyped}
                       returnKeyType="send"
-                      placeholder={revealed ? current.text : 'پاسخت را به زبان درس بنویس'}
+                      placeholder={!isExamMode && revealed ? current.text : 'پاسخت را به زبان درس بنویس'}
                       placeholderTextColor={Palette.muted}
                       accessibilityLabel="پاسخ شما"
-                      style={styles.input}
+                      style={[styles.input, isRtlTarget && styles.rtlInput]}
                     />
                     <Pressable accessibilityRole="button" accessibilityLabel="ارسال پاسخ" onPress={sendTyped} style={styles.send}>
                       <Send size={16} color="#FFFFFF" />
@@ -954,20 +1249,20 @@ export default function LessonConversationRoom({
                   </Pressable>
                 ) : null}
 
-                {!hintOpen ? (
+                {!isExamMode && !hintOpen ? (
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => setHintOpen(true)}>
                     <HelpCircle size={14} color={Palette.primary} />
                     <Text style={styles.linkText}>سرنخ معنایی</Text>
                   </Pressable>
                 ) : null}
 
-                {!revealed && (attempts >= 1 || hintOpen) ? (
+                {!isExamMode && !revealed && (attempts >= 1 || hintOpen) ? (
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => setRevealed(true)}>
                     <Text style={styles.linkText}>نمایش الگوی کمکی</Text>
                   </Pressable>
                 ) : null}
 
-                {attempts >= 2 ? (
+                {(isExamMode ? attempts >= 1 : attempts >= 2) ? (
                   <Pressable accessibilityRole="button" style={styles.skipButton} onPress={skipAsIncomplete}>
                     <Text style={styles.skipText}>رد شدن (ثبت به‌عنوان ناتمام)</Text>
                   </Pressable>
@@ -984,10 +1279,10 @@ export default function LessonConversationRoom({
 
           {current && !isMine && !activeFollowUp ? (
             <View style={[styles.bubble, styles.theirs, typing && styles.bubblePending]}>
-              <Text style={styles.who}>{typing ? `${partnerName} در حال تایپ…` : speakingAt === index ? `${partnerName} در حال صحبت…` : partnerName}</Text>
+              <Text style={styles.who}>{typing ? `${partnerName} در حال آماده‌شدن…` : speakingAt === index ? `${partnerName} در حال صحبت…` : partnerName}</Text>
               {!typing ? (
                 <>
-                  <Text style={styles.lineText}>{current.text}</Text>
+                  <Text style={[styles.lineText, isRtlTarget && styles.rtlText]}>{current.text}</Text>
                   <Text style={styles.lineFa}>{current.fa}</Text>
                   <Pressable accessibilityRole="button" accessibilityLabel="دوباره بشنو" onPress={() => speak(current.text, index)} style={styles.replay}>
                     <Volume2 size={15} color={Palette.primary} />
@@ -999,7 +1294,17 @@ export default function LessonConversationRoom({
           ) : null}
 
           {note ? <Text accessibilityRole="alert" style={styles.note}>{note}</Text> : null}
-          {roles.length > 1 ? <Pressable accessibilityRole="button" style={styles.switchRow} onPress={flipRole}><Text style={styles.linkText}>جای من و {partnerName} را عوض کن</Text></Pressable> : null}
+
+          <View style={styles.bottomActionsRow}>
+            {roles.length > 1 ? (
+              <Pressable accessibilityRole="button" style={styles.switchRow} onPress={flipRole}>
+                <Text style={styles.linkText}>جای من و {partnerName} را عوض کن</Text>
+              </Pressable>
+            ) : null}
+            <Pressable accessibilityRole="button" style={styles.switchRow} onPress={() => restart(isExamMode ? 'guided-practice' : 'oral-exam')}>
+              <Text style={styles.linkText}>{isExamMode ? 'تغییر به تمرین هدایت‌شده' : 'تغییر به امتحان شفاهی'}</Text>
+            </Pressable>
+          </View>
         </View>
       )}
     </View>
@@ -1008,27 +1313,40 @@ export default function LessonConversationRoom({
 
 const styles = StyleSheet.create({
   wrap: { width: '100%', alignItems: 'stretch', gap: 9, paddingVertical: 6 },
-  invite: { width: '100%', gap: 10, paddingVertical: 14, alignItems: 'center' },
-  inviteBadge: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF' },
-  inviteBadgeText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Palette.primaryDark, writingDirection: 'rtl' },
+  invite: { width: '100%', gap: 11, paddingVertical: 16, paddingHorizontal: 14, borderRadius: 22, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#DDE2FF', alignItems: 'center' },
+  inviteBadgesRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  optionalBadge: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 20, backgroundColor: '#ECFDF5', borderWidth: 1, borderColor: '#A7F3D0' },
+  optionalBadgeText: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: '#047857', writingDirection: 'rtl' },
+  inviteBadge: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF' },
+  inviteBadgeText: { fontFamily: Typography.boldFontFamily, fontSize: 11.5, color: Palette.primaryDark, writingDirection: 'rtl' },
   inviteTitle: { fontFamily: Typography.boldFontFamily, fontSize: 18, lineHeight: 30, color: Palette.ink, textAlign: 'center', writingDirection: 'rtl' },
-  sceneText: { fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 25, color: Palette.primaryDark, textAlign: 'center', writingDirection: 'rtl', maxWidth: 560 },
-  inviteText: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 23, color: Palette.text, textAlign: 'center', writingDirection: 'rtl', maxWidth: 540 },
-  modeSelector: { width: '100%', flexDirection: 'row-reverse', gap: 8, marginTop: 4 },
-  modeCard: { flex: 1, borderRadius: 14, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', padding: 10, gap: 3, alignItems: 'flex-end' },
+  sceneText: { fontFamily: Typography.boldFontFamily, fontSize: 14, lineHeight: 24, color: Palette.primaryDark, textAlign: 'center', writingDirection: 'rtl', maxWidth: 560 },
+  inviteText: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 23, color: Palette.text, textAlign: 'center', writingDirection: 'rtl', maxWidth: 560 },
+  recordBanner: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 14, backgroundColor: '#F5F7FF', borderWidth: 1, borderColor: '#C7D2FE' },
+  recordBannerText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Palette.primaryDark, writingDirection: 'rtl' },
+  modeSelector: { width: '100%', flexDirection: 'row-reverse', gap: 8, marginTop: 2 },
+  modeCard: { flex: 1, borderRadius: 15, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#F8FAFC', padding: 11, gap: 4, alignItems: 'flex-end' },
   modeCardOn: { borderColor: Palette.primary, backgroundColor: Palette.primarySoft },
+  modeCardExamOn: { borderColor: Palette.primaryDark, backgroundColor: '#EEF2FF', borderWidth: 1.5 },
+  modeHeadRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
   modeTitle: { fontFamily: Typography.boldFontFamily, fontSize: 13, color: Palette.ink, writingDirection: 'rtl' },
   modeTitleOn: { color: Palette.primaryDark },
-  modeDesc: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 17, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
-  roleRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginTop: 4 },
-  roleChip: { minHeight: 40, borderRadius: 20, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', paddingHorizontal: 14, justifyContent: 'center' },
+  modeDesc: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
+  roleRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginTop: 2 },
+  roleChip: { minHeight: 38, borderRadius: 20, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', paddingHorizontal: 14, justifyContent: 'center' },
   roleChipOn: { backgroundColor: Palette.primarySoft, borderColor: Palette.primary },
-  roleChipText: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.text },
+  roleChipText: { fontFamily: Typography.fontFamily, fontSize: 12.5, color: Palette.text },
   roleChipTextOn: { color: Palette.primaryDark, fontFamily: Typography.boldFontFamily },
-  enter: { minHeight: 52, marginTop: 6, borderRadius: 16, backgroundColor: Palette.primary, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 9, paddingHorizontal: 20 },
+  enter: { minHeight: 52, width: '100%', maxWidth: 340, marginTop: 4, borderRadius: 16, backgroundColor: Palette.primary, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 9, paddingHorizontal: 20 },
+  enterExam: { backgroundColor: Palette.primaryDark },
   enterText: { fontFamily: Typography.boldFontFamily, fontSize: 15, color: '#FFFFFF', writingDirection: 'rtl' },
   emptyNote: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.muted, textAlign: 'center', writingDirection: 'rtl' },
   thread: { width: '100%', gap: 10, marginTop: 6 },
+  liveModeBar: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  liveModeBadge: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999 },
+  liveExamBadge: { backgroundColor: Palette.primaryDark },
+  livePracticeBadge: { backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF' },
+  liveModeBadgeText: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Palette.primaryDark, writingDirection: 'rtl' },
   metaRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
   dots: { flexDirection: 'row', gap: 5 },
   dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: '#E2E5F5' },
@@ -1057,6 +1375,7 @@ const styles = StyleSheet.create({
   replay: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4, padding: 4 },
   replayText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Palette.primary, writingDirection: 'rtl' },
   turnCard: { width: '100%', borderRadius: 20, borderWidth: 1, borderColor: '#DDE2FF', backgroundColor: '#FBFBFF', padding: 14, gap: 9 },
+  turnCardExam: { borderColor: Palette.primary, backgroundColor: '#F5F7FF' },
   turnHeaderRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   turnTitle: { fontFamily: Typography.boldFontFamily, fontSize: 13, color: Palette.primaryDark, writingDirection: 'rtl' },
   levelBadge: { fontFamily: Typography.fontFamily, fontSize: 11, color: Palette.primary, backgroundColor: Palette.primarySoft, borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3, writingDirection: 'rtl' },
@@ -1090,7 +1409,8 @@ const styles = StyleSheet.create({
   input: { flex: 1, minHeight: 46, borderRadius: 14, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', paddingHorizontal: 12, fontFamily: 'Times New Roman', fontSize: 16, color: Palette.ink },
   send: { width: 46, height: 46, borderRadius: 23, backgroundColor: Palette.primary, alignItems: 'center', justifyContent: 'center' },
   note: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 21, color: '#B91C1C', textAlign: 'center', writingDirection: 'rtl' },
-  switchRow: { minHeight: 40, alignItems: 'center', justifyContent: 'center' },
+  bottomActionsRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center', gap: 8 },
+  switchRow: { minHeight: 38, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6 },
   doneCard: { width: '100%', marginTop: 12, padding: 18, borderRadius: 22, alignItems: 'stretch', gap: 14, borderWidth: 1 },
   doneCardGreen: { backgroundColor: '#F6FBF8', borderColor: '#BBF7D0' },
   doneCardBlue: { backgroundColor: '#F5F7FF', borderColor: '#C7D2FE' },
@@ -1101,6 +1421,7 @@ const styles = StyleSheet.create({
   trophyBlue: { backgroundColor: Palette.primary },
   trophyWarn: { backgroundColor: '#D97706' },
   heroCopy: { flex: 1, gap: 4, alignItems: 'flex-end' },
+  gradePillsRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 5 },
   xpPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 12, backgroundColor: Palette.primarySoft },
   xpPillText: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: Palette.primaryDark, writingDirection: 'rtl' },
   doneTitle: { fontFamily: Typography.boldFontFamily, fontSize: 16, lineHeight: 24, textAlign: 'right', writingDirection: 'rtl' },
@@ -1117,11 +1438,16 @@ const styles = StyleSheet.create({
   circleWarn: { backgroundColor: '#FEF3C7', borderColor: '#FBBF24' },
   overallValue: { fontFamily: Typography.boldFontFamily, fontSize: 18, writingDirection: 'rtl' },
   overallLabel: { fontFamily: Typography.fontFamily, fontSize: 10, writingDirection: 'rtl' },
-  metricsGrid: { flexDirection: 'row-reverse', gap: 8 },
-  metricBox: { flex: 1, paddingVertical: 10, paddingHorizontal: 8, borderRadius: 14, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center', gap: 2 },
+  metricsGrid: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8 },
+  metricBox: { flex: 1, minWidth: '45%', paddingVertical: 10, paddingHorizontal: 8, borderRadius: 14, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center', gap: 2 },
   metricValue: { fontFamily: Typography.boldFontFamily, fontSize: 15, color: Palette.ink, writingDirection: 'rtl' },
   metricLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Palette.muted, writingDirection: 'rtl' },
   finalHint: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 21, textAlign: 'right', writingDirection: 'rtl' },
+  weakFocusBox: { padding: 12, borderRadius: 14, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#FDE68A', gap: 7 },
+  weakFocusTitle: { fontFamily: Typography.boldFontFamily, fontSize: 12.5, color: '#92400E', textAlign: 'right', writingDirection: 'rtl' },
+  weakWordsText: { fontFamily: Typography.fontFamily, fontSize: 12, color: '#B45309', textAlign: 'right', writingDirection: 'rtl' },
+  weakSentenceBtn: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8, padding: 9, borderRadius: 11, backgroundColor: '#FFFBEB', borderWidth: 1, borderColor: '#FDE68A' },
+  weakSentenceText: { flex: 1, fontFamily: 'Times New Roman', fontSize: 14, fontWeight: '700', color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
   reviewList: { gap: 8 },
   reviewHeading: { fontFamily: Typography.boldFontFamily, fontSize: 13, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
   reviewItem: { padding: 12, borderRadius: 14, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E5E7EB', gap: 5 },
@@ -1132,7 +1458,8 @@ const styles = StyleSheet.create({
   scoreTagText: { fontFamily: Typography.boldFontFamily, fontSize: 11, writingDirection: 'rtl' },
   reviewPrompt: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 19, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   reviewHeard: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: Palette.text, textAlign: 'right', writingDirection: 'rtl' },
-  reviewExpected: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: Palette.primaryDark, textAlign: 'right', writingDirection: 'rtl' },
+  expectedPlayRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6, marginTop: 2 },
+  reviewExpected: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: Palette.primaryDark, textAlign: 'right', writingDirection: 'rtl' },
   errorLine: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#B45309', textAlign: 'right', writingDirection: 'rtl', width: '100%' },
   successLine: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#166534', textAlign: 'right', writingDirection: 'rtl' },
   doneActions: { flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'center', gap: 10 },

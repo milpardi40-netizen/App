@@ -439,11 +439,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       return;
     }
 
-    if (!conversation?.completed) {
-      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
-      return;
-    }
-
     void stopStarterSpeech();
     completing.current = true;
     setSaving(true);
@@ -717,6 +712,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         {stage === 9 && <>
           <LessonConversationRoom
             key={lesson.id}
+            courseId={course.id}
             lessonId={lesson.id}
             levelId={lesson.levelId}
             situation={lesson.situation}

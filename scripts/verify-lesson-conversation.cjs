@@ -78,10 +78,12 @@ const esbuild = require('esbuild');
   const russian = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
   const starter = fs.readFileSync('components/StarterLesson.tsx', 'utf8');
   const turkish = fs.readFileSync('components/TurkishLesson.tsx', 'utf8');
+  const arabic = fs.readFileSync('components/arabic/ArabicLessonScreen.tsx', 'utf8');
   check(room.includes('normalizeLessonConversation') && room.includes('onSessionChange') && room.includes('initialSession'), 'room hydrates and emits durable state');
-  check(english.includes('conversation?.completed') && english.includes('onSessionChange={setConversation}'), 'English completion requires the conversation and persists it');
-  check(russian.includes('conversation?.completed') && russian.includes('onSessionChange={setConversation}'), 'Russian completion requires the conversation and persists it');
-  check(starter.includes('conversation?.completed') && starter.includes('onSessionChange={setConversation}') && starter.includes('<LessonConversationRoom') && starter.includes('<RealConversationEntry'), 'DE/FR/ES completion requires the conversation room and persists it');
-  check(turkish.includes('conversation?.completed') && turkish.includes('onSessionChange={setConversation}') && turkish.includes('<LessonConversationRoom') && turkish.includes('<RealConversationEntry'), 'Turkish completion requires the conversation room and persists it');
-  console.log(`PASS: ${SENTENCE_LESSONS.length} English, ${RUSSIAN_LESSONS.length} Russian, ${TURKISH_LESSONS.length} Turkish, and DE/FR/ES lessons have explicit conversation roles, durable resume state and completion gates.`);
+  check(room.includes("'oral-exam'") && room.includes('blindExam') && room.includes('saveLessonOutcome'), 'room provides blind oral exam mode and durable outcome grading');
+  for (const [label, src] of [['English', english], ['Russian', russian], ['DE/FR/ES', starter], ['Turkish', turkish], ['Arabic', arabic]]) {
+    check(src.includes('onSessionChange={setConversation}') && src.includes('initialSession={conversation}') && src.includes('<LessonConversationRoom') && src.includes('<RealConversationEntry'), `${label} wires LessonConversationRoom with durable session persistence`);
+    check(!src.includes('ابتدا تمرین مکالمهٔ همین درس را کامل کنید'), `${label} keeps the conversation room optional instead of blocking lesson completion`);
+  }
+  console.log(`PASS: ${SENTENCE_LESSONS.length} English, ${RUSSIAN_LESSONS.length} Russian, ${TURKISH_LESSONS.length} Turkish, and DE/FR/ES lessons have explicit conversation roles, durable resume state, optional oral exam mode, and real grading.`);
 })().catch(error => { console.error(error); process.exit(1); });

@@ -479,10 +479,6 @@ export default function ArabicLessonScreen() {
       setRevealed(false);
       return;
     }
-    if (!conversation?.completed) {
-      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
-      return;
-    }
     if (saving) return;
     completing.current = true;
     setSaving(true);
@@ -1031,6 +1027,7 @@ export default function ArabicLessonScreen() {
             <>
               <LessonConversationRoom
                 key={lesson.id}
+                courseId="ar"
                 lessonId={lesson.id}
                 levelId={lesson.levelId}
                 situation={lesson.situation}

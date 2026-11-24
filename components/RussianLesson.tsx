@@ -380,11 +380,6 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       return;
     }
 
-    if (!conversation?.completed) {
-      setCompletionError('ابتدا تمرین مکالمهٔ همین درس را کامل کنید؛ پاسخ صوتی، تایپی یا نمایش پاسخ قابل استفاده است.');
-      return;
-    }
-
     void stopRussianSpeech();
     completing.current = true;
     setSaving(true);
@@ -647,6 +642,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         {stage === 9 && <>
           <LessonConversationRoom
             key={lesson.id}
+            courseId="ru"
             lessonId={lesson.id}
             levelId={lesson.levelId}
             situation={lesson.situation}
