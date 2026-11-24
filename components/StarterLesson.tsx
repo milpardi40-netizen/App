@@ -156,7 +156,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const bridgeRules = useMemo(() => bridgeLanguage ? starterBridgeRulesForLesson(bridgeLanguage, lesson.sentences) : [], [bridgeLanguage, lesson.sentences]);
   const checks = useMemo(() => shuffleChecks(lesson.id, starterDisplayChecks(lesson)), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
-  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart: () => void; readiness?: number };
+  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; onFreeConversation?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
   const roledDialogue = useMemo(() => withInferredDialogueRoles(starterDisplayDialogue(lesson)), [lesson]);
   const semanticPractice = useMemo(
@@ -465,7 +465,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         dueReviews,
         review: () => router.replace(`${course.home}/review` as never),
         newAchievements: rewards.medals,
-        levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness(course.id as 'de' | 'fr' | 'es', auditLessonsFromLearning(course.lessons as ReadonlyArray<import('@/lib/languages/types').LearningLesson & { levelId: number }>)), lesson.levelId)?.readiness, title: course.levels.find(item => item.id === lesson.levelId)?.title ?? '', lessons: course.lessons.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: `${course.home}/studio`, params: { level: String(lesson.levelId), mode: 'warmup' } } as never) } : undefined,
+        levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness(course.id as 'de' | 'fr' | 'es', auditLessonsFromLearning(course.lessons as ReadonlyArray<import('@/lib/languages/types').LearningLesson & { levelId: number }>)), lesson.levelId)?.readiness, title: course.levels.find(item => item.id === lesson.levelId)?.title ?? '', lessons: course.lessons.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: `${course.home}/studio`, params: { level: String(lesson.levelId), mode: 'warmup' } } as never), onFreeConversation: () => router.replace({ pathname: '/conversation-rooms/[language]', params: { language: course.id, level: String(lesson.levelId), mode: 'level-free' } } as never) } : undefined,
       });
     } catch {
       completing.current = false;
@@ -747,7 +747,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         </View>
       </View>
       <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(lessons, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
-      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: () => { const go = celebration.levelFinished!.onStart; setCelebration(null); go(); } } : undefined} />
+      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined, onFreeConversation: celebration.levelFinished.onFreeConversation ? () => { const go = celebration.levelFinished!.onFreeConversation!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );
 }
