@@ -673,7 +673,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
             <Pressable accessibilityRole="button" accessibilityLabel={`شنیدن ${unit} انتخاب‌شده`} style={styles.bubbleSound} onPress={() => speak(current.text)}><Volume2 size={20} color={Palette.primary} /></Pressable>
             <PracticeNavigation index={sentenceIndex} count={lesson.sentences.length} onChange={setSentenceIndex} />
           </View> : null}
-          {false ? null : <View style={styles.evidenceCard}>
+          <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>
               <View style={styles.questionHeader}><View style={styles.questionBadge}><Text style={styles.questionBadgeText}>سؤال {fa(index + 1)}</Text></View><View style={styles.questionRule} /></View>
               <Text style={styles.questionPrompt}>{question.promptFa}</Text>
@@ -692,7 +692,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
               </View>}
             </View>)}
             {!a1 && !showCheckAnswers && <Pressable accessibilityRole="button" style={styles.showAnswersButton} onPress={() => setShowCheckAnswers(true)}><Text style={styles.showAnswersText}>نمایش توضیح همهٔ پاسخ‌ها</Text></Pressable>}
-          </View>}
+          </View>
           <StarterExtraPractice key={lesson.id} lesson={lesson} />
           {readingTask ? <StarterA1Skill key={`${lesson.id}-reading`} task={readingTask} onSpeak={speak} /> : null}
             </> },

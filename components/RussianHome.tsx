@@ -401,6 +401,19 @@ export default function RussianHome() {
                 </View>
                 <ChevronLeft size={17} color={HomeColors.muted} />
               </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="اتاق مکالمهٔ درس‌های روسی"
+                style={styles.quickCard}
+                onPress={() => router.push('/conversation-rooms/ru' as never)}
+              >
+                <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><MessageCircle size={18} color={HomeColors.accent} /></View>
+                <View style={styles.quickCopy}>
+                  <Text style={styles.quickTitle}>اتاق مکالمهٔ درس‌ها</Text>
+                  <Text style={styles.quickDesc}>فقط مکالمه‌های هر سطح (Pre-A1 تا C1)</Text>
+                </View>
+                <ChevronLeft size={17} color={HomeColors.muted} />
+              </Pressable>
               <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => router.push('/learn/ru/library' as never)}>
                 <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><MessageCircle size={18} color={HomeColors.accent} /></View>
                 <View style={styles.quickCopy}>

@@ -606,7 +606,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
             </View>
             <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`واژه ${fa(index + 1)}`} accessibilityState={{ selected: index === sentenceIndex }} onPress={() => { setSentenceIndex(index); setRevealed(false); }} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
           </View> : null}
-          {false ? null : <View style={styles.evidenceCard}>
+          <View style={styles.evidenceCard}>
             {checks.map((question, index) => <View key={index} style={styles.question}>
               <View style={styles.questionHeader}><View style={styles.questionBadge}><Text style={styles.questionBadgeText}>سؤال {fa(index + 1)}</Text></View><View style={styles.questionRule} /></View>
               <Text style={styles.questionPrompt}>{question.promptFa}</Text>
@@ -625,7 +625,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
               </View>}
             </View>)}
             {!showCheckAnswers && <Pressable accessibilityRole="button" style={styles.showAnswersButton} onPress={() => setShowCheckAnswers(true)}><Text style={styles.showAnswersText}>نمایش توضیح همهٔ پاسخ‌ها</Text></Pressable>}
-          </View>}
+          </View>
             </> },
           ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}

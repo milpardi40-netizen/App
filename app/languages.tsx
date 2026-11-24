@@ -311,10 +311,10 @@ export default function LanguagesHome() {
                     <Play size={16} color={palette.paper} fill={palette.paper} strokeWidth={2} />
                   </View>
                   <View style={styles.quickCopy}>
-                    <Text numberOfLines={1} style={styles.quickTitle}>
+                    <Text noFontBump style={styles.quickTitle}>
                       {`ادامهٔ یادگیری ${resumeBanner.languageName}`}
                     </Text>
-                    <Text numberOfLines={1} style={styles.quickDetail}>
+                    <Text noFontBump style={styles.quickDetail}>
                       بازگشت مستقیم به آخرین مسیر
                     </Text>
                   </View>
@@ -333,10 +333,10 @@ export default function LanguagesHome() {
                     <BookOpen size={16} color={palette.terracotta} strokeWidth={2} />
                   </View>
                   <View style={styles.quickCopy}>
-                    <Text numberOfLines={1} style={styles.quickTitle}>
+                    <Text noFontBump style={styles.quickTitle}>
                       مرور امروز
                     </Text>
-                    <Text numberOfLines={1} style={styles.quickDetail}>
+                    <Text noFontBump style={styles.quickDetail}>
                       {`${toPersianDigits(dueReviewCount)} جمله آمادهٔ مرور`}
                     </Text>
                   </View>
@@ -405,8 +405,8 @@ const styles = StyleSheet.create({
   quickIconPrimary: { width: 34, height: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.forest },
   quickIconReview: { width: 34, height: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.terracottaSoft },
   quickCopy: { flex: 1, minWidth: 0, alignItems: Platform.OS === 'web' ? 'flex-start' : 'flex-end', gap: 1 },
-  quickTitle: { fontFamily: 'Beiruti', fontSize: 14.5, lineHeight: 22, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' },
-  quickDetail: { fontFamily: 'Beiruti', fontSize: 11.5, lineHeight: 18, color: palette.muted, textAlign: 'right', writingDirection: 'rtl' },
+  quickTitle: { width: '100%', fontFamily: 'Beiruti', fontSize: 14.5, lineHeight: 22, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' },
+  quickDetail: { width: '100%', fontFamily: 'Beiruti', fontSize: 11.5, lineHeight: 18, color: palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   languageList: { flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse', alignItems: 'stretch', gap: 12 },
   languageListWrap: { flexWrap: 'wrap' },
   languageBlock: { gap: 10 },
