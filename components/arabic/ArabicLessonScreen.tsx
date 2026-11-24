@@ -101,6 +101,13 @@ export default function ArabicLessonScreen() {
     next: () => void;
     dueReviews: number;
     review: () => void;
+    levelFinished?: {
+      title: string;
+      lessons: number;
+      onStart?: () => void;
+      onFreeConversation?: () => void;
+      readiness?: number;
+    };
     newAchievements?: readonly { id: string; title: string; description: string }[];
   } | null>(null);
 
@@ -520,6 +527,18 @@ export default function ArabicLessonScreen() {
         dueReviews,
         review: () => router.replace('/learn/ar/review' as never),
         newAchievements: rewards.medals,
+        levelFinished:
+          !nextLesson || nextLesson.levelId !== lesson.levelId
+            ? {
+                title: ARABIC_LEVELS.find(item => item.id === lesson.levelId)?.title ?? '',
+                lessons: ARABIC_LESSONS.filter(item => item.levelId === lesson.levelId).length,
+                onFreeConversation: () =>
+                  router.replace({
+                    pathname: '/conversation-rooms/[language]',
+                    params: { language: 'ar', level: String(lesson.levelId), mode: 'level-free' },
+                  } as never),
+              }
+            : undefined,
       });
     } catch {
       setCompletionError('پایان درس ذخیره نشد؛ دوباره تلاش کنید.');
@@ -1164,6 +1183,27 @@ export default function ArabicLessonScreen() {
           go?.();
         }}
         newAchievements={celebration?.newAchievements}
+        levelFinished={
+          celebration?.levelFinished
+            ? {
+                ...celebration.levelFinished,
+                onStart: celebration.levelFinished.onStart
+                  ? () => {
+                      const go = celebration.levelFinished!.onStart!;
+                      setCelebration(null);
+                      go();
+                    }
+                  : undefined,
+                onFreeConversation: celebration.levelFinished.onFreeConversation
+                  ? () => {
+                      const go = celebration.levelFinished!.onFreeConversation!;
+                      setCelebration(null);
+                      go();
+                    }
+                  : undefined,
+              }
+            : undefined
+        }
       />
     </View>
   );

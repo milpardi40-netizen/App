@@ -1,6 +1,7 @@
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { FitScrollView } from '@/components/FitScrollView';
 import LessonConversationRoom from '@/components/LessonConversationRoom';
+import LevelFreeConversationRoom from '@/components/LevelFreeConversationRoom';
 import { PageNavigation } from '@/components/PageNavigation';
 import { LearningHomeColors as HomeColors } from '@/components/LearningHomeStyles';
 import type { BranchingLocale } from '@/lib/branchingConversation';
@@ -8,7 +9,7 @@ import { toPersianDigits } from '@/lib/format';
 import type { LessonConversationSession } from '@/lib/lessonConversation';
 import { Colors, Spacing, Typography } from '@/lib/theme';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ArrowLeft, ArrowRight, ChevronLeft, MessageCircle, Search, X } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, ChevronLeft, MessageCircle, Search, Sparkles, X } from 'lucide-react-native';
 import { useCallback, useEffect, useMemo, useState, type ComponentProps } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -71,9 +72,11 @@ export default function LessonConversationHub({
   onStop,
 }: Props) {
   const router = useRouter();
-  const params = useLocalSearchParams<{ language?: string; level?: string | string[]; lesson?: string | string[] }>();
+  const params = useLocalSearchParams<{ language?: string; level?: string | string[]; lesson?: string | string[]; mode?: string | string[] }>();
   const levelParam = firstParam(params.level);
   const lessonParam = firstParam(params.lesson);
+  const modeParam = firstParam(params.mode);
+  const isLevelFreeMode = modeParam === 'level-free';
 
   const selectedLevel = useMemo(
     () => levels.find(item => String(item.id) === levelParam),
@@ -116,7 +119,7 @@ export default function LessonConversationHub({
 
   useEffect(() => {
     onStop();
-  }, [selectedLevel?.id, activeSummary?.id, onStop]);
+  }, [selectedLevel?.id, activeSummary?.id, isLevelFreeMode, onStop]);
 
   useEffect(() => () => onStop(), [onStop]);
 
@@ -137,10 +140,11 @@ export default function LessonConversationHub({
   }, [levelSummaries, query]);
 
   const routeFor = useCallback(
-    (levelId?: number, lessonId?: string) => {
+    (levelId?: number, lessonId?: string, mode?: 'level-free') => {
       const nextParams: Record<string, string> = { language: courseId };
       if (levelId !== undefined) nextParams.level = String(levelId);
       if (lessonId) nextParams.lesson = lessonId;
+      if (mode) nextParams.mode = mode;
       return { pathname: '/conversation-rooms/[language]', params: nextParams } as never;
     },
     [courseId],
@@ -149,6 +153,11 @@ export default function LessonConversationHub({
   const openLevel = (levelId: number) => {
     onStop();
     router.push(routeFor(levelId));
+  };
+
+  const openLevelFree = (levelId: number) => {
+    onStop();
+    router.push(routeFor(levelId, undefined, 'level-free'));
   };
 
   const openLesson = (levelId: number, lessonId: string) => {
@@ -161,6 +170,49 @@ export default function LessonConversationHub({
     if (selectedLevel) router.replace(routeFor(selectedLevel.id));
     else router.replace(routeFor());
   };
+
+  if (selectedLevel && isLevelFreeMode) {
+    return (
+      <View style={styles.root}>
+        <View style={styles.roomTopBar}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`بازگشت به مکالمه‌های سطح ${selectedLevel.cefr}`}
+            onPress={backToLevelList}
+            style={({ pressed }) => [styles.roomBackButton, pressed && styles.pressed]}
+          >
+            <ArrowRight size={16} color={HomeColors.ink} />
+            <Text style={styles.roomBackText}>فهرست {selectedLevel.cefr}</Text>
+          </Pressable>
+          <View style={styles.roomHeaderCopy}>
+            <Text numberOfLines={1} style={styles.roomHeaderTitle}>گفت‌وگوی آزاد پایان سطح</Text>
+            <Text style={styles.roomHeaderMeta}>
+              {selectedLevel.cefr} · {languageName}
+            </Text>
+          </View>
+          <View style={[styles.cefrBadge, { backgroundColor: `${selectedLevel.color}18`, borderColor: `${selectedLevel.color}40` }]}>
+            <Text style={[styles.cefrBadgeText, { color: selectedLevel.color }]}>{selectedLevel.cefr}</Text>
+          </View>
+        </View>
+
+        <FitScrollView contentContainerStyle={styles.roomScrollContent} showsVerticalScrollIndicator={false}>
+          <View style={styles.roomInner}>
+            <LevelFreeConversationRoom
+              courseId={courseId}
+              languageName={languageName}
+              locale={locale}
+              level={selectedLevel}
+              summaries={levelSummaries}
+              buildPayload={buildPayload}
+              onSpeak={onSpeak}
+              onStop={onStop}
+              onBack={backToLevelList}
+            />
+          </View>
+        </FitScrollView>
+      </View>
+    );
+  }
 
   if (selectedLevel && activeSummary && activePayload) {
     const prevSummary = activeSummaryIndex > 0 ? levelSummaries[activeSummaryIndex - 1] : undefined;
@@ -342,6 +394,26 @@ export default function LessonConversationHub({
                 )}
               </View>
 
+              {levelSummaries.length > 0 && (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={`شروع گفت‌وگوی آزاد پایان سطح ${selectedLevel.cefr}`}
+                  onPress={() => openLevelFree(selectedLevel.id)}
+                  style={({ pressed }) => [styles.freeLevelCard, { borderColor: `${selectedLevel.color}40` }, pressed && styles.pressed]}
+                >
+                  <View style={[styles.freeLevelIcon, { backgroundColor: `${selectedLevel.color}16` }]}>
+                    <Sparkles size={19} color={selectedLevel.color} />
+                  </View>
+                  <View style={styles.freeLevelCopy}>
+                    <Text style={styles.freeLevelTitle}>گفت‌وگوی آزاد پایان سطح · {selectedLevel.cefr}</Text>
+                    <Text style={styles.freeLevelDesc}>
+                      ۱۰ تا ۱۲ موقعیت از این سطح: فارسی را ببین و خودت به {languageName} بگو (اختیاری، بدون نمره)
+                    </Text>
+                  </View>
+                  <ChevronLeft size={18} color={selectedLevel.color} />
+                </Pressable>
+              )}
+
               {levelSummaries.length > 8 && (
                 <View style={styles.searchBox}>
                   <Search size={16} color={HomeColors.muted} />
@@ -512,6 +584,19 @@ const styles = StyleSheet.create({
   selectedLevelCount: { fontFamily: Typography.fontFamily, fontSize: 12.5, lineHeight: 20, color: HomeColors.muted },
   selectedLevelTitle: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 15.5, lineHeight: 24, color: HomeColors.ink, textAlign: 'right', writingDirection: 'rtl' },
   selectedLevelDesc: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 19, color: HomeColors.muted, textAlign: 'right', writingDirection: 'rtl' },
+  freeLevelCard: {
+    flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse',
+    alignItems: 'center',
+    gap: 11,
+    padding: 13,
+    borderRadius: 16,
+    backgroundColor: HomeColors.surface,
+    borderWidth: 1,
+  },
+  freeLevelIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  freeLevelCopy: { flex: 1, minWidth: 0, gap: 3 },
+  freeLevelTitle: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 14, lineHeight: 21, color: HomeColors.ink, textAlign: 'right', writingDirection: 'rtl' },
+  freeLevelDesc: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 19, color: HomeColors.muted, textAlign: 'right', writingDirection: 'rtl' },
   searchBox: {
     flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse',
     alignItems: 'center',

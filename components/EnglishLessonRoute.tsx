@@ -92,7 +92,7 @@ export default function SentenceLessonScreen() {
   const assessmentResult = useRef<{ correct: number; total: number } | null>(null);
   useEffect(() => { assessmentResult.current = null; }, [lesson.id]);
   const [chunkCelebration, setChunkCelebration] = useState<{ chunk: number; total: number; done: number; nextStart: number } | null>(null);
-  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart: () => void; readiness?: number };
+  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; onFreeConversation?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
   const [completionError, setCompletionError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -520,7 +520,7 @@ export default function SentenceLessonScreen() {
       dueReviews,
       review: () => router.replace('/review' as never),
       newAchievements: rewards.medals,
-      levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness('en', auditLessonsFromEnglish(SENTENCE_LESSONS)), lesson.levelId)?.readiness, title: COURSE_LEVELS.find(item => item.id === lesson.levelId)?.title ?? '', lessons: SENTENCE_LESSONS.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: '/learn/en/studio', params: { level: String(lesson.levelId), mode: 'warmup' } } as never) } : undefined,
+      levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness('en', auditLessonsFromEnglish(SENTENCE_LESSONS)), lesson.levelId)?.readiness, title: COURSE_LEVELS.find(item => item.id === lesson.levelId)?.title ?? '', lessons: SENTENCE_LESSONS.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: '/learn/en/studio', params: { level: String(lesson.levelId), mode: 'warmup' } } as never), onFreeConversation: () => router.replace({ pathname: '/conversation-rooms/[language]', params: { language: 'en', level: String(lesson.levelId), mode: 'level-free' } } as never) } : undefined,
     });
     } catch { setCompletionError('پایان درس ذخیره نشد؛ دوباره تلاش کنید.'); }
     finally { completing.current=false; setSaving(false); }
@@ -843,7 +843,7 @@ export default function SentenceLessonScreen() {
         </View>
       ) : null}
       <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(SENTENCE_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
-      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: () => { const go = celebration.levelFinished!.onStart; setCelebration(null); go(); } } : undefined} />
+      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined, onFreeConversation: celebration.levelFinished.onFreeConversation ? () => { const go = celebration.levelFinished!.onFreeConversation!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );
 }

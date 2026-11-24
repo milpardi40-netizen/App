@@ -703,7 +703,11 @@ function englishLabLesson(lab: LabLesson): SentenceLesson {
       vocabulary: sentence.vocabulary,
     })),
     dialogue: lab.dialogue.map((line, index) => ({
-      speaker: index % 2 === 0 ? 'learner' as const : 'partner' as const,
+      speaker: line.speaker === 'هم‌صحبت' || line.speaker === 'همراه'
+        ? 'partner' as const
+        : line.speaker === 'زبان‌آموز' || line.speaker === 'زبانآموز'
+          ? 'learner' as const
+          : (index % 2 === 0 ? 'partner' as const : 'learner' as const),
       text: line.text, fa: line.fa,
     })),
     checks: lab.checks,
