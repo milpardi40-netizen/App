@@ -93,14 +93,31 @@ export function readingColor(color: unknown): string | undefined {
   colorCache.set(color, result);
   return result;
 }
+const GLOBAL_FONT_BUMP = 1;
+const SENTENCE_FONT_BUMP = 2;
+const SENTENCE_FONT_THRESHOLD = 17;
+
 function presentationStyle(style: TextProps['style'], extra?: TextStyle, keepColor = false, textScale = 1): TextStyle | undefined {
   const flat = StyleSheet.flatten([style, extra]) as TextStyle | undefined;
   const out: TextStyle = {};
   let color = keepColor ? flat?.color : readingColor(flat?.color);
   if (color === BLACK && extra === persian) color = PERSIAN_BLACK;
   if (color !== undefined && color !== flat?.color) out.color = color;
-  if (textScale !== 1) {
-    const size = flat?.fontSize ?? 14;
+  const baseSize = flat?.fontSize;
+  if (typeof baseSize === 'number' && baseSize > 0) {
+    const bump = baseSize >= SENTENCE_FONT_THRESHOLD ? SENTENCE_FONT_BUMP : GLOBAL_FONT_BUMP;
+    const bumpedSize = baseSize + bump;
+    out.fontSize = textScale !== 1
+      ? Math.round(bumpedSize * textScale * 10) / 10
+      : bumpedSize;
+    if (typeof flat?.lineHeight === 'number' && flat.lineHeight > 0) {
+      const bumpedLineHeight = Math.round(flat.lineHeight * (bumpedSize / baseSize) * 10) / 10;
+      out.lineHeight = textScale !== 1
+        ? Math.round(bumpedLineHeight * textScale * 10) / 10
+        : bumpedLineHeight;
+    }
+  } else if (textScale !== 1) {
+    const size = 14 + GLOBAL_FONT_BUMP;
     out.fontSize = Math.round(size * textScale * 10) / 10;
     if (flat?.lineHeight) out.lineHeight = Math.round(flat.lineHeight * textScale * 10) / 10;
   }
@@ -196,8 +213,9 @@ export const LocalizedText = forwardRef<NativeText, LocalizedTextProps>(function
  * keeps Beiruti and RTL rather than breaking editing, selection or IME state. */
 export const LocalizedTextInput = forwardRef<NativeTextInput, TextInputProps>(function LocalizedTextInput({ style, value, defaultValue, placeholder, onChangeText, ...props }, ref) {
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? '');
+  const textScale = useContext(TextScaleContext);
   const content = value ?? uncontrolled;
   return <NativeTextInput ref={ref} {...props} value={value} defaultValue={defaultValue} placeholder={placeholder}
     onChangeText={text => { if (value === undefined) setUncontrolled(text); onChangeText?.(text); }}
-    style={[style, scriptStyle(content || placeholder || ''), presentationStyle(style, scriptStyle(content || placeholder || ''))]} />;
+    style={[style, scriptStyle(content || placeholder || ''), presentationStyle(style, scriptStyle(content || placeholder || ''), false, textScale)]} />;
 });

@@ -1,6 +1,6 @@
-import { LocalizedText as Text } from '@/components/LocalizedText';
+import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Check, Volume2 } from 'lucide-react-native';
 import { ARABIC_LESSONS, type ArabicCheck, type ArabicLesson } from '@/lib/arabic/content';
 import { playArabicSpeech } from '@/lib/arabic/speech';
