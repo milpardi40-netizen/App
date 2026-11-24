@@ -66,6 +66,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const maxListenTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const emptyRetries = useRef(0);
   const busyRetries = useRef(0);
+  const clientRetries = useRef(0);
   const targetRef = useRef(text);
   targetRef.current = text;
   const onResultRef = useRef(onResult);
@@ -92,13 +93,17 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     settledRef.current = false;
     emptyRetries.current = 0;
     busyRetries.current = 0;
+    clientRetries.current = 0;
   }, [text]);
   useEffect(() => () => {
     generation.current++;
     clearListenTimers();
     if (retryTimer.current) clearTimeout(retryTimer.current);
     retryTimer.current = null;
-    if (micOwner === owner.current) { micOwner = null; void ExpoSpeechRecognitionModule.abort?.(); }
+    if (micOwner === owner.current) {
+      micOwner = null;
+      if (listeningRef.current) void ExpoSpeechRecognitionModule.abort?.();
+    }
   }, [text, clearListenTimers]);
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
@@ -116,6 +121,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         retryTimer.current = null;
       }
       if (wasAutoStart && micOwner === owner.current) {
+        const wasListening = listeningRef.current;
         generation.current++;
         clearListenTimers();
         settledRef.current = true;
@@ -123,7 +129,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         listeningRef.current = false;
         setListening(false);
         setPartial('');
-        void ExpoSpeechRecognitionModule.abort?.();
+        if (wasListening) void ExpoSpeechRecognitionModule.abort?.();
       }
       return;
     }
@@ -253,6 +259,18 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       setError('میکروفن لحظه‌ای مشغول بود؛ دوباره «بگو» را بزنید.');
       return;
     }
+    if (code === 'client') {
+      if (clientRetries.current < 1 && !stoppingByUser.current && !retryTimer.current) {
+        clientRetries.current += 1;
+        retryTimer.current = setTimeout(() => {
+          retryTimer.current = null;
+          void startRef.current?.();
+        }, 450);
+        return;
+      }
+      setError('سرویس گفتار دستگاه آماده نشد؛ اتصال اینترنت و فعال بودن سرویس گفتار گوگل را بررسی کنید یا پاسخ را بنویسید.');
+      return;
+    }
     setError(code === 'not-allowed' || code === 'service-not-allowed'
       ? 'اجازهٔ میکروفن یا تشخیص گفتار داده نشده است؛ از تنظیمات دستگاه فعالش کنید.'
       : code === 'language-not-supported'
@@ -280,42 +298,27 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     settledRef.current = false;
     const token = ++generation.current;
     try {
-      if (Platform.OS === 'web' && !ExpoSpeechRecognitionModule.isRecognitionAvailable()) {
-        setError('مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.');
+      if (typeof ExpoSpeechRecognitionModule.isRecognitionAvailable === 'function' && !ExpoSpeechRecognitionModule.isRecognitionAvailable()) {
+        setError(Platform.OS === 'web'
+          ? 'مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.'
+          : 'سرویس تشخیص گفتار روی دستگاه فعال نیست؛ در تنظیمات گوشی سرویس گفتار گوگل را بررسی کنید.');
         return;
       }
       const permission = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
       if (token !== generation.current) return;
       if (micOwner && micOwner !== owner.current) { setError('ابتدا تمرین گفتاری فعال را پایان دهید.'); return; }
       if (!permission.granted) { setError('برای تمرین گفتاری، اجازهٔ میکروفن لازم است.'); return; }
+      try { void Speech.stop(); } catch { /* ignore */ }
       micOwner = owner.current;
-      if (adaptiveTiming) {
-        const windowTiming = timingRef.current;
-        ExpoSpeechRecognitionModule.start({
-          lang: locale,
-          interimResults: true,
-          continuous: Platform.OS === 'web',
-          maxAlternatives: 5,
-          contextualStrings: [text],
-          requiresOnDeviceRecognition: false,
-          addsPunctuation: false,
-          androidIntentOptions: {
-            EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS: windowTiming.minimumMs,
-            EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.completeSilenceMs,
-            EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS: windowTiming.possiblyCompleteSilenceMs,
-          },
-        });
-      } else {
-        ExpoSpeechRecognitionModule.start({
-          lang: locale,
-          interimResults: true,
-          continuous: false,
-          maxAlternatives: 5,
-          contextualStrings: [text],
-          requiresOnDeviceRecognition: false,
-          addsPunctuation: false,
-        });
-      }
+      ExpoSpeechRecognitionModule.start({
+        lang: locale,
+        interimResults: true,
+        continuous: adaptiveTiming && Platform.OS === 'web',
+        maxAlternatives: 5,
+        contextualStrings: text.trim() ? [text] : undefined,
+        requiresOnDeviceRecognition: false,
+        addsPunctuation: false,
+      });
     } catch {
       if (micOwner === owner.current) micOwner = null;
       setError('تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
@@ -354,6 +357,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
           if (listening) { stop(); return; }
           emptyRetries.current = 0;
           busyRetries.current = 0;
+          clientRetries.current = 0;
           void start();
         }}
         style={({ pressed }) => [styles.button, compact && styles.buttonCompact, { backgroundColor: listening ? '#B91C1C' : accent }, pressed && styles.buttonPressed]}

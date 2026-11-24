@@ -328,6 +328,7 @@ export default function LessonConversationRoom({
 
   const advance = useCallback(() => {
     clearStall();
+    onStop?.();
     setAttempts(0);
     setRevealed(false);
     setChoicePanel(false);
@@ -336,7 +337,7 @@ export default function LessonConversationRoom({
     setDiagnostic(null);
     setHintOpen(false);
     setIndex(value => value + 1);
-  }, [clearStall]);
+  }, [clearStall, onStop]);
 
   const linesRef = useRef(lines); linesRef.current = lines;
   const indexRef = useRef(index); indexRef.current = index;

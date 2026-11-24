@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
 import { Mic2, Square } from 'lucide-react-native';
+import * as Speech from '@/lib/courseSpeech';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { Typography } from '@/lib/theme';
 
@@ -24,16 +25,27 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
   const [partial, setPartial] = useState('');
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState('');
+  const listeningRef = useRef(false);
   const finalRef = useRef('');
   const lastHeardRef = useRef('');
   const settledRef = useRef(false);
+  const busyRetries = useRef(0);
+  const clientRetries = useRef(0);
+  const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const startRef = useRef<null | (() => Promise<void>)>(null);
   const generation = useRef(0);
   const onTranscriptRef = useRef(onTranscript);
   onTranscriptRef.current = onTranscript;
 
-  useEffect(() => () => { generation.current++; void ExpoSpeechRecognitionModule.abort?.(); }, []);
+  useEffect(() => () => {
+    generation.current++;
+    if (retryTimer.current) clearTimeout(retryTimer.current);
+    retryTimer.current = null;
+    if (listeningRef.current) void ExpoSpeechRecognitionModule.abort?.();
+  }, []);
 
   useSpeechRecognitionEvent('start', () => {
+    listeningRef.current = true;
     setListening(true);
     setError('');
   });
@@ -59,6 +71,7 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
   });
 
   useSpeechRecognitionEvent('end', () => {
+    listeningRef.current = false;
     setListening(false);
     setPartial('');
     if (settledRef.current) return;
@@ -71,13 +84,38 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
   });
 
   useSpeechRecognitionEvent('error', event => {
+    listeningRef.current = false;
     setListening(false);
     setPartial('');
-    const code = event.error;
+    const code = event.error as string;
     settledRef.current = true;
     if (code === 'aborted') return;
-    if (code === 'no-speech') {
+    if (code === 'no-speech' || code === 'speech-timeout') {
       setError('چیزی شنیده نشد؛ یک بار دیگر بگو.');
+      return;
+    }
+    if (code === 'busy') {
+      if (busyRetries.current < 1 && !retryTimer.current) {
+        busyRetries.current += 1;
+        retryTimer.current = setTimeout(() => {
+          retryTimer.current = null;
+          void startRef.current?.();
+        }, 450);
+        return;
+      }
+      setError('میکروفن لحظه‌ای مشغول بود؛ دوباره «بگو» را بزنید.');
+      return;
+    }
+    if (code === 'client') {
+      if (clientRetries.current < 1 && !retryTimer.current) {
+        clientRetries.current += 1;
+        retryTimer.current = setTimeout(() => {
+          retryTimer.current = null;
+          void startRef.current?.();
+        }, 450);
+        return;
+      }
+      setError('سرویس گفتار دستگاه آماده نشد؛ اتصال اینترنت و فعال بودن سرویس گفتار گوگل را بررسی کنید.');
       return;
     }
     setError(code === 'not-allowed' || code === 'service-not-allowed'
@@ -86,11 +124,17 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
         ? 'تشخیص گفتار این زبان روی دستگاه شما در دسترس نیست.'
         : code === 'network'
           ? 'برای تشخیص گفتار این زبان، اتصال اینترنت لازم است.'
-          : 'تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
+          : code === 'audio-capture'
+            ? 'میکروفن دستگاه در دسترس نیست؛ بررسی کنید برنامهٔ دیگری از آن استفاده نکند.'
+            : code === 'too-many-requests'
+              ? 'درخواست‌های گفتاری زیاد شد؛ چند لحظه صبر کنید و دوباره «بگو» را بزنید.'
+              : 'تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
   });
 
   const start = async () => {
-    if (disabled) return;
+    if (disabled || listeningRef.current) return;
+    if (retryTimer.current) clearTimeout(retryTimer.current);
+    retryTimer.current = null;
     setError('');
     setPartial('');
     setTranscript('');
@@ -99,8 +143,10 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
     settledRef.current = false;
     const token = ++generation.current;
     try {
-      if (Platform.OS === 'web' && !ExpoSpeechRecognitionModule.isRecognitionAvailable()) {
-        setError('مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.');
+      if (typeof ExpoSpeechRecognitionModule.isRecognitionAvailable === 'function' && !ExpoSpeechRecognitionModule.isRecognitionAvailable()) {
+        setError(Platform.OS === 'web'
+          ? 'مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.'
+          : 'سرویس تشخیص گفتار روی دستگاه فعال نیست؛ در تنظیمات گوشی سرویس گفتار گوگل را بررسی کنید.');
         return;
       }
       const permission = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
@@ -109,12 +155,13 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
         setError('برای پاسخ گفتاری، اجازهٔ میکروفن لازم است.');
         return;
       }
+      try { void Speech.stop(); } catch { /* ignore */ }
       ExpoSpeechRecognitionModule.start({
         lang: locale,
         interimResults: true,
         continuous: false,
         maxAlternatives: 5,
-        contextualStrings,
+        contextualStrings: contextualStrings.length ? contextualStrings : undefined,
         requiresOnDeviceRecognition: false,
         addsPunctuation: true,
       });
@@ -126,6 +173,7 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
   const stop = () => {
     try { ExpoSpeechRecognitionModule.stop(); } catch { /* already stopped */ }
   };
+  startRef.current = start;
 
   return (
     <View style={styles.wrap}>
@@ -140,7 +188,12 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
         accessibilityLabel={listening ? 'پایان گفتن' : 'بگو'}
         accessibilityState={{ disabled }}
         disabled={disabled}
-        onPress={() => (listening ? stop() : void start())}
+        onPress={() => {
+          if (listening) { stop(); return; }
+          busyRetries.current = 0;
+          clientRetries.current = 0;
+          void start();
+        }}
         style={({ pressed }) => [
           styles.button,
           listening && styles.buttonListening,

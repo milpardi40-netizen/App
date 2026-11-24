@@ -84,6 +84,7 @@
           "speechRecognitionPermission": "برای بررسی گفتار شما، اجازه تشخیص گفتار را بدهید.",
           "androidSpeechServicePackages": [
             "com.google.android.googlequicksearchbox",
+            "com.google.android.as",
             "com.google.android.tts"
           ]
         }
