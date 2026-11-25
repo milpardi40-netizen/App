@@ -57,6 +57,7 @@ const esbuild = require('esbuild');
     'ru-pre-13-greeting-name-phrases', 'ru-pre-14-polite-phrases', 'ru-pre-15-combos-pronoun-demo', 'ru-pre-16-combos-adj-verb',
     'ru-pre-17-sentences-be-have', 'ru-pre-18-sentences-verbs', 'ru-pre-19-questions-basic', 'ru-pre-20-questions-whose-yesno-count',
     'ru-pre-21-daily-identity-family-age', 'ru-pre-22-daily-likes-needs-wants', 'ru-pre-23-daily-descriptions',
+    'ru-pre-29-numbers-teens', 'ru-pre-30-question-words-2', 'ru-pre-31-more-descriptions',
     'ru-pre-24-conv-greeting-intro', 'ru-pre-25-conv-family-home', 'ru-pre-26-conv-objects',
     'ru-pre-27-conv-food-shopping', 'ru-pre-28-conv-classroom',
   ];
@@ -85,10 +86,10 @@ const esbuild = require('esbuild');
   const allIds = app.RUSSIAN_LESSONS.map(lesson => lesson.id);
   let cursor = 0;
   for (const id of allIds) if (id === stableIds[cursor]) cursor += 1;
-  check('Russian course keeps every lesson in order across Pre-A1..C1 and practice labs', app.RUSSIAN_LESSONS.length === 194
+  check('Russian course keeps every lesson in order across Pre-A1..C1 and practice labs', app.RUSSIAN_LESSONS.length === 197
     && cursor === stableIds.length
     && app.RUSSIAN_LESSONS.every(lesson => /^lab-ru-[a-z0-9]+-\d{2}$/.test(lesson.id) || (lesson.title && lesson.situation)));
-  check('Russian course keeps aligned sentence counts per level (Pre-A1: 8, A1: 16, A2..C1: 8, labs: 10/12)', sentenceCount === 1824
+  check('Russian course keeps aligned sentence counts per level (Pre-A1: 8, A1: 16, A2..C1: 8, labs: 10/12)', sentenceCount === 1848
     && app.RUSSIAN_LESSONS.filter(lesson => !lesson.id.startsWith('lab-')).every(lesson => lesson.sentences.length === (lesson.levelId === 1 ? 16 : 8))
     && app.RUSSIAN_LESSONS.filter(lesson => lesson.id.startsWith('lab-')).every(lesson => [10, 12].includes(lesson.sentences.length)));
   check('Russian roadmap now has six levels', app.RUSSIAN_LEVELS.map(level => level.id).join('|') === '0|1|2|3|4|5'
@@ -97,10 +98,10 @@ const esbuild = require('esbuild');
   const lessonsByLevel = [0, 1, 2, 3, 4, 5].map(levelId => app.RUSSIAN_LESSONS.filter(lesson => lesson.levelId === levelId));
   check('Russian roadmap groups lessons by level in order, from Pre-A1 through C1', app.RUSSIAN_LESSONS.every((lesson, index) => lesson.order === index + 1 && lesson.subtitle)
     && app.RUSSIAN_LESSONS.every((lesson, index) => index === 0 || lesson.levelId >= app.RUSSIAN_LESSONS[index - 1].levelId)
-    && lessonsByLevel.map(lessons => lessons.length).join('|') === '28|29|37|37|33|30'
+    && lessonsByLevel.map(lessons => lessons.length).join('|') === '31|29|37|37|33|30'
     && lessonsByLevel.every(lessons => lessons.length > 0)
     && lessonsByLevel.flat().length === app.RUSSIAN_LESSONS.length);
-  check('Pre-A1 lesson IDs and 28-lesson zero-to-dialogue order remain stable', lessonsByLevel[0].map(lesson => lesson.id).join('|') === expectedPreA1Ids.join('|'));
+  check('Pre-A1 lesson IDs and 31-lesson zero-to-dialogue order remain stable', lessonsByLevel[0].map(lesson => lesson.id).join('|') === expectedPreA1Ids.join('|'));
   check('Pre-A1 uses 8 sentences, 4-line guided dialogue, explicit patterns and no letter-pair gating', lessonsByLevel[0].every(lesson =>
     app.starterStep(lesson.id) === undefined
     && lesson.sentences.length === 8

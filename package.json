@@ -23,6 +23,7 @@
     "validate:logic": "node scripts/verify-app-logic.mjs",
     "validate:admin": "node scripts/verify-education-admin.mjs",
     "validate:russian": "node scripts/verify-russian-course.cjs",
+    "validate:recycling": "node scripts/verify-russian-recycling.cjs",
     "validate:english-supplement": "node scripts/verify-english-supplement.cjs",
     "validate:english-engine": "node scripts/verify-english-engine.cjs",
     "validate:language-entry": "node scripts/verify-language-entry.cjs",

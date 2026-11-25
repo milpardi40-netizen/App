@@ -594,7 +594,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
               <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
               <Text style={styles.stageTitle}>{foundation ? `انتخاب ${unit}` : 'ساخت جمله'}</Text>
               {showHint && <Text style={styles.stageDesc}>{foundation ? `معنی ثبت‌شده را بخوانید و ${unit} مربوط به همان نمونهٔ درس را انتخاب کنید.` : lesson.levelId <= 0 ? 'جملهٔ درست و الگویش بالای صفحه دیده می‌شود؛ واژه‌ها را به ترتیب آن بچینید.' : 'الگوی ساختار و واژه‌های کلیدی را ببینید و جمله را بسازید.'}</Text>}
-              {foundation || current.text.trim().replace(/\s+([!?.;,:])/g, '$1').split(/\s+/).length === 1 ? (
+              {foundation || current.text.trim().replace(/\s+([!?.;,:])/g, '$1').split(/\s+/).length <= (lesson.levelId === 0 ? 2 : 1) ? (
                 <StarterWordChoice key={current.id} sentence={current} sentences={lesson.sentences} />
               ) : (
                 <LanguageSentenceBuilder
