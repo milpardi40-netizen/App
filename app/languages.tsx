@@ -4,9 +4,10 @@ import { ImageBackground, Linking, Platform, Pressable, ScrollView, StyleSheet, 
 import { createAudioPlayer } from 'expo-audio';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { ArrowLeft, BookOpen, Globe, Headphones, LifeBuoy, LockKeyhole, MessageCircle, Play } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, Download, Globe, Headphones, LifeBuoy, LockKeyhole, MessageCircle, Play, SlidersHorizontal, Type, Volume2 } from 'lucide-react-native';
 import { MiloLanguageBrand } from '@/components/MiloLanguageBrand';
 import { ProfileIcon } from '@/components/ProfileIcon';
+import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { ensureOpenLearnerRegistered } from '@/lib/openLearnerAccount';
 import { isLearnerRegistered } from '@/lib/registrationStatus';
 import { LANGUAGES, findLanguage } from '@/lib/languages/catalog';
@@ -77,6 +78,7 @@ export default function LanguagesHome() {
   const [registered, setRegistered] = useState(false);
   const [resumeBanner, setResumeBanner] = useState<ResumeBannerState | null>(null);
   const [dueReviewCount, setDueReviewCount] = useState(0);
+  const [quickSettingsOpen, setQuickSettingsOpen] = useState(false);
 
   useFocusEffect(useCallback(() => {
     let active = true;
@@ -265,6 +267,14 @@ export default function LanguagesHome() {
               </Pressable>
               <Pressable
                 accessibilityRole="button"
+                accessibilityLabel="تنظیمات فونت، صدا و پشتیبان"
+                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
+                onPress={() => setQuickSettingsOpen(true)}
+              >
+                <SlidersHorizontal size={16} color={palette.forest} strokeWidth={1.9} />
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
                 accessibilityLabel="سایت و دانلود نسخهٔ اندروید"
                 style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
                 onPress={openSite}
@@ -368,8 +378,44 @@ export default function LanguagesHome() {
               );
             })}
           </View>
+
+          <View style={styles.discoverBar}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setQuickSettingsOpen(true)}
+              style={({ pressed }) => [styles.discoverPill, pressed && styles.pressed]}
+            >
+              <Type size={14} color={palette.forest} />
+              <Text style={styles.discoverText}>فونت و اندازهٔ متن</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setQuickSettingsOpen(true)}
+              style={({ pressed }) => [styles.discoverPill, pressed && styles.pressed]}
+            >
+              <Volume2 size={14} color={palette.forest} />
+              <Text style={styles.discoverText}>گویندهٔ صدا</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.push('/lang/backup' as never)}
+              style={({ pressed }) => [styles.discoverPill, pressed && styles.pressed]}
+            >
+              <Download size={14} color={palette.forest} />
+              <Text style={styles.discoverText}>پشتیبان پیشرفت</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.push('/app-lock' as never)}
+              style={({ pressed }) => [styles.discoverPill, pressed && styles.pressed]}
+            >
+              <LockKeyhole size={14} color={palette.forest} />
+              <Text style={styles.discoverText}>قفل برنامه</Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
+      <QuickSettingsModal visible={quickSettingsOpen} onClose={() => setQuickSettingsOpen(false)} />
       <OpeningOverlay visible={opening} />
     </View>
   );
@@ -435,5 +481,8 @@ const styles = StyleSheet.create({
   stepBadge: { width: 26, height: 26, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.sage },
   stepBadgeAccent: { backgroundColor: palette.terracottaSoft },
   stepTitle: { fontFamily: 'Beiruti', color: palette.ink, fontSize: 12.5, lineHeight: 19, textAlign: 'right', writingDirection: 'rtl' },
+  discoverBar: { flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse', flexWrap: 'wrap', gap: 8, justifyContent: 'center' },
+  discoverPill: { flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 999, backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.border },
+  discoverText: { fontFamily: 'Beiruti', fontSize: 12, lineHeight: 18, color: palette.forest, textAlign: 'right', writingDirection: 'rtl' },
   pressed: { opacity: 0.84, transform: [{ scale: 0.985 }] },
 });

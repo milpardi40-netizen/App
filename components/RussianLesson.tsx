@@ -478,6 +478,21 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             <SentenceGenderLabel language="ru" text={current.text} />
               <Text style={styles.russianSentence}>{current.text}</Text>
             <Text style={styles.pronunciation}>{current.pronunciation}</Text>
+            {lesson.levelId === 0 ? (() => {
+              const badges = current.vocabulary
+                .map(v => ({ word: v.word, badge: preA1GenderBadge(v.meaning) }))
+                .filter((item): item is { word: string; badge: GenderBadge } => !!item.badge);
+              if (!badges.length) return null;
+              return (
+                <View style={styles.sentenceGenderRow}>
+                  {badges.map((item, idx) => (
+                    <View key={`${item.word}-${idx}`} style={[styles.genderPill, { backgroundColor: item.badge.bg, borderColor: item.badge.border }]}>
+                      <Text style={[styles.genderPillText, { color: item.badge.text }]}>{item.word}: {item.badge.label}</Text>
+                    </View>
+                  ))}
+                </View>
+              );
+            })() : null}
             <View style={styles.divider} />
             {lesson.levelId >= 3 ? <RevealText text={current.fa} style={styles.persian} resetKey={current.id} /> : <Text keepColor style={styles.persian}>{current.fa}</Text>}
             {current.pattern ? <View style={styles.pattern}><Text style={styles.patternLabel}>الگو</Text><Text style={styles.patternText}>{current.pattern}</Text></View> : null}
@@ -577,9 +592,18 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         {stage === 5 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
           <Text style={styles.stageTitle}>واژگان از دل جمله‌ها</Text>
-          {showHint && <Text style={styles.stageDesc}>هر واژه را با معنی و جمله‌اش مرور کنید.</Text>}
-          <View style={styles.vocabList} onLayout={event => { vocabListOffsetRef.current = event.nativeEvent.layout.y; }}>{vocabulary.map(({ word, sentence }, vocabIndex) => <View key={`${word.word}-${sentence.id}`} onLayout={event => { vocabCardYsRef.current[vocabIndex] = event.nativeEvent.layout.y; }} style={styles.vocabCard}>
-            <View style={styles.vocabTop}><Text style={styles.vocabWord}>{word.word}</Text><Text style={styles.vocabMeaning}>{word.meaning}</Text></View>
+          {showHint && <Text style={styles.stageDesc}>هر واژه را با معنی، جنسیت و جمله‌اش مرور کنید.</Text>}
+          {lesson.levelId === 0 ? <View style={styles.preGenderWrap}><LessonGenderCard language="ru" lesson={lesson} speak={speak} /></View> : null}
+          <View style={styles.vocabList} onLayout={event => { vocabListOffsetRef.current = event.nativeEvent.layout.y; }}>{vocabulary.map(({ word, sentence }, vocabIndex) => {
+            const badge = lesson.levelId === 0 ? preA1GenderBadge(word.meaning) : null;
+            return <View key={`${word.word}-${sentence.id}`} onLayout={event => { vocabCardYsRef.current[vocabIndex] = event.nativeEvent.layout.y; }} style={styles.vocabCard}>
+            <View style={styles.vocabTop}>
+              <View style={styles.vocabWordGroup}>
+                <Text style={styles.vocabWord}>{word.word}</Text>
+                {badge ? <View style={[styles.genderPill, { backgroundColor: badge.bg, borderColor: badge.border }]}><Text style={[styles.genderPillText, { color: badge.text }]}>{badge.label}</Text></View> : null}
+              </View>
+              <Text style={styles.vocabMeaning}>{word.meaning}</Text>
+            </View>
             <Text style={styles.vocabExample}>{sentence.text}</Text><Text keepColor style={styles.vocabExampleFa}>{sentence.fa}</Text>
             <Pressable accessibilityRole="button" accessibilityLabel={`شنیدن مثال: ${sentence.text}`} style={styles.bubbleSound} onPress={() => speakForTarget(sentence.text, pace('normal'), `5:${vocabIndex}:${word.word}`)}><Volume2 size={16} color={Palette.primary} /></Pressable>
             <SpeakCheck
@@ -598,7 +622,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
                 }
               }}
             />
-          </View>)}</View>
+          </View>;
+          })}</View>
         </View>}
 
         {stage === 6 && <View style={styles.grammarStage}>
@@ -711,6 +736,27 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   );
 }
 
+type GenderBadge = { label: string; bg: string; border: string; text: string };
+
+function preA1GenderBadge(meaning: string): GenderBadge | null {
+  if (/مذکر|آقا|پسر/.test(meaning) && /مؤنث|خانم|دختر/.test(meaning)) {
+    return { label: 'مذکر / مؤنث', bg: '#EEF2FF', border: '#C7D2FE', text: '#3730A3' };
+  }
+  if (/مؤنث|خانم/.test(meaning)) {
+    return { label: 'مؤنث (она́)', bg: '#FDF2F8', border: '#FBCFE8', text: '#9D174D' };
+  }
+  if (/مذکر|آقا/.test(meaning)) {
+    return { label: 'مذکر (он)', bg: '#EFF6FF', border: '#BFDBFE', text: '#1D4ED8' };
+  }
+  if (/خنثی/.test(meaning)) {
+    return { label: 'خنثی (оно́)', bg: '#ECFDF5', border: '#A7F3D0', text: '#047857' };
+  }
+  if (/مشترک/.test(meaning)) {
+    return { label: 'مشترک (زن و مرد یکی)', bg: '#F8FAFC', border: '#CBD5E1', text: '#475569' };
+  }
+  return null;
+}
+
 type LearningLessonVocabulary = RussianCourseLesson['sentences'][number]['vocabulary'][number];
 
 // The «سنجش کوتاه» block below shares one centred, equal-card layout with every other language.
@@ -813,8 +859,13 @@ const styles = { ...StyleSheet.create({
   dot: { width: 9, height: 9, borderRadius: 5, backgroundColor: Palette.border },
   dotActive: { width: 24, backgroundColor: Palette.primary },
   vocabList: { width: '100%', gap: 9, marginTop: 18 },
+  preGenderWrap: { width: '100%', marginTop: 14 },
   vocabCard: { width: '100%', borderRadius: 16, backgroundColor: Palette.surface, borderWidth: 1, borderColor: Palette.border, padding: 14, gap: 7 },
   vocabTop: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', gap: 10 },
+  vocabWordGroup: { flexDirection: 'row-reverse', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
+  sentenceGenderRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'center', gap: 6, marginTop: 10 },
+  genderPill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, borderWidth: 1 },
+  genderPillText: { fontFamily: Typography.boldFontFamily, fontSize: 10, writingDirection: 'rtl' },
   vocabWord: { fontFamily: 'Times New Roman', fontSize: 16, fontWeight: '800', color: Palette.ink, textAlign: 'right', writingDirection: 'ltr' },
   vocabMeaning: { fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.primaryDark, textAlign: 'right', writingDirection: 'rtl' },
   vocabExample: { fontFamily: 'Times New Roman', fontSize: 13, fontWeight: '800', lineHeight: 22, color: Palette.text, textAlign: 'right', writingDirection: 'ltr' },

@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Check, RotateCcw, Type } from 'lucide-react-native';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { toPersianDigits as fa } from '@/lib/format';
+import { Typography } from '@/lib/theme';
 import {
   useDisplayTypography,
   type DisplayFontPreset,
@@ -184,8 +185,8 @@ const styles = StyleSheet.create({
   previewTopRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   previewLabel: { fontSize: 11.5, lineHeight: 20, color: palette.muted, writingDirection: 'rtl' },
   previewBadge: { fontSize: 11.5, lineHeight: 20, color: palette.forest, writingDirection: 'rtl' },
-  previewFa: { fontSize: 15, lineHeight: 26, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' },
-  previewForeign: { fontSize: 15.5, lineHeight: 25, color: palette.ink, textAlign: 'left', writingDirection: 'ltr' },
+  previewFa: { fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 26, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' },
+  previewForeign: { fontFamily: Typography.latinFontFamily, fontSize: 15.5, lineHeight: 25, color: palette.ink, textAlign: 'left', writingDirection: 'ltr' },
   group: { gap: 8 },
   groupLabel: { fontSize: 13, lineHeight: 22, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' },
   rowsList: { gap: 8 },

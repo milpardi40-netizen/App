@@ -11,8 +11,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Application from 'expo-application';
 import { useFocusEffect, useRouter } from 'expo-router';
 import {
-  Activity, Award, BadgeCheck, BookOpenCheck, Brain, CalendarDays, ChevronLeft, Clock3, Cloud, Download, Flame, Fingerprint,
-  Languages, Layers, LogOut, Mail, Pencil, RefreshCw, Repeat, ShieldCheck, Smartphone, Sparkles, Target, Trophy, Volume2, X,
+  Activity, Award, BadgeCheck, BookOpenCheck, Brain, CalendarDays, ChevronDown, ChevronLeft, ChevronUp,
+  Clock3, Cloud, Download, Flame, Fingerprint, Languages, Layers, LockKeyhole, LogOut, Mail, Pencil,
+  RefreshCw, Repeat, ShieldCheck, Smartphone, Sparkles, Target, Trophy, Type, Volume2, X,
 } from 'lucide-react-native';
 import { PageNavigation } from '@/components/PageNavigation';
 import { FEATURES } from '@/lib/features';
@@ -45,14 +46,6 @@ const palette = {
   success: '#2F7D4F',
   danger: '#B3261E',
 };
-
-type Tab = 'overview' | 'languages' | 'achievements' | 'account';
-const TABS: Array<{ id: Tab; label: string }> = [
-  { id: 'overview', label: 'نمای کلی' },
-  { id: 'languages', label: 'زبان‌ها' },
-  { id: 'achievements', label: 'دستاوردها' },
-  { id: 'account', label: 'تنظیمات' },
-];
 
 export default function ProfileScreen() {
   // Login builds use the registered Supabase account; open builds use a
@@ -107,7 +100,6 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
   const [userId, setUserId] = useState('');
   const [lastSignIn, setLastSignIn] = useState<string | null>(null);
   const { data: summary, failed: statsFailed, retry: refreshStats } = useFocusedLearningData(loadLearnerProfileSummary, true);
-  const [tab, setTab] = useState<Tab>('overview');
   const [editing, setEditing] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
   const [saving, setSaving] = useState(false);
@@ -115,6 +107,12 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
   const [lastSynced, setLastSynced] = useState('');
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
+
+  // Clean collapsible states so the single-scroll page stays calm and airy
+  const [showTypography, setShowTypography] = useState(false);
+  const [showDeepStats, setShowDeepStats] = useState(false);
+  const [showPendingMedals, setShowPendingMedals] = useState(false);
+  const [showAccountDetails, setShowAccountDetails] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -202,7 +200,6 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
         await clearLocalProfile();
         setProfile(null);
         setLocalProfile(null);
-        setTab('overview');
         return;
       }
       const { error: authError } = await supabase.auth.signOut();
@@ -241,23 +238,23 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
             <View style={styles.loading}><ActivityIndicator color={palette.forest} /><Text style={styles.loadingText}>در حال بارگذاری پروفایل…</Text></View>
           ) : !profile && local ? (
             <>
-            <LocalProfileSetup
-              pending={localProfile}
-              onChanged={() => { setNotice(''); void load(); }}
-              onVerified={() => {
-                setNotice('پروفایل شما روی این دستگاه فعال شد.');
-                if (deviceAccount) {
-                  void registerOpenLearnerOnServer()
-                    .then(result => { if (result === 'registered') setNotice('پروفایل فعال شد و در پنل مدیریت ثبت گردید.'); })
-                    .catch(cause => setError(cause instanceof Error ? cause.message : 'ثبت در پنل مدیریت انجام نشد.'))
-                    .finally(() => void load());
-                } else {
-                  void load();
-                }
-              }}
-            />
-            <DisplayTypographyCard />
-          </>
+              <LocalProfileSetup
+                pending={localProfile}
+                onChanged={() => { setNotice(''); void load(); }}
+                onVerified={() => {
+                  setNotice('پروفایل شما روی این دستگاه فعال شد.');
+                  if (deviceAccount) {
+                    void registerOpenLearnerOnServer()
+                      .then(result => { if (result === 'registered') setNotice('پروفایل فعال شد و در پنل مدیریت ثبت گردید.'); })
+                      .catch(cause => setError(cause instanceof Error ? cause.message : 'ثبت در پنل مدیریت انجام نشد.'))
+                      .finally(() => void load());
+                  } else {
+                    void load();
+                  }
+                }}
+              />
+              <DisplayTypographyCard />
+            </>
           ) : !profile ? (
             <>
               <View style={styles.card}>
@@ -272,7 +269,7 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
             </>
           ) : (
             <>
-              {/* ───── Identity ───── */}
+              {/* ───── 1. Identity & Hero Stats ───── */}
               <View style={styles.heroCard}>
                 <LinearGradient colors={['#2C4B35', '#3F6A4B']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFillObject} />
                 <View style={styles.heroTop}>
@@ -325,44 +322,106 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
               {!!notice && <Text style={styles.notice}>{notice}</Text>}
               {!!error && <Text accessibilityRole="alert" style={styles.error}>{error}</Text>}
 
-              {/* ───── Tabs ───── */}
-              <View style={styles.tabBar}>
-                {TABS.map(item => (
-                  <Pressable key={item.id} accessibilityRole="tab" accessibilityState={{ selected: tab === item.id }} onPress={() => setTab(item.id)} style={[styles.tabItem, tab === item.id && styles.tabItemActive]}>
-                    <Text keepColor={tab === item.id} style={[styles.tabText, tab === item.id && styles.tabTextActive]}>{item.label}</Text>
+              {/* ───── 2. Quick Controls (visible immediately!) ───── */}
+              <View style={styles.quickControlsCard}>
+                <Text style={styles.sectionEyebrow}>تنظیمات و دسترسی سریع</Text>
+                <RecordedSpeechSetting />
+                <View style={styles.quickGrid}>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => setShowTypography(v => !v)}
+                    style={({ pressed }) => [styles.quickGridBtn, showTypography && styles.quickGridBtnOn, pressed && styles.pressed]}
+                  >
+                    <Type size={16} color={palette.forest} />
+                    <Text style={styles.quickGridText}>قلم و اندازهٔ متن</Text>
                   </Pressable>
-                ))}
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => router.push('/lang/backup' as never)}
+                    style={({ pressed }) => [styles.quickGridBtn, pressed && styles.pressed]}
+                  >
+                    <Download size={16} color={palette.forest} />
+                    <Text style={styles.quickGridText}>پشتیبان محلی</Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => router.push('/app-lock' as never)}
+                    style={({ pressed }) => [styles.quickGridBtn, pressed && styles.pressed]}
+                  >
+                    <LockKeyhole size={16} color={palette.forest} />
+                    <Text style={styles.quickGridText}>قفل برنامه</Text>
+                  </Pressable>
+                  {summary?.reviewsDueNow ? (
+                    <Pressable
+                      accessibilityRole="button"
+                      onPress={() => { if (summary.nextReview) router.push(summary.nextReview.route as never); }}
+                      style={({ pressed }) => [styles.quickGridBtn, styles.quickGridBtnWarm, pressed && styles.pressed]}
+                    >
+                      <Repeat size={16} color={palette.terracotta} />
+                      <Text style={styles.quickGridText}>{fa(summary.reviewsDueNow)} مرور آماده</Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+                {showTypography ? <View style={styles.inlinePanel}><DisplayTypographyCard /></View> : null}
               </View>
 
-              {(statsFailed || !!summary?.unavailable.length || summary?.languages.some(l => l.unreadable)) && <Pressable accessibilityRole="button" onPress={refreshStats}><Text style={styles.error}>بخشی از سابقه خوانده نشد{summary?.unavailable.length ? ` (${summary.unavailable.join('، ')})` : ''}؛ برای خواندن دوباره بزنید.</Text></Pressable>}
-              {!summary && !statsFailed && tab !== 'account' && <ActivityIndicator color={palette.forest} />}
-              {summary && tab === 'overview' && <OverviewTab summary={summary} onReview={() => { if (summary.nextReview) router.push(summary.nextReview.route as never); }} />}
-              {summary && tab === 'languages' && <LanguagesTab summary={summary} onOpen={home => router.push(home as never)} />}
-              {summary && tab === 'achievements' && <AchievementsTab achievements={summary.achievements} />}
-              {tab === 'account' && (
-                <AccountTab
-                  local={local}
-                  deviceAccount={deviceAccount}
-                  serverRegisteredAt={localProfile?.serverRegisteredAt ?? null}
-                  onRegister={() => {
-                    setError(''); setNotice('');
-                    void registerOpenLearnerOnServer()
-                      .then(() => { setNotice('در پنل مدیریت ثبت شد.'); })
-                      .catch(cause => setError(cause instanceof Error ? cause.message : 'ثبت انجام نشد.'))
-                      .finally(() => void load());
-                  }}
-                  localCode={localProfile?.code ?? ''}
-                  profile={profile}
-                  userId={userId}
-                  lastSignIn={lastSignIn}
-                  lastSynced={lastSynced}
-                  syncing={syncing}
-                  onSync={() => void syncNow()}
-                  onManage={() => router.push('/personal-sync' as never)}
-                  onBackup={() => router.push('/lang/backup' as never)}
-                  onSignOut={confirmSignOut}
-                />
+              {(statsFailed || !!summary?.unavailable.length || summary?.languages.some(l => l.unreadable)) && (
+                <Pressable accessibilityRole="button" onPress={refreshStats}>
+                  <Text style={styles.error}>بخشی از سابقه خوانده نشد{summary?.unavailable.length ? ` (${summary.unavailable.join('، ')})` : ''}؛ برای خواندن دوباره بزنید.</Text>
+                </Pressable>
               )}
+
+              {/* ───── 3. Today, Weekly Trend & Optional Deep Analytics ───── */}
+              {!summary && !statsFailed ? (
+                <ActivityIndicator color={palette.forest} />
+              ) : summary ? (
+                <>
+                  <TodayAndTrendSection
+                    summary={summary}
+                    showDeepStats={showDeepStats}
+                    onToggleDeepStats={() => setShowDeepStats(v => !v)}
+                    onReview={() => { if (summary.nextReview) router.push(summary.nextReview.route as never); }}
+                  />
+
+                  <StudyReminderCard />
+
+                  {/* ───── 4. Languages Progress ───── */}
+                  <LanguagesSection summary={summary} onOpen={home => router.push(home as never)} />
+
+                  {/* ───── 5. Achievements ───── */}
+                  <AchievementsSection
+                    achievements={summary.achievements}
+                    showPending={showPendingMedals}
+                    onTogglePending={() => setShowPendingMedals(v => !v)}
+                  />
+                </>
+              ) : null}
+
+              {/* ───── 6. Account, Updates & Sync ───── */}
+              <AccountSection
+                expanded={showAccountDetails}
+                onToggleExpanded={() => setShowAccountDetails(v => !v)}
+                local={local}
+                deviceAccount={deviceAccount}
+                serverRegisteredAt={localProfile?.serverRegisteredAt ?? null}
+                onRegister={() => {
+                  setError(''); setNotice('');
+                  void registerOpenLearnerOnServer()
+                    .then(() => { setNotice('در پنل مدیریت ثبت شد.'); })
+                    .catch(cause => setError(cause instanceof Error ? cause.message : 'ثبت انجام نشد.'))
+                    .finally(() => void load());
+                }}
+                localCode={localProfile?.code ?? ''}
+                profile={profile}
+                userId={userId}
+                lastSignIn={lastSignIn}
+                lastSynced={lastSynced}
+                syncing={syncing}
+                onSync={() => void syncNow()}
+                onManage={() => router.push('/personal-sync' as never)}
+                onBackup={() => router.push('/lang/backup' as never)}
+                onSignOut={confirmSignOut}
+              />
             </>
           )}
         </View>
@@ -371,15 +430,26 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
   );
 }
 
-/* ───────────────────────── Overview ───────────────────────── */
+/* ───────────────────────── Today & Trend ───────────────────────── */
 
-function OverviewTab({ summary, onReview }: { summary: LearnerProfileSummary; onReview: () => void }) {
+function TodayAndTrendSection({
+  summary,
+  showDeepStats,
+  onToggleDeepStats,
+  onReview,
+}: {
+  summary: LearnerProfileSummary;
+  showDeepStats: boolean;
+  onToggleDeepStats: () => void;
+  onReview: () => void;
+}) {
   const goalPercent = Math.min(100, Math.floor((summary.todayMinutes / Math.max(1, summary.dailyGoalMinutes)) * 100));
   const maxMinutes = Math.max(1, ...summary.week.map(day => day.minutes));
   const level = summary.level;
+
   return (
     <>
-      <Section icon={<Target size={17} color={palette.terracotta} />} title="امروز">
+      <Section icon={<Target size={17} color={palette.terracotta} />} title="امروز و مسیر رشد">
         <View style={styles.todayRow}>
           <Ring percent={goalPercent} label={`${fa(goalPercent)}٪`} />
           <View style={styles.todayCopy}>
@@ -391,18 +461,25 @@ function OverviewTab({ summary, onReview }: { summary: LearnerProfileSummary; on
             </View>
           </View>
         </View>
-      </Section>
 
-      <Section icon={<Trophy size={17} color={palette.gold} />} title={`سطح زبان‌آموز: ${level.title}`} subtitle={`مرحلهٔ ${fa(level.index + 1)} از ${fa(level.total)}`}>
+        <View style={styles.subDivider} />
+
+        <View style={styles.levelHeaderLine}>
+          <Trophy size={15} color={palette.gold} />
+          <Text style={styles.subheadingInline}>سطح: {level.title} ({fa(level.index + 1)} از {fa(level.total)})</Text>
+        </View>
         <View style={styles.levelSteps}>
           {Array.from({ length: level.total }).map((_, i) => <View key={i} style={[styles.levelStep, i < level.index && styles.levelStepDone, i === level.index && styles.levelStepActive]} />)}
         </View>
         <ProgressTrack value={level.progress * 100} color={palette.forest} />
         <Text style={styles.cardText}>{level.next ? `${fa(level.remaining)} درس دیگر تا سطح «${level.next}».` : 'به بالاترین سطح رسیده‌اید؛ آفرین!'}</Text>
-      </Section>
 
-      <View style={{ marginBottom: 12 }}><StudyReminderCard /></View>
-      <View style={{ marginBottom: 12 }}><LearningAnalyticsCard /></View>
+        {summary.reviewsDueNow > 0 && (
+          <Pressable accessibilityRole="button" onPress={onReview} style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
+            <Repeat size={16} color="#FFFFFF" /><Text keepColor style={styles.primaryButtonText}>شروع مرور {summary.nextReview?.language}</Text>
+          </Pressable>
+        )}
+      </Section>
 
       <Section icon={<Activity size={17} color={palette.forest} />} title="فعالیت هفتهٔ اخیر" subtitle={`${formatMinutes(summary.weekMinutes)} · ${fa(summary.activeDaysLast30)} روز فعال در ۳۰ روز گذشته`}>
         <View style={styles.chart}>
@@ -416,44 +493,49 @@ function OverviewTab({ summary, onReview }: { summary: LearnerProfileSummary; on
             </View>
           ))}
         </View>
-        <Text style={styles.cardHint}>ارتفاع ستون: دقیقه‌های اندازه‌گیری‌شده · نقطه: روز دارای فعالیت</Text>
-      </Section>
 
-      <View style={styles.statsGrid}>
-        <StatTile icon={<BookOpenCheck size={18} color={palette.forest} />} value={fa(summary.completedLessons)} label="درس تکمیل‌شده" hint={`از ${fa(summary.totalLessons)} درس`} />
-        <StatTile icon={<Flame size={18} color={palette.terracotta} />} value={fa(summary.currentStreak)} label="روز پیاپی" hint={`رکورد: ${fa(summary.longestStreak)} روز`} />
-        <StatTile icon={<Clock3 size={18} color={palette.forest} />} value={formatMinutes(summary.totalMinutes)} label="زمان اندازه‌گیری‌شده" compact />
-        <StatTile icon={<Languages size={18} color={palette.forest} />} value={fa(summary.activeLanguages)} label="زبان فعال" hint={`از ${fa(summary.languages.length)} زبان`} />
-        <StatTile icon={<Repeat size={18} color={palette.forest} />} value={fa(summary.reviewsTotal)} label="کارت جمله" hint={`${fa(summary.reviewsMastered)} در حافظهٔ بلندمدت`} />
-        <StatTile icon={<Repeat size={18} color={palette.forest} />} value={`${summary.reviewLowerBound ? 'حداقل ' : ''}${fa(summary.reviewsDone)}`} label="مرور انجام‌شده" hint={`${fa(summary.reviewsDueNow)} کارت جمله و واژه آمادهٔ مرور`} />
-        <StatTile icon={<Brain size={18} color={palette.terracotta} />} value={fa(summary.vocabulary.seen)} label="واژهٔ انگلیسی دیده‌شده" hint={`${fa(summary.vocabulary.mastered)} واژهٔ تثبیت‌شده`} />
-      </View>
-
-      {summary.reviewsDueNow > 0 && (
-        <Pressable accessibilityRole="button" onPress={onReview} style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
-          <Repeat size={16} color="#FFFFFF" /><Text keepColor style={styles.primaryButtonText}>شروع مرور {summary.nextReview?.language}</Text>
+        <Pressable accessibilityRole="button" accessibilityState={{ expanded: showDeepStats }} onPress={onToggleDeepStats} style={styles.expandToggle}>
+          <Text style={styles.expandToggleText}>{showDeepStats ? 'بستن آمار کامل و تحلیل‌ها' : 'نمایش آمار کامل و تحلیل یادگیری'}</Text>
+          {showDeepStats ? <ChevronUp size={16} color={palette.forest} /> : <ChevronDown size={16} color={palette.forest} />}
         </Pressable>
-      )}
+
+        {showDeepStats ? (
+          <View style={styles.deepStatsWrap}>
+            <LearningAnalyticsCard />
+            <View style={styles.statsGrid}>
+              <StatTile icon={<BookOpenCheck size={18} color={palette.forest} />} value={fa(summary.completedLessons)} label="درس تکمیل‌شده" hint={`از ${fa(summary.totalLessons)} درس`} />
+              <StatTile icon={<Flame size={18} color={palette.terracotta} />} value={fa(summary.currentStreak)} label="روز پیاپی" hint={`رکورد: ${fa(summary.longestStreak)} روز`} />
+              <StatTile icon={<Clock3 size={18} color={palette.forest} />} value={formatMinutes(summary.totalMinutes)} label="زمان اندازه‌گیری‌شده" compact />
+              <StatTile icon={<Languages size={18} color={palette.forest} />} value={fa(summary.activeLanguages)} label="زبان فعال" hint={`از ${fa(summary.languages.length)} زبان`} />
+              <StatTile icon={<Repeat size={18} color={palette.forest} />} value={fa(summary.reviewsTotal)} label="کارت جمله" hint={`${fa(summary.reviewsMastered)} در حافظهٔ بلندمدت`} />
+              <StatTile icon={<Repeat size={18} color={palette.forest} />} value={`${summary.reviewLowerBound ? 'حداقل ' : ''}${fa(summary.reviewsDone)}`} label="مرور انجام‌شده" hint={`${fa(summary.reviewsDueNow)} کارت جمله و واژه آمادهٔ مرور`} />
+              <StatTile icon={<Brain size={18} color={palette.terracotta} />} value={fa(summary.vocabulary.seen)} label="واژهٔ انگلیسی دیده‌شده" hint={`${fa(summary.vocabulary.mastered)} واژهٔ تثبیت‌شده`} />
+            </View>
+          </View>
+        ) : null}
+      </Section>
     </>
   );
 }
 
 /* ───────────────────────── Languages ───────────────────────── */
 
-function LanguagesTab({ summary, onOpen }: { summary: LearnerProfileSummary; onOpen: (home: string) => void }) {
+function LanguagesSection({ summary, onOpen }: { summary: LearnerProfileSummary; onOpen: (home: string) => void }) {
   const ordered = [...summary.languages].sort((a, b) => Number(b.started) - Number(a.started) || b.completedLessons - a.completedLessons);
   return (
-    <>
-      {ordered.map(language => <LanguageCard key={language.id} language={language} onOpen={() => onOpen(language.home)} />)}
-    </>
+    <Section icon={<Languages size={17} color={palette.forest} />} title="پیشرفت زبان‌ها" subtitle="برای دیدن جزئیات یا ادامه، روی هر زبان بزنید.">
+      <View style={styles.langList}>
+        {ordered.map(language => <LanguageCard key={language.id} language={language} onOpen={() => onOpen(language.home)} />)}
+      </View>
+    </Section>
   );
 }
 
 function LanguageCard({ language, onOpen }: { language: LanguageProfileStat; onOpen: () => void }) {
-  const [expanded, setExpanded] = useState(language.started);
+  const [expanded, setExpanded] = useState(false);
   const r = language.reviews;
   return (
-    <View style={styles.card}>
+    <View style={styles.langItemCard}>
       <Pressable accessibilityRole="button" accessibilityState={{ expanded }} onPress={() => setExpanded(v => !v)} style={styles.langHead}>
         <View style={[styles.langBadge, { backgroundColor: language.accent }]}><Text keepColor style={styles.langBadgeText}>{language.nativeName.slice(0, 2)}</Text></View>
         <View style={styles.langHeadCopy}>
@@ -546,131 +628,156 @@ function LanguageCard({ language, onOpen }: { language: LanguageProfileStat; onO
 
 /* ───────────────────────── Achievements ───────────────────────── */
 
-function AchievementsTab({ achievements }: { achievements: Achievement[] }) {
+function AchievementsSection({
+  achievements,
+  showPending,
+  onTogglePending,
+}: {
+  achievements: Achievement[];
+  showPending: boolean;
+  onTogglePending: () => void;
+}) {
   const earned = achievements.filter(a => a.earned);
   const pending = achievements.filter(a => !a.earned).sort((a, b) => b.progress - a.progress);
   return (
-    <>
-      <Section icon={<Award size={17} color={palette.gold} />} title={`نشان‌های کسب‌شده (${fa(earned.length)})`}>
-        {earned.length === 0 ? <Text style={styles.cardText}>با تکمیل اولین درس، نخستین نشان را می‌گیرید.</Text> : (
-          <View style={styles.badgeGrid}>
-            {earned.map(a => (
-              <View key={a.id} style={[styles.badge, styles.badgeEarned]}>
-                <View style={styles.badgeIcon}><Award size={18} color={palette.gold} /></View>
-                <Text style={styles.badgeTitle}>{a.title}</Text>
-                <Text style={styles.badgeDesc}>{a.description}</Text>
-              </View>
-            ))}
-          </View>
-        )}
-      </Section>
-      <Section icon={<Sparkles size={17} color={palette.forest} />} title={`در مسیر (${fa(pending.length)})`}>
-        {pending.map(a => (
-          <View key={a.id} style={styles.pendingRow}>
-            <View style={styles.pendingCopy}>
-              <View style={styles.pendingTitleRow}>
-                <Text style={styles.pendingTitle}>{a.title}</Text>
-                <Text style={styles.pendingDetail}>{fa(a.detail)}</Text>
-              </View>
-              <ProgressTrack value={a.progress * 100} color={palette.terracotta} height={5} />
-              <Text style={styles.pendingDesc}>{a.description}</Text>
+    <Section icon={<Award size={17} color={palette.gold} />} title={`نشان‌ها و دستاوردها (${fa(earned.length)} از ${fa(achievements.length)})`}>
+      {earned.length === 0 ? (
+        <Text style={styles.cardText}>با تکمیل اولین درس، نخستین نشان را می‌گیرید.</Text>
+      ) : (
+        <View style={styles.badgeGrid}>
+          {earned.map(a => (
+            <View key={a.id} style={[styles.badge, styles.badgeEarned]}>
+              <View style={styles.badgeIcon}><Award size={18} color={palette.gold} /></View>
+              <Text style={styles.badgeTitle}>{a.title}</Text>
+              <Text style={styles.badgeDesc}>{a.description}</Text>
             </View>
-          </View>
-        ))}
-      </Section>
-    </>
+          ))}
+        </View>
+      )}
+
+      {pending.length > 0 ? (
+        <>
+          <Pressable accessibilityRole="button" accessibilityState={{ expanded: showPending }} onPress={onTogglePending} style={styles.expandToggle}>
+            <Text style={styles.expandToggleText}>
+              {showPending ? 'بستن نشان‌های در مسیر' : `نشان‌های در مسیر (${fa(pending.length)})`}
+            </Text>
+            {showPending ? <ChevronUp size={16} color={palette.forest} /> : <ChevronDown size={16} color={palette.forest} />}
+          </Pressable>
+          {showPending ? pending.map(a => (
+            <View key={a.id} style={styles.pendingRow}>
+              <View style={styles.pendingCopy}>
+                <View style={styles.pendingTitleRow}>
+                  <Text style={styles.pendingTitle}>{a.title}</Text>
+                  <Text style={styles.pendingDetail}>{fa(a.detail)}</Text>
+                </View>
+                <ProgressTrack value={a.progress * 100} color={palette.terracotta} height={5} />
+                <Text style={styles.pendingDesc}>{a.description}</Text>
+              </View>
+            </View>
+          )) : null}
+        </>
+      ) : null}
+    </Section>
   );
 }
 
-/* ───────────────────────── Account ───────────────────────── */
+/* ───────────────────────── Account & Version ───────────────────────── */
 
-function AccountTab({ local, deviceAccount, serverRegisteredAt, onRegister, localCode, profile, userId, lastSignIn, lastSynced, syncing, onSync, onManage, onBackup, onSignOut }: {
-  local: boolean; deviceAccount: boolean; serverRegisteredAt: string | null; onRegister: () => void; localCode: string; profile: RegistrationProfile; userId: string; lastSignIn: string | null; lastSynced: string; syncing: boolean;
-  onSync: () => void; onManage: () => void; onBackup: () => void; onSignOut: () => void;
+function AccountSection({
+  expanded,
+  onToggleExpanded,
+  local,
+  deviceAccount,
+  serverRegisteredAt,
+  onRegister,
+  localCode,
+  profile,
+  userId,
+  lastSignIn,
+  lastSynced,
+  syncing,
+  onSync,
+  onManage,
+  onBackup,
+  onSignOut,
+}: {
+  expanded: boolean;
+  onToggleExpanded: () => void;
+  local: boolean;
+  deviceAccount: boolean;
+  serverRegisteredAt: string | null;
+  onRegister: () => void;
+  localCode: string;
+  profile: RegistrationProfile;
+  userId: string;
+  lastSignIn: string | null;
+  lastSynced: string;
+  syncing: boolean;
+  onSync: () => void;
+  onManage: () => void;
+  onBackup: () => void;
+  onSignOut: () => void;
 }) {
   const appVersion = Application.nativeApplicationVersion || '1.0.0';
   const buildVersion = Application.nativeBuildVersion || '';
+
   return (
-    <>
-      <Section icon={<Fingerprint size={17} color={palette.forest} />} title="مشخصات حساب">
-        <KeyValueList rows={local ? [
-          ['نام نمایشی', profile.full_name || '—'],
-          ['ایمیل', profile.email, true],
-          ['تاریخ ساخت پروفایل', formatDate(profile.registered_at)],
-          ['فعال‌سازی', lastSignIn ? formatDate(lastSignIn, true) : '—'],
-          ['آخرین فعالیت', profile.last_seen_at ? timeAgo(profile.last_seen_at) : '—'],
-          ['کد ورود این دستگاه', localCode ? fa(localCode) : '—', true],
-          ...(deviceAccount ? [['شناسهٔ دستگاه', userId ? `${userId.slice(0, 8)}…${userId.slice(-4)}` : 'در انتظار اتصال', true] as [string, string, boolean]] : []),
-        ] : [
-          ['نام نمایشی', profile.full_name || '—'],
-          ['ایمیل', profile.email, true],
-          ['تاریخ ثبت‌نام', formatDate(profile.registered_at)],
-          ['آخرین ورود', lastSignIn ? formatDate(lastSignIn, true) : '—'],
-          ['آخرین فعالیت ثبت‌شده', profile.last_seen_at ? timeAgo(profile.last_seen_at) : '—'],
-          ['شناسهٔ کاربر', userId ? `${userId.slice(0, 8)}…${userId.slice(-4)}` : '—', true],
-        ]} />
-      </Section>
+    <Section icon={<Smartphone size={17} color={palette.forest} />} title="نسخهٔ برنامه، همگام‌سازی و حساب">
+      <AppUpdateCard />
 
-      {deviceAccount && (
-        <Section icon={<BadgeCheck size={17} color={palette.forest} />} title="ثبت در پنل مدیریت" subtitle="نام و ایمیل شما برای مدیر برنامه قابل مشاهده است؛ کد ورود هرگز ارسال نمی‌شود.">
-          <KeyValueList rows={[
-            ['وضعیت', serverRegisteredAt ? 'ثبت‌شده' : 'هنوز ثبت نشده'],
-            ['زمان ثبت', serverRegisteredAt ? formatDate(serverRegisteredAt, true) : '—'],
-          ]} />
-          {!serverRegisteredAt && (
-            <Pressable accessibilityRole="button" onPress={onRegister} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
-              <RefreshCw size={16} color={palette.forest} /><Text style={styles.secondaryButtonText}>تلاش دوباره برای ثبت</Text>
-            </Pressable>
-          )}
-        </Section>
-      )}
-
-      {local && !deviceAccount ? (
-        <Section icon={<Smartphone size={17} color={palette.forest} />} title="ذخیرهٔ محلی" subtitle="این پروفایل و پیشرفت شما فقط روی همین دستگاه نگهداری می‌شود و هیچ داده‌ای به سرور فرستاده نمی‌شود.">
-          <KeyValueList rows={[
-            ['وضعیت', 'فعال روی این دستگاه'],
-            ['کد ورود', 'توسط برنامه به‌صورت تصادفی ساخته شده؛ برای ورود دوباره روی همین دستگاه لازم است'],
-            ['پشتیبان', 'برای انتقال پیشرفت به دستگاه دیگر از پشتیبان محلی استفاده کنید'],
-          ]} />
-        </Section>
-      ) : (
-      <Section icon={<Cloud size={17} color={palette.forest} />} title="همگام‌سازی ابری" subtitle="پیشرفت شما به حساب ایمیلی‌تان وصل است و روی هر دستگاهی که وارد شوید ادامه پیدا می‌کند.">
+      {!local || deviceAccount ? (
         <Pressable accessibilityRole="button" accessibilityState={{ disabled: syncing }} disabled={syncing} onPress={onSync} style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
-          {syncing ? <ActivityIndicator size="small" color="#FFFFFF" /> : <RefreshCw size={16} color="#FFFFFF" />}
+          {syncing ? <ActivityIndicator size="small" color="#FFFFFF" /> : <Cloud size={16} color="#FFFFFF" />}
           <Text keepColor style={styles.primaryButtonText}>{syncing ? 'در حال همگام‌سازی…' : 'همگام‌سازی اکنون'}</Text>
         </Pressable>
-        <KeyValueList rows={[
-          ['وضعیت', lastSynced ? 'همگام' : 'آمادهٔ همگام‌سازی'],
-          ['آخرین تأیید سرور', lastSynced ? formatDate(lastSynced, true) : 'در این نشست انجام نشده'],
-          ['محتوای همگام‌شده', 'پیشرفت درس‌ها، کارت‌های مرور و زمان تمرین انگلیسی'],
-          ...(deviceAccount ? [['دامنهٔ همگام‌سازی', 'پشتیبان ابری همین دستگاه؛ برای انتقال به دستگاه دیگر از پشتیبان محلی استفاده کنید'] as [string, string]] : []),
-        ]} />
-      </Section>
-      )}
+      ) : null}
 
-      <Section icon={<Smartphone size={17} color={palette.forest} />} title="دستگاه و نسخه" subtitle="نسخهٔ فعلی برنامه و به‌روزرسانی‌های منتشرشده برای همین اپ.">
-        <AppUpdateCard />
-        <KeyValueList rows={[
-          ['سیستم‌عامل', Platform.OS === 'android' ? 'Android' : Platform.OS === 'ios' ? 'iOS' : 'Web', true],
-          ['نسخهٔ برنامه', buildVersion ? `${appVersion} (${buildVersion})` : appVersion, true],
-          ['ذخیرهٔ محلی', 'فعال؛ پیشرفت بدون اینترنت هم ثبت می‌شود'],
-        ]} />
-      </Section>
+      <Pressable accessibilityRole="button" accessibilityState={{ expanded }} onPress={onToggleExpanded} style={styles.expandToggle}>
+        <Text style={styles.expandToggleText}>
+          {expanded ? 'بستن جزئیات حساب و امنیت' : 'جزئیات حساب، کد دستگاه و حریم خصوصی'}
+        </Text>
+        {expanded ? <ChevronUp size={16} color={palette.forest} /> : <ChevronDown size={16} color={palette.forest} />}
+      </Pressable>
 
-      <DisplayTypographyCard />
+      {expanded ? (
+        <View style={styles.deepStatsWrap}>
+          <KeyValueList rows={local ? [
+            ['نام نمایشی', profile.full_name || '—'],
+            ['ایمیل', profile.email, true],
+            ['تاریخ ساخت پروفایل', formatDate(profile.registered_at)],
+            ['فعال‌سازی', lastSignIn ? formatDate(lastSignIn, true) : '—'],
+            ['آخرین فعالیت', profile.last_seen_at ? timeAgo(profile.last_seen_at) : '—'],
+            ['کد ورود این دستگاه', localCode ? fa(localCode) : '—', true],
+            ...(deviceAccount ? [['شناسهٔ دستگاه', userId ? `${userId.slice(0, 8)}…${userId.slice(-4)}` : 'در انتظار اتصال', true] as [string, string, boolean]] : []),
+            ['نسخهٔ برنامه', buildVersion ? `${appVersion} (${buildVersion})` : appVersion, true],
+          ] : [
+            ['نام نمایشی', profile.full_name || '—'],
+            ['ایمیل', profile.email, true],
+            ['تاریخ ثبت‌نام', formatDate(profile.registered_at)],
+            ['آخرین ورود', lastSignIn ? formatDate(lastSignIn, true) : '—'],
+            ['آخرین فعالیت ثبت‌شده', profile.last_seen_at ? timeAgo(profile.last_seen_at) : '—'],
+            ['شناسهٔ کاربر', userId ? `${userId.slice(0, 8)}…${userId.slice(-4)}` : '—', true],
+            ['آخرین همگام‌سازی', lastSynced ? formatDate(lastSynced, true) : 'در این نشست انجام نشده'],
+            ['نسخهٔ برنامه', buildVersion ? `${appVersion} (${buildVersion})` : appVersion, true],
+          ]} />
 
-      <RecordedSpeechSetting />
+          {deviceAccount && !serverRegisteredAt ? (
+            <Pressable accessibilityRole="button" onPress={onRegister} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
+              <RefreshCw size={16} color={palette.forest} /><Text style={styles.secondaryButtonText}>تلاش دوباره برای ثبت در پنل مدیریت</Text>
+            </Pressable>
+          ) : null}
 
-      <Section icon={<ShieldCheck size={17} color={palette.forest} />} title="مدیریت و امنیت">
-        {!local && <ActionRow icon={<Mail size={16} color={palette.forest} />} title="مدیریت ایمیل و ورود" subtitle="تغییر ایمیل، دریافت کد تازه" onPress={onManage} />}
-        <ActionRow icon={<Download size={16} color={palette.forest} />} title="پشتیبان محلی پیشرفت" subtitle="ذخیره و بازیابی فایل پشتیبان" onPress={onBackup} />
-        <ActionRow icon={<Layers size={16} color={palette.forest} />} title="حریم خصوصی" subtitle="فقط نام و ایمیل ذخیره می‌شود؛ محتوای تمرین‌ها خصوصی می‌ماند" />
-        <Pressable accessibilityRole="button" onPress={onSignOut} style={({ pressed }) => [styles.dangerButton, pressed && styles.pressed]}>
-          <LogOut size={16} color={palette.danger} /><Text keepColor style={styles.dangerButtonText}>{local ? 'خروج از پروفایل' : 'خروج از حساب'}</Text>
-        </Pressable>
-        <Text style={styles.cardHint}>{local ? 'با خروج، پروفایل این دستگاه حذف می‌شود ولی پیشرفت یادگیری می‌ماند.' : 'با خروج، پیشرفت محلی روی این دستگاه پاک نمی‌شود.'}</Text>
-      </Section>
-    </>
+          {!local && <ActionRow icon={<Mail size={16} color={palette.forest} />} title="مدیریت ایمیل و ورود" subtitle="تغییر ایمیل، دریافت کد تازه" onPress={onManage} />}
+          <ActionRow icon={<Download size={16} color={palette.forest} />} title="پشتیبان محلی پیشرفت" subtitle="ذخیره و بازیابی فایل پشتیبان" onPress={onBackup} />
+          <ActionRow icon={<Layers size={16} color={palette.forest} />} title="حریم خصوصی" subtitle="فقط نام و ایمیل ذخیره می‌شود؛ محتوای تمرین‌ها خصوصی می‌ماند" />
+
+          <Pressable accessibilityRole="button" onPress={onSignOut} style={({ pressed }) => [styles.dangerButton, pressed && styles.pressed]}>
+            <LogOut size={16} color={palette.danger} /><Text keepColor style={styles.dangerButtonText}>{local ? 'خروج از پروفایل' : 'خروج از حساب'}</Text>
+          </Pressable>
+          <Text style={styles.cardHint}>{local ? 'با خروج، پروفایل این دستگاه حذف می‌شود ولی پیشرفت یادگیری می‌ماند.' : 'با خروج، پیشرفت محلی روی این دستگاه پاک نمی‌شود.'}</Text>
+        </View>
+      ) : null}
+    </Section>
   );
 }
 
@@ -800,15 +907,22 @@ function RecordedSpeechSetting() {
     void setPrefersRecordedSpeech(next);
   };
   return (
-    <Section icon={<Volume2 size={17} color={palette.forest} />} title="گویندهٔ صدا" subtitle="پیش‌فرض، صدای خود گوشی است؛ اگر این صدا برایتان ناخوشایند یا منقطع بود، صدای ضبط‌شده را انتخاب کنید.">
-      <Pressable accessibilityRole="button" onPress={toggle} style={({ pressed }) => [{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', padding: 14, borderRadius: 16, borderWidth: 1, borderColor: palette.border, backgroundColor: useRecorded ? palette.forestSoft : palette.sage }, pressed && styles.pressed]}>
-        <Text keepColor style={{ fontSize: 14, color: palette.ink, fontWeight: '700' }}>{useRecorded ? 'صدای ضبطشده · روشن' : 'صدای گوشی · پیشفرض'}</Text>
-        <View style={{ width: 46, height: 26, borderRadius: 13, backgroundColor: useRecorded ? palette.forest : palette.muted, alignItems: useRecorded ? 'flex-end' : 'flex-start', justifyContent: 'center', paddingHorizontal: 3 }}>
-          <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#FFFFFF' }} />
+    <Pressable
+      accessibilityRole="button"
+      onPress={toggle}
+      style={({ pressed }) => [styles.speechRow, useRecorded && styles.speechRowOn, pressed && styles.pressed]}
+    >
+      <View style={styles.speechCopy}>
+        <View style={styles.speechTitleRow}>
+          <Volume2 size={16} color={palette.forest} />
+          <Text style={styles.speechTitle}>گویندهٔ صدا: {useRecorded ? 'صدای ضبط‌شده · روشن' : 'صدای گوشی · پیش‌فرض'}</Text>
         </View>
-      </Pressable>
-      <Text style={styles.cardHint}>همین انتخاب در بخش «واژه‌ها» هم دیده می‌شود و در هر دو جا یکسان ذخیره می‌شود. صدای گوشی همیشه پیش‌فرض است؛ فقط اگر خودتان صدای ضبط‌شده را روشن کنید (یا صدای گوشی چند بار پخش نشود) فایل‌های ضبط‌شده به کار می‌روند.</Text>
-    </Section>
+        <Text style={styles.speechSubtitle}>برای تغییر بین صدای دستگاه و صدای ضبط‌شده لمس کنید</Text>
+      </View>
+      <View style={[styles.switchTrack, useRecorded && styles.switchTrackOn]}>
+        <View style={styles.switchThumb} />
+      </View>
+    </Pressable>
   );
 }
 
@@ -941,11 +1055,23 @@ const styles = StyleSheet.create({
   notice: { fontSize: 13, color: palette.success, textAlign: 'center' },
   error: { fontSize: 13, color: palette.danger, textAlign: 'center' },
 
-  tabBar: { flexDirection: 'row-reverse', padding: 4, borderRadius: 16, backgroundColor: '#EEE8DB', borderWidth: 1, borderColor: palette.border },
-  tabItem: { flex: 1, minHeight: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  tabItemActive: { backgroundColor: palette.forest },
-  tabText: { fontFamily: Typography.fontFamily, fontSize: 13, color: palette.muted },
-  tabTextActive: { color: '#FFFFFF', fontWeight: '800' },
+  quickControlsCard: { borderRadius: 20, padding: 15, gap: 10, backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.border },
+  sectionEyebrow: { fontFamily: Typography.boldFontFamily, fontSize: 13.5, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' },
+  speechRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: 12, borderRadius: 14, borderWidth: 1, borderColor: palette.border, backgroundColor: palette.sage },
+  speechRowOn: { backgroundColor: palette.forestSoft, borderColor: palette.forest },
+  speechCopy: { flex: 1, alignItems: 'flex-end', gap: 2 },
+  speechTitleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  speechTitle: { fontFamily: Typography.boldFontFamily, fontSize: 13, color: palette.ink, writingDirection: 'rtl' },
+  speechSubtitle: { fontFamily: Typography.fontFamily, fontSize: 11, color: palette.muted, writingDirection: 'rtl' },
+  switchTrack: { width: 44, height: 24, borderRadius: 12, backgroundColor: palette.muted, alignItems: 'flex-start', justifyContent: 'center', paddingHorizontal: 3 },
+  switchTrackOn: { backgroundColor: palette.forest, alignItems: 'flex-end' },
+  switchThumb: { width: 18, height: 18, borderRadius: 9, backgroundColor: '#FFFFFF' },
+  quickGrid: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8 },
+  quickGridBtn: { flexBasis: '47%', flexGrow: 1, minHeight: 44, borderRadius: 13, paddingHorizontal: 10, backgroundColor: '#FAF6EE', borderWidth: 1, borderColor: palette.border, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  quickGridBtnOn: { backgroundColor: palette.forestSoft, borderColor: palette.forest },
+  quickGridBtnWarm: { backgroundColor: palette.terracottaSoft, borderColor: '#EBD2C3' },
+  quickGridText: { fontFamily: Typography.boldFontFamily, fontSize: 12.5, color: palette.ink, writingDirection: 'rtl' },
+  inlinePanel: { marginTop: 4 },
 
   card: { borderRadius: 20, padding: 16, gap: 12, backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.border, shadowColor: '#514433', shadowOpacity: 0.06, shadowRadius: 12, shadowOffset: { width: 0, height: 5 }, elevation: 2 },
   cardHead: { flexDirection: 'row-reverse', alignItems: 'center', gap: 10 },
@@ -956,6 +1082,9 @@ const styles = StyleSheet.create({
   cardText: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 22, color: palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   cardHint: { fontSize: 11, color: palette.muted, textAlign: 'center' },
   subheading: { fontFamily: Typography.fontFamily, fontSize: 13.5, fontWeight: '800', color: palette.ink, textAlign: 'right', writingDirection: 'rtl', marginTop: 4 },
+  subheadingInline: { fontFamily: Typography.boldFontFamily, fontSize: 13.5, color: palette.ink, writingDirection: 'rtl' },
+  subDivider: { height: 1, backgroundColor: palette.border, marginVertical: 2 },
+  levelHeaderLine: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
   emptyIcon: { alignSelf: 'center', width: 56, height: 56, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.sage },
 
   todayRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 16 },
@@ -966,7 +1095,7 @@ const styles = StyleSheet.create({
   chipWarm: { backgroundColor: palette.terracottaSoft },
   chipText: { fontFamily: Typography.fontFamily, fontSize: 11.5, color: palette.ink },
 
-  goalMeter: { width: 112, borderRadius: 16, paddingVertical: 12, paddingHorizontal: 10, alignItems: 'center', gap: 4, backgroundColor: palette.terracottaSoft, borderWidth: 1, borderColor: '#EBD2C3' },
+  goalMeter: { width: 108, borderRadius: 16, paddingVertical: 12, paddingHorizontal: 10, alignItems: 'center', gap: 4, backgroundColor: palette.terracottaSoft, borderWidth: 1, borderColor: '#EBD2C3' },
   goalTrack: { width: '100%', height: 7, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.7)', overflow: 'hidden', marginTop: 4 },
   goalFill: { height: '100%', borderRadius: 4, backgroundColor: palette.terracotta },
   goalFillDone: { backgroundColor: palette.success },
@@ -977,10 +1106,8 @@ const styles = StyleSheet.create({
   levelStep: { flex: 1, height: 6, borderRadius: 3, backgroundColor: palette.sage },
   levelStepDone: { backgroundColor: palette.gold },
   levelStepActive: { backgroundColor: palette.terracotta },
-  levelTrack: { height: 10, borderRadius: 5, backgroundColor: palette.sage, overflow: 'hidden' },
-  levelFill: { height: '100%', borderRadius: 5, backgroundColor: palette.terracotta },
 
-  chart: { flexDirection: 'row-reverse', alignItems: 'flex-end', justifyContent: 'space-between', height: 132, paddingTop: 4 },
+  chart: { flexDirection: 'row-reverse', alignItems: 'flex-end', justifyContent: 'space-between', height: 124, paddingTop: 4 },
   chartCol: { flex: 1, alignItems: 'center', gap: 4, height: '100%' },
   chartValue: { fontFamily: Typography.fontFamily, fontSize: 10.5, color: palette.muted, height: 16 },
   chartBarTrack: { flex: 1, width: 18, borderRadius: 9, backgroundColor: palette.sage, justifyContent: 'flex-end', overflow: 'hidden' },
@@ -989,29 +1116,33 @@ const styles = StyleSheet.create({
   chartDay: { fontFamily: Typography.fontFamily, fontSize: 11.5, color: palette.muted },
   chartDayToday: { color: palette.terracotta, fontWeight: '800' },
 
+  expandToggle: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, paddingVertical: 10, borderRadius: 12, backgroundColor: '#FAF6EE', borderWidth: 1, borderColor: palette.border },
+  expandToggleText: { fontFamily: Typography.boldFontFamily, fontSize: 12.5, color: palette.forest, writingDirection: 'rtl' },
+  deepStatsWrap: { gap: 10 },
+
   statsGrid: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 10 },
-  statTile: { flexBasis: '47%', flexGrow: 1, borderRadius: 18, padding: 14, gap: 3, alignItems: 'flex-end', backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.border },
-  statIcon: { width: 36, height: 36, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.sage, marginBottom: 4 },
-  statValue: { fontFamily: Typography.fontFamily, fontSize: 24, lineHeight: 32, fontWeight: '800', color: palette.ink },
-  statValueCompact: { fontSize: 16, lineHeight: 28 },
+  statTile: { flexBasis: '47%', flexGrow: 1, borderRadius: 16, padding: 13, gap: 3, alignItems: 'flex-end', backgroundColor: '#FAF6EE', borderWidth: 1, borderColor: palette.border },
+  statIcon: { width: 34, height: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.sage, marginBottom: 2 },
+  statValue: { fontFamily: Typography.fontFamily, fontSize: 22, lineHeight: 30, fontWeight: '800', color: palette.ink },
+  statValueCompact: { fontSize: 15, lineHeight: 26 },
   statLabel: { fontFamily: Typography.fontFamily, fontSize: 12, color: palette.muted },
   statHint: { fontFamily: Typography.fontFamily, fontSize: 11, color: palette.terracotta },
 
+  langList: { gap: 10 },
+  langItemCard: { borderRadius: 16, padding: 12, backgroundColor: '#FAF6EE', borderWidth: 1, borderColor: palette.border, gap: 10 },
   langHead: { flexDirection: 'row-reverse', alignItems: 'center', gap: 12 },
-  langBadge: { width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
-  langBadgeText: { fontFamily: Typography.latinFontFamily, fontSize: 15, fontWeight: '800', color: '#FFFFFF' },
-  langHeadCopy: { flex: 1, gap: 6 },
+  langBadge: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
+  langBadgeText: { fontFamily: Typography.latinFontFamily, fontSize: 14, fontWeight: '800', color: '#FFFFFF' },
+  langHeadCopy: { flex: 1, gap: 5 },
   langTitleRow: { flexDirection: 'row-reverse', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 },
-  langName: { fontFamily: Typography.fontFamily, fontSize: 15.5, fontWeight: '800', color: palette.ink },
+  langName: { fontFamily: Typography.fontFamily, fontSize: 15, fontWeight: '800', color: palette.ink },
   langNative: { fontFamily: Typography.latinFontFamily, fontSize: 12, color: palette.muted, writingDirection: 'ltr' },
-  languageTrack: { height: 6, borderRadius: 3, backgroundColor: palette.sage, overflow: 'hidden' },
-  languageFill: { height: '100%', borderRadius: 3 },
   languageMeta: { fontFamily: Typography.fontFamily, fontSize: 11.5, color: palette.muted, textAlign: 'right', writingDirection: 'rtl' },
   chevronOpen: { transform: [{ rotate: '-90deg' }] },
   langBody: { gap: 10, borderTopWidth: 1, borderTopColor: palette.border, paddingTop: 12 },
 
   kvGrid: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8 },
-  kv: { flexBasis: '47%', flexGrow: 1, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 8, backgroundColor: '#FAF6EE', borderWidth: 1, borderColor: palette.border, alignItems: 'flex-end', gap: 2 },
+  kv: { flexBasis: '47%', flexGrow: 1, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 8, backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.border, alignItems: 'flex-end', gap: 2 },
   kvLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: palette.muted },
   kvValue: { fontFamily: Typography.fontFamily, fontSize: 13, fontWeight: '800', color: palette.ink, textAlign: 'right', writingDirection: 'rtl' },
   kvValueHighlight: { color: palette.terracotta },
@@ -1023,9 +1154,6 @@ const styles = StyleSheet.create({
   levelTitleRow: { flexDirection: 'row-reverse', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 },
   levelTitle: { fontFamily: Typography.latinFontFamily, fontSize: 12.5, fontWeight: '700', color: palette.ink, writingDirection: 'ltr' },
   levelCefr: { fontFamily: Typography.fontFamily, fontSize: 11, color: palette.muted },
-  levelMiniTrack: { height: 5, borderRadius: 3, backgroundColor: palette.sage, overflow: 'hidden' },
-  levelMiniFill: { height: '100%', borderRadius: 3 },
-  levelCount: { fontFamily: Typography.fontFamily, fontSize: 12, fontWeight: '800', color: palette.ink, minWidth: 44, textAlign: 'left' },
 
   reviewBar: { flexDirection: 'row-reverse', height: 10, borderRadius: 5, overflow: 'hidden', backgroundColor: palette.sage, gap: 2 },
   reviewSeg: { height: '100%' },
