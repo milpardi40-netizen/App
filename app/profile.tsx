@@ -24,6 +24,7 @@ import { ensureOpenLearnerRegistered, registerOpenLearnerOnServer } from '@/lib/
 import { loadLearnerProfileSummary, nameInitials, type Achievement, type LanguageProfileStat, type LearnerProfileSummary } from '@/lib/learnerProfile';
 import StudyReminderCard from '@/components/StudyReminderCard';
 import LearningAnalyticsCard from '@/components/LearningAnalyticsCard';
+import DisplayTypographyCard from '@/components/DisplayTypographyCard';
 import { toPersianDigits as fa, timeAgo } from '@/lib/format';
 import { Typography } from '@/lib/theme';
 import { prefersRecordedSpeech, setPrefersRecordedSpeech } from '@/lib/content/speechFallback';
@@ -239,6 +240,7 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
           {loading ? (
             <View style={styles.loading}><ActivityIndicator color={palette.forest} /><Text style={styles.loadingText}>در حال بارگذاری پروفایل…</Text></View>
           ) : !profile && local ? (
+            <>
             <LocalProfileSetup
               pending={localProfile}
               onChanged={() => { setNotice(''); void load(); }}
@@ -254,15 +256,20 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
                 }
               }}
             />
+            <DisplayTypographyCard />
+          </>
           ) : !profile ? (
-            <View style={styles.card}>
-              <View style={styles.emptyIcon}><ShieldCheck size={26} color={palette.forest} /></View>
-              <Text style={styles.cardTitle}>هنوز وارد حساب نشده‌اید</Text>
-              <Text style={styles.cardText}>برای نمایش پروفایل، ثبت‌نام یا ورود با ایمیل را انجام دهید.</Text>
-              <Pressable accessibilityRole="button" style={styles.primaryButton} onPress={() => router.push('/personal-sync' as never)}>
-                <Mail size={16} color="#FFFFFF" /><Text keepColor style={styles.primaryButtonText}>ورود یا ثبت‌نام</Text>
-              </Pressable>
-            </View>
+            <>
+              <View style={styles.card}>
+                <View style={styles.emptyIcon}><ShieldCheck size={26} color={palette.forest} /></View>
+                <Text style={styles.cardTitle}>هنوز وارد حساب نشده‌اید</Text>
+                <Text style={styles.cardText}>برای نمایش پروفایل، ثبت‌نام یا ورود با ایمیل را انجام دهید.</Text>
+                <Pressable accessibilityRole="button" style={styles.primaryButton} onPress={() => router.push('/personal-sync' as never)}>
+                  <Mail size={16} color="#FFFFFF" /><Text keepColor style={styles.primaryButtonText}>ورود یا ثبت‌نام</Text>
+                </Pressable>
+              </View>
+              <DisplayTypographyCard />
+            </>
           ) : (
             <>
               {/* ───── Identity ───── */}
@@ -649,6 +656,8 @@ function AccountTab({ local, deviceAccount, serverRegisteredAt, onRegister, loca
           ['ذخیرهٔ محلی', 'فعال؛ پیشرفت بدون اینترنت هم ثبت می‌شود'],
         ]} />
       </Section>
+
+      <DisplayTypographyCard />
 
       <RecordedSpeechSetting />
 

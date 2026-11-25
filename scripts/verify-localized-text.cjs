@@ -21,14 +21,21 @@ assert.equal(themeFor('android').latinFontFamily, 'serif');
 assert.equal(themeFor('android').fontFamily, 'Beiruti');
 
 let state;
-const fakeReact = { ...React, useState: initial => [state === undefined ? (state = initial) : state, next => { state = next; }], useContext: () => 1 };
-const native = { Text: 'NativeText', TextInput: 'NativeTextInput', StyleSheet: { flatten: value => [].concat(value).filter(Boolean) } };
+let mockDisplay = { fontPreset: 'app', scale: 1 };
+const textScaleCtx = { id: 'scale' };
+const displayCtx = { id: 'display' };
+const fakeReact = {
+  ...React,
+  useState: initial => [state === undefined ? (state = initial) : state, next => { state = next; }],
+  useContext: ctx => (ctx === displayCtx ? mockDisplay : 1),
+};
+const native = { Platform: { OS: 'web' }, Text: 'NativeText', TextInput: 'NativeTextInput', StyleSheet: { flatten: value => Object.assign({}, ...[].concat(value).filter(Boolean)) } };
 const { textScript, LocalizedText, LocalizedTextInput } = loadTsx('components/LocalizedText.tsx', name => {
   if (name === 'react') return fakeReact;
   if (name === 'react-native') return native;
   if (name === '@/lib/theme') return { Typography: themeFor('web') };
   // The screen-level scale context lives in the scroll shell; the component only reads it.
-  if (name === '@/components/FitScrollView') return { TextScaleContext: { Provider: 'Provider', Consumer: 'Consumer', _currentValue: 1 } };
+  if (name === '@/components/FitScrollView') return { TextScaleContext: textScaleCtx, DisplayTypographyContext: displayCtx };
   return require(name);
 });
 
@@ -134,4 +141,18 @@ for (const file of [...walk('app'), ...walk('components')]) {
 }
 const motion = fs.readFileSync('components/MiloLogoMotion.tsx', 'utf8');
 assert(/letter:\s*\{\s*fontFamily:\s*Typography\.latinFontFamily/.test(motion), 'animated native wordmark must use the shared family');
-console.log('Localized typography: Persian, six languages, IPA, mixed/nested runs, punctuation, emoji/icons, accessibility, inputs, platform fallbacks and shared usage passed.');
+
+// Verify user-selectable display presets (modern, system, scaled).
+mockDisplay = { fontPreset: 'modern', scale: 1.12 };
+const modernFa = LocalizedText.render({ children: 'سلام', style: { fontSize: 15, fontFamily: 'Beiruti' } }, null);
+assert.equal(modernFa.props.style[1].fontFamily, 'Vazirmatn-Bold');
+assert.equal(modernFa.props.style[2].fontSize, 17.9);
+const modernEn = LocalizedText.render({ children: 'Hello', style: { fontSize: 15 } }, null);
+assert.match(modernEn.props.style[1].fontFamily, /Inter/);
+mockDisplay = { fontPreset: 'system', scale: 0.9 };
+const sysFa = LocalizedText.render({ children: 'سلام', style: { fontSize: 15, fontFamily: 'Beiruti' } }, null);
+assert.equal(sysFa.props.style[2].fontFamily, 'system-ui, -apple-system, sans-serif');
+assert.equal(sysFa.props.style[2].fontSize, 14.4);
+mockDisplay = { fontPreset: 'app', scale: 1 };
+
+console.log('Localized typography: Persian, six languages, IPA, mixed/nested runs, punctuation, emoji/icons, accessibility, inputs, platform fallbacks, user display presets and shared usage passed.');

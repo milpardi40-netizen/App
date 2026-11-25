@@ -10,7 +10,10 @@ import { Platform, ScrollView, View, useWindowDimensions, type ScrollViewProps }
 const PHONE_SCALE = 0.78;
 /** Text keeps the visual size it had at the earlier 86% layout scale. */
 const TEXT_REFERENCE_SCALE = 0.86;
+export type DisplayFontPreset = 'app' | 'modern' | 'system';
+export type DisplayTypographyState = { fontPreset: DisplayFontPreset; scale: number };
 export const TextScaleContext = createContext(1);
+export const DisplayTypographyContext = createContext<DisplayTypographyState>({ fontPreset: 'app', scale: 1 });
 const WIDE_BREAKPOINT = 700;
 
 type FitScrollViewProps = ScrollViewProps & {
