@@ -494,15 +494,18 @@ const esbuild = require('esbuild');
     onCore.bands.every(band => band.readiness === (band.lessons ? Math.min(band.structureScore, band.coverage) : 0))
       && onCore.packsIncluded === false
       && (() => {
-        // Any word the band does not teach will do; taking the last entry of the list went stale as soon as
-        // the course grew into it, and the branch then silently stopped being exercised.
-        const untaught = onCore.bands[1].gaps[0] ?? core.words[core.words.length - 1];
-        const withPacks = app.computeReadiness('ru', readinessAudit, app.ruFrequency, 60, { A1: [untaught] }, { beginnerFrequency: core });
-        const a1 = withPacks.bands[1];
+        // Any word a band does not teach will do. The probe used to hardcode A1, but that went stale as
+        // soon as the course grew into the whole beginner core (A1 coverage 100%): with no A1 gap left
+        // there is no core word packs could add, so the probe now uses the first band that still has gaps.
+        const gappyBand = onCore.bands.find(band => band.gaps.length > 0);
+        if (!gappyBand) return true; // the course teaches the whole target; packs have nothing left to add
+        const untaught = gappyBand.gaps[0];
+        const withPacks = app.computeReadiness('ru', readinessAudit, app.ruFrequency, 60, { [gappyBand.band]: [untaught] }, { beginnerFrequency: core });
+        const probed = withPacks.bands.find(band => band.band === gappyBand.band);
         // Percentages are rounded, so compare the counts: one extra pack word must move the side figure and
         // leave the headline exactly where the course alone put it.
-        return withPacks.packsIncluded === true && a1.coveredWordsWithPacks > a1.coveredWords && a1.coverage === a1.coverageCourse
-          && a1.coveredWords === a1.coveredWordsCourse && a1.coverageWithPacks >= a1.coverage;
+        return withPacks.packsIncluded === true && probed && probed.coveredWordsWithPacks > probed.coveredWords && probed.coverage === probed.coverageCourse
+          && probed.coveredWords === probed.coveredWordsCourse && probed.coverageWithPacks >= probed.coverage;
       })());
   const readinessLine = fs.readFileSync('components/LevelReadinessLine.tsx', 'utf8');
   check('the level card shows both readiness branches and keeps the pack number beside the vocabulary branch',

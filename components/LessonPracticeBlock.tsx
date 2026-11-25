@@ -25,6 +25,8 @@ interface Props {
   retryKinds?: PracticeKind[];
   onSpeak: (text: string) => void;
   onComplete: (stats: PracticeStats) => void;
+  /** Exam scoring hook: fires once per finished item with its first-try outcome. */
+  onItemDone?: (item: PracticeItem, correct: boolean) => void;
   /** Final stats recorded by the parent; lets a re-mounted block show the right summary (total 0 = skipped). */
   summary?: PracticeStats;
   completed?: boolean;
@@ -47,7 +49,7 @@ const KIND_LABEL: Record<PracticeKind, string> = {
   write: 'بنویس: این جمله به زبان درس چه می‌شود؟',
 };
 
-export default function LessonPracticeBlock({ title, intro, items, source, retryKinds, onSpeak, onComplete, completed, onSkip, exam, foreignStyle, accent = Palette.primary, summary, courseId }: Props) {
+export default function LessonPracticeBlock({ title, intro, items, source, retryKinds, onSpeak, onComplete, onItemDone, completed, onSkip, exam, foreignStyle, accent = Palette.primary, summary, courseId }: Props) {
   const [queue, setQueue] = useState<PracticeItem[]>(items);
   const [resolved, setResolved] = useState<null | boolean>(null); // null = unanswered, true/false = outcome
   const [done, setDone] = useState(0);
@@ -102,6 +104,7 @@ export default function LessonPracticeBlock({ title, intro, items, source, retry
   const advance = useCallback(() => {
     if (!current || resolved === null) return;
     const ok = resolved;
+    onItemDone?.(current, ok);
     setQueue(value => {
       const [head, ...rest] = value;
       if (ok || head.retry || exam) return rest;
@@ -113,7 +116,7 @@ export default function LessonPracticeBlock({ title, intro, items, source, retry
     setResolved(null);
     resetTransient();
     hapticTap();
-  }, [current, resolved, source, retryKinds, exam]);
+  }, [current, resolved, source, retryKinds, exam, onItemDone]);
 
   if (total === 0) return null;
   const fromParent = completed && summary && done === 0 ? summary : null;

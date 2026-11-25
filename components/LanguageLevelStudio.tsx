@@ -8,7 +8,7 @@ import { ProgressTrack } from './ProgressTrack';
 import { usePackPool } from '@/lib/content/usePackVariations';
 import { asLessonSentences } from '@/lib/content/packs';
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useCallback, useEffect, useMemo, useState, type ComponentType, type ReactElement } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType, type ReactElement } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
@@ -17,12 +17,12 @@ import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import LessonPracticeBlock from '@/components/LessonPracticeBlock';
-import { ASSESSMENT_PASS_PERCENT, ASSESSMENT_QUESTIONS, SUPPLEMENT_QUESTIONS, buildLevelExam, buildLevelSupplement, buildLevelWarmUp, levelPool, loadLevelAssessments, saveLevelAssessment, type LevelAssessmentState } from '@/lib/levelAssessment';
+import { ASSESSMENT_PASS_PERCENT, ASSESSMENT_QUESTIONS, SUPPLEMENT_QUESTIONS, buildLevelExam, buildLevelSupplement, buildLevelWarmUp, examCanDoBreakdown, levelPool, loadLevelAssessments, saveLevelAssessment, type CanDoScore, type ExamItemResult, type LevelAssessmentState } from '@/lib/levelAssessment';
 import type { LearningLesson } from '@/lib/languages/types';
 import type { CourseProgress } from '@/lib/courseProgress';
 import { toPersianDigits as fa } from '@/lib/format';
 import { Typography } from '@/lib/theme';
-import type { PracticeStats } from '@/lib/lessonPractice';
+import type { PracticeItem, PracticeStats } from '@/lib/lessonPractice';
 
 type Mode = 'exam' | 'practice' | 'warmup';
 type LevelId = keyof typeof ENGLISH_LEVEL_GRADIENTS;
@@ -54,7 +54,9 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
   const { data: snapshot } = useCourseSnapshot(courseId);
   const [records, setRecords] = useState<LevelAssessmentState>({});
   const [running, setRunning] = useState<{ levelId: LevelId; mode: Mode; attempt: number } | null>(null);
-  const [result, setResult] = useState<{ levelId: LevelId; mode: Mode; stats: PracticeStats; percent: number } | null>(null);
+  const [result, setResult] = useState<{ levelId: LevelId; mode: Mode; stats: PracticeStats; percent: number; canDo?: CanDoScore[] } | null>(null);
+  // Per-question exam outcomes, grouped into the seven «می‌توانم» bands on the result card.
+  const examResults = useRef<ExamItemResult[]>([]);
 
   useFocusEffect(useCallback(() => {
     let alive = true;
@@ -68,6 +70,7 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
   useEffect(() => {
     const levelId = Number(level) as LevelId;
     if (level !== undefined && mode && levels.some(item => item.id === levelId)) {
+      examResults.current = [];
       setRunning({ levelId, mode, attempt: (records[levelId]?.attempts ?? 0) + 1 });
     }
     // run only when the route params change
@@ -94,14 +97,19 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
       setRecords(value => ({ ...value, [running.levelId]: record }));
     }
     if (running.mode !== 'exam') void addPracticeActivity(courseId, localDay(), { rounds: 1 }).catch(() => undefined);
-    setResult({ levelId: running.levelId, mode: running.mode, stats, percent });
+    setResult({ levelId: running.levelId, mode: running.mode, stats, percent, canDo: running.mode === 'exam' ? examCanDoBreakdown(examResults.current) : undefined });
     setRunning(null);
   }, [running, courseId]);
 
   const start = (levelId: LevelId, nextMode: Mode) => {
     setResult(null);
+    examResults.current = [];
     setRunning({ levelId, mode: nextMode, attempt: (records[levelId]?.attempts ?? 0) + 1 });
   };
+
+  const onExamItemDone = useCallback((item: PracticeItem, correct: boolean) => {
+    examResults.current.push({ sentenceId: item.sentenceId, correct });
+  }, []);
 
   if (running && pool) {
     const levelMeta = levels.find(item => item.id === running.levelId)!;
@@ -113,8 +121,8 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
           <Text style={styles.headerSub}>{levelMeta.title} · {levelMeta.cefr}</Text>
         </LinearGradient>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          {running.mode === 'exam' ? <View style={styles.rulesCard}><Text style={styles.rulesTitle}>قانون آزمون</Text><Text style={styles.rulesText}>{fa(ASSESSMENT_QUESTIONS)} سؤال از همهٔ درس‌های این سطح، در قالب‌های مختلف. هر سؤال یک بار پرسیده می‌شود و فرصت دوباره ندارد. حد قبولی {fa(ASSESSMENT_PASS_PERCENT)}٪ است؛ هر بار آزمون، سؤال‌های تازه دارد.</Text></View> : null}
-          <LessonPracticeBlock title={running.mode === 'exam' ? `آزمون سطح` : running.mode === 'warmup' ? 'گرم‌کردن سطح' : 'تمرین تکمیلی'} intro={running.mode === 'exam' ? `${fa(items.length)} سؤال؛ بدون فرصت دوباره.` : running.mode === 'warmup' ? `${fa(items.length)} ضربه، از هر درسِ این سطح یکی، به ترتیب درس‌ها؛ اگر جایی اشتباه شد، همان‌جا به شکل دیگری برمی‌گردد.` : `${fa(SUPPLEMENT_QUESTIONS)} ضربه از جمله‌های این سطح؛ هر روز تازه می‌شود.`} items={items} source={pool} retryKinds={russianStarter ? ['listen'] : undefined} exam={running.mode === 'exam'} onSkip={() => setRunning(null)} onSpeak={speak} onComplete={finish} foreignStyle={[styles.foreign, config.foreignFontFamily ? { fontFamily: config.foreignFontFamily } : null]} accent={running.mode === 'exam' ? Palette.primary : running.mode === 'warmup' ? '#D97706' : Palette.success} />
+          {running.mode === 'exam' ? <View style={styles.rulesCard}><Text style={styles.rulesTitle}>قانون آزمون</Text><Text style={styles.rulesText}>{fa(ASSESSMENT_QUESTIONS)} سؤال از همهٔ درس‌های این سطح، در قالب‌های مختلف و در هفت توانمندی «می‌توانم». هر سؤال یک بار پرسیده می‌شود و فرصت دوباره ندارد. حد قبولی {fa(ASSESSMENT_PASS_PERCENT)}٪ است؛ هر بار آزمون، سؤال‌های تازه دارد و کارت نتیجه نشان می‌دهد در کدام توانمندی‌ها قوی بودید.</Text></View> : null}
+          <LessonPracticeBlock title={running.mode === 'exam' ? `آزمون سطح` : running.mode === 'warmup' ? 'گرم‌کردن سطح' : 'تمرین تکمیلی'} intro={running.mode === 'exam' ? `${fa(items.length)} سؤال؛ بدون فرصت دوباره.` : running.mode === 'warmup' ? `${fa(items.length)} ضربه، از هر درسِ این سطح یکی، به ترتیب درس‌ها؛ اگر جایی اشتباه شد، همان‌جا به شکل دیگری برمی‌گردد.` : `${fa(SUPPLEMENT_QUESTIONS)} ضربه از جمله‌های این سطح؛ هر روز تازه می‌شود.`} items={items} source={pool} retryKinds={russianStarter ? ['listen'] : undefined} exam={running.mode === 'exam'} onItemDone={running.mode === 'exam' ? onExamItemDone : undefined} onSkip={() => setRunning(null)} onSpeak={speak} onComplete={finish} foreignStyle={[styles.foreign, config.foreignFontFamily ? { fontFamily: config.foreignFontFamily } : null]} accent={running.mode === 'exam' ? Palette.primary : running.mode === 'warmup' ? '#D97706' : Palette.success} />
         </ScrollView>
         <BottomNav />
       </View>
@@ -129,7 +137,17 @@ export default function LanguageLevelStudio({ config }: { config: LevelStudioCon
         {result ? <View style={[styles.resultCard, result.mode === 'exam' && result.percent >= ASSESSMENT_PASS_PERCENT && styles.resultPass]}>
           <View style={styles.resultRow}>{result.mode === 'exam' && result.percent >= ASSESSMENT_PASS_PERCENT ? <Award size={26} color={Palette.success} /> : <CheckCircle2 size={26} color={Palette.primaryDark} />}<Text style={styles.resultTitle}>{result.mode === 'exam' ? (result.percent >= ASSESSMENT_PASS_PERCENT ? 'قبول شدید!' : 'این بار قبول نشدید') : result.mode === 'warmup' ? 'گرم‌کردن سطح تمام شد' : 'تمرین امروز تمام شد'}</Text></View>
           <Text style={styles.resultText}>{fa(result.stats.firstTryCorrect)} از {fa(result.stats.total)} درست · {fa(result.percent)}٪{result.stats.seconds ? ` · ${fa(result.stats.seconds)} ثانیه` : ''}</Text>
-          {result.mode === 'exam' && result.percent < ASSESSMENT_PASS_PERCENT ? <Text style={styles.resultHint}>درس‌های این سطح را مرور کنید و دوباره امتحان دهید؛ سؤال‌ها هر بار تازه‌اند.</Text> : null}
+          {result.mode === 'exam' && result.canDo && result.canDo.length ? <View style={styles.canDoWrap}>
+            {result.canDo.map(score => <View key={score.band} style={styles.canDoRow}>
+              <View style={[styles.canDoDot, { backgroundColor: score.correct === score.total ? Palette.success : score.correct > 0 ? '#F59E0B' : '#DC2626' }]} />
+              <Text style={styles.canDoLabel}>{score.label}</Text>
+              <Text style={[styles.canDoScore, { color: score.correct === score.total ? Palette.success : Palette.text }]}>{fa(score.correct)}/{fa(score.total)}</Text>
+            </View>)}
+          </View> : null}
+          {result.mode === 'exam' && result.percent < ASSESSMENT_PASS_PERCENT ? <Text style={styles.resultHint}>{(() => {
+            const weakest = result.canDo?.filter(score => score.correct < score.total).sort((a, b) => (a.correct / a.total) - (b.correct / b.total))[0];
+            return weakest ? `درس‌های بند «${weakest.label}» را مرور کنید و دوباره امتحان دهید؛ سؤال‌ها هر بار تازه‌اند.` : 'درس‌های این سطح را مرور کنید و دوباره امتحان دهید؛ سؤال‌ها هر بار تازه‌اند.';
+          })()}</Text> : null}
         </View> : null}
         {levels.map(levelMeta => {
           const lessons = allLessons.filter(lesson => lesson.levelId === levelMeta.id);
@@ -190,6 +208,11 @@ const styles = StyleSheet.create({
   resultTitle: { fontFamily: Typography.fontFamily, fontSize: 18, color: Palette.ink },
   resultText: { fontFamily: Typography.fontFamily, fontSize: 14, color: Palette.primaryDark, textAlign: 'right', writingDirection: 'rtl' },
   resultHint: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: Palette.text, textAlign: 'right', writingDirection: 'rtl' },
+  canDoWrap: { borderRadius: 14, backgroundColor: Palette.surfaceMuted, borderWidth: 1, borderColor: Palette.border, padding: 12, gap: 8 },
+  canDoRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
+  canDoDot: { width: 8, height: 8, borderRadius: 4 },
+  canDoLabel: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
+  canDoScore: { fontFamily: 'Times New Roman', fontWeight: '800', fontSize: 12 },
   levelCard: { borderRadius: 20, backgroundColor: Palette.surface, borderWidth: 1, borderColor: Palette.border, padding: 16, gap: 12, overflow: 'hidden' },
   levelStripe: { position: 'absolute', top: 0, right: 0, left: 0, height: 5 },
   levelHead: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
