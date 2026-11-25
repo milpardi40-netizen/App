@@ -16,6 +16,7 @@ import * as Speech from '@/lib/courseSpeech';
 import { ArrowRight, ChevronLeft, Headphones, Mic2, RefreshCw, RotateCcw, Sparkles, Volume2 } from 'lucide-react-native';
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
 import ProductionTask from '@/components/ProductionTask';
+import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import StarterA1Skill from '@/components/StarterA1Skill';
 import { RUSSIAN_A1_SKILLS } from '@/lib/languages/russianA1Skills';
 import RevealText from '@/components/RevealText';
@@ -673,6 +674,17 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         /> : null}
 
 
+        {stage === 9 && <LessonDialogueRoom
+          key={lesson.id}
+          language="ru"
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          levelId={lesson.levelId}
+          situation={lesson.situation}
+          lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          locale="ru-RU"
+          onSpeak={(text, onDone) => void playRussianSpeech(text, pace('normal'), onDone, onDone)}
+        />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
       </View>

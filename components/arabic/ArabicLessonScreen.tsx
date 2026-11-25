@@ -54,6 +54,7 @@ import { PageNavigation } from '@/components/PageNavigation';
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
 import RevealText from '@/components/RevealText';
 import SpeakCheck from '@/components/SpeakCheck';
+import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
 import { ArabicLessonEvidence } from './ArabicLessonEvidence';
 import { ArabicSentenceBuilder } from './ArabicSentenceBuilder';
@@ -1013,6 +1014,19 @@ export default function ArabicLessonScreen() {
           )}
 
 
+          {stage === 9 && (
+            <LessonDialogueRoom
+              key={lesson.id}
+              language="ar"
+              lessonId={lesson.id}
+              lessonTitle={lesson.title}
+              levelId={lesson.levelId}
+              situation={lesson.situation}
+              lines={lesson.sentences.map(sentence => ({ text: sentence.ar, fa: sentence.fa }))}
+              locale="ar-SA"
+              onSpeak={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone })}
+            />
+          )}
           {!!completionError && <Text style={styles.speechError}>{completionError}</Text>}
         </View>
 

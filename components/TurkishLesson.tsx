@@ -39,6 +39,7 @@ import { shuffleChecks } from '@/lib/shuffleChecks';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
 import BlindListeningList from '@/components/BlindListeningList';
 import LessonCelebration, { type CelebrationStats } from '@/components/LessonCelebration';
+import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import { finishLessonRewards } from '@/lib/lessonRewards';
 import { trackLessonCompleted, trackLessonStarted, trackStageReached } from '@/lib/analyticsSession';
 import { recordStudyDay } from '@/lib/studyStreak';
@@ -618,6 +619,17 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
         {stage === 8 && lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
 
 
+        {stage === 9 && <LessonDialogueRoom
+          key={lesson.id}
+          language="tr"
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          levelId={lesson.levelId}
+          situation={lesson.situation}
+          lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          locale="tr-TR"
+          onSpeak={(text, onDone) => void playTurkishSpeech(text, NORMAL_SPEECH_RATE, onDone, onDone)}
+        />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
       </View>

@@ -356,8 +356,8 @@ const esbuild = require('esbuild');
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
   const timeCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-a1-time-and-calendar').checks[0];
   check('A1 calendar check tests yesterday/day comprehension', timeCheck.choices[timeCheck.correctIndex] === 'دیروز یکشنبه بود.');
-  check('Russian follows the shared nine-stage lesson flow ending at the speaking check', app.RUSSIAN_LESSON_STAGES.length === 9
-    && app.RUSSIAN_LESSON_STAGES[app.RUSSIAN_LESSON_STAGES.length - 1].id === 'speaking-check'
+  check('Russian follows the shared ten-stage lesson flow ending at the dialogue room', app.RUSSIAN_LESSON_STAGES.length === 10
+    && app.RUSSIAN_LESSON_STAGES[app.RUSSIAN_LESSON_STAGES.length - 1].id === 'dialogue-room'
     && app.RUSSIAN_LESSON_STAGES.every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id
       && stage.labelFa === app.ENGLISH_ENGINE_STEPS[index].labelFa
       && stage.labelEn === app.ENGLISH_ENGINE_STEPS[index].labelEn));

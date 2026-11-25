@@ -40,6 +40,7 @@ export const TURKISH_LESSON_STAGES = [
   { id: 'grammar-through-usage', labelFa: 'دستور در کاربرد', labelEn: 'Grammar Through Usage' },
   { id: 'short-assessment', labelFa: 'سنجش کوتاه', labelEn: 'Short Assessment' },
   { id: 'speaking-check', labelFa: 'آزمون گفتاری', labelEn: 'Speaking Check' },
+  { id: 'dialogue-room', labelFa: 'اتاق گفت‌وگو', labelEn: 'Dialogue Room' },
 ] as const;
 
 export type TurkishLevelId = 0 | 1 | 2 | 3 | 4 | 5;

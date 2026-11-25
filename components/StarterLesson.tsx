@@ -56,6 +56,7 @@ import { shuffleChecks } from '@/lib/shuffleChecks';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
 import BlindListeningList from '@/components/BlindListeningList';
 import LessonCelebration, { type CelebrationStats } from '@/components/LessonCelebration';
+import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import { finishLessonRewards } from '@/lib/lessonRewards';
 import { trackLessonCompleted, trackLessonStarted, trackStageReached } from '@/lib/analyticsSession';
 import { recordStudyDay } from '@/lib/studyStreak';
@@ -71,6 +72,7 @@ const foundationStageNames: Record<number, { labelFa: string; labelEn: string }>
   6: {labelFa:'نکتهٔ آموزشی', labelEn:'Learning Note'},
   7: {labelFa:'سنجش کوتاه', labelEn:'Short Assessment'},
   8: {labelFa:'آزمون گفتاری', labelEn:'Speaking Check'},
+  9: {labelFa:'اتاق گفت‌وگو', labelEn:'Dialogue Room'},
 };
 
 /** سرعت‌ها از قرارداد مشترک روایت می‌آیند تا درس، سطح و واژه‌ها یک صدای واحد داشته باشند. */
@@ -690,6 +692,17 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         /> : null}
 
 
+        {stage === 9 && <LessonDialogueRoom
+          key={lesson.id}
+          language={course.id}
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          levelId={lesson.levelId}
+          situation={lesson.situation}
+          lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          locale={course.locale}
+          onSpeak={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone)}
+        />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
       </View>

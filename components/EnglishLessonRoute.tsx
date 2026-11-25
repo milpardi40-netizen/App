@@ -9,6 +9,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
 import BlindListeningList from '@/components/BlindListeningList';
 import LessonCelebration, { type CelebrationStats } from '@/components/LessonCelebration';
+import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import { finishLessonRewards } from '@/lib/lessonRewards';
 import { trackLessonCompleted, trackLessonStarted, trackStageReached } from '@/lib/analyticsSession';
 import { CHUNK_THRESHOLD, lessonChunks, loadCompletedChunks, markChunkDone } from '@/lib/lessonChunks';
@@ -783,6 +784,17 @@ export default function SentenceLessonScreen() {
         /> : null}
         {stage === 8 && lesson.levelId >= 4 ? <EnglishB2Scenario key={`${lesson.id}-scenario`} lessonId={lesson.id} speak={speak} scenario={C1_SCENARIOS[lesson.id]} /> : null}
         {stage === 8 && lesson.levelId >= 5 ? <EnglishC1ExtendedModel key={`${lesson.id}-extended-model`} lessonId={lesson.id} speak={speak} /> : null}
+        {stage === 9 && <LessonDialogueRoom
+          key={lesson.id}
+          language="en"
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          levelId={lesson.levelId}
+          situation={lesson.situation}
+          lines={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
+          locale="en-US"
+          onSpeak={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone })}
+        />}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}
       </View>
         <View style={{ height: bottomSpacer }} />

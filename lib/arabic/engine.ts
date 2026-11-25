@@ -17,7 +17,8 @@ export interface ArabicEngineStep {
     | 'vocabulary'
     | 'grammar-through-usage'
     | 'short-assessment'
-    | 'speaking-check';
+    | 'speaking-check'
+    | 'dialogue-room';
   title: string;
   subtitle: string;
 }
@@ -25,7 +26,7 @@ export interface ArabicEngineStep {
 /**
  * Canonical 10-stage English-pattern learning flow for Arabic:
  * Situation -> Core Sentences -> Listening -> Shadowing -> Sentence Building (RTL)
- * -> Vocabulary from Sentences -> Grammar through Usage -> Short Assessment -> Speaking Exam -> Conversation Room.
+ * -> Vocabulary from Sentences -> Grammar through Usage -> Short Assessment -> Speaking Exam -> Dialogue Room.
  */
 export const ARABIC_ENGINE_STEPS: readonly ArabicEngineStep[] = [
   { key: 'situation', title: 'موقعیت', subtitle: 'درک صحنه و نیاز ارتباطی واقعی' },
@@ -37,6 +38,7 @@ export const ARABIC_ENGINE_STEPS: readonly ArabicEngineStep[] = [
   { key: 'grammar-through-usage', title: 'دستور در کاربرد', subtitle: 'قالب اسمی/فعلی و مطابقت از دل مثال‌ها' },
   { key: 'short-assessment', title: 'سنجش کوتاه', subtitle: 'شنیداری، خواندن، نوشتن و کاربرد' },
   { key: 'speaking-check', title: 'آزمون گفتاری', subtitle: 'سنجش بدون تکرار و ثبت خطاهای واقعی' },
+  { key: 'dialogue-room', title: 'اتاق گفت‌وگو', subtitle: 'هشت جملهٔ درس در یک گفت‌وگوی دوستانه با اپراتور' },
 ] as const;
 
 export interface ArabicLevelBlueprint {

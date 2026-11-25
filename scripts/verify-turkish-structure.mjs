@@ -275,11 +275,11 @@ check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 18
 check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ', 'Turkish 29-letter alphabet is exact');
 check(turkish.TURKISH_LEVELS.map(level => level.cefr).join('|') === 'Pre-A1|A1|A2|B1|B2|C1', 'Turkish publishes six distinct CEFR bands');
 check(turkish.TURKISH_LEVELS.map(level => level.id).join('|') === russian.RUSSIAN_LEVELS.map(level => level.id).join('|'), 'Level ids agree across both maps');
-// Both ladders are nine stages long and share the exact same nine-stage progression
-// ending with the speaking check (آزمون گفتاری) at stage 8.
-check(turkish.TURKISH_LESSON_STAGES.length === 9 && russian.RUSSIAN_LESSON_STAGES.length === 9
+// Both ladders are ten stages long and share the exact same ten-stage progression
+// ending with the dialogue room (اتاق گفت‌وگو) at stage 9.
+check(turkish.TURKISH_LESSON_STAGES.length === 10 && russian.RUSSIAN_LESSON_STAGES.length === 10
   && JSON.stringify(turkish.TURKISH_LESSON_STAGES) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES)
-  && turkish.TURKISH_LESSON_STAGES[turkish.TURKISH_LESSON_STAGES.length - 1].id === 'speaking-check', 'Turkish and Russian share the exact nine-stage core ending with the speaking check');
+  && turkish.TURKISH_LESSON_STAGES[turkish.TURKISH_LESSON_STAGES.length - 1].id === 'dialogue-room', 'Turkish and Russian share the exact ten-stage core ending with the dialogue room');
 
 const availableLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'available');
 const plannedLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'planned');
@@ -451,6 +451,7 @@ for (const [file, component] of [
   ['components/routes/TurkishLessonScreen.tsx', 'TurkishLesson'],
   ['app/learn/[language]/review.tsx', 'TurkishReview'],
   ['components/TurkishLesson.tsx', 'TurkishSentenceBuilder'],
+  ['components/TurkishLesson.tsx', 'LessonDialogueRoom'],
   ['lib/turkishSpeech.ts', "speechTagFor('tr-TR')"],
 ]) check(read(file).includes(component), `${file} connects ${component}`);
 check(!/courseContent|RUSSIAN_LESSONS|SENTENCE_LESSONS/.test(read('lib/languages/turkish.ts')), 'Turkish curriculum does not reuse English or Russian educational content');
