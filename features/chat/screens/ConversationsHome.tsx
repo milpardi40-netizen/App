@@ -317,6 +317,17 @@ export default function ConversationsHome() {
               </View>
             </View>
           ) : null}
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`رفتن به اتاق‌های مکالمهٔ شبیه‌سازی‌شدهٔ ${copy.shortName}`}
+            onPress={() => router.push({ pathname: '/conversation-rooms/[language]', params: { language: displayCopyLang } } as never)}
+            style={styles.simRoomsButton}
+          >
+            <Text style={styles.simRoomsText}>
+              تمرین فردی می‌خواهی؟ ورود به اتاق مکالمهٔ شبیه‌سازی‌شدهٔ {copy.shortName}
+            </Text>
+            <ChevronLeft size={16} color={Colors.primary[300]} />
+          </Pressable>
         </View>
         {configured && MANAGEMENT_BUILD ? <ChatAlertSettingsCard /> : null}
         {configured && (
@@ -435,6 +446,8 @@ const styles = StyleSheet.create({
   langChipActive: { backgroundColor: Colors.primary[100], borderColor: Colors.primary[400] },
   langChipText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[200] },
   langChipTextActive: { color: Colors.primary[700], fontWeight: Typography.weights.bold },
+  simRoomsButton: { marginTop: 6, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingHorizontal: 12, paddingVertical: 9, borderRadius: Radius.lg, backgroundColor: Colors.primary[500] + '18', borderWidth: 1, borderColor: Colors.primary[500] + '40' },
+  simRoomsText: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 11.5, lineHeight: 18, color: Colors.primary[200], textAlign: 'right', writingDirection: 'rtl' },
   emmaCard: { borderRadius: Radius.xl, padding: Spacing.md, backgroundColor: Colors.neutral[850], borderWidth: 1, borderColor: Colors.accent[500] + '50', flexDirection: 'row-reverse', alignItems: 'center', gap: Spacing.md },
   avatarWrap: { position: 'relative' },
   emmaAvatar: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.accent[500] + '20' },

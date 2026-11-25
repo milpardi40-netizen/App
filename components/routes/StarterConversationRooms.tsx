@@ -4,6 +4,7 @@ import LessonConversationHub, {
   type ConversationRoomSummary,
 } from '@/components/LessonConversationHub';
 import { conversationPracticeForLesson, type BranchingLocale } from '@/lib/branchingConversation';
+import { resolveConversationDialogue } from '@/lib/conversationRoomDialogues';
 import { NEW_COURSES, type NewLanguageId } from '@/lib/languages/newCourses';
 import { starterDisplayDialogue } from '@/lib/languages/starterEditorial';
 import { findLanguageEntry } from '@/lib/languages/registry';
@@ -36,7 +37,7 @@ export default function StarterConversationRooms({ language }: Props) {
     const grouped: Record<number, ConversationRoomSummary[]> = {};
     for (const level of course.levels) grouped[level.id] = [];
     for (const lesson of course.lessons) {
-      const displayDialogue = starterDisplayDialogue(lesson);
+      const displayDialogue = resolveConversationDialogue(lesson.id, starterDisplayDialogue(lesson));
       const hasDialogue = displayDialogue.some(line => line.text.trim());
       const lineCount = hasDialogue
         ? displayDialogue.filter(line => line.text.trim()).length
@@ -65,7 +66,9 @@ export default function StarterConversationRooms({ language }: Props) {
     (lessonId: string): ConversationRoomPayload | null => {
       const lesson = course.lessons.find(item => item.id === lessonId);
       if (!lesson) return null;
-      const roledDialogue = withInferredDialogueRoles(starterDisplayDialogue(lesson));
+      const roledDialogue = withInferredDialogueRoles(
+        resolveConversationDialogue(lesson.id, starterDisplayDialogue(lesson)),
+      );
       return {
         dialogue: roledDialogue,
         fallback: lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa })),

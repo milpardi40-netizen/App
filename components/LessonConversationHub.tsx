@@ -309,10 +309,24 @@ export default function LessonConversationHub({
                   <MessageCircle size={20} color={accentColor} />
                 </View>
                 <View style={styles.introCopy}>
-                  <Text style={styles.introTitle}>فقط مکالمه‌های هر سطح، یک‌جا و آمادهٔ تمرین</Text>
+                  <Text style={styles.introTitle}>تمرین شبیه‌سازی‌شدهٔ مکالمه‌های هر سطح</Text>
                   <Text style={styles.introBody}>
-                    سطح دلخواه را انتخاب کنید تا همهٔ {toPersianDigits(totalConversations)} مکالمهٔ درس‌های این زبان دقیقاً مطابق اتاق مکالمهٔ هر درس در اختیارتان قرار بگیرد.
+                    سطح دلخواه را انتخاب کنید تا همهٔ {toPersianDigits(totalConversations)} مکالمهٔ شبیه‌سازی‌شدهٔ درس‌های این زبان آمادهٔ تمرین باشند.
                   </Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={`رفتن به گفت‌وگوی واقعی با افراد در ${languageName}`}
+                    onPress={() => {
+                      onStop();
+                      router.push({ pathname: '/conversations', params: { language: courseId } } as never);
+                    }}
+                    style={({ pressed }) => [styles.realChatLinkBtn, pressed && styles.pressed]}
+                  >
+                    <Text style={[styles.realChatLinkText, { color: accentColor }]}>
+                      گفت‌وگو با افراد واقعی را می‌خواهی؟ ورود به چت زنده
+                    </Text>
+                    <ArrowLeft size={14} color={accentColor} />
+                  </Pressable>
                 </View>
               </View>
 
@@ -407,7 +421,7 @@ export default function LessonConversationHub({
                   <View style={styles.freeLevelCopy}>
                     <Text style={styles.freeLevelTitle}>گفت‌وگوی آزاد پایان سطح · {selectedLevel.cefr}</Text>
                     <Text style={styles.freeLevelDesc}>
-                      ۱۰ تا ۱۲ موقعیت از این سطح: فارسی را ببین و خودت به {languageName} بگو (اختیاری، بدون نمره)
+                      ۱۰ تا ۱۲ موقعیت شبیه‌سازی‌شده: هم‌صحبت جمله‌اش را به {languageName} می‌گوید و تو پاسخ می‌دهی (اختیاری، بدون نمره)
                     </Text>
                   </View>
                   <ChevronLeft size={18} color={selectedLevel.color} />
@@ -516,6 +530,24 @@ const styles = StyleSheet.create({
   introCopy: { flex: 1, minWidth: 0, gap: 4 },
   introTitle: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 23, color: HomeColors.ink, textAlign: 'right', writingDirection: 'rtl' },
   introBody: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 12.5, lineHeight: 20, color: HomeColors.muted, textAlign: 'right', writingDirection: 'rtl' },
+  realChatLinkBtn: {
+    flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse',
+    alignItems: 'center',
+    alignSelf: Platform.OS === 'web' ? 'flex-start' : 'flex-end',
+    gap: 6,
+    marginTop: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 999,
+    backgroundColor: '#F3F1EA',
+  },
+  realChatLinkText: {
+    fontFamily: Typography.boldFontFamily,
+    fontSize: 12,
+    lineHeight: 18,
+    textAlign: 'right',
+    writingDirection: 'rtl',
+  },
   levelList: { gap: 10 },
   levelCard: {
     flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse',

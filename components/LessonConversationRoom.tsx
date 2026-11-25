@@ -25,12 +25,17 @@ import {
 } from '@/lib/lessonConversation';
 import { saveLessonOutcome } from '@/lib/lessonOutcomes';
 import {
+  conversationPracticeForLesson,
   type BranchingConversation,
   type BranchingLocale,
   type Choice,
   type ConversationLevel,
   type SemanticTurn,
 } from '@/lib/branchingConversation';
+import {
+  CONVERSATION_ROOM_DIALOGUES,
+  resolveConversationDialogue,
+} from '@/lib/conversationRoomDialogues';
 
 type ChatLine = { who: string; role: 'learner' | 'partner'; text: string; fa: string };
 type TurnStatus = 'spoken' | 'typed' | 'choice' | 'skipped';
@@ -92,15 +97,49 @@ export default function LessonConversationRoom({
   const isRtlTarget = locale.toLowerCase().startsWith('ar');
   const resolvedCourseId = courseId ?? locale.split('-')[0].toLowerCase();
 
+  const effectiveDialogue = useMemo(
+    () => resolveConversationDialogue(lessonId, dialogue),
+    [dialogue, lessonId],
+  );
+  const usesCuratedDialogue = Boolean(lessonId && CONVERSATION_ROOM_DIALOGUES[lessonId]);
+
+  const effectiveSemanticPractice = useMemo<BranchingConversation | null | undefined>(() => {
+    if (!usesCuratedDialogue) return semanticPractice;
+    const inferredLevelId =
+      levelId ??
+      (semanticPractice?.level === 'Pre-A1'
+        ? 0
+        : semanticPractice?.level === 'A1'
+          ? 1
+          : semanticPractice?.level === 'A2'
+            ? 2
+            : semanticPractice?.level === 'B1'
+              ? 3
+              : semanticPractice?.level === 'B2'
+                ? 4
+                : semanticPractice?.level === 'C1'
+                  ? 5
+                  : 1);
+    return conversationPracticeForLesson(
+      {
+        id: lessonId,
+        levelId: inferredLevelId,
+        sentences: effectiveDialogue.map(line => ({ text: line.text, fa: line.fa })),
+        dialogue: withInferredDialogueRoles(effectiveDialogue),
+      },
+      locale,
+    );
+  }, [effectiveDialogue, lessonId, levelId, locale, semanticPractice, usesCuratedDialogue]);
+
   const hasAuthoredDialogue = useMemo(
-    () => dialogue.some(line => line.text.trim().length > 0),
-    [dialogue],
+    () => effectiveDialogue.some(line => line.text.trim().length > 0),
+    [effectiveDialogue],
   );
 
   // Use the lesson's own dialogue with explicit/inferred roles; for early alphabet/word lessons
   // without a dialogue array, surface up to 6 distinct items cleanly.
   const lines = useMemo<ChatLine[]>(() => {
-    const real = dialogue.filter(line => line.text.trim());
+    const real = effectiveDialogue.filter(line => line.text.trim());
     if (real.length) {
       return withInferredDialogueRoles(real).map(line => ({
         who: line.speaker,
@@ -116,7 +155,7 @@ export default function LessonConversationRoom({
       text: line.text,
       fa: line.fa,
     }));
-  }, [dialogue, fallback]);
+  }, [effectiveDialogue, fallback]);
 
   const roles = useMemo(() => [...new Set(lines.map(line => line.who))], [lines]);
   const declared = learnerRoleOf(lines);
@@ -128,6 +167,7 @@ export default function LessonConversationRoom({
   const [showPhrase, setShowPhrase] = useState(true);
   const [typed, setTyped] = useState(false);
   const [choicePanel, setChoicePanel] = useState(false);
+  const [choiceFeedback, setChoiceFeedback] = useState<{ text: string; ok: boolean } | null>(null);
   const [draft, setDraft] = useState('');
   const [note, setNote] = useState('');
   const [learnerActuals, setLearnerActuals] = useState<Record<number, { text: string; status: TurnStatus }>>({});
@@ -140,12 +180,12 @@ export default function LessonConversationRoom({
   const stall = useRef<ReturnType<typeof setTimeout> | null>(null);
   const spokenFor = useRef<number | null>(null);
 
-  const activeLevel: ConversationLevel = semanticPractice?.level
+  const activeLevel: ConversationLevel = effectiveSemanticPractice?.level
     ?? (levelId === 0 ? 'Pre-A1' : levelId === 1 ? 'A1' : levelId === 2 ? 'A2' : levelId === 3 ? 'B1' : levelId === 4 ? 'B2' : levelId === 5 ? 'C1' : 'A1');
 
   const current = lines[index];
   const currentRule: SemanticTurn | undefined = current
-    ? (semanticPractice?.turns[index] ?? semanticPractice?.allTurns?.[index])
+    ? (effectiveSemanticPractice?.turns[index] ?? effectiveSemanticPractice?.allTurns?.[index])
     : undefined;
   const isMine = !!current && !!myRole && current.who === myRole;
   const finished = open && index >= lines.length;
@@ -165,6 +205,7 @@ export default function LessonConversationRoom({
     setMyRole(restored.myRole ?? declared ?? roles[0] ?? null);
     setTyped(false);
     setChoicePanel(false);
+    setChoiceFeedback(null);
     setDraft('');
     setNote('');
     setLearnerActuals({});
@@ -222,6 +263,7 @@ export default function LessonConversationRoom({
     clearStall();
     onStop?.();
     setChoicePanel(false);
+    setChoiceFeedback(null);
     setDraft('');
     setNote('');
     setSamplePlaying(false);
@@ -301,6 +343,7 @@ export default function LessonConversationRoom({
 
   const restart = () => {
     clearTimer(); clearStall();
+    onStop?.();
     spokenFor.current = null;
     setLearnerActuals({});
     outcomeSavedRef.current = false;
@@ -312,6 +355,19 @@ export default function LessonConversationRoom({
     setDraft('');
     setNote('');
     setChoicePanel(false);
+    setChoiceFeedback(null);
+  };
+
+  const submitChoice = (ch: Choice) => {
+    if (!ch.correct) {
+      setChoiceFeedback({
+        ok: false,
+        text: `«${ch.text}» با پاسخ مورد نظر این نوبت هماهنگ نیست؛ گزینهٔ درست را انتخاب کن.`,
+      });
+      return;
+    }
+    setChoiceFeedback(null);
+    submitAnswer(ch.text, 'choice');
   };
 
   const flipRole = () => {
@@ -365,12 +421,12 @@ export default function LessonConversationRoom({
         <View style={styles.invite}>
           <View style={styles.inviteBadgesRow}>
             <View style={styles.optionalBadge}>
-              <Text style={styles.optionalBadgeText}>اختیاری</Text>
+              <Text style={styles.optionalBadgeText}>شبیه‌سازی تعاملی · اختیاری</Text>
             </View>
             <View style={styles.inviteBadge}>
               <MessageCircle size={14} color={Palette.primary} />
               <Text style={styles.inviteBadgeText}>
-                اتاق مکالمهٔ درس · {levelLabelFa(activeLevel)} · {fa(lines.length)} خط
+                تمرین گفت‌وگوی درس · {levelLabelFa(activeLevel)} · {fa(lines.length)} نوبت
               </Text>
             </View>
           </View>
@@ -555,12 +611,17 @@ export default function LessonConversationRoom({
                     <Pressable
                       key={`choice-${index}-${idx}`}
                       accessibilityRole="button"
-                      onPress={() => submitAnswer(ch.text, 'choice')}
+                      onPress={() => submitChoice(ch)}
                       style={styles.choiceBtn}
                     >
                       <Text style={[styles.choiceForeign, isRtlTarget && styles.rtlText]}>{ch.text}</Text>
                     </Pressable>
                   ))}
+                  {choiceFeedback ? (
+                    <Text accessibilityLiveRegion="polite" style={styles.choiceFeedbackText}>
+                      {choiceFeedback.text}
+                    </Text>
+                  ) : null}
                 </View>
               ) : null}
 
@@ -578,52 +639,52 @@ export default function LessonConversationRoom({
                   compact
                   onResult={result => {
                     if (!result.heard.trim()) {
-                      setNote('صدایی دریافت نشد؛ دوباره میکروفن را بزن، بنویس، یا «رد شو / خط بعدی» را بزن.');
+                      setNote('صدایی دریافت نشد؛ دوباره میکروفن را بزن، بنویس، یا «نوبت بعدی» را بزن.');
                       return;
                     }
                     submitAnswer(result.heard, 'voice');
                   }}
                   singleAttempt
                 />
-              ) : null}
+              ) : (
+                <View style={styles.compose}>
+                  <TextInput
+                    value={draft}
+                    onChangeText={setDraft}
+                    onSubmitEditing={sendTyped}
+                    returnKeyType="send"
+                    placeholder="پاسخ خودت را بنویس…"
+                    placeholderTextColor={Palette.muted}
+                    accessibilityLabel="پاسخ شما"
+                    style={[styles.input, isRtlTarget && styles.rtlInput]}
+                  />
+                  <Pressable accessibilityRole="button" accessibilityLabel="ارسال پاسخ" onPress={sendTyped} style={styles.send}>
+                    <Send size={16} color="#FFFFFF" />
+                  </Pressable>
+                </View>
+              )}
 
               <View style={styles.turnRow}>
-                {!typed ? (
-                  <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(true); setNote(''); }}>
-                    <Text style={styles.linkText}>نوشتن پاسخ</Text>
-                  </Pressable>
-                ) : (
-                  <View style={styles.compose}>
-                    <TextInput
-                      value={draft}
-                      onChangeText={setDraft}
-                      onSubmitEditing={sendTyped}
-                      returnKeyType="send"
-                      placeholder={showPhrase ? current.text : 'پاسخت را بنویس'}
-                      placeholderTextColor={Palette.muted}
-                      accessibilityLabel="پاسخ شما"
-                      style={[styles.input, isRtlTarget && styles.rtlInput]}
-                    />
-                    <Pressable accessibilityRole="button" accessibilityLabel="ارسال پاسخ" onPress={sendTyped} style={styles.send}>
-                      <Send size={16} color="#FFFFFF" />
+                <View style={styles.turnModeGroup}>
+                  {!typed ? (
+                    <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(true); setNote(''); }}>
+                      <Text style={styles.linkText}>نوشتن پاسخ</Text>
                     </Pressable>
-                  </View>
-                )}
+                  ) : (
+                    <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(false); setNote(''); }}>
+                      <Text style={styles.linkText}>بازگشت به میکروفن</Text>
+                    </Pressable>
+                  )}
 
-                {hasChoices ? (
-                  <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => setChoicePanel(v => !v)}>
-                    <Text style={styles.linkText}>{choicePanel ? 'بستن گزینه‌ها' : 'گزینه‌ها'}</Text>
-                  </Pressable>
-                ) : null}
-
-                {typed ? (
-                  <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setTyped(false); setNote(''); }}>
-                    <Text style={styles.linkText}>بازگشت به میکروفن</Text>
-                  </Pressable>
-                ) : null}
+                  {hasChoices ? (
+                    <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => { setChoicePanel(v => !v); setChoiceFeedback(null); }}>
+                      <Text style={styles.linkText}>{choicePanel ? 'بستن گزینه‌ها' : 'انتخاب از گزینه‌ها'}</Text>
+                    </Pressable>
+                  ) : null}
+                </View>
 
                 <Pressable accessibilityRole="button" style={styles.skipButton} onPress={moveToNextTurn}>
-                  <Text style={styles.skipText}>رد شو / خط بعدی</Text>
+                  <Text style={styles.skipText}>نوبت بعدی</Text>
                 </Pressable>
               </View>
             </View>
@@ -638,17 +699,36 @@ export default function LessonConversationRoom({
                 <>
                   <Text style={[styles.lineText, isRtlTarget && styles.rtlText]}>{current.text}</Text>
                   <Text style={styles.lineFa}>{current.fa}</Text>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel="دوباره بشنو"
-                    onPress={() => speak(current.text, index)}
-                    style={styles.replay}
-                  >
-                    <Volume2 size={15} color={Palette.primary} />
-                    <Text style={styles.replayText}>دوباره بشنو</Text>
-                  </Pressable>
+                  <View style={styles.partnerActionsRow}>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel="دوباره بشنو"
+                      onPress={() => speak(current.text, index)}
+                      style={styles.replay}
+                    >
+                      <Volume2 size={15} color={Palette.primary} />
+                      <Text style={styles.replayText}>دوباره بشنو</Text>
+                    </Pressable>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel="ادامه به نوبت بعدی"
+                      onPress={advance}
+                      style={styles.partnerContinueBtn}
+                    >
+                      <Text style={styles.partnerContinueText}>ادامه</Text>
+                    </Pressable>
+                  </View>
                 </>
-              ) : null}
+              ) : (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="رد کردن مکث هم‌صحبت"
+                  onPress={advance}
+                  style={styles.partnerContinueBtn}
+                >
+                  <Text style={styles.partnerContinueText}>ادامه</Text>
+                </Pressable>
+              )}
             </View>
           ) : null}
 
@@ -731,7 +811,12 @@ const styles = StyleSheet.create({
   choiceList: { gap: 7 },
   choiceBtn: { borderRadius: 12, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', padding: 11 },
   choiceForeign: { fontFamily: 'Times New Roman', fontSize: 15, fontWeight: '700', color: Palette.ink, textAlign: 'left', writingDirection: 'ltr' },
+  choiceFeedbackText: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 19, color: '#B45309', backgroundColor: '#FEF3C7', borderColor: '#FDE68A', borderWidth: 1, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7, textAlign: 'right', writingDirection: 'rtl' },
   turnRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
+  turnModeGroup: { flexDirection: 'row-reverse', flexWrap: 'wrap', alignItems: 'center', gap: 10 },
+  partnerActionsRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginTop: 4 },
+  partnerContinueBtn: { alignSelf: 'flex-start', minHeight: 32, paddingHorizontal: 14, borderRadius: 999, backgroundColor: Palette.primary, alignItems: 'center', justifyContent: 'center' },
+  partnerContinueText: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: '#FFFFFF', writingDirection: 'rtl' },
   linkButton: { minHeight: 36, flexDirection: 'row-reverse', alignItems: 'center', gap: 4, justifyContent: 'center', paddingHorizontal: 4 },
   linkText: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.primary, writingDirection: 'rtl' },
   skipButton: { minHeight: 36, justifyContent: 'center', paddingHorizontal: 10, borderRadius: 999, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#CBD5E1' },

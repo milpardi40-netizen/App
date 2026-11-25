@@ -105,23 +105,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "text": "Good morning! Would you like some water?",
+          "fa": "صبح بخیر! آب میل دارید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Let us start with the and of in short sentences.",
-          "fa": "بیایید با «the» و «of» در جمله‌های کوتاه شروع کنیم."
+          "text": "Yes, please. Thank you very much.",
+          "fa": "بله، لطفاً. خیلی ممنون."
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember in?",
-          "fa": "خوبه! آیا «in» را هم یادت هست؟"
+          "text": "Here you are. Are you ready for class?",
+          "fa": "بفرمایید. برای کلاس آماده‌اید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Yes, both in and for are much clearer to me now.",
-          "fa": "بله، الان هم «in» و هم «for» خیلی برایم روشن‌تر شده‌اند."
+          "text": "Yes, I am ready. Let us begin.",
+          "fa": "بله، آماده‌ام. بیایید شروع کنیم."
         }
       ],
       "checks": [
@@ -243,23 +243,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Did you notice as when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «as» شدی؟"
+          "text": "Hello! What is your name?",
+          "fa": "سلام! اسمتان چیست؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Yes, I saw as right next to at in the conversation.",
-          "fa": "بله، در گفت‌وگو «as» را درست کنار «at» دیدم."
+          "text": "My name is Sara. And what is your name?",
+          "fa": "اسم من سارا است. اسم شما چیست؟"
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep he in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «he» را هم به خاطر بسپاری؟"
+          "text": "I am Amir. Where are you from?",
+          "fa": "من امیر هستم. اهل کجا هستید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use he and not when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «he» و «not» استفاده کنم."
+          "text": "I am from Tehran. Nice to meet you!",
+          "fa": "اهل تهران هستم. از آشنایی خوشحالم!"
         }
       ],
       "checks": [
@@ -389,23 +389,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Let us review his together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «his» را با هم مرور کنیم."
+          "text": "Excuse me, is this your book?",
+          "fa": "ببخشید، این کتاب شماست؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced his and they aloud.",
-          "fa": "فکر خوبیه! من همین الان «his» و «they» را با صدای بلند تمرین کردم."
+          "text": "No, my book is in my bag.",
+          "fa": "نه، کتاب من داخل کیفم است."
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "What about me and if from the same group?",
-          "fa": "دربارهٔ «me» و «if» از همین بخش چطور؟"
+          "text": "Where is your bag?",
+          "fa": "کیفتان کجاست؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say me and if in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «me» و «if» را در بافت جمله می‌گویم."
+          "text": "It is on the chair near the door.",
+          "fa": "روی صندلی نزدیک در است."
         }
       ],
       "checks": [
@@ -539,23 +539,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "text": "Hello! Tea or coffee?",
+          "fa": "سلام! چای یا قهوه؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Let us start with more and were in short sentences.",
-          "fa": "بیایید با «more» و «were» در جمله‌های کوتاه شروع کنیم."
+          "text": "Tea, please. Without sugar.",
+          "fa": "چای، لطفاً. بدون شکر."
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember who?",
-          "fa": "خوبه! آیا «who» را هم یادت هست؟"
+          "text": "Sure. Would you like bread too?",
+          "fa": "حتماً. نان هم میل دارید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Yes, both who and had are much clearer to me now.",
-          "fa": "بله، الان هم «who» و هم «had» خیلی برایم روشن‌تر شده‌اند."
+          "text": "No, thank you. Just tea is fine.",
+          "fa": "نه، ممنون. فقط چای کافی است."
         }
       ],
       "checks": [
@@ -712,24 +712,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice were when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «were» شدی؟"
+          "speaker": "کارمند کافه",
+          "text": "Good morning! What can I get for you today?",
+          "fa": "صبح بخیر! امروز چی براتون بیارم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw were right next to also in the conversation.",
-          "fa": "بله، در گفت‌وگو «were» را درست کنار «also» دیدم."
+          "speaker": "شما",
+          "text": "A small coffee and a cheese sandwich, please.",
+          "fa": "یک قهوهٔ کوچک و یک ساندویچ پنیر، لطفاً."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep them in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «them» را هم به خاطر بسپاری؟"
+          "speaker": "کارمند کافه",
+          "text": "For here or to go?",
+          "fa": "همین‌جا میل می‌کنید یا بیرون‌بر؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use them and its when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «them» و «its» استفاده کنم."
+          "speaker": "شما",
+          "text": "For here, please. Thank you!",
+          "fa": "همین‌جا، لطفاً. ممنون!"
         }
       ],
       "checks": [
@@ -886,24 +886,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review best together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «best» را با هم مرور کنیم."
+          "speaker": "همسایه",
+          "text": "Hi! Are you new in this building?",
+          "fa": "سلام! در این ساختمان تازه‌وارد هستید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced best and such aloud.",
-          "fa": "فکر خوبیه! من همین الان «best» و «such» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Yes, I moved in yesterday. My name is Reza.",
+          "fa": "بله، دیروز اسباب‌کشی کردم. اسم من رضا است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about look and both from the same group?",
-          "fa": "دربارهٔ «look» و «both» از همین بخش چطور؟"
+          "speaker": "همسایه",
+          "text": "Welcome! I live next door in apartment four.",
+          "fa": "خوش آمدید! من همسایهٔ دیواربه‌دیوار در واحد چهار هستم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say look and both in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «look» و «both» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Great to meet you! Let me know if you ever need anything.",
+          "fa": "از آشنایی خوشحالم! اگر کاری داشتید حتماً بگویید."
         }
       ],
       "checks": [
@@ -1060,24 +1060,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "کارمند ایستگاه",
+          "text": "Next, please! How can I help you?",
+          "fa": "نفر بعدی لطفاً! چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with set and thought in short sentences.",
-          "fa": "بیایید با «set» و «thought» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "One ticket to the city center, please.",
+          "fa": "یک بلیت به مرکز شهر، لطفاً."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember done?",
-          "fa": "خوبه! آیا «done» را هم یادت هست؟"
+          "speaker": "کارمند ایستگاه",
+          "text": "Single or return?",
+          "fa": "یک‌طرفه یا رفت‌وبرگشت؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both done and however are much clearer to me now.",
-          "fa": "بله، الان هم «done» و هم «however» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Return, please. How much is it?",
+          "fa": "رفت‌وبرگشت، لطفاً. قیمتش چقدر است؟"
         }
       ],
       "checks": [
@@ -1234,24 +1234,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice power when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «power» شدی؟"
+          "speaker": "شما",
+          "text": "Excuse me, is there a library near here?",
+          "fa": "ببخشید، این نزدیک‌ها کتابخانه هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw power right next to seen in the conversation.",
-          "fa": "بله، در گفت‌وگو «power» را درست کنار «seen» دیدم."
+          "speaker": "رهگذر",
+          "text": "Yes, walk straight ahead for two minutes.",
+          "fa": "بله، دو دقیقه مستقیم جلو بروید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep states in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «states» را هم به خاطر بسپاری؟"
+          "speaker": "شما",
+          "text": "Is it on the left or on the right?",
+          "fa": "سمت چپ است یا سمت راست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use states and based when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «states» و «based» استفاده کنم."
+          "speaker": "رهگذر",
+          "text": "On the right, right next to the post office.",
+          "fa": "سمت راست، درست کنار ادارهٔ پست."
         }
       ],
       "checks": [
@@ -1408,24 +1408,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review using together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «using» را با هم مرور کنیم."
+          "speaker": "فروشنده",
+          "text": "Good afternoon! Are you looking for anything special?",
+          "fa": "عصر بخیر! دنبال چیز خاصی می‌گردید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced using and law aloud.",
-          "fa": "فکر خوبیه! من همین الان «using» و «law» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Yes, where can I find fresh apples and milk?",
+          "fa": "بله، سیب تازه و شیر کجا پیدا می‌کنم؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about war and whole from the same group?",
-          "fa": "دربارهٔ «war» و «whole» از همین بخش چطور؟"
+          "speaker": "فروشنده",
+          "text": "The apples are near the entrance, and milk is in aisle three.",
+          "fa": "سیب‌ها نزدیک ورودی و شیر در راهروی سه است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say war and whole in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «war» و «whole» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Thank you! I also need a loaf of bread.",
+          "fa": "ممنون! یک قرص نان هم لازم دارم."
         }
       ],
       "checks": [
@@ -1582,24 +1582,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "What are you doing this Saturday?",
+          "fa": "این شنبه چه کار می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with social and talk in short sentences.",
-          "fa": "بیایید با «social» و «talk» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "I am going to the park with my sister in the morning.",
+          "fa": "صبح با خواهرم به پارک می‌روم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember court?",
-          "fa": "خوبه! آیا «court» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "That sounds nice! Are you free in the afternoon?",
+          "fa": "عالی است! بعدازظهر وقت داری؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both court and fact are much clearer to me now.",
-          "fa": "بله، الان هم «court» و هم «fact» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Yes! Let us meet for tea at four o’clock.",
+          "fa": "بله! ساعت چهار برای چای همدیگر را ببینیم."
         }
       ],
       "checks": [
@@ -1756,24 +1756,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice history when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «history» شدی؟"
+          "speaker": "داروساز",
+          "text": "Hello, how can I help you today?",
+          "fa": "سلام، امروز چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw history right next to known in the conversation.",
-          "fa": "بله، در گفت‌وگو «history» را درست کنار «known» دیدم."
+          "speaker": "شما",
+          "text": "I have a sore throat and a mild headache.",
+          "fa": "گلودرد و سردرد خفیفی دارم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep research in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «research» را هم به خاطر بسپاری؟"
+          "speaker": "داروساز",
+          "text": "Since when have you had these symptoms?",
+          "fa": "از چه زمانی این علائم را دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use research and several when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «research» و «several» استفاده کنم."
+          "speaker": "شما",
+          "text": "Since yesterday evening. Do you have lozenges?",
+          "fa": "از دیروز عصر. قرص مکیدنی گلو دارید؟"
         }
       ],
       "checks": [
@@ -1930,24 +1930,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review probably together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «probably» را با هم مرور کنیم."
+          "speaker": "گارسون",
+          "text": "Are you ready to order lunch?",
+          "fa": "برای سفارش ناهار آماده‌اید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced probably and yeah aloud.",
-          "fa": "فکر خوبیه! من همین الان «probably» و «yeah» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Yes, I would like the vegetable soup and rice.",
+          "fa": "بله، سوپ سبزیجات و برنج می‌خواهم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about york and possible from the same group?",
-          "fa": "دربارهٔ «york» و «possible» از همین بخش چطور؟"
+          "speaker": "گارسون",
+          "text": "Would you like anything to drink with that?",
+          "fa": "همراهش نوشیدنی هم میل دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say york and possible in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «york» و «possible» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Just a glass of still water, please.",
+          "fa": "فقط یک لیوان آب معمولی، لطفاً."
         }
       ],
       "checks": [
@@ -2124,24 +2124,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "فروشنده",
+          "text": "Hello! How can I help you today?",
+          "fa": "سلام! امروز چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with really and being in short sentences.",
-          "fa": "بیایید با «really» و «being» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "I bought this shirt yesterday, but it is a bit too small.",
+          "fa": "دیروز این پیراهن را خریدم، ولی کمی کوچک است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember world?",
-          "fa": "خوبه! آیا «world» را هم یادت هست؟"
+          "speaker": "فروشنده",
+          "text": "No problem. Do you have the receipt with you?",
+          "fa": "مشکلی نیست. رسیدش همراهتان هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both world and great are much clearer to me now.",
-          "fa": "بله، الان هم «world» و هم «great» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Yes, here it is. Can I exchange it for a medium?",
+          "fa": "بله، بفرمایید. می‌توانم با سایز مدیوم عوضش کنم؟"
         }
       ],
       "checks": [
@@ -2330,24 +2330,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice american when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «american» شدی؟"
+          "speaker": "پذیرش هتل",
+          "text": "Good evening, welcome! Do you have a reservation?",
+          "fa": "عصر بخیر، خوش آمدید! رزرو دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw american right next to party in the conversation.",
-          "fa": "بله، در گفت‌وگو «american» را درست کنار «party» دیدم."
+          "speaker": "شما",
+          "text": "Yes, a single room for three nights under Mina Karimi.",
+          "fa": "بله، یک اتاق یک‌نفره برای سه شب به نام مینا کریمی."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep shit in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «shit» را هم به خاطر بسپاری؟"
+          "speaker": "پذیرش هتل",
+          "text": "Found it! Breakfast is served from seven to ten.",
+          "fa": "پیدایش کردم! صبحانه از هفت تا ده سرو می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use shit and general when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «shit» و «general» استفاده کنم."
+          "speaker": "شما",
+          "text": "Thank you. Does the room have a quiet window?",
+          "fa": "ممنون. آیا اتاق پنجرهٔ رو به حیاط آرام دارد؟"
         }
       ],
       "checks": [
@@ -2548,24 +2548,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review guy together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «guy» را با هم مرور کنیم."
+          "speaker": "دوست",
+          "text": "Did you check the weather forecast for tomorrow?",
+          "fa": "پیش‌بینی هوای فردا را نگاه کردی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced guy and true aloud.",
-          "fa": "فکر خوبیه! من همین الان «guy» و «true» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Yes, it says sunny in the morning, with light rain later.",
+          "fa": "بله، نوشته صبح آفتابی است و بعد کمی باران می‌بارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about fuck and history from the same group?",
-          "fa": "دربارهٔ «fuck» و «history» از همین بخش چطور؟"
+          "speaker": "دوست",
+          "text": "Should we still go for our morning walk?",
+          "fa": "پس باز هم پیاده‌روی صبح را برویم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say fuck and history in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «fuck» و «history» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Sure, if we start at eight, we will be back before it rains.",
+          "fa": "حتماً، اگر ساعت هشت شروع کنیم، قبل از باران برمی‌گردیم."
         }
       ],
       "checks": [
@@ -2746,24 +2746,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "You look energetic! How often do you exercise?",
+          "fa": "سرحال به نظر می‌رسی! چند بار در هفته ورزش می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with heart and yourself in short sentences.",
-          "fa": "بیایید با «heart» و «yourself» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "I usually swim twice a week and walk to work.",
+          "fa": "معمولاً هفته‌ای دو بار شنا می‌کنم و پیاده سر کار می‌روم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember act?",
-          "fa": "خوبه! آیا «act» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "That is great. I am trying to start running again.",
+          "fa": "عالیه. من هم می‌خواهم دوباره دویدن را شروع کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both act and fun are much clearer to me now.",
-          "fa": "بله، الان هم «act» و هم «fun» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "We can jog together in the park on Tuesdays if you like.",
+          "fa": "اگر دوست داری سه‌شنبه‌ها می‌توانیم با هم در پارک بدویم."
         }
       ],
       "checks": [
@@ -2948,24 +2948,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice song when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «song» شدی؟"
+          "speaker": "منشی",
+          "text": "Dental clinic, good morning. How can I help you?",
+          "fa": "کلینیک دندان‌پزشکی، صبح بخیر. چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw song right next to action in the conversation.",
-          "fa": "بله، در گفت‌وگو «song» را درست کنار «action» دیدم."
+          "speaker": "شما",
+          "text": "I would like to book a checkup for next week.",
+          "fa": "می‌خواهم برای هفتهٔ آینده یک نوبت معاینه بگیرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep himself in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «himself» را هم به خاطر بسپاری؟"
+          "speaker": "منشی",
+          "text": "We have an opening on Wednesday at ten in the morning.",
+          "fa": "چهارشنبه ساعت ده صبح وقت خالی داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use himself and dr when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «himself» و «dr» استفاده کنم."
+          "speaker": "شما",
+          "text": "Wednesday at ten works well for me. Thank you.",
+          "fa": "چهارشنبه ساعت ده برایم عالی است. ممنون."
         }
       ],
       "checks": [
@@ -3158,24 +3158,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review shot together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «shot» را با هم مرور کنیم."
+          "speaker": "شما",
+          "text": "Excuse me, do you know why the printer is not working?",
+          "fa": "ببخشید، می‌دانی چرا چاپگر کار نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced shot and site aloud.",
-          "fa": "فکر خوبیه! من همین الان «shot» و «site» را با صدای بلند تمرین کردم."
+          "speaker": "همکار",
+          "text": "Let me check. Oh, it looks like the paper tray is empty.",
+          "fa": "بگذار ببینم. آها، مثل اینکه سینی کاغذ خالی شده."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about account and co from the same group?",
-          "fa": "دربارهٔ «account» و «co» از همین بخش چطور؟"
+          "speaker": "شما",
+          "text": "Where do we keep the extra paper?",
+          "fa": "کاغذ اضافه را کجا نگه می‌داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say account and co in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «account» و «co» را در بافت جمله می‌گویم."
+          "speaker": "همکار",
+          "text": "In the white cabinet behind the reception desk.",
+          "fa": "داخل کمد سفید پشت میز پذیرش."
         }
       ],
       "checks": [
@@ -3372,24 +3372,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "What are we cooking for dinner tonight?",
+          "fa": "امشب برای شام چی درست می‌کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with boy and girls in short sentences.",
-          "fa": "بیایید با «boy» و «girls» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "I thought we could make pasta with tomato sauce and salad.",
+          "fa": "فکر کردم پاستا با سس گوجه‌فرنگی و سالاد درست کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember gold?",
-          "fa": "خوبه! آیا «gold» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "Sounds delicious! Do we have enough tomatoes and garlic?",
+          "fa": "خوشمزه به نظر می‌رسد! به اندازه کافی گوجه و سیر داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both gold and gone are much clearer to me now.",
-          "fa": "بله، الان هم «gold» و هم «gone» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "We have tomatoes, so I will just pick up garlic on my way home.",
+          "fa": "گوجه داریم، فقط سر راه خانه سیر می‌خرم."
         }
       ],
       "checks": [
@@ -3570,24 +3570,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice david when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «david» شدی؟"
+          "speaker": "مسافر",
+          "text": "Excuse me, has the number twelve bus passed yet?",
+          "fa": "ببخشید، اتوبوس شمارهٔ دوازده رد شده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw david right next to fast in the conversation.",
-          "fa": "بله، در گفت‌وگو «david» را درست کنار «fast» دیدم."
+          "speaker": "شما",
+          "text": "Not yet. The screen says it is six minutes late today.",
+          "fa": "هنوز نه. تابلو نشان می‌دهد امروز شش دقیقه تأخیر دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep federal in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «federal» را هم به خاطر بسپاری؟"
+          "speaker": "مسافر",
+          "text": "Oh, I hope it comes soon. Does it stop at the museum?",
+          "fa": "امیدوارم زود برسد. جلوی موزه توقف دارد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use federal and league when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «federal» و «league» استفاده کنم."
+          "speaker": "شما",
+          "text": "Yes, it is the fourth stop after the central square.",
+          "fa": "بله، چهارمین ایستگاه بعد از میدان مرکزی است."
         }
       ],
       "checks": [
@@ -3772,24 +3772,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review blood together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «blood» را با هم مرور کنیم."
+          "speaker": "دوست",
+          "text": "Have you decided what to buy for Nima’s birthday?",
+          "fa": "تصمیم گرفتی برای تولد نیما چی بخری؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced blood and china aloud.",
-          "fa": "فکر خوبیه! من همین الان «blood» و «china» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "I want to get him a warm scarf or a travel mug.",
+          "fa": "می‌خواهم یک شال‌گردن گرم یا ماگ سفری بگیرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about economic and hell from the same group?",
-          "fa": "دربارهٔ «economic» و «hell» از همین بخش چطور؟"
+          "speaker": "دوست",
+          "text": "A travel mug is very useful! He takes the train every morning.",
+          "fa": "ماگ سفری خیلی کاربردی است! هر صبح با قطار می‌رود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say economic and hell in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «economic» و «hell» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "True! Let us check the shop near the station after work.",
+          "fa": "راست می‌گویی! بعد از کار مغازهٔ نزدیک ایستگاه را می‌بینیم."
         }
       ],
       "checks": [
@@ -3982,24 +3982,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "کتابدار",
+          "text": "Welcome to the city library! Do you have a membership card?",
+          "fa": "به کتابخانهٔ شهر خوش آمدید! کارت عضویت دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with foreign and hair in short sentences.",
-          "fa": "بیایید با «foreign» و «hair» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Not yet. How can I sign up for one?",
+          "fa": "هنوز نه. چطور می‌توانم ثبت‌نام کنم؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember increase?",
-          "fa": "خوبه! آیا «increase» را هم یادت هست؟"
+          "speaker": "کتابدار",
+          "text": "Just show me your ID and fill out this short form.",
+          "fa": "فقط کارت شناسایی‌تان را نشان بدهید و این فرم کوتاه را پر کنید."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both increase and legal are much clearer to me now.",
-          "fa": "بله، الان هم «increase» و هم «legal» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "How many books can I borrow at a time?",
+          "fa": "هر بار چند کتاب می‌توانم امانت بگیرم؟"
         }
       ],
       "checks": [
@@ -4196,24 +4196,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice sir when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «sir» شدی؟"
+          "speaker": "همراه",
+          "text": "Have you packed your bag for the trip tomorrow?",
+          "fa": "ساک سفر فردا را بسته‌ای؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw sir right next to success in the conversation.",
-          "fa": "بله، در گفت‌وگو «sir» را درست کنار «success» دیدم."
+          "speaker": "شما",
+          "text": "Almost! I just need to add my charger and a warm jacket.",
+          "fa": "تقریباً! فقط مانده شارژر و یک کاپشن گرم بگذارم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep ways in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «ways» را هم به خاطر بسپاری؟"
+          "speaker": "همراه",
+          "text": "Don’t forget comfortable shoes; we will walk a lot.",
+          "fa": "کفش راحت یادت نرود؛ خیلی پیاده‌روی داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use ways and access when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «ways» و «access» استفاده کنم."
+          "speaker": "شما",
+          "text": "Good reminder! I am wearing my sneakers on the train.",
+          "fa": "یادآوری خوبی بود! کفش کتانی‌ام را توی قطار می‌پوشم."
         }
       ],
       "checks": [
@@ -4394,24 +4394,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review paul together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «paul» را با هم مرور کنیم."
+          "speaker": "دوست",
+          "text": "Do you feel like watching a movie tonight?",
+          "fa": "حوصله داری امشب فیلم ببینیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced paul and respect aloud.",
-          "fa": "فکر خوبیه! من همین الان «paul» و «respect» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Sure! What kind of film are you in the mood for?",
+          "fa": "حتماً! چه نوع فیلمی دلت می‌خواهد؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about rock and shall from the same group?",
-          "fa": "دربارهٔ «rock» و «shall» از همین بخش چطور؟"
+          "speaker": "دوست",
+          "text": "Something light and funny, not too long.",
+          "fa": "یک چیز سبک و خنده‌دار، نه خیلی طولانی."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say rock and shall in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «rock» و «shall» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Perfect, I know a great comedy we have not seen yet.",
+          "fa": "عالیه، یک کمدی خوب سراغ دارم که هنوز ندیده‌ایم."
         }
       ],
       "checks": [
@@ -4600,24 +4600,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Thanks for coming in today. Why does this role interest you?",
+          "fa": "ممنون که امروز تشریف آوردید. چرا این موقعیت شغلی برایتان جذاب است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with world and great in short sentences.",
-          "fa": "بیایید با «world» و «great» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "I enjoy working directly with customers and solving practical issues.",
+          "fa": "از کار مستقیم با مشتریان و حل مسائل عملی لذت می‌برم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember high?",
-          "fa": "خوبه! آیا «high» را هم یادت هست؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Could you share one situation where you worked under a tight deadline?",
+          "fa": "می‌توانید موقعیتی را بگویید که زیر فشار زمانی کار کرده‌اید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both high and done are much clearer to me now.",
-          "fa": "بله، الان هم «high» و هم «done» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Last year I reorganized our weekly schedule so every order went out on time.",
+          "fa": "پارسال برنامهٔ هفتگی را طوری بازچینی کردم که همهٔ سفارش‌ها به‌موقع ارسال شدند."
         }
       ],
       "checks": [
@@ -4814,24 +4814,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice social when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «social» شدی؟"
+          "speaker": "شما",
+          "text": "Excuse me, our train has been delayed by forty minutes. Is there another connection?",
+          "fa": "ببخشید، قطار ما چهل دقیقه تأخیر دارد. مسیر جایگزین دیگری هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw social right next to court in the conversation.",
-          "fa": "بله، در گفت‌وگو «social» را درست کنار «court» دیدم."
+          "speaker": "کارمند ایستگاه",
+          "text": "Yes, you can take the regional train on platform three and transfer.",
+          "fa": "بله، می‌توانید با قطار محلی از سکوی سه بروید و خط عوض کنید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep given in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «given» را هم به خاطر بسپاری؟"
+          "speaker": "شما",
+          "text": "Will my current ticket still be valid on that train?",
+          "fa": "آیا بلیت فعلی من در آن قطار هم معتبر است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use given and guys when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «given» و «guys» استفاده کنم."
+          "speaker": "کارمند ایستگاه",
+          "text": "Yes, because of the delay, no extra fee is needed.",
+          "fa": "بله، به دلیل تأخیر نیازی به هزینهٔ اضافه نیست."
         }
       ],
       "checks": [
@@ -5020,24 +5020,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review fucking together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «fucking» را با هم مرور کنیم."
+          "speaker": "شما",
+          "text": "Hello Mr. Alavi, the kitchen sink has been leaking since last night.",
+          "fa": "سلام آقای علوی، سینک آشپزخانه از دیشب چکه می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced fucking and million aloud.",
-          "fa": "فکر خوبیه! من همین الان «fucking» و «million» را با صدای بلند تمرین کردم."
+          "speaker": "صاحب‌خانه",
+          "text": "Thanks for letting me know quickly. Is water getting on the floor?",
+          "fa": "ممنون که سریع خبر دادید. آب روی کف هم می‌ریزد؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about among and development from the same group?",
-          "fa": "دربارهٔ «among» و «development» از همین بخش چطور؟"
+          "speaker": "شما",
+          "text": "Just a little, so I placed a bucket underneath for now.",
+          "fa": "کمی، برای همین فعلاً یک سطل زیرش گذاشته‌ام."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say among and development in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «among» و «development» را در بافت جمله می‌گویم."
+          "speaker": "صاحب‌خانه",
+          "text": "Good idea. I will send a plumber tomorrow morning between nine and eleven.",
+          "fa": "فکر خوبی است. فردا صبح بین نه تا یازده لوله‌کش می‌فرستم."
         }
       ],
       "checks": [
@@ -5218,24 +5218,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "How are you finding working from home twice a week?",
+          "fa": "دورکاری دو روز در هفته برایت چطور است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with dr and held in short sentences.",
-          "fa": "بیایید با «dr» و «held» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "It saves me two hours of commuting, so I get much more focused work done.",
+          "fa": "دو ساعت در رفت‌وآمد صرفه‌جویی می‌کند، پس تمرکز بیشتری روی کار دارم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember de?",
-          "fa": "خوبه! آیا «de» را هم یادت هست؟"
+          "speaker": "همکار",
+          "text": "Do you miss quick chats with the team?",
+          "fa": "دلت برای گپ‌های کوتاه با تیم تنگ نمی‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both de and fight are much clearer to me now.",
-          "fa": "بله، الان هم «de» و هم «fight» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Sometimes, which is why I like coming into the office on Mondays and Thursdays.",
+          "fa": "گاهی بله، برای همین دوست دارم دوشنبه و پنجشنبه حضوری بیایم."
         }
       ],
       "checks": [
@@ -5424,24 +5424,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice military when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «military» شدی؟"
+          "speaker": "مشاور",
+          "text": "Are you looking for an evening class or a weekend workshop?",
+          "fa": "دنبال کلاس عصر هستید یا کارگاه آخر هفته؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw military right next to st in the conversation.",
-          "fa": "بله، در گفت‌وگو «military» را درست کنار «st» دیدم."
+          "speaker": "شما",
+          "text": "An evening class suits me better because I work until five.",
+          "fa": "کلاس عصر برایم مناسب‌تر است چون تا ساعت پنج کار می‌کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep won in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «won» را هم به خاطر بسپاری؟"
+          "speaker": "مشاور",
+          "text": "We have a small group starting next Tuesday at six thirty.",
+          "fa": "یک گروه کوچک داریم که سه‌شنبهٔ آینده ساعت شش‌ونیم شروع می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use won and couple when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «won» و «couple» استفاده کنم."
+          "speaker": "شما",
+          "text": "That fits my schedule. Can I attend the first session as a trial?",
+          "fa": "با برنامه‌ام می‌خواند. می‌توانم جلسهٔ اول را آزمایشی شرکت کنم؟"
         }
       ],
       "checks": [
@@ -5638,24 +5638,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review giving together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «giving» را با هم مرور کنیم."
+          "speaker": "دوست",
+          "text": "You look tired today. Did you stay up late again?",
+          "fa": "امروز خسته به نظر می‌رسی. دوباره تا دیر وقت بیدار ماندی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced giving and rate aloud.",
-          "fa": "فکر خوبیه! من همین الان «giving» و «rate» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Yes, I kept checking messages on my phone past midnight.",
+          "fa": "بله، تا بعد از نیمه‌شب پیام‌های گوشی‌ام را چک می‌کردم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about stuff and whatever from the same group?",
-          "fa": "دربارهٔ «stuff» و «whatever» از همین بخش چطور؟"
+          "speaker": "دوست",
+          "text": "Leaving the phone outside the bedroom really helped me sleep better.",
+          "fa": "گذاشتن گوشی بیرون از اتاق خواب خیلی به خواب بهتر من کمک کرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say stuff and whatever in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «stuff» و «whatever» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "That is smart. I will try reading a paper book before bed tonight.",
+          "fa": "فکر هوشمندانه‌ای است. امشب قبل از خواب کتاب کاغذی می‌خوانم."
         }
       ],
       "checks": [
@@ -5844,24 +5844,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همسایه",
+          "text": "Did you notice the new recycling bins near the courtyard gate?",
+          "fa": "سطل‌های بازیافت جدید کنار در حیاط را دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with lord and related in short sentences.",
-          "fa": "بیایید با «lord» و «related» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Yes! Separating paper and glass is much easier now.",
+          "fa": "بله! الان جداکردن کاغذ و شیشه خیلی راحت‌تر شده است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember terms?",
-          "fa": "خوبه! آیا «terms» را هم یادت هست؟"
+          "speaker": "همسایه",
+          "text": "Do you know which day they collect the plastic bin?",
+          "fa": "می‌دانی کدام روز سطل پلاستیک را خالی می‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both terms and damn are much clearer to me now.",
-          "fa": "بله، الان هم «terms» و هم «damn» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Every Thursday morning, according to the notice on the wall.",
+          "fa": "طبق اطلاعیهٔ روی دیوار، هر پنجشنبه صبح."
         }
       ],
       "checks": [
@@ -6042,24 +6042,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice army when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «army» شدی؟"
+          "speaker": "همکار",
+          "text": "Are we still on track to send the client report on Friday?",
+          "fa": "هنوز طبق برنامه قرار است گزارش مشتری را جمعه بفرستیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw army right next to australia in the conversation.",
-          "fa": "بله، در گفت‌وگو «army» را درست کنار «australia» دیدم."
+          "speaker": "شما",
+          "text": "Almost, though I am still waiting for the final sales numbers.",
+          "fa": "تقریباً، هرچند هنوز منتظر آمار نهایی فروش هستم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep earth in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «earth» را هم به خاطر بسپاری؟"
+          "speaker": "همکار",
+          "text": "If you send me the draft today, I can check the layout tonight.",
+          "fa": "اگر پیش‌نویس را امروز برایم بفرستی، امشب صفحه‌آرایی را چک می‌کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use earth and huge when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «earth» و «huge» استفاده کنم."
+          "speaker": "شما",
+          "text": "Deal! That will save us a lot of stress on Friday morning.",
+          "fa": "قبول! این‌طوری صبح جمعه کلی از استرسمان کم می‌شود."
         }
       ],
       "checks": [
@@ -6248,24 +6248,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review wanna together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «wanna» را با هم مرور کنیم."
+          "speaker": "دوست",
+          "text": "How do you remember new expressions without forgetting them quickly?",
+          "fa": "اصطلاح‌های تازه را چطور یاد می‌گیری که زود یادت نرود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced wanna and boys aloud.",
-          "fa": "فکر خوبیه! من همین الان «wanna» و «boys» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "I use each new phrase in two real sentences right after hearing it.",
+          "fa": "هر عبارت تازه را بلافاصله بعد از شنیدن در دو جملهٔ واقعی به کار می‌برم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about etc and fans from the same group?",
-          "fa": "دربارهٔ «etc» و «fans» از همین بخش چطور؟"
+          "speaker": "دوست",
+          "text": "Do you also listen to short podcasts while commuting?",
+          "fa": "توی مسیر پادکست کوتاه هم گوش می‌دهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say etc and fans in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «etc» و «fans» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Yes, ten minutes a day on the bus makes a big difference.",
+          "fa": "بله، روزی ده دقیقه در اتوبوس خیلی تفاوت ایجاد می‌کند."
         }
       ],
       "checks": [
@@ -6462,24 +6462,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همسایه",
+          "text": "Are you coming to the neighborhood book swap this Sunday?",
+          "fa": "یکشنبه به برنامهٔ مبادلهٔ کتاب محله می‌آیی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with radio and russian in short sentences.",
-          "fa": "بیایید با «radio» و «russian» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "I would love to! Should I bring books in any particular language?",
+          "fa": "با کمال میل! کتاب‌ها را به زبان خاصی بیاورم؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember treatment?",
-          "fa": "خوبه! آیا «treatment» را هم یادت هست؟"
+          "speaker": "همسایه",
+          "text": "Any novels, travel guides, or children’s books are welcome.",
+          "fa": "هر رمان، راهنمای سفر یا کتاب کودک پذیرفته می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both treatment and western are much clearer to me now.",
-          "fa": "بله، الان هم «treatment» و هم «western» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Great, I have three novels I finished recently and want to pass on.",
+          "fa": "عالی است، سه رمان دارم که تازگی خوانده‌ام و می‌خواهم به بقیه بدهم."
         }
       ],
       "checks": [
@@ -6668,24 +6668,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice significant when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «significant» شدی؟"
+          "speaker": "شما",
+          "text": "Hello, I received my online order today, but one item is missing.",
+          "fa": "سلام، سفارش اینترنتی‌ام امروز رسید، ولی یک قلم از آن کم است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw significant right next to studies in the conversation.",
-          "fa": "بله، در گفت‌وگو «significant» را درست کنار «studies» دیدم."
+          "speaker": "پشتیبانی",
+          "text": "I am sorry about that. Could you share your order number?",
+          "fa": "بابت این موضوع متأسفم. می‌توانید شمارهٔ سفارشتان را بفرمایید؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep winning in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «winning» را هم به خاطر بسپاری؟"
+          "speaker": "شما",
+          "text": "Sure, it is four-eight-two. The box only had the charger, not the case.",
+          "fa": "حتماً، چهارصد و هشتاد و دو است. داخل جعبه فقط شارژر بود، قاب نبود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use winning and episode when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «winning» و «episode» استفاده کنم."
+          "speaker": "پشتیبانی",
+          "text": "Thank you. We will ship the missing case today at no extra charge.",
+          "fa": "ممنون. قاب جاافتاده را امروز بدون هزینهٔ اضافه ارسال می‌کنیم."
         }
       ],
       "checks": [
@@ -6914,24 +6914,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review god together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «god» را با هم مرور کنیم."
+          "speaker": "مدیر محصول",
+          "text": "If we prioritize the enterprise audit log now, the mobile redesign shifts to Q3. How do you weigh that tradeoff?",
+          "fa": "اگر الان گزارش ممیزی سازمانی را در اولویت بگذاریم، بازطراحی موبایل به فصل سوم می‌افتد. این موازنه را چطور می‌سنجید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced god and nothing aloud.",
-          "fa": "فکر خوبیه! من همین الان «god» و «nothing» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Enterprise renewals depend on compliance this quarter, whereas mobile engagement is already steady.",
+          "fa": "تمدید قراردادهای سازمانی این فصل به انطباق قوانین وابسته است، در حالی که تعامل موبایل همین الان هم پایدار است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about men and party from the same group?",
-          "fa": "دربارهٔ «men» و «party» از همین بخش چطور؟"
+          "speaker": "مدیر محصول",
+          "text": "Won’t mobile power users push back on waiting another three months?",
+          "fa": "کاربران حرفه‌ای موبایل بابت سه ماه انتظار بیشتر اعتراض نمی‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say men and party in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «men» و «party» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "We can ship two high-demand speed fixes alongside the audit log so mobile users still see momentum.",
+          "fa": "می‌توانیم هم‌زمان با گزارش ممیزی دو بهینه‌سازی سرعت پرطرفدار را عرضه کنیم تا کاربران موبایل هم پیشرفت را ببینند."
         }
       ],
       "checks": [
@@ -7144,24 +7144,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "مشاور حقوقی",
+          "text": "Our new refund policy allows cancellations up to forty-eight hours in advance, with no exceptions.",
+          "fa": "سیاست جدید بازپرداخت ما لغو را تا چهل‌وهشت ساعت قبل مجاز می‌داند، بدون استثنا."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with song and de in short sentences.",
-          "fa": "بیایید با «song» و «de» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Strict cutoffs reduce abuse, yet rigid enforcement during severe weather can damage long-term trust.",
+          "fa": "محدودیت‌های سخت از سوءاستفاده می‌کاهد، اما اجرای خشک آن در هوای بحرانی به اعتماد بلندمدت آسیب می‌زند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember re?",
-          "fa": "خوبه! آیا «re» را هم یادت هست؟"
+          "speaker": "مشاور حقوقی",
+          "text": "How do we allow flexibility without opening a loophole for routine last-minute cancellations?",
+          "fa": "چطور انعطاف بگذاریم بی‌آنکه راه سوءاستفاده برای لغوهای لحظه‌آخری باز شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both re and land are much clearer to me now.",
-          "fa": "بله، الان هم «re» و هم «land» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Offer a one-time travel credit for documented emergencies rather than an automatic cash refund.",
+          "fa": "به‌جای بازپرداخت نقدی خودکار، برای شرایط اضطراری مستند یک اعتبار سفر یک‌باره بدهید."
         }
       ],
       "checks": [
@@ -7390,24 +7390,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice east when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «east» شدی؟"
+          "speaker": "پژوهشگر",
+          "text": "Our survey shows eighty percent satisfaction among respondents who stayed for the full year.",
+          "fa": "پیمایش ما رضایت هشتاد درصدی را در میان کسانی نشان می‌دهد که یک سال کامل ماندند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw east right next to stuff in the conversation.",
-          "fa": "بله، در گفت‌وگو «east» را درست کنار «stuff» دیدم."
+          "speaker": "شما",
+          "text": "Focusing solely on retained members introduces survivorship bias and overlooks why early dropouts left.",
+          "fa": "تمرکز صرف بر اعضای باقی‌مانده سوگیری بقا ایجاد می‌کند و علت خروج افراد در ابتدا را نادیده می‌گیرد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep whatever in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «whatever» را هم به خاطر بسپاری؟"
+          "speaker": "پژوهشگر",
+          "text": "Good catch. How could we balance the sample before publishing?",
+          "fa": "نکتهٔ خوبی است. پیش از انتشار چطور نمونه را متعادل کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use whatever and david when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «whatever» و «david» استفاده کنم."
+          "speaker": "شما",
+          "text": "Include exit interviews from churned users and report both cohorts side by side.",
+          "fa": "مصاحبه‌های خروج کاربران جداشده را هم اضافه کنیم و هر دو گروه را کنار هم گزارش دهیم."
         }
       ],
       "checks": [
@@ -7620,24 +7620,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review race together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «race» را با هم مرور کنیم."
+          "speaker": "معمار نرم‌افزار",
+          "text": "Synchronizing every device every ten seconds is saturating our database connections.",
+          "fa": "همگام‌سازی هر دستگاه در هر ده ثانیه دارد اتصالات پایگاه دادهٔ ما را پر می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced race and super aloud.",
-          "fa": "فکر خوبیه! من همین الان «race» و «super» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Instead of polling constantly, clients should only pull updates when they receive a lightweight push signal.",
+          "fa": "به‌جای پرس‌وجوی مداوم، کلاینت‌ها فقط باید هنگام دریافت یک پیام اعلان سبک، تغییرات را بگیرند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about union and crazy from the same group?",
-          "fa": "دربارهٔ «union» و «crazy» از همین بخش چطور؟"
+          "speaker": "معمار نرم‌افزار",
+          "text": "What happens if a phone misses a push notification while offline?",
+          "fa": "اگر گوشی در حالت آفلاین یک اعلان را از دست بدهد چه می‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say union and crazy in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «union» و «crazy» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "It simply fetches changes since its last local timestamp as soon as connectivity returns.",
+          "fa": "به‌محض بازگشت اتصال، فقط تغییرات پس از آخرین زمان ذخیره‌شدهٔ خود را می‌گیرد."
         }
       ],
       "checks": [
@@ -7866,24 +7866,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "میزبان",
+          "text": "Critics argue that pedestrianizing the main square will hurt local shop deliveries.",
+          "fa": "منتقدان می‌گویند پیاده‌روسازی میدان اصلی به تحویل بار مغازه‌های محلی آسیب می‌زند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with peace and via in short sentences.",
-          "fa": "بیایید با «peace» و «via» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "That concern is valid if access is blocked completely, which is why timed delivery windows work better.",
+          "fa": "اگر دسترسی کاملاً بسته شود این نگرانی به‌جاست، به همین دلیل بازه‌های زمانی تحویل بار بهتر جواب می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember anti?",
-          "fa": "خوبه! آیا «anti» را هم یادت هست؟"
+          "speaker": "میزبان",
+          "text": "How have nearby cities structured those delivery hours?",
+          "fa": "شهرهای اطراف این ساعات تحویل بار را چطور تنظیم کرده‌اند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both anti and association are much clearer to me now.",
-          "fa": "بله، الان هم «anti» و هم «association» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Vans enter freely between six and ten in the morning, leaving the rest of the day quiet and walkable.",
+          "fa": "ون‌ها بین شش تا ده صبح آزادانه وارد می‌شوند و بقیهٔ روز آرام و مخصوص پیاده‌روی می‌ماند."
         }
       ],
       "checks": [
@@ -8096,24 +8096,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice wide when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «wide» شدی؟"
+          "speaker": "همکار",
+          "text": "Design and engineering seem deadlocked over whether to rebuild the checkout page.",
+          "fa": "به نظر می‌رسد طراحی و تیم فنی دربارهٔ بازنویسی صفحهٔ پرداخت به بن‌بست رسیده‌اند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw wide right next to wow in the conversation.",
-          "fa": "بله، در گفت‌وگو «wide» را درست کنار «wow» دیدم."
+          "speaker": "شما",
+          "text": "Both sides actually share the same goal—lowering drop-offs—but disagree on timeline risk.",
+          "fa": "هر دو طرف در واقع هدف یکسانی دارند—کاهش رهاکردن سبد—اما سر ریسک زمانی اختلاف دارند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep fear in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «fear» را هم به خاطر بسپاری؟"
+          "speaker": "همکار",
+          "text": "How can we get them unstuck in tomorrow’s sync?",
+          "fa": "در جلسهٔ فردا چطور از این بن‌بست خارجشان کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use fear and german when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «fear» و «german» استفاده کنم."
+          "speaker": "شما",
+          "text": "Ask each team to test one small hypothesis this sprint before committing to a full rewrite.",
+          "fa": "از هر تیم بخواهیم پیش از تعهد به بازنویسی کامل، یک فرضیهٔ کوچک را در همین اسپرینت آزمایش کند."
         }
       ],
       "checks": [
@@ -8342,24 +8342,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review worst together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «worst» را با هم مرور کنیم."
+          "speaker": "استاد راهنما",
+          "text": "Your literature review is thorough, yet your main claim feels buried in chapter two.",
+          "fa": "مرور ادبیات تو دقیق است، ولی ادعای اصلی‌ات در فصل دوم گم شده است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced worst and africa aloud.",
-          "fa": "فکر خوبیه! من همین الان «worst» و «africa» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "That makes sense—I spent too long summarizing prior models before stating where they fall short.",
+          "fa": "منطقی است—بیش از حد مدل‌های قبلی را خلاصه کردم قبل از اینکه بگویم کجا کم می‌آورند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about band and ended from the same group?",
-          "fa": "دربارهٔ «band» و «ended» از همین بخش چطور؟"
+          "speaker": "استاد راهنما",
+          "text": "How will you sharpen that transition for the committee?",
+          "fa": "این گذار را برای کمیته چطور تیزتر و روشن‌تر می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say band and ended in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «band» و «ended» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "I will open chapter one with the exact gap my experiment addresses and link every section back to it.",
+          "fa": "فصل اول را دقیقاً با خلئی شروع می‌کنم که آزمایش من پاسخ می‌دهد و هر بخش را به آن وصل می‌کنم."
         }
       ],
       "checks": [
@@ -8572,24 +8572,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "روابط عمومی",
+          "text": "Customers are posting screenshots of delayed deliveries. Should we wait until all data is verified?",
+          "fa": "مشتریان اسکرین‌شات تأخیر تحویل‌ها را منتشر می‌کنند. صبر کنیم تا همهٔ داده‌ها تأیید شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with highly and holding in short sentences.",
-          "fa": "بیایید با «highly» و «holding» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Silence creates more anxiety than partial answers. We should acknowledge the delay immediately and state what we know.",
+          "fa": "سکوت بیشتر از پاسخ ناقص اضطراب می‌سازد. باید فوراً تأخیر را بپذیریم و آنچه را می‌دانیم بگوییم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember japan?",
-          "fa": "خوبه! آیا «japan» را هم یادت هست؟"
+          "speaker": "روابط عمومی",
+          "text": "What commitment can we safely share right now?",
+          "fa": "الان چه تعهدی را می‌توانیم با اطمینان اعلام کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both japan and laws are much clearer to me now.",
-          "fa": "بله، الان هم «japan» و هم «laws» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Promise a verified status update within three hours and direct affected orders to priority support.",
+          "fa": "قول به‌روزرسانی دقیق ظرف سه ساعت آینده را بدهیم و سفارش‌های متأثر را به پشتیبانی ویژه وصل کنیم."
         }
       ],
       "checks": [
@@ -8818,24 +8818,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice truly when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «truly» شدی؟"
+          "speaker": "همکار",
+          "text": "Marketing wants full browsing histories to tailor recommendations automatically.",
+          "fa": "تیم بازاریابی کل تاریخچهٔ مرور را می‌خواهد تا پیشنهادها را خودکار شخصی‌سازی کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw truly right next to division in the conversation.",
-          "fa": "بله، در گفت‌وگو «truly» را درست کنار «division» دیدم."
+          "speaker": "شما",
+          "text": "Collecting broad history raises privacy exposure when recent category preferences already deliver most of the gain.",
+          "fa": "گردآوری تاریخچهٔ گسترده ریسک حریم خصوصی دارد در حالی که علایق اخیر دسته‌ای بیشتر سود را می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep freedom in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «freedom» را هم به خاطر بسپاری؟"
+          "speaker": "همکار",
+          "text": "Would explicit opt-in categories really perform nearly as well?",
+          "fa": "آیا انتخاب دسته‌های دلخواه با رضایت صریح واقعاً تقریباً همان‌قدر کارایی دارد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use freedom and google when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «freedom» و «google» استفاده کنم."
+          "speaker": "شما",
+          "text": "Yes, and storing fewer sensitive logs lowers both compliance risk and storage overhead.",
+          "fa": "بله، و ذخیرهٔ داده‌های حساس کمتر هم ریسک مقرراتی و هم هزینهٔ نگهداری را کم می‌کند."
         }
       ],
       "checks": [
@@ -9048,24 +9048,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review acting together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «acting» را با هم مرور کنیم."
+          "speaker": "ویراستار",
+          "text": "The literal translation of this slogan sounds oddly stiff in everyday conversation.",
+          "fa": "ترجمهٔ تحت‌اللفظی این شعار در گفت‌وگوی روزمره به‌طرز عجیبی خشک به نظر می‌رسد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced acting and african aloud.",
-          "fa": "فکر خوبیه! من همین الان «acting» و «african» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Idiomatic phrasing matters more than word-for-word accuracy when you want warmth.",
+          "fa": "وقتی صمیمیت می‌خواهید، بیان اصطلاحی طبیعی مهم‌تر از دقت واژه‌به‌واژه است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about arms and click from the same group?",
-          "fa": "دربارهٔ «arms» و «click» از همین بخش چطور؟"
+          "speaker": "ویراستار",
+          "text": "How do we keep the original promise without sounding unnatural?",
+          "fa": "چطور وعدهٔ اصلی را نگه داریم بی‌آنکه مصنوعی به نظر برسد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say arms and click in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «arms» و «click» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Focus on the feeling the reader should take away, then choose the phrase a local friend would say.",
+          "fa": "روی حسی تمرکز کنید که خواننده باید بگیرد و بعد عبارتی را برگزینید که یک دوست بومی می‌گوید."
         }
       ],
       "checks": [
@@ -9294,24 +9294,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "داور",
+          "text": "Your neighborhood literacy initiative is promising, yet how will it sustain itself once the grant ends?",
+          "fa": "طرح سوادآموزی محلی شما امیدوارکننده است، اما پس از پایان کمک‌هزینه چطور پایدار می‌ماند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with waste and apparently in short sentences.",
-          "fa": "بیایید با «waste» و «apparently» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Year one builds the curriculum and trains local mentors; by year two, municipal libraries absorb operations.",
+          "fa": "سال اول برنامه درسی ساخته می‌شود و مربیان محلی آموزش می‌بینند؛ از سال دوم کتابخانه‌های شهری اجرا را می‌پذیرند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember edition?",
-          "fa": "خوبه! آیا «edition» را هم یادت هست؟"
+          "speaker": "داور",
+          "text": "Have the library directors already confirmed staffing capacity?",
+          "fa": "آیا مدیران کتابخانه‌ها ظرفیت نیروی انسانی را تأیید کرده‌اند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both edition and institute are much clearer to me now.",
-          "fa": "بله، الان هم «edition» و هم «institute» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Yes, two regional branches signed letters committing space and coordinator hours.",
+          "fa": "بله، دو شعبهٔ منطقه‌ای نامه‌های تعهد فضا و ساعات هماهنگ‌کننده را امضا کرده‌اند."
         }
       ],
       "checks": [
@@ -9524,24 +9524,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice shut when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «shut» شدی؟"
+          "speaker": "سردبیر",
+          "text": "The whistleblower refuses to go on record. Can we still publish the safety report?",
+          "fa": "افشاگر حاضر نیست نامش فاش شود. باز هم می‌توانیم گزارش ایمنی را منتشر کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw shut right next to van in the conversation.",
-          "fa": "بله، در گفت‌وگو «shut» را درست کنار «van» دیدم."
+          "speaker": "شما",
+          "text": "Only if we independently corroborate every technical claim through inspection records or a second witness.",
+          "fa": "فقط در صورتی که هر ادعای فنی را مستقلاً با اسناد بازرسی یا شاهد دوم راستی‌آزمایی کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep wood in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «wood» را هم به خاطر بسپاری؟"
+          "speaker": "سردبیر",
+          "text": "How should we explain the anonymity to readers?",
+          "fa": "ناشناس‌بودن منبع را چطور برای خوانندگان توضیح دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use wood and carried when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «wood» و «carried» استفاده کنم."
+          "speaker": "شما",
+          "text": "State clearly why the source requested protection and describe the documents we verified ourselves.",
+          "fa": "به‌روشنی بگوییم چرا منبع درخواست حفاظت کرده و اسنادی را که خودمان سنجیده‌ایم شرح دهیم."
         }
       ],
       "checks": [
@@ -9770,24 +9770,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review billion together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «billion» را با هم مرور کنیم."
+          "speaker": "مدیر عملیات",
+          "text": "Relying on a single regional port delayed our entire spring shipment by three weeks.",
+          "fa": "تکیه بر یک بندر منطقه‌ای کل محمولهٔ بهاری ما را سه هفته عقب انداخت."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced billion and cells aloud.",
-          "fa": "فکر خوبیه! من همین الان «billion» و «cells» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "We treated cost efficiency as the only metric and ignored disruption probability.",
+          "fa": "ما بهره‌وری هزینه را تنها معیار گرفتیم و احتمال اختلال را نادیده گرفتیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about criminal and fly from the same group?",
-          "fa": "دربارهٔ «criminal» و «fly» از همین بخش چطور؟"
+          "speaker": "مدیر عملیات",
+          "text": "Does splitting volume across two suppliers raise unit cost too much?",
+          "fa": "تقسیم حجم بین دو تأمین‌کننده هزینهٔ واحد را خیلی بالا نمی‌برد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say criminal and fly in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «criminal» و «fly» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Slightly, but far less than lost sales and rush air-freight penalties.",
+          "fa": "کمی، اما بسیار کمتر از فروش ازدست‌رفته و جریمهٔ حمل هوایی فوری."
         }
       ],
       "checks": [
@@ -10000,24 +10000,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Some colleagues worry the new drafting assistant will replace junior analysts.",
+          "fa": "بعضی همکاران نگرانند دستیار پیش‌نویس جدید جای تحلیلگران تازه‌کار را بگیرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with lies and nuclear in short sentences.",
-          "fa": "بیایید با «lies» و «nuclear» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "It automates routine formatting, yet verifying assumptions and context still demands human judgment.",
+          "fa": "قالب‌بندی تکراری را خودکار می‌کند، اما راستی‌آزمایی فرض‌ها و بافت هنوز قضاوت انسانی می‌طلبد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember port?",
-          "fa": "خوبه! آیا «port» را هم یادت هست؟"
+          "speaker": "همکار",
+          "text": "Then how should junior training change so they build that judgment early?",
+          "fa": "پس آموزش نیروهای تازه‌کار چطور باید تغییر کند تا این قضاوت را زودتر بسازند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both port and shoot are much clearer to me now.",
-          "fa": "بله، الان هم «port» و هم «shoot» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Have them audit automated summaries against source spreadsheets from week one.",
+          "fa": "از هفتهٔ اول از آن‌ها بخواهیم خلاصه‌های خودکار را با جدول‌های منبع تطبیق دهند."
         }
       ],
       "checks": [
@@ -10246,24 +10246,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Did you notice climate when we went through the examples?",
-          "fa": "وقتی مثال‌ها را مرور کردیم متوجه «climate» شدی؟"
+          "speaker": "شریک تجاری",
+          "text": "We cannot accept exclusive regional rights unless you double the minimum annual order.",
+          "fa": "نمی‌توانیم حق انحصار منطقه‌ای بدهیم مگر اینکه حداقل سفارش سالانه را دو برابر کنید."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, I saw climate right next to duty in the conversation.",
-          "fa": "بله، در گفت‌وگو «climate» را درست کنار «duty» دیدم."
+          "speaker": "شما",
+          "text": "Doubling upfront exposes us to unsold inventory, yet we do want long-term commitment.",
+          "fa": "دو برابر کردن در ابتدا ریسک کالای فروش‌نرفته دارد، هرچند ما تعهد بلندمدت می‌خواهیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Great. Can you keep fantastic in mind for your next reply?",
-          "fa": "عالیه. می‌توانی برای پاسخ بعدی‌ات «fantastic» را هم به خاطر بسپاری؟"
+          "speaker": "شریک تجاری",
+          "text": "What middle ground protects both our margins and your cash flow?",
+          "fa": "چه راه‌حل میانه‌ای هم حاشیهٔ سود ما را حفظ می‌کند و هم نقدینگی شما را؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sure, I can easily use fantastic and flying when speaking.",
-          "fa": "حتماً، هنگام صحبت کردن به راحتی می‌توانم از «fantastic» و «flying» استفاده کنم."
+          "speaker": "شما",
+          "text": "Keep exclusivity conditional on hitting tiered quarterly milestones rather than one rigid upfront jump.",
+          "fa": "انحصار را به‌جای یک جهش خشک اولیه، مشروط به تحقق هدف‌های پلکانی فصلی بگذاریم."
         }
       ],
       "checks": [
@@ -10476,24 +10476,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Let us review banks together before we move on.",
-          "fa": "بیایید قبل از ادامه دادن، «banks» را با هم مرور کنیم."
+          "speaker": "تحلیلگر",
+          "text": "Average session duration dropped by twenty percent this month—should we worry?",
+          "fa": "میانگین مدت هر نشست این ماه بیست درصد افت کرده—نگران شویم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Good idea! I already practiced banks and ben aloud.",
-          "fa": "فکر خوبیه! من همین الان «banks» و «ben» را با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Not automatically. After we simplified search, users may simply be finding answers faster.",
+          "fa": "لزوماً نه. بعد از ساده‌سازی جست‌وجو، کاربران شاید فقط سریع‌تر به جواب می‌رسند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "What about debt and domestic from the same group?",
-          "fa": "دربارهٔ «debt» و «domestic» از همین بخش چطور؟"
+          "speaker": "تحلیلگر",
+          "text": "How can we tell efficiency apart from frustration?",
+          "fa": "چطور کارایی را از کلافگی و ترک صفحه تشخیص دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "They feel natural now, especially when I say debt and domestic in context.",
-          "fa": "الان خیلی طبیعی‌تر به نظر می‌رسند، مخصوصاً وقتی «debt» و «domestic» را در بافت جمله می‌گویم."
+          "speaker": "شما",
+          "text": "Check whether task-completion rates rose while support tickets stayed flat.",
+          "fa": "بررسی کنیم آیا نرخ تکمیل کارها بالا رفته و تیکت‌های پشتیبانی ثابت مانده است."
         }
       ],
       "checks": [
@@ -10722,24 +10722,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Which words from today are we practicing first?",
-          "fa": "امروز اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Summer heatwaves are stressing the downtown power grid every July now.",
+          "fa": "موج‌های گرمای تابستان الان هر تیرماه به شبکهٔ برق مرکز شهر فشار می‌آورند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Let us start with ca and drama in short sentences.",
-          "fa": "بیایید با «ca» و «drama» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Adding peak generators only treats the symptom; shaded corridors and reflective roofs lower baseline demand.",
+          "fa": "افزودن ژنراتور اوج مصرف فقط علامت را درمان می‌کند؛ معابر سایه‌دار و بام‌های بازتابنده نیاز پایه را کم می‌کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sounds good! Do you also remember entry?",
-          "fa": "خوبه! آیا «entry» را هم یادت هست؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Passive cooling takes years to show results, though.",
+          "fa": "اما خنک‌سازی غیرفعال سال‌ها طول می‌کشد تا نتیجه بدهد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Yes, both entry and era are much clearer to me now.",
-          "fa": "بله، الان هم «entry» و هم «era» خیلی برایم روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "True, so pairing street trees with targeted building retrofits gives measurable relief within two summers.",
+          "fa": "درست است، بنابراین ترکیب درخت‌کاری خیابان‌ها با بهسازی هدفمند ساختمان‌ها ظرف دو تابستان اثر ملموس می‌دهد."
         }
       ],
       "checks": [
@@ -10922,24 +10922,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "فروشنده",
+          "text": "Guten Tag! Wie kann ich Ihnen helfen?",
+          "fa": "روز بخیر! چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit so und bei in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «so» و «bei» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Ich habe dieses Hemd gestern gekauft, aber es ist etwas zu klein.",
+          "fa": "دیروز این پیراهن را خریدم، اما کمی کوچک است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an nur?",
-          "fa": "خیلی خوب! آیا «nur» را هم هنوز یادت هست؟"
+          "speaker": "فروشنده",
+          "text": "Kein Problem. Haben Sie den Kassenbon dabei?",
+          "fa": "مشکلی نیست. رسید خرید همراهتان هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl nur als auch einer sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «nur» و هم «einer» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Ja, hier ist er. Kann ich es gegen Größe M umtauschen?",
+          "fa": "بله، بفرمایید. می‌توانم با سایز ام تعویض کنم؟"
         }
       ],
       "checks": [
@@ -11124,24 +11124,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir eines vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «eines» شدی؟"
+          "speaker": "پذیرش هتل",
+          "text": "Guten Abend, willkommen! Haben Sie reserviert?",
+          "fa": "عصر بخیر، خوش آمدید! رزرو دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe eines zusammen mit soll gelesen.",
-          "fa": "بله، «eines» را همراه با «soll» خواندم."
+          "speaker": "شما",
+          "text": "Ja, ein Einzelzimmer für drei Nächte auf den Namen Mina Karimi.",
+          "fa": "بله، یک اتاق تک‌نفره برای سه شب به نام مینا کریمی."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an selbst denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «selbst» هم دقت کنی؟"
+          "speaker": "پذیرش هتل",
+          "text": "Gefunden! Frühstück gibt es von sieben bis zehn Uhr.",
+          "fa": "پیدایش کردم! صبحانه از هفت تا ده است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, selbst und menschen fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «selbst» و «menschen» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Danke. Liegt das Zimmer zu einem ruhigen Hof?",
+          "fa": "ممنون. آیا اتاق رو به حیاط آرام است؟"
         }
       ],
       "checks": [
@@ -11334,24 +11334,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir weiss noch einmal kurz wiederholen?",
-          "fa": "بیایید «weiss» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "Hast du den Wetterbericht für morgen gesehen?",
+          "fa": "پیش‌بینی هوای فردا را دیده‌ای؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe weiss und weiter schon laut gesprochen.",
-          "fa": "با کمال میل! من «weiss» و «weiter» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Ja, morgens sonnig, aber am Nachmittag regnet es leicht.",
+          "fa": "بله، صبح آفتابی است اما بعدازظهر کمی باران می‌بارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit wirklich und mann aus?",
-          "fa": "دربارهٔ «wirklich» و «mann» چطور؟"
+          "speaker": "دوست",
+          "text": "Wollen wir trotzdem unseren Spaziergang machen?",
+          "fa": "باز هم پیاده‌روی را برویم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit wirklich und mann klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «wirklich» و «mann» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Klar, wenn wir um acht starten, sind wir vor dem Regen zurück.",
+          "fa": "حتماً، اگر ساعت هشت راه بیفتیم قبل از باران برمی‌گردیم."
         }
       ],
       "checks": [
@@ -11548,24 +11548,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Du wirkst so fit! Wie oft machst du Sport?",
+          "fa": "خیلی سرحال به نظر می‌رسی! چند وقت یک بار ورزش می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit neuen und seinem in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «neuen» و «seinem» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Ich schwimme zweimal pro Woche und gehe zu Fuß zur Arbeit.",
+          "fa": "هفته‌ای دو بار شنا می‌کنم و پیاده سر کار می‌روم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an dies?",
-          "fa": "خیلی خوب! آیا «dies» را هم هنوز یادت هست؟"
+          "speaker": "دوست",
+          "text": "Toll! Ich möchte auch wieder mit dem Laufen anfangen.",
+          "fa": "عالی است! من هم می‌خواهم دوباره دویدن را شروع کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl dies als auch etwa sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «dies» و هم «etwa» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Wir können dienstags zusammen im Park joggen.",
+          "fa": "سه‌شنبه‌ها می‌توانیم با هم در پارک بدویم."
         }
       ],
       "checks": [
@@ -11746,24 +11746,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir grosse vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «grosse» شدی؟"
+          "speaker": "منشی",
+          "text": "Zahnarztpraxis, guten Morgen. Wie kann ich helfen?",
+          "fa": "مطب دندان‌پزشکی، صبح بخیر. چطور کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe grosse zusammen mit grossen gelesen.",
-          "fa": "بله، «grosse» را همراه با «grossen» خواندم."
+          "speaker": "شما",
+          "text": "Ich möchte gern nächste Woche einen Kontrolltermin vereinbaren.",
+          "fa": "می‌خواهم برای هفتهٔ آینده وقت معاینه بگیرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an wissen denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «wissen» هم دقت کنی؟"
+          "speaker": "منشی",
+          "text": "Am Mittwoch um zehn Uhr wäre noch etwas frei.",
+          "fa": "چهارشنبه ساعت ده صبح وقت خالی داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, wissen und fall fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «wissen» و «fall» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Mittwoch um zehn passt mir sehr gut. Danke.",
+          "fa": "چهارشنبه ساعت ده برایم خیلی مناسب است. ممنون."
         }
       ],
       "checks": [
@@ -11948,24 +11948,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir jemand noch einmal kurz wiederholen?",
-          "fa": "بیایید «jemand» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "شما",
+          "text": "Entschuldigung, weißt du, warum der Drucker nicht funktioniert?",
+          "fa": "ببخشید، می‌دانی چرا چاپگر کار نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe jemand und wollte schon laut gesprochen.",
-          "fa": "با کمال میل! من «jemand» و «wollte» را همین الان بلند تکرار کردم."
+          "speaker": "همکار",
+          "text": "Moment, ich schaue nach. Das Papierfach ist leer.",
+          "fa": "یک لحظه نگاه کنم. سینی کاغذ خالی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit ganze und gerne aus?",
-          "fa": "دربارهٔ «ganze» و «gerne» چطور؟"
+          "speaker": "شما",
+          "text": "Wo liegt das neue Papier?",
+          "fa": "کاغذ تازه کجاست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit ganze und gerne klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «ganze» و «gerne» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "همکار",
+          "text": "Im weißen Schrank hinter dem Empfang.",
+          "fa": "در کمد سفید پشت میز پذیرش."
         }
       ],
       "checks": [
@@ -12158,24 +12158,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Was kochen wir heute Abend zum Essen?",
+          "fa": "امشب برای شام چه بپزیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit bild und eigenen in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «bild» و «eigenen» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Wir könnten Nudeln mit Tomatensoße und Salat machen.",
+          "fa": "می‌توانیم پاستا با سس گوجه و سالاد درست کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an je?",
-          "fa": "خیلی خوب! آیا «je» را هم هنوز یادت هست؟"
+          "speaker": "دوست",
+          "text": "Lecker! Haben wir genug Tomaten und Knoblauch?",
+          "fa": "خوشمزه است! گوجه و سیر به اندازهٔ کافی داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl je als auch eben sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «je» و هم «eben» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Tomaten sind da, Knoblauch kaufe ich auf dem Heimweg.",
+          "fa": "گوجه داریم، سیر را در راه برگشت می‌خرم."
         }
       ],
       "checks": [
@@ -12372,24 +12372,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir stand vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «stand» شدی؟"
+          "speaker": "مسافر",
+          "text": "Entschuldigung, ist der Bus Nummer zwölf schon vorbeigefahren?",
+          "fa": "ببخشید، اتوبوس شمارهٔ دوازده رد شده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe stand zusammen mit stunden gelesen.",
-          "fa": "بله، «stand» را همراه با «stunden» خواندم."
+          "speaker": "شما",
+          "text": "Noch nicht. Laut Anzeige hat er heute sechs Minuten Verspätung.",
+          "fa": "هنوز نه. طبق تابلو امروز شش دقیقه تأخیر دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an thema denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «thema» هم دقت کنی؟"
+          "speaker": "مسافر",
+          "text": "Hoffentlich kommt er bald. Hält er am Museum?",
+          "fa": "امیدوارم زود بیاید. جلوی موزه می‌ایستد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, thema und beispiel fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «thema» و «beispiel» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Ja, das ist die vierte Haltestelle nach dem Zentrum.",
+          "fa": "بله، چهارمین ایستگاه بعد از مرکز است."
         }
       ],
       "checks": [
@@ -12570,24 +12570,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir bringen noch einmal kurz wiederholen?",
-          "fa": "بیایید «bringen» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "Weißt du schon, was du Nima zum Geburtstag schenkst?",
+          "fa": "می‌دانی برای تولد نیما چه هدیه‌ای بخری؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe bringen und deutlich schon laut gesprochen.",
-          "fa": "با کمال میل! من «bringen» و «deutlich» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Ich möchte ihm einen warmen Schal oder einen Thermobecher kaufen.",
+          "fa": "می‌خواهم یک شال گرم یا لیوان سفری برایش بخرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit hand und jede aus?",
-          "fa": "دربارهٔ «hand» و «jede» چطور؟"
+          "speaker": "دوست",
+          "text": "Ein Thermobecher ist praktisch, er fährt jeden Morgen Zug.",
+          "fa": "لیوان سفری خیلی کاربردی است، هر صبح سوار قطار می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit hand und jede klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «hand» و «jede» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Stimmt! Schauen wir nach der Arbeit im Laden am Bahnhof.",
+          "fa": "درست است! بعد از کار مغازهٔ ایستگاه را می‌بینیم."
         }
       ],
       "checks": [
@@ -12772,24 +12772,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "کتابدار",
+          "text": "Willkommen in der Stadtbibliothek! Haben Sie einen Ausweis?",
+          "fa": "به کتابخانهٔ شهر خوش آمدید! کارت عضویت دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit strasse und bekannt in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «strasse» و «bekannt» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Noch nicht. Wie kann ich mich anmelden?",
+          "fa": "هنوز نه. چطور می‌توانم ثبت‌نام کنم؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an bisher?",
-          "fa": "خیلی خوب! آیا «bisher» را هم هنوز یادت هست؟"
+          "speaker": "کتابدار",
+          "text": "Zeigen Sie bitte Ihren Ausweis und füllen Sie dieses Formular aus.",
+          "fa": "لطفاً مدرک شناسایی را نشان دهید و این فرم را پر کنید."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl bisher als auch europa sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «bisher» و هم «europa» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Wie viele Bücher darf man auf einmal ausleihen?",
+          "fa": "هر بار چند کتاب می‌توان امانت گرفت؟"
         }
       ],
       "checks": [
@@ -12970,24 +12970,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir durch vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «durch» شدی؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Danke für Ihr Kommen. Warum interessiert Sie diese Stelle?",
+          "fa": "ممنون که آمدید. چرا این شغل برایتان جذاب است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe durch zusammen mit doch gelesen.",
-          "fa": "بله، «durch» را همراه با «doch» خواندم."
+          "speaker": "شما",
+          "text": "Ich arbeite gern direkt mit Kunden und löse praktische Aufgaben.",
+          "fa": "دوست دارم مستقیم با مشتریان کار کنم و مسائل عملی را حل کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an gegen denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «gegen» هم دقت کنی؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Wie gehen Sie vor, wenn mehrere Aufgaben gleichzeitig dringend sind?",
+          "fa": "وقتی چند کار هم‌زمان فوری هستند چطور عمل می‌کنید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, gegen und seine fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «gegen» و «seine» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Ich setze klare Prioritäten und stimme mich früh mit dem Team ab.",
+          "fa": "اولویت‌های روشن می‌گذارم و زود با تیم هماهنگ می‌کنم."
         }
       ],
       "checks": [
@@ -13172,24 +13172,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir lassen noch einmal kurz wiederholen?",
-          "fa": "بیایید «lassen» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "شما",
+          "text": "Entschuldigung, mein Zug hat vierzig Minuten Verspätung. Gibt es eine Alternative?",
+          "fa": "ببخشید، قطارم چهل دقیقه تأخیر دارد. راه جایگزینی هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe lassen und weiss schon laut gesprochen.",
-          "fa": "با کمال میل! من «lassen» و «weiss» را همین الان بلند تکرار کردم."
+          "speaker": "کارمند ایستگاه",
+          "text": "Ja, nehmen Sie den Regionalzug auf Gleis drei und steigen Sie um.",
+          "fa": "بله، با قطار منطقه‌ای در سکوی سه بروید و خط عوض کنید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit wirklich und mann aus?",
-          "fa": "دربارهٔ «wirklich» و «mann» چطور؟"
+          "speaker": "شما",
+          "text": "Gilt mein aktuelles Ticket auch für diesen Zug?",
+          "fa": "آیا بلیت فعلی‌ام برای آن قطار هم معتبر است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit wirklich und mann klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «wirklich» و «mann» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "کارمند ایستگاه",
+          "text": "Ja, wegen der Verspätung zahlen Sie nichts extra.",
+          "fa": "بله، به خاطر تأخیر هزینهٔ اضافی نمی‌پردازید."
         }
       ],
       "checks": [
@@ -13398,24 +13398,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "شما",
+          "text": "Guten Tag Herr Alavi, das Spülbecken in der Küche tropft seit gestern Abend.",
+          "fa": "سلام آقای علوی، سینک آشپزخانه از دیشب چکه می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit gleich und lange in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «gleich» و «lange» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "صاحب‌خانه",
+          "text": "Danke für die schnelle Nachricht. Läuft Wasser auf den Boden?",
+          "fa": "ممنون که سریع اطلاع دادید. آب روی زمین می‌ریزد؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an allem?",
-          "fa": "خیلی خوب! آیا «allem» را هم هنوز یادت هست؟"
+          "speaker": "شما",
+          "text": "Nur wenig, ich habe erst einmal einen Eimer daruntergestellt.",
+          "fa": "فقط کم، فعلاً یک سطل زیرش گذاشته‌ام."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl allem als auch davon sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «allem» و هم «davon» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "صاحب‌خانه",
+          "text": "Gut gemacht. Morgen früh zwischen neun und elf kommt ein Handwerker.",
+          "fa": "کار خوبی کردید. فردا صبح بین نه تا یازده تعمیرکار می‌آید."
         }
       ],
       "checks": [
@@ -13596,24 +13596,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir heisst vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «heisst» شدی؟"
+          "speaker": "همکار",
+          "text": "Wie kommst du damit zurecht, zweimal pro Woche von zu Hause zu arbeiten?",
+          "fa": "با هفته‌ای دو روز دورکاری چطور کنار می‌آیی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe heisst zusammen mit statt gelesen.",
-          "fa": "بله، «heisst» را همراه با «statt» خواندم."
+          "speaker": "شما",
+          "text": "Ich spare zwei Stunden Fahrtzeit und arbeite viel konzentrierter.",
+          "fa": "دو ساعت در مسیر صرفه‌جویی می‌کنم و با تمرکز بیشتری کار می‌کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an lässt denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «lässt» هم دقت کنی؟"
+          "speaker": "همکار",
+          "text": "Fehlen dir die kurzen Gespräche im Büro nicht?",
+          "fa": "دلت برای گفت‌وگوهای کوتاه در دفتر تنگ نمی‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, lässt und besonders fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «lässt» و «besonders» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Manchmal schon, deshalb bin ich montags und donnerstags gern vor Ort.",
+          "fa": "گاهی بله، برای همین دوشنبه‌ها و پنجشنبه‌ها حضوری می‌آیم."
         }
       ],
       "checks": [
@@ -13798,24 +13798,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir ganzen noch einmal kurz wiederholen?",
-          "fa": "بیایید «ganzen» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "مشاور",
+          "text": "Suchen Sie einen Abendkurs oder einen Wochenendworkshop?",
+          "fa": "دنبال کلاس عصر هستید یا کارگاه آخر هفته؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe ganzen und leider schon laut gesprochen.",
-          "fa": "با کمال میل! من «ganzen» و «leider» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Ein Abendkurs passt mir besser, weil ich bis fünf Uhr arbeite.",
+          "fa": "کلاس عصر برایم بهتر است چون تا ساعت پنج کار می‌کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit daher und daran aus?",
-          "fa": "دربارهٔ «daher» و «daran» چطور؟"
+          "speaker": "مشاور",
+          "text": "Nächsten Dienstag um halb sieben startet eine kleine Gruppe.",
+          "fa": "سه‌شنبهٔ آینده ساعت شش‌ونیم یک گروه کوچک شروع می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit daher und daran klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «daher» و «daran» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Das passt zeitlich gut. Kann ich zuerst eine Probestunde besuchen?",
+          "fa": "از نظر زمان خوب است. می‌توانم اول یک جلسهٔ آزمایشی بیایم؟"
         }
       ],
       "checks": [
@@ -14012,24 +14012,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Du siehst heute müde aus. Warst du wieder spät wach?",
+          "fa": "امروز خسته به نظر می‌رسی. دوباره تا دیروقت بیدار بودی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit junge und sofort in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «junge» و «sofort» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Ja, ich habe nach Mitternacht noch Nachrichten am Handy gelesen.",
+          "fa": "بله، بعد از نیمه‌شب هنوز پیام‌های گوشی را می‌خواندم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an aller?",
-          "fa": "خیلی خوب! آیا «aller» را هم هنوز یادت هست؟"
+          "speaker": "دوست",
+          "text": "Seit ich das Handy im Wohnzimmer lasse, schlafe ich viel ruhiger.",
+          "fa": "از وقتی گوشی را در اتاق نشیمن می‌گذارم خیلی آرام‌تر می‌خوابم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl aller als auch deutlich sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «aller» و هم «deutlich» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Gute Idee, heute Abend lese ich lieber ein gedrucktes Buch.",
+          "fa": "فکر خوبی است، امشب ترجیح می‌دهم کتاب کاغذی بخوانم."
         }
       ],
       "checks": [
@@ -14218,24 +14218,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir gruppe vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «gruppe» شدی؟"
+          "speaker": "همسایه",
+          "text": "Hast du die neuen Mülltonnen am Hoftor gesehen?",
+          "fa": "سطل‌های جدید دم در حیاط را دیده‌ای؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe gruppe zusammen mit her gelesen.",
-          "fa": "بله، «gruppe» را همراه با «her» خواندم."
+          "speaker": "شما",
+          "text": "Ja! Jetzt kann man Papier und Glas viel leichter trennen.",
+          "fa": "بله! الان جداکردن کاغذ و شیشه خیلی آسان‌تر شده."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an meisten denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «meisten» هم دقت کنی؟"
+          "speaker": "همسایه",
+          "text": "Weißt du, an welchem Tag die gelbe Tonne abgeholt wird?",
+          "fa": "می‌دانی سطل پلاستیک را کدام روز می‌برند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, meisten und millionen fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «meisten» و «millionen» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Jeden Donnerstagmorgen, laut dem Aushang an der Wand.",
+          "fa": "طبق برگهٔ روی دیوار، هر پنجشنبه صبح."
         }
       ],
       "checks": [
@@ -14428,24 +14428,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir spass noch einmal kurz wiederholen?",
-          "fa": "بیایید «spass» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "همکار",
+          "text": "Schaffen wir den Bericht für den Kunden bis Freitag?",
+          "fa": "گزارش مشتری را تا جمعه می‌رسانیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe spass und wort schon laut gesprochen.",
-          "fa": "با کمال میل! من «spass» و «wort» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Fast, aber ich warte noch auf die letzten Verkaufszahlen.",
+          "fa": "تقریباً، ولی هنوز منتظر آمار نهایی فروش هستم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit ernst und gross aus?",
-          "fa": "دربارهٔ «ernst» و «gross» چطور؟"
+          "speaker": "همکار",
+          "text": "Wenn du mir heute den Entwurf schickst, prüfe ich das Layout.",
+          "fa": "اگر پیش‌نویس را امروز بفرستی، صفحه‌آرایی را بررسی می‌کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit ernst und gross klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «ernst» و «gross» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Super, das spart uns am Freitagmorgen viel Zeit.",
+          "fa": "عالی است، این‌طوری صبح جمعه خیلی در وقتمان صرفه‌جویی می‌شود."
         }
       ],
       "checks": [
@@ -14642,24 +14642,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Wie merkst du dir neue Ausdrücke, ohne sie schnell zu vergessen?",
+          "fa": "عبارت‌های تازه را چطور به خاطر می‌سپاری که زود یادت نرود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit folgen und führt in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «folgen» و «führt» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Ich bilde sofort nach dem Hören zwei eigene Sätze damit.",
+          "fa": "بلافاصله بعد از شنیدن، دو جملهٔ واقعی با آن می‌سازم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an ziemlich?",
-          "fa": "خیلی خوب! آیا «ziemlich» را هم هنوز یادت هست؟"
+          "speaker": "دوست",
+          "text": "Hörst du unterwegs auch kurze Podcasts?",
+          "fa": "در مسیر پادکست‌های کوتاه هم گوش می‌دهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl ziemlich als auch angst sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «ziemlich» و هم «angst» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Ja, zehn Minuten im Bus jeden Tag helfen enorm.",
+          "fa": "بله، هر روز ده دقیقه در اتوبوس خیلی کمک می‌کند."
         }
       ],
       "checks": [
@@ -14872,24 +14872,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir gegen vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «gegen» شدی؟"
+          "speaker": "مدیر",
+          "text": "Wir prüfen gerade unser hybrides Arbeitsmodell für das nächste Quartal. Was hat bei euch gut funktioniert?",
+          "fa": "داریم مدل کار ترکیبی فصل آینده را بررسی می‌کنیم. در تیم شما چه چیزی خوب جواب داده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe gegen zusammen mit seine gelesen.",
-          "fa": "بله، «gegen» را همراه با «seine» خواندم."
+          "speaker": "شما",
+          "text": "Zwei feste Bürotage stärken den Austausch, während die Tage im Homeoffice konzentriertes Arbeiten ermöglichen.",
+          "fa": "دو روز ثابت در دفتر تعامل را تقویت می‌کند و روزهای دورکاری امکان تمرکز بالا می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an denn denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «denn» هم دقت کنی؟"
+          "speaker": "مدیر",
+          "text": "Habt ihr bei dieser Aufteilung auch Nachteile bemerkt?",
+          "fa": "در این تقسیم‌بندی نکتهٔ منفی هم دیده‌اید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, denn und will fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «denn» و «will» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Nur neue Kolleginnen brauchen an ihren Homeoffice-Tagen eine klarere Begleitung.",
+          "fa": "فقط همکاران تازه در روزهای دورکاری به همراهی روشن‌تری نیاز دارند."
         }
       ],
       "checks": [
@@ -15118,24 +15118,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir euch noch einmal kurz wiederholen?",
-          "fa": "بیایید «euch» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "همکار",
+          "text": "Welches Risiko siehst du, wenn wir das neue Buchungssystem überall gleichzeitig einführen?",
+          "fa": "اگر سامانهٔ رزرو جدید را همه‌جا هم‌زمان اجرا کنیم چه ریسکی می‌بینی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe euch und sowie schon laut gesprochen.",
-          "fa": "با کمال میل! من «euch» و «sowie» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Ohne gründliche Schulung könnten die Teams zu Stoßzeiten überfordert sein.",
+          "fa": "بدون آموزش دقیق، تیم‌ها در ساعات اوج کار تحت فشار قرار می‌گیرند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit dafür und nie aus?",
-          "fa": "دربارهٔ «dafür» و «nie» چطور؟"
+          "speaker": "همکار",
+          "text": "Wie können wir dieses Risiko sinnvoll senken?",
+          "fa": "چطور می‌توانیم این ریسک را منطقی کاهش دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit dafür und nie klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «dafür» و «nie» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Starten wir zuerst mit einem zweiwöchigen Testlauf in einer großen Filiale.",
+          "fa": "بیایید ابتدا با یک اجرای آزمایشی دوهفته‌ای در یک شعبهٔ بزرگ شروع کنیم."
         }
       ],
       "checks": [
@@ -15356,24 +15356,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Unser Software-Budget wurde gekürzt, aber wir brauchen weiterhin verlässliche Auswertungen.",
+          "fa": "بودجهٔ نرم‌افزار ما کم شده، اما هنوز به تحلیل‌های قابل اعتماد نیاز داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit zwar und art in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «zwar» و «art» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Statt drei ähnliche Werkzeuge zu bezahlen, sollten wir auf eine zentrale Plattform wechseln.",
+          "fa": "به‌جای پرداخت هزینهٔ سه ابزار مشابه، باید به یک سامانهٔ مرکزی منتقل شویم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an schnell?",
-          "fa": "خیلی خوب! آیا «schnell» را هم هنوز یادت هست؟"
+          "speaker": "همکار",
+          "text": "Würde der Umzug der alten Berichte nicht zu viel Entwicklungszeit kosten?",
+          "fa": "انتقال گزارش‌های قدیمی وقت زیادی از تیم فنی نمی‌گیرد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl schnell als auch wollte sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «schnell» و هم «wollte» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Wir übernehmen nur die zehn wichtigsten Berichte; der Rest wird archiviert.",
+          "fa": "فقط ده گزارش مهم را منتقل می‌کنیم؛ بقیه بایگانی می‌شوند."
         }
       ],
       "checks": [
@@ -15602,24 +15602,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir leider vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «leider» شدی؟"
+          "speaker": "همکار",
+          "text": "Hast du den Artikel gesehen, laut dem die Fahrpreise nächsten Monat verdoppelt werden?",
+          "fa": "آن مقاله را دیده‌ای که می‌گوید کرایه‌ها ماه آینده دو برابر می‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe leider zusammen mit kaum gelesen.",
-          "fa": "بله، «leider» را همراه با «kaum» خواندم."
+          "speaker": "شما",
+          "text": "Ja, aber im offiziellen Protokoll der Stadt steht keine solche Abstimmung.",
+          "fa": "بله، اما در صورت‌جلسهٔ رسمی شهرداری چنین رأی‌گیری‌ای نیست."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an halt denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «halt» هم دقت کنی؟"
+          "speaker": "همکار",
+          "text": "Warum hat sich die Meldung dann so schnell verbreitet?",
+          "fa": "پس چرا این خبر این‌قدر سریع پخش شد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, halt und thema fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «halt» و «thema» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Die Schlagzeile riss einen alten Entwurf aus dem Zusammenhang, ohne Quelle.",
+          "fa": "تیتر یک پیش‌نویس قدیمی را بدون ذکر منبع از بافت خارج کرده بود."
         }
       ],
       "checks": [
@@ -15840,24 +15840,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir strasse noch einmal kurz wiederholen?",
-          "fa": "بیایید «strasse» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "پشتیبانی",
+          "text": "Kundenservice, guten Tag. Was kann ich für Sie tun?",
+          "fa": "خدمات مشتریان، روز بخیر. چه کمکی می‌توانم بکنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe strasse und bekannt schon laut gesprochen.",
-          "fa": "با کمال میل! من «strasse» و «bekannt» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Unser Anschluss ist trotz zweier Meldungen seit vier Tagen gestört.",
+          "fa": "اتصال ما با وجود دو گزارش، چهار روز است قطع شده است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit europa und her aus?",
-          "fa": "دربارهٔ «europa» و «her» چطور؟"
+          "speaker": "پشتیبانی",
+          "text": "Bitte entschuldigen Sie die Verzögerung. Ich priorisiere den Fall sofort.",
+          "fa": "لطفاً بابت تأخیر ببخشید. پرونده را فوراً در اولویت می‌گذارم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit europa und her klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «europa» و «her» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Vielen Dank. Bitte bestätigen Sie mir die Gutschrift für die Ausfalltage schriftlich.",
+          "fa": "خیلی ممنون. لطفاً کسر هزینهٔ روزهای قطعی را هم کتبی تأیید کنید."
         }
       ],
       "checks": [
@@ -16078,24 +16078,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Die Mieten rund um die Universität sind dieses Semester wieder stark gestiegen.",
+          "fa": "اجاره‌ها اطراف دانشگاه این ترم دوباره خیلی بالا رفته است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit ernst und gross in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «ernst» و «gross» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Viele Studierende ziehen deshalb weiter nach draußen an die U-Bahn-Linie.",
+          "fa": "بسیاری از دانشجویان به همین خاطر به حاشیه در مسیر مترو نقل مکان می‌کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an mädchen?",
-          "fa": "خیلی خوب! آیا «mädchen» را هم هنوز یادت هست؟"
+          "speaker": "همکار",
+          "text": "Erschwert der längere Arbeitsweg ihre Nebenjobs?",
+          "fa": "مسیر طولانی‌تر کار دانشجویی‌شان را سخت نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl mädchen als auch all sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «mädchen» و هم «all» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Es kostet täglich etwa eine Stunde, aber mit verlässlichen Zügen geht es.",
+          "fa": "روزانه حدود یک ساعت زمان می‌برد، اما با قطارهای منظم قابل مدیریت است."
         }
       ],
       "checks": [
@@ -16316,24 +16316,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir september vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «september» شدی؟"
+          "speaker": "همکار",
+          "text": "Danke fürs Zuhören bei meiner Probe. Kam die Kernbotschaft klar an?",
+          "fa": "ممنون که به تمرینم گوش دادی. پیام اصلی روشن بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe september zusammen mit wieso gelesen.",
-          "fa": "بله، «september» را همراه با «wieso» خواندم."
+          "speaker": "شما",
+          "text": "Der Einstieg war stark, nur die Folien mit den vielen Zahlen wirkten etwas voll.",
+          "fa": "شروعت قوی بود، فقط اسلایدهای پر از عدد کمی شلوغ به نظر می‌رسید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an aufgrund denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «aufgrund» هم دقت کنی؟"
+          "speaker": "همکار",
+          "text": "Hilft es, die Grafik auf zwei ruhigere Folien aufzuteilen?",
+          "fa": "کمک می‌کند نمودار را در دو اسلاید خلوت‌تر تقسیم کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, aufgrund und innerhalb fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «aufgrund» و «innerhalb» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Auf jeden Fall, und eine hervorgehobene Kennzahl pro Folie lenkt den Blick.",
+          "fa": "حتماً، و برجسته‌کردن یک شاخص در هر اسلاید نگاه مخاطب را هدایت می‌کند."
         }
       ],
       "checks": [
@@ -16554,24 +16554,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir partei noch einmal kurz wiederholen?",
-          "fa": "بیایید «partei» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "همکار جدید",
+          "text": "Hast du kurz Zeit, mir die wöchentliche Aufgabenübergabe zu zeigen?",
+          "fa": "وقت داری کوتاه تحویل هفتگی کارها را به من نشان بدهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe partei und reden schon laut gesprochen.",
-          "fa": "با کمال میل! من «partei» و «reden» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Na klar! Jeden Donnerstagnachmittag tragen wir die Zuständigkeiten in die Liste ein.",
+          "fa": "البته! هر پنجشنبه بعدازظهر مسئولیت‌ها را در فهرست وارد می‌کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit willst und wobei aus?",
-          "fa": "دربارهٔ «willst» و «wobei» چطور؟"
+          "speaker": "همکار جدید",
+          "text": "Und was machen wir, wenn eine Aufgabe noch auf ein anderes Team wartet?",
+          "fa": "و اگر کاری هنوز منتظر تیم دیگری باشد چه می‌کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit willst und wobei klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «willst» و «wobei» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Dann markieren wir sie orange, damit die Leitung am Freitag nachhakt.",
+          "fa": "آن را نارنجی علامت می‌زنیم تا مدیر جمعه پیگیری کند."
         }
       ],
       "checks": [
@@ -16792,24 +16792,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Unsere Stromrechnung im Büro ist im Sommer um zwanzig Prozent gestiegen.",
+          "fa": "قبض برق دفتر در تابستان بیست درصد افزایش یافته است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit oktober und schaffen in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «oktober» و «schaffen» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Wahrscheinlich bleiben Licht und Klimaanlage in Besprechungsräumen abends oft an.",
+          "fa": "احتمالاً چراغ و تهویه در اتاق جلسه‌ها شب‌ها روشن می‌ماند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an versucht?",
-          "fa": "خیلی خوب! آیا «versucht» را هم هنوز یادت هست؟"
+          "speaker": "همکار",
+          "text": "Würden Bewegungsmelder im zweiten Stock dabei helfen?",
+          "fa": "آیا حسگرهای حرکتی در طبقهٔ دوم کمک می‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl versucht als auch einsatz sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «versucht» و هم «einsatz» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Ja, und eine Zeitschaltuhr ab achtzehn Uhr spart sofort Energie.",
+          "fa": "بله، و تایمر از ساعت هجده فوراً در مصرف انرژی صرفه‌جویی می‌کند."
         }
       ],
       "checks": [
@@ -17030,24 +17030,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir zumindest vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «zumindest» شدی؟"
+          "speaker": "مدیر",
+          "text": "Weniger Testnutzer haben verlängert. Was kam in den Gesprächen heraus?",
+          "fa": "کاربران آزمایشی کمتری تمدید کردند. در گفت‌وگوها چه نتیجه‌ای به دست آمد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe zumindest zusammen mit übrigens gelesen.",
-          "fa": "بله، «zumindest» را همراه با «übrigens» خواندم."
+          "speaker": "شما",
+          "text": "Die Funktionen gefielen ihnen, aber die erste Einrichtung blieb oft unvollständig.",
+          "fa": "امکانات را دوست داشتند، اما راه‌اندازی اولیه اغلب ناتمام می‌ماند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an band denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «band» هم دقت کنی؟"
+          "speaker": "مدیر",
+          "text": "Das Problem entsteht also schon in der ersten Woche?",
+          "fa": "پس مشکل همان هفتهٔ اول شکل می‌گیرد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, band und chance fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «band» و «chance» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Genau. Eine kurze Schritt-für-Schritt-Hilfe am ersten Tag würde enorm helfen.",
+          "fa": "دقیقاً. یک راهنمای کوتاه گام‌به‌گام در روز اول کمک بزرگی می‌کند."
         }
       ],
       "checks": [
@@ -17268,24 +17268,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir toll noch einmal kurz wiederholen?",
-          "fa": "بیایید «toll» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "شرکت‌کننده",
+          "text": "Danke für den Vortrag. Haben Sie neben Stadtkliniken auch ländliche Praxen untersucht?",
+          "fa": "ممنون بابت سخنرانی. آیا علاوه بر بیمارستان‌های شهری، درمانگاه‌های روستایی را هم بررسی کردید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe toll und versuchen schon laut gesprochen.",
-          "fa": "با کمال میل! من «toll» و «versuchen» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Gute Frage. Diese Studie umfasste drei Stadtkliniken; ländliche Praxen folgen als Nächstes.",
+          "fa": "پرسش خوبی است. این مطالعه سه کلینیک شهری را دربر گرفت؛ مراکز روستایی گام بعدی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit gedanken und gemeinde aus?",
-          "fa": "دربارهٔ «gedanken» و «gemeinde» چطور؟"
+          "speaker": "شرکت‌کننده",
+          "text": "Erwarten Sie dort Probleme durch langsamere Internetverbindungen?",
+          "fa": "انتظار دارید اینترنت کندتر آنجا مشکل ایجاد کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit gedanken und gemeinde klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «gedanken» و «gemeinde» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Ja, deshalb testen wir vorab eine Funktion für den Offline-Betrieb.",
+          "fa": "بله، به همین خاطر پیشاپیش حالت آفلاین را آزمایش می‌کنیم."
         }
       ],
       "checks": [
@@ -17506,24 +17506,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "تأمین‌کننده",
+          "text": "Bei einem Jahresvertrag können wir zehn Prozent Rabatt anbieten.",
+          "fa": "با قرارداد یک‌ساله می‌توانیم ده درصد تخفیف بدهیم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit heraus und kennt in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «heraus» و «kennt» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Das klingt gut, aber wir brauchen eine Klausel zur vierteljährlichen Qualitätsprüfung.",
+          "fa": "خوب است، اما به بندی برای بررسی فصلی کیفیت نیاز داریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an kritik?",
-          "fa": "خیلی خوب! آیا «kritik» را هم هنوز یادت هست؟"
+          "speaker": "تأمین‌کننده",
+          "text": "Einverstanden, wenn wir für Notfälle eine Reaktionszeit von vier Stunden festlegen.",
+          "fa": "موافقیم، اگر برای موارد فوری زمان پاسخ چهار ساعته تعیین کنیم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl kritik als auch neuer sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «kritik» و هم «neuer» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Abgemacht. Schicken Sie uns bitte den geänderten Entwurf zur Prüfung.",
+          "fa": "توافق شد. لطفاً پیش‌نویس اصلاح‌شده را برای بررسی بفرستید."
         }
       ],
       "checks": [
@@ -17744,24 +17744,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir zeiten vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «zeiten» شدی؟"
+          "speaker": "مشاور",
+          "text": "Möchtest du dich für den Master in Berlin oder in München bewerben?",
+          "fa": "می‌خواهی برای کارشناسی ارشد در برلین اقدام کنی یا مونیخ؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe zeiten zusammen mit ausbildung gelesen.",
-          "fa": "بله، «zeiten» را همراه با «ausbildung» خواندم."
+          "speaker": "شما",
+          "text": "Ich tendiere zu Berlin, weil das Forschungsfeld genau zu meiner Arbeit passt.",
+          "fa": "به برلین گرایش دارم چون حوزهٔ پژوهشی‌اش دقیقاً با کارم هماهنگ است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an beispielsweise denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «beispielsweise» هم دقت کنی؟"
+          "speaker": "مشاور",
+          "text": "Denk daran, dass das Sprachzertifikat zwei Monate vorher vorliegen muss.",
+          "fa": "یادت باشد مدرک زبان باید دو ماه زودتر آماده باشد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, beispielsweise und deswegen fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «beispielsweise» و «deswegen» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Danke für den Hinweis, den Prüfungstermin habe ich für nächsten Monat gebucht.",
+          "fa": "ممنون از تذکر، تاریخ آزمون را برای ماه آینده رزرو کرده‌ام."
         }
       ],
       "checks": [
@@ -17982,24 +17982,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir verbindung noch einmal kurz wiederholen?",
-          "fa": "بیایید «verbindung» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "Wie fandest du gestern die Dokumentation über Stadtgärten?",
+          "fa": "مستند دیشب دربارهٔ باغچه‌های شهری را چطور دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe verbindung und zeitung schon laut gesprochen.",
-          "fa": "با کمال میل! من «verbindung» و «zeitung» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Die Interviews waren stark, aber die Wasserkosten kamen zu kurz.",
+          "fa": "مصاحبه‌ها قوی بود، ولی به هزینه‌های آب خیلی کم پرداخته شد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit zuvor und ahnung aus?",
-          "fa": "دربارهٔ «zuvor» و «ahnung» چطور؟"
+          "speaker": "دوست",
+          "text": "Stimmt, laufende Kosten entscheiden oft über den langfristigen Erfolg.",
+          "fa": "درست است، هزینه‌های جاری اغلب موفقیت بلندمدت را تعیین می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit zuvor und ahnung klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «zuvor» و «ahnung» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Trotzdem gab es gute Ansätze, die ein Viertel im Kleinen testen kann.",
+          "fa": "با این حال ایده‌های خوبی داشت که یک محله در مقیاس کوچک می‌تواند آزمایش کند."
         }
       ],
       "checks": [
@@ -18220,24 +18220,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Der Support bekommt viele Rückfragen zum neuen Rechnungsformat.",
+          "fa": "پشتیبانی پرسش‌های زیادی دربارهٔ قالب جدید فاکتور می‌گیرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit liste und soweit in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «liste» و «soweit» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Fügen wir direkt unter der Gesamtsumme eine kurze Aufschlüsselung der Steuern ein.",
+          "fa": "بیایید درست زیر جمع کل یک تفکیک کوتاه از مالیات اضافه کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an bietet?",
-          "fa": "خیلی خوب! آیا «bietet» را هم هنوز یادت هست؟"
+          "speaker": "همکار",
+          "text": "Wie schnell kann die Technik die Vorlage anpassen?",
+          "fa": "تیم فنی چه زمانی می‌تواند قالب را تغییر دهد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl bietet als auch dran sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «bietet» و هم «dran» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Wenn wir heute den genauen Text senden, klappt es bis Donnerstag.",
+          "fa": "اگر امروز متن دقیق را بفرستیم، تا پنجشنبه آماده می‌شود."
         }
       ],
       "checks": [
@@ -18458,24 +18458,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir co vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «co» شدی؟"
+          "speaker": "هماهنگ‌کننده",
+          "text": "Für die Parkaktion am Samstag haben sich zwanzig Helfer gemeldet. Reicht unser Material?",
+          "fa": "برای پاک‌سازی پارک روز شنبه بیست داوطلب ثبت‌نام کرده‌اند. وسایلمان کافی است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe co zusammen mit gmbh gelesen.",
-          "fa": "بله، «co» را همراه با «gmbh» خواندم."
+          "speaker": "شما",
+          "text": "Handschuhe und Säcke reichen, aber fünf zusätzliche Rechen wären hilfreich.",
+          "fa": "دستکش و کیسه کافی است، ولی پنج شن‌کش اضافه مفید خواهد بود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an klingt denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «klingt» هم دقت کنی؟"
+          "speaker": "هماهنگ‌کننده",
+          "text": "Gut, ich frage beim Nachbarschaftshaus. Wie teilen wir die Gruppen auf?",
+          "fa": "خوب است، از مرکز محله می‌پرسم. گروه‌ها را چطور تقسیم کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, klingt und knapp fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «klingt» و «knapp» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Vier kleine Teams für je einen Bereich sind bis Mittag fertig.",
+          "fa": "چهار تیم کوچک برای هر بخش تا ظهر کار را تمام می‌کنند."
         }
       ],
       "checks": [
@@ -18696,24 +18696,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir beitrag noch einmal kurz wiederholen?",
-          "fa": "بیایید «beitrag» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "مدیر محصول",
+          "text": "Wenn wir das Prüfprotokoll vorziehen, rutscht das mobile Redesign ins dritte Quartal. Wie wägst du das ab?",
+          "fa": "اگر گزارش ممیزی را جلو بیندازیم، بازطراحی موبایل به فصل سوم می‌افتد. چطور ارزیابی‌اش می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe beitrag und gesetz schon laut gesprochen.",
-          "fa": "با کمال میل! من «beitrag» و «gesetz» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Große Vertragsverlängerungen hängen jetzt von der Compliance ab, während die mobile Nutzung stabil ist.",
+          "fa": "تمدید قراردادهای بزرگ الان به انطباق وابسته است، در حالی که استفاده از موبایل پایدار مانده است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit hotel und jedenfalls aus?",
-          "fa": "دربارهٔ «hotel» و «jedenfalls» چطور؟"
+          "speaker": "مدیر محصول",
+          "text": "Werden aktive Mobilnutzer nicht ungeduldig, wenn sie drei Monate warten?",
+          "fa": "کاربران فعال موبایل با سه ماه انتظار بی‌تاب نمی‌شوند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit hotel und jedenfalls klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «hotel» و «jedenfalls» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Wir liefern parallel zwei gezielte Tempo-Verbesserungen für mobil, damit Fortschritt sichtbar bleibt.",
+          "fa": "هم‌زمان دو بهبود هدفمند سرعت در موبایل ارائه می‌دهیم تا پیشرفت ملموس بماند."
         }
       ],
       "checks": [
@@ -18934,24 +18934,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "مشاور حقوقی",
+          "text": "Unsere neue Erstattungsregel erlaubt Stornierungen bis achtundvierzig Stunden vorher, ohne Ausnahmen.",
+          "fa": "قانون جدید بازپرداخت ما لغو را تا چهل‌وهشت ساعت قبل بدون استثنا مجاز می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit verhalten und aktiv in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «verhalten» و «aktiv» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Klare Fristen verhindern Missbrauch, aber bei Unwettern schadet Härte dem Kundenvertrauen.",
+          "fa": "مهلت روشن جلوی سوءاستفاده را می‌گیرد، ولی در طوفان سخت‌گیری به اعتماد مشتری لطمه می‌زند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an bildung?",
-          "fa": "خیلی خوب! آیا «bildung» را هم هنوز یادت هست؟"
+          "speaker": "مشاور حقوقی",
+          "text": "Wie bleiben wir flexibel, ohne jedes kurzfristige Absagen zu belohnen?",
+          "fa": "چطور انعطاف داشته باشیم بدون اینکه هر لغو دقیقه نودی تشویق شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl bildung als auch darunter sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «bildung» و هم «darunter» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Gewähren wir bei belegten Notfällen ein einmaliges Reiseguthaben statt direkter Rückzahlung.",
+          "fa": "در موارد اضطراری مستند به‌جای بازپرداخت نقدی، یک اعتبار سفر یک‌باره بدهیم."
         }
       ],
       "checks": [
@@ -19172,24 +19172,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir hannover vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «hannover» شدی؟"
+          "speaker": "پژوهشگر",
+          "text": "Unsere Umfrage zeigt achtzig Prozent Zufriedenheit bei Mitgliedern, die ein ganzes Jahr blieben.",
+          "fa": "نظرسنجی ما هشتاد درصد رضایت در میان اعضایی نشان می‌دهد که یک سال کامل ماندند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe hannover zusammen mit lebens gelesen.",
-          "fa": "بله، «hannover» را همراه با «lebens» خواندم."
+          "speaker": "شما",
+          "text": "Nur Verbliebene zu befragen erzeugt einen Verzerrungseffekt und verdeckt frühe Abbruchgründe.",
+          "fa": "پرسش فقط از ماندگاران سوگیری ایجاد می‌کند و دلایل ترک زودهنگام را پنهان می‌سازد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an lebt denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «lebt» هم دقت کنی؟"
+          "speaker": "پژوهشگر",
+          "text": "Ein wichtiger Punkt. Wie können wir die Stichprobe vor der Veröffentlichung ausgleichen?",
+          "fa": "نکتهٔ مهمی است. پیش از انتشار چطور نمونه را متعادل کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, lebt und nennt fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «lebt» و «nennt» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Ergänzen wir Austrittsgespräche und stellen beide Gruppen getrennt dar.",
+          "fa": "گفت‌وگوهای خروج را اضافه کنیم و هر دو گروه را جداگانه گزارش دهیم."
         }
       ],
       "checks": [
@@ -19410,24 +19410,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir versuch noch einmal kurz wiederholen?",
-          "fa": "بیایید «versuch» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "معمار نرم‌افزار",
+          "text": "Das Abfragen alle zehn Sekunden überlastet zunehmend unsere Datenbankverbindungen.",
+          "fa": "پرس‌وجوی هر ده ثانیه به‌شدت اتصالات پایگاه داده را پر می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe versuch und vertrag schon laut gesprochen.",
-          "fa": "با کمال میل! من «versuch» و «vertrag» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Statt dauernder Abfragen sollten Geräte nur nach einem kurzen Push-Hinweis synchronisieren.",
+          "fa": "به‌جای پرس‌وجوی دائمی، دستگاه‌ها فقط پس از یک هشدار کوتاه همگام‌سازی کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit befindet und daraus aus?",
-          "fa": "دربارهٔ «befindet» و «daraus» چطور؟"
+          "speaker": "معمار نرم‌افزار",
+          "text": "Was passiert, wenn ein Gerät offline eine Benachrichtigung verpasst?",
+          "fa": "اگر دستگاهی در حالت آفلاین اعلانی را از دست بدهد چه؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit befindet und daraus klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «befindet» و «daraus» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Beim erneuten Verbinden lädt es einfach alle Änderungen seit dem letzten Zeitstempel.",
+          "fa": "به‌محض اتصال مجدد، تغییرات پس از آخرین برچسب زمان را دریافت می‌کند."
         }
       ],
       "checks": [
@@ -19648,24 +19648,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "میزبان",
+          "text": "Kritiker fürchten, eine autofreie Innenstadt erschwere die Belieferung kleiner Läden.",
+          "fa": "منتقدان نگرانند مرکز شهر بدون خودرو بارگیری مغازه‌های کوچک را سخت کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit regeln und sobald in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «regeln» و «sobald» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Bei einer Vollsperrung stimmt das, deshalb sind feste Lieferzeitfenster sinnvoller.",
+          "fa": "در بسته‌شدن کامل درست است، برای همین بازه‌های زمانی بارگیری منطقی‌ترند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an solange?",
-          "fa": "خیلی خوب! آیا «solange» را هم هنوز یادت هست؟"
+          "speaker": "میزبان",
+          "text": "Wie regeln andere Städte solche Zeitfenster?",
+          "fa": "شهرهای دیگر این بازه‌ها را چطور تنظیم می‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl solange als auch sonne sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «solange» و هم «sonne» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Lieferwagen fahren morgens bis zehn Uhr ein, danach gehört der Platz den Fußgängern.",
+          "fa": "خودروهای بار تا ده صبح وارد می‌شوند و بعد از آن میدان در اختیار عابران است."
         }
       ],
       "checks": [
@@ -19886,24 +19886,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir videos vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «videos» شدی؟"
+          "speaker": "همکار",
+          "text": "Design und Entwicklung sind sich beim Neubau der Bezahlseite völlig uneinig.",
+          "fa": "طراحی و توسعه سر بازنویسی صفحهٔ پرداخت به اختلاف جدی خورده‌اند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe videos zusammen mit wagen gelesen.",
-          "fa": "بله، «videos» را همراه با «wagen» خواندم."
+          "speaker": "شما",
+          "text": "Beide wollen weniger Abbrüche, bewerten aber das Zeitrisiko unterschiedlich.",
+          "fa": "هر دو کاهش ریزش را می‌خواهند، ولی ریسک زمانی را متفاوت می‌سنجند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an winter denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «winter» هم دقت کنی؟"
+          "speaker": "همکار",
+          "text": "Wie lösen wir diese Blockade morgen im Meeting?",
+          "fa": "این گره را فردا در جلسه چطور باز کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, winter und zusätzlich fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «winter» و «zusätzlich» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Testen wir zuerst eine kleine Änderung im laufenden Sprint, bevor wir komplett neu bauen.",
+          "fa": "پیش از بازسازی کامل، اول یک تغییر کوچک را در همین اسپرینت آزمایش کنیم."
         }
       ],
       "checks": [
@@ -20124,24 +20124,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir brachte noch einmal kurz wiederholen?",
-          "fa": "بیایید «brachte» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "استاد راهنما",
+          "text": "Ihr Forschungsstand ist gründlich, aber die zentrale These geht im zweiten Kapitel etwas unter.",
+          "fa": "مرور پژوهش شما دقیق است، ولی ادعای اصلی در فصل دوم کمی گم می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe brachte und club schon laut gesprochen.",
-          "fa": "با کمال میل! من «brachte» و «club» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Stimmt, ich habe frühere Modelle zu lange beschrieben, bevor ich ihre Lücken benenne.",
+          "fa": "درست است، مدل‌های قبلی را بیش از حد شرح دادم قبل از اینکه خلأشان را بگویم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit draussen und einfluss aus?",
-          "fa": "دربارهٔ «draussen» و «einfluss» چطور؟"
+          "speaker": "استاد راهنما",
+          "text": "Wie schärfen Sie diesen Übergang für die Kommission?",
+          "fa": "این گذار را برای کمیته چطور دقیق‌تر می‌کنید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit draussen und einfluss klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «draussen» و «einfluss» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Ich stelle meine Leitfrage direkt an den Anfang und beziehe jedes Kapitel darauf.",
+          "fa": "پرسش محوری را مستقیم در ابتدا می‌آورم و هر فصل را به آن پیوند می‌دهم."
         }
       ],
       "checks": [
@@ -20362,24 +20362,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "روابط عمومی",
+          "text": "Kunden teilen Bilder verspäteter Lieferungen. Warten wir, bis alle Zahlen geprüft sind?",
+          "fa": "مشتریان تصاویر تحویل‌های با تأخیر را پخش می‌کنند. صبر کنیم همهٔ آمار بررسی شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit erinnert und ex in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «erinnert» و «ex» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Schweigen verunsichert mehr als eine frühe Einordnung. Bestätigen wir die Störung sofort.",
+          "fa": "سکوت بیشتر از توضیح زودهنگام نگرانی می‌آورد. اختلال را فوراً تأیید کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an fuss?",
-          "fa": "خیلی خوب! آیا «fuss» را هم هنوز یادت هست؟"
+          "speaker": "روابط عمومی",
+          "text": "Welche Zusage können wir schon verlässlich geben?",
+          "fa": "الان چه قولی را می‌توانیم مطمئن بدهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl fuss als auch geboren sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «fuss» و هم «geboren» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Ein klares Update in drei Stunden und direkte Hilfe für betroffene Bestellungen.",
+          "fa": "یک گزارش روشن تا سه ساعت دیگر و رسیدگی مستقیم به سفارش‌های آسیب‌دیده."
         }
       ],
       "checks": [
@@ -20600,24 +20600,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir ding vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «ding» شدی؟"
+          "speaker": "همکار",
+          "text": "Das Marketing möchte den gesamten Verlauf nutzen, um Empfehlungen anzupassen.",
+          "fa": "بازاریابی می‌خواهد برای پیشنهادها از کل تاریخچهٔ مرور استفاده کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe ding zusammen mit friedrich gelesen.",
-          "fa": "بله، «ding» را همراه با «friedrich» خواندم."
+          "speaker": "شما",
+          "text": "Das erhöht das Datenschutzrisiko, obwohl aktuelle Themenwahlen fast denselben Nutzen bringen.",
+          "fa": "این ریسک حریم خصوصی را بالا می‌برد در حالی که انتخاب‌های اخیر تقریباً همان فایده را دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an gelten denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «gelten» هم دقت کنی؟"
+          "speaker": "همکار",
+          "text": "Reichen freiwillig gewählte Interessen wirklich aus?",
+          "fa": "آیا علاقه‌مندی‌های داوطلبانه واقعاً کافی است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, gelten und gesamten fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «gelten» و «gesamten» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Ja, und weniger sensible Daten senken zugleich das rechtliche Risiko.",
+          "fa": "بله، و دادهٔ حساس کمتر هم‌زمان ریسک حقوقی را کاهش می‌دهد."
         }
       ],
       "checks": [
@@ -20838,24 +20838,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir haut noch einmal kurz wiederholen?",
-          "fa": "بیایید «haut» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "ویراستار",
+          "text": "Die wörtliche Übersetzung dieses Slogans klingt im Alltag seltsam steif.",
+          "fa": "ترجمهٔ تحت‌اللفظی این شعار در گفتار روزمره عجیب و خشک است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe haut und inhalt schon laut gesprochen.",
-          "fa": "با کمال میل! من «haut» و «inhalt» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Bei Werbetexten zählt der natürliche Ton mehr als Worttreue.",
+          "fa": "در متن‌های تبلیغاتی لحن طبیعی مهم‌تر از پایبندی واژگانی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit leisten und rücken aus?",
-          "fa": "دربارهٔ «leisten» و «rücken» چطور؟"
+          "speaker": "ویراستار",
+          "text": "Wie bewahren wir die Kernaussage, ohne künstlich zu klingen?",
+          "fa": "چطور پیام اصلی را نگه داریم بی‌آنکه مصنوعی باشد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit leisten und rücken klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «leisten» و «rücken» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Nehmen wir eine Wendung, die man im Gespräch tatsächlich so sagen würde.",
+          "fa": "عبارتی را انتخاب کنیم که در گفت‌وگوی واقعی واقعاً همین‌طور گفته می‌شود."
         }
       ],
       "checks": [
@@ -21076,24 +21076,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "داور",
+          "text": "Ihr Leseprojekt ist überzeugend, aber wie trägt es sich nach Ablauf der Förderung?",
+          "fa": "طرح خواندن شما قانع‌کننده است، اما پس از پایان حمایت مالی چطور ادامه می‌یابد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit rennen und sage in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «rennen» و «sage» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Im ersten Jahr schulen wir Ehrenamtliche, danach übernehmen die Stadtbibliotheken den Betrieb.",
+          "fa": "در سال اول داوطلبان را آموزش می‌دهیم، بعد کتابخانه‌های شهری اجرا را برعهده می‌گیرند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an schade?",
-          "fa": "خیلی خوب! آیا «schade» را هم هنوز یادت هست؟"
+          "speaker": "داور",
+          "text": "Liegt dafür bereits eine verbindliche Zusage der Bibliotheken vor?",
+          "fa": "آیا تعهد قطعی کتابخانه‌ها همین الان وجود دارد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl schade als auch schlimm sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «schade» و هم «schlimm» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Ja, zwei Häuser haben Räume und Betreuungsstunden schriftlich zugesichert.",
+          "fa": "بله، دو مرکز فضا و ساعات راهنمایی را کتبی تضمین کرده‌اند."
         }
       ],
       "checks": [
@@ -21314,24 +21314,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir wünschen vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «wünschen» شدی؟"
+          "speaker": "سردبیر",
+          "text": "Die Hinweisgeberin will anonym bleiben. Dürfen wir den Sicherheitsbericht trotzdem drucken?",
+          "fa": "منبع افشاگر می‌خواهد ناشناس بماند. باز هم می‌توانیم گزارش ایمنی را چاپ کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe wünschen zusammen mit zuhause gelesen.",
-          "fa": "بله، «wünschen» را همراه با «zuhause» خواندم."
+          "speaker": "شما",
+          "text": "Nur wenn wir jede technische Aussage unabhängig durch Prüfberichte oder zweite Quellen belegen.",
+          "fa": "فقط اگر هر نکتهٔ فنی را مستقلاً با گزارش بازرسی یا منبع دوم تأیید کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an ans denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «ans» هم دقت کنی؟"
+          "speaker": "سردبیر",
+          "text": "Wie erklären wir den Lesern diese Anonymität?",
+          "fa": "این ناشناس‌بودن را چطور برای خوانندگان توضیح دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, ans und autor fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «ans» و «autor» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Benennen wir offen den Schutzgrund und die von uns selbst geprüften Unterlagen.",
+          "fa": "دلیل حفاظت و مدارکی را که خودمان بررسی کرده‌ایم شفاف بیان کنیم."
         }
       ],
       "checks": [
@@ -21552,24 +21552,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir eingesetzt noch einmal kurz wiederholen?",
-          "fa": "بیایید «eingesetzt» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "مدیر عملیات",
+          "text": "Die Abhängigkeit von einem einzigen Hafen hat die gesamte Frühjahrslieferung verzögert.",
+          "fa": "وابستگی به یک بندر کل محمولهٔ بهاری را به تأخیر انداخت."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe eingesetzt und entdeckt schon laut gesprochen.",
-          "fa": "با کمال میل! من «eingesetzt» و «entdeckt» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Wir haben nur auf den niedrigsten Preis geschaut und Ausfallrisiken ausgeblendet.",
+          "fa": "ما فقط کمترین قیمت را دیدیم و ریسک توقف را نادیده گرفتیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit erinnern und extrem aus?",
-          "fa": "دربارهٔ «erinnern» و «extrem» چطور؟"
+          "speaker": "مدیر عملیات",
+          "text": "Verteuert ein zweiter Lieferant nicht jedes einzelne Teil zu stark?",
+          "fa": "دومین تأمین‌کننده قیمت هر قطعه را زیادی گران نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit erinnern und extrem klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «erinnern» و «extrem» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Etwas schon, aber deutlich weniger als teure Nottransporte per Luftfracht.",
+          "fa": "کمی بله، ولی خیلی کمتر از حمل‌ونقل اضطراری هوایی پرهزینه."
         }
       ],
       "checks": [
@@ -21790,24 +21790,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Einige befürchten, das neue Textwerkzeug verdränge Berufseinsteiger.",
+          "fa": "بعضی نگرانند ابزار متنی جدید جای تازه‌کاران را بگیرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit armee und ausland in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «armee» و «ausland» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Es nimmt Routinearbeit ab, aber Kontext und Plausibilität bleiben menschliche Aufgaben.",
+          "fa": "کار تکراری را برمی‌دارد، اما بافت و راستی‌آزمایی کار انسان می‌ماند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an böse?",
-          "fa": "خیلی خوب! آیا «böse» را هم هنوز یادت هست؟"
+          "speaker": "همکار",
+          "text": "Wie sollten wir Einsteiger dann von Anfang an ausbilden?",
+          "fa": "پس تازه‌کارها را از ابتدا چطور آموزش دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl böse als auch diesmal sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «böse» و هم «diesmal» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Sie sollen Entwürfe ab Woche eins kritisch mit den Rohdaten abgleichen.",
+          "fa": "از هفتهٔ اول پیش‌نویس‌ها را نقادانه با داده‌های خام تطبیق دهند."
         }
       ],
       "checks": [
@@ -22028,24 +22028,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir tour vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «tour» شدی؟"
+          "speaker": "شریک تجاری",
+          "text": "Exklusivrechte gibt es nur, wenn Sie die jährliche Mindestmenge verdoppeln.",
+          "fa": "حق انحصار فقط وقتی ممکن است که حداقل سفارش سالانه را دو برابر کنید."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe tour zusammen mit wege gelesen.",
-          "fa": "بله، «tour» را همراه با «wege» خواندم."
+          "speaker": "شما",
+          "text": "Eine sofortige Verdopplung bindet zu viel Kapital, obwohl wir langfristig wachsen wollen.",
+          "fa": "دو برابر شدن فوری سرمایهٔ زیادی را قفل می‌کند، هرچند رشد بلندمدت می‌خواهیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an wesentlich denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «wesentlich» هم دقت کنی؟"
+          "speaker": "شریک تجاری",
+          "text": "Welcher Kompromiss schützt beide Seiten fair?",
+          "fa": "چه سازشی منصفانه از هر دو طرف محافظت می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, wesentlich und wunsch fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «wesentlich» و «wunsch» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Knüpfen wir die Exklusivität an gestaffelte Quartalsziele statt einer starren Eingangshürde.",
+          "fa": "انحصار را به‌جای مانع سخت اولیه به هدف‌های پلکانی فصلی گره بزنیم."
         }
       ],
       "checks": [
@@ -22266,24 +22266,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir liga noch einmal kurz wiederholen?",
-          "fa": "بیایید «liga» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "تحلیلگر",
+          "text": "Die durchschnittliche Sitzungsdauer sank um zwanzig Prozent. Ist das ein Warnsignal?",
+          "fa": "میانگین زمان نشست بیست درصد کاهش یافته. آیا زنگ خطر است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe liga und mehrheit schon laut gesprochen.",
-          "fa": "با کمال میل! من «liga» و «mehrheit» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Nicht unbedingt. Nach der besseren Suche finden Nutzer ihr Ziel vielleicht schlicht schneller.",
+          "fa": "نه لزوماً. بعد از بهبود جست‌وجو شاید کاربران فقط سریع‌تر به هدف می‌رسند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit offensichtlich und robert aus?",
-          "fa": "دربارهٔ «offensichtlich» و «robert» چطور؟"
+          "speaker": "تحلیلگر",
+          "text": "Wie unterscheiden wir Tempo von Unzufriedenheit?",
+          "fa": "سرعت بالا را چطور از نارضایتی جدا کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit offensichtlich und robert klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «offensichtlich» و «robert» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Prüfen wir, ob die Abschlussquote gestiegen und die Fehlerrate gesunken ist.",
+          "fa": "ببینیم نرخ تکمیل بالا رفته و نرخ خطا پایین آمده است یا نه."
         }
       ],
       "checks": [
@@ -22504,24 +22504,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Hitzewellen belasten im Juli jedes Jahr das innerstädtische Stromnetz.",
+          "fa": "موج‌های گرما هر تیر به شبکهٔ برق مرکز شهر فشار می‌آورند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit theater und traum in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «theater» و «traum» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Zusätzliche Kraftwerke bekämpfen nur Symptome; Bäume und helle Dächer senken den Bedarf dauerhaft.",
+          "fa": "نیروگاه اضافه فقط علامت را کنترل می‌کند؛ درخت و بام روشن نیاز را دائماً کم می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an verwendung?",
-          "fa": "خیلی خوب! آیا «verwendung» را هم هنوز یادت هست؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Solche Maßnahmen wirken aber erst nach Jahren spürbar.",
+          "fa": "اما چنین اقداماتی تازه بعد از سال‌ها محسوس می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl verwendung als auch werte sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «verwendung» و هم «werte» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "In Kombination mit gezielter Gebäudesanierung sinkt die Spitze schon nach zwei Sommern.",
+          "fa": "در ترکیب با بهسازی هدفمند ساختمان، اوج مصرف ظرف دو تابستان پایین می‌آید."
         }
       ],
       "checks": [
@@ -22742,24 +22742,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir vertreter vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «vertreter» شدی؟"
+          "speaker": "مدیر ارشد",
+          "text": "Die Vorlage hat vierzig Seiten, doch der Vorstand hat vor der Abstimmung nur zwanzig Minuten.",
+          "fa": "بستهٔ گزارش چهل صفحه است، اما هیئت‌مدیره پیش از رأی‌گیری فقط بیست دقیقه دارد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe vertreter zusammen mit verwaltung gelesen.",
-          "fa": "بله، «vertreter» را همراه با «verwaltung» خواندم."
+          "speaker": "شما",
+          "text": "Stellen wir eine einseitige Entscheidungsvorlage mit Kosten, Risiken und Empfehlung voran.",
+          "fa": "یک خلاصهٔ یک‌صفحه‌ای شامل هزینه، ریسک و پیشنهاد را در ابتدا بگذاریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an zahlreichen denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «zahlreichen» هم دقت کنی؟"
+          "speaker": "مدیر ارشد",
+          "text": "Wohin kommen dann die ausführlichen Finanztabellen?",
+          "fa": "پس جدول‌های مفصل مالی کجا بروند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, zahlreichen und angriff fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «zahlreichen» و «angriff» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "In den Anhang, damit Interessierte die Details bei Bedarf sofort nachschlagen können.",
+          "fa": "به پیوست، تا علاقه‌مندان در صورت نیاز فوری پیدایشان کنند."
         }
       ],
       "checks": [
@@ -22980,24 +22980,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir abgeschlossen noch einmal kurz wiederholen?",
-          "fa": "بیایید «abgeschlossen» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "رهبر فنی",
+          "text": "Der Ausfall am Dienstag geschah direkt nach einer manuellen Konfigurationsänderung.",
+          "fa": "قطعی سه‌شنبه درست بعد از یک تغییر دستی تنظیمات رخ داد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe abgeschlossen und daniel schon laut gesprochen.",
-          "fa": "با کمال میل! من «abgeschlossen» و «daniel» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Statt Schuld zu suchen, sollten wir fragen, warum der Ablauf ungeprüfte Handarbeit zuließ.",
+          "fa": "به‌جای مقصریابی، بپرسیم چرا روند کار اجازهٔ تغییر دستی بی‌بررسی داد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit entgegen und falle aus?",
-          "fa": "دربارهٔ «entgegen» و «falle» چطور؟"
+          "speaker": "رهبر فنی",
+          "text": "Welche Sicherung verhindert solche Fehler dauerhaft?",
+          "fa": "چه محافظی جلوی این خطاها را دائمی می‌گیرد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit entgegen und falle klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «entgegen» و «falle» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Konfigurationen nur noch über geprüfte Änderungen mit automatischem Test einspielen.",
+          "fa": "تنظیمات فقط از مسیر تغییر بازبینی‌شده با آزمون خودکار اعمال شوند."
         }
       ],
       "checks": [
@@ -23218,24 +23218,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "مدیر فرهنگی",
+          "text": "Eintrittskarten decken nur die Hälfte der Kosten, doch höhere Preise schrecken Gäste ab.",
+          "fa": "بلیت فقط نیمی از هزینه‌ها را می‌پوشاند، ولی افزایش قیمت مخاطبان را فراری می‌دهد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit davor und dortmund in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «davor» و «dortmund» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Gestaffelte Tarife mit einem freien Abend pro Woche bewahren den offenen Zugang.",
+          "fa": "تعرفهٔ پلکانی همراه با یک عصر رایگان در هفته دسترسی عمومی را حفظ می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an eigenes?",
-          "fa": "خیلی خوب! آیا «eigenes» را هم هنوز یادت هست؟"
+          "speaker": "مدیر فرهنگی",
+          "text": "Wer gleicht die fehlenden Einnahmen dieses Abends aus?",
+          "fa": "کاهش درآمد آن عصر را چه کسی جبران می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl eigenes als auch einzigen sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «eigenes» و هم «einzigen» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Regionale Stiftungen fördern solche offenen Abende oft sehr gern gezielt.",
+          "fa": "بنیادهای منطقه‌ای اغلب با رغبت از چنین عصرهای آزادی حمایت مالی می‌کنند."
         }
       ],
       "checks": [
@@ -23456,24 +23456,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir wunder vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «wunder» شدی؟"
+          "speaker": "سرپرست",
+          "text": "Amir hat zweimal eine Frist gerissen, obwohl seine Ergebnisse fachlich überzeugen.",
+          "fa": "امیر دو بار مهلت را رد کرده، هرچند کیفیت کار فنی‌اش خوب است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe wunder zusammen mit überzeugt gelesen.",
-          "fa": "بله، «wunder» را همراه با «überzeugt» خواندم."
+          "speaker": "شما",
+          "text": "Er unterschätzt oft verdeckte Abhängigkeiten und meldet Hindernisse erst sehr spät.",
+          "fa": "وابستگی‌های پنهان را دست‌کم می‌گیرد و موانع را دیر خبر می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an bedarf denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «bedarf» هم دقت کنی؟"
+          "speaker": "سرپرست",
+          "text": "Wie möchtest du das konstruktiv mit ihm besprechen?",
+          "fa": "چطور می‌خواهی سازنده با او مطرحش کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, bedarf und bedingungen fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «bedarf» و «bedingungen» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Wir zerlegen seine nächste Aufgabe am Montag gemeinsam in kleine, überprüfbare Schritte.",
+          "fa": "دوشنبه کار بعدی‌اش را با هم به گام‌های کوچک و قابل بررسی تقسیم می‌کنیم."
         }
       ],
       "checks": [
@@ -23694,24 +23694,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir entspricht noch einmal kurz wiederholen?",
-          "fa": "بیایید «entspricht» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "کارشناس گمرک",
+          "text": "Ihre Sendung liegt beim Zoll, weil die Warenbeschreibung zu ungenau ist.",
+          "fa": "محمولهٔ شما در گمرک مانده چون شرح کالا بیش‌ازحد مبهم است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe entspricht und finger schon laut gesprochen.",
-          "fa": "با کمال میل! من «entspricht» و «finger» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Verstehe, der Lieferant hat nur Sammelbegriffe statt exakter Zolltarifnummern eingetragen.",
+          "fa": "متوجهم، تأمین‌کننده به‌جای کد تعرفهٔ دقیق فقط عنوان‌های کلی نوشته است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit fliegen und geist aus?",
-          "fa": "دربارهٔ «fliegen» و «geist» چطور؟"
+          "speaker": "کارشناس گمرک",
+          "text": "Können Sie heute noch detaillierte Datenblätter nachreichen?",
+          "fa": "می‌توانید همین امروز برگه‌های مشخصات دقیق را بفرستید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit fliegen und geist klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «fliegen» و «geist» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Ja, ich sende die unterzeichnete Rechnung samt Datenblättern innerhalb einer Stunde.",
+          "fa": "بله، ظرف یک ساعت فاکتور امضاشده همراه برگه‌های فنی را می‌فرستم."
         }
       ],
       "checks": [
@@ -23932,24 +23932,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "خبرنگار",
+          "text": "Warum wurden die Gesundheitsempfehlungen nach sechs Monaten geändert? Schadet das nicht der Glaubwürdigkeit?",
+          "fa": "چرا توصیه‌های بهداشتی بعد از شش ماه تغییر کرد؟ این به اعتبار آسیب نمی‌زند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit erlebt und euer in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «erlebt» و «euer» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Empfehlungen an neue Daten anzupassen zeigt wissenschaftliche Sorgfalt statt Willkür.",
+          "fa": "تطبیق توصیه‌ها با داده‌های تازه نشانهٔ دقت علمی است نه دمدمی‌مزاجی."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an falsche?",
-          "fa": "خیلی خوب! آیا «falsche» را هم هنوز یادت هست؟"
+          "speaker": "خبرنگار",
+          "text": "Wie lässt sich Unsicherheit künftig verständlicher erklären?",
+          "fa": "عدم قطعیت را در آینده چطور قابل‌فهم‌تر توضیح دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl falsche als auch firmen sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «falsche» و هم «firmen» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Klar trennen, was gesichert ist und was laufende Studien noch präzisieren.",
+          "fa": "روشن جدا کنیم چه چیزی قطعی است و چه چیزی را پژوهش‌های جاری دقیق‌تر می‌کنند."
         }
       ],
       "checks": [
@@ -24170,24 +24170,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir entlang vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «entlang» شدی؟"
+          "speaker": "خریدار",
+          "text": "Der Anbieter verspricht neunundneunzig Prozent Genauigkeit für jedes Dokument.",
+          "fa": "فروشنده وعدهٔ نودونه درصد دقت برای هر سندی را می‌دهد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe entlang zusammen mit entsprechende gelesen.",
-          "fa": "بله، «entlang» را همراه با «entsprechende» خواندم."
+          "speaker": "شما",
+          "text": "Pauschale Zahlen sagen wenig, solange unscharfe Scans und Handschrift nicht getestet wurden.",
+          "fa": "اعداد کلی تا زمانی که اسکن تار و دست‌خط آزمایش نشود چیز زیادی نمی‌گوید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an fühle denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «fühle» هم دقت کنی؟"
+          "speaker": "خریدار",
+          "text": "Sollten wir einen Test mit unseren eigenen Belegen verlangen?",
+          "fa": "آزمایش با مدارک خودمان را بخواهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, fühle und heinrich fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «fühle» و «heinrich» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Ja, geben wir fünfzig schwierige echte Fälle vor und messen je Feld.",
+          "fa": "بله، پنجاه نمونهٔ واقعی دشوار بدهیم و خطا را در هر فیلد بسنجیم."
         }
       ],
       "checks": [
@@ -24408,24 +24408,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir angenommen noch einmal kurz wiederholen?",
-          "fa": "بیایید «angenommen» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "Fandest du das offene Ende des Romans bewusst so gewählt?",
+          "fa": "به نظرت پایان باز رمان عمدی انتخاب شده بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe angenommen und armen schon laut gesprochen.",
-          "fa": "با کمال میل! من «angenommen» و «armen» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Ja, eine glatte Auflösung hätte der inneren Zerrissenheit der Hauptfigur widersprochen.",
+          "fa": "بله، یک گره‌گشایی ساده با تردید درونی شخصیت اصلی در تضاد بود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit bestand und bewegen aus?",
-          "fa": "دربارهٔ «bestand» و «bewegen» چطور؟"
+          "speaker": "دوست",
+          "text": "Welche Szene war für dich der eigentliche Wendepunkt?",
+          "fa": "برای تو کدام صحنه نقطهٔ عطف اصلی بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit bestand und bewegen klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «bestand» و «bewegen» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Der Abschied am Bahnhof, wo das Ungesagte stärker wirkte als jedes Wort.",
+          "fa": "خداحافظی در ایستگاه، جایی که ناگفته‌ها قوی‌تر از هر کلمه‌ای بود."
         }
       ],
       "checks": [
@@ -24646,24 +24646,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Welche Wörter üben wir heute zuerst im Gespräch?",
-          "fa": "امروز اول کدام واژه‌ها را در گفت‌وگو تمرین می‌کنیم؟"
+          "speaker": "طراح خدمات",
+          "text": "Die rein digitale Verlängerung spart Zeit, aber ältere Bürger klagen häufiger.",
+          "fa": "تمدید تمام‌دیجیتال زمان می‌خرد، ولی شهروندان سالمند بیشتر گلایه دارند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Lass uns mit prinzip und regen in kurzen Sätzen anfangen.",
-          "fa": "بیایید با «prinzip» و «regen» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Effizienz darf niemanden ausschließen, der ohne Internetanschluss lebt.",
+          "fa": "کارایی نباید کسی را که دسترسی اینترنت ندارد کنار بگذارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Sehr gut! Erinnerst du dich auch noch an tradition?",
-          "fa": "خیلی خوب! آیا «tradition» را هم هنوز یادت هست؟"
+          "speaker": "طراح خدمات",
+          "text": "Wie schließen wir diese Lücke ohne hohe Zusatzkosten?",
+          "fa": "این شکاف را چطور بدون هزینهٔ سنگین پر کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, sowohl tradition als auch training sind mir jetzt viel klarer.",
-          "fa": "بله، الان هم «tradition» و هم «training» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Mit einer Telefonhilfe und Sprechstunden direkt in bestehenden Bürgerbibliotheken.",
+          "fa": "با یک خط تلفنی و میز راهنما در همان کتابخانه‌های عمومی موجود."
         }
       ],
       "checks": [
@@ -24884,24 +24884,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ist dir bonn vorhin bei den Beispielen aufgefallen?",
-          "fa": "آیا کمی پیش در مثال‌ها متوجه «bonn» شدی؟"
+          "speaker": "مدیر منابع انسانی",
+          "text": "Überregionale Stellen brachten doppelt so viele Bewerbungen, aber die Bindung sank leicht.",
+          "fa": "آگهی ملی دو برابر متقاضی آورد، ولی ماندگاری کمی پایین آمد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ja, ich habe bonn zusammen mit bühne gelesen.",
-          "fa": "بله، «bonn» را همراه با «bühne» خواندم."
+          "speaker": "شما",
+          "text": "Größere Reichweite funktioniert nur, wenn wir asynchrone Zusammenarbeit offen vorab klären.",
+          "fa": "گسترهٔ بیشتر فقط وقتی جواب می‌دهد که همکاری غیرهم‌زمان را پیشاپیش روشن کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Prima. Kannst du beim Sprechen auch an city denken?",
-          "fa": "عالیه. می‌توانی موقع صحبت به «city» هم دقت کنی؟"
+          "speaker": "مدیر منابع انسانی",
+          "text": "Was fehlte bisher in den Gesprächen?",
+          "fa": "تا امروز در مصاحبه‌ها چه کم بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Klar, city und ehemalige fallen mir jetzt ganz leicht.",
-          "fa": "حتماً، الان «city» و «ehemalige» خیلی برایم راحت شده‌اند."
+          "speaker": "شما",
+          "text": "Eine realistische schriftliche Teamaufgabe, die unseren Arbeitsalltag abbildet.",
+          "fa": "یک تمرین نوشتاری واقعی تیمی که روزمرهٔ کاری ما را نشان دهد."
         }
       ],
       "checks": [
@@ -25122,24 +25122,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Wollen wir ergibt noch einmal kurz wiederholen?",
-          "fa": "بیایید «ergibt» را یک بار دیگر کوتاه مرور کنیم؟"
+          "speaker": "آموزگار",
+          "text": "Nach kürzeren Lektionen stieg die Abschlussquote, doch der langfristige Lernerfolg blieb gleich.",
+          "fa": "با کوتاه‌کردن درس‌ها نرخ اتمام بالا رفت، اما یادگیری بلندمدت ثابت ماند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Gern! Ich habe ergibt und förderung schon laut gesprochen.",
-          "fa": "با کمال میل! من «ergibt» و «förderung» را همین الان بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Kurze Einheiten motivieren, aber Behalten braucht zeitlich versetzte Wiederholung.",
+          "fa": "درس کوتاه انگیزه می‌دهد، ولی ماندگاری به مرور بافاصلهٔ زمانی نیاز دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Und wie sieht es mit gelegt und gemeinden aus?",
-          "fa": "دربارهٔ «gelegt» و «gemeinden» چطور؟"
+          "speaker": "آموزگار",
+          "text": "Wie bauen wir Wiederholung ein, ohne dass es eintönig wirkt?",
+          "fa": "چطور مرور را اضافه کنیم بدون اینکه یکنواخت شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Mit gelegt und gemeinden klingen meine Sätze schon viel natürlicher.",
-          "fa": "با «gelegt» و «gemeinden» جمله‌هایم الان خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Indem frühere Wörter in neuen, alltagsnahen Dialogen wieder auftauchen.",
+          "fa": "با برگرداندن واژه‌های قبلی در گفت‌وگوهای تازه و روزمره."
         }
       ],
       "checks": [
@@ -25322,24 +25322,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "فروشنده",
+          "text": "Bonjour ! Comment puis-je vous aider ?",
+          "fa": "روز بخیر! چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec même et ont dans des phrases simples.",
-          "fa": "بیایید با «même» و «ont» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "J’ai acheté cette chemise hier, mais elle est un peu petite.",
+          "fa": "دیروز این پیراهن را خریدم، ولی کمی تنگ است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de ses ?",
-          "fa": "خیلی خوب! «ses» را هم یادت هست؟"
+          "speaker": "فروشنده",
+          "text": "Pas de problème. Vous avez le ticket de caisse ?",
+          "fa": "مشکلی نیست. رسید خرید را دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, ses et leur sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «ses» و «leur» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Oui, le voici. Puis-je l’échanger contre une taille M ?",
+          "fa": "بله، بفرمایید. می‌توانم با سایز مدیوم عوض کنم؟"
         }
       ],
       "checks": [
@@ -25524,24 +25524,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué ainsi quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «ainsi» شدی؟"
+          "speaker": "پذیرش هتل",
+          "text": "Bonsoir et bienvenue ! Vous avez une réservation ?",
+          "fa": "عصر بخیر، خوش آمدید! رزرو دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu ainsi juste à côté de quelques dans le texte.",
-          "fa": "بله، در متن «ainsi» را درست کنار «quelques» دیدم."
+          "speaker": "شما",
+          "text": "Oui, une chambre simple pour trois nuits au nom de Mina Karimi.",
+          "fa": "بله، یک اتاق یک‌نفره برای سه شب به نام مینا کریمی."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder cela en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «cela» را هم در ذهن داشته باشی؟"
+          "speaker": "پذیرش هتل",
+          "text": "Parfait ! Le petit-déjeuner est servi de sept heures à dix heures.",
+          "fa": "عالی! صبحانه از ساعت هفت تا ده سرو می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser cela et homme à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «cela» و «homme» استفاده کنم."
+          "speaker": "شما",
+          "text": "Merci. Est-ce que la chambre donne sur une cour calme ?",
+          "fa": "ممنون. آیا اتاق رو به حیاطی آرام است؟"
         }
       ],
       "checks": [
@@ -25734,24 +25734,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit vos rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «vos» را سریع با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "Tu as regardé la météo pour demain ?",
+          "fa": "پیش‌بینی هوای فردا را دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété vos et ca à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «vos» و «ca» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Oui, soleil le matin, mais un peu de pluie l’après-midi.",
+          "fa": "بله، صبح آفتابی و بعدازظهر کمی باران است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour femme et également, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «femme» و «également» چطور، الان راحت‌تر شده؟"
+          "speaker": "دوست",
+          "text": "On fait quand même notre balade ?",
+          "fa": "باز هم پیاده‌روی را برویم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte femme et également me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «femme» و «également» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Oui, si on part à huit heures, on rentre avant la pluie.",
+          "fa": "بله، اگر ساعت هشت حرکت کنیم قبل از باران برمی‌گردیم."
         }
       ],
       "checks": [
@@ -25948,24 +25948,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Tu as l’air en forme ! Tu fais du sport souvent ?",
+          "fa": "خیلی سرحال به نظر می‌رسی! زیاد ورزش می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec suite et genre dans des phrases simples.",
-          "fa": "بیایید با «suite» و «genre» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Je nage deux fois par semaine et je vais au travail à pied.",
+          "fa": "هفته‌ای دو بار شنا می‌کنم و پیاده سر کار می‌روم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de savoir ?",
-          "fa": "خیلی خوب! «savoir» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "C’est génial. J’essaie de me remettre à courir aussi.",
+          "fa": "عالی است. من هم سعی می‌کنم دوباره دویدن را شروع کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, savoir et société sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «savoir» و «société» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Si tu veux, on peut courir ensemble le mardi au parc.",
+          "fa": "اگر بخواهی می‌توانیم سه‌شنبه‌ها با هم در پارک بدویم."
         }
       ],
       "checks": [
@@ -26146,24 +26146,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué passer quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «passer» شدی؟"
+          "speaker": "منشی",
+          "text": "Cabinet dentaire, bonjour. Comment puis-je vous aider ?",
+          "fa": "کلینیک دندان‌پزشکی، روز بخیر. چطور کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu passer juste à côté de aucun dans le texte.",
-          "fa": "بله، در متن «passer» را درست کنار «aucun» دیدم."
+          "speaker": "شما",
+          "text": "Je voudrais prendre rendez-vous pour un contrôle la semaine prochaine.",
+          "fa": "می‌خواهم برای هفتهٔ آینده وقت معاینه بگیرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder loi en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «loi» را هم در ذهن داشته باشی؟"
+          "speaker": "منشی",
+          "text": "Nous avons une place mercredi à dix heures du matin.",
+          "fa": "چهارشنبه ساعت ده صبح وقت خالی داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser loi et pris à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «loi» و «pris» استفاده کنم."
+          "speaker": "شما",
+          "text": "Mercredi à dix heures, c’est parfait pour moi. Merci.",
+          "fa": "چهارشنبه ساعت ده برایم عالی است. ممنون."
         }
       ],
       "checks": [
@@ -26348,24 +26348,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit article rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «article» را سریع با هم مرور کنیم؟"
+          "speaker": "شما",
+          "text": "Excuse-moi, tu sais pourquoi l’imprimante ne marche pas ?",
+          "fa": "ببخشید، می‌دانی چرا چاپگر کار نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété article et donne à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «article» و «donne» را با صدای بلند تکرار کردم."
+          "speaker": "همکار",
+          "text": "Attends, je regarde. Le bac à papier est vide.",
+          "fa": "صبر کن نگاه کنم. سینی کاغذ خالی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour donner et ligne, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «donner» و «ligne» چطور، الان راحت‌تر شده؟"
+          "speaker": "شما",
+          "text": "Où est-ce qu’on range le papier ?",
+          "fa": "کاغذها را کجا می‌گذاریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte donner et ligne me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «donner» و «ligne» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "همکار",
+          "text": "Dans l’armoire blanche derrière l’accueil.",
+          "fa": "در کمد سفید پشت پذیرش."
         }
       ],
       "checks": [
@@ -26558,24 +26558,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Qu’est-ce qu’on prépare pour le dîner ce soir ?",
+          "fa": "امشب برای شام چی درست کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec nuit et étais dans des phrases simples.",
-          "fa": "بیایید با «nuit» و «étais» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "On pourrait faire des pâtes à la tomate avec une salade.",
+          "fa": "می‌توانیم پاستا با سس گوجه و سالاد درست کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de tour ?",
-          "fa": "خیلی خوب! «tour» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "Bonne idée ! On a assez de tomates et d’ail ?",
+          "fa": "فکر خوبیه! گوجه و سیر به اندازه کافی داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, tour et vue sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «tour» و «vue» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "On a des tomates, j’achèterai de l’ail en rentrant.",
+          "fa": "گوجه داریم، سر راه برگشت سیر می‌خرم."
         }
       ],
       "checks": [
@@ -26772,24 +26772,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué titre quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «titre» شدی؟"
+          "speaker": "مسافر",
+          "text": "Pardon, le bus numéro douze est déjà passé ?",
+          "fa": "ببخشید، اتوبوس شمارهٔ دوازده رد شده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu titre juste à côté de mise dans le texte.",
-          "fa": "بله، در متن «titre» را درست کنار «mise» دیدم."
+          "speaker": "شما",
+          "text": "Pas encore. L’écran indique six minutes de retard.",
+          "fa": "هنوز نه. نمایشگر شش دقیقه تأخیر نشان می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder saison en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «saison» را هم در ذهن داشته باشی؟"
+          "speaker": "مسافر",
+          "text": "J’espère qu’il arrive vite. Il s’arrête au musée ?",
+          "fa": "امیدوارم زود برسد. جلوی موزه توقف می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser saison et sait à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «saison» و «sait» استفاده کنم."
+          "speaker": "شما",
+          "text": "Oui, c’est le quatrième arrêt après la place centrale.",
+          "fa": "بله، چهارمین ایستگاه بعد از میدان مرکزی است."
         }
       ],
       "checks": [
@@ -26970,24 +26970,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit manière rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «manière» را سریع با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "Tu sais ce que tu vas offrir à Nima pour son anniversaire ?",
+          "fa": "می‌دانی برای تولد نیما چی کادو بخری؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété manière et mars à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «manière» و «mars» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Je pense prendre une écharpe chaude ou un mug de voyage.",
+          "fa": "فکر می‌کنم یک شال گرم یا ماگ سفری بگیرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour pierre et québec, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «pierre» و «québec» چطور، الان راحت‌تر شده؟"
+          "speaker": "دوست",
+          "text": "Le mug est très pratique, il prend le train tous les matins.",
+          "fa": "ماگ خیلی کاربردی است، هر صبح سوار قطار می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte pierre et québec me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «pierre» و «québec» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "C’est vrai ! Passons voir la boutique près de la gare.",
+          "fa": "راست می‌گویی! سری به مغازهٔ نزدیک ایستگاه بزنیم."
         }
       ],
       "checks": [
@@ -27172,24 +27172,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "کتابدار",
+          "text": "Bienvenue à la bibliothèque ! Vous avez une carte de lecteur ?",
+          "fa": "به کتابخانه خوش آمدید! کارت عضویت دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec match et permet dans des phrases simples.",
-          "fa": "بیایید با «match» و «permet» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Pas encore. Comment puis-je m’inscrire ?",
+          "fa": "هنوز نه. چطور می‌توانم ثبت‌نام کنم؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de voit ?",
-          "fa": "خیلی خوب! «voit» را هم یادت هست؟"
+          "speaker": "کتابدار",
+          "text": "Montrez-moi une pièce d’identité et remplissez ce court formulaire.",
+          "fa": "کارت شناسایی را نشان بدهید و این فرم کوتاه را پر کنید."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, voit et importe sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «voit» و «importe» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Combien de livres peut-on emprunter en même temps ?",
+          "fa": "هم‌زمان چند کتاب می‌توان امانت گرفت؟"
         }
       ],
       "checks": [
@@ -27370,24 +27370,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué ses quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «ses» شدی؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Merci d’être venu. Pourquoi ce poste vous intéresse-t-il ?",
+          "fa": "ممنون که آمدید. چرا به این جایگاه شغلی علاقه‌مندید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu ses juste à côté de leur dans le texte.",
-          "fa": "بله، در متن «ses» را درست کنار «leur» دیدم."
+          "speaker": "شما",
+          "text": "J’aime travailler avec les clients et résoudre des problèmes concrets.",
+          "fa": "دوست دارم با مشتریان کار کنم و مسائل واقعی را حل کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder rien en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «rien» را هم در ذهن داشته باشی؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Comment réagissez-vous lorsque les délais sont courts ?",
+          "fa": "وقتی مهلت‌ها کوتاه است چطور واکنش نشان می‌دهید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser rien et contre à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «rien» و «contre» استفاده کنم."
+          "speaker": "شما",
+          "text": "Je classe les tâches par priorité et je préviens l’équipe rapidement.",
+          "fa": "کارها را اولویت‌بندی می‌کنم و سریع به تیم اطلاع می‌دهم."
         }
       ],
       "checks": [
@@ -27572,24 +27572,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit mort rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «mort» را سریع با هم مرور کنیم؟"
+          "speaker": "شما",
+          "text": "Excusez-moi, mon train a quarante minutes de retard. Y a-t-il une autre option ?",
+          "fa": "ببخشید، قطارم چهل دقیقه تأخیر دارد. گزینهٔ دیگری هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété mort et compte à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «mort» و «compte» را با صدای بلند تکرار کردم."
+          "speaker": "کارمند ایستگاه",
+          "text": "Oui, prenez le train régional voie trois puis faites une correspondance.",
+          "fa": "بله، قطار منطقه‌ای سکوی سه را سوار شوید و سپس خط عوض کنید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour état et politique, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «état» و «politique» چطور، الان راحت‌تر شده؟"
+          "speaker": "شما",
+          "text": "Est-ce que mon billet reste valable sur ce train ?",
+          "fa": "آیا بلیتم در آن قطار هم معتبر می‌ماند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte état et politique me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «état» و «politique» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "کارمند ایستگاه",
+          "text": "Oui, à cause du retard, vous n’avez rien à payer en plus.",
+          "fa": "بله، به دلیل تأخیر نیازی به پرداخت اضافه نیست."
         }
       ],
       "checks": [
@@ -27782,24 +27782,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "شما",
+          "text": "Bonjour monsieur Alavi, l’évier de la cuisine fuit depuis hier soir.",
+          "fa": "سلام آقای علوی، سینک آشپزخانه از دیشب نشتی دارد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec ailleurs et dis dans des phrases simples.",
-          "fa": "بیایید با «ailleurs» و «dis» در جمله‌های ساده شروع کنیم."
+          "speaker": "صاحب‌خانه",
+          "text": "Merci de me prévenir vite. Est-ce que l’eau coule par terre ?",
+          "fa": "ممنون که سریع خبر دادید. آب روی زمین می‌ریزد؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de jeu ?",
-          "fa": "خیلی خوب! «jeu» را هم یادت هست؟"
+          "speaker": "شما",
+          "text": "Un peu seulement, j’ai mis un seau dessous pour l’instant.",
+          "fa": "فقط کمی، فعلاً یک سطل زیرش گذاشته‌ام."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, jeu et effet sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «jeu» و «effet» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "صاحب‌خانه",
+          "text": "Bonne idée. J’envoie un plombier demain matin entre neuf et onze heures.",
+          "fa": "فکر خوبی است. فردا صبح بین نه تا یازده لوله‌کش می‌فرستم."
         }
       ],
       "checks": [
@@ -27996,24 +27996,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué seule quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «seule» شدی؟"
+          "speaker": "همکار",
+          "text": "Comment trouves-tu le télétravail deux jours par semaine ?",
+          "fa": "دورکاری دو روز در هفته برایت چطور است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu seule juste à côté de président dans le texte.",
-          "fa": "بله، در متن «seule» را درست کنار «président» دیدم."
+          "speaker": "شما",
+          "text": "J’économise deux heures de trajet et je suis beaucoup plus concentré.",
+          "fa": "دو ساعت در رفت‌وآمد صرفه‌جویی می‌کنم و خیلی متمرکزترم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder crois en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «crois» را هم در ذهن داشته باشی؟"
+          "speaker": "همکار",
+          "text": "Les échanges rapides avec l’équipe ne te manquent pas ?",
+          "fa": "دلت برای گپ‌های سریع با تیم تنگ نمی‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser crois et dieu à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «crois» و «dieu» استفاده کنم."
+          "speaker": "شما",
+          "text": "Un peu, c’est pour ça que je viens au bureau le lundi et le jeudi.",
+          "fa": "کمی، برای همین دوشنبه و پنجشنبه به دفتر می‌آیم."
         }
       ],
       "checks": [
@@ -28194,24 +28194,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit fort rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «fort» را سریع با هم مرور کنیم؟"
+          "speaker": "مشاور",
+          "text": "Vous préférez un cours du soir ou un atelier le week-end ?",
+          "fa": "کلاس عصر را ترجیح می‌دهید یا کارگاه آخر هفته؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété fort et ayant à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «fort» و «ayant» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Un cours du soir me convient mieux, car je finis le travail à dix-sept heures.",
+          "fa": "کلاس عصر برایم مناسب‌تر است چون ساعت پنج کارم تمام می‌شود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour main et terre, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «main» و «terre» چطور، الان راحت‌تر شده؟"
+          "speaker": "مشاور",
+          "text": "Un petit groupe commence mardi prochain à dix-huit heures trente.",
+          "fa": "سه‌شنبهٔ آینده ساعت شش‌ونیم یک گروه کوچک شروع می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte main et terre me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «main» و «terre» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "L’horaire est parfait. Puis-je faire un premier cours d’essai ?",
+          "fa": "ساعتش عالی است. می‌توانم جلسهٔ اول را آزمایشی شرکت کنم؟"
         }
       ],
       "checks": [
@@ -28400,24 +28400,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Tu as l’air fatigué aujourd’hui. Tu t’es encore couché tard ?",
+          "fa": "امروز خسته به نظر می‌رسی. باز هم دیر خوابیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec moyen et ordre dans des phrases simples.",
-          "fa": "بیایید با «moyen» و «ordre» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Oui, j’ai regardé mes messages sur le téléphone après minuit.",
+          "fa": "بله، بعد از نیمه‌شب پیام‌های گوشی را نگاه می‌کردم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de étant ?",
-          "fa": "خیلی خوب! «étant» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "Laisser le téléphone hors de la chambre m’a vraiment aidé à mieux dormir.",
+          "fa": "گذاشتن گوشی بیرون از اتاق خواب واقعاً به خواب بهترم کمک کرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, étant et but sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «étant» و «but» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "C’est malin. Ce soir, je vais plutôt lire un livre papier.",
+          "fa": "کار عاقلانه‌ای است. امشب کتاب کاغذی می‌خوانم."
         }
       ],
       "checks": [
@@ -28614,24 +28614,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué match quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «match» شدی؟"
+          "speaker": "همسایه",
+          "text": "Tu as vu les nouvelles poubelles de tri près du portail ?",
+          "fa": "سطل‌های تفکیک زبالهٔ جدید کنار در حیاط را دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu match juste à côté de permet dans le texte.",
-          "fa": "بله، در متن «match» را درست کنار «permet» دیدم."
+          "speaker": "شما",
+          "text": "Oui ! C’est beaucoup plus simple maintenant pour le papier et le verre.",
+          "fa": "بله! الان برای کاغذ و شیشه خیلی راحت‌تر شده."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder voit en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «voit» را هم در ذهن داشته باشی؟"
+          "speaker": "همسایه",
+          "text": "Tu sais quel jour ils passent pour le plastique ?",
+          "fa": "می‌دانی کدام روز برای پلاستیک می‌آیند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser voit et juin à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «voit» و «juin» استفاده کنم."
+          "speaker": "شما",
+          "text": "Tous les jeudis matin, d’après l’affiche dans l’entrée.",
+          "fa": "طبق اطلاعیهٔ ورودی، هر پنجشنبه صبح."
         }
       ],
       "checks": [
@@ -28820,24 +28820,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit mot rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «mot» را سریع با هم مرور کنیم؟"
+          "speaker": "همکار",
+          "text": "On tient toujours le délai de vendredi pour le rapport client ?",
+          "fa": "هنوز به مهلت جمعه برای گزارش مشتری می‌رسیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété mot et recherche à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «mot» و «recherche» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Presque, j’attends juste les derniers chiffres de vente.",
+          "fa": "تقریباً، فقط منتظر آمار نهایی فروش هستم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour santé et seront, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «santé» و «seront» چطور، الان راحت‌تر شده؟"
+          "speaker": "همکار",
+          "text": "Envoie-moi le brouillon aujourd’hui et je relis la mise en page ce soir.",
+          "fa": "پیش‌نویس را امروز بفرست تا امشب صفحه‌بندی را چک کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte santé et seront me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «santé» و «seront» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Parfait, ça nous évitera de courir vendredi matin.",
+          "fa": "عالیه، این‌طوری صبح جمعه عجله نخواهیم داشت."
         }
       ],
       "checks": [
@@ -29018,24 +29018,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Comment retiens-tu les nouvelles expressions sans les oublier vite ?",
+          "fa": "چطور عبارت‌های تازه را نگه می‌داری که زود یادت نرود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec gars et laquelle dans des phrases simples.",
-          "fa": "بیایید با «gars» و «laquelle» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Je réutilise chaque expression dans deux phrases réelles juste après.",
+          "fa": "بلافاصله هر عبارت را در دو جملهٔ واقعی به کار می‌برم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de octobre ?",
-          "fa": "خیلی خوب! «octobre» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "Tu écoutes aussi de courts podcasts dans les transports ?",
+          "fa": "در مسیر پادکست کوتاه هم گوش می‌دهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, octobre et siècle sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «octobre» و «siècle» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Oui, dix minutes par jour dans le bus font une vraie différence.",
+          "fa": "بله، روزی ده دقیقه در اتوبوس واقعاً اثر دارد."
         }
       ],
       "checks": [
@@ -29268,24 +29268,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué vie quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «vie» شدی؟"
+          "speaker": "مدیر",
+          "text": "Nous révisons notre politique de travail hybride pour le prochain trimestre. Qu’est-ce qui marche le mieux dans votre équipe ?",
+          "fa": "سیاست کار ترکیبی فصل بعد را بازبینی می‌کنیم. در تیم شما چه چیزی بهتر جواب داده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu vie juste à côté de juste dans le texte.",
-          "fa": "بله، در متن «vie» را درست کنار «juste» دیدم."
+          "speaker": "شما",
+          "text": "Deux jours fixes au bureau maintiennent la cohésion tout en laissant du calme à la maison pour les dossiers de fond.",
+          "fa": "دو روز ثابت در دفتر انسجام را حفظ می‌کند و در خانه آرامش لازم برای کارهای عمیق را می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder vraiment en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «vraiment» را هم در ذهن داشته باشی؟"
+          "speaker": "مدیر",
+          "text": "Avez-vous remarqué des limites à ce fonctionnement ?",
+          "fa": "آیا محدودیتی هم در این روش دیده‌اید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser vraiment et ainsi à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «vraiment» و «ainsi» استفاده کنم."
+          "speaker": "شما",
+          "text": "Seulement pour les nouveaux arrivants, qui ont besoin de points plus réguliers à distance.",
+          "fa": "فقط برای تازه‌واردها که از راه دور به هماهنگی منظم‌تری نیاز دارند."
         }
       ],
       "checks": [
@@ -29494,24 +29494,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit surtout rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «surtout» را سریع با هم مرور کنیم؟"
+          "speaker": "همکار",
+          "text": "Quel est le principal risque si nous déployons le nouveau système de réservation partout en même temps ?",
+          "fa": "اگر سامانهٔ رزرو تازه را همه‌جا هم‌زمان اجرا کنیم، ریسک اصلی چیست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété surtout et font à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «surtout» و «font» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Les équipes risquent de perdre du temps aux heures de pointe si la formation est trop courte.",
+          "fa": "اگر آموزش کوتاه باشد، تیم‌ها در ساعات شلوغی زمان از دست می‌دهند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour hommes et loi, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «hommes» و «loi» چطور، الان راحت‌تر شده؟"
+          "speaker": "همکار",
+          "text": "Que proposes-tu pour limiter ce risque ?",
+          "fa": "برای کاهش این ریسک چه پیشنهادی داری؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte hommes et loi me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «hommes» و «loi» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Testons-le d’abord pendant deux semaines dans une seule agence pilote.",
+          "fa": "ابتدا دو هفته در یک شعبهٔ آزمایشی امتحانش کنیم."
         }
       ],
       "checks": [
@@ -29736,24 +29736,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Notre budget logiciel a été réduit, mais nous avons toujours besoin de statistiques fiables.",
+          "fa": "بودجهٔ نرم‌افزار کاهش یافته، اما هنوز به آمار دقیق نیاز داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec nuit et tour dans des phrases simples.",
-          "fa": "بیایید با «nuit» و «tour» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Plutôt que de payer trois outils redondants, regroupons tout sur une seule plateforme.",
+          "fa": "به‌جای پرداخت هزینهٔ سه ابزار هم‌پوشان، همه را در یک سامانه متمرکز کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de an ?",
-          "fa": "خیلی خوب! «an» را هم یادت هست؟"
+          "speaker": "همکار",
+          "text": "Est-ce que transférer les anciens rapports prendrait trop de temps ?",
+          "fa": "انتقال گزارش‌های قدیمی وقت زیادی نمی‌گیرد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, an et aura sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «an» و «aura» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "On ne migre que les dix tableaux actifs ; les autres restent en archive.",
+          "fa": "فقط ده جدول فعال را منتقل می‌کنیم؛ بقیه در بایگانی می‌مانند."
         }
       ],
       "checks": [
@@ -29966,24 +29966,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué grâce quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «grâce» شدی؟"
+          "speaker": "همکار",
+          "text": "Tu as vu l’article qui prétend que les tarifs des transports vont doubler le mois prochain ?",
+          "fa": "مقاله‌ای را دیدی که مدعی است کرایهٔ حمل‌ونقل ماه بعد دو برابر می‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu grâce juste à côté de moyen dans le texte.",
-          "fa": "بله، در متن «grâce» را درست کنار «moyen» دیدم."
+          "speaker": "شما",
+          "text": "Oui, mais le compte rendu officiel de la mairie ne mentionne aucun vote à ce sujet.",
+          "fa": "بله، اما صورت‌جلسهٔ رسمی شهرداری هیچ رأی‌گیری در این باره ندارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder étant en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «étant» را هم در ذهن داشته باشی؟"
+          "speaker": "همکار",
+          "text": "Pourquoi cette rumeur s’est-elle propagée si vite ?",
+          "fa": "چرا این شایعه این‌قدر سریع پخش شد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser étant et but à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «étant» و «but» استفاده کنم."
+          "speaker": "شما",
+          "text": "Le titre sortait un vieux projet de budget de son contexte sans citer de source.",
+          "fa": "تیتر یک طرح قدیمی بودجه را بدون منبع از بافت جدا کرده بود."
         }
       ],
       "checks": [
@@ -30212,24 +30212,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit voit rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «voit» را سریع با هم مرور کنیم؟"
+          "speaker": "پشتیبانی",
+          "text": "Service client, bonjour. Comment puis-je vous aider ?",
+          "fa": "خدمات مشتریان، روز بخیر. چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété voit et juin à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «voit» و «juin» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Notre connexion est coupée depuis quatre jours malgré deux demandes d’intervention.",
+          "fa": "اتصال ما با وجود دو درخواست پیگیری، چهار روز است قطع شده است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour lorsque et peur, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «lorsque» و «peur» چطور، الان راحت‌تر شده؟"
+          "speaker": "پشتیبانی",
+          "text": "Veuillez nous excuser pour ce retard. Je transmets le dossier en urgence.",
+          "fa": "بابت این تأخیر پوزش می‌خواهیم. پرونده را فوری ارجاع می‌دهم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte lorsque et peur me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «lorsque» و «peur» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Merci. Pouvez-vous aussi confirmer par écrit la remise sur la facture ?",
+          "fa": "ممنون. می‌توانید تخفیف قبض برای روزهای قطعی را هم کتبی تأیید کنید؟"
         }
       ],
       "checks": [
@@ -30462,24 +30462,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Les loyers près de l’université ont encore augmenté ce semestre.",
+          "fa": "اجاره‌ها نزدیک دانشگاه این ترم باز هم زیاد شده است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec propre et environ dans des phrases simples.",
-          "fa": "بیایید با «propre» و «environ» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Oui, beaucoup d’étudiants s’installent plus loin sur la ligne de métro.",
+          "fa": "بله، خیلی از دانشجویان در مسیر مترو کمی دورتر خانه می‌گیرند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de fond ?",
-          "fa": "خیلی خوب! «fond» را هم یادت هست؟"
+          "speaker": "همکار",
+          "text": "Est-ce que ce trajet complique leurs emplois à temps partiel ?",
+          "fa": "این رفت‌وآمد کار پاره‌وقتشان را سخت نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, fond et mec sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «fond» و «mec» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Cela ajoute une heure par jour, mais les trains directs restent fiables.",
+          "fa": "روزی یک ساعت اضافه می‌کند، ولی قطارهای مستقیم هنوز منظم‌اند."
         }
       ],
       "checks": [
@@ -30688,24 +30688,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué tel quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «tel» شدی؟"
+          "speaker": "همکار",
+          "text": "Merci d’avoir suivi ma répétition. Le message principal était-il clair ?",
+          "fa": "ممنون که تمرینم را دیدی. پیام اصلی روشن بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu tel juste à côté de armée dans le texte.",
-          "fa": "بله، در متن «tel» را درست کنار «armée» دیدم."
+          "speaker": "شما",
+          "text": "Ton introduction était excellente, mais les diapositives chiffrées étaient un peu chargées.",
+          "fa": "مقدمه‌ات عالی بود، ولی اسلایدهای آماری کمی شلوغ بودند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder chance en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «chance» را هم در ذهن داشته باشی؟"
+          "speaker": "همکار",
+          "text": "Est-ce que diviser le graphique en deux vues plus simples aiderait ?",
+          "fa": "اگر نمودار را به دو اسلاید ساده‌تر تقسیم کنم کمک می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser chance et croire à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «chance» و «croire» استفاده کنم."
+          "speaker": "شما",
+          "text": "Tout à fait, surtout si tu mets un seul chiffre clé en avant.",
+          "fa": "قطعاً، به‌خصوص اگر روی هر اسلاید فقط یک عدد کلیدی را برجسته کنی."
         }
       ],
       "checks": [
@@ -30938,24 +30938,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit justice rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «justice» را سریع با هم مرور کنیم؟"
+          "speaker": "همکار جدید",
+          "text": "Tu as cinq minutes pour m’expliquer le passage de relais hebdomadaire ?",
+          "fa": "پنج دقیقه وقت داری تحویل هفتگی کارها را توضیح بدهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété justice et met à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «justice» و «met» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Bien sûr ! Chaque jeudi après-midi, on met à jour le tableau partagé.",
+          "fa": "حتماً! هر پنجشنبه عصر جدول مشترک را به‌روز می‌کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour occasion et perdu, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «occasion» و «perdu» چطور، الان راحت‌تر شده؟"
+          "speaker": "همکار جدید",
+          "text": "Et si une tâche dépend encore d’un autre service ?",
+          "fa": "و اگر کاری هنوز به بخش دیگری وابسته باشد چه؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte occasion et perdu me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «occasion» و «perdu» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "On la met en orange pour que la responsable relance vendredi matin.",
+          "fa": "نارنجی‌اش می‌کنیم تا سرپرست صبح جمعه پیگیری کند."
         }
       ],
       "checks": [
@@ -31164,24 +31164,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "La facture d’électricité du bâtiment a augmenté de vingt pour cent cet été.",
+          "fa": "قبض برق ساختمان این تابستان بیست درصد بالا رفته است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec hein et hors dans des phrases simples.",
-          "fa": "بیایید با «hein» و «hors» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Les lumières et la climatisation des salles restent souvent allumées après dix-huit heures.",
+          "fa": "چراغ و تهویهٔ سالن‌ها اغلب بعد از ساعت شش روشن می‌ماند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de lequel ?",
-          "fa": "خیلی خوب! «lequel» را هم یادت هست؟"
+          "speaker": "همکار",
+          "text": "Des capteurs de présence pourraient régler ça facilement ?",
+          "fa": "حسگرهای حضور به‌راحتی این را حل می‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, lequel et national sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «lequel» و «national» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Oui, et une minuterie automatique à dix-huit heures réduirait vite le gaspillage.",
+          "fa": "بله، و تایمر خودکار در ساعت شش سریع اسراف را کم می‌کند."
         }
       ],
       "checks": [
@@ -31414,24 +31414,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué simplement quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «simplement» شدی؟"
+          "speaker": "مدیر",
+          "text": "Moins d’utilisateurs d’essai ont renouvelé leur abonnement. Qu’as-tu observé ?",
+          "fa": "کاربران آزمایشی کمتری تمدید کرده‌اند. چه نکته‌ای دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu simplement juste à côté de travers dans le texte.",
-          "fa": "بله، در متن «simplement» را درست کنار «travers» دیدم."
+          "speaker": "شما",
+          "text": "Ils apprécient l’outil, mais beaucoup abandonnent avant de finir la configuration initiale.",
+          "fa": "ابزار را دوست دارند، اما بسیاری قبل از تکمیل تنظیم اولیه رها می‌کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder demi en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «demi» را هم در ذهن داشته باشی؟"
+          "speaker": "مدیر",
+          "text": "Donc tout se joue dès la première semaine ?",
+          "fa": "پس همه‌چیز از همان هفتهٔ اول تعیین می‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser demi et liberté à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «demi» و «liberté» استفاده کنم."
+          "speaker": "شما",
+          "text": "Oui, un guide de cinq minutes dès le premier jour ferait la différence.",
+          "fa": "بله، یک راهنمای پنج‌دقیقه‌ای در روز اول تفاوت ایجاد می‌کند."
         }
       ],
       "checks": [
@@ -31640,24 +31640,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit finalement rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «finalement» را سریع با هم مرور کنیم؟"
+          "speaker": "شرکت‌کننده",
+          "text": "Merci pour votre intervention. Avez-vous inclus des cliniques rurales dans votre étude ?",
+          "fa": "ممنون از سخنرانی. آیا درمانگاه‌های روستایی را هم در پژوهش گنجاندید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété finalement et fini à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «finalement» و «fini» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Bonne question. Cet échantillon portait sur trois hôpitaux urbains ; les zones rurales sont la prochaine étape.",
+          "fa": "سؤال خوبی است. این نمونه سه بیمارستان شهری بود؛ مناطق روستایی مرحلهٔ بعدی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour haute et manger, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «haute» و «manger» چطور، الان راحت‌تر شده؟"
+          "speaker": "شرکت‌کننده",
+          "text": "La qualité de la connexion risque-t-elle de changer vos résultats ?",
+          "fa": "کیفیت اینترنت ممکن است نتایج را تغییر دهد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte haute et manger me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «haute» و «manger» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Oui, c’est pourquoi nous testons déjà un mode hors ligne.",
+          "fa": "بله، برای همین از الان حالت آفلاین را آزمایش می‌کنیم."
         }
       ],
       "checks": [
@@ -31890,24 +31890,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "تأمین‌کننده",
+          "text": "Nous pouvons proposer dix pour cent de remise pour un contrat annuel.",
+          "fa": "برای قرارداد سالانه می‌توانیم ده درصد تخفیف بدهیم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec honneur et matière dans des phrases simples.",
-          "fa": "بیایید با «honneur» و «matière» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "C’est intéressant, mais il nous faut une clause de révision trimestrielle sur les délais.",
+          "fa": "جذاب است، ولی به یک بند بازبینی فصلی دربارهٔ زمان پاسخگویی نیاز داریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de ouest ?",
-          "fa": "خیلی خوب! «ouest» را هم یادت هست؟"
+          "speaker": "تأمین‌کننده",
+          "text": "D’accord, à condition de fixer un délai de quatre heures pour les urgences.",
+          "fa": "قبول، به شرطی که مهلت چهار ساعته برای موارد فوری بگذاریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, ouest et permis sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «ouest» و «permis» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Parfait. Envoyez le projet mis à jour pour que notre équipe le relise demain.",
+          "fa": "عالی است. پیش‌نویس به‌روزشده را بفرستید تا تیم ما فردا بخواند."
         }
       ],
       "checks": [
@@ -32116,24 +32116,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué style quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «style» شدی؟"
+          "speaker": "مشاور",
+          "text": "Tu comptes postuler pour le master à Berlin ou à Munich ?",
+          "fa": "قصد داری برای ارشد در برلین اقدام کنی یا مونیخ؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu style juste à côté de sérieux dans le texte.",
-          "fa": "بله، در متن «style» را درست کنار «sérieux» دیدم."
+          "speaker": "شما",
+          "text": "Je penche pour Berlin, car le laboratoire correspond bien à mon sujet.",
+          "fa": "به برلین تمایل دارم چون آزمایشگاهش با موضوع من خیلی می‌خواند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder terrain en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «terrain» را هم در ذهن داشته باشی؟"
+          "speaker": "مشاور",
+          "text": "N’oublie pas que l’attestation de langue est exigée deux mois avant la rentrée.",
+          "fa": "فراموش نکن مدرک زبان دو ماه قبل از شروع سال تحصیلی لازم است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser terrain et église à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «terrain» و «église» استفاده کنم."
+          "speaker": "شما",
+          "text": "Merci du rappel, j’ai déjà réservé mon examen pour le mois prochain.",
+          "fa": "ممنون از یادآوری، همین الان آزمونم را برای ماه آینده رزرو کرده‌ام."
         }
       ],
       "checks": [
@@ -32366,24 +32366,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit voulu rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «voulu» را سریع با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "Tu as pensé quoi du documentaire d’hier sur l’agriculture urbaine ?",
+          "fa": "مستند دیشب دربارهٔ کشاورزی شهری را چطور دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété voulu et bons à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «voulu» و «bons» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Les témoignages étaient réussis, mais le film a évité la question du coût de l’eau.",
+          "fa": "روایت‌ها خیلی خوب بود، اما فیلم از هزینهٔ آب عبور کرد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour critique et dehors, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «critique» و «dehors» چطور، الان راحت‌تر شده؟"
+          "speaker": "دوست",
+          "text": "C’est vrai que les frais d’entretien pèsent lourd dans la durée.",
+          "fa": "درست است که هزینهٔ نگهداری در بلندمدت بسیار مؤثر است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte critique et dehors me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «critique» و «dehors» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Malgré cela, il propose des pistes réalistes à tester à petite échelle.",
+          "fa": "با این همه، راه‌های واقع‌بینانه‌ای برای آزمایش در مقیاس کوچک ارائه داد."
         }
       ],
       "checks": [
@@ -32592,24 +32592,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Le support reçoit beaucoup de questions sur le nouveau format de facture.",
+          "fa": "پشتیبانی دربارهٔ قالب جدید فاکتور پرسش‌های زیادی می‌گیرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec michel et physique dans des phrases simples.",
-          "fa": "بیایید با «michel» و «physique» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Ajoutons une ligne claire sous le total pour détailler les taxes.",
+          "fa": "بیایید زیر جمع کل یک خط روشن برای جزئیات مالیات اضافه کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de telle ?",
-          "fa": "خیلی خوب! «telle» را هم یادت هست؟"
+          "speaker": "همکار",
+          "text": "Sous quel délai l’équipe technique peut-elle modifier le modèle ?",
+          "fa": "تیم فنی در چه مدتی می‌تواند قالب را اصلاح کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, telle et territoire sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «telle» و «territoire» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Si on envoie le texte aujourd’hui, ce sera prêt pour la mise à jour de jeudi.",
+          "fa": "اگر امروز متن را بفرستیم، برای به‌روزرسانی پنجشنبه آماده است."
         }
       ],
       "checks": [
@@ -32842,24 +32842,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué assurer quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «assurer» شدی؟"
+          "speaker": "هماهنگ‌کننده",
+          "text": "Vingt bénévoles sont inscrits pour nettoyer le parc samedi. Avons-nous assez de matériel ?",
+          "fa": "بیست داوطلب برای پاک‌سازی پارک شنبه ثبت‌نام کرده‌اند. وسایل کافی داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu assurer juste à côté de carrière dans le texte.",
-          "fa": "بله، در متن «assurer» را درست کنار «carrière» دیدم."
+          "speaker": "شما",
+          "text": "Nous avons assez de gants et de sacs, mais il faudrait cinq râteaux en plus.",
+          "fa": "دستکش و کیسه به اندازه داریم، ولی پنج شن‌کش دیگر لازم است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder chine en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «chine» را هم در ذهن داشته باشی؟"
+          "speaker": "هماهنگ‌کننده",
+          "text": "Je demande au centre de quartier. Comment répartir les équipes ?",
+          "fa": "از مرکز محله می‌پرسم. گروه‌ها را چطور تقسیم کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser chine et commun à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «chine» و «commun» استفاده کنم."
+          "speaker": "شما",
+          "text": "Quatre petits groupes, un par zone, et tout sera fini avant midi.",
+          "fa": "چهار گروه کوچک، هرکدام یک بخش، تا قبل از ظهر همه‌چیز تمام می‌شود."
         }
       ],
       "checks": [
@@ -33068,24 +33068,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit juge rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «juge» را سریع با هم مرور کنیم؟"
+          "speaker": "مدیر محصول",
+          "text": "Si nous priorisons le journal d’audit, la refonte mobile glisse au troisième trimestre. Comment arbitrer ?",
+          "fa": "اگر گزارش ممیزی را در اولویت بگذاریم، بازطراحی موبایل به فصل سوم می‌افتد. چطور تصمیم بگیریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété juge et mme à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «juge» و «mme» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Les renouvellements grands comptes exigent la conformité dès ce trimestre, alors que le mobile reste stable.",
+          "fa": "تمدید مشتریان بزرگ همین فصل به انطباق نیاز دارد، در حالی که موبایل ثابت است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour mètres et poids, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «mètres» و «poids» چطور، الان راحت‌تر شده؟"
+          "speaker": "مدیر محصول",
+          "text": "Les utilisateurs mobiles avancés ne risquent-ils pas d’être frustrés d’attendre ?",
+          "fa": "کاربران حرفه‌ای موبایل از انتظار دلخور نمی‌شوند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte mètres et poids me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «mètres» و «poids» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "En publiant deux gains de rapidité très demandés en parallèle, on garde leur confiance.",
+          "fa": "با انتشار دو بهبود سرعت پرمتقاضی به صورت هم‌زمان، اعتمادشان حفظ می‌شود."
         }
       ],
       "checks": [
@@ -33318,24 +33318,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "مشاور حقوقی",
+          "text": "La nouvelle politique autorise l’annulation jusqu’à quarante-huit heures avant, sans aucune exception.",
+          "fa": "سیاست جدید لغو را تا چهل‌وهشت ساعت قبل بدون هیچ استثنایی مجاز می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec tenir et tient dans des phrases simples.",
-          "fa": "بیایید با «tenir» و «tient» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Une règle stricte limite les abus, mais une application rigide en cas d’intempérie nuit à la confiance.",
+          "fa": "قانون سخت جلوی سوءاستفاده را می‌گیرد، ولی سخت‌گیری در هوای بحرانی به اعتماد لطمه می‌زند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de trucs ?",
-          "fa": "خیلی خوب! «trucs» را هم یادت هست؟"
+          "speaker": "مشاور حقوقی",
+          "text": "Comment rester souple sans créer de brèche pour les annulations de dernière minute ?",
+          "fa": "چطور انعطاف نشان دهیم بی‌آنکه روزنه برای لغو لحظه‌آخری باز شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, trucs et york sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «trucs» و «york» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Proposons un avoir unique sur justificatif d’urgence plutôt qu’un remboursement automatique.",
+          "fa": "به‌جای بازپرداخت خودکار، با مدرک اضطراری یک اعتبار یک‌بارمصرف بدهیم."
         }
       ],
       "checks": [
@@ -33544,24 +33544,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué environnement quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «environnement» شدی؟"
+          "speaker": "پژوهشگر",
+          "text": "L’enquête montre quatre-vingts pour cent de satisfaction parmi ceux qui sont restés un an.",
+          "fa": "نظرسنجی هشتاد درصد رضایت را در میان کسانی نشان می‌دهد که یک سال مانده‌اند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu environnement juste à côté de ferme dans le texte.",
-          "fa": "بله، در متن «environnement» را درست کنار «ferme» دیدم."
+          "speaker": "شما",
+          "text": "Interroger uniquement les fidèles crée un biais de survie et masque les motifs de départ rapide.",
+          "fa": "پرسش فقط از ماندگاران سوگیری بقا می‌آورد و دلایل خروج سریع را پنهان می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder macron en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «macron» را هم در ذهن داشته باشی؟"
+          "speaker": "پژوهشگر",
+          "text": "Bien vu. Comment corriger l’échantillon avant de publier ?",
+          "fa": "دقت خوبی بود. پیش از انتشار چطور نمونه را اصلاح کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser macron et maire à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «macron» و «maire» استفاده کنم."
+          "speaker": "شما",
+          "text": "Ajoutons les entretiens de départ et présentons les deux groupes côte à côte.",
+          "fa": "مصاحبه‌های خروج را اضافه کنیم و هر دو گروه را کنار هم نشان دهیم."
         }
       ],
       "checks": [
@@ -33794,24 +33794,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit vitesse rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «vitesse» را سریع با هم مرور کنیم؟"
+          "speaker": "معمار نرم‌افزار",
+          "text": "Synchroniser chaque appareil toutes les dix secondes sature nos connexions de base de données.",
+          "fa": "همگام‌سازی هر ده ثانیه اتصالات پایگاه داده را اشباع می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété vitesse et étranger à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «vitesse» و «étranger» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Plutôt que d’interroger en continu, déclenchons la synchronisation uniquement sur notification légère.",
+          "fa": "به‌جای پرس‌وجوی مداوم، همگام‌سازی را فقط با یک اعلان سبک فعال کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour américains et charles, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «américains» و «charles» چطور، الان راحت‌تر شده؟"
+          "speaker": "معمار نرم‌افزار",
+          "text": "Et si un téléphone hors ligne manque cette notification ?",
+          "fa": "و اگر گوشی آفلاین این اعلان را از دست بدهد چه؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte américains et charles me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «américains» و «charles» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Dès le retour du réseau, il récupère simplement les écarts depuis son dernier horodatage.",
+          "fa": "به‌محض برگشت شبکه، فقط تغییرات بعد از آخرین زمان ثبت‌شده را می‌گیرد."
         }
       ],
       "checks": [
@@ -34020,24 +34020,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "میزبان",
+          "text": "Les opposants craignent que la piétonnisation de la place nuise aux livraisons des commerces.",
+          "fa": "مخالفان نگرانند پیاده‌روسازی میدان به تحویل بار مغازه‌ها آسیب بزند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec pauvre et propres dans des phrases simples.",
-          "fa": "بیایید با «pauvre» و «propres» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "C’est juste en cas de fermeture totale, d’où l’intérêt de créneaux horaires dédiés.",
+          "fa": "در بستن کامل درست است، از همین رو بازه‌های زمانی مشخص بهتر است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de représente ?",
-          "fa": "خیلی خوب! «représente» را هم یادت هست؟"
+          "speaker": "میزبان",
+          "text": "Comment d’autres villes organisent-elles ces créneaux ?",
+          "fa": "شهرهای دیگر این بازه‌ها را چطور تنظیم می‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, représente et revient sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «représente» و «revient» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Les livreurs accèdent librement de six heures à dix heures, puis la place reste calme.",
+          "fa": "پیک‌ها از شش تا ده صبح آزادانه می‌آیند و بعد میدان آرام می‌ماند."
         }
       ],
       "checks": [
@@ -34270,24 +34270,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué tombe quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «tombe» شدی؟"
+          "speaker": "همکار",
+          "text": "Le design et la technique bloquent sur la refonte complète de la page de paiement.",
+          "fa": "طراحی و تیم فنی دربارهٔ بازسازی کامل صفحهٔ پرداخت به بن‌بست خورده‌اند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu tombe juste à côté de top dans le texte.",
-          "fa": "بله، در متن «tombe» را درست کنار «top» دیدم."
+          "speaker": "شما",
+          "text": "Les deux visent moins d’abandons, mais divergent sur le risque de calendrier.",
+          "fa": "هر دو به دنبال کاهش ریزش‌اند، ولی دربارهٔ ریسک زمان‌بندی اختلاف دارند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder totalement en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «totalement» را هم در ذهن داشته باشی؟"
+          "speaker": "همکار",
+          "text": "Comment débloquer la discussion demain ?",
+          "fa": "فردا چطور بحث را باز کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser totalement et usage à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «totalement» و «usage» استفاده کنم."
+          "speaker": "شما",
+          "text": "Proposons un test ciblé sur une étape avant de décider d’une refonte totale.",
+          "fa": "پیشنهاد دهیم پیش از بازسازی کامل، یک آزمایش محدود روی یک مرحله انجام شود."
         }
       ],
       "checks": [
@@ -34496,24 +34496,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit vit rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «vit» را سریع با هم مرور کنیم؟"
+          "speaker": "استاد راهنما",
+          "text": "Votre revue de littérature est solide, mais votre thèse principale reste noyée au chapitre deux.",
+          "fa": "مرور پیشینهٔ شما محکم است، ولی مدعای اصلی در فصل دوم پنهان مانده است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété vit et atteint à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «vit» و «atteint» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "En effet, j’ai trop résumé les modèles existants avant de montrer leurs limites.",
+          "fa": "بله، پیش از نشان‌دادن محدودیت‌های مدل‌های قبلی زیادی خلاصه‌شان کردم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour boulot et bébé, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «boulot» و «bébé» چطور، الان راحت‌تر شده؟"
+          "speaker": "استاد راهنما",
+          "text": "Comment comptez-vous clarifier cela devant le jury ?",
+          "fa": "چطور این را پیش هیئت داوران روشن‌تر می‌کنید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte boulot et bébé me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «boulot» و «bébé» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "J’ouvrirai le premier chapitre sur l’écart précis que mon protocole cherche à combler.",
+          "fa": "فصل اول را دقیقاً با شکافی شروع می‌کنم که آزمایش من قرار است پر کند."
         }
       ],
       "checks": [
@@ -34746,24 +34746,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "روابط عمومی",
+          "text": "Des clients publient des captures de retards. Attendons-nous la vérification complète ?",
+          "fa": "مشتریان تصاویر تأخیرها را منتشر می‌کنند. تا بررسی کامل صبر کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec épisode et évidemment dans des phrases simples.",
-          "fa": "بیایید با «épisode» و «évidemment» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Le silence inquiète davantage. Reconnaissons le retard tout de suite avec les faits avérés.",
+          "fa": "سکوت بیشتر نگران‌کننده است. فوراً تأخیر را با اطلاعات قطعی بپذیریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de avocat ?",
-          "fa": "خیلی خوب! «avocat» را هم یادت هست؟"
+          "speaker": "روابط عمومی",
+          "text": "Quel engagement précis pouvons-nous prendre dès maintenant ?",
+          "fa": "الان چه تعهد دقیقی می‌توانیم بدهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, avocat et bonheur sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «avocat» و «bonheur» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Promettre un point complet sous trois heures et prioriser les commandes touchées.",
+          "fa": "قول گزارش کامل ظرف سه ساعت و اولویت‌دادن به سفارش‌های متأثر."
         }
       ],
       "checks": [
@@ -34972,24 +34972,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué gueule quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «gueule» شدی؟"
+          "speaker": "همکار",
+          "text": "Le marketing souhaite exploiter tout l’historique de navigation pour personnaliser les offres.",
+          "fa": "بازاریابی می‌خواهد کل تاریخچهٔ مرور را برای پیشنهادها به کار بگیرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu gueule juste à côté de hauteur dans le texte.",
-          "fa": "بله، در متن «gueule» را درست کنار «hauteur» دیدم."
+          "speaker": "شما",
+          "text": "Cela expose trop de données privées alors que des préférences déclarées suffisent largement.",
+          "fa": "این داده‌های خصوصی زیادی را در معرض خطر می‌گذارد در حالی که ترجیحات اعلام‌شده کافی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder nicolas en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «nicolas» را هم در ذهن داشته باشی؟"
+          "speaker": "همکار",
+          "text": "Des choix explicites donnent-ils des résultats comparables ?",
+          "fa": "انتخاب‌های صریح نتایج مشابهی می‌دهند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser nicolas et né à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «nicolas» و «né» استفاده کنم."
+          "speaker": "شما",
+          "text": "Oui, tout en réduisant nos risques réglementaires et nos coûts de stockage.",
+          "fa": "بله، و هم‌زمان ریسک مقرراتی و هزینهٔ ذخیره‌سازی را کم می‌کند."
         }
       ],
       "checks": [
@@ -35222,24 +35222,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit front rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «front» را سریع با هم مرور کنیم؟"
+          "speaker": "ویراستار",
+          "text": "La traduction littérale de ce slogan paraît très rigide à l’oral.",
+          "fa": "ترجمهٔ تحت‌اللفظی این شعار در گفتار خیلی خشک به نظر می‌رسد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété front et marseille à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «front» و «marseille» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Pour toucher le lecteur, l’expression idiomatique prime sur le mot à mot.",
+          "fa": "برای اثرگذاری بر خواننده، اصطلاح طبیعی بر واژه‌به‌واژه اولویت دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour mérite et noms, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «mérite» و «noms» چطور، الان راحت‌تر شده؟"
+          "speaker": "ویراستار",
+          "text": "Comment préserver la promesse sans paraître artificiel ?",
+          "fa": "چطور وعده را حفظ کنیم بی‌آنکه مصنوعی به نظر برسد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte mérite et noms me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «mérite» و «noms» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Cherchons la tournure qu’un natif emploierait spontanément dans ce contexte.",
+          "fa": "عبارتی را پیدا کنیم که یک بومی خودجوش در این موقعیت به کار می‌برد."
         }
       ],
       "checks": [
@@ -35448,24 +35448,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "داور",
+          "text": "Votre projet d’alphabétisation est prometteur, mais comment tiendra-t-il après la subvention ?",
+          "fa": "طرح سوادآموزی شما امیدوارکننده است، ولی بعد از پایان بودجه چطور دوام می‌آورد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec bruxelles et chat dans des phrases simples.",
-          "fa": "بیایید با «bruxelles» و «chat» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "La première année forme les tuteurs locaux ; ensuite, les médiathèques municipales prennent le relais.",
+          "fa": "سال اول مربیان محلی آموزش می‌بینند؛ سپس کتابخانه‌های شهری ادامه را می‌گیرند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de coin ?",
-          "fa": "خیلی خوب! «coin» را هم یادت هست؟"
+          "speaker": "داور",
+          "text": "Les directions ont-elles confirmé leur capacité d’accueil ?",
+          "fa": "مدیران ظرفیت پذیرش را تأیید کرده‌اند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, coin et el sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «coin» و «el» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Oui, deux bibliothèques ont déjà signé une lettre d’engagement.",
+          "fa": "بله، دو کتابخانه همین الان تعهدنامه امضا کرده‌اند."
         }
       ],
       "checks": [
@@ -35698,24 +35698,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué beauté quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «beauté» شدی؟"
+          "speaker": "سردبیر",
+          "text": "La source refuse d’être nommée. Peut-on tout de même publier l’enquête de sécurité ?",
+          "fa": "منبع حاضر نیست نامش بیاید. باز هم می‌توانیم گزارش ایمنی را منتشر کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu beauté juste à côté de buts dans le texte.",
-          "fa": "بله، در متن «beauté» را درست کنار «buts» دیدم."
+          "speaker": "شما",
+          "text": "Uniquement si chaque fait technique est recoupé par des archives ou un second témoin.",
+          "fa": "فقط اگر هر نکتهٔ فنی با بایگانی‌ها یا شاهد دوم تطبیق داده شود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder champ en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «champ» را هم در ذهن داشته باشی؟"
+          "speaker": "سردبیر",
+          "text": "Comment justifier cet anonymat auprès du public ?",
+          "fa": "این ناشناس‌بودن را چطور برای مخاطب توجیه کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser champ et conférence à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «champ» و «conférence» استفاده کنم."
+          "speaker": "شما",
+          "text": "En expliquant le risque encouru et en détaillant les documents vérifiés par la rédaction.",
+          "fa": "با توضیح خطر پیش‌رو و تشریح اسناد بررسی‌شده در تحریریه."
         }
       ],
       "checks": [
@@ -35924,24 +35924,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit autorité rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «autorité» را سریع با هم مرور کنیم؟"
+          "speaker": "مدیر عملیات",
+          "text": "Dépendre d’un seul port a retardé toute notre livraison de printemps de trois semaines.",
+          "fa": "وابستگی به یک بندر کل محمولهٔ بهاری ما را سه هفته عقب انداخت."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété autorité et citoyens à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «autorité» و «citoyens» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Nous avons optimisé le coût immédiat en négligeant la résilience de la chaîne.",
+          "fa": "هزینهٔ فوری را بهینه کردیم و تاب‌آوری زنجیره را نادیده گرفتیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour clairement et collection, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «clairement» و «collection» چطور، الان راحت‌تر شده؟"
+          "speaker": "مدیر عملیات",
+          "text": "Diviser les commandes entre deux fournisseurs ne va-t-il pas trop peser sur les marges ?",
+          "fa": "تقسیم سفارش بین دو تأمین‌کننده به حاشیه سود فشار نمی‌آورد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte clairement et collection me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «clairement» و «collection» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Un peu, mais bien moins que les ventes perdues et le fret aérien d’urgence.",
+          "fa": "کمی، ولی بسیار کمتر از فروش ازدست‌رفته و حمل هوایی اضطراری."
         }
       ],
       "checks": [
@@ -36174,24 +36174,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Certains craignent que le nouvel assistant ne remplace les analystes juniors.",
+          "fa": "بعضی‌ها نگرانند دستیار جدید جای تحلیلگران تازه‌کار را بگیرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec propriétaire et propriété dans des phrases simples.",
-          "fa": "بیایید با «propriétaire» و «propriété» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Il automatise la mise en forme, mais vérifier les hypothèses reste un jugement humain.",
+          "fa": "قالب‌بندی را خودکار می‌کند، ولی سنجش فرض‌ها قضاوت انسانی می‌ماند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de quitter ?",
-          "fa": "خیلی خوب! «quitter» را هم یادت هست؟"
+          "speaker": "همکار",
+          "text": "Comment adapter la formation des juniors dès l’arrivée ?",
+          "fa": "آموزش تازه‌کاران را از بدو ورود چطور تنظیم کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, quitter et quotidien sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «quitter» و «quotidien» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "En leur confiant la relecture critique des synthèses face aux chiffres sources.",
+          "fa": "با سپردن بازخوانی نقادانهٔ خلاصه‌ها در برابر آمارهای منبع به آن‌ها."
         }
       ],
       "checks": [
@@ -36400,24 +36400,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué rome quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «rome» شدی؟"
+          "speaker": "شریک تجاری",
+          "text": "L’exclusivité régionale exige de doubler votre volume annuel minimum.",
+          "fa": "انحصار منطقه‌ای نیازمند دو برابر کردن حداقل حجم سالانه است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu rome juste à côté de réserve dans le texte.",
-          "fa": "بله، در متن «rome» را درست کنار «réserve» دیدم."
+          "speaker": "شما",
+          "text": "Doubler d’emblée alourdirait nos stocks, même si nous visons un partenariat durable.",
+          "fa": "دو برابر کردن یک‌باره انبار ما را سنگین می‌کند، اگرچه همکاری پایدار می‌خواهیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder section en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «section» را هم در ذهن داشته باشی؟"
+          "speaker": "شریک تجاری",
+          "text": "Quel compromis sécuriserait nos deux positions ?",
+          "fa": "چه توافق میانه‌ای هر دو جایگاه را امن می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser section et sent à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «section» و «sent» استفاده کنم."
+          "speaker": "شما",
+          "text": "Conditionnons l’exclusivité à des paliers trimestriels progressifs plutôt qu’à un seuil fixe.",
+          "fa": "انحصار را به‌جای سقف ثابت، مشروط به پله‌های فصلی تدریجی کنیم."
         }
       ],
       "checks": [
@@ -36650,24 +36650,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit militaires rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «militaires» را سریع با هم مرور کنیم؟"
+          "speaker": "تحلیلگر",
+          "text": "La durée moyenne des sessions a chuté de vingt pour cent. Faut-il s’inquiéter ?",
+          "fa": "میانگین مدت نشست بیست درصد کم شده. جای نگرانی هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété militaires et naturel à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «militaires» و «naturel» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Pas forcément : depuis la nouvelle recherche, chacun trouve peut-être plus vite.",
+          "fa": "نه لزوماً: از زمان جست‌وجوی جدید شاید همه سریع‌تر جواب را پیدا می‌کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour opérations et revue, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «opérations» و «revue» چطور، الان راحت‌تر شده؟"
+          "speaker": "تحلیلگر",
+          "text": "Comment distinguer l’efficacité d’un abandon ?",
+          "fa": "کارایی را چطور از رهاکردن تشخیص دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte opérations et revue me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «opérations» و «revue» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "En vérifiant si le taux de réussite a monté sans hausse des tickets.",
+          "fa": "با بررسی اینکه نرخ موفقیت بالا رفته و تیکت‌ها زیاد نشده باشد."
         }
       ],
       "checks": [
@@ -36876,24 +36876,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Les canicules estivales saturent désormais le réseau électrique du centre chaque été.",
+          "fa": "گرمای تابستان هر سال شبکهٔ برق مرکز شهر را اشباع می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec roman et star dans des phrases simples.",
-          "fa": "بیایید با «roman» و «star» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Ajouter des générateurs ne traite que l’effet ; ombrage et toits clairs réduisent le besoin de fond.",
+          "fa": "افزودن مولد فقط اثر را درمان می‌کند؛ سایه و سقف روشن نیاز پایه را کم می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de tiers ?",
-          "fa": "خیلی خوب! «tiers» را هم یادت هست؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Mais l’adaptation passive met des années à porter ses fruits.",
+          "fa": "ولی سازگاری غیرفعال سال‌ها طول می‌کشد نتیجه بدهد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, tiers et économiques sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «tiers» و «économiques» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "En la couplant à une isolation ciblée, on gagne déjà dès le deuxième été.",
+          "fa": "با ترکیبش با عایق‌کاری هدفمند، از همان تابستان دوم نتیجه می‌بینیم."
         }
       ],
       "checks": [
@@ -37126,24 +37126,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué reprendre quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «reprendre» شدی؟"
+          "speaker": "مدیر ارشد",
+          "text": "Le dossier fait quarante pages et le conseil n’a que vingt minutes avant le vote.",
+          "fa": "پرونده چهل صفحه است و شورا پیش از رأی‌گیری فقط بیست دقیقه وقت دارد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu reprendre juste à côté de robert dans le texte.",
-          "fa": "بله، در متن «reprendre» را درست کنار «robert» دیدم."
+          "speaker": "شما",
+          "text": "Plaçons en tête une note d’une page avec coût, risque et recommandation claire.",
+          "fa": "یک برگهٔ یک‌صفحه‌ای با هزینه، ریسک و پیشنهاد روشن در ابتدا بگذاریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder récemment en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «récemment» را هم در ذهن داشته باشی؟"
+          "speaker": "مدیر ارشد",
+          "text": "Et les tableaux financiers détaillés ?",
+          "fa": "و جدول‌های مالی مفصل چه؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser récemment et savez à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «récemment» و «savez» استفاده کنم."
+          "speaker": "شما",
+          "text": "En annexe, accessibles d’un coup d’œil pour ceux qui veulent vérifier les calculs.",
+          "fa": "در پیوست، در دسترس برای کسانی که می‌خواهند محاسبات را بررسی کنند."
         }
       ],
       "checks": [
@@ -37352,24 +37352,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit permettant rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «permettant» را سریع با هم مرور کنیم؟"
+          "speaker": "رهبر فنی",
+          "text": "La panne de mardi est survenue juste après une modification manuelle.",
+          "fa": "قطعی سه‌شنبه درست بعد از یک تغییر دستی پیش آمد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété permettant et possède à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «permettant» و «possède» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Au lieu de chercher un coupable, demandons pourquoi le système permettait cette saisie sans relecture.",
+          "fa": "به‌جای دنبال مقصر گشتن، بپرسیم چرا سامانه اجازهٔ ثبت بدون بازبینی داد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour réduction et réel, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «réduction» و «réel» چطور، الان راحت‌تر شده؟"
+          "speaker": "رهبر فنی",
+          "text": "Quel garde-fou évitera ce problème à l’avenir ?",
+          "fa": "چه حفاظی در آینده از این مشکل جلوگیری می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte réduction et réel me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «réduction» و «réel» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Exiger un contrôle automatique et une validation croisée avant toute mise en ligne.",
+          "fa": "الزام به کنترل خودکار و تأیید دو نفره پیش از انتشار."
         }
       ],
       "checks": [
@@ -37602,24 +37602,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "مدیر فرهنگی",
+          "text": "La billetterie ne couvre que la moitié de la conservation, mais augmenter les tarifs réduit la fréquentation.",
+          "fa": "فروش بلیت فقط نیمی از نگهداری را می‌پوشاند، ولی گران‌کردن بازدید را کم می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec nommé et notes dans des phrases simples.",
-          "fa": "بیایید با «nommé» و «notes» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Une tarification modulée avec une nocturne gratuite maintient l’accès pour tous.",
+          "fa": "قیمت‌گذاری پلکانی با یک شب رایگان دسترسی همگانی را حفظ می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de oublie ?",
-          "fa": "خیلی خوب! «oublie» را هم یادت هست؟"
+          "speaker": "مدیر فرهنگی",
+          "text": "Comment financer cette soirée gratuite ?",
+          "fa": "هزینهٔ این شب رایگان را چطور تأمین کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, oublie et paraît sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «oublie» و «paraît» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Des mécènes locaux soutiennent volontiers des créneaux ouverts aux familles.",
+          "fa": "حامیان محلی با رغبت از بازه‌های آزاد خانوادگی پشتیبانی می‌کنند."
         }
       ],
       "checks": [
@@ -37828,24 +37828,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué thomas quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «thomas» شدی؟"
+          "speaker": "سرپرست",
+          "text": "Amir a manqué deux échéances de suite, bien que son travail technique soit solide.",
+          "fa": "امیر دو مهلت پیاپی را از دست داده، با اینکه کار فنی‌اش محکم است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu thomas juste à côté de urgence dans le texte.",
-          "fa": "بله، در متن «thomas» را درست کنار «urgence» دیدم."
+          "speaker": "شما",
+          "text": "Il sous-estime souvent les dépendances et signale les blocages trop tard.",
+          "fa": "اغلب وابستگی‌ها را دست‌کم می‌گیرد و موانع را دیر اعلام می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder vécu en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «vécu» را هم در ذهن داشته باشی؟"
+          "speaker": "سرپرست",
+          "text": "Comment aborder le sujet de façon constructive ?",
+          "fa": "چطور موضوع را سازنده مطرح کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser vécu et élève à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «vécu» و «élève» استفاده کنم."
+          "speaker": "شما",
+          "text": "Découper sa prochaine tâche ensemble lundi pour repérer les zones floues dès le départ.",
+          "fa": "دوشنبه کار بعدی‌اش را با هم بشکنیم تا ابهام‌ها از همان ابتدا دیده شود."
         }
       ],
       "checks": [
@@ -38078,24 +38078,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit lesquels rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «lesquels» را سریع با هم مرور کنیم؟"
+          "speaker": "کارشناس گمرک",
+          "text": "Votre colis est bloqué en douane car les libellés de marchandises sont trop vagues.",
+          "fa": "بستهٔ شما در گمرک مانده چون شرح کالاها بیش‌ازحد مبهم است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété lesquels et local à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «lesquels» و «local» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "D’accord, le fournisseur a indiqué des catégories générales au lieu des codes douaniers exacts.",
+          "fa": "متوجهم، تأمین‌کننده به‌جای کد دقیق گمرکی دسته‌های کلی نوشته است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour michael et métier, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «michael» و «métier» چطور، الان راحت‌تر شده؟"
+          "speaker": "کارشناس گمرک",
+          "text": "Pouvez-vous transmettre les fiches techniques détaillées aujourd’hui ?",
+          "fa": "امروز می‌توانید برگه‌های فنی دقیق را ارسال کنید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte michael et métier me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «michael» و «métier» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Oui, je vous envoie la facture signée et les fiches d’ici une heure.",
+          "fa": "بله، تا یک ساعت دیگر فاکتور امضاشده و برگه‌ها را می‌فرستم."
         }
       ],
       "checks": [
@@ -38304,24 +38304,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "خبرنگار",
+          "text": "Pourquoi les consignes sanitaires ont-elles évolué après six mois ? Cela nuit-il à la confiance ?",
+          "fa": "چرا توصیه‌های بهداشتی بعد از شش ماه تغییر کرد؟ به اعتماد لطمه نمی‌زند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec eaux et excellent dans des phrases simples.",
-          "fa": "بیایید با «eaux» و «excellent» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "Adapter les recommandations aux nouvelles preuves relève de la rigueur scientifique.",
+          "fa": "تطبیق توصیه‌ها با شواهد جدید نشانهٔ دقت علمی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de foutre ?",
-          "fa": "خیلی خوب! «foutre» را هم یادت هست؟"
+          "speaker": "خبرنگار",
+          "text": "Comment mieux expliquer cette part d’incertitude au public ?",
+          "fa": "این بخش عدم قطعیت را چطور برای مردم بهتر توضیح دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, foutre et hasard sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «foutre» و «hasard» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "En distinguant ce qui est acquis de ce que les études en cours précisent encore.",
+          "fa": "با تفکیک آنچه قطعی است از آنچه پژوهش‌های جاری هنوز دقیق‌تر می‌کنند."
         }
       ],
       "checks": [
@@ -38554,24 +38554,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué chute quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «chute» شدی؟"
+          "speaker": "خریدار",
+          "text": "Le prestataire annonce quatre-vingt-dix-neuf pour cent de précision sur tous les documents.",
+          "fa": "پیمانکار نودونه درصد دقت روی همهٔ سندها اعلام می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu chute juste à côté de crime dans le texte.",
-          "fa": "بله، در متن «chute» را درست کنار «crime» دیدم."
+          "speaker": "شما",
+          "text": "Ce chiffre global vaut peu tant qu’on n’a pas testé les scans flous et l’écriture manuscrite.",
+          "fa": "این عدد کلی تا اسکن‌های تار و دست‌نوشته آزمایش نشود ارزش کمی دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder croix en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «croix» را هم در ذهن داشته باشی؟"
+          "speaker": "خریدار",
+          "text": "Exigeons-nous un essai sur nos propres dossiers ?",
+          "fa": "آزمایش روی پرونده‌های خودمان را بخواهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser croix et description à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «croix» و «description» استفاده کنم."
+          "speaker": "شما",
+          "text": "Oui, soumettons cinquante cas complexes réels et mesurons chaque champ.",
+          "fa": "بله، پنجاه مورد پیچیدهٔ واقعی بدهیم و هر فیلد را بسنجیم."
         }
       ],
       "checks": [
@@ -38780,24 +38780,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit glace rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «glace» را سریع با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "La fin ouverte du roman t’a-t-elle semblé volontairement ambiguë ?",
+          "fa": "پایان باز رمان به نظرت عمداً مبهم بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété glace et hommage à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «glace» و «hommage» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Oui, une conclusion fermée aurait trahi le doute constant du personnage.",
+          "fa": "بله، یک پایان‌بندی بسته به تردید همیشگی شخصیت خیانت می‌کرد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour humanité et info, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «humanité» و «info» چطور، الان راحت‌تر شده؟"
+          "speaker": "دوست",
+          "text": "Quelle scène marque le vrai basculement selon toi ?",
+          "fa": "به نظرت کدام صحنه چرخش اصلی است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte humanité et info me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «humanité» و «info» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "Les adieux sur le quai, où les silences pèsent plus que les répliques.",
+          "fa": "خداحافظی روی سکو، جایی که سکوت‌ها سنگین‌تر از دیالوگ‌هاست."
         }
       ],
       "checks": [
@@ -39030,24 +39030,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Quels mots révisons-nous ensemble en premier aujourd’hui ?",
-          "fa": "امروز اول کدام واژه‌ها را با هم مرور می‌کنیم؟"
+          "speaker": "طراح خدمات",
+          "text": "Le renouvellement uniquement en ligne accélère le traitement, mais les plaintes des aînés augmentent.",
+          "fa": "تمدید تمام‌آنلاین کار را سریع کرده، ولی گلایهٔ سالمندان بیشتر شده است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Commençons avec égalité et élus dans des phrases simples.",
-          "fa": "بیایید با «égalité» و «élus» در جمله‌های ساده شروع کنیم."
+          "speaker": "شما",
+          "text": "La rapidité ne doit pas exclure ceux qui n’ont ni équipement ni aisance numérique.",
+          "fa": "سرعت نباید کسانی را که تجهیزات یا مهارت دیجیتال ندارند حذف کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Très bien ! Tu te souviens aussi de chômage ?",
-          "fa": "خیلی خوب! «chômage» را هم یادت هست؟"
+          "speaker": "طراح خدمات",
+          "text": "Comment maintenir un accueil humain sans alourdir le budget ?",
+          "fa": "چطور پشتیبانی انسانی را بدون سنگین‌کردن بودجه نگه داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, chômage et comportement sont beaucoup plus clairs pour moi maintenant.",
-          "fa": "بله، الان «chômage» و «comportement» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Via une ligne téléphonique dédiée et des permanences en bibliothèque de quartier.",
+          "fa": "از طریق یک خط تلفن اختصاصی و میز پاسخگویی در کتابخانهٔ محله."
         }
       ],
       "checks": [
@@ -39256,24 +39256,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Tu as remarqué bilan quand nous avons lu les exemples ?",
-          "fa": "وقتی مثال‌ها را خواندیم متوجه «bilan» شدی؟"
+          "speaker": "مدیر منابع انسانی",
+          "text": "Le recrutement national a doublé les candidatures, mais la rétention à six mois a fléchi.",
+          "fa": "استخدام ملی متقاضیان را دو برابر کرد، ولی ماندگاری شش‌ماهه کمی افت کرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, j’ai vu bilan juste à côté de cap dans le texte.",
-          "fa": "بله، در متن «bilan» را درست کنار «cap» دیدم."
+          "speaker": "شما",
+          "text": "Élargir le vivier réussit mieux quand on clarifie très tôt le travail asynchrone.",
+          "fa": "گسترده‌کردن دایره وقتی بهتر جواب می‌دهد که کار غیرهم‌زمان زود روشن شود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Parfait. Tu peux aussi garder considéré en tête pour ta réponse ?",
-          "fa": "عالیه. می‌توانی برای پاسخت «considéré» را هم در ذهن داشته باشی؟"
+          "speaker": "مدیر منابع انسانی",
+          "text": "Que manquait-il dans nos entretiens ?",
+          "fa": "در مصاحبه‌های ما چه چیزی کم بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bien sûr, j’arrive facilement à utiliser considéré et devenue à l’oral.",
-          "fa": "حتماً، در صحبت کردن به راحتی می‌توانم از «considéré» و «devenue» استفاده کنم."
+          "speaker": "شما",
+          "text": "Une mise en situation écrite reflétant vraiment nos échanges quotidiens.",
+          "fa": "یک تمرین نوشتاری واقعی که گفت‌وگوهای روزمرهٔ ما را بازتاب دهد."
         }
       ],
       "checks": [
@@ -39506,24 +39506,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "On revoit barre rapidement avant de passer à la suite ?",
-          "fa": "قبل از ادامه دادن، «barre» را سریع با هم مرور کنیم؟"
+          "speaker": "آموزگار",
+          "text": "Les leçons plus courtes augmentent la complétion, mais la mémorisation à terme stagne.",
+          "fa": "درس‌های کوتاه‌تر تکمیل را بالا برد، ولی یادسپاری بلندمدت ثابت مانده است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Bonne idée ! J’ai déjà répété barre et climat à voix haute.",
-          "fa": "فکر خوبیه! من همین الان «barre» و «climat» را با صدای بلند تکرار کردم."
+          "speaker": "شما",
+          "text": "Le format court motive, mais la mémoire exige un réemploi espacé quelques jours plus tard.",
+          "fa": "قالب کوتاه انگیزه می‌دهد، اما حافظه به کاربرد دوبارهٔ بافاصله نیاز دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Et pour conflit et essentiel, ça va mieux maintenant ?",
-          "fa": "دربارهٔ «conflit» و «essentiel» چطور، الان راحت‌تر شده؟"
+          "speaker": "آموزگار",
+          "text": "Comment réviser sans lasser l’apprenant ?",
+          "fa": "چطور مرور کنیم بی‌آنکه زبان‌آموز خسته شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Oui, en contexte conflit et essentiel me semblent tout à fait naturels.",
-          "fa": "بله، در بافت جمله «conflit» و «essentiel» کاملاً طبیعی به نظر می‌رسند."
+          "speaker": "شما",
+          "text": "En réutilisant le vocabulaire acquis dans de nouveaux dialogues réalistes.",
+          "fa": "با به‌کارگیری واژگان قبلی در گفت‌وگوهای واقعی جدید."
         }
       ],
       "checks": [
@@ -39706,24 +39706,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "فروشنده",
+          "text": "¡Hola! ¿En qué puedo ayudarle hoy?",
+          "fa": "سلام! امروز چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con ya y cuando en frases cortas.",
-          "fa": "بیایید با «ya» و «cuando» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Compré esta camisa ayer, pero me queda un poco pequeña.",
+          "fa": "دیروز این پیراهن را خریدم، اما برایم کمی کوچک است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar ser?",
-          "fa": "خیلی خوب! یادت هست چطور از «ser» هم استفاده کنی؟"
+          "speaker": "فروشنده",
+          "text": "No hay problema. ¿Trae el recibo de compra?",
+          "fa": "مشکلی نیست. رسید خرید را همراه دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto ser como sobre me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «ser» و هم «sobre» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Sí, aquí está. ¿Puedo cambiarla por una talla M?",
+          "fa": "بله، بفرمایید. می‌توانم با سایز مدیوم عوض کنم؟"
         }
       ],
       "checks": [
@@ -39908,24 +39908,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en otros cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «otros» دقت کردی؟"
+          "speaker": "پذیرش هتل",
+          "text": "Buenas tardes, ¡bienvenido! ¿Tiene reserva?",
+          "fa": "عصر بخیر، خوش آمدید! رزرو دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi otros junto con cosas en la misma lección.",
-          "fa": "بله، در همین درس «otros» را همراه با «cosas» دیدم."
+          "speaker": "شما",
+          "text": "Sí, una habitación individual por tres noches a nombre de Mina Karimi.",
+          "fa": "بله، یک اتاق تک‌نفره برای سه شب به نام مینا کریمی."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta gran al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «gran» را هم در نظر بگیری؟"
+          "speaker": "پذیرش هتل",
+          "text": "¡Aquí está! El desayuno se sirve de siete a diez.",
+          "fa": "پیدا شد! صبحانه از هفت تا ده سرو می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar gran y nunca con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «gran» و «nunca» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Gracias. ¿La habitación da a un patio tranquilo?",
+          "fa": "ممنون. آیا اتاق رو به حیاط آرام است؟"
         }
       ],
       "checks": [
@@ -40118,24 +40118,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos alguien un momento antes de seguir?",
-          "fa": "قبل از ادامه، «alguien» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "¿Viste el pronóstico del tiempo para mañana?",
+          "fa": "پیش‌بینی هوای فردا را دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué alguien y quien en voz alta.",
-          "fa": "فکر خوبیه! من «alguien» و «quien» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Sí, por la mañana hace sol, pero por la tarde llueve un poco.",
+          "fa": "بله، صبح آفتابی است ولی عصر کمی باران می‌بارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con toda y caso?",
-          "fa": "و با «toda» و «caso» چه حسی داری؟"
+          "speaker": "دوست",
+          "text": "¿Salimos a caminar de todas formas?",
+          "fa": "با این حال برای پیاده‌روی برویم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora toda y caso suenan mucho más naturales en contexto.",
-          "fa": "الان «toda» و «caso» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Claro, si salimos a las ocho, volvemos antes de la lluvia.",
+          "fa": "حتماً، اگر ساعت هشت راه بیفتیم قبل از باران برمی‌گردیم."
         }
       ],
       "checks": [
@@ -40332,24 +40332,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "¡Se te ve con mucha energía! ¿Haces deporte a menudo?",
+          "fa": "خیلی پرانرژی به نظر می‌رسی! زیاد ورزش می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con según y cualquier en frases cortas.",
-          "fa": "بیایید با «según» و «cualquier» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Nado dos veces por semana y voy caminando al trabajo.",
+          "fa": "هفته‌ای دو بار شنا می‌کنم و پیاده سر کار می‌روم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar dios?",
-          "fa": "خیلی خوب! یادت هست چطور از «dios» هم استفاده کنی؟"
+          "speaker": "دوست",
+          "text": "Qué bien. Yo quiero volver a salir a correr.",
+          "fa": "چه خوب. من هم می‌خواهم دوباره دویدن را شروع کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto dios como fueron me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «dios» و هم «fueron» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Podemos correr juntos los martes en el parque.",
+          "fa": "سه‌شنبه‌ها می‌توانیم با هم در پارک بدویم."
         }
       ],
       "checks": [
@@ -40530,24 +40530,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en cosa cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «cosa» دقت کردی؟"
+          "speaker": "منشی",
+          "text": "Clínica dental, buenos días. ¿En qué puedo ayudarle?",
+          "fa": "کلینیک دندان‌پزشکی، صبح بخیر. چطور کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi cosa junto con dentro en la misma lección.",
-          "fa": "بله، در همین درس «cosa» را همراه با «dentro» دیدم."
+          "speaker": "شما",
+          "text": "Quisiera pedir cita para una revisión la próxima semana.",
+          "fa": "می‌خواهم برای هفتهٔ آینده وقت معاینه بگیرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta aún al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «aún» را هم در نظر بگیری؟"
+          "speaker": "منشی",
+          "text": "Tenemos un hueco el miércoles a las diez de la mañana.",
+          "fa": "چهارشنبه ساعت ده صبح وقت خالی داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar aún y misma con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «aún» و «misma» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "El miércoles a las diez me viene muy bien. Gracias.",
+          "fa": "چهارشنبه ساعت ده برایم خیلی خوب است. ممنون."
         }
       ],
       "checks": [
@@ -40732,24 +40732,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos san un momento antes de seguir?",
-          "fa": "قبل از ادامه، «san» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "شما",
+          "text": "Perdona, ¿sabes por qué no funciona la impresora?",
+          "fa": "ببخشید، می‌دانی چرا چاپگر کار نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué san y social en voz alta.",
-          "fa": "فکر خوبیه! من «san» و «social» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "همکار",
+          "text": "Déjame mirar. Parece que no tiene papel.",
+          "fa": "بگذار ببینم. انگار کاغذ ندارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con ejemplo y horas?",
-          "fa": "و با «ejemplo» و «horas» چه حسی داری؟"
+          "speaker": "شما",
+          "text": "¿Dónde guardamos el papel nuevo?",
+          "fa": "کاغذ تازه را کجا می‌گذاریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora ejemplo y horas suenan mucho más naturales en contexto.",
-          "fa": "الان «ejemplo» و «horas» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "همکار",
+          "text": "En el armario blanco detrás de recepción.",
+          "fa": "در کمد سفید پشت میز پذیرش."
         }
       ],
       "checks": [
@@ -40942,24 +40942,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "¿Qué preparamos hoy para la cena?",
+          "fa": "امشب برای شام چه درست کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con amor y dicho en frases cortas.",
-          "fa": "بیایید با «amor» و «dicho» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Podríamos hacer pasta con salsa de tomate y ensalada.",
+          "fa": "می‌توانیم پاستا با سس گوجه و سالاد درست کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar eran?",
-          "fa": "خیلی خوب! یادت هست چطور از «eran» هم استفاده کنی؟"
+          "speaker": "دوست",
+          "text": "¡Qué rico! ¿Tenemos bastantes tomates y ajo?",
+          "fa": "عالی است! گوجه و سیر به اندازه کافی داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto eran como frente me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «eran» و هم «frente» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Hay tomates, así que compro ajo camino a casa.",
+          "fa": "گوجه هست، پس سر راه خانه سیر می‌خرم."
         }
       ],
       "checks": [
@@ -41156,24 +41156,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en unidos cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «unidos» دقت کردی؟"
+          "speaker": "مسافر",
+          "text": "Disculpe, ¿ya pasó el autobús número doce?",
+          "fa": "ببخشید، اتوبوس شمارهٔ دوازده رد شده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi unidos junto con uso en la misma lección.",
-          "fa": "بله، در همین درس «unidos» را همراه با «uso» دیدم."
+          "speaker": "شما",
+          "text": "Todavía no. La pantalla dice que lleva seis minutos de retraso.",
+          "fa": "هنوز نه. صفحه نمایش شش دقیقه تأخیر نشان می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta artículo al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «artículo» را هم در نظر بگیری؟"
+          "speaker": "مسافر",
+          "text": "Ojalá llegue pronto. ¿Para frente al museo?",
+          "fa": "امیدوارم زود برسد. جلوی موزه توقف دارد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar artículo y cierto con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «artículo» و «cierto» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Sí, es la cuarta parada después de la plaza central.",
+          "fa": "بله، چهارمین ایستگاه بعد از میدان مرکزی است."
         }
       ],
       "checks": [
@@ -41354,24 +41354,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos público un momento antes de seguir?",
-          "fa": "قبل از ادامه، «público» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "¿Ya sabes qué regalarle a Nima por su cumpleaños?",
+          "fa": "می‌دانی برای تولد نیما چی هدیه بدهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué público y seguir en voz alta.",
-          "fa": "فکر خوبیه! من «público» و «seguir» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Quiero comprarle una bufanda abrigada o una taza térmica.",
+          "fa": "می‌خواهم یک شال گرم یا لیوان سفری برایش بخرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con servicio y situación?",
-          "fa": "و با «servicio» و «situación» چه حسی داری؟"
+          "speaker": "دوست",
+          "text": "La taza térmica es muy útil; toma el tren cada mañana.",
+          "fa": "لیوان سفری خیلی مفید است؛ هر صبح سوار قطار می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora servicio y situación suenan mucho más naturales en contexto.",
-          "fa": "الان «servicio» و «situación» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "¡Es verdad! Pasemos por la tienda de la estación luego.",
+          "fa": "راست می‌گویی! بعداً سری به مغازهٔ ایستگاه بزنیم."
         }
       ],
       "checks": [
@@ -41556,24 +41556,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "کتابدار",
+          "text": "¡Bienvenido a la biblioteca! ¿Tiene carné de socio?",
+          "fa": "به کتابخانه خوش آمدید! کارت عضویت دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con demás y dicen en frases cortas.",
-          "fa": "بیایید با «demás» و «dicen» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Todavía no. ¿Cómo puedo darme de alta?",
+          "fa": "هنوز نه. چطور می‌توانم ثبت‌نام کنم؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar diferentes?",
-          "fa": "خیلی خوب! یادت هست چطور از «diferentes» هم استفاده کنی؟"
+          "speaker": "کتابدار",
+          "text": "Solo necesito su documento y este breve formulario.",
+          "fa": "فقط مدرک شناسایی و این فرم کوتاه لازم است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto diferentes como lista me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «diferentes» و هم «lista» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "¿Cuántos libros puedo sacar a la vez?",
+          "fa": "هم‌زمان چند کتاب می‌توانم امانت بگیرم؟"
         }
       ],
       "checks": [
@@ -41754,24 +41754,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en ser cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «ser» دقت کردی؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Gracias por venir hoy. ¿Por qué le interesa este puesto?",
+          "fa": "ممنون که امروز آمدید. چرا این شغل برایتان جالب است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi ser junto con entre en la misma lección.",
-          "fa": "بله، در همین درس «ser» را همراه با «entre» دیدم."
+          "speaker": "شما",
+          "text": "Me gusta tratar con clientes y resolver problemas prácticos.",
+          "fa": "ارتباط با مشتریان و حل مسائل عملی را دوست دارم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta ni al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «ni» را هم در نظر بگیری؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "¿Cómo se organiza cuando tiene varias tareas urgentes?",
+          "fa": "وقتی چند کار فوری هم‌زمان دارید چطور برنامه‌ریزی می‌کنید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar ni y tan con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «ni» و «tan» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Ordeno lo más importante primero y coordino con el equipo.",
+          "fa": "مهم‌ترین‌ها را اول می‌گذارم و با تیم هماهنگ می‌کنم."
         }
       ],
       "checks": [
@@ -41956,24 +41956,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos forma un momento antes de seguir?",
-          "fa": "قبل از ادامه، «forma» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "شما",
+          "text": "Disculpe, mi tren lleva cuarenta minutos de retraso. ¿Hay otra conexión?",
+          "fa": "ببخشید، قطارم چهل دقیقه تأخیر دارد. خط دیگری هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué forma y sido en voz alta.",
-          "fa": "فکر خوبیه! من «forma» و «sido» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "کارمند ایستگاه",
+          "text": "Sí, puede tomar el tren regional del andén tres y hacer transbordo.",
+          "fa": "بله، می‌توانید قطار محلی سکوی سه را سوار شوید و تعویض خط کنید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con quien y toda?",
-          "fa": "و با «quien» و «toda» چه حسی داری؟"
+          "speaker": "شما",
+          "text": "¿Mi billete actual sirve también para ese tren?",
+          "fa": "آیا بلیت فعلی من برای آن قطار هم معتبر است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora quien y toda suenan mucho más naturales en contexto.",
-          "fa": "الان «quien» و «toda» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "کارمند ایستگاه",
+          "text": "Sí, por el retraso no tiene que pagar nada adicional.",
+          "fa": "بله، به خاطر تأخیر مبلغ اضافی لازم نیست."
         }
       ],
       "checks": [
@@ -42166,24 +42166,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "شما",
+          "text": "Hola señor Alavi, el fregadero de la cocina gotea desde anoche.",
+          "fa": "سلام آقای علوی، سینک آشپزخانه از دیشب چکه می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con medio y fuera en frases cortas.",
-          "fa": "بیایید با «medio» و «fuera» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "صاحب‌خانه",
+          "text": "Gracias por avisarme pronto. ¿Cae agua al suelo?",
+          "fa": "ممنون که زود خبر دادید. آب روی زمین می‌ریزد؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar hacia?",
-          "fa": "خیلی خوب! یادت هست چطور از «hacia» هم استفاده کنی؟"
+          "speaker": "شما",
+          "text": "Solo un poco; puse un cubo debajo por ahora.",
+          "fa": "فقط کمی؛ فعلاً یک سطل زیرش گذاشته‌ام."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto hacia como sino me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «hacia» و هم «sino» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "صاحب‌خانه",
+          "text": "Bien hecho. Mañana por la mañana envío al fontanero entre las nueve y las once.",
+          "fa": "خوب است. فردا صبح بین نه تا یازده لوله‌کش می‌فرستم."
         }
       ],
       "checks": [
@@ -42380,24 +42380,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en guerra cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «guerra» دقت کردی؟"
+          "speaker": "همکار",
+          "text": "¿Qué tal te va trabajando desde casa dos días a la semana?",
+          "fa": "با دو روز دورکاری در هفته چطور پیش می‌روی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi guerra junto con ante en la misma lección.",
-          "fa": "بله، در همین درس «guerra» را همراه با «ante» دیدم."
+          "speaker": "شما",
+          "text": "Ahorro dos horas de viaje y me concentro mucho mejor.",
+          "fa": "دو ساعت در مسیر صرفه‌جویی می‌کنم و خیلی بهتر تمرکز می‌کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta dar al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «dar» را هم در نظر بگیری؟"
+          "speaker": "همکار",
+          "text": "¿No echas de menos hablar en persona con el equipo?",
+          "fa": "دلت برای صحبت حضوری با تیم تنگ نمی‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar dar y pasa con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «dar» و «pasa» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "A veces sí, por eso prefiero ir a la oficina los lunes y jueves.",
+          "fa": "گاهی بله، برای همین دوشنبه‌ها و پنجشنبه‌ها به دفتر می‌روم."
         }
       ],
       "checks": [
@@ -42578,24 +42578,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos eran un momento antes de seguir?",
-          "fa": "قبل از ادامه، «eran» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "مشاور",
+          "text": "¿Busca un curso por la tarde o un taller de fin de semana?",
+          "fa": "دنبال کلاس عصر هستید یا کارگاه آخر هفته؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué eran y frente en voz alta.",
-          "fa": "فکر خوبیه! من «eran» و «frente» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Me conviene más por la tarde porque trabajo hasta las cinco.",
+          "fa": "عصر برایم بهتر است چون تا ساعت پنج کار می‌کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con real y hijo?",
-          "fa": "و با «real» و «hijo» چه حسی داری؟"
+          "speaker": "مشاور",
+          "text": "El próximo martes empieza un grupo reducido a las seis y media.",
+          "fa": "سه‌شنبهٔ آینده ساعت شش‌ونیم یک گروه کوچک شروع می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora real y hijo suenan mucho más naturales en contexto.",
-          "fa": "الان «real» و «hijo» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Ese horario me va bien. ¿Puedo probar la primera clase?",
+          "fa": "این ساعت برایم خوب است. می‌توانم جلسهٔ اول را آزمایشی شرکت کنم؟"
         }
       ],
       "checks": [
@@ -42780,24 +42780,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Pareces cansado hoy. ¿Te acostaste tarde otra vez?",
+          "fa": "امروز خسته به نظر می‌رسی. دوباره دیر خوابیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con razón y sabe en frases cortas.",
-          "fa": "بیایید با «razón» و «sabe» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Sí, estuve mirando mensajes en el móvil pasada la medianoche.",
+          "fa": "بله، تا بعد از نیمه‌شب پیام‌های گوشی را می‌دیدم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar mayoría?",
-          "fa": "خیلی خوب! یادت هست چطور از «mayoría» هم استفاده کنی؟"
+          "speaker": "دوست",
+          "text": "Dejar el teléfono fuera del dormitorio me ayudó mucho a descansar.",
+          "fa": "گذاشتن گوشی بیرون از اتاق خواب خیلی به استراحتم کمک کرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto mayoría como tierra me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «mayoría» و هم «tierra» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Tienes razón. Esta noche leeré un libro en papel antes de dormir.",
+          "fa": "حق با توست. امشب قبل از خواب کتاب کاغذی می‌خوانم."
         }
       ],
       "checks": [
@@ -42990,24 +42990,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en cuanto cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «cuanto» دقت کردی؟"
+          "speaker": "همسایه",
+          "text": "¿Viste los nuevos contenedores de reciclaje junto al portal?",
+          "fa": "سطل‌های بازیافت جدید کنار در ورودی را دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi cuanto junto con ello en la misma lección.",
-          "fa": "بله، در همین درس «cuanto» را همراه با «ello» دیدم."
+          "speaker": "شما",
+          "text": "¡Sí! Ahora es mucho más fácil separar el papel y el vidrio.",
+          "fa": "بله! الان جداکردن کاغذ و شیشه خیلی راحت‌تر است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta largo al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «largo» را هم در نظر بگیری؟"
+          "speaker": "همسایه",
+          "text": "¿Sabes qué día recogen el contenedor de plástico?",
+          "fa": "می‌دانی کدام روز سطل پلاستیک را جمع می‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar largo y orden con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «largo» و «orden» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Todos los jueves por la mañana, según el cartel del edificio.",
+          "fa": "طبق اطلاعیهٔ ساختمان، هر پنجشنبه صبح."
         }
       ],
       "checks": [
@@ -43204,24 +43204,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos mundial un momento antes de seguir?",
-          "fa": "قبل از ادامه، «mundial» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "همکار",
+          "text": "¿Seguimos a tiempo para enviar el informe el viernes?",
+          "fa": "هنوز برای ارسال گزارش در روز جمعه به‌موقع هستیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué mundial y obra en voz alta.",
-          "fa": "فکر خوبیه! من «mundial» و «obra» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Casi listo, pero aún espero las cifras finales de ventas.",
+          "fa": "تقریباً آماده است، ولی هنوز منتظر آمار نهایی فروش هستم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con ojos y os?",
-          "fa": "و با «ojos» و «os» چه حسی داری؟"
+          "speaker": "همکار",
+          "text": "Si me mandas el borrador hoy, reviso el formato esta noche.",
+          "fa": "اگر پیش‌نویس را امروز بفرستی، امشب قالبش را چک می‌کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora ojos y os suenan mucho más naturales en contexto.",
-          "fa": "الان «ojos» و «os» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "¡Trato hecho! Así iremos mucho más tranquilos el viernes.",
+          "fa": "قبول! این‌طوری جمعه خیلی با آرامش بیشتری پیش می‌رویم."
         }
       ],
       "checks": [
@@ -43402,24 +43402,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "¿Cómo recuerdas las expresiones nuevas sin olvidarlas rápido?",
+          "fa": "عبارت‌های جدید را چطور یادت نگه می‌داری؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con poner y rey en frases cortas.",
-          "fa": "بیایید با «poner» و «rey» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Uso cada frase nueva en dos ejemplos reales nada más escucharla.",
+          "fa": "هر جملهٔ تازه را بلافاصله بعد از شنیدن در دو مثال واقعی به کار می‌برم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar vos?",
-          "fa": "خیلی خوب! یادت هست چطور از «vos» هم استفاده کنی؟"
+          "speaker": "دوست",
+          "text": "¿También escuchas pódcast cortos durante el trayecto?",
+          "fa": "در مسیر هم پادکست کوتاه گوش می‌دهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto vos como apoyo me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «vos» و هم «apoyo» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Sí, diez minutos diarios en el autobús se notan muchísimo.",
+          "fa": "بله، روزی ده دقیقه در اتوبوس خیلی محسوس است."
         }
       ],
       "checks": [
@@ -43628,24 +43628,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en ni cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «ni» دقت کردی؟"
+          "speaker": "مدیر",
+          "text": "Estamos revisando el modelo híbrido para el próximo trimestre. ¿Qué ha funcionado mejor en tu equipo?",
+          "fa": "مدل کار ترکیبی فصل بعد را بازبینی می‌کنیم. در تیم شما چه چیزی بهتر کار کرده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi ni junto con tan en la misma lección.",
-          "fa": "بله، در همین درس «ni» را همراه با «tan» دیدم."
+          "speaker": "شما",
+          "text": "Tener dos días fijos en la oficina mantiene la coordinación y deja jornadas tranquilas en casa.",
+          "fa": "دو روز ثابت در دفتر هماهنگی را حفظ می‌کند و روزهای آرامی در خانه می‌گذارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta vida al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «vida» را هم در نظر بگیری؟"
+          "speaker": "مدیر",
+          "text": "¿Has notado algún inconveniente con este reparto?",
+          "fa": "مشکلی هم در این تقسیم‌بندی دیده‌ای؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar vida y han con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «vida» و «han» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Solo que quienes acaban de entrar necesitan un seguimiento más claro en remoto.",
+          "fa": "فقط اینکه تازه‌واردها در روزهای دورکاری به پیگیری روشن‌تری نیاز دارند."
         }
       ],
       "checks": [
@@ -43878,24 +43878,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos cual un momento antes de seguir?",
-          "fa": "قبل از ادامه، «cual» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "همکار",
+          "text": "¿Cuál es el mayor riesgo si lanzamos el nuevo sistema de reservas en todas las sedes a la vez?",
+          "fa": "اگر سامانهٔ رزرواسیون تازه را همه‌جا هم‌زمان راه بیندازیم، ریسک اصلی چیست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué cual y tipo en voz alta.",
-          "fa": "فکر خوبیه! من «cual» و «tipo» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "El personal podría atascarse en horas punta si la formación es muy rápida.",
+          "fa": "اگر آموزش خیلی سریع باشد، کارکنان در ساعات شلوغی گیر می‌کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con mayor y además?",
-          "fa": "و با «mayor» و «además» چه حسی داری؟"
+          "speaker": "همکار",
+          "text": "¿Cómo propones reducir ese riesgo?",
+          "fa": "پیشنهاد می‌کنی این ریسک را چطور کم کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora mayor y además suenan mucho más naturales en contexto.",
-          "fa": "الان «mayor» و «además» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Hagamos primero una prueba de dos semanas en una sola oficina con mucho movimiento.",
+          "fa": "ابتدا یک آزمایش دوهفته‌ای در یک شعبهٔ پررفت‌وآمد اجرا کنیم."
         }
       ],
       "checks": [
@@ -44100,24 +44100,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Recortaron el presupuesto de software, pero seguimos necesitando análisis fiables.",
+          "fa": "بودجهٔ نرم‌افزار کم شده، اما هنوز به تحلیل‌های معتبر نیاز داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con san y social en frases cortas.",
-          "fa": "بیایید با «san» و «social» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "En lugar de pagar tres herramientas parecidas, podemos quedarnos con una sola plataforma.",
+          "fa": "به‌جای پرداخت هزینهٔ سه ابزار مشابه، روی یک بستر واحد بمانیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar horas?",
-          "fa": "خیلی خوب! یادت هست چطور از «horas» هم استفاده کنی؟"
+          "speaker": "همکار",
+          "text": "¿Migrar los informes anteriores llevaría demasiado tiempo técnico?",
+          "fa": "انتقال گزارش‌های قبلی زمان فنی زیادی نمی‌برد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto horas como millones me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «horas» و هم «millones» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Solo migramos los diez paneles principales y archivamos los antiguos.",
+          "fa": "فقط ده داشبورد اصلی را منتقل می‌کنیم و قدیمی‌ها را بایگانی می‌کنیم."
         }
       ],
       "checks": [
@@ -44338,24 +44338,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en paso cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «paso» دقت کردی؟"
+          "speaker": "همکار",
+          "text": "¿Viste la noticia que afirma que las tarifas del transporte se duplicarán el mes que viene?",
+          "fa": "خبری را دیدی که می‌گوید کرایهٔ حمل‌ونقل ماه آینده دو برابر می‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi paso junto con posible en la misma lección.",
-          "fa": "بله، در همین درس «paso» را همراه با «posible» دیدم."
+          "speaker": "شما",
+          "text": "Sí, pero en las actas oficiales del ayuntamiento no figura ninguna votación sobre tarifas.",
+          "fa": "بله، اما در صورت‌جلسهٔ رسمی شهرداری هیچ رأی‌گیری دربارهٔ کرایه نیست."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta sigue al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «sigue» را هم در نظر بگیری؟"
+          "speaker": "همکار",
+          "text": "¿Por qué crees que circuló tan rápido?",
+          "fa": "به نظرت چرا این‌قدر سریع پخش شد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar sigue y unidos con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «sigue» و «unidos» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "El titular sacó de contexto un borrador antiguo sin citar ninguna fuente fiable.",
+          "fa": "تیتر یک پیش‌نویس قدیمی را بدون منبع معتبر از بافت خارج کرد."
         }
       ],
       "checks": [
@@ -44584,24 +44584,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos cuanto un momento antes de seguir?",
-          "fa": "قبل از ادامه، «cuanto» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "پشتیبانی",
+          "text": "Atención al cliente, buenos días. ¿En qué puedo ayudarle?",
+          "fa": "خدمات مشتریان، روز بخیر. چطور کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué cuanto y realmente en voz alta.",
-          "fa": "فکر خوبیه! من «cuanto» و «realmente» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Llevamos cuatro días sin conexión pese a haber abierto dos incidencias.",
+          "fa": "با وجود ثبت دو گزارش، چهار روز است اتصال نداریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con demás y dicen?",
-          "fa": "و با «demás» و «dicen» چه حسی داری؟"
+          "speaker": "پشتیبانی",
+          "text": "Disculpe la demora. Paso su caso a prioridad alta ahora mismo.",
+          "fa": "بابت تأخیر ببخشید. همین الان پرونده را در اولویت بالا قرار می‌دهم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora demás y dicen suenan mucho más naturales en contexto.",
-          "fa": "الان «demás» و «dicen» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Gracias. Por favor, envíeme por escrito el descuento por los días sin servicio.",
+          "fa": "ممنون. لطفاً تخفیف روزهای بدون سرویس را هم کتباً بفرستید."
         }
       ],
       "checks": [
@@ -44814,24 +44814,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Los alquileres cerca de la universidad han vuelto a subir este semestre.",
+          "fa": "اجاره‌ها نزدیک دانشگاه این ترم دوباره بالا رفته است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con población y relación en frases cortas.",
-          "fa": "بیایید با «población» و «relación» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Sí, muchos estudiantes se mudan más lejos siguiendo la línea de metro.",
+          "fa": "بله، خیلی از دانشجویان در مسیر خط مترو به محله‌های دورتر می‌روند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar suerte?",
-          "fa": "خیلی خوب! یادت هست چطور از «suerte» هم استفاده کنی؟"
+          "speaker": "همکار",
+          "text": "¿Les afecta el trayecto más largo en sus trabajos de media jornada?",
+          "fa": "مسیر طولانی‌تر روی کار پاره‌وقتشان اثر می‌گذارد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto suerte como bastante me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «suerte» و هم «bastante» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Suma una hora diaria, aunque los trenes frecuentes lo hacen llevadero.",
+          "fa": "روزی یک ساعت اضافه می‌کند، هرچند قطارهای منظم تحمل‌پذیرش می‌کند."
         }
       ],
       "checks": [
@@ -45060,24 +45060,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en marzo cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «marzo» دقت کردی؟"
+          "speaker": "همکار",
+          "text": "Gracias por escuchar mi ensayo. ¿Quedó claro el mensaje principal?",
+          "fa": "ممنون که تمرینم را گوش دادی. پیام اصلی روشن بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi marzo junto con peor en la misma lección.",
-          "fa": "بله، در همین درس «marzo» را همراه با «peor» دیدم."
+          "speaker": "شما",
+          "text": "Tu inicio funcionó muy bien, pero las diapositivas con datos estaban algo recargadas.",
+          "fa": "شروع تو عالی بود، ولی اسلایدهای آماری کمی شلوغ بودند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta serie al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «serie» را هم در نظر بگیری؟"
+          "speaker": "همکار",
+          "text": "¿Ayudaría dividir el gráfico en dos diapositivas más limpias?",
+          "fa": "اگر نمودار را در دو اسلاید خلوت‌تر تقسیم کنم بهتر می‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar serie y sur con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «serie» و «sur» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Sin duda, y destacar una cifra clave por pantalla mantiene la atención.",
+          "fa": "بی‌تردید، و برجسته‌کردن یک رقم کلیدی توجه را حفظ می‌کند."
         }
       ],
       "checks": [
@@ -45290,24 +45290,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos palabra un momento antes de seguir?",
-          "fa": "قبل از ادامه، «palabra» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "همکار جدید",
+          "text": "¿Tienes cinco minutos para mostrarme cómo funciona el traspaso semanal?",
+          "fa": "پنج دقیقه وقت داری تحویل هفتگی کارها را نشان بدهی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué palabra y sean en voz alta.",
-          "fa": "فکر خوبیه! من «palabra» و «sean» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "¡Claro! Cada jueves por la tarde actualizamos la lista compartida con responsables.",
+          "fa": "حتماً! هر پنجشنبه عصر فهرست مشترک را با مسئول‌ها به‌روز می‌کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con abril y joven?",
-          "fa": "و با «abril» و «joven» چه حسی داری؟"
+          "speaker": "همکار جدید",
+          "text": "¿Qué hacemos si una tarea depende de otro departamento?",
+          "fa": "اگر کاری به بخش دیگری وابسته باشد چه کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora abril y joven suenan mucho más naturales en contexto.",
-          "fa": "الان «abril» و «joven» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "La marcamos en naranja para que la coordinación la siga el viernes.",
+          "fa": "نارنجی‌اش می‌کنیم تا هماهنگی جمعه پیگیری‌اش کند."
         }
       ],
       "checks": [
@@ -45536,24 +45536,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "La factura eléctrica del edificio subió un veinte por ciento este verano.",
+          "fa": "قبض برق ساختمان این تابستان بیست درصد بالا رفته است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con pena y siglo en frases cortas.",
-          "fa": "بیایید با «pena» و «siglo» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Seguramente las luces y el aire acondicionado quedan encendidos por la tarde.",
+          "fa": "احتمالاً چراغ و کولرها عصرها روشن می‌مانند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar cabo?",
-          "fa": "خیلی خوب! یادت هست چطور از «cabo» هم استفاده کنی؟"
+          "speaker": "همکار",
+          "text": "¿Ayudaría instalar sensores de movimiento en las salas?",
+          "fa": "نصب حسگر حرکتی در سالن‌ها کمک می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto cabo como común me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «cabo» و هم «común» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Sí, y programar el apagado automático a las seis ahorraría enseguida.",
+          "fa": "بله، و تنظیم خاموشی خودکار ساعت شش فوراً صرفه‌جویی می‌کند."
         }
       ],
       "checks": [
@@ -45766,24 +45766,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en carrera cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «carrera» دقت کردی؟"
+          "speaker": "مدیر",
+          "text": "Menos usuarios de prueba renovaron el primer mes. ¿Qué patrón encontraste?",
+          "fa": "کاربران آزمایشی کمتری ماه اول را تمدید کردند. چه الگویی دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi carrera junto con ejército en la misma lección.",
-          "fa": "بله، در همین درس «carrera» را همراه با «ejército» دیدم."
+          "speaker": "شما",
+          "text": "Les gustaba la aplicación, pero no terminaban de configurar su primer plan.",
+          "fa": "برنامه را دوست داشتند، اما تنظیم برنامهٔ اول را تمام نمی‌کردند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta encima al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «encima» را هم در نظر بگیری؟"
+          "speaker": "مدیر",
+          "text": "Entonces la caída ocurre en la primera semana, no al final.",
+          "fa": "پس افت در هفتهٔ اول رخ می‌دهد نه در پایان."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar encima y interés con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «encima» و «interés» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Exacto. Una guía breve de cinco minutos el primer día ayudaría mucho.",
+          "fa": "دقیقاً. یک راهنمای کوتاه پنج‌دقیقه‌ای در روز اول خیلی کمک می‌کند."
         }
       ],
       "checks": [
@@ -46012,24 +46012,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos justo un momento antes de seguir?",
-          "fa": "قبل از ادامه، «justo» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "شرکت‌کننده",
+          "text": "Gracias por la charla. ¿Su estudio incluyó clínicas rurales además de hospitales urbanos?",
+          "fa": "ممنون از سخنرانی. آیا مطالعهٔ شما شامل درمانگاه‌های روستایی هم بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué justo y podía en voz alta.",
-          "fa": "فکر خوبیه! من «justo» و «podía» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Buena pregunta. Esta muestra cubrió tres hospitales urbanos; las clínicas rurales son el siguiente paso.",
+          "fa": "سؤال خوبی است. این نمونه سه بیمارستان شهری بود؛ درمانگاه‌های روستایی گام بعدی هستند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con ven y actividades?",
-          "fa": "و با «ven» و «actividades» چه حسی داری؟"
+          "speaker": "شرکت‌کننده",
+          "text": "¿Cree que la conexión a internet influirá en los resultados allí?",
+          "fa": "فکر می‌کنید اتصال اینترنت آنجا روی نتایج اثر بگذارد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora ven y actividades suenan mucho más naturales en contexto.",
-          "fa": "الان «ven» و «actividades» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Sí, por eso estamos probando un modo sin conexión antes de ampliar.",
+          "fa": "بله، به همین خاطر پیش از گسترش حالت بدون اینترنت را آزمایش می‌کنیم."
         }
       ],
       "checks": [
@@ -46242,24 +46242,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "تأمین‌کننده",
+          "text": "Podemos ofrecer un diez por ciento de descuento con un contrato anual.",
+          "fa": "با قرارداد سالانه می‌توانیم ده درصد تخفیف بدهیم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con hija y humanos en frases cortas.",
-          "fa": "بیایید با «hija» و «humanos» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Nos interesa, pero necesitamos una cláusula de revisión trimestral de los plazos.",
+          "fa": "خوب است، ولی یک بند بازبینی فصلی برای مهلت‌ها لازم داریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar ideas?",
-          "fa": "خیلی خوب! یادت هست چطور از «ideas» هم استفاده کنی؟"
+          "speaker": "تأمین‌کننده",
+          "text": "De acuerdo, si fijamos una respuesta máxima de cuatro horas en urgencias.",
+          "fa": "قبول است، اگر برای موارد فوری سقف پاسخ چهار ساعته تعیین کنیم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto ideas como menor me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «ideas» و هم «menor» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Perfecto. Envíe el borrador actualizado y lo revisamos mañana.",
+          "fa": "عالی. پیش‌نویس به‌روزشده را بفرستید تا فردا بررسی کنیم."
         }
       ],
       "checks": [
@@ -46488,24 +46488,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en cualquiera cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «cualquiera» دقت کردی؟"
+          "speaker": "مشاور",
+          "text": "¿Piensas solicitar el máster en Berlín o en Múnich?",
+          "fa": "قصد داری برای کارشناسی ارشد در برلین اقدام کنی یا مونیخ؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi cualquiera junto con departamento en la misma lección.",
-          "fa": "بله، در همین درس «cualquiera» را همراه با «departamento» دیدم."
+          "speaker": "شما",
+          "text": "Me inclino por Berlín porque su grupo de investigación encaja con mi tesis.",
+          "fa": "برلین را ترجیح می‌دهم چون گروه پژوهشی‌اش با پایان‌نامه‌ام هم‌راستاست."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta existen al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «existen» را هم در نظر بگیری؟"
+          "speaker": "مشاور",
+          "text": "Recuerda que piden el certificado de idioma dos meses antes del inicio.",
+          "fa": "یادت باشد مدرک زبان را دو ماه قبل از شروع می‌خواهند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar existen y mitad con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «existen» و «mitad» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Gracias por avisar, ya reservé el examen para el mes que viene.",
+          "fa": "ممنون که گفتی، همین الان آزمون را برای ماه آینده رزرو کرده‌ام."
         }
       ],
       "checks": [
@@ -46718,24 +46718,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos jóvenes un momento antes de seguir?",
-          "fa": "قبل از ادامه، «jóvenes» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "¿Qué te pareció el documental de anoche sobre huertos urbanos?",
+          "fa": "مستند دیشب دربارهٔ باغچه‌های شهری چطور بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué jóvenes y perder en voz alta.",
-          "fa": "فکر خوبیه! من «jóvenes» و «perder» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Las entrevistas estuvieron muy bien, aunque pasó por alto el coste del agua.",
+          "fa": "مصاحبه‌ها خیلی خوب بود، هرچند هزینهٔ آب را نادیده گرفت."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con políticas y pone?",
-          "fa": "و با «políticas» و «pone» چه حسی داری؟"
+          "speaker": "دوست",
+          "text": "Es verdad, el mantenimiento decide muchas veces si el proyecto dura.",
+          "fa": "درست است، نگهداری اغلب تعیین می‌کند پروژه دوام می‌آورد یا نه."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora políticas y pone suenan mucho más naturales en contexto.",
-          "fa": "الان «políticas» و «pone» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Aun así, dio ideas realistas para probar en el barrio a pequeña escala.",
+          "fa": "با این حال، ایده‌های واقع‌بینانه‌ای برای آزمایش در مقیاس کوچک داد."
         }
       ],
       "checks": [
@@ -46964,24 +46964,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Soporte sigue recibiendo dudas sobre el nuevo formato de factura.",
+          "fa": "پشتیبانی هنوز دربارهٔ قالب جدید فاکتور سؤال دریافت می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con colegio y fiesta en frases cortas.",
-          "fa": "بیایید با «colegio» و «fiesta» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Añadamos una línea clara bajo el total para desglosar los impuestos.",
+          "fa": "یک خط روشن زیر مبلغ کل اضافه کنیم تا مالیات واضح شود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar imposible?",
-          "fa": "خیلی خوب! یادت هست چطور از «imposible» هم استفاده کنی؟"
+          "speaker": "همکار",
+          "text": "¿En cuánto tiempo puede actualizarlo el equipo técnico?",
+          "fa": "تیم فنی در چه مدتی می‌تواند آن را به‌روز کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto imposible como pedro me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «imposible» و هم «pedro» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Si enviamos el texto hoy, entra en la versión del jueves.",
+          "fa": "اگر امروز متن را بفرستیم، در نسخهٔ پنجشنبه قرار می‌گیرد."
         }
       ],
       "checks": [
@@ -47194,24 +47194,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en dolor cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «dolor» دقت کردی؟"
+          "speaker": "هماهنگ‌کننده",
+          "text": "Se apuntaron veinte voluntarios para limpiar el parque el sábado. ¿Tenemos material suficiente?",
+          "fa": "بیست داوطلب برای پاک‌سازی پارک شنبه ثبت‌نام کرده‌اند. وسایل کافی داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi dolor junto con isla en la misma lección.",
-          "fa": "بله، در همین درس «dolor» را همراه با «isla» دیدم."
+          "speaker": "شما",
+          "text": "Guantes y bolsas sobran, aunque convendría pedir cinco rastrillos más.",
+          "fa": "دستکش و کیسه زیاد داریم، ولی پنج شن‌کش دیگر بگیریم بهتر است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta mente al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «mente» را هم در نظر بگیری؟"
+          "speaker": "هماهنگ‌کننده",
+          "text": "Bien, se los pido al centro cívico. ¿Cómo dividimos los grupos?",
+          "fa": "خوب، از مرکز محله می‌خواهم. گروه‌ها را چطور تقسیم کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar mente y odio con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «mente» و «odio» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Cuatro equipos pequeños por zonas terminarán antes del mediodía.",
+          "fa": "چهار گروه کوچک در هر بخش قبل از ظهر کار را تمام می‌کنند."
         }
       ],
       "checks": [
@@ -47440,24 +47440,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos rico un momento antes de seguir?",
-          "fa": "قبل از ادامه، «rico» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "مدیر محصول",
+          "text": "Si priorizamos el registro de auditoría, el rediseño móvil pasa al tercer trimestre. ¿Cómo valoras ese equilibrio?",
+          "fa": "اگر گزارش ممیزی را جلو بیندازیم، بازطراحی موبایل به فصل سوم می‌رود. این موازنه را چطور می‌بینی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué rico y simple en voz alta.",
-          "fa": "فکر خوبیه! من «rico» و «simple» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Las renovaciones corporativas dependen del cumplimiento este trimestre, mientras que el uso móvil sigue estable.",
+          "fa": "تمدید قراردادهای سازمانی این فصل به انطباق وابسته است، ولی استفادهٔ موبایل پایدار است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con unidad y vino?",
-          "fa": "و با «unidad» و «vino» چه حسی داری؟"
+          "speaker": "مدیر محصول",
+          "text": "¿No protestarán los usuarios móviles por esperar otros tres meses?",
+          "fa": "کاربران موبایل بابت سه ماه انتظار بیشتر گلایه نمی‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora unidad y vino suenan mucho más naturales en contexto.",
-          "fa": "الان «unidad» و «vino» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Podemos lanzar dos mejoras de velocidad muy pedidas en paralelo para mostrar avance.",
+          "fa": "می‌توانیم هم‌زمان دو بهبود سرعت پرتقاضا را بدهیم تا پیشرفت دیده شود."
         }
       ],
       "checks": [
@@ -47670,24 +47670,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "مشاور حقوقی",
+          "text": "La nueva política permite cancelar hasta cuarenta y ocho horas antes, sin excepciones.",
+          "fa": "سیاست جدید لغو را تا چهل‌وهشت ساعت قبل بدون استثنا مجاز می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con completamente y conocimiento en frases cortas.",
-          "fa": "بیایید با «completamente» و «conocimiento» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Un límite firme evita abusos, pero aplicarlo sin matices ante temporales daña la confianza.",
+          "fa": "سقف قاطع جلوی سوءاستفاده را می‌گیرد، اما اجرای خشک در طوفان به اعتماد ضربه می‌زند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar humano?",
-          "fa": "خیلی خوب! یادت هست چطور از «humano» هم استفاده کنی؟"
+          "speaker": "مشاور حقوقی",
+          "text": "¿Cómo damos flexibilidad sin abrir la puerta a cancelaciones habituales de última hora?",
+          "fa": "چطور انعطاف بدهیم بی‌آنکه درِ لغوهای مکرر لحظه‌آخری باز شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto humano como imágenes me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «humano» و هم «imágenes» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Ofrezcamos un crédito único ante emergencias acreditadas en vez de devolución automática.",
+          "fa": "در موارد اضطراری مستند به‌جای بازپرداخت خودکار یک اعتبار یک‌باره بدهیم."
         }
       ],
       "checks": [
@@ -47916,24 +47916,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en económico cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «económico» دقت کردی؟"
+          "speaker": "پژوهشگر",
+          "text": "La encuesta refleja un ochenta por ciento de satisfacción entre quienes siguieron todo el año.",
+          "fa": "نظرسنجی هشتاد درصد رضایت را میان کسانی نشان می‌دهد که کل سال ماندند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi económico junto con federal en la misma lección.",
-          "fa": "بله، در همین درس «económico» را همراه با «federal» دیدم."
+          "speaker": "شما",
+          "text": "Medir solo a quienes permanecen introduce sesgo de supervivencia y oculta por qué se van otros.",
+          "fa": "سنجش فقط میان ماندگاران سوگیری بقا ایجاد می‌کند و علت رفتن بقیه را پنهان می‌سازد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta lengua al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «lengua» را هم در نظر بگیری؟"
+          "speaker": "پژوهشگر",
+          "text": "Buen apunte. ¿Cómo equilibramos la muestra antes de publicar?",
+          "fa": "نکتهٔ خوبی است. قبل از انتشار چطور نمونه را متعادل کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar lengua y naturaleza con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «lengua» و «naturaleza» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Incluimos entrevistas de salida de bajas tempranas y mostramos ambos grupos por separado.",
+          "fa": "مصاحبه‌های خروج ریزش‌های اولیه را هم بگذاریم و هر دو گروه را جداگانه نشان دهیم."
         }
       ],
       "checks": [
@@ -48146,24 +48146,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos chicas un momento antes de seguir?",
-          "fa": "قبل از ادامه، «chicas» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "معمار نرم‌افزار",
+          "text": "Sincronizar cada dispositivo cada diez segundos está saturando la base de datos.",
+          "fa": "همگام‌سازی هر ده ثانیه پایگاه داده را اشباع می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué chicas y creación en voz alta.",
-          "fa": "فکر خوبیه! من «chicas» و «creación» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "En vez de consultar sin pausa, cada cliente debería actualizarse solo al recibir un aviso ligero.",
+          "fa": "به‌جای پرس‌وجوی بی‌وقفه، هر کلاینت فقط با دریافت یک اعلان سبک به‌روز شود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con destino y especie?",
-          "fa": "و با «destino» و «especie» چه حسی داری؟"
+          "speaker": "معمار نرم‌افزار",
+          "text": "¿Qué ocurre si un teléfono pierde el aviso por estar sin cobertura?",
+          "fa": "اگر گوشی به خاطر نبود آنتن اعلان را از دست بدهد چه؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora destino y especie suenan mucho más naturales en contexto.",
-          "fa": "الان «destino» و «especie» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Al reconectarse descarga únicamente los cambios desde su última marca de tiempo.",
+          "fa": "هنگام اتصال دوباره فقط تغییرات بعد از آخرین برچسب زمانی را می‌گیرد."
         }
       ],
       "checks": [
@@ -48392,24 +48392,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "میزبان",
+          "text": "Quienes se oponen temen que peatonalizar la plaza complique el reparto a los comercios.",
+          "fa": "مخالفان نگرانند پیاده‌روسازی میدان توزیع بار مغازه‌ها را سخت کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con pase y pesos en frases cortas.",
-          "fa": "بیایید با «pase» و «pesos» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Tendrían razón con un cierre total, pero con franjas horarias el reparto funciona bien.",
+          "fa": "با بستن کامل حق دارند، اما با بازه‌های زمانی توزیع خوب پیش می‌رود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar referencia?",
-          "fa": "خیلی خوب! یادت هست چطور از «referencia» هم استفاده کنی؟"
+          "speaker": "میزبان",
+          "text": "¿Cómo han organizado esas franjas en otras ciudades?",
+          "fa": "در شهرهای دیگر این بازه‌ها را چطور تنظیم کرده‌اند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto referencia como reforma me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «referencia» و هم «reforma» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Se permite cargar de seis a diez de la mañana y el resto del día queda peatonal.",
+          "fa": "از شش تا ده صبح اجازهٔ بارگیری می‌دهند و بقیهٔ روز پیاده می‌ماند."
         }
       ],
       "checks": [
@@ -48622,24 +48622,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en contar cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «contar» دقت کردی؟"
+          "speaker": "همکار",
+          "text": "Diseño e ingeniería están atascados sobre si rehacer toda la página de pago.",
+          "fa": "طراحی و مهندسی سر بازنویسی کامل صفحهٔ پرداخت گیر کرده‌اند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi contar junto con crecimiento en la misma lección.",
-          "fa": "بله، در همین درس «contar» را همراه با «crecimiento» دیدم."
+          "speaker": "شما",
+          "text": "Ambos buscan reducir abandonos, pero discrepan en el riesgo del plazo.",
+          "fa": "هر دو کاهش رهاکردن را می‌خواهند، ولی سر ریسک زمانی اختلاف دارند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta excelente al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «excelente» را هم در نظر بگیری؟"
+          "speaker": "همکار",
+          "text": "¿Cómo destrabamos la reunión de mañana?",
+          "fa": "جلسهٔ فردا را چطور از گیر دربیاوریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar excelente y llevó con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «excelente» و «llevó» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Probemos primero un ajuste pequeño antes de comprometernos con una reescritura total.",
+          "fa": "پیش از تعهد به بازنویسی کامل، اول یک تغییر کوچک را امتحان کنیم."
         }
       ],
       "checks": [
@@ -48868,24 +48868,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos acaba un momento antes de seguir?",
-          "fa": "قبل از ادامه، «acaba» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "استاد راهنما",
+          "text": "Tu marco teórico es sólido, pero la tesis principal queda algo escondida en el segundo capítulo.",
+          "fa": "چارچوب نظری‌ات محکم است، ولی تز اصلی در فصل دوم کمی پنهان شده است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué acaba y amo en voz alta.",
-          "fa": "فکر خوبیه! من «acaba» و «amo» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Tiene razón; dediqué demasiado espacio a resumir modelos previos antes de señalar sus límites.",
+          "fa": "حق با شماست؛ پیش از اشاره به محدودیت‌ها، زیادی مدل‌های قبلی را خلاصه کردم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con chico y ciento?",
-          "fa": "و با «chico» و «ciento» چه حسی داری؟"
+          "speaker": "استاد راهنما",
+          "text": "¿Cómo vas a afinar ese enfoque ante el tribunal?",
+          "fa": "این تمرکز را پیش هیئت داوران چطور دقیق‌تر می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora chico y ciento suenan mucho más naturales en contexto.",
-          "fa": "الان «chico» و «ciento» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Empezaré el primer capítulo planteando la brecha exacta que aborda mi experimento.",
+          "fa": "فصل اول را با طرح دقیق خلئی شروع می‌کنم که آزمایش من بررسی می‌کند."
         }
       ],
       "checks": [
@@ -49098,24 +49098,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "روابط عمومی",
+          "text": "Varios clientes están subiendo capturas de entregas retrasadas. ¿Esperamos a verificar todo?",
+          "fa": "مشتریان تصاویر تأخیرها را می‌گذارند. صبر کنیم همه‌چیز تأیید شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con encanta y extraño en frases cortas.",
-          "fa": "بیایید با «encanta» و «extraño» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "El silencio genera más inquietud. Conviene reconocer el retraso ya con lo que sabemos.",
+          "fa": "سکوت نگرانی بیشتری می‌سازد. بهتر است همین الان تأخیر را با داده‌های موجود بپذیریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar flores?",
-          "fa": "خیلی خوب! یادت هست چطور از «flores» هم استفاده کنی؟"
+          "speaker": "روابط عمومی",
+          "text": "¿Qué compromiso realista podemos anunciar ahora?",
+          "fa": "الان چه تعهد واقع‌بینانه‌ای می‌توانیم اعلام کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto flores como garcía me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «flores» و هم «garcía» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Dar una actualización verificada en tres horas y priorizar los pedidos afectados.",
+          "fa": "ارائهٔ گزارش تأییدشده تا سه ساعت دیگر و اولویت به سفارش‌های متأثر."
         }
       ],
       "checks": [
@@ -49344,24 +49344,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en lópez cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «lópez» دقت کردی؟"
+          "speaker": "همکار",
+          "text": "Marketing quiere todo el historial de navegación para personalizar recomendaciones.",
+          "fa": "بازاریابی کل تاریخچهٔ مرور را برای شخصی‌سازی پیشنهادها می‌خواهد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi lópez junto con matrimonio en la misma lección.",
-          "fa": "بله، در همین درس «lópez» را همراه با «matrimonio» دیدم."
+          "speaker": "شما",
+          "text": "Guardar tanto rastro eleva el riesgo de privacidad cuando bastan las preferencias recientes.",
+          "fa": "نگهداری این‌همه ردپا ریسک حریم خصوصی دارد وقتی ترجیحات اخیر کافی است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta misión al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «misión» را هم در نظر بگیری؟"
+          "speaker": "همکار",
+          "text": "¿Funcionan casi igual de bien las categorías elegidas voluntariamente?",
+          "fa": "دسته‌های انتخابی داوطلبانه تقریباً همان‌قدر خوب کار می‌کنند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar misión y peligro con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «misión» و «peligro» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Sí, y almacenar menos datos sensibles reduce también la carga legal.",
+          "fa": "بله، و نگهداری داده‌های حساس کمتر بار حقوقی را هم کم می‌کند."
         }
       ],
       "checks": [
@@ -49574,24 +49574,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos concepto un momento antes de seguir?",
-          "fa": "قبل از ادامه، «concepto» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "ویراستار",
+          "text": "La traducción literal de este lema suena demasiado rígida al hablar.",
+          "fa": "ترجمهٔ تحت‌اللفظی این شعار در گفتار بیش‌ازحد خشک است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué concepto y dicha en voz alta.",
-          "fa": "فکر خوبیه! من «concepto» و «dicha» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Cuando buscas cercanía, importa más el giro natural que calcar cada palabra.",
+          "fa": "وقتی صمیمیت می‌خواهی، اصطلاح طبیعی مهم‌تر از کپی‌کردن هر واژه است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con diputados y distintas?",
-          "fa": "و با «diputados» و «distintas» چه حسی داری؟"
+          "speaker": "ویراستار",
+          "text": "¿Cómo mantenemos la idea sin que suene forzado?",
+          "fa": "چطور ایده را نگه داریم بی‌آنکه تصنعی باشد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora diputados y distintas suenan mucho más naturales en contexto.",
-          "fa": "الان «diputados» و «distintas» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Elijamos la frase que diría cualquier hablante en una charla cotidiana.",
+          "fa": "جمله‌ای را برگزینیم که هر گویشوری در گفت‌وگوی روزمره می‌گوید."
         }
       ],
       "checks": [
@@ -49820,24 +49820,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "داور",
+          "text": "Su iniciativa de lectura es sólida, pero ¿cómo se sostendrá al terminar la beca?",
+          "fa": "طرح مطالعهٔ شما محکم است، اما بعد از پایان کمک‌هزینه چطور ادامه می‌یابد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con considera y crítica en frases cortas.",
-          "fa": "بیایید با «considera» و «crítica» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "El primer año formamos tutores locales y en el segundo las bibliotecas municipales asumen la gestión.",
+          "fa": "سال اول مربیان محلی را آموزش می‌دهیم و سال دوم کتابخانه‌های شهری اداره را برعهده می‌گیرند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar dejado?",
-          "fa": "خیلی خوب! یادت هست چطور از «dejado» هم استفاده کنی؟"
+          "speaker": "داور",
+          "text": "¿Han confirmado ya personal disponible para atenderlo?",
+          "fa": "نیروی کافی برای پشتیبانی‌اش را تأیید کرده‌اند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto dejado como dias me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «dejado» و هم «dias» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Sí, dos sedes firmaron cartas cediendo salas y horas de coordinación.",
+          "fa": "بله، دو شعبه نامه‌های واگذاری سالن و ساعات هماهنگی را امضا کرده‌اند."
         }
       ],
       "checks": [
@@ -50050,24 +50050,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en diversas cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «diversas» دقت کردی؟"
+          "speaker": "سردبیر",
+          "text": "La fuente no quiere dar su nombre. ¿Podemos publicar igualmente el informe de seguridad?",
+          "fa": "منبع نمی‌خواهد نامش بیاید. باز هم می‌توانیم گزارش ایمنی را منتشر کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi diversas junto con estan en la misma lección.",
-          "fa": "بله، در همین درس «diversas» را همراه با «estan» دیدم."
+          "speaker": "شما",
+          "text": "Solo si corroboramos cada dato técnico con actas oficiales o un segundo testigo.",
+          "fa": "فقط اگر هر دادهٔ فنی را با اسناد رسمی یا شاهد دوم تأیید کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta estén al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «estén» را هم در نظر بگیری؟"
+          "speaker": "سردبیر",
+          "text": "¿Cómo explicamos el anonimato a los lectores?",
+          "fa": "ناشناس‌بودن را چطور برای خوانندگان توضیح دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar estén y facultad con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «estén» و «facultad» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Aclarando el motivo de protección y detallando los documentos que comprobamos.",
+          "fa": "با توضیح دلیل حفاظت و ذکر اسنادی که خودمان بررسی کرده‌ایم."
         }
       ],
       "checks": [
@@ -50296,24 +50296,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos genial un momento antes de seguir?",
-          "fa": "قبل از ادامه، «genial» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "مدیر عملیات",
+          "text": "Depender de un solo puerto retrasó tres semanas todo el envío de primavera.",
+          "fa": "وابستگی به یک بندر کل محمولهٔ بهاری را سه هفته عقب انداخت."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué genial y historias en voz alta.",
-          "fa": "فکر خوبیه! من «genial» و «historias» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Priorizamos el menor coste inmediato sin valorar el riesgo de bloqueo.",
+          "fa": "کمترین هزینهٔ فوری را اولویت دادیم بی‌آنکه ریسک انسداد را بسنجیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con jugador y menores?",
-          "fa": "و با «jugador» و «menores» چه حسی داری؟"
+          "speaker": "مدیر عملیات",
+          "text": "¿Repartir pedidos entre dos proveedores encarece demasiado cada unidad?",
+          "fa": "تقسیم سفارش بین دو تأمین‌کننده هر واحد را زیادی گران نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora jugador y menores suenan mucho más naturales en contexto.",
-          "fa": "الان «jugador» و «menores» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Algo sí, pero mucho menos que pagar envíos aéreos urgentes.",
+          "fa": "کمی بله، ولی خیلی کمتر از پرداخت حمل هوایی فوری."
         }
       ],
       "checks": [
@@ -50526,24 +50526,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "همکار",
+          "text": "Algunos temen que el asistente automático desplace a los analistas principiantes.",
+          "fa": "بعضی‌ها می‌ترسند دستیار خودکار جای تحلیلگران تازه‌کار را بگیرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con pide y piedra en frases cortas.",
-          "fa": "بیایید با «pide» و «piedra» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Automatiza borradores repetitivos, pero validar supuestos sigue exigiendo criterio humano.",
+          "fa": "پیش‌نویس‌های تکراری را خودکار می‌کند، ولی سنجش فرض‌ها هنوز دید انسانی می‌خواهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar privado?",
-          "fa": "خیلی خوب! یادت هست چطور از «privado» هم استفاده کنی؟"
+          "speaker": "همکار",
+          "text": "¿Cómo adaptamos entonces su aprendizaje inicial?",
+          "fa": "پس یادگیری اولیهٔ آن‌ها را چطور تغییر دهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto privado como propósito me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «privado» و هم «propósito» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Pidiéndoles contrastar cada resumen generado con los datos originales.",
+          "fa": "از آن‌ها بخواهیم هر خلاصهٔ تولیدشده را با داده‌های اصلی مقایسه کنند."
         }
       ],
       "checks": [
@@ -50772,24 +50772,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en literatura cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «literatura» دقت کردی؟"
+          "speaker": "شریک تجاری",
+          "text": "Solo damos exclusividad regional si duplican el pedido mínimo anual.",
+          "fa": "انحصار منطقه‌ای را فقط در صورت دو برابر شدن حداقل سفارش سالانه می‌دهیم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi literatura junto con mexicano en la misma lección.",
-          "fa": "بله، در همین درس «literatura» را همراه با «mexicano» دیدم."
+          "speaker": "شما",
+          "text": "Duplicar de entrada nos dejaría demasiado inventario, aunque buscamos relación estable.",
+          "fa": "دو برابر کردن از ابتدا موجودی زیادی روی دستمان می‌گذارد، ولی رابطهٔ پایدار می‌خواهیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta naturales al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «naturales» را هم در نظر بگیری؟"
+          "speaker": "شریک تجاری",
+          "text": "¿Qué punto intermedio protege a ambas partes?",
+          "fa": "چه نقطهٔ میانی‌ای از هر دو طرف محافظت می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar naturales y online con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «naturales» و «online» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Vinculemos la exclusividad a metas trimestrales escalonadas en vez de un salto rígido.",
+          "fa": "انحصار را به‌جای جهش خشک، به هدف‌های پلکانی فصلی متصل کنیم."
         }
       ],
       "checks": [
@@ -51002,24 +51002,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos declaración un momento antes de seguir?",
-          "fa": "قبل از ادامه، «declaración» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "تحلیلگر",
+          "text": "La duración media de sesión bajó un veinte por ciento. ¿Es preocupante?",
+          "fa": "میانگین زمان نشست بیست درصد کم شده. نگران‌کننده است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué declaración y estadounidense en voz alta.",
-          "fa": "فکر خوبیه! من «declaración» و «estadounidense» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "No necesariamente; tras mejorar el buscador quizá encuentren todo más rápido.",
+          "fa": "نه لزوماً؛ بعد از بهبود جست‌وجو شاید همه‌چیز را سریع‌تر پیدا می‌کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con estatal y ganó?",
-          "fa": "و با «estatal» و «ganó» چه حسی داری؟"
+          "speaker": "تحلیلگر",
+          "text": "¿Cómo distinguimos eficiencia de frustración?",
+          "fa": "کارایی را چطور از کلافگی جدا کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora estatal y ganó suenan mucho más naturales en contexto.",
-          "fa": "الان «estatal» و «ganó» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Mirando si subieron las tareas completadas y bajaron las consultas.",
+          "fa": "با دیدن اینکه آیا کارهای تکمیل‌شده بالا رفته و تماس‌ها کم شده است."
         }
       ],
       "checks": [
@@ -51248,24 +51248,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Las olas de calor tensionan cada verano la red eléctrica del centro.",
+          "fa": "موج‌های گرما هر تابستان شبکهٔ برق مرکز شهر را زیر فشار می‌گذارند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con distribución y fuertes en frases cortas.",
-          "fa": "بیایید با «distribución» و «fuertes» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Sumar generadores solo atiende el síntoma; más sombra y cubiertas claras bajan la demanda base.",
+          "fa": "افزودن مولد فقط علامت را درمان می‌کند؛ سایهٔ بیشتر و سقف روشن تقاضای پایه را کم می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar gas?",
-          "fa": "خیلی خوب! یادت هست چطور از «gas» هم استفاده کنی؟"
+          "speaker": "برنامه‌ریز شهری",
+          "text": "Pero el enfriamiento pasivo tarda años en notarse.",
+          "fa": "اما خنک‌سازی غیرفعال سال‌ها زمان می‌برد تا دیده شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto gas como grave me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «gas» و هم «grave» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Combinado con mejoras en fachadas, reduce picos en apenas dos veranos.",
+          "fa": "در ترکیب با اصلاح نماها، اوج مصرف را ظرف دو تابستان کم می‌کند."
         }
       ],
       "checks": [
@@ -51478,24 +51478,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en impuestos cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «impuestos» دقت کردی؟"
+          "speaker": "مدیر ارشد",
+          "text": "El informe tiene cuarenta páginas y el comité solo dispone de veinte minutos.",
+          "fa": "گزارش چهل صفحه است و کمیته فقط بیست دقیقه فرصت دارد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi impuestos junto con inmediatamente en la misma lección.",
-          "fa": "بله، در همین درس «impuestos» را همراه با «inmediatamente» دیدم."
+          "speaker": "شما",
+          "text": "Encabecemos con una hoja de decisión que resuma coste, riesgo y propuesta.",
+          "fa": "با یک برگ تصمیم‌گیری شروع کنیم که هزینه، ریسک و پیشنهاد را خلاصه کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta medicina al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «medicina» را هم در نظر بگیری؟"
+          "speaker": "مدیر ارشد",
+          "text": "¿Dónde dejamos los cuadros financieros completos?",
+          "fa": "جدول‌های مالی کامل را کجا بگذاریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar medicina y movimientos con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «medicina» و «movimientos» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "En el anexo, listos para quien necesite revisar el detalle.",
+          "fa": "در پیوست، آماده برای کسی که بخواهد جزئیات را ببیند."
         }
       ],
       "checks": [
@@ -51724,24 +51724,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos bebé un momento antes de seguir?",
-          "fa": "قبل از ادامه، «bebé» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "رهبر فنی",
+          "text": "La caída del martes ocurrió justo tras un ajuste manual de configuración.",
+          "fa": "قطعی سه‌شنبه درست بعد از یک تغییر دستی تنظیمات رخ داد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué bebé y categoría en voz alta.",
-          "fa": "فکر خوبیه! من «bebé» و «categoría» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "En vez de señalar personas, preguntemos por qué el flujo permitió cambios sin revisión.",
+          "fa": "به‌جای انگشت اشاره به افراد، بپرسیم چرا جریان کار تغییر بدون بازبینی را مجاز کرد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con claramente y concurso?",
-          "fa": "و با «claramente» و «concurso» چه حسی داری؟"
+          "speaker": "رهبر فنی",
+          "text": "¿Qué control evita ese fallo de raíz?",
+          "fa": "چه کنترلی این خطا را از ریشه برطرف می‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora claramente y concurso suenan mucho más naturales en contexto.",
-          "fa": "الان «claramente» و «concurso» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Exigir revisiones registradas con pruebas automáticas antes de aplicar cambios.",
+          "fa": "الزام به بازبینی ثبت‌شده با آزمون خودکار پیش از اعمال تغییر."
         }
       ],
       "checks": [
@@ -51954,24 +51954,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "مدیر فرهنگی",
+          "text": "Las entradas solo cubren la mitad del mantenimiento, pero subir precios reduce las visitas.",
+          "fa": "بلیت فقط نیمی از نگهداری را می‌پوشاند، ولی گران‌کردن بازدید را کم می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con accidente y alimentos en frases cortas.",
-          "fa": "بیایید با «accidente» و «alimentos» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Tarifas diferenciadas con una tarde gratuita entre semana cuidan el acceso público.",
+          "fa": "نرخ پلکانی همراه با یک عصر رایگان در میانهٔ هفته دسترسی عمومی را حفظ می‌کند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar aproximadamente?",
-          "fa": "خیلی خوب! یادت هست چطور از «aproximadamente» هم استفاده کنی؟"
+          "speaker": "مدیر فرهنگی",
+          "text": "¿Cómo compensamos el coste de esa tarde abierta?",
+          "fa": "هزینهٔ آن عصر آزاد را چطور جبران کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto aproximadamente como autores me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «aproximadamente» و هم «autores» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Patrocinadores locales suelen financiar noches abiertas a cambio de visibilidad cultural.",
+          "fa": "حامیان محلی معمولاً شب‌های آزاد را در ازای دیده‌شدن فرهنگی تأمین مالی می‌کنند."
         }
       ],
       "checks": [
@@ -52200,24 +52200,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en ocasión cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «ocasión» دقت کردی؟"
+          "speaker": "سرپرست",
+          "text": "Amir incumplió dos plazos seguidos, aunque su calidad técnica es muy buena.",
+          "fa": "امیر دو مهلت پیاپی را از دست داده، هرچند کیفیت فنی‌اش خوب است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi ocasión junto con poca en la misma lección.",
-          "fa": "بله، در همین درس «ocasión» را همراه با «poca» دیدم."
+          "speaker": "شما",
+          "text": "Suele subestimar dependencias ocultas y avisa los bloqueos demasiado tarde.",
+          "fa": "معمولاً وابستگی‌های پنهان را دست‌کم می‌گیرد و موانع را دیر خبر می‌دهد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta precisamente al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «precisamente» را هم در نظر بگیری؟"
+          "speaker": "سرپرست",
+          "text": "¿Cómo piensas planteárselo de forma constructiva?",
+          "fa": "چطور قصد داری سازنده با او در میان بگذاری؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar precisamente y regional con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «precisamente» و «regional» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Desglosando juntos su próxima tarea el lunes para detectar dudas antes de empezar.",
+          "fa": "دوشنبه با هم کار بعدی‌اش را خرد کنیم تا ابهام‌ها پیش از شروع پیدا شوند."
         }
       ],
       "checks": [
@@ -52430,24 +52430,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos extranjero un momento antes de seguir?",
-          "fa": "قبل از ادامه، «extranjero» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "کارشناس گمرک",
+          "text": "Su envío está retenido en aduanas porque los códigos de producto son demasiado generales.",
+          "fa": "محمولهٔ شما در گمرک متوقف شده چون کدهای کالا بیش‌ازحد کلی است."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué extranjero y global en voz alta.",
-          "fa": "فکر خوبیه! من «extranjero» و «global» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Entiendo, el proveedor puso descripciones amplias en vez de los códigos arancelarios exactos.",
+          "fa": "می‌فهمم، تأمین‌کننده به‌جای کد تعرفهٔ دقیق شرح کلی نوشته است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con gonzález y impacto?",
-          "fa": "و با «gonzález» و «impacto» چه حسی داری؟"
+          "speaker": "کارشناس گمرک",
+          "text": "¿Puede enviar hoy las fichas técnicas desglosadas?",
+          "fa": "امروز می‌توانید مشخصات فنی تفکیک‌شده را بفرستید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora gonzález y impacto suenan mucho más naturales en contexto.",
-          "fa": "الان «gonzález» و «impacto» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Sí, en menos de una hora envío la factura firmada y cada ficha.",
+          "fa": "بله، کمتر از یک ساعت فاکتور امضاشده و هر برگه را می‌فرستم."
         }
       ],
       "checks": [
@@ -52676,24 +52676,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "خبرنگار",
+          "text": "¿Por qué cambiaron las pautas sanitarias a los seis meses? ¿No resta credibilidad?",
+          "fa": "چرا راهنمای بهداشتی بعد از شش ماه تغییر کرد؟ اعتبار را کم نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con división y enemigo en frases cortas.",
-          "fa": "بیایید با «división» و «enemigo» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Actualizar criterios al aparecer nuevos datos demuestra rigor científico, no contradicción.",
+          "fa": "به‌روزرسانی معیارها با آمدن داده‌های تازه نشانهٔ دقت علمی است، نه تناقض."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar estrellas?",
-          "fa": "خیلی خوب! یادت هست چطور از «estrellas» هم استفاده کنی؟"
+          "speaker": "خبرنگار",
+          "text": "¿Cómo comunicar mejor la incertidumbre en el futuro?",
+          "fa": "در آینده چطور عدم قطعیت را بهتر منتقل کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto estrellas como foro me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «estrellas» و هم «foro» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Diferenciando lo ya comprobado de aquello que los estudios siguen afinando.",
+          "fa": "با تفکیک آنچه ثابت شده از آنچه پژوهش‌ها هنوز دقیق‌تر می‌کنند."
         }
       ],
       "checks": [
@@ -52906,24 +52906,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en cumpleaños cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «cumpleaños» دقت کردی؟"
+          "speaker": "خریدار",
+          "text": "El proveedor promete un noventa y nueve por ciento de acierto en cualquier documento.",
+          "fa": "فروشنده نودونه درصد دقت روی هر سندی را وعده می‌دهد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi cumpleaños junto con defender en la misma lección.",
-          "fa": "بله، در همین درس «cumpleaños» را همراه با «defender» دیدم."
+          "speaker": "شما",
+          "text": "Esa cifra dice poco si no vemos cómo responde ante escaneos borrosos o notas a mano.",
+          "fa": "این رقم بدون دیدن واکنش به اسکن تار یا دست‌نویس چیز زیادی نمی‌گوید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta eeuu al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «eeuu» را هم در نظر بگیری؟"
+          "speaker": "خریدار",
+          "text": "¿Pedimos una prueba con nuestros archivos reales?",
+          "fa": "آزمایش با فایل‌های واقعی خودمان را بخواهیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar eeuu y estrella con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «eeuu» و «estrella» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Sí, enviemos cincuenta casos difíciles y midamos el error por campo.",
+          "fa": "بله، پنجاه نمونهٔ دشوار بفرستیم و خطای هر فیلد را بسنجیم."
         }
       ],
       "checks": [
@@ -53152,24 +53152,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos escenario un momento antes de seguir?",
-          "fa": "قبل از ادامه، «escenario» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "دوست",
+          "text": "¿Sentiste que el final abierto de la novela era intencionado?",
+          "fa": "حس کردی پایان باز رمان عمدی بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué escenario y hermoso en voz alta.",
-          "fa": "فکر خوبیه! من «escenario» و «hermoso» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Sí, cerrarlo todo de golpe habría chocado con la duda constante del protagonista.",
+          "fa": "بله، بستن ناگهانی همه‌چیز با تردید مدام قهرمان ناسازگار بود."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con invierno y lados?",
-          "fa": "و با «invierno» و «lados» چه حسی داری؟"
+          "speaker": "دوست",
+          "text": "¿Qué escena fue para ti el punto de giro?",
+          "fa": "به نظرت کدام صحنه نقطهٔ عطف بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora invierno y lados suenan mucho más naturales en contexto.",
-          "fa": "الان «invierno» و «lados» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "La despedida en el andén, donde pesó más lo callado que lo dicho.",
+          "fa": "وداع روی سکو، جایی که ناگفته‌ها سنگین‌تر از گفته‌ها بود."
         }
       ],
       "checks": [
@@ -53382,24 +53382,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Qué palabras vamos a practicar primero en esta conversación?",
-          "fa": "در این گفت‌وگو اول کدام واژه‌ها را تمرین می‌کنیم؟"
+          "speaker": "طراح خدمات",
+          "text": "Renovar permisos solo por internet agilizó el trámite, pero subieron las quejas de mayores.",
+          "fa": "تمدید تمام‌آنلاین روند را سریع کرد، ولی شکایت سالمندان بالا رفت."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Empecemos con clima y comportamiento en frases cortas.",
-          "fa": "بیایید با «clima» و «comportamiento» در جمله‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Ganar rapidez no debe dejar fuera a quienes no manejan trámites digitales.",
+          "fa": "سرعت گرفتن نباید کسانی را که با کار دیجیتال راحت نیستند جا بگذارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¡Muy bien! ¿También recuerdas cómo usar corriente?",
-          "fa": "خیلی خوب! یادت هست چطور از «corriente» هم استفاده کنی؟"
+          "speaker": "طراح خدمات",
+          "text": "¿Cómo lo resolvemos sin abrir oficinas costosas?",
+          "fa": "چطور بدون بازکردن دفاتر پرهزینه حلش کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, tanto corriente como discusión me quedan mucho más claros ahora.",
-          "fa": "بله، الان هم «corriente» و هم «discusión» برایم خیلی روشن‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Manteniendo una línea telefónica y apoyo presencial en bibliotecas municipales.",
+          "fa": "با حفظ یک خط تلفن و راهنمای حضوری در کتابخانه‌های شهری."
         }
       ],
       "checks": [
@@ -53628,24 +53628,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Te fijaste en constante cuando leímos los ejemplos?",
-          "fa": "وقتی مثال‌ها را خواندیم به «constante» دقت کردی؟"
+          "speaker": "مدیر منابع انسانی",
+          "text": "Abrir vacantes a todo el país duplicó candidatos, pero la retención bajó un poco.",
+          "fa": "بازکردن فرصت در کل کشور متقاضیان را دو برابر کرد، ولی ماندگاری کمی افت کرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Sí, vi constante junto con convirtió en la misma lección.",
-          "fa": "بله، در همین درس «constante» را همراه با «convirtió» دیدم."
+          "speaker": "شما",
+          "text": "Ampliar la búsqueda funciona si explicamos con claridad cómo trabajamos en remoto.",
+          "fa": "گسترش جست‌وجو وقتی جواب می‌دهد که روش کار از راه دور را روشن توضیح دهیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Genial. ¿Puedes tener en cuenta crea al responder?",
-          "fa": "عالیه. می‌توانی هنگام پاسخ دادن «crea» را هم در نظر بگیری؟"
+          "speaker": "مدیر منابع انسانی",
+          "text": "¿Qué echaste en falta en las entrevistas?",
+          "fa": "در مصاحبه‌ها جای چه چیزی خالی بود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Claro, ya puedo usar crea y cuerpos con bastante soltura.",
-          "fa": "حتماً، الان می‌توانم «crea» و «cuerpos» را با روانی خوبی به کار ببرم."
+          "speaker": "شما",
+          "text": "Un ejercicio escrito real que muestre nuestra comunicación diaria.",
+          "fa": "یک تمرین نوشتاری واقعی که ارتباط روزمرهٔ ما را نشان دهد."
         }
       ],
       "checks": [
@@ -53858,24 +53858,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Repasamos seas un momento antes de seguir?",
-          "fa": "قبل از ادامه، «seas» را یک لحظه با هم مرور کنیم؟"
+          "speaker": "آموزگار",
+          "text": "Al acortar las lecciones subió la finalización, pero el recuerdo a largo plazo no cambió.",
+          "fa": "با کوتاه‌کردن درس‌ها اتمام بالا رفت، ولی یادآوری بلندمدت تغییر نکرد."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "¡Buena idea! Ya practiqué seas y seguido en voz alta.",
-          "fa": "فکر خوبیه! من «seas» و «seguido» را همین الان با صدای بلند تمرین کردم."
+          "speaker": "شما",
+          "text": "Las sesiones breves animan, pero retener exige repaso espaciado días después.",
+          "fa": "جلسهٔ کوتاه دلگرم می‌کند، اما ماندگاری به مرور بافاصله چند روز بعد نیاز دارد."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "¿Y qué tal te sientes con sueños y titular?",
-          "fa": "و با «sueños» و «titular» چه حسی داری؟"
+          "speaker": "آموزگار",
+          "text": "¿Cómo integramos ese repaso sin aburrir?",
+          "fa": "این مرور را چطور بدون کسل‌کردن بگنجانیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Ahora sueños y titular suenan mucho más naturales en contexto.",
-          "fa": "الان «sueños» و «titular» در بافت جمله خیلی طبیعی‌تر به گوش می‌رسند."
+          "speaker": "شما",
+          "text": "Reciclando palabras anteriores dentro de diálogos nuevos y cotidianos.",
+          "fa": "با به کار بردن واژه‌های پیشین در گفت‌وگوهای تازه و روزمره."
         }
       ],
       "checks": [
@@ -53996,23 +53996,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Какие слова мы повторим в разговоре в первую очередь?",
-          "fa": "امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟"
+          "text": "До́брое у́тро! Хоти́те воды́?",
+          "fa": "صبح بخیر! آب می‌خواهید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Давай начнём со слов в и и в коротких фразах.",
-          "fa": "بیایید با واژه‌های «в» و «и» در عبارت‌های کوتاه شروع کنیم."
+          "text": "Да, пожа́луйста. Большо́е спаси́бо!",
+          "fa": "بله، لطفاً. خیلی ممنون!"
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "Отлично! А слово на ты тоже помнишь?",
-          "fa": "عالی! واژهٔ «на» را هم یادت هست؟"
+          "text": "Вот, пожа́луйста. Вы гото́вы к уро́ку?",
+          "fa": "بفرمایید. برای درس آماده‌اید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Да, теперь и на, и с звучат для меня намного понятнее.",
-          "fa": "بله، الان هم «на» و هم «с» برایم خیلی مفهوم‌تر شده‌اند."
+          "text": "Да, я гото́в. Начнём!",
+          "fa": "بله، آماده‌ام. شروع کنیم!"
         }
       ],
       "checks": [
@@ -54134,23 +54134,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Ты заметил слово то, когда мы читали примеры?",
-          "fa": "وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «то» شدی؟"
+          "text": "Приве́т! Как вас зову́т?",
+          "fa": "سلام! اسم شما چیست؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Да, я увидел то рядом со словом его в этом уроке.",
-          "fa": "بله، در همین درس «то» را کنار واژهٔ «его» دیدم."
+          "text": "Меня́ зову́т Са́ра. А вас?",
+          "fa": "اسم من سارا است. شما چطور؟"
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "Хорошо. Сможешь использовать он в своём ответе?",
-          "fa": "خوبه. می‌توانی در پاسخت از «он» هم استفاده کنی؟"
+          "text": "Я Ами́р. Отку́да вы?",
+          "fa": "من امیر هستم. اهل کجا هستید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Конечно, я уже спокойно говорю он и от вслух.",
-          "fa": "حتماً، الان خیلی راحت «он» و «от» را بلند به زبان می‌آورم."
+          "text": "Я из Тегера́на. О́чень прия́тно!",
+          "fa": "اهل تهران هستم. خیلی خوشبختم!"
         }
       ],
       "checks": [
@@ -54280,23 +54280,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Давай быстро повторим когда, прежде чем пойдём дальше.",
-          "fa": "بیایید قبل از ادامه دادن، «когда» را سریع مرور کنیم."
+          "text": "Извини́те, э́то ва́ша кни́га?",
+          "fa": "ببخشید، این کتاب شماست؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Хорошая идея! Я уже произнёс когда и было вслух.",
-          "fa": "فکر خوبیه! من همین الان «когда» و «было» را بلند گفتم."
+          "text": "Нет, моя́ кни́га в су́мке.",
+          "fa": "نه، کتاب من داخل کیفم است."
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "А как насчёт слов уже и еще?",
-          "fa": "دربارهٔ واژه‌های «уже» و «еще» چطور؟"
+          "text": "Где ва́ша су́мка?",
+          "fa": "کیف شما کجاست؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "В разговоре уже и еще запоминаются гораздо легче.",
-          "fa": "در گفت‌وگو «уже» و «еще» خیلی راحت‌تر در ذهن می‌مانند."
+          "text": "Она́ на сту́ле ря́дом с две́рью.",
+          "fa": "روی صندلی کنار در است."
         }
       ],
       "checks": [
@@ -54430,23 +54430,23 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       "dialogue": [
         {
           "speaker": "هم‌صحبت",
-          "text": "Какие слова мы повторим в разговоре в первую очередь?",
-          "fa": "امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟"
+          "text": "Здра́вствуйте! Чай и́ли ко́фе?",
+          "fa": "سلام! چای یا قهوه؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Давай начнём со слов во и может в коротких фразах.",
-          "fa": "بیایید با واژه‌های «во» و «может» در عبارت‌های کوتاه شروع کنیم."
+          "text": "Чай, пожа́луйста. Без са́хара.",
+          "fa": "چای، لطفاً. بدون شکر."
         },
         {
           "speaker": "هم‌صحبت",
-          "text": "Отлично! А слово после ты тоже помнишь?",
-          "fa": "عالی! واژهٔ «после» را هم یادت هست؟"
+          "text": "Хорошо́. Хлеб то́же бу́дете?",
+          "fa": "خوب. نان هم میل دارید؟"
         },
         {
           "speaker": "زبان‌آموز",
-          "text": "Да, теперь и после, и очень звучат для меня намного понятнее.",
-          "fa": "بله، الان هم «после» و هم «очень» برایم خیلی مفهوم‌تر شده‌اند."
+          "text": "Нет, спаси́бо. То́лько чай.",
+          "fa": "نه، ممنون. فقط چای."
         }
       ],
       "checks": [
@@ -54627,24 +54627,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ты заметил слово то, когда мы читали примеры?",
-          "fa": "وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «то» شدی؟"
+          "speaker": "فروشنده",
+          "text": "Здра́вствуйте! Чем могу́ вам помо́чь?",
+          "fa": "سلام! چطور می‌توانم کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, я увидел то рядом со словом все в этом уроке.",
-          "fa": "بله، در همین درس «то» را کنار واژهٔ «все» دیدم."
+          "speaker": "شما",
+          "text": "Я купи́л эту руба́шку вчера́, но она́ мне немного мала́.",
+          "fa": "دیروز این پیراهن را خریدم، ولی برایم کمی تنگ است."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Хорошо. Сможешь использовать еще в своём ответе?",
-          "fa": "خوبه. می‌توانی در پاسخت از «еще» هم استفاده کنی؟"
+          "speaker": "فروشنده",
+          "text": "Без пробле́м. У вас сохрани́лся чек?",
+          "fa": "مشکلی نیست. رسیدش را دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Конечно, я уже спокойно говорю еще и при вслух.",
-          "fa": "حتماً، الان خیلی راحت «еще» و «при» را بلند به زبان می‌آورم."
+          "speaker": "شما",
+          "text": "Да, вот он. Мо́жно обменя́ть на сре́дний разме́р?",
+          "fa": "بله، بفرمایید. می‌توانم با سایز متوسط عوض کنم؟"
         }
       ],
       "checks": [
@@ -54829,24 +54829,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Давай быстро повторим ну, прежде чем пойдём дальше.",
-          "fa": "بیایید قبل از ادامه دادن، «ну» را سریع مرور کنیم."
+          "speaker": "پذیرش هتل",
+          "text": "До́брый ве́чер! У вас есть бро́нь?",
+          "fa": "عصر بخیر! رزرو دارید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Хорошая идея! Я уже произнёс ну и ни вслух.",
-          "fa": "فکر خوبیه! من همین الان «ну» و «ни» را بلند گفتم."
+          "speaker": "شما",
+          "text": "Да, одноме́стный но́мер на три но́чи на и́мя Ми́на Карими́.",
+          "fa": "بله، یک اتاق یک‌نفره برای سه شب به نام مینا کریمی."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "А как насчёт слов человек и ли?",
-          "fa": "دربارهٔ واژه‌های «человек» و «ли» چطور؟"
+          "speaker": "پذیرش هتل",
+          "text": "Нашла́! За́втрак подаю́т с семи́ до десяти́.",
+          "fa": "پیدا کردم! صبحانه از هفت تا ده سرو می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "В разговоре человек и ли запоминаются гораздо легче.",
-          "fa": "در گفت‌وگو «человек» و «ли» خیلی راحت‌تر در ذهن می‌مانند."
+          "speaker": "شما",
+          "text": "Спаси́бо. О́кна выхо́дят в ти́хий двор?",
+          "fa": "ممنون. پنجره رو به حیاط آرام است؟"
         }
       ],
       "checks": [
@@ -55039,24 +55039,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Какие слова мы повторим в разговоре в первую очередь?",
-          "fa": "امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟"
+          "speaker": "دوست",
+          "text": "Ты смотре́л прогно́з пого́ды на за́втра?",
+          "fa": "پیش‌بینی هوای فردا را دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Давай начнём со слов п и люди в коротких фразах.",
-          "fa": "بیایید با واژه‌های «п» و «люди» در عبارت‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Да, у́тром со́лнечно, а днём обеща́ют небольшо́й дождь.",
+          "fa": "بله، صبح آفتابی است ولی ظهر باران خفیف پیش‌بینی شده."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Отлично! А слово тут ты тоже помнишь?",
-          "fa": "عالی! واژهٔ «тут» را هم یادت هست؟"
+          "speaker": "دوست",
+          "text": "Всё равно́ пойдём гуля́ть у́тром?",
+          "fa": "باز هم صبح برویم پیاده‌روی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, теперь и тут, и её звучат для меня намного понятнее.",
-          "fa": "بله، الان هم «тут» و هم «её» برایم خیلی مفهوم‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Коне́чно, е́сли вы́йдем в во́семь, вернёмся до дождя́.",
+          "fa": "البته، اگر ساعت هشت راه بیفتیم قبل از باران برمی‌گردیم."
         }
       ],
       "checks": [
@@ -55253,24 +55253,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ты заметил слово н, когда мы читали примеры?",
-          "fa": "وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «н» شدی؟"
+          "speaker": "دوست",
+          "text": "Ты так бо́дро вы́глядишь! Ча́сто занима́ешься спо́ртом?",
+          "fa": "خیلی سرحال به نظر می‌رسی! زیاد ورزش می‌کنی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, я увидел н рядом со словом первый в этом уроке.",
-          "fa": "بله، در همین درس «н» را کنار واژهٔ «первый» دیدم."
+          "speaker": "شما",
+          "text": "Обы́чно я пла́ваю два ра́за в неде́лю и хожу́ на рабо́ту пешко́м.",
+          "fa": "معمولاً هفته‌ای دو بار شنا می‌کنم و پیاده سر کار می‌روم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Хорошо. Сможешь использовать такое в своём ответе?",
-          "fa": "خوبه. می‌توانی در پاسخت از «такое» هم استفاده کنی؟"
+          "speaker": "دوست",
+          "text": "Отли́чно! Я то́же хочу́ сно́ва нача́ть бе́гать.",
+          "fa": "عالی است! من هم می‌خواهم دوباره دویدن را شروع کنم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Конечно, я уже спокойно говорю такое и хотя вслух.",
-          "fa": "حتماً، الان خیلی راحت «такое» و «хотя» را بلند به زبان می‌آورم."
+          "speaker": "شما",
+          "text": "Дава́й бе́гать вме́сте по вто́рникам в па́рке.",
+          "fa": "بیا سه‌شنبه‌ها با هم در پارک بدویم."
         }
       ],
       "checks": [
@@ -55451,24 +55451,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Давай быстро повторим должен, прежде чем пойдём дальше.",
-          "fa": "بیایید قبل از ادامه دادن، «должен» را سریع مرور کنیم."
+          "speaker": "منشی",
+          "text": "Стоматоло́гия, до́брое у́тро. Чем могу́ помо́чь?",
+          "fa": "کلینیک دندان‌پزشکی، صبح بخیر. چطور کمکتان کنم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Хорошая идея! Я уже произнёс должен и кроме вслух.",
-          "fa": "فکر خوبیه! من همین الان «должен» و «кроме» را بلند گفتم."
+          "speaker": "شما",
+          "text": "Я хоте́л бы записа́ться на осмо́тр на сле́дующей неде́ле.",
+          "fa": "می‌خواهم برای هفتهٔ آینده نوبت معاینه بگیرم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "А как насчёт слов связи и нибудь?",
-          "fa": "دربارهٔ واژه‌های «связи» و «нибудь» چطور؟"
+          "speaker": "منشی",
+          "text": "Есть свобо́дное вре́мя в сре́ду в де́сять утра́.",
+          "fa": "چهارشنبه ساعت ده صبح وقت خالی هست."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "В разговоре связи и нибудь запоминаются гораздо легче.",
-          "fa": "در گفت‌وگو «связи» و «нибудь» خیلی راحت‌تر در ذهن می‌مانند."
+          "speaker": "شما",
+          "text": "Среда́ в де́сять мне о́чень подхо́дит. Спаси́бо.",
+          "fa": "چهارشنبه ساعت ده برایم خیلی مناسب است. ممنون."
         }
       ],
       "checks": [
@@ -55653,24 +55653,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Какие слова мы повторим в разговоре в первую очередь?",
-          "fa": "امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟"
+          "speaker": "شما",
+          "text": "Извини́, не зна́ешь, почему́ при́нтер не рабо́тает?",
+          "fa": "ببخشید، نمی‌دانی چرا چاپگر کار نمی‌کند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Давай начнём со слов кого и никто в коротких фразах.",
-          "fa": "بیایید با واژه‌های «кого» و «никто» در عبارت‌های کوتاه شروع کنیم."
+          "speaker": "همکار",
+          "text": "Сейча́с посмотрю́. Ой, про́сто зако́нчилась бума́га.",
+          "fa": "الان نگاه می‌کنم. آها، فقط کاغذش تمام شده."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Отлично! А слово стороны ты тоже помнишь?",
-          "fa": "عالی! واژهٔ «стороны» را هم یادت هست؟"
+          "speaker": "شما",
+          "text": "Где у нас лежи́т запасна́я бума́га?",
+          "fa": "کاغذ یدکی کجاست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, теперь и стороны, и таким звучат для меня намного понятнее.",
-          "fa": "بله، الان هم «стороны» و هم «таким» برایم خیلی مفهوم‌تر شده‌اند."
+          "speaker": "همکار",
+          "text": "В бе́лом шкафу́ за сто́йкой администра́тора.",
+          "fa": "داخل کمد سفید پشت میز پذیرش."
         }
       ],
       "checks": [
@@ -55863,24 +55863,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ты заметил слово собой, когда мы читали примеры?",
-          "fa": "وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «собой» شدی؟"
+          "speaker": "دوست",
+          "text": "Что мы пригото́вим сего́дня на у́жин?",
+          "fa": "امشب برای شام چی درست کنیم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, я увидел собой рядом со словом совсем в этом уроке.",
-          "fa": "بله، در همین درس «собой» را کنار واژهٔ «совсем» دیدم."
+          "speaker": "شما",
+          "text": "Мо́жно сде́лать па́сту с тома́тным со́усом и сала́т.",
+          "fa": "می‌توانیم پاستا با سس گوجه و سالاد درست کنیم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Хорошо. Сможешь использовать правда в своём ответе?",
-          "fa": "خوبه. می‌توانی در پاسخت از «правда» هم استفاده کنی؟"
+          "speaker": "دوست",
+          "text": "Вку́сно! У нас хвати́т помидо́ров и чеснока́?",
+          "fa": "خوشمزه است! گوجه و سیر به اندازهٔ کافی داریم؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Конечно, я уже спокойно говорю правда и рф вслух.",
-          "fa": "حتماً، الان خیلی راحت «правда» و «рф» را بلند به زبان می‌آورم."
+          "speaker": "شما",
+          "text": "Помидо́ры есть, а чесно́к я куплю́ по доро́ге домо́й.",
+          "fa": "گوجه داریم، سیر را سر راه خانه می‌خرم."
         }
       ],
       "checks": [
@@ -56069,24 +56069,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Давай быстро повторим при, прежде чем пойдём дальше.",
-          "fa": "بیایید قبل از ادامه دادن، «при» را سریع مرور کنیم."
+          "speaker": "مصاحبه‌گر",
+          "text": "Спаси́бо, что пришли́. Почему́ вас заинтересова́ла э́та должно́сть?",
+          "fa": "ممنون که آمدید. چرا به این سمت علاقه‌مند شدید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Хорошая идея! Я уже произнёс при и были вслух.",
-          "fa": "فکر خوبیه! من همین الان «при» و «были» را بلند گفتم."
+          "speaker": "شما",
+          "text": "Мне нра́вится обща́ться с клие́нтами и реша́ть практи́ческие зада́чи.",
+          "fa": "ارتباط با مشتریان و حل مسائل عملی را دوست دارم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "А как насчёт слов также и ее?",
-          "fa": "دربارهٔ واژه‌های «также» و «ее» چطور؟"
+          "speaker": "مصاحبه‌گر",
+          "text": "Как вы справля́етесь, когда́ сро́ки о́чень сжа́тые?",
+          "fa": "وقتی مهلت‌ها خیلی فشرده است چطور عمل می‌کنید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "В разговоре также и ее запоминаются гораздо легче.",
-          "fa": "در گفت‌وگو «также» و «ее» خیلی راحت‌تر در ذهن می‌مانند."
+          "speaker": "شما",
+          "text": "Я расставля́ю приорите́ты и зара́нее догова́риваюсь с кома́ндой.",
+          "fa": "اولویت‌ها را مشخص می‌کنم و زودتر با تیم هماهنگ می‌کنم."
         }
       ],
       "checks": [
@@ -56283,24 +56283,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Какие слова мы повторим в разговоре в первую очередь?",
-          "fa": "امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟"
+          "speaker": "شما",
+          "text": "Извини́те, мой по́езд заде́рживается на со́рок мину́т. Есть друго́й вариа́нт?",
+          "fa": "ببخشید، قطار من چهل دقیقه تأخیر دارد. گزینهٔ دیگری هست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Давай начнём со слов всегда и между в коротких фразах.",
-          "fa": "بیایید با واژه‌های «всегда» و «между» در عبارت‌های کوتاه شروع کنیم."
+          "speaker": "کارمند ایستگاه",
+          "text": "Да, сади́тесь на электри́чку с тре́тьей платфо́рмы и сде́лайте переса́дку.",
+          "fa": "بله، سوار قطار محلی از سکوی سه شوید و خط عوض کنید."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Отлично! А слово такой ты тоже помнишь?",
-          "fa": "عالی! واژهٔ «такой» را هم یادت هست؟"
+          "speaker": "شما",
+          "text": "Мой биле́т бу́дет действи́телен на э́том по́езде?",
+          "fa": "آیا بلیتم در آن قطار هم معتبر است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, теперь и такой, и п звучат для меня намного понятнее.",
-          "fa": "بله، الان هم «такой» و هم «п» برایم خیلی مفهوم‌تر شده‌اند."
+          "speaker": "کارمند ایستگاه",
+          "text": "Да, из-за заде́ржки допла́чивать не ну́жно.",
+          "fa": "بله، به خاطر تأخیر نیازی به پرداخت اضافه نیست."
         }
       ],
       "checks": [
@@ -56489,24 +56489,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ты заметил слово ведь, когда мы читали примеры?",
-          "fa": "وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «ведь» شدی؟"
+          "speaker": "شما",
+          "text": "Здра́вствуйте, ра́ковина на ку́хне протека́ет со вчера́шнего ве́чера.",
+          "fa": "سلام، سینک آشپزخانه از دیشب چکه می‌کند."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, я увидел ведь рядом со словом вообще в этом уроке.",
-          "fa": "بله، در همین درس «ведь» را کنار واژهٔ «вообще» دیدم."
+          "speaker": "صاحب‌خانه",
+          "text": "Спаси́бо, что сра́зу сказа́ли. Вода́ попада́ет на пол?",
+          "fa": "ممنون که فوری خبر دادید. آب روی زمین می‌ریزد؟"
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Хорошо. Сможешь использовать будут в своём ответе?",
-          "fa": "خوبه. می‌توانی در پاسخت از «будут» هم استفاده کنی؟"
+          "speaker": "شما",
+          "text": "Немно́го, я пока́ поста́вил сни́зу ведро́.",
+          "fa": "کمی، فعلاً زیرش یک سطل گذاشته‌ام."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Конечно, я уже спокойно говорю будут и должны вслух.",
-          "fa": "حتماً، الان خیلی راحت «будут» و «должны» را بلند به زبان می‌آورم."
+          "speaker": "صاحب‌خانه",
+          "text": "Хорошо́. За́втра у́тром с девяти́ до оди́ннадцати придёт санте́хник.",
+          "fa": "خوب است. فردا صبح بین نه تا یازده لوله‌کش می‌آید."
         }
       ],
       "checks": [
@@ -56687,24 +56687,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Давай быстро повторим такие, прежде чем пойдём дальше.",
-          "fa": "بیایید قبل از ادامه دادن، «такие» را سریع مرور کنیم."
+          "speaker": "همکار",
+          "text": "Как тебе́ рабо́та из до́ма два ра́за в неде́лю?",
+          "fa": "دورکاری دو بار در هفته برایت چطور است؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Хорошая идея! Я уже произнёс такие и этих вслух.",
-          "fa": "فکر خوبیه! من همین الان «такие» و «этих» را بلند گفتم."
+          "speaker": "شما",
+          "text": "Я эконо́млю два часа́ на доро́ге и рабо́таю гора́здо сосредото́ченнее.",
+          "fa": "دو ساعت در رفت‌وآمد صرفه‌جویی می‌کنم و خیلی متمرکزتر کار می‌کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "А как насчёт слов е и этим?",
-          "fa": "دربارهٔ واژه‌های «е» و «этим» چطور؟"
+          "speaker": "همکار",
+          "text": "Не скуча́ешь по живы́м разгово́рам с колле́гами?",
+          "fa": "دلت برای صحبت حضوری با همکاران تنگ نمی‌شود؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "В разговоре е и этим запоминаются гораздо легче.",
-          "fa": "در گفت‌وگو «е» و «этим» خیلی راحت‌تر در ذهن می‌مانند."
+          "speaker": "شما",
+          "text": "Иногда́ да, поэ́тому я с удово́льствием приезжа́ю в о́фис по понеде́льникам и четверга́м.",
+          "fa": "گاهی بله، برای همین دوشنبه‌ها و پنجشنبه‌ها با میل به دفتر می‌آیم."
         }
       ],
       "checks": [
@@ -56893,24 +56893,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Какие слова мы повторим в разговоре в первую очередь?",
-          "fa": "امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟"
+          "speaker": "مشاور",
+          "text": "Вам удо́бнее вече́рние заня́тия и́ли гру́ппа выходно́го дня?",
+          "fa": "کلاس‌های عصر برایتان راحت‌تر است یا گروه آخر هفته؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Давай начнём со слов сразу и нельзя в коротких фразах.",
-          "fa": "بیایید با واژه‌های «сразу» و «нельзя» در عبارت‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Вече́рний курс подхо́дит лу́чше, я рабо́таю до пяти́.",
+          "fa": "دورهٔ عصر بهتر است، چون تا ساعت پنج کار می‌کنم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Отлично! А слово правда ты тоже помнишь?",
-          "fa": "عالی! واژهٔ «правда» را هم یادت هست؟"
+          "speaker": "مشاور",
+          "text": "В сле́дующий вто́рник в полседьмо́го начина́ет небольша́я гру́ппа.",
+          "fa": "سه‌شنبهٔ آینده ساعت شش‌ونیم یک گروه کوچک شروع می‌شود."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, теперь и правда, и рф звучат для меня намного понятнее.",
-          "fa": "بله، الان هم «правда» و هم «рф» برایم خیلی مفهوم‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "Расписа́ние подхо́дит. Мо́жно прийти́ на пе́рвое про́бное заня́тие?",
+          "fa": "برنامه‌اش مناسب است. می‌توانم برای جلسهٔ اول آزمایشی بیایم؟"
         }
       ],
       "checks": [
@@ -57107,24 +57107,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ты заметил слово мир, когда мы читали примеры?",
-          "fa": "وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «мир» شدی؟"
+          "speaker": "دوست",
+          "text": "Ты сего́дня вы́глядишь уста́вшим. Опять по́здно лёг?",
+          "fa": "امروز خسته به نظر می‌رسی. دوباره دیر خوابیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, я увидел мир рядом со словом организации в этом уроке.",
-          "fa": "بله، در همین درس «мир» را کنار واژهٔ «организации» دیدم."
+          "speaker": "شما",
+          "text": "Да, по́сле полу́ночи всё ещё проверя́л сообще́ния в телефо́не.",
+          "fa": "بله، بعد از نیمه‌شب هنوز پیام‌های گوشی را چک می‌کردم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Хорошо. Сможешь использовать партии в своём ответе?",
-          "fa": "خوبه. می‌توانی در پاسخت از «партии» هم استفاده کنی؟"
+          "speaker": "دوست",
+          "text": "Я стал оставля́ть телефо́н на ку́хне, и спать ста́ло гора́здо лу́чше.",
+          "fa": "من گوشی را در آشپزخانه می‌گذارم و خوابم خیلی بهتر شده."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Конечно, я уже спокойно говорю партии и таких вслух.",
-          "fa": "حتماً، الان خیلی راحت «партии» و «таких» را بلند به زبان می‌آورم."
+          "speaker": "شما",
+          "text": "Хоро́ший сове́т, сего́дня пе́ред сном почита́ю бума́жную кни́гу.",
+          "fa": "پیشنهاد خوبی است، امشب قبل از خواب کتاب کاغذی می‌خوانم."
         }
       ],
       "checks": [
@@ -57313,24 +57313,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Давай быстро повторим зачем, прежде чем пойдём дальше.",
-          "fa": "بیایید قبل از ادامه دادن، «зачем» را سریع مرور کنیم."
+          "speaker": "همسایه",
+          "text": "Ты ви́дел но́вые контейнеры для сортиро́вки у воро́т?",
+          "fa": "سطل‌های تفکیک جدید کنار در حیاط را دیدی؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Хорошая идея! Я уже произнёс зачем и самое вслух.",
-          "fa": "فکر خوبیه! من همین الان «зачем» و «самое» را بلند گفتم."
+          "speaker": "شما",
+          "text": "Да! Тепе́рь отделя́ть бума́гу и стекло́ гора́здо про́ще.",
+          "fa": "بله! الان جداکردن کاغذ و شیشه خیلی ساده‌تر شده."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "А как насчёт слов самом и стала?",
-          "fa": "دربارهٔ واژه‌های «самом» و «стала» چطور؟"
+          "speaker": "همسایه",
+          "text": "Не зна́ешь, в како́й день забира́ют пла́стик?",
+          "fa": "نمی‌دانی چه روزی پلاستیک‌ها را می‌برند؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "В разговоре самом и стала запоминаются гораздо легче.",
-          "fa": "در گفت‌وگو «самом» و «стала» خیلی راحت‌تر در ذهن می‌مانند."
+          "speaker": "شما",
+          "text": "Ка́ждый четве́рг у́тром, так на́писано в объявле́нии.",
+          "fa": "هر پنجشنبه صبح، در اطلاعیه این‌طور نوشته است."
         }
       ],
       "checks": [
@@ -57539,24 +57539,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Какие слова мы повторим в разговоре в первую очередь?",
-          "fa": "امروز در گفت‌وگو اول کدام واژه‌ها را مرور می‌کنیم؟"
+          "speaker": "مدیر",
+          "text": "Мы пересматриваем форма́т гибри́дной рабо́ты на сле́дующий кварта́л. Что лу́чше всего́ срабо́тало в ва́шей кома́нде?",
+          "fa": "داریم شیوهٔ کار ترکیبی فصل بعد را بازبینی می‌کنیم. در تیم شما چه چیزی بهتر جواب داده؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Давай начнём со слов еще и также в коротких фразах.",
-          "fa": "بیایید با واژه‌های «еще» و «также» در عبارت‌های کوتاه شروع کنیم."
+          "speaker": "شما",
+          "text": "Два о́бщих дня в о́фисе сохраня́ют связь в кома́нде, а до́ма лю́ди споко́йно занима́ются сло́жными зада́чами.",
+          "fa": "دو روز مشترک در دفتر ارتباط تیمی را حفظ می‌کند و در خانه افراد با آرامش روی کارهای دقیق تمرکز می‌کنند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Отлично! А слово ее ты тоже помнишь?",
-          "fa": "عالی! واژهٔ «ее» را هم یادت هست؟"
+          "speaker": "مدیر",
+          "text": "Замети́ли ли вы каки́е-то ми́нусы в тако́м гра́фике?",
+          "fa": "نکتهٔ منفی هم در این برنامه دیده‌اید؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, теперь и ее, и быть звучат для меня намного понятнее.",
-          "fa": "بله، الان هم «ее» و هم «быть» برایم خیلی مفهوم‌تر شده‌اند."
+          "speaker": "شما",
+          "text": "То́лько новичка́м ну́жно бо́льше поня́тной подде́ржки в удалённые дни.",
+          "fa": "فقط نیروهای جدید در روزهای دورکاری به پشتیبانی روشن‌تری نیاز دارند."
         }
       ],
       "checks": [
@@ -57789,24 +57789,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Ты заметил слово своей, когда мы читали примеры?",
-          "fa": "وقتی مثال‌ها را می‌خواندیم متوجه واژهٔ «своей» شدی؟"
+          "speaker": "همکار",
+          "text": "Како́й гла́вный риск, е́сли мы запу́стим но́вую систе́му за́писи сра́зу во всех филиа́лах?",
+          "fa": "اگر سامانهٔ نوبت‌دهی تازه را هم‌زمان در همهٔ شعب راه بیندازیم، ریسک اصلی چیست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Да, я увидел своей рядом со словом является в этом уроке.",
-          "fa": "بله، در همین درس «своей» را کنار واژهٔ «является» دیدم."
+          "speaker": "شما",
+          "text": "В часы́ пик сотру́дники мо́гут не спра́виться без доста́точного обуче́ния.",
+          "fa": "در ساعات اوج، کارکنان بدون آموزش کافی ممکن است دچار مشکل شوند."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "Хорошо. Сможешь использовать лишь в своём ответе?",
-          "fa": "خوبه. می‌توانی در پاسخت از «лишь» هم استفاده کنی؟"
+          "speaker": "همکار",
+          "text": "Как ты предлага́ешь сни́зить этот риск?",
+          "fa": "پیشنهادت برای کاهش این ریسک چیست؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Конечно, я уже спокойно говорю лишь и свои вслух.",
-          "fa": "حتماً، الان خیلی راحت «лишь» و «свои» را بلند به زبان می‌آورم."
+          "speaker": "شما",
+          "text": "Дава́й сначала проведём двухнеде́льный пило́т в одно́м кру́пном отделе́нии.",
+          "fa": "بیا اول یک آزمایش دوهفته‌ای در یک شعبهٔ بزرگ اجرا کنیم."
         }
       ],
       "checks": [
@@ -58015,24 +58015,24 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ],
       "dialogue": [
         {
-          "speaker": "هم‌صحبت",
-          "text": "Давай быстро повторим е, прежде чем пойдём дальше.",
-          "fa": "بیایید قبل از ادامه دادن، «е» را سریع مرور کنیم."
+          "speaker": "همکار",
+          "text": "Наш бюдже́т на програ́ммы сократи́ли, но надёжная анали́тика всё равно́ нужна́.",
+          "fa": "بودجهٔ نرم‌افزار را کم کرده‌اند، اما هنوز به تحلیل قابل اعتماد نیاز داریم."
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "Хорошая идея! Я уже произнёс е и этим вслух.",
-          "fa": "فکر خوبیه! من همین الان «е» و «этим» را بلند گفتم."
+          "speaker": "شما",
+          "text": "Вме́сто трёх похо́жих се́рвисов мо́жно оста́вить одну́ основну́ю платфо́рму.",
+          "fa": "به‌جای سه سرویس مشابه می‌توانیم یک بستر اصلی را نگه داریم."
         },
         {
-          "speaker": "هم‌صحبت",
-          "text": "А как насчёт слов другие и ней?",
-          "fa": "دربارهٔ واژه‌های «другие» و «ней» چطور؟"
+          "speaker": "همکار",
+          "text": "Перено́с ста́рых отчётов не займёт сли́шком мно́го вре́мени?",
+          "fa": "انتقال گزارش‌های قدیمی زمان زیادی نمی‌برد؟"
         },
         {
-          "speaker": "زبان‌آموز",
-          "text": "В разговоре другие и ней запоминаются гораздо легче.",
-          "fa": "در گفت‌وگو «другие» و «ней» خیلی راحت‌تر در ذهن می‌مانند."
+          "speaker": "شما",
+          "text": "Мы перенесём то́лько де́сять актуа́льных дашбо́рдов, а остальны́е отправим в архи́в.",
+          "fa": "فقط ده گزارش فعال را منتقل می‌کنیم و بقیه را بایگانی می‌کنیم."
         }
       ],
       "checks": [
@@ -58049,4 +58049,4 @@ export const LAB_LESSONS: Record<LabLanguage, readonly LabLesson[]> = {
       ]
     }
   ]
-}  as unknown as Record<LabLanguage, readonly LabLesson[]>;
+} as unknown as Record<LabLanguage, readonly LabLesson[]>;

@@ -4,6 +4,7 @@ import LessonConversationHub, {
   type ConversationRoomSummary,
 } from '@/components/LessonConversationHub';
 import { conversationPracticeForLesson } from '@/lib/branchingConversation';
+import { resolveConversationDialogue } from '@/lib/conversationRoomDialogues';
 import { findTurkishLesson, TURKISH_LESSONS, TURKISH_LEVELS } from '@/lib/languages/turkish';
 import { withInferredDialogueRoles } from '@/lib/lessonConversation';
 import { playTurkishSpeech, stopTurkishSpeech } from '@/lib/turkishSpeech';
@@ -24,9 +25,10 @@ export default function TurkishConversationRooms() {
     const grouped: Record<number, ConversationRoomSummary[]> = {};
     for (const level of TURKISH_LEVELS) grouped[level.id] = [];
     for (const lesson of TURKISH_LESSONS) {
-      const hasDialogue = lesson.dialogue.some(line => line.text.trim());
+      const resolvedDialogue = resolveConversationDialogue(lesson.id, lesson.dialogue);
+      const hasDialogue = resolvedDialogue.some(line => line.text.trim());
       const lineCount = hasDialogue
-        ? lesson.dialogue.filter(line => line.text.trim()).length
+        ? resolvedDialogue.filter(line => line.text.trim()).length
         : lesson.sentences.filter(sentence => sentence.text.trim()).length;
       if (!grouped[lesson.levelId]) grouped[lesson.levelId] = [];
       grouped[lesson.levelId].push({
@@ -51,7 +53,9 @@ export default function TurkishConversationRooms() {
   const buildPayload = useCallback((lessonId: string): ConversationRoomPayload | null => {
     const lesson = findTurkishLesson(lessonId);
     if (!lesson) return null;
-    const roledDialogue = withInferredDialogueRoles(lesson.dialogue);
+    const roledDialogue = withInferredDialogueRoles(
+      resolveConversationDialogue(lesson.id, lesson.dialogue),
+    );
     return {
       dialogue: roledDialogue,
       fallback: lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa })),

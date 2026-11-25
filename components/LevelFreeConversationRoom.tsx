@@ -18,6 +18,9 @@ type FreeTurn = {
   lessonId: string;
   lessonTitle: string;
   situation: string;
+  partnerSpeaker?: string;
+  partnerText?: string;
+  partnerFa?: string;
   text: string;
   fa: string;
 };
@@ -38,24 +41,47 @@ function pickLevelTurns(
 ): FreeTurn[] {
   if (!summaries.length) return [];
 
-  const candidates: { summary: ConversationRoomSummary; items: { text: string; fa: string }[] }[] = [];
+  type CandidateItem = {
+    partnerSpeaker?: string;
+    partnerText?: string;
+    partnerFa?: string;
+    text: string;
+    fa: string;
+  };
+  const candidates: { summary: ConversationRoomSummary; items: CandidateItem[] }[] = [];
   for (const summary of summaries) {
     const payload = buildPayload(summary.id);
     if (!payload) continue;
-    const learnerLines = (payload.dialogue ?? []).filter(
-      line => line.role === 'learner' && line.text.trim() && (line.fa ?? '').trim(),
-    );
-    const anyDialogueLines = (payload.dialogue ?? []).filter(
+    const dlg = (payload.dialogue ?? []).filter(
       line => line.text.trim() && (line.fa ?? '').trim(),
     );
-    const fallbackLines = (payload.fallback ?? []).filter(
-      line => line.text.trim() && line.fa.trim(),
-    );
-    const source = learnerLines.length
-      ? learnerLines.map(line => ({ text: line.text.trim(), fa: (line.fa ?? '').trim() }))
+    const learnerPairs: CandidateItem[] = [];
+    for (let idx = 0; idx < dlg.length; idx++) {
+      const line = dlg[idx];
+      if (line.role !== 'learner') continue;
+      const prev = idx > 0 ? dlg[idx - 1] : undefined;
+      const partner = prev && prev.role !== 'learner' ? prev : undefined;
+      learnerPairs.push({
+        partnerSpeaker: partner?.speaker,
+        partnerText: partner?.text.trim(),
+        partnerFa: partner?.fa?.trim(),
+        text: line.text.trim(),
+        fa: (line.fa ?? '').trim(),
+      });
+    }
+    const anyDialogueLines = dlg.map(line => ({
+      text: line.text.trim(),
+      fa: (line.fa ?? '').trim(),
+    }));
+    const fallbackLines = (payload.fallback ?? [])
+      .filter(line => line.text.trim() && line.fa.trim())
+      .map(line => ({ text: line.text.trim(), fa: line.fa.trim() }));
+
+    const source: CandidateItem[] = learnerPairs.length
+      ? learnerPairs
       : anyDialogueLines.length
-        ? anyDialogueLines.map(line => ({ text: line.text.trim(), fa: (line.fa ?? '').trim() }))
-        : fallbackLines.map(line => ({ text: line.text.trim(), fa: line.fa.trim() }));
+        ? anyDialogueLines
+        : fallbackLines;
 
     if (source.length) candidates.push({ summary, items: source });
   }
@@ -78,6 +104,9 @@ function pickLevelTurns(
         lessonId: entry.summary.id,
         lessonTitle: entry.summary.title,
         situation: entry.summary.situation || entry.summary.subtitle || '',
+        partnerSpeaker: item.partnerSpeaker,
+        partnerText: item.partnerText,
+        partnerFa: item.partnerFa,
         text: item.text,
         fa: item.fa,
       });
@@ -97,6 +126,9 @@ function pickLevelTurns(
           lessonId: entry.summary.id,
           lessonTitle: entry.summary.title,
           situation: entry.summary.situation || entry.summary.subtitle || '',
+          partnerSpeaker: item.partnerSpeaker,
+          partnerText: item.partnerText,
+          partnerFa: item.partnerFa,
           text: item.text,
           fa: item.fa,
         });
@@ -160,6 +192,11 @@ export default function LevelFreeConversationRoom({
     onStop();
     setRound(prev => prev + 1);
   }, [onStop]);
+
+  const handleSpeakPartner = useCallback(() => {
+    if (!current?.partnerText) return;
+    onSpeak(current.partnerText, () => undefined);
+  }, [current, onSpeak]);
 
   const handleRevealAndSpeak = useCallback(() => {
     if (!current) return;
@@ -241,7 +278,7 @@ export default function LevelFreeConversationRoom({
           </Pressable>
         </View>
         <Text style={styles.progressLabel}>
-          موقعیت {toPersianDigits(index + 1)} از {toPersianDigits(turns.length)} · بدون نمره و کاملاً اختیاری
+          نوبت {toPersianDigits(index + 1)} از {toPersianDigits(turns.length)} · تمرین شبیه‌سازی‌شده (بدون نمره)
         </Text>
         <View style={styles.progressTrack}>
           <View style={[styles.progressFill, { width: `${progressRatio}%`, backgroundColor: level.color }]} />
@@ -254,7 +291,36 @@ export default function LevelFreeConversationRoom({
           {!!current.situation && <Text style={styles.contextSituation}>{current.situation}</Text>}
         </View>
 
-        <Text style={styles.promptLabel}>این جمله را به {languageName} بیان کنید:</Text>
+        {current.partnerText ? (
+          <View style={styles.partnerBubble}>
+            <View style={styles.partnerHeaderRow}>
+              <Text style={styles.partnerName}>
+                {current.partnerSpeaker && current.partnerSpeaker !== 'partner'
+                  ? current.partnerSpeaker
+                  : 'هم‌صحبت'}
+              </Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="شنیدن پرسش هم‌صحبت"
+                onPress={handleSpeakPartner}
+                style={({ pressed }) => [styles.partnerSpeakBtn, pressed && styles.pressed]}
+              >
+                <Volume2 size={14} color={level.color} />
+                <Text style={[styles.partnerSpeakText, { color: level.color }]}>بشنو</Text>
+              </Pressable>
+            </View>
+            <Text style={[styles.partnerTarget, isArabic && styles.revealTargetArabic]}>
+              {current.partnerText}
+            </Text>
+            {!!current.partnerFa && <Text style={styles.partnerFa}>{current.partnerFa}</Text>}
+          </View>
+        ) : null}
+
+        <Text style={styles.promptLabel}>
+          {current.partnerText
+            ? `پاسخ خودت به ${languageName} (هدف معنایی):`
+            : `این جمله را به ${languageName} بیان کنید:`}
+        </Text>
         <Text style={styles.promptFa}>{current.fa}</Text>
 
         {revealed ? (
@@ -413,6 +479,61 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily,
     fontSize: 12,
     lineHeight: 18,
+    color: HomeColors.muted,
+    textAlign: 'right',
+    writingDirection: 'rtl',
+  },
+  partnerBubble: {
+    padding: 13,
+    borderRadius: 14,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E0D6',
+    gap: 6,
+  },
+  partnerHeaderRow: {
+    flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  partnerName: {
+    fontFamily: Typography.boldFontFamily,
+    fontSize: 12,
+    lineHeight: 18,
+    color: HomeColors.muted,
+    textAlign: 'right',
+    writingDirection: 'rtl',
+  },
+  partnerSpeakBtn: {
+    flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 999,
+    backgroundColor: '#F6F4ED',
+    borderWidth: 1,
+    borderColor: '#E2E0D6',
+  },
+  partnerSpeakText: {
+    fontFamily: Typography.boldFontFamily,
+    fontSize: 11.5,
+    lineHeight: 16,
+  },
+  partnerTarget: {
+    fontFamily: Typography.latinFontFamily,
+    fontSize: 17,
+    lineHeight: 26,
+    fontWeight: '700',
+    color: HomeColors.ink,
+    textAlign: 'left',
+    writingDirection: 'ltr',
+  },
+  partnerFa: {
+    fontFamily: Typography.fontFamily,
+    fontSize: 13,
+    lineHeight: 20,
     color: HomeColors.muted,
     textAlign: 'right',
     writingDirection: 'rtl',
