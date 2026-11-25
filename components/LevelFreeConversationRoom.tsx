@@ -7,6 +7,7 @@ import type {
 } from '@/components/LessonConversationHub';
 import SpeakCheck from '@/components/SpeakCheck';
 import type { BranchingLocale } from '@/lib/branchingConversation';
+import { hostFor } from '@/lib/conversationHosts';
 import { toPersianDigits } from '@/lib/format';
 import type { SpeechLevel } from '@/lib/speechTiming';
 import { Colors, Typography } from '@/lib/theme';
@@ -38,6 +39,8 @@ type FreeTurn = {
 
 type CompletedChatEntry = FreeTurn & {
   learnerReply: string;
+  /** True when the reply was actually produced (typed/spoken), not the ready-made sample. */
+  produced?: boolean;
 };
 
 type FreeMode = 'guided' | 'type' | 'voice';
@@ -109,11 +112,12 @@ function pickLevelTurns(
   const picked: FreeTurn[] = [];
   const usedKeys = new Set<string>();
 
+  // «یک روز با میزبان» — walk the level's lessons IN ORDER (each round starts one scene
+  // further), so the free conversation reads as one coherent day, not shuffled snippets.
   for (let slot = 0; slot < desiredCount; slot++) {
-    const baseIndex = Math.floor((slot * candidates.length) / desiredCount);
-    const shiftedIndex = (baseIndex + round * 3 + slot * round) % candidates.length;
-    const entry = candidates[shiftedIndex];
-    const item = entry.items[(round + slot) % entry.items.length];
+    const entry = candidates[(slot + round) % candidates.length];
+    const layer = Math.floor(slot / candidates.length);
+    const item = entry.items[(layer + round) % entry.items.length];
     const key = `${entry.summary.id}:${item.text}`;
     if (!usedKeys.has(key)) {
       usedKeys.add(key);
@@ -209,6 +213,9 @@ export default function LevelFreeConversationRoom({
   const current = index < turns.length ? turns[index] : undefined;
   const completed = turns.length > 0 && index >= turns.length;
   const spokenCount = Object.values(spokenTurns).filter(Boolean).length;
+  const producedCount = transcript.filter(item => item.produced).length;
+  const producedPercent = transcript.length ? Math.round((producedCount / transcript.length) * 100) : 0;
+  const host = hostFor(courseId, level.id);
   const isArabic = courseId === 'ar';
 
   const handleRemix = useCallback(() => {
@@ -224,12 +231,13 @@ export default function LevelFreeConversationRoom({
     if (!current) return;
     onStop();
     const cleaned = replyText.trim() || current.text;
-    setTranscript(prev => [...prev, { ...current, learnerReply: cleaned }]);
+    const produced = (mode === 'voice' && replyText.trim().length > 0) || (mode === 'type' && draft.trim().length > 0);
+    setTranscript(prev => [...prev, { ...current, learnerReply: cleaned, produced }]);
     setDraft('');
     setLastHeard('');
     setRevealed(isBeginner);
     setIndex(prev => prev + 1);
-  }, [current, isBeginner, onStop]);
+  }, [current, isBeginner, onStop, mode, draft]);
 
   if (!turns.length) {
     return (
@@ -248,11 +256,22 @@ export default function LevelFreeConversationRoom({
         <View style={[styles.doneIcon, { backgroundColor: `${level.color}16` }]}>
           <CheckCircle2 size={32} color={level.color} />
         </View>
-        <Text style={styles.doneTitle}>چتِ ترکیبی سطح {level.cefr} انجام شد!</Text>
+        <Text style={styles.doneTitle}>
+          {host ? `یک روز با ${host.name} تمام شد!` : `گفت‌وگوی پیوستهٔ سطح ${level.cefr} تمام شد!`}
+        </Text>
         <Text style={styles.doneBody}>
-          {toPersianDigits(turns.length)} موقعیت متنوع از این سطح را به‌شکل مکالمهٔ واقعی پشت سر گذاشتی
+          {toPersianDigits(turns.length)} صحنهٔ این سطح را به‌ترتیب پشت سر گذاشتی
           {spokenCount > 0 ? ` (${toPersianDigits(spokenCount)} مورد با صدای خودت)` : ''}.
         </Text>
+        <View style={styles.engagementCard}>
+          <Text style={styles.engagementTitle}>مشارکت شخصی</Text>
+          <Text style={styles.engagementValue}>
+            {toPersianDigits(producedPercent)}٪ · {toPersianDigits(producedCount)} پاسخ از خودت از {toPersianDigits(transcript.length)} نوبت
+          </Text>
+          <Text style={styles.engagementHint}>
+            هر نوبتی که با نوشتن یا صدای خودت جواب گرفتی کامل شمرده می‌شود؛ پاسخ نمونه نصفِ رشد است.
+          </Text>
+        </View>
 
         <View style={styles.recapList}>
           <Text style={styles.recapHeading}>مرور پیام‌های این گفت‌وگو</Text>
@@ -314,7 +333,7 @@ export default function LevelFreeConversationRoom({
         <View style={styles.headerRow}>
           <View style={styles.titleRow}>
             <Sparkles size={16} color={level.color} />
-            <Text style={styles.headerTitle}>گفت‌وگوی آزاد سطح {level.cefr}</Text>
+            <Text style={styles.headerTitle}>{host ? `یک روز با ${host.name} · سطح ${level.cefr}` : `گفت‌وگوی آزاد سطح ${level.cefr}`}</Text>
           </View>
           <Pressable
             accessibilityRole="button"
@@ -327,11 +346,16 @@ export default function LevelFreeConversationRoom({
           </Pressable>
         </View>
         <Text style={styles.progressLabel}>
-          موقعیت {toPersianDigits(index + 1)} از {toPersianDigits(turns.length)} · بدون نمره و زمان‌سنج
+          موقعیت {toPersianDigits(index + 1)} از {toPersianDigits(turns.length)} · بدون زمان‌سنج · {host ? `همراه با ${host.name} ${host.emoji}` : 'همراه میزبان سطح'}
         </Text>
         <View style={styles.progressTrack}>
           <View style={[styles.progressFill, { width: `${progressRatio}%`, backgroundColor: level.color }]} />
         </View>
+      </View>
+
+      {/* Scene chip: each new lessonTitle is the next stop of the same day */}
+      <View style={[styles.sceneChip, { borderColor: `${level.color}55` }]}>
+        <Text style={[styles.sceneChipText, { color: level.color }]}>صحنهٔ الآن: {current.lessonTitle}</Text>
       </View>
 
       {recentTranscript.length > 0 ? (
@@ -593,6 +617,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: HomeColors.border,
   },
+  sceneChip: { alignSelf: 'flex-end', borderRadius: 999, borderWidth: 1, backgroundColor: '#FFFFFF', paddingHorizontal: 12, paddingVertical: 5 },
+  sceneChipText: { fontFamily: Typography.boldFontFamily, fontSize: 11, writingDirection: 'rtl' },
+  engagementCard: { width: '100%', borderRadius: 16, backgroundColor: '#F8FAFF', borderWidth: 1, borderColor: HomeColors.border, padding: 12, gap: 4 },
+  engagementTitle: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: HomeColors.muted, textAlign: 'right', writingDirection: 'rtl' },
+  engagementValue: { fontFamily: Typography.boldFontFamily, fontSize: 15, color: HomeColors.ink, textAlign: 'right', writingDirection: 'rtl' },
+  engagementHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: HomeColors.muted, textAlign: 'right', writingDirection: 'rtl' },
   recapList: { gap: 8 },
   recapHeading: {
     fontFamily: Typography.boldFontFamily,

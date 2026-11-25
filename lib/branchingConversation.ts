@@ -5,7 +5,7 @@ export type BranchingLocale = 'en-US' | 'ru-RU' | 'tr-TR' | 'de-DE' | 'fr-FR' | 
 export type ConversationLevel = 'Pre-A1' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 export type ConversationMode = 'guided' | 'controlled' | 'semi-free' | 'semantic' | 'branching' | 'open-roleplay';
 
-export type Choice = { text: string; correct: boolean };
+export type Choice = { text: string; correct: boolean; /** Partner reaction for a fork choice: every fork choice is `correct` and moves the scene down its own path. */ branchReply?: { text: string; fa: string }; /** Meta label shown on the result card when this fork was the final turn («پایان: …»). */ ending?: string };
 export type SemanticBranch = {
   match: string[][];
   reply: { text: string; fa: string };
@@ -496,6 +496,90 @@ const EN_B2: BranchingConversation = {
 
 const DEFINITIONS: Record<string, BranchingConversation> = {
   'b2-survival-society-negotiation': EN_B2,
+  // Russian A1 scene forks: the partner reacts to WHAT you chose, not just that you chose.
+  // Every authored turn is a learner turn of the lesson, so the level-verifier's
+  // targetText coverage still holds after the merge.
+  'ru-a1-cafe-and-food': {
+    level: 'A1', mode: 'controlled', turns: {
+      3: {
+        promptFa: 'سفارشت را ثبت کن: قهوه، چای یا فقط دسر.',
+        concepts: [['суп', 'десе́рт', 'ко́фе', 'ча́й', 'сала́т']],
+        choices: [
+          { text: 'Тогда́ мне суп и ко́фе без са́хара, пожа́луйста.', correct: true, branchReply: { text: 'Отли́чно! Ко́фе бу́дет го́тов че́рез пять мину́т.', fa: 'عالی! قهوه پنج دقیقهٔ دیگر آماده است.' } },
+          { text: 'Тогда́ мне суп и чай с лимо́ном, пожа́луйста.', correct: true, branchReply: { text: 'Хоро́ший вы́бор! Чай в таку́ю пого́ду идёт о́чень хорошо́.', fa: 'انتخاب خوبی است! چای در این هوا عالی جواب می‌دهد.' } },
+          { text: 'Для меня́ то́лько десе́рт, пожа́луйста.', correct: true, branchReply: { text: 'Сла́дкое у нас всегда́ пе́рвым зака́нчивается! Сейча́с принесу́.', fa: 'شیرینی‌های ما همیشه اول تمام می‌شوند! الان می‌آورم.' } },
+        ],
+        branches: [
+          { match: [['ча́й', 'чай']], reply: { text: 'Хоро́ший вы́бор! Чай в таку́ю пого́ду идёт о́чень хорошо́.', fa: 'انتخاب خوبی است! چای در این هوا عالی جواب می‌دهد.' } },
+          { match: [['десе́рт', 'десерт', 'торт']], reply: { text: 'Сла́дкое у нас всегда́ пе́рвым зака́нчивается! Сейча́с принесу́.', fa: 'شیرینی‌های ما همیشه اول تمام می‌شوند! الان می‌آورم.' } },
+        ],
+        fallbackReply: { text: 'Отли́чно! Скоро принесу́.', fa: 'عالی! به‌زودی می‌آورم.' },
+      },
+    },
+  },
+  'ru-a1-buying-something': {
+    level: 'A1', mode: 'controlled', turns: {
+      2: {
+        promptFa: 'خرید را نهایی کن: با کارت، نقد یا درخواست تخفیف.',
+        concepts: [['ка́ртой', 'заплати́ть', 'нали́чными', 'ски́дка', 'возьму́']],
+        choices: [
+          { text: 'Отли́чно, я возьму́ э́то. Мо́жно заплати́ть ка́ртой?', correct: true, branchReply: { text: 'Да, коне́чно. Приложи́те ка́рту здесь, пожа́луйста.', fa: 'بله حتماً. لطفاً کارت را همین‌جا بزنید.' } },
+          { text: 'Я заплачу́ нали́чными.', correct: true, branchReply: { text: 'Хорошо́, с вас сто рубле́й.', fa: 'خوب، از شما صد روبل.' } },
+          { text: 'А ски́дка сего́дня есть?', correct: true, branchReply: { text: 'Есть! Сего́дня де́сять проце́нтов ски́дки.', fa: 'هست! امروز ده درصد تخفیف داریم.' } },
+        ],
+        branches: [
+          { match: [['нали́чными', 'наличными', 'де́ньги']], reply: { text: 'Хорошо́, с вас сто рубле́й.', fa: 'خوب، از شما صد روبل.' } },
+          { match: [['ски́дка', 'скидка', 'деше́вле']], reply: { text: 'Есть! Сего́дня де́сять проце́нтов ски́дки.', fa: 'هست! امروز ده درصد تخفیف داریم.' } },
+        ],
+        fallbackReply: { text: 'Хорошо́, оформля́ю ваш зака́з.', fa: 'خوب، سفارش شما را ثبت می‌کنم.' },
+      },
+    },
+  },
+  'ru-a1-invitations-and-plans': {
+    level: 'A1', mode: 'controlled', turns: {
+      3: {
+        promptFa: 'به دعوت جواب بده: قبول می‌کنی، عوض می‌کنی یا زمان دیگری می‌گذاری؟',
+        concepts: [['да', 'удово́льствием', 'суббо́та', 'кино́', 'не']],
+        choices: [
+          { text: 'Да, с удово́льствием! Во ско́лько?', correct: true, branchReply: { text: 'Здо́рово! Беру́ два биле́та на четы́ре часа́.', fa: 'عالیه! دو بلیت ساعت چهار می‌گیرم.' } },
+          { text: 'Я не смогу в воскресе́нье. Мо́жет, в суббо́ту?', correct: true, branchReply: { text: 'Хорошо́, дава́й в суббо́ту в три часа́!', fa: 'باشه، بگذار شنبه ساعت سه!' } },
+          { text: 'Не хо́чу в кино́, но ко́фе — да!', correct: true, branchReply: { text: 'Договори́лись: то́лько ко́фе!', fa: 'قرار شد: فقط قهوه!' } },
+        ],
+        branches: [
+          { match: [['суббо́ту', 'субботу', 'не смогу́']], reply: { text: 'Хорошо́, дава́й в суббо́ту в три часа́!', fa: 'باشه، بگذار شنبه ساعت سه!' } },
+          { match: [['не хо́чу', 'не хочу', 'ко́фе']], reply: { text: 'Договори́лись: то́лько ко́фе!', fa: 'قرار شد: فقط قهوه!' } },
+        ],
+        fallbackReply: { text: 'Хорошо́, тогда́ спиши́мся!', fa: 'خوب، پس خبر می‌دهم!' },
+      },
+      5: {
+        promptFa: 'قرار را نهایی کن — این آخرین نوبت است و پایانِ گفت‌وگو را تعیین می‌کند.',
+        concepts: [['договори́лись', 'бу́ду', 'рад', 'ви́деть', 'завтра']],
+        choices: [
+          { text: 'Договори́лись! Бу́ду рад тебя́ ви́деть.', correct: true, branchReply: { text: 'И я! До воскресе́нья!', fa: 'من هم! تا یکشنبه!' }, ending: 'پایان: قرار سینما بسته شد' },
+          { text: 'Договори́лись! Тогда́ звони́ накану́не.', correct: true, branchReply: { text: 'Хорошо́, я напи́шу тебе ве́чером.', fa: 'خوب، عصر به تو پیام می‌دهم.' }, ending: 'پایان: قرار با تماسِ شبِ قبل نهایی شد' },
+        ],
+        fallbackReply: { text: 'И я! До ско́рой встре́чи!', fa: 'من هم! به‌زودی می‌بینیمت!' },
+      },
+    },
+  },
+  'ru-a1-directions-and-neighborhood': {
+    level: 'A1', mode: 'controlled', turns: {
+      4: {
+        promptFa: 'موقعیت را دقیق کن: بانک، مترو یا خودت نقشه را پیدا می‌کنی.',
+        concepts: [['ба́нком', 'метро́', 'ка́рте', 'ря́дом']],
+        choices: [
+          { text: 'Рядо́м с ба́нком?', correct: true, branchReply: { text: 'Да, ве́рно: ря́дом с ба́нком.', fa: 'بله درست است: کنار بانک.' } },
+          { text: 'А где здесь метро́?', correct: true, branchReply: { text: 'Метро́ — напра́во от па́рка. Но по́чта бли́же!', fa: 'مترو سمت راست پارک است، ولی پست نزدیک‌تر است!' } },
+          { text: 'Спаси́бо, я уже́ нашёл на ка́рте.', correct: true, branchReply: { text: 'Отли́чно, ка́рта хорошо́ вре́дит!', fa: 'عالی، نقشه خوب راهنمایی می‌کند!' }, ending: 'پایان: خودت با نقشه راه را پیدا کردی' },
+        ],
+        branches: [
+          { match: [['метро́', 'метро']], reply: { text: 'Метро́ — напра́во от па́рка. Но по́чта бли́же!', fa: 'مترو سمت راست پارک است، ولی پست نزدیک‌تر است!' } },
+          { match: [['ка́рте', 'карте', 'нашёл']], reply: { text: 'Отли́чно, ка́рта хорошо́ вре́дит!', fa: 'عالی، نقشه خوب راهنمایی می‌کند!' } },
+        ],
+        fallbackReply: { text: 'Легко́ найдёте!', fa: 'راحت پیدا می‌کنید!' },
+      },
+    },
+  },
 };
 
 const LEVEL_BY_ID: Record<number, ConversationLevel> = { 0: 'Pre-A1', 1: 'A1', 2: 'A2', 3: 'B1', 4: 'B2', 5: 'C1' };

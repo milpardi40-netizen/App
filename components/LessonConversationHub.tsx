@@ -5,6 +5,8 @@ import LevelFreeConversationRoom from '@/components/LevelFreeConversationRoom';
 import { PageNavigation } from '@/components/PageNavigation';
 import { LearningHomeColors as HomeColors } from '@/components/LearningHomeStyles';
 import type { BranchingLocale } from '@/lib/branchingConversation';
+import { hostFor } from '@/lib/conversationHosts';
+import { missionForLesson } from '@/lib/conversationMissions';
 import { toPersianDigits } from '@/lib/format';
 import type { LessonConversationSession } from '@/lib/lessonConversation';
 import { Colors, Spacing, Typography } from '@/lib/theme';
@@ -355,6 +357,15 @@ export default function LessonConversationHub({
                         {!!level.description && (
                           <Text numberOfLines={2} style={styles.levelDesc}>{level.description}</Text>
                         )}
+                        {(() => {
+                          const host = hostFor(courseId, level.id);
+                          return host ? (
+                            <View style={styles.levelHostRow}>
+                              <Text style={styles.levelHostEmoji}>{host.emoji}</Text>
+                              <Text style={styles.levelHostText}>هم‌صحبت شما: {host.name} — {host.bio}</Text>
+                            </View>
+                          ) : null;
+                        })()}
                       </View>
                       <ChevronLeft size={18} color={HomeColors.muted} />
                     </Pressable>
@@ -421,7 +432,10 @@ export default function LessonConversationHub({
                   <View style={styles.freeLevelCopy}>
                     <Text style={styles.freeLevelTitle}>گفت‌وگوی آزاد پایان سطح · {selectedLevel.cefr}</Text>
                     <Text style={styles.freeLevelDesc}>
-                      ۱۰ تا ۱۲ موقعیت شبیه‌سازی‌شده: هم‌صحبت جمله‌اش را به {languageName} می‌گوید و تو پاسخ می‌دهی (اختیاری، بدون نمره)
+                      {(() => {
+                        const host = hostFor(courseId, selectedLevel.id);
+                        return host ? `«یک روز با ${host.name}» — ` : '';
+                      })()}۱۰ صحنهٔ پیوستهٔ این سطح به‌ترتیب درس‌ها: هم‌صحبت جمله‌اش را به {languageName} می‌گوید و تو با صدای خودت یا نوشتن جواب می‌دهی.
                     </Text>
                   </View>
                   <ChevronLeft size={18} color={selectedLevel.color} />
@@ -485,6 +499,12 @@ export default function LessonConversationHub({
                               </Text>
                             </View>
                           </View>
+                          {(() => {
+                            const mission = missionForLesson(item.id, item.situation || item.subtitle, []);
+                            return mission.curated ? (
+                              <Text numberOfLines={1} style={styles.lessonRowMission}>🎯 مأموریت: {mission.goal}</Text>
+                            ) : null;
+                          })()}
                           <Text numberOfLines={2} style={styles.lessonRowSituation}>
                             {item.situation || item.subtitle || ''}
                           </Text>
@@ -584,6 +604,9 @@ const styles = StyleSheet.create({
   countPillText: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 18, color: HomeColors.ink },
   levelTitle: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 15, lineHeight: 23, color: HomeColors.ink, textAlign: 'right', writingDirection: 'rtl' },
   levelDesc: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 19, color: HomeColors.muted, textAlign: 'right', writingDirection: 'rtl' },
+  levelHostRow: { width: '100%', flexDirection: 'row-reverse', alignItems: 'center', gap: 6, marginTop: 2 },
+  levelHostEmoji: { fontSize: 14 },
+  levelHostText: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 11.5, lineHeight: 18, color: HomeColors.ink, textAlign: 'right', writingDirection: 'rtl' },
   levelRail: { flexDirection: Platform.OS === 'web' ? 'row' : 'row-reverse', gap: 8, paddingVertical: 2 },
   levelTab: {
     flexDirection: 'row',
@@ -676,6 +699,7 @@ const styles = StyleSheet.create({
   turnsPill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: '#F3F1EA' },
   turnsPillText: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 16, color: HomeColors.muted },
   lessonRowSituation: { width: '100%', fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 18, color: HomeColors.muted, textAlign: 'right', writingDirection: 'rtl' },
+  lessonRowMission: { width: '100%', fontFamily: Typography.boldFontFamily, fontSize: 11.5, lineHeight: 18, color: '#92600A', textAlign: 'right', writingDirection: 'rtl' },
   emptyCard: { padding: 20, borderRadius: 16, backgroundColor: HomeColors.surface, borderWidth: 1, borderColor: HomeColors.border, alignItems: 'center' },
   emptyText: { fontFamily: Typography.fontFamily, fontSize: 13.5, color: HomeColors.muted },
   roomTopBar: {

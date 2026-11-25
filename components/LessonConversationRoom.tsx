@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule } from 'expo-speech-recognition';
 import {
+  AlertCircle,
   CheckCircle2,
   Eye,
   EyeOff,
@@ -11,6 +12,7 @@ import {
   RefreshCw,
   Send,
   Sparkles,
+  Target,
   Volume2,
 } from 'lucide-react-native';
 import SpeakCheck from '@/components/SpeakCheck';
@@ -28,12 +30,15 @@ import {
 import { saveLessonOutcome } from '@/lib/lessonOutcomes';
 import {
   conversationPracticeForLesson,
+  evaluateSemanticResponse,
   type BranchingConversation,
   type BranchingLocale,
   type Choice,
   type ConversationLevel,
   type SemanticTurn,
 } from '@/lib/branchingConversation';
+import { hostFor } from '@/lib/conversationHosts';
+import { MISSION_STEP_MIN_SCORE, missionForLesson, missionGrade, missionOverall } from '@/lib/conversationMissions';
 import {
   CONVERSATION_ROOM_DIALOGUES,
   resolveConversationDialogue,
@@ -178,6 +183,9 @@ export default function LessonConversationRoom({
   const [draft, setDraft] = useState('');
   const [note, setNote] = useState('');
   const [learnerActuals, setLearnerActuals] = useState<Record<number, { text: string; status: TurnStatus }>>({});
+  // Real scoring: per-turn percent + the partner's fork reaction (branching scenes).
+  const [turnScores, setTurnScores] = useState<Record<number, number>>({});
+  const [reactions, setReactions] = useState<Record<number, { text: string; fa: string; ending?: string }>>({});
   const [hydrated, setHydrated] = useState(false);
   const [samplePlaying, setSamplePlaying] = useState(false);
 
@@ -193,6 +201,22 @@ export default function LessonConversationRoom({
   const isMine = !!current && !!myRole && current.who === myRole;
   const finished = open && index >= lines.length;
   const sent = useMemo(() => lines.slice(0, Math.min(index, lines.length)), [lines, index]);
+
+  const levelIndex = levelId ?? (activeLevel === 'Pre-A1' ? 0 : activeLevel === 'A2' ? 2 : activeLevel === 'B1' ? 3 : activeLevel === 'B2' ? 4 : activeLevel === 'C1' ? 5 : 1);
+  const host = hostFor(resolvedCourseId, levelIndex);
+
+  // Mission: goal + the learner's own turns as a checklist, scored for real.
+  const mission = useMemo(() => missionForLesson(
+    lessonId,
+    situation,
+    lines.map((line, turn) => ({ turn, label: line.fa })).filter(item => lines[item.turn].who === myRole),
+  ), [lessonId, situation, lines, myRole]);
+  const myTurnIndices = useMemo(() => lines.map((line, turn) => (line.who === myRole ? turn : -1)).filter(turn => turn >= 0), [lines, myRole]);
+  const overallPercent = missionOverall(turnScores, myTurnIndices);
+  const missionPassed = overallPercent >= mission.passPercent;
+  const endingLabel = useMemo(() => Object.values(reactions).find(reaction => reaction.ending)?.ending, [reactions]);
+  const skippedCount = Object.values(learnerActuals).filter(item => item.status === 'skipped').length;
+  const voiceCount = Object.values(learnerActuals).filter(item => item.status === 'spoken').length;
   const partnerName = nameOf(lines.find(line => line.who !== myRole)?.who ?? 'هم‌صحبت');
   const myRoleLabel = myRole ? nameOf(myRole) : 'شما';
 
@@ -212,6 +236,8 @@ export default function LessonConversationRoom({
     setDraft('');
     setNote('');
     setLearnerActuals({});
+    setTurnScores({});
+    setReactions({});
     setSamplePlaying(false);
     outcomeSavedRef.current = false;
     setHydrated(true);
@@ -302,6 +328,25 @@ export default function LessonConversationRoom({
       return;
     }
     const turnStatus: TurnStatus = method === 'voice' ? 'spoken' : method === 'choice' ? 'choice' : 'typed';
+    // Real evaluation: typed/spoken turns must actually match the situation; a rejected
+    // reply stays on the turn with feedback (the sample button below is the escape hatch).
+    let score = 100;
+    if (method !== 'choice' && currentRule) {
+      const evaluation = evaluateSemanticResponse(currentRule, cleaned, locale, activeLevel);
+      if (!evaluation.accepted) {
+        setNote(evaluation.feedback);
+        return;
+      }
+      score = evaluation.score;
+      if (evaluation.branchReply) {
+        const isFinalMine = myTurnIndices[myTurnIndices.length - 1] === index;
+        setReactions(prev => ({
+          ...prev,
+          [index]: { text: evaluation.branchReply!.text, fa: evaluation.branchReply!.fa, ...(isFinalMine ? { ending: 'پایان: مسیر تازهٔ گفت‌وگو' } : {}) },
+        }));
+      }
+    }
+    setTurnScores(prev => ({ ...prev, [index]: score }));
     setLearnerActuals(prev => ({
       ...prev,
       [index]: { text: cleaned, status: turnStatus },
@@ -313,6 +358,7 @@ export default function LessonConversationRoom({
 
   const moveToNextTurn = () => {
     if (!current) return;
+    setTurnScores(prev => ({ ...prev, [index]: 40 }));
     setLearnerActuals(prev => ({
       ...prev,
       [index]: { text: current.text, status: 'skipped' },
@@ -327,6 +373,8 @@ export default function LessonConversationRoom({
     setShowPhrase(isBeginnerBand);
     setReplyMode(isBeginnerBand ? 'choice' : 'type');
     outcomeSavedRef.current = false;
+    setTurnScores({});
+    setReactions({});
     clearTimer();
     clearStall();
     spokenFor.current = null;
@@ -338,6 +386,8 @@ export default function LessonConversationRoom({
     onStop?.();
     spokenFor.current = null;
     setLearnerActuals({});
+    setTurnScores({});
+    setReactions({});
     outcomeSavedRef.current = false;
     setIndex(0);
     setTyping(false);
@@ -359,6 +409,11 @@ export default function LessonConversationRoom({
       return;
     }
     setChoiceFeedback(null);
+    // Scene fork: this choice moves the conversation down its own path and the partner
+    // reacts to it; an `ending` choice on the final turn names the session's ending.
+    if (ch.branchReply) {
+      setReactions(prev => ({ ...prev, [index]: { text: ch.branchReply!.text, fa: ch.branchReply!.fa, ending: ch.ending } }));
+    }
     // Play the selected line briefly in background or just append cleanly into the chat thread.
     submitAnswer(ch.text, 'choice');
   };
@@ -388,29 +443,28 @@ export default function LessonConversationRoom({
     }
   };
 
-  // Quietly record completion without surfacing exam grades or percentage scores to the learner.
+  // Record the real outcome of the session (mission score with a pass mark), not a blanket success.
   useEffect(() => {
     if (!finished || !lines.length || outcomeSavedRef.current) return;
     outcomeSavedRef.current = true;
-    const entries = Object.values(learnerActuals);
-    const voiceTurns = entries.filter(item => item.status === 'spoken').length;
+    const answered = Object.keys(learnerActuals).length;
     void saveLessonOutcome(resolvedCourseId, lessonId, {
       oralExam: {
-        mode: 'listen-echo',
-        overall: 100,
-        bestOverall: 100,
-        pronunciation: 100,
-        semantic: 100,
-        independence: 100,
-        interaction: 100,
-        grade: 'A',
-        passed: true,
-        voiceTurns,
+        mode: 'guided-practice',
+        overall: overallPercent,
+        bestOverall: overallPercent,
+        pronunciation: overallPercent,
+        semantic: overallPercent,
+        independence: answered ? Math.max(0, 100 - Math.round((skippedCount / answered) * 100)) : 0,
+        interaction: myTurnIndices.length ? Math.round((answered / myTurnIndices.length) * 100) : 0,
+        grade: missionGrade(overallPercent),
+        passed: missionPassed,
+        voiceTurns: voiceCount,
         totalTurns: lines.length,
         at: new Date().toISOString(),
       },
     });
-  }, [finished, learnerActuals, lessonId, lines.length, resolvedCourseId]);
+  }, [finished, learnerActuals, lessonId, lines.length, missionPassed, overallPercent, resolvedCourseId, skippedCount, voiceCount, myTurnIndices.length]);
 
   const availableChoices: Choice[] = useMemo(() => {
     if (currentRule?.choices?.length) return currentRule.choices;
@@ -494,17 +548,38 @@ export default function LessonConversationRoom({
           </Pressable>
         </View>
       ) : finished ? (
-        <View style={styles.doneCard}>
+        <View style={[styles.doneCard, !missionPassed && styles.doneCardRetry]}>
           <View style={styles.doneHeader}>
-            <View style={styles.doneIconBadge}>
-              <CheckCircle2 size={22} color="#FFFFFF" />
+            <View style={[styles.doneIconBadge, !missionPassed && styles.doneIconRetry]}>
+              {missionPassed ? <CheckCircle2 size={22} color="#FFFFFF" /> : <AlertCircle size={22} color="#FFFFFF" />}
             </View>
             <View style={styles.doneCopy}>
-              <Text style={styles.doneTitle}>گفت‌وگو با موفقیت انجام شد!</Text>
+              <Text style={styles.doneTitle}>{missionPassed ? 'مأموریت انجام شد!' : 'مأموریت کامل نشد'}</Text>
               <Text style={styles.doneText}>
-                تمام پیام‌های این موقعیت را مرور و تمرین کردی. هر کدام را لمس کنی دوباره پخش می‌شود.
+                {missionPassed
+                  ? `امتیاز گفت‌وگو: ${fa(overallPercent)}٪ از حد قبولی ${fa(mission.passPercent)}٪. هر پیام را لمس کنی دوباره پخش می‌شود.`
+                  : `امتیاز این بار ${fa(overallPercent)}٪ بود (حد قبولی ${fa(mission.passPercent)}٪). گام‌های نارنجی را با صدا یا نوشتنِ خودت دوباره بگو و تکرار کن.`}
               </Text>
             </View>
+          </View>
+
+          {endingLabel ? (
+            <View style={styles.endingChip}><Text style={styles.endingChipText}>{endingLabel}</Text></View>
+          ) : null}
+
+          <View style={styles.missionList}>
+            <Text style={styles.missionListTitle}>چک‌لیست مأموریت</Text>
+            {mission.steps.map(step => {
+              const stepScore = turnScores[step.turn] ?? 0;
+              const stepDone = stepScore >= MISSION_STEP_MIN_SCORE;
+              return (
+                <View key={`mission-${step.turn}`} style={styles.missionStepRow}>
+                  <Text style={[styles.missionStepDot, stepDone && styles.missionStepDotDone]}>{stepDone ? '✓' : '•'}</Text>
+                  <Text numberOfLines={1} style={[styles.missionStepLabel, stepDone && styles.missionStepLabelDone]}>{step.label}</Text>
+                  <Text style={[styles.missionStepScore, !stepDone && styles.missionStepScoreWeak]}>{fa(stepScore)}</Text>
+                </View>
+              );
+            })}
           </View>
 
           <View style={styles.reviewList}>
@@ -544,6 +619,27 @@ export default function LessonConversationRoom({
         </View>
       ) : (
         <View style={styles.chatShell}>
+          {/* Host strip + mission banner (format reform: who you are talking to, and what for) */}
+          {host ? (
+            <View style={styles.hostStrip}>
+              <Text style={styles.hostEmoji}>{host.emoji}</Text>
+              <View style={styles.hostCopy}>
+                <Text style={styles.hostName}>{host.name} · میزبان این سطح</Text>
+                <Text style={styles.hostBio}>{host.bio}</Text>
+              </View>
+              <View style={styles.missionChip}>
+                <Target size={12} color="#FFFFFF" />
+                <Text style={styles.missionChipText}>مأموریت</Text>
+              </View>
+            </View>
+          ) : null}
+          <View style={styles.missionBanner}>
+            <Text numberOfLines={1} style={styles.missionGoalText}>🎯 {mission.goal}</Text>
+            <Text style={styles.missionProgressText}>
+              گام {fa(Object.values(turnScores).filter(value => value >= MISSION_STEP_MIN_SCORE).length)} از {fa(myTurnIndices.length)}
+            </Text>
+          </View>
+
           {/* Chat Header */}
           <View style={styles.chatTopBar} accessibilityLiveRegion="polite">
             <View style={styles.partnerInfo}>
@@ -594,8 +690,10 @@ export default function LessonConversationRoom({
               const actual = learnerActuals[at];
               const isLearnerBubble = line.who === myRole;
               const bubbleText = isLearnerBubble && actual && actual.status !== 'skipped' ? actual.text : line.text;
+              const reaction = reactions[at];
               return (
-                <View key={`sent-wrap-${at}`} style={[styles.bubble, isLearnerBubble ? styles.mine : styles.theirs]}>
+                <View key={`sent-wrap-${at}`} style={styles.bubbleGroup}>
+                <View style={[styles.bubble, isLearnerBubble ? styles.mine : styles.theirs]}>
                   <View style={styles.bubbleTop}>
                     <Text style={styles.who}>{isLearnerBubble ? `شما (${myRoleLabel})` : partnerName}</Text>
                     <Pressable
@@ -609,6 +707,14 @@ export default function LessonConversationRoom({
                   </View>
                   <Text style={[styles.lineText, isRtlTarget && styles.rtlText]}>{bubbleText}</Text>
                   {showTranslations && line.fa ? <Text style={styles.lineFa}>{line.fa}</Text> : null}
+                </View>
+                {reaction ? (
+                  <View style={[styles.bubble, styles.theirs, styles.reactionBubble]}>
+                    <Text style={styles.who}>{partnerName} · واکنش</Text>
+                    <Text style={[styles.lineText, isRtlTarget && styles.rtlText]}>{reaction.text}</Text>
+                    <Text style={styles.lineFa}>{reaction.fa}</Text>
+                  </View>
+                ) : null}
                 </View>
               );
             })}
@@ -858,6 +964,30 @@ const styles = StyleSheet.create({
   progressTrack: { flexDirection: 'row-reverse', gap: 4 },
   progressSeg: { flex: 1, height: 4, borderRadius: 2, backgroundColor: '#E2E6F3' },
   progressSegDone: { backgroundColor: Palette.primary },
+
+  hostStrip: { width: '100%', flexDirection: 'row-reverse', alignItems: 'center', gap: 10, borderRadius: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F5', padding: 10 },
+  hostEmoji: { fontSize: 22 },
+  hostCopy: { flex: 1, minWidth: 0, gap: 1 },
+  hostName: { fontFamily: Typography.boldFontFamily, fontSize: 12.5, color: Palette.ink, textAlign: 'right', writingDirection: 'rtl' },
+  hostBio: { fontFamily: Typography.fontFamily, fontSize: 11, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
+  missionChip: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4, borderRadius: 999, backgroundColor: Palette.primary, paddingHorizontal: 9, paddingVertical: 4 },
+  missionChipText: { fontFamily: Typography.boldFontFamily, fontSize: 10.5, color: '#FFFFFF' },
+  missionBanner: { width: '100%', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8, borderRadius: 14, backgroundColor: '#FFF8E6', borderWidth: 1, borderColor: '#F2E3B3', paddingHorizontal: 12, paddingVertical: 8 },
+  missionGoalText: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 19, color: '#8A6D1A', textAlign: 'right', writingDirection: 'rtl' },
+  missionProgressText: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: '#8A6D1A' },
+  bubbleGroup: { width: '100%', gap: 4 },
+  reactionBubble: { borderStyle: 'dashed', borderColor: '#B9C4E8' },
+  endingChip: { alignSelf: 'center', borderRadius: 999, backgroundColor: '#EEF2FF', borderWidth: 1, borderColor: '#C7D2FE', paddingHorizontal: 12, paddingVertical: 5 },
+  endingChipText: { fontFamily: Typography.boldFontFamily, fontSize: 11.5, color: '#4338CA', writingDirection: 'rtl' },
+  missionList: { width: '100%', borderRadius: 14, backgroundColor: '#F8FAFF', borderWidth: 1, borderColor: '#E2E8F5', padding: 12, gap: 6 },
+  missionListTitle: { fontFamily: Typography.boldFontFamily, fontSize: 12, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
+  missionStepRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
+  missionStepDot: { width: 18, height: 18, borderRadius: 9, backgroundColor: '#FFF1D6', borderWidth: 1, borderColor: '#F2C94C', textAlign: 'center', lineHeight: 16, fontSize: 11, color: '#92600A', overflow: 'hidden' },
+  missionStepDotDone: { backgroundColor: '#D1FAE5', borderColor: '#34D399', color: '#065F46' },
+  missionStepLabel: { flex: 1, fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.text, textAlign: 'right', writingDirection: 'rtl' },
+  missionStepLabelDone: { color: '#065F46' },
+  missionStepScore: { fontFamily: Typography.boldFontFamily, fontSize: 11, color: '#059669' },
+  missionStepScoreWeak: { color: '#B45309' },
   progressSegNow: { backgroundColor: '#10B981' },
   thread: { width: '100%', gap: 8, paddingVertical: 4 },
   bubble: { borderRadius: 18, padding: 12, borderWidth: 1, gap: 4 },
@@ -915,6 +1045,8 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.85 },
 
   doneCard: { width: '100%', marginTop: 6, padding: 16, borderRadius: 22, alignItems: 'stretch', gap: 14, borderWidth: 1, backgroundColor: '#F6FBF8', borderColor: '#BBF7D0' },
+  doneCardRetry: { backgroundColor: '#FFF9EF', borderColor: '#F5D08C' },
+  doneIconRetry: { backgroundColor: '#D97706' },
   doneHeader: { flexDirection: 'row-reverse', alignItems: 'center', gap: 12 },
   doneIconBadge: { width: 42, height: 42, borderRadius: 21, backgroundColor: '#16A34A', alignItems: 'center', justifyContent: 'center' },
   doneCopy: { flex: 1, gap: 3, alignItems: 'flex-end' },
