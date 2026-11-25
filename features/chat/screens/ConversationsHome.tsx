@@ -319,12 +319,15 @@ export default function ConversationsHome() {
           ) : null}
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`رفتن به اتاق‌های مکالمهٔ شبیه‌سازی‌شدهٔ ${copy.shortName}`}
-            onPress={() => router.push({ pathname: '/conversation-rooms/[language]', params: { language: displayCopyLang } } as never)}
+            accessibilityLabel={`رفتن به اتاق گفت‌وگوی ${copy.shortName}`}
+            onPress={() => router.push({
+              pathname: '/dialogue-room/[language]',
+              params: lessonId ? { language: displayCopyLang, lessonId } : { language: displayCopyLang },
+            } as never)}
             style={styles.simRoomsButton}
           >
             <Text style={styles.simRoomsText}>
-              تمرین فردی می‌خواهی؟ ورود به اتاق مکالمهٔ شبیه‌سازی‌شدهٔ {copy.shortName}
+              ورود به اتاق گفت‌وگوی {copy.shortName}
             </Text>
             <ChevronLeft size={16} color={Colors.primary[300]} />
           </Pressable>

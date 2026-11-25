@@ -6,7 +6,7 @@ import { Bot, ChevronLeft, MessageCircle, UserRound } from 'lucide-react-native'
 import SpeakCheck, { type SpeakCheckResult } from '@/components/SpeakCheck';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { stop as stopCourseSpeech } from '@/lib/courseSpeech';
-import { Radius, Spacing, Typography } from '@/lib/theme';
+import { Radius, Shadows, Spacing, Typography } from '@/lib/theme';
 import { toPersianDigits as fa } from '@/lib/format';
 
 /**
@@ -52,37 +52,48 @@ export default function LessonDialogueRoom({ language, lessonId, lessonTitle, le
   turnRef.current = turn;
   const spokenRef = useRef<Set<string>>(new Set());
   const advancedRef = useRef<number>(-1);
+  // Lesson props arrive as fresh array/function identities on every parent
+  // render. The room must never stop or restart its voice because of that, so
+  // the speech effect reads them through refs and depends on turn state only.
+  const linesRef = useRef(lines);
+  linesRef.current = lines;
+  const onSpeakRef = useRef(onSpeak);
+  onSpeakRef.current = onSpeak;
 
   const speakerOf = useCallback((index: number): Speaker => ((index % 2 === 0) === (starter === 'operator') ? 'operator' : 'me'), [starter]);
 
-  // One advance per turn: a voice engine may report both done and error for the
-  // same utterance, and the room must never skip a sentence because of it.
-  const advance = useCallback(() => {
-    const current = turnRef.current;
-    if (advancedRef.current === current) return;
-    advancedRef.current = current;
-    if (current + 1 < lines.length) setTurn(current + 1);
+  // One advance per turn, bound to that turn: a late callback for an earlier
+  // line (a voice stopped without callbacks, a stale recogniser result) must
+  // never skip a sentence or re-advance the same one.
+  const advanceFor = useCallback((index: number) => {
+    if (index !== turnRef.current || advancedRef.current === index) return;
+    advancedRef.current = index;
+    if (index + 1 < linesRef.current.length) setTurn(index + 1);
     else setPhase('done');
-  }, [lines.length]);
+  }, []);
 
-  // The operator's turn: speak the line exactly once; when the voice finishes
-  // (or fails), move on. The spoken-guard keeps engine retries silent.
+  // The operator's turn: speak the line exactly once and move on when the
+  // voice finishes or errors. If the engine never reports either (an utterance
+  // stopped without callbacks), a generous watchdog keeps the room moving so
+  // the dialogue always runs to the end instead of locking on «گوش کن».
   useEffect(() => {
     if (phase !== 'run') return;
-    const line = lines[turn];
+    const line = linesRef.current[turn];
     if (!line) return;
-    if (speakerOf(turn) === 'operator') {
-      const key = `${starter}:${turn}`;
-      if (spokenRef.current.has(key)) return;
+    if (speakerOf(turn) !== 'operator') return;
+    const key = `${starter}:${turn}`;
+    if (!spokenRef.current.has(key)) {
       spokenRef.current.add(key);
-      onSpeak(line.text, advance);
+      onSpeakRef.current(line.text, () => advanceFor(turn));
     }
-    return () => { void stopCourseSpeech(); };
-  }, [phase, turn, starter, lines, onSpeak, speakerOf, advance]);
+    const rescue = setTimeout(() => advanceFor(turn), Math.min(30000, Math.max(15000, 4000 + line.text.length * 150)));
+    return () => clearTimeout(rescue);
+  }, [phase, turn, starter, speakerOf, advanceFor]);
 
   useEffect(() => () => { void stopCourseSpeech(); }, []);
 
   const start = useCallback((who: Speaker) => {
+    void stopCourseSpeech();
     spokenRef.current = new Set();
     advancedRef.current = -1;
     turnRef.current = 0;
@@ -93,9 +104,10 @@ export default function LessonDialogueRoom({ language, lessonId, lessonTitle, le
   }, []);
 
   const onUserResult = useCallback((index: number, result: SpeakCheckResult) => {
+    if (index !== turnRef.current) return;
     setResults(current => (current[index] ? current : { ...current, [index]: result }));
-    advance();
-  }, [advance]);
+    advanceFor(index);
+  }, [advanceFor]);
 
   const userIndexes = useMemo(() => lines.map((_, index) => index).filter(index => speakerOf(index) === 'me'), [lines, speakerOf]);
 
@@ -204,11 +216,13 @@ export default function LessonDialogueRoom({ language, lessonId, lessonTitle, le
         </View>
       ) : null}
 
-      <Pressable accessibilityRole="button" accessibilityLabel="مکالمه با شخص زنده" style={[styles.liveButton, { backgroundColor: accent }]} onPress={openLiveConversation}>
-        <MessageCircle size={18} color="#FFFFFF" />
-        <Text style={styles.liveButtonText}>مکالمه با شخص زنده</Text>
-        <ChevronLeft size={16} color="#FFFFFF" />
-      </Pressable>
+      <View style={styles.liveCard}>
+        <Pressable accessibilityRole="button" accessibilityLabel="مکالمه با شخص زنده" style={[styles.liveButton, { backgroundColor: accent }]} onPress={openLiveConversation}>
+          <MessageCircle size={18} color="#FFFFFF" />
+          <Text style={styles.liveButtonText}>مکالمه با شخص زنده</Text>
+          <ChevronLeft size={16} color="#FFFFFF" />
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -246,6 +260,7 @@ const styles = StyleSheet.create({
   reviewLine: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Palette.ink, textAlign: 'right' },
   reviewOk: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Palette.success, textAlign: 'right', writingDirection: 'rtl' },
   reviewMissed: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Palette.danger, textAlign: 'right', writingDirection: 'rtl' },
-  liveButton: { minHeight: 48, borderRadius: Radius.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.xs, paddingVertical: Spacing.sm },
+  liveCard: { width: '100%', marginTop: Spacing.xl, padding: Spacing.md, borderRadius: Radius.xl, backgroundColor: Palette.surface, borderWidth: 1, borderColor: Palette.border, ...Shadows.card },
+  liveButton: { width: '100%', minHeight: 48, borderRadius: Radius.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.xs, paddingVertical: Spacing.sm },
   liveButtonText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, color: '#FFFFFF', textAlign: 'center', writingDirection: 'rtl' },
 });
