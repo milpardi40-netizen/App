@@ -51,7 +51,7 @@ const TABS: Array<{ id: Tab; label: string }> = [
   { id: 'overview', label: 'نمای کلی' },
   { id: 'languages', label: 'زبان‌ها' },
   { id: 'achievements', label: 'دستاوردها' },
-  { id: 'account', label: 'حساب' },
+  { id: 'account', label: 'تنظیمات' },
 ];
 
 export default function ProfileScreen() {
