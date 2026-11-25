@@ -7,6 +7,7 @@
     "dev": "EXPO_NO_TELEMETRY=1 node scripts/run-expo.mjs start",
     "dev:web": "node scripts/serve-preview.mjs",
     "build:web": "node scripts/run-expo.mjs export --platform web --clear",
+    "build:web:root": "EXPO_PUBLIC_WEB_ROOT=true node scripts/run-expo.mjs export --platform web --clear",
     "build:web:admin": "MILO_ADMIN_APP=true EXPO_PUBLIC_MILO_ADMIN_APP=true EXPO_PUBLIC_ENABLE_EDUCATION_ADMIN=true EXPO_PUBLIC_LEARNER_LOGIN=false EXPO_PUBLIC_LANGUAGE_SCOPE=en,tr node scripts/run-expo.mjs export --platform web --clear",
     "build:web:learner": "EXPO_PUBLIC_MILO_ADMIN_APP=false EXPO_PUBLIC_ENABLE_EDUCATION_ADMIN=false EXPO_PUBLIC_LEARNER_LOGIN=false EXPO_PUBLIC_LANGUAGE_SCOPE=en,ru,tr,de,fr,es,ar node scripts/run-expo.mjs export --platform web --clear",
     "build:site": "node scripts/build-site.mjs",
