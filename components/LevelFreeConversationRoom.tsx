@@ -218,6 +218,20 @@ export default function LevelFreeConversationRoom({
   const host = hostFor(courseId, level.id);
   const isArabic = courseId === 'ar';
 
+  // Full speech: the partner's incoming line is voiced as it lands, and the learner's
+  // target line is voiced as a model whenever it is not hidden (blind practice stays blind).
+  useEffect(() => {
+    if (!current) return;
+    if (current.partnerText) {
+      onSpeak(current.partnerText, () => {
+        if (revealed) onSpeak(current.text, () => undefined);
+      });
+    } else if (revealed) {
+      onSpeak(current.text, () => undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current?.lessonId, current?.text, index, round]);
+
   const handleRemix = useCallback(() => {
     onStop();
     setRound(prev => prev + 1);
@@ -269,7 +283,7 @@ export default function LevelFreeConversationRoom({
             {toPersianDigits(producedPercent)}٪ · {toPersianDigits(producedCount)} پاسخ از خودت از {toPersianDigits(transcript.length)} نوبت
           </Text>
           <Text style={styles.engagementHint}>
-            هر نوبتی که با نوشتن یا صدای خودت جواب گرفتی کامل شمرده می‌شود؛ پاسخ نمونه نصفِ رشد است.
+            هر نوبتی که با نوشتن یا صدای خودت جواب گرفتی کامل شمرده می‌شود.
           </Text>
         </View>
 
@@ -529,16 +543,6 @@ export default function LevelFreeConversationRoom({
           <View style={styles.heardNote}>
             <Text style={styles.heardNoteText}>صدای شما در گفت‌وگو ثبت شد.</Text>
           </View>
-        ) : null}
-
-        {mode !== 'guided' ? (
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => submitTurn(current.text)}
-            style={styles.skipChip}
-          >
-            <Text style={styles.skipChipText}>ارسال با پاسخ نمونه</Text>
-          </Pressable>
         ) : null}
       </View>
     </View>
@@ -882,21 +886,6 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  skipChip: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 11,
-    paddingVertical: 6,
-    borderRadius: 999,
-    backgroundColor: '#F3F1EA',
-    borderWidth: 1,
-    borderColor: HomeColors.border,
-  },
-  skipChipText: {
-    fontFamily: Typography.boldFontFamily,
-    fontSize: 11.5,
-    color: HomeColors.ink,
-    writingDirection: 'rtl',
   },
   heardNote: {
     paddingHorizontal: 12,

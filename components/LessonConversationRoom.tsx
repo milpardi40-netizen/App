@@ -9,9 +9,11 @@ import {
   Keyboard,
   MessageCircle,
   Mic2,
+  Play,
   RefreshCw,
   Send,
   Sparkles,
+  Square,
   Target,
   Volume2,
 } from 'lucide-react-native';
@@ -45,7 +47,7 @@ import {
 } from '@/lib/conversationRoomDialogues';
 
 type ChatLine = { who: string; role: 'learner' | 'partner'; text: string; fa: string };
-type TurnStatus = 'spoken' | 'typed' | 'choice' | 'skipped';
+type TurnStatus = 'spoken' | 'typed' | 'choice';
 type ReplyMode = 'choice' | 'voice' | 'type';
 
 type Props = {
@@ -193,6 +195,7 @@ export default function LessonConversationRoom({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stall = useRef<ReturnType<typeof setTimeout> | null>(null);
   const spokenFor = useRef<number | null>(null);
+  const previewToken = useRef(0);
 
   const current = lines[index];
   const currentRule: SemanticTurn | undefined = current
@@ -215,14 +218,14 @@ export default function LessonConversationRoom({
   const overallPercent = missionOverall(turnScores, myTurnIndices);
   const missionPassed = overallPercent >= mission.passPercent;
   const endingLabel = useMemo(() => Object.values(reactions).find(reaction => reaction.ending)?.ending, [reactions]);
-  const skippedCount = Object.values(learnerActuals).filter(item => item.status === 'skipped').length;
   const voiceCount = Object.values(learnerActuals).filter(item => item.status === 'spoken').length;
+  const producedCount = Object.values(learnerActuals).filter(item => item.status === 'spoken' || item.status === 'typed').length;
   const partnerName = nameOf(lines.find(line => line.who !== myRole)?.who ?? 'هم‌صحبت');
   const myRoleLabel = myRole ? nameOf(myRole) : 'شما';
 
   const clearTimer = () => { if (timer.current) { clearTimeout(timer.current); timer.current = null; } };
   const clearStall = () => { if (stall.current) { clearTimeout(stall.current); stall.current = null; } };
-  useEffect(() => () => { clearTimer(); clearStall(); onStop?.(); }, [onStop]);
+  useEffect(() => () => { previewToken.current += 1; clearTimer(); clearStall(); onStop?.(); }, [onStop]);
 
   useEffect(() => {
     const restored = normalizeLessonConversation(initialSession, lines.length, roles, declared);
@@ -288,6 +291,21 @@ export default function LessonConversationRoom({
     });
   }, [current, speak]);
 
+  // «پخش کامل گفت‌وگو» — the whole dialogue voiced line by line, before entering.
+  const [previewPlaying, setPreviewPlaying] = useState(false);
+  const playFullPreview = useCallback(() => {
+    if (previewPlaying) { previewToken.current += 1; setPreviewPlaying(false); onStop?.(); return; }
+    const token = previewToken.current + 1;
+    previewToken.current = token;
+    setPreviewPlaying(true);
+    const step = (i: number) => {
+      if (token !== previewToken.current) return;
+      if (i >= lines.length) { setPreviewPlaying(false); return; }
+      speak(lines[i].text, -100 - i, () => setTimeout(() => step(i + 1), 420));
+    };
+    step(0);
+  }, [previewPlaying, lines, speak, onStop]);
+
   const advance = useCallback(() => {
     clearStall();
     onStop?.();
@@ -320,11 +338,20 @@ export default function LessonConversationRoom({
     showPartner(index);
   }, [current, index, isMine, open, showPartner, typing]);
 
+  // Full speech: the learner's own target line is also voiced the moment its turn
+  // arrives (listen-and-repeat), so the complete conversation is spoken aloud.
+  useEffect(() => {
+    if (!open || !current || !isMine) return;
+    if (spokenFor.current === index) return;
+    spokenFor.current = index;
+    speak(current.text, index);
+  }, [current, index, isMine, open, speak]);
+
   const submitAnswer = (answer: string, method: 'voice' | 'typed' | 'choice' = 'typed') => {
     if (!current) return;
     const cleaned = answer.trim();
     if (!cleaned) {
-      setNote('اول پاسخی انتخاب کن، بنویس یا با «پاسخ نمونه» ادامه بده.');
+      setNote('اول پاسخی انتخاب کن، بنویس یا با صدای خودت بگو.');
       return;
     }
     const turnStatus: TurnStatus = method === 'voice' ? 'spoken' : method === 'choice' ? 'choice' : 'typed';
@@ -356,18 +383,10 @@ export default function LessonConversationRoom({
     advance();
   };
 
-  const moveToNextTurn = () => {
-    if (!current) return;
-    setTurnScores(prev => ({ ...prev, [index]: 40 }));
-    setLearnerActuals(prev => ({
-      ...prev,
-      [index]: { text: current.text, status: 'skipped' },
-    }));
-    advance();
-  };
-
   // Start immediately without blocking on a scary microphone permission popup; mic is 100% opt-in.
   const begin = () => {
+    previewToken.current += 1;
+    setPreviewPlaying(false);
     setOpen(true);
     setIndex(0);
     setShowPhrase(isBeginnerBand);
@@ -385,6 +404,8 @@ export default function LessonConversationRoom({
     clearStall();
     onStop?.();
     spokenFor.current = null;
+    previewToken.current += 1;
+    setPreviewPlaying(false);
     setLearnerActuals({});
     setTurnScores({});
     setReactions({});
@@ -455,7 +476,7 @@ export default function LessonConversationRoom({
         bestOverall: overallPercent,
         pronunciation: overallPercent,
         semantic: overallPercent,
-        independence: answered ? Math.max(0, 100 - Math.round((skippedCount / answered) * 100)) : 0,
+        independence: answered ? Math.round((producedCount / answered) * 100) : 0,
         interaction: myTurnIndices.length ? Math.round((answered / myTurnIndices.length) * 100) : 0,
         grade: missionGrade(overallPercent),
         passed: missionPassed,
@@ -464,7 +485,7 @@ export default function LessonConversationRoom({
         at: new Date().toISOString(),
       },
     });
-  }, [finished, learnerActuals, lessonId, lines.length, missionPassed, overallPercent, resolvedCourseId, skippedCount, voiceCount, myTurnIndices.length]);
+  }, [finished, learnerActuals, lessonId, lines.length, missionPassed, overallPercent, resolvedCourseId, producedCount, voiceCount, myTurnIndices.length]);
 
   const availableChoices: Choice[] = useMemo(() => {
     if (currentRule?.choices?.length) return currentRule.choices;
@@ -513,6 +534,18 @@ export default function LessonConversationRoom({
             <Text style={[styles.previewLine, isRtlTarget && styles.rtlText]}>{lines[0]?.text}</Text>
             <Text style={styles.previewFa}>{lines[0]?.fa}</Text>
           </View>
+
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={previewPlaying ? 'توقف پخش کامل گفت‌وگو' : 'پخش کامل گفت‌وگو با صدا'}
+            onPress={playFullPreview}
+            style={({ pressed }) => [styles.fullPlayBtn, previewPlaying && styles.fullPlayBtnActive, pressed && styles.pressed]}
+          >
+            {previewPlaying ? <Square size={15} color={Palette.primaryDark} /> : <Play size={15} color="#FFFFFF" />}
+            <Text style={[styles.fullPlayText, previewPlaying && styles.fullPlayTextActive]}>
+              {previewPlaying ? 'توقف پخش' : 'پخش کامل گفت‌وگو'}
+            </Text>
+          </Pressable>
 
           {roles.length > 1 ? (
             <View style={styles.roleBox}>
@@ -689,7 +722,7 @@ export default function LessonConversationRoom({
             {sent.map((line, at) => {
               const actual = learnerActuals[at];
               const isLearnerBubble = line.who === myRole;
-              const bubbleText = isLearnerBubble && actual && actual.status !== 'skipped' ? actual.text : line.text;
+              const bubbleText = isLearnerBubble && actual ? actual.text : line.text;
               const reaction = reactions[at];
               return (
                 <View key={`sent-wrap-${at}`} style={styles.bubbleGroup}>
@@ -795,12 +828,7 @@ export default function LessonConversationRoom({
                     <Text style={styles.listenBtnText}>{samplePlaying ? 'پخش…' : 'بشنو'}</Text>
                   </Pressable>
                 </View>
-              ) : (
-                <Pressable accessibilityRole="button" style={styles.helperChip} onPress={playCurrent}>
-                  <Volume2 size={14} color={Palette.primaryDark} />
-                  <Text style={styles.helperChipText}>{samplePlaying ? 'در حال پخش…' : 'شنیدن پاسخ نمونه'}</Text>
-                </Pressable>
-              )}
+              ) : null}
 
               {/* Mode Selector Tabs */}
               <View style={styles.modeSwitcher}>
@@ -895,9 +923,6 @@ export default function LessonConversationRoom({
               ) : null}
 
               <View style={styles.composerFooter}>
-                <Pressable accessibilityRole="button" style={styles.skipButton} onPress={moveToNextTurn}>
-                  <Text style={styles.skipText}>ارسال با پاسخ نمونه</Text>
-                </Pressable>
                 {roles.length > 1 ? (
                   <Pressable accessibilityRole="button" style={styles.linkButton} onPress={flipRole}>
                     <Text style={styles.linkText}>جابه‌جایی نقش</Text>
@@ -1019,8 +1044,10 @@ const styles = StyleSheet.create({
   listenBtn: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4, paddingHorizontal: 11, paddingVertical: 6, borderRadius: 999, backgroundColor: Palette.primary },
   listenBtnActive: { backgroundColor: Palette.primaryDark },
   listenBtnText: { fontFamily: Typography.boldFontFamily, fontSize: 11.5, color: '#FFFFFF', writingDirection: 'rtl' },
-  helperChip: { alignSelf: 'flex-end', flexDirection: 'row-reverse', alignItems: 'center', gap: 5, paddingHorizontal: 11, paddingVertical: 6, borderRadius: 999, backgroundColor: '#EEF2FF', borderWidth: 1, borderColor: '#C7D2FE' },
-  helperChipText: { fontFamily: Typography.boldFontFamily, fontSize: 11.5, color: Palette.primaryDark, writingDirection: 'rtl' },
+  fullPlayBtn: { minHeight: 44, width: '100%', maxWidth: 340, borderRadius: 16, backgroundColor: Palette.primary, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, paddingHorizontal: 16 },
+  fullPlayBtnActive: { backgroundColor: '#EEF2FF', borderWidth: 1, borderColor: Palette.primary },
+  fullPlayText: { fontFamily: Typography.boldFontFamily, fontSize: 13.5, color: '#FFFFFF', writingDirection: 'rtl' },
+  fullPlayTextActive: { color: Palette.primaryDark },
 
   modeSwitcher: { flexDirection: 'row-reverse', gap: 6, padding: 3, borderRadius: 12, backgroundColor: '#F1F4FA' },
   modeTab: { flex: 1, minHeight: 34, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 5, borderRadius: 9, paddingHorizontal: 6 },
@@ -1036,9 +1063,7 @@ const styles = StyleSheet.create({
   compose: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
   input: { flex: 1, minHeight: 44, borderRadius: 14, borderWidth: 1, borderColor: Palette.border, backgroundColor: '#FFFFFF', paddingHorizontal: 12, fontFamily: Typography.latinFontFamily, fontSize: 15.5, color: Palette.ink },
   send: { width: 44, height: 44, borderRadius: 22, backgroundColor: Palette.primary, alignItems: 'center', justifyContent: 'center' },
-  composerFooter: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingTop: 2 },
-  skipButton: { minHeight: 34, justifyContent: 'center', paddingHorizontal: 11, borderRadius: 999, backgroundColor: '#F1F5F9', borderWidth: 1, borderColor: '#CBD5E1' },
-  skipText: { fontFamily: Typography.boldFontFamily, fontSize: 11.5, color: Palette.text, writingDirection: 'rtl' },
+  composerFooter: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'flex-end', gap: 8, paddingTop: 2 },
   linkButton: { minHeight: 34, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6 },
   linkText: { fontFamily: Typography.fontFamily, fontSize: 12.5, color: Palette.primary, writingDirection: 'rtl' },
   note: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: Palette.primaryDark, textAlign: 'center', writingDirection: 'rtl' },
