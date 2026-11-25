@@ -276,7 +276,7 @@ check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ
 check(turkish.TURKISH_LEVELS.map(level => level.cefr).join('|') === 'Pre-A1|A1|A2|B1|B2|C1', 'Turkish publishes six distinct CEFR bands');
 check(turkish.TURKISH_LEVELS.map(level => level.id).join('|') === russian.RUSSIAN_LEVELS.map(level => level.id).join('|'), 'Level ids agree across both maps');
 // Both ladders are ten stages long and share the exact same ten-stage progression
-// ending with «اتاق مکالمه» (Conversation Room) at stage 9.
+// ending with the lesson dialogue stage (Conversation Room) at stage 9.
 check(turkish.TURKISH_LESSON_STAGES.length === 10 && russian.RUSSIAN_LESSON_STAGES.length === 10
   && JSON.stringify(turkish.TURKISH_LESSON_STAGES) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES)
   && turkish.TURKISH_LESSON_STAGES[turkish.TURKISH_LESSON_STAGES.length - 1].id === 'conversation-room', 'Turkish and Russian share the exact ten-stage core ending with the conversation room');

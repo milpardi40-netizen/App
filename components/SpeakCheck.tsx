@@ -34,7 +34,7 @@ type Props = {
   /** Learner CEFR level used to scale speaking and thinking-pause headroom (when adaptiveTiming is enabled). */
   level?: SpeechLevel;
   levelId?: number;
-  /** Enable level/length-calibrated timing and countdown hint (used exclusively in «اتاق مکالمه»). */
+  /** Enable level/length-calibrated timing and countdown hint (used in the lesson dialogue stage). */
   adaptiveTiming?: boolean;
   /** Hide target words and missed-word hints (used during real oral exam mode). */
   blindExam?: boolean;

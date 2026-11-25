@@ -61,7 +61,7 @@ export const ENGLISH_ENGINE_STEPS = [
   { id: 'grammar-through-usage', labelFa: 'دستور در کاربرد', labelEn: 'Grammar Through Usage' },
   { id: 'short-assessment', labelFa: 'سنجش کوتاه', labelEn: 'Short Assessment' },
   { id: 'speaking-check', labelFa: 'آزمون گفتاری', labelEn: 'Speaking Check' },
-  { id: 'conversation-room', labelFa: 'اتاق مکالمه', labelEn: 'Conversation Room' },
+  { id: 'conversation-room', labelFa: 'گفت‌وگوی درس', labelEn: 'Lesson Dialogue' },
 ] as const;
 
 

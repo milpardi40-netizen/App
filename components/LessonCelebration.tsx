@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Animated, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { ArrowLeft, CheckCircle2, Flame, MessageCircle, RefreshCw, Trophy } from 'lucide-react-native';
+import { ArrowLeft, CheckCircle2, Flame, RefreshCw, Trophy } from 'lucide-react-native';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { Typography } from '@/lib/theme';
 import { toPersianDigits as fa } from '@/lib/format';
@@ -31,8 +31,8 @@ interface Props {
   /** Spaced-repetition cards that are due right now; shows a short review suggestion when > 0. */
   dueReviews?: number;
   onReview?: () => void;
-  /** Set when this lesson was the last one of its level: offers the full level warm-up and optional free conversation. */
-  levelFinished?: { title: string; lessons: number; onStart?: () => void; onFreeConversation?: () => void; /** Content readiness (0–100) of the level's CEFR band; keeps the message honest. */ readiness?: number };
+  /** Set when this lesson was the last one of its level: offers the full level warm-up. */
+  levelFinished?: { title: string; lessons: number; onStart?: () => void; /** Content readiness (0–100) of the level's CEFR band; keeps the message honest. */ readiness?: number };
   /** Medals unlocked by this specific lesson; shown right here instead of hiding them in the profile. */
   newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }>;
 }
@@ -83,9 +83,8 @@ export default function LessonCelebration({ visible, lessonTitle, stats, hasNext
           </View> : null}
           {levelFinished ? <View style={styles.levelBox}>
             <View style={styles.levelHead}><Trophy size={18} color="#B45309" /><Text style={styles.levelTitle}>{levelFinished.readiness !== undefined && levelFinished.readiness < 100 ? `درس‌های آمادهٔ سطح «${levelFinished.title}» تمام شد (${fa(levelFinished.readiness)}٪ محتوا)` : `سطح «${levelFinished.title}» تمام شد!`}</Text></View>
-            <Text style={styles.levelText}>قبل از رفتن به سطح بعد، یک گرم‌کردن کامل یا گفت‌وگوی آزاد اختیاری با جمله‌های همین سطح داشته باش.</Text>
+            <Text style={styles.levelText}>قبل از رفتن به سطح بعد، یک گرم‌کردن کامل با جمله‌های همین سطح داشته باش.</Text>
             {levelFinished.onStart ? <Pressable accessibilityRole="button" onPress={levelFinished.onStart} style={styles.levelButton}><Flame size={16} color="#FFFFFF" /><Text style={styles.levelButtonText}>گرم‌کردن کامل سطح</Text></Pressable> : null}
-            {levelFinished.onFreeConversation ? <Pressable accessibilityRole="button" onPress={levelFinished.onFreeConversation} style={styles.levelFreeButton}><MessageCircle size={16} color="#92400E" /><Text style={styles.levelFreeButtonText}>گفت‌وگوی آزاد پایان سطح (اختیاری)</Text></Pressable> : null}
           </View> : null}
           {dueReviews > 0 && onReview ? <Pressable accessibilityRole="button" onPress={onReview} style={styles.reviewButton}>
             <RefreshCw size={16} color={Palette.primaryDark} />
@@ -119,8 +118,6 @@ const styles = StyleSheet.create({
   levelText: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#78350F', textAlign: 'right', writingDirection: 'rtl' },
   levelButton: { minHeight: 44, borderRadius: 12, backgroundColor: '#D97706', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8 },
   levelButtonText: { fontFamily: Typography.fontFamily, fontSize: 14, color: '#FFFFFF' },
-  levelFreeButton: { minHeight: 44, borderRadius: 12, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#F59E0B', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8 },
-  levelFreeButtonText: { fontFamily: Typography.fontFamily, fontSize: 13.5, color: '#92400E' },
   reviewButton: { marginTop: 12, width: '100%', minHeight: 46, borderRadius: 14, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF' },
   reviewText: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.primaryDark, writingDirection: 'rtl' },
   streakHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: '#8A929E', textAlign: 'center', writingDirection: 'rtl' },

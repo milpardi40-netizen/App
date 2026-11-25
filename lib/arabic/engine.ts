@@ -39,7 +39,7 @@ export const ARABIC_ENGINE_STEPS: readonly ArabicEngineStep[] = [
   { key: 'grammar-through-usage', title: 'دستور در کاربرد', subtitle: 'قالب اسمی/فعلی و مطابقت از دل مثال‌ها' },
   { key: 'short-assessment', title: 'سنجش کوتاه', subtitle: 'شنیداری، خواندن، نوشتن و کاربرد' },
   { key: 'speaking-check', title: 'آزمون گفتاری', subtitle: 'سنجش بدون تکرار و ثبت خطاهای واقعی' },
-  { key: 'conversation-room', title: 'اتاق مکالمه', subtitle: 'گفت‌وگوی استاندارد و چالش زنده با زمان‌بندی تطبیقی' },
+  { key: 'conversation-room', title: 'گفت‌وگوی درس', subtitle: 'گفت‌وگوی استاندارد و چالش زنده با زمان‌بندی تطبیقی' },
 ] as const;
 
 export interface ArabicLevelBlueprint {
