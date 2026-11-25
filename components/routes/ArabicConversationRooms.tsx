@@ -7,6 +7,7 @@ import { ARABIC_LESSONS, ARABIC_LEVELS, getArabicLesson } from '@/lib/arabic/con
 import { arabicLessonToLearningLesson } from '@/lib/arabic/engine';
 import { ARABIC_NORMAL_SPEECH_RATE, playArabicSpeech, stopArabicSpeech } from '@/lib/arabic/speech';
 import { conversationPracticeForLesson } from '@/lib/branchingConversation';
+import { resolveConversationDialogue } from '@/lib/conversationRoomDialogues';
 import { useCallback, useMemo } from 'react';
 
 const LEVEL_MAP: readonly ConversationRoomLevel[] = ARABIC_LEVELS.map(level => ({
@@ -22,9 +23,16 @@ export default function ArabicConversationRooms() {
     const grouped: Record<number, ConversationRoomSummary[]> = {};
     for (const level of ARABIC_LEVELS) grouped[level.id] = [];
     for (const lesson of ARABIC_LESSONS) {
-      const hasDialogue = lesson.dialogue.some(line => line.ar.trim());
+      const rawDialogue = lesson.dialogue.map(line => ({
+        speaker: line.name ?? (line.speaker === 'partner' ? 'المُحاوِر' : 'شما'),
+        role: line.speaker,
+        text: line.ar,
+        fa: line.fa,
+      }));
+      const resolved = resolveConversationDialogue(lesson.id, rawDialogue);
+      const hasDialogue = resolved.some(line => line.text.trim());
       const lineCount = hasDialogue
-        ? lesson.dialogue.filter(line => line.ar.trim()).length
+        ? resolved.filter(line => line.text.trim()).length
         : lesson.sentences.filter(sentence => sentence.ar.trim()).length;
       if (!grouped[lesson.levelId]) grouped[lesson.levelId] = [];
       grouped[lesson.levelId].push({
@@ -50,15 +58,17 @@ export default function ArabicConversationRooms() {
     const lesson = getArabicLesson(lessonId);
     if (!lesson) return null;
     const learningLesson = arabicLessonToLearningLesson(lesson);
+    const rawDialogue = lesson.dialogue.map(line => ({
+      speaker: line.name ?? (line.speaker === 'partner' ? 'المُحاوِر' : 'شما'),
+      role: line.speaker,
+      text: line.ar,
+      fa: line.fa,
+    }));
+    const dialogue = resolveConversationDialogue(lesson.id, rawDialogue);
     return {
-      dialogue: lesson.dialogue.map(line => ({
-        speaker: line.name ?? (line.speaker === 'partner' ? 'المُحاوِر' : 'شما'),
-        role: line.speaker,
-        text: line.ar,
-        fa: line.fa,
-      })),
+      dialogue,
       fallback: lesson.sentences.map(sentence => ({ text: sentence.ar, fa: sentence.fa })),
-      semanticPractice: conversationPracticeForLesson({ ...learningLesson, levelId: lesson.levelId }, 'ar-SA'),
+      semanticPractice: conversationPracticeForLesson({ ...learningLesson, dialogue, levelId: lesson.levelId }, 'ar-SA'),
     };
   }, []);
 

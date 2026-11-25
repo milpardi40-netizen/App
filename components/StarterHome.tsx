@@ -18,11 +18,13 @@ import {
   MessageCircle,
   Play,
   RefreshCw,
+  SlidersHorizontal,
   Sparkles,
   RotateCcw,
   Volume2,
   Award,
 } from 'lucide-react-native';
+import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { PageNavigation } from '@/components/PageNavigation';
 import { StarterBottomNav } from '@/components/StarterBottomNav';
 import { LearningHomeColors as HomeColors, learningHomeStyles as styles } from '@/components/LearningHomeStyles';
@@ -93,6 +95,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
   const compact = width < 640;
   const { snapshot, progress, dueCount, streak, plan, hasStartedCourse, error, retry } = useCourseHome(course.id);
   const [showRoadmap, setShowRoadmap] = useState(false);
+  const [quickSettingsOpen, setQuickSettingsOpen] = useState(false);
   const { opening, open } = useOpeningNavigation();
   const completedIds = progress?.completedLessonIds ?? [];
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
@@ -470,6 +473,14 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                 </View>
                 <ChevronLeft size={17} color={HomeColors.muted} />
               </Pressable>
+              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => setQuickSettingsOpen(true)}>
+                <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><SlidersHorizontal size={18} color={HomeColors.accent} /></View>
+                <View style={styles.quickCopy}>
+                  <Text style={styles.quickTitle}>تنظیمات قلم، صدا و پشتیبان</Text>
+                  <Text style={styles.quickDesc}>فونت نمایش، گوینده، قفل و نسخهٔ برنامه</Text>
+                </View>
+                <ChevronLeft size={17} color={HomeColors.muted} />
+              </Pressable>
             </View>
           </View>
 
@@ -479,6 +490,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
           </View>
         </View>
       </ScrollView>
+      <QuickSettingsModal visible={quickSettingsOpen} onClose={() => setQuickSettingsOpen(false)} />
       <StarterBottomNav course={course} />
       <OpeningOverlay visible={opening} />
     </View>

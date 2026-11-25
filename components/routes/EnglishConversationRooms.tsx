@@ -4,7 +4,9 @@ import LessonConversationHub, {
   type ConversationRoomSummary,
 } from '@/components/LessonConversationHub';
 import { conversationPracticeForLesson } from '@/lib/branchingConversation';
+import { resolveConversationDialogue } from '@/lib/conversationRoomDialogues';
 import { COURSE_LEVELS, SENTENCE_LESSONS, getSentenceLesson } from '@/lib/courseContent';
+import { withInferredDialogueRoles } from '@/lib/lessonConversation';
 import { playResponsiveSpeech, stopResponsiveSpeech } from '@/lib/responsiveSpeech';
 import { useCallback, useMemo } from 'react';
 
@@ -21,9 +23,10 @@ export default function EnglishConversationRooms() {
     const grouped: Record<number, ConversationRoomSummary[]> = {};
     for (const level of COURSE_LEVELS) grouped[level.id] = [];
     for (const lesson of SENTENCE_LESSONS) {
-      const hasDialogue = lesson.dialogue.some(line => line.text.trim());
+      const resolvedDialogue = resolveConversationDialogue(lesson.id, lesson.dialogue);
+      const hasDialogue = resolvedDialogue.some(line => line.text.trim());
       const lineCount = hasDialogue
-        ? lesson.dialogue.filter(line => line.text.trim()).length
+        ? resolvedDialogue.filter(line => line.text.trim()).length
         : lesson.sentences.filter(sentence => sentence.en.trim()).length;
       if (!grouped[lesson.levelId]) grouped[lesson.levelId] = [];
       grouped[lesson.levelId].push({
@@ -48,10 +51,13 @@ export default function EnglishConversationRooms() {
   const buildPayload = useCallback((lessonId: string): ConversationRoomPayload | null => {
     const lesson = getSentenceLesson(lessonId);
     if (!lesson) return null;
+    const roledDialogue = withInferredDialogueRoles(
+      resolveConversationDialogue(lesson.id, lesson.dialogue),
+    );
     return {
-      dialogue: lesson.dialogue,
+      dialogue: roledDialogue,
       fallback: lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa })),
-      semanticPractice: conversationPracticeForLesson(lesson, 'en-US'),
+      semanticPractice: conversationPracticeForLesson({ ...lesson, dialogue: roledDialogue }, 'en-US'),
     };
   }, []);
 
