@@ -18,6 +18,9 @@ import { Inter_800ExtraBold } from '@expo-google-fonts/inter/800ExtraBold';
 import { Beiruti_500Medium } from '@expo-google-fonts/beiruti/500Medium';
 import { Beiruti_700Bold } from '@expo-google-fonts/beiruti/700Bold';
 import { Beiruti_900Black } from '@expo-google-fonts/beiruti/900Black';
+import { Vazirmatn_500Medium } from '@expo-google-fonts/vazirmatn/500Medium';
+import { Vazirmatn_700Bold } from '@expo-google-fonts/vazirmatn/700Bold';
+import { DisplayTypographyProvider } from '@/lib/displayTypography';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { AppLockGate } from '@/components/AppLockGate';
@@ -131,6 +134,8 @@ export default function RootLayout() {
     'Beiruti-Medium': Beiruti_500Medium,
     'Beiruti-Bold': Beiruti_700Bold,
     'Beiruti-Black': Beiruti_900Black,
+    Vazirmatn: Vazirmatn_500Medium,
+    'Vazirmatn-Bold': Vazirmatn_700Bold,
     // Latin teaching content uses bundled faces too, eliminating Android OEM
     // font and fallback-metric differences between phones.
     Inter: Inter_400Regular,
@@ -203,6 +208,7 @@ export default function RootLayout() {
   }
 
   return (
+    <DisplayTypographyProvider>
     <SafeAreaProvider>
       <KeyboardProvider>
       <ErrorBoundary>
@@ -229,6 +235,7 @@ export default function RootLayout() {
       </ErrorBoundary>
       </KeyboardProvider>
     </SafeAreaProvider>
+    </DisplayTypographyProvider>
   );
 }
 

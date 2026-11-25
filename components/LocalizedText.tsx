@@ -1,7 +1,7 @@
 import React, { forwardRef, useContext, useState } from 'react';
-import { StyleSheet, Text as NativeText, TextInput as NativeTextInput, type TextProps, type TextInputProps, type TextStyle } from 'react-native';
+import { Platform, StyleSheet, Text as NativeText, TextInput as NativeTextInput, type TextProps, type TextInputProps, type TextStyle } from 'react-native';
 import { Typography } from '@/lib/theme';
-import { TextScaleContext } from '@/components/FitScrollView';
+import { DisplayTypographyContext, TextScaleContext, type DisplayFontPreset, type DisplayTypographyState } from '@/components/FitScrollView';
 
 // Persian and Arabic letters share the app's existing Persian presentation.
 // Unicode letters also cover accented Latin, Cyrillic and IPA, not just ASCII.
@@ -33,14 +33,42 @@ function childrenText(children: React.ReactNode): string {
   return text;
 }
 
-// Persian copy renders in Beiruti Bold everywhere: the regular cut is too thin
-// on Android and reads as faint/blurry.
-const persian: TextStyle = { fontFamily: 'Beiruti-Bold', fontWeight: '400', textAlign: 'right', writingDirection: 'rtl' };
-// Non-Persian text (English, German, French, Spanish, Turkish, Russian …) and
-// every Times New Roman run render bold; Persian keeps its own weight.
-const persianDigits: TextStyle = { fontFamily: 'Beiruti-Bold', fontWeight: '400' };
-const latinFont: TextStyle = { fontFamily: Typography.latinFontFamily, fontWeight: '700' };
+const isWeb = Platform?.OS === 'web';
+const DEFAULT_DISPLAY: DisplayTypographyState = { fontPreset: 'app', scale: 1 };
+
+// Persian copy renders in Beiruti Bold everywhere by default: the regular cut
+// is too thin on Android and reads as faint/blurry.
+const persianApp: TextStyle = { fontFamily: 'Beiruti-Bold', fontWeight: '400', textAlign: 'right', writingDirection: 'rtl' };
+const persianModern: TextStyle = { fontFamily: 'Vazirmatn-Bold', fontWeight: '400', textAlign: 'right', writingDirection: 'rtl' };
+const persianSystem: TextStyle = { ...(isWeb ? { fontFamily: 'system-ui, -apple-system, sans-serif' } : {}), fontWeight: '400', textAlign: 'right', writingDirection: 'rtl' };
+
+const persianDigitsApp: TextStyle = { fontFamily: 'Beiruti-Bold', fontWeight: '400' };
+const persianDigitsModern: TextStyle = { fontFamily: 'Vazirmatn-Bold', fontWeight: '400' };
+const persianDigitsSystem: TextStyle = isWeb ? { fontFamily: 'system-ui, -apple-system, sans-serif', fontWeight: '400' } : { fontWeight: '400' };
+
+const latinApp: TextStyle = { fontFamily: Typography.latinFontFamily, fontWeight: '700' };
+const latinModern: TextStyle = isWeb
+  ? { fontFamily: "'Inter', system-ui, sans-serif", fontWeight: '600' }
+  : { fontFamily: 'Inter-SemiBold', fontWeight: '400' };
+const latinSystem: TextStyle = isWeb
+  ? { fontFamily: 'system-ui, -apple-system, sans-serif', fontWeight: '700' }
+  : { fontWeight: '700' };
+
+const leftToRightApp: TextStyle = { ...latinApp, textAlign: 'left', writingDirection: 'ltr' };
+const leftToRightModern: TextStyle = { ...latinModern, textAlign: 'left', writingDirection: 'ltr' };
+const leftToRightSystem: TextStyle = { ...latinSystem, textAlign: 'left', writingDirection: 'ltr' };
+
 const TIMES_FAMILY = /times/i;
+
+function fontsForPreset(preset: DisplayFontPreset) {
+  if (preset === 'modern') {
+    return { persian: persianModern, persianDigits: persianDigitsModern, latin: latinModern, leftToRight: leftToRightModern };
+  }
+  if (preset === 'system') {
+    return { persian: persianSystem, persianDigits: persianDigitsSystem, latin: latinSystem, leftToRight: leftToRightSystem };
+  }
+  return { persian: persianApp, persianDigits: persianDigitsApp, latin: latinApp, leftToRight: leftToRightApp };
+}
 
 // ---- reading colour: dark/medium text becomes pure black; light text on
 // coloured or dark surfaces is left alone so it stays legible.
@@ -97,11 +125,19 @@ const GLOBAL_FONT_BUMP = 1;
 const SENTENCE_FONT_BUMP = 2;
 const SENTENCE_FONT_THRESHOLD = 17;
 
-function presentationStyle(style: TextProps['style'], extra?: TextStyle, keepColor = false, textScale = 1, noFontBump = false): TextStyle | undefined {
+function presentationStyle(
+  style: TextProps['style'],
+  extra?: TextStyle,
+  keepColor = false,
+  textScale = 1,
+  noFontBump = false,
+  fontPreset: DisplayFontPreset = 'app',
+  persianRef?: TextStyle,
+): TextStyle | undefined {
   const flat = StyleSheet.flatten([style, extra]) as TextStyle | undefined;
   const out: TextStyle = {};
   let color = keepColor ? flat?.color : readingColor(flat?.color);
-  if (color === BLACK && extra === persian) color = PERSIAN_BLACK;
+  if (color === BLACK && extra && extra === persianRef) color = PERSIAN_BLACK;
   if (color !== undefined && color !== flat?.color) out.color = color;
   const baseSize = flat?.fontSize;
   if (typeof baseSize === 'number' && baseSize > 0) {
@@ -123,10 +159,16 @@ function presentationStyle(style: TextProps['style'], extra?: TextStyle, keepCol
     out.fontSize = Math.round(size * textScale * 10) / 10;
     if (flat?.lineHeight) out.lineHeight = Math.round(flat.lineHeight * textScale * 10) / 10;
   }
-  if (flat?.fontFamily && TIMES_FAMILY.test(String(flat.fontFamily)) && flat.fontWeight !== '700' && flat.fontWeight !== 'bold') out.fontWeight = '700';
+  if (fontPreset === 'system' && flat?.fontFamily) {
+    out.fontFamily = isWeb ? 'system-ui, -apple-system, sans-serif' : undefined;
+  } else if (fontPreset === 'modern' && !extra && flat?.fontFamily) {
+    out.fontFamily = 'Vazirmatn-Bold';
+  }
+  if (fontPreset === 'app' && flat?.fontFamily && TIMES_FAMILY.test(String(flat.fontFamily)) && flat.fontWeight !== '700' && flat.fontWeight !== 'bold') {
+    out.fontWeight = '700';
+  }
   return Object.keys(out).length ? out : undefined;
 }
-const leftToRight: TextStyle = { ...latinFont, textAlign: 'left', writingDirection: 'ltr' };
 
 // Keep combining marks with their base character. In particular a keycap such
 // as 1️⃣ is an emoji, not a digit to be restyled. PUA icon glyphs are not letters.
@@ -149,20 +191,21 @@ function isForeignCluster(cluster: string): boolean {
 function hasForeignDigit(value: string): boolean {
   return clusters(value).some(cluster => asciiDigit.test(Array.from(cluster)[0]) && !isEmojiPresentation(cluster));
 }
-function scriptStyle(text: string): TextStyle | undefined {
+function scriptStyle(text: string, fontPreset: DisplayFontPreset): TextStyle | undefined {
+  const faces = fontsForPreset(fontPreset);
   const script = textScript(text);
-  if (script === 'persian') return persian;
-  if (script === 'left-to-right') return leftToRight;
-  // Standalone Western digits use the serif without changing alignment or direction.
-  if (hasForeignDigit(text)) return latinFont;
+  if (script === 'persian') return faces.persian;
+  if (script === 'left-to-right') return faces.leftToRight;
+  // Standalone Western digits use the foreign face without changing alignment or direction.
+  if (hasForeignDigit(text)) return faces.latin;
   // Letterless text (Persian digits, percentages, counters): Beiruti's regular
   // digits are hairline-thin on Android, so use the bold cut.
-  return /[\u06F0-\u06F9\u0660-\u0669]/.test(text) ? persianDigits : undefined;
+  return /[\u06F0-\u06F9\u0660-\u0669]/.test(text) ? faces.persianDigits : undefined;
 }
 
 /** Style only non-Persian runs. Do not assign a direction to inline spans: the
  * native/browser bidi algorithm remains responsible for mixed-script ordering. */
-function foreignRuns(value: string): React.ReactNode {
+function foreignRuns(value: string, latinFace: TextStyle): React.ReactNode {
   const parts = clusters(value);
   const foreign = parts.map(isForeignCluster);
   // Adjacent punctuation, e.g. /həˈloʊ/ or C1, follows its foreign run. Spaces,
@@ -182,21 +225,29 @@ function foreignRuns(value: string): React.ReactNode {
     else runs.push({ text: part, foreign: kind });
   });
   return runs.map((run, index) => run.foreign
-    ? <NativeText key={index} style={latinFont}>{run.text}</NativeText>
+    ? <NativeText key={index} style={latinFace}>{run.text}</NativeText>
     : run.text);
 }
 
 // Descend only into native Text and fragments; custom children (including icon
 // components) retain their identity, props, fonts, event handlers and semantics.
-function styleMixedChildren(children: React.ReactNode): React.ReactNode {
+function styleMixedChildren(children: React.ReactNode, latinFace: TextStyle): React.ReactNode {
   return React.Children.map(children, child => {
-    if (typeof child === 'string' || typeof child === 'number') return foreignRuns(String(child));
+    if (typeof child === 'string' || typeof child === 'number') return foreignRuns(String(child), latinFace);
     if (React.isValidElement<{ children?: React.ReactNode }>(child)
         && (child.type === NativeText || child.type === React.Fragment)) {
-      return React.cloneElement(child, undefined, styleMixedChildren(child.props.children));
+      return React.cloneElement(child, undefined, styleMixedChildren(child.props.children, latinFace));
     }
     return child;
   });
+}
+
+function readDisplayPrefs(raw: unknown): DisplayTypographyState {
+  if (!raw || typeof raw !== 'object') return DEFAULT_DISPLAY;
+  const obj = raw as Partial<DisplayTypographyState>;
+  const fontPreset: DisplayFontPreset = obj.fontPreset === 'modern' || obj.fontPreset === 'system' ? obj.fontPreset : 'app';
+  const scale = typeof obj.scale === 'number' && Number.isFinite(obj.scale) && obj.scale > 0 ? obj.scale : 1;
+  return { fontPreset, scale };
 }
 
 /** Preserve the outer Text, all accessibility/interaction props and layout. */
@@ -208,21 +259,30 @@ export type LocalizedTextProps = TextProps & {
 };
 export const LocalizedText = forwardRef<NativeText, LocalizedTextProps>(function LocalizedText({ style, children, keepColor, noFontBump, ...props }, ref) {
   const content = childrenText(children);
-  const script = scriptStyle(content);
-  const textScale = useContext(TextScaleContext);
-  return <NativeText ref={ref} {...props} style={[style, script, presentationStyle(style, script, keepColor, textScale, noFontBump)]}>
-    {textScript(content) === 'persian' && clusters(content).some(isForeignCluster) ? styleMixedChildren(children) : children}
+  const rawScale = useContext(TextScaleContext);
+  const textScale = typeof rawScale === 'number' && Number.isFinite(rawScale) && rawScale > 0 ? rawScale : 1;
+  const displayPrefs = readDisplayPrefs(useContext(DisplayTypographyContext));
+  const faces = fontsForPreset(displayPrefs.fontPreset);
+  const script = scriptStyle(content, displayPrefs.fontPreset);
+  const combinedScale = Math.round(textScale * displayPrefs.scale * 1000) / 1000;
+  return <NativeText ref={ref} {...props} style={[style, script, presentationStyle(style, script, keepColor, combinedScale, noFontBump, displayPrefs.fontPreset, faces.persian)]}>
+    {textScript(content) === 'persian' && clusters(content).some(isForeignCluster) ? styleMixedChildren(children, faces.latin) : children}
   </NativeText>;
 });
 
 /** Controlled and uncontrolled inputs update direction as the learner types.
  * Native editable controls support one font family only; mixed input therefore
- * keeps Beiruti and RTL rather than breaking editing, selection or IME state. */
+ * keeps a single Persian face and RTL rather than breaking editing, selection or IME state. */
 export const LocalizedTextInput = forwardRef<NativeTextInput, TextInputProps>(function LocalizedTextInput({ style, value, defaultValue, placeholder, onChangeText, ...props }, ref) {
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? '');
-  const textScale = useContext(TextScaleContext);
+  const rawScale = useContext(TextScaleContext);
+  const textScale = typeof rawScale === 'number' && Number.isFinite(rawScale) && rawScale > 0 ? rawScale : 1;
+  const displayPrefs = readDisplayPrefs(useContext(DisplayTypographyContext));
+  const faces = fontsForPreset(displayPrefs.fontPreset);
   const content = value ?? uncontrolled;
+  const script = scriptStyle(content || placeholder || '', displayPrefs.fontPreset);
+  const combinedScale = Math.round(textScale * displayPrefs.scale * 1000) / 1000;
   return <NativeTextInput ref={ref} {...props} value={value} defaultValue={defaultValue} placeholder={placeholder}
     onChangeText={text => { if (value === undefined) setUncontrolled(text); onChangeText?.(text); }}
-    style={[style, scriptStyle(content || placeholder || ''), presentationStyle(style, scriptStyle(content || placeholder || ''), false, textScale)]} />;
+    style={[style, script, presentationStyle(style, script, false, combinedScale, false, displayPrefs.fontPreset, faces.persian)]} />;
 });

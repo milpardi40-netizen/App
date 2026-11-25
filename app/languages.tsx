@@ -1,10 +1,11 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useEffect, useState } from 'react';
-import { ImageBackground, Linking, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { ImageBackground, Linking, Modal, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { createAudioPlayer } from 'expo-audio';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { ArrowLeft, BookOpen, Globe, Headphones, LifeBuoy, LockKeyhole, MessageCircle, Play } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, Globe, Headphones, LifeBuoy, LockKeyhole, MessageCircle, Play, Type, X } from 'lucide-react-native';
+import DisplayTypographyCard from '@/components/DisplayTypographyCard';
 import { MiloLanguageBrand } from '@/components/MiloLanguageBrand';
 import { ProfileIcon } from '@/components/ProfileIcon';
 import { ensureOpenLearnerRegistered } from '@/lib/openLearnerAccount';
@@ -58,6 +59,7 @@ export default function LanguagesHome() {
   const router = useRouter();
   const { opening, open } = useOpeningNavigation();
   const [openingSupport, setOpeningSupport] = useState(false);
+  const [typographyOpen, setTypographyOpen] = useState(false);
   const { width } = useWindowDimensions();
   const compact = width < 680;
   const desktop = width >= 760;
@@ -265,6 +267,14 @@ export default function LanguagesHome() {
               </Pressable>
               <Pressable
                 accessibilityRole="button"
+                accessibilityLabel="فونت و اندازهٔ متن"
+                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
+                onPress={() => setTypographyOpen(true)}
+              >
+                <Type size={16} color={palette.forest} strokeWidth={1.9} />
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
                 accessibilityLabel="سایت و دانلود نسخهٔ اندروید"
                 style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
                 onPress={openSite}
@@ -371,6 +381,32 @@ export default function LanguagesHome() {
         </View>
       </ScrollView>
       <OpeningOverlay visible={opening} />
+      <Modal
+        visible={typographyOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setTypographyOpen(false)}
+      >
+        <View style={styles.typographyBackdrop}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="بستن تنظیمات فونت"
+            style={StyleSheet.absoluteFillObject}
+            onPress={() => setTypographyOpen(false)}
+          />
+          <View style={styles.typographySheet}>
+            <DisplayTypographyCard compact />
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setTypographyOpen(false)}
+              style={({ pressed }) => [styles.typographyCloseBtn, pressed && styles.pressed]}
+            >
+              <X size={15} color="#FFFFFF" />
+              <Text keepColor style={styles.typographyCloseText}>تأیید و بستن</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -435,5 +471,9 @@ const styles = StyleSheet.create({
   stepBadge: { width: 26, height: 26, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.sage },
   stepBadgeAccent: { backgroundColor: palette.terracottaSoft },
   stepTitle: { fontFamily: 'Beiruti', color: palette.ink, fontSize: 12.5, lineHeight: 19, textAlign: 'right', writingDirection: 'rtl' },
+  typographyBackdrop: { flex: 1, backgroundColor: 'rgba(15, 23, 42, 0.48)', alignItems: 'center', justifyContent: 'center', padding: 18 },
+  typographySheet: { width: '100%', maxWidth: 460, borderRadius: 24, backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.border, padding: 16, gap: 12 },
+  typographyCloseBtn: { minHeight: 44, borderRadius: 14, backgroundColor: palette.forest, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  typographyCloseText: { fontSize: 13.5, color: '#FFFFFF', writingDirection: 'rtl' },
   pressed: { opacity: 0.84, transform: [{ scale: 0.985 }] },
 });
