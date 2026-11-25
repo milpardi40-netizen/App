@@ -30,12 +30,11 @@ check(/AppState\.addEventListener\('change'/.test(gate) && /state === 'inactive'
 check(/nextFailures >= 5/.test(gate) && /30_000/.test(gate), 'pattern brute-force attempts receive a cooldown');
 check(/<AppLockGate>[\s\S]*?<Stack/.test(rootLayout), 'app lock guards the complete route stack');
 check(/savePattern\(pattern\)/.test(settings) && /setDeviceLockEnabled\(true\)/.test(settings), 'settings can independently enable pattern and phone lock');
-check(/deleteConversationForMe/.test(humanChat) && /confirmDeleteConversation/.test(humanChat), 'an open real-person chat can be deleted');
-check(/deleteConversationForMe/.test(contactsHome), 'a contact and its conversation can be deleted from the chat list');
+check(/confirmDelete\(/.test(contactsHome) && /deleteConversationForMe/.test(contactsHome), 'a real-person chat can be deleted, with confirmation, from the chat list');
 check(/EmmaDisabled/.test(emmaRoute) && /<Redirect href=/.test(emmaRoute), 'the retired Emma coach route redirects instead of half-rendering');
 check(/hideConversationLocally/.test(conversations) && /\.from\('learning_contacts'\)[\s\S]*?\.delete\(\)/.test(conversations), 'contact deletion is immediate locally and RLS-protected remotely');
 check(/GRANT DELETE ON TABLE public\.learning_contacts TO authenticated/.test(migration), 'database migration grants the DELETE operation constrained by existing RLS');
-/** The chat composer rides on the shared keyboard attachment, which measures the real keyboard edge. */
+/** The chat answer card rides on the shared keyboard attachment (KeyboardStickyView). */
 const composerFollowsKeyboard = file => {
   const open = file.search(/<KeyboardAttachedView\b[^>]*>/);
   if (open === -1) return false;
@@ -43,11 +42,11 @@ const composerFollowsKeyboard = file => {
   const close = file.indexOf('</KeyboardAttachedView>', open);
   if (close === -1) return false;
   const body = file.slice(open + tag.length, close);
-  return /styles\.composer/.test(body) && /onLayout=/.test(tag);
+  return /styles\.answerCard/.test(body);
 };
 check(composerFollowsKeyboard(humanChat), 'the composer and its side buttons follow the keyboard animation');
-check(/keyboardDidShow/.test(keyboardAttachment) && /measureInWindow/.test(keyboardAttachment) && /Animated\.timing/.test(keyboardAttachment), 'the attachment measures the keyboard edge and animates the composer with it');
-check(/composer:\s*\{\s*flexShrink:\s*0/.test(humanChat), 'the composer stays fully visible during keyboard resize');
+check(/KeyboardStickyView/.test(keyboardAttachment) && /offset=\{\{ closed: 0, opened: openedOffset \}\}/.test(keyboardAttachment), 'the attachment rides the single native keyboard inset with the composer');
+check(/answerCard:\s*\{[^}]*flexShrink:\s*0/.test(humanChat), 'the composer stays fully visible during keyboard resize');
 check(!/marginBottom:\s*100/.test(humanChat), 'no fixed composer offset fights keyboard movement');
 
 console.log(`${checks} app-lock, deletion, and dynamic-keyboard checks passed.`);

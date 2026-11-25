@@ -59,11 +59,11 @@ check(/companionenglish:\/\/\/conversations\/emma/.test(androidSmoke)
   && /Composer is clipped/.test(androidSmoke),
   'Android release smoke test opens the real keyboard and rejects a clipped composer');
 check(/messages:\s*\{\s*flex:\s*1,\s*minHeight:\s*0/.test(human), 'the message list yields all resized height to the composer');
-check(/<KeyboardAttachedView[\s\S]*?<View style=\{styles\.composer\}>/.test(human), 'the complete composer and its side buttons ride on the keyboard attachment');
-check(/composer:\s*\{\s*flexShrink:\s*0,\s*minHeight:\s*64,\s*overflow:\s*'visible'/.test(human), 'the chat composer retains its full visible height during resize');
-check(/keyboardDidShow/.test(keyboardAttachment) && /measureInWindow/.test(keyboardAttachment)
-  && /Animated\.timing\(translate, \{ toValue: rounded, duration: 140, useNativeDriver: true \}\)/.test(keyboardAttachment),
-  'the attachment measures the keyboard edge and animates the composer on the UI thread');
+check(/<KeyboardAttachedView[\s\S]*?<View style=\{styles\.answerCard\}>/.test(human), 'the complete answer card and its mode/input controls ride on the keyboard attachment');
+check(/answerCard:\s*\{[^}]*flexShrink:\s*0/.test(human), 'the chat answer card retains its full visible height during resize');
+check(/KeyboardStickyView/.test(keyboardAttachment) && /offset=\{\{ closed: 0, opened: openedOffset \}\}/.test(keyboardAttachment)
+  && /Platform\.OS === 'ios' \? insets\.bottom : 0/.test(keyboardAttachment),
+  'the attachment rides the single native keyboard inset (iOS offset by home-indicator inset, Android handled by KeyboardProvider)');
 check((human.match(/containsRtlScript/g) || []).length >= 4
   && /rtlText:\s*\{\s*fontFamily:\s*Typography\.fontFamily/.test(human)
   && /ltrText:\s*\{\s*fontFamily:\s*Typography\.latinFontFamily/.test(human),

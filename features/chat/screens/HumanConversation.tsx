@@ -660,6 +660,7 @@ function TurnConversationScreen({
             contentContainerStyle={[styles.messageContent, keyboardInset > 0 && { paddingBottom: keyboardInset + Spacing.sm }]}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+            automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
             onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
           >
             {lessonPlan ? (
@@ -853,7 +854,7 @@ const styles = StyleSheet.create({
   cueRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginTop: 1 },
   cuePill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.full, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E6DEC8' },
   cueText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '600', color: '#334155', writingDirection: 'ltr' },
-  messages: { flex: 1 },
+  messages: { flex: 1, minHeight: 0 },
   messageContent: { paddingHorizontal: Spacing.md, paddingTop: 10, paddingBottom: 10, gap: 8 },
   lessonIntroCard: { paddingHorizontal: 11, paddingVertical: 8, borderRadius: Radius.md, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8EAF2' },
   lessonIntroText: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: Colors.neutral[300], textAlign: 'right' },
@@ -884,7 +885,7 @@ const styles = StyleSheet.create({
   finishedCard: { marginTop: Spacing.xs, padding: Spacing.md, borderRadius: Radius.lg, backgroundColor: Colors.success[500] + '0D', borderWidth: 1, borderColor: Colors.success[500] + '25', gap: 3 },
   finishedTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.success[700], textAlign: 'right' },
   finishedText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], textAlign: 'right' },
-  answerCard: { paddingHorizontal: 12, paddingTop: 8, paddingBottom: 6, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 6 },
+  answerCard: { flexShrink: 0, paddingHorizontal: 12, paddingTop: 8, paddingBottom: 6, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E8EAF2', gap: 6 },
   modeRow: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
   modeGroup: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
   modeLabel: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.neutral[500], marginLeft: 2 },

@@ -3,6 +3,7 @@ import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
 import { Mic2, Square } from 'lucide-react-native';
 import * as Speech from '@/lib/courseSpeech';
+import { ONLINE_AUDIO_DISABLED_MESSAGE, requireOnlineAudioEnabled } from '@/lib/onlineAudioPolicy';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { Typography } from '@/lib/theme';
 
@@ -143,6 +144,14 @@ export default function VoiceAnswerInput({ locale, contextualStrings = [], disab
     settledRef.current = false;
     const token = ++generation.current;
     try {
+      // Privacy gate: the online-audio product decision must block before any
+      // microphone permission request (docs/SPEECH-PRIVACY-GATE-FA.md).
+      try {
+        requireOnlineAudioEnabled();
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : ONLINE_AUDIO_DISABLED_MESSAGE);
+        return;
+      }
       if (typeof ExpoSpeechRecognitionModule.isRecognitionAvailable === 'function' && !ExpoSpeechRecognitionModule.isRecognitionAvailable()) {
         setError(Platform.OS === 'web'
           ? 'مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.'
