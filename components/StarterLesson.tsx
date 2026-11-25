@@ -23,8 +23,6 @@ import SpeakCheck from '@/components/SpeakCheck';
 import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
 import { isStarterBridgeLanguage, starterBridgeFor, starterBridgeRulesForLesson } from '@/lib/languages/starterPersianBridge';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
-import LessonConversationRoom from '@/components/LessonConversationRoom';
-import RealConversationEntry from '@/components/RealConversationEntry';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
@@ -48,8 +46,6 @@ import { bandReadinessForLevel } from '@/lib/content/readiness';
 import { ENGLISH_ENGINE_STEPS } from '@/lib/englishLearningEngine';
 type StarterCourseLesson = StarterLesson;
 import type { StarterLessonSession } from '@/lib/languages/starterSessions';
-import { withInferredDialogueRoles, type LessonConversationSession } from '@/lib/lessonConversation';
-import { conversationPracticeForLesson, type BranchingLocale } from '@/lib/branchingConversation';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playStarterSpeech, stopStarterSpeech, warmStarterSpeech } from '@/lib/starterSpeech';
 import { ensureRecordedAudio } from '@/lib/content/coreAudio';
@@ -75,7 +71,6 @@ const foundationStageNames: Record<number, { labelFa: string; labelEn: string }>
   6: {labelFa:'نکتهٔ آموزشی', labelEn:'Learning Note'},
   7: {labelFa:'سنجش کوتاه', labelEn:'Short Assessment'},
   8: {labelFa:'آزمون گفتاری', labelEn:'Speaking Check'},
-  9: {labelFa:'گفت‌وگوی درس', labelEn:'Lesson Dialogue'},
 };
 
 /** سرعت‌ها از قرارداد مشترک روایت می‌آیند تا درس، سطح و واژه‌ها یک صدای واحد داشته باشند. */
@@ -136,7 +131,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const [revealed, setRevealed] = useState(false);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showCheckAnswers, setShowCheckAnswers] = useState(false);
-  const [conversation, setConversation] = useState<LessonConversationSession | undefined>();
   const [sessionReady, setSessionReady] = useState(false);
   const [sessionError, setSessionError] = useState('');
   const [completionError, setCompletionError] = useState('');
@@ -158,15 +152,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
-  const roledDialogue = useMemo(() => withInferredDialogueRoles(starterDisplayDialogue(lesson)), [lesson]);
-  const semanticPractice = useMemo(
-    () =>
-      conversationPracticeForLesson(
-        { id: lesson.id, levelId: lesson.levelId, sentences: lesson.sentences, dialogue: roledDialogue },
-        course.locale as BranchingLocale,
-      ),
-    [lesson, roledDialogue, course.locale],
-  );
   const teachingNote = starterTeachingNote(lesson);
   const allChecksPassed = checks.every((question, index) => answers[String(index)] === question.correctIndex);
   const progressPercent = Math.round(((stage + 1) / stages.length) * 100);
@@ -216,7 +201,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       // A level replay is explicitly temporary when it would otherwise overwrite a saved attempt.
       preserveExistingSession.current = replayingLevel && result.hasSavedSession;
       const saved = replayingLevel
-        ? { stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false, conversation: undefined }
+        ? { stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false }
         : result.session;
       if (restarting) {
         restartPromise.current = null;
@@ -232,7 +217,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       setRevealed(saved.revealed);
       setAnswers(saved.answers);
       setShowCheckAnswers(saved.showCheckAnswers);
-      setConversation(saved.conversation);
       setSpeechError('');
       setSessionReady(true);
       trackLessonStarted(course.id, lesson.id);
@@ -250,11 +234,11 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: StarterLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers, conversation };
+    const nextSession: StarterLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveStarterLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
-  }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
   const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
   const activeMicTargetRef = useRef<string | null>(null);
@@ -319,10 +303,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     );
   }, [course.locale, speakForTarget]);
 
-  const speakConversationLine = useCallback((text: string, onDone: () => void) => {
-    void playStarterSpeech(course.locale, text, narrationRate(course.locale, 'normal'), onDone, undefined, onDone);
-  }, [course.locale]);
-  const stopConversationSpeech = useCallback(() => { void stopStarterSpeech(); }, []);
 
   const firstVocabWord = vocabulary[0]?.word.word ?? '';
 
@@ -709,25 +689,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           accent={Palette.primary}
         /> : null}
 
-        {stage === 9 && <>
-          <LessonConversationRoom
-            key={lesson.id}
-            courseId={course.id}
-            lessonId={lesson.id}
-            levelId={lesson.levelId}
-            situation={lesson.situation}
-            partnerRole="طرف مقابل"
-            dialogue={roledDialogue}
-            fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
-            locale={course.locale as BranchingLocale}
-            onSpeak={speakConversationLine}
-            onStop={stopConversationSpeech}
-            initialSession={conversation}
-            onSessionChange={setConversation}
-            semanticPractice={semanticPractice}
-          />
-          <RealConversationEntry language={course.id as 'de' | 'fr' | 'es'} lessonId={lesson.id} lessonTitle={lesson.title} levelId={lesson.levelId} situation={lesson.situation} />
-        </>}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}

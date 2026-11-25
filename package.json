@@ -36,8 +36,6 @@
     "validate:app-lock": "node scripts/verify-app-lock.mjs",
     "validate:typography": "node scripts/verify-typography-stability.mjs",
     "validate:chat-notifications": "node scripts/verify-chat-notifications.mjs",
-    "validate:lesson-conversation": "node scripts/verify-lesson-conversation.cjs",
-    "validate:conversation-levels": "node scripts/verify-conversation-levels.cjs",
     "validate:turn-conversation": "node scripts/verify-turn-conversation.cjs",
     "validate:shared-level": "node scripts/verify-shared-level.cjs",
     "validate:registration-admin": "node scripts/verify-registration-admin.mjs",

@@ -330,11 +330,11 @@ for (const os of ['android', 'web']) {
     snap = await app.loadCourseSnapshot(id);
     const t = snap.levels[a.levelId];
     must.equal(t.completed, 0); must.equal(t.partial, 1);
-    must.ok(Math.abs(t.percent - 100 * (1 + 1/a.sentences.length) / (10 * t.total)) < 1e-9);
+    must.ok(Math.abs(t.percent - 100 * (1 + 1/a.sentences.length) / (9 * t.total)) < 1e-9);
     must.notEqual(app.formatPercent(t.percent), '۰٪');
-    await save(c1.id, { ...intro, stage: 9 });
+    await save(c1.id, { ...intro, stage: 8 });
     const restored = await launch(outfile).loadCourseSnapshot(id);
-    must.equal(restored.sessions[c1.id].stage, 9); must.equal(restored.current.id, c1.id); must.equal(restored.levels[5].partial, 1);
+    must.equal(restored.sessions[c1.id].stage, 8); must.equal(restored.current.id, c1.id); must.equal(restored.levels[5].partial, 1);
     await store.completeSentenceLesson(a.id); await store.completeSentenceLesson(a.id); // replay
     snap = await app.loadCourseSnapshot(id); must.equal(snap.course.completed, 1); must.equal(snap.course.partial, 1);
     must.equal(snap.validCards.length, a.sentences.length);

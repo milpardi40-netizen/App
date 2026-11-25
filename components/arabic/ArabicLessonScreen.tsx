@@ -7,7 +7,6 @@ import { Check, ChevronLeft, Headphones, Mic2, RotateCcw, Sparkles, Volume2 } fr
 import { ARABIC_LESSONS, ARABIC_LEVELS, getArabicLesson } from '@/lib/arabic/content';
 import {
   ARABIC_ENGINE_STEPS,
-  arabicLessonToLearningLesson,
   getArabicLessonPatterns,
   getArabicLessonVocabulary,
 } from '@/lib/arabic/engine';
@@ -31,10 +30,8 @@ import {
   saveArabicLessonSession,
   type ArabicLessonAttempt,
 } from '@/lib/arabic/studyState';
-import { conversationPracticeForLesson } from '@/lib/branchingConversation';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
-import type { LessonConversationSession } from '@/lib/lessonConversation';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
 import { recordStudyDay } from '@/lib/studyStreak';
 import { finishLessonRewards } from '@/lib/lessonRewards';
@@ -51,12 +48,10 @@ import BlindListeningList from '@/components/BlindListeningList';
 import { FitScrollView, lessonScrollOffset } from '@/components/FitScrollView';
 import { GrammarNoteCard, GrammarPatternCard, GrammarStageHeader } from '@/components/GrammarUsage';
 import LessonCelebration, { type CelebrationStats } from '@/components/LessonCelebration';
-import LessonConversationRoom from '@/components/LessonConversationRoom';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
 import { PageNavigation } from '@/components/PageNavigation';
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
-import RealConversationEntry from '@/components/RealConversationEntry';
 import RevealText from '@/components/RevealText';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
@@ -77,7 +72,6 @@ export default function ArabicLessonScreen() {
   const [revealed, setRevealed] = useState(false);
   const [evidencePassed, setEvidencePassed] = useState(false);
   const [attemptEvidence, setAttemptEvidence] = useState<Record<string, boolean> | undefined>(undefined);
-  const [conversation, setConversation] = useState<LessonConversationSession | undefined>(undefined);
   const [builtSentences, setBuiltSentences] = useState<Record<string, boolean>>({});
   const [doneChunks, setDoneChunks] = useState<number[]>([]);
   const [sessionReady, setSessionReady] = useState(false);
@@ -226,7 +220,6 @@ export default function ArabicLessonScreen() {
         const saved = state.sessions[lesson.id] ?? freshArabicSession();
         attempt.current = saved.attempt;
         setAttemptEvidence(saved.attempt ? (saved.attemptEvidence ?? {}) : undefined);
-        setConversation(saved.conversation);
         setStage(Math.min(saved.stage, stages.length - 1));
         setSentenceIndex(Math.min(saved.sentenceIndex, Math.max(0, lesson.sentences.length - 1)));
         setRevealed(saved.revealed);
@@ -272,7 +265,6 @@ export default function ArabicLessonScreen() {
         evidencePassed,
         attempt: attempt.current,
         attemptEvidence,
-        conversation,
       })
         .then(() => {
           if (currentSave && screenRun.current === run) setSessionError('');
@@ -287,7 +279,6 @@ export default function ArabicLessonScreen() {
       currentSave = false;
     };
   }, [
-    conversation,
     lesson,
     sessionReady,
     stage,
@@ -316,14 +307,6 @@ export default function ArabicLessonScreen() {
 
   const vocabulary = useMemo(() => (lesson ? getArabicLessonVocabulary(lesson) : []), [lesson]);
   const patterns = useMemo(() => (lesson ? getArabicLessonPatterns(lesson) : []), [lesson]);
-  const learningLesson = useMemo(() => (lesson ? arabicLessonToLearningLesson(lesson) : null), [lesson]);
-  const semanticPractice = useMemo(
-    () =>
-      lesson && learningLesson
-        ? conversationPracticeForLesson({ ...learningLesson, levelId: lesson.levelId }, 'ar-SA')
-        : undefined,
-    [lesson, learningLesson],
-  );
 
   const speakForTarget = useCallback(
     (text: string, rate: number | undefined, targetKey: string | null) => {
@@ -399,12 +382,6 @@ export default function ArabicLessonScreen() {
     [stage, current, speakForTarget],
   );
 
-  const speakConversationLine = useCallback((text: string, onDone: () => void) => {
-    playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone });
-  }, []);
-  const stopConversationSpeech = useCallback(() => {
-    void stopArabicSpeech();
-  }, []);
 
   const listenListOffsetRef = useRef(0);
   const vocabListOffsetRef = useRef(0);
@@ -503,7 +480,6 @@ export default function ArabicLessonScreen() {
         evidencePassed,
         attempt: attempt.current,
         attemptEvidence,
-        conversation,
       });
       void stopArabicSpeech();
       const streak = await recordStudyDay();
@@ -1036,38 +1012,6 @@ export default function ArabicLessonScreen() {
             </View>
           )}
 
-          {stage === 9 && (
-            <>
-              <LessonConversationRoom
-                key={lesson.id}
-                courseId="ar"
-                lessonId={lesson.id}
-                levelId={lesson.levelId}
-                situation={lesson.situation}
-                partnerRole="طرف مقابل"
-                dialogue={lesson.dialogue.map(line => ({
-                  speaker: line.name ?? (line.speaker === 'partner' ? 'المُحاوِر' : 'شما'),
-                  role: line.speaker,
-                  text: line.ar,
-                  fa: line.fa,
-                }))}
-                fallback={lesson.sentences.map(s => ({ text: s.ar, fa: s.fa }))}
-                locale="ar-SA"
-                onSpeak={speakConversationLine}
-                onStop={stopConversationSpeech}
-                initialSession={conversation}
-                onSessionChange={setConversation}
-                semanticPractice={semanticPractice}
-              />
-              <RealConversationEntry
-                language="ar"
-                lessonId={lesson.id}
-                lessonTitle={lesson.title}
-                levelId={lesson.levelId}
-                situation={lesson.situation}
-              />
-            </>
-          )}
 
           {!!completionError && <Text style={styles.speechError}>{completionError}</Text>}
         </View>

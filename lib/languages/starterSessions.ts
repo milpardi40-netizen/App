@@ -4,7 +4,6 @@ import { Platform } from 'react-native';
 import type { StarterLesson, NewLanguageId } from './newCourses';
 import { ENGLISH_ENGINE_STEPS } from '../englishLearningEngine';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
-import { isLessonConversationSession, type LessonConversationSession } from '../lessonConversation';
 
 
 
@@ -17,8 +16,6 @@ export interface StarterLessonSession {
   revealed: boolean;
   answers: Record<string, number>;
   showCheckAnswers: boolean;
-  /** Durable progress of the lesson-scoped scripted conversation; no audio is stored. */
-  conversation?: LessonConversationSession;
 }
 
 interface StarterStudyState {
@@ -72,8 +69,7 @@ function readSession(lessonId: string, value: unknown): StarterLessonSession {
   if (stage === null
     || !Number.isInteger(session.sentenceIndex)
     || typeof session.revealed !== 'boolean' || typeof session.showCheckAnswers !== 'boolean'
-    || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)
-    || (session.conversation !== undefined && !isLessonConversationSession(session.conversation))) {
+    || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس این زبان معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   const answers: Record<string, number> = {};
@@ -91,7 +87,6 @@ function readSession(lessonId: string, value: unknown): StarterLessonSession {
     revealed: session.revealed,
     answers,
     showCheckAnswers: session.showCheckAnswers,
-    ...(session.conversation ? { conversation: session.conversation } : {}),
   };
 }
 
@@ -103,8 +98,7 @@ function validateSession(lessonId: string, value: unknown): StarterLessonSession
   if (stage === null
     || !Number.isInteger(session.sentenceIndex) || session.sentenceIndex! < 0 || session.sentenceIndex! >= lesson.sentences.length
     || typeof session.revealed !== 'boolean' || typeof session.showCheckAnswers !== 'boolean'
-    || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)
-    || (session.conversation !== undefined && !isLessonConversationSession(session.conversation))) {
+    || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس این زبان معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   const answers: Record<string, number> = {};
@@ -124,7 +118,6 @@ function validateSession(lessonId: string, value: unknown): StarterLessonSession
     revealed: session.revealed,
     answers,
     showCheckAnswers: session.showCheckAnswers,
-    ...(session.conversation ? { conversation: session.conversation } : {}),
   };
 }
 

@@ -21,8 +21,6 @@ import { RUSSIAN_A1_SKILLS } from '@/lib/languages/russianA1Skills';
 import RevealText from '@/components/RevealText';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
-import LessonConversationRoom from '@/components/LessonConversationRoom';
-import RealConversationEntry from '@/components/RealConversationEntry';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
@@ -37,7 +35,6 @@ import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } f
 import { bandReadinessForLevel } from '@/lib/content/readiness';
 
 import type { RussianLessonSession } from '@/lib/languages/russianStudyState';
-import type { LessonConversationSession } from '@/lib/lessonConversation';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playRussianSpeech, stopRussianSpeech, warmRussianSpeech } from '@/lib/russianSpeech';
 import { ensureRecordedAudio } from '@/lib/content/coreAudio';
@@ -53,7 +50,6 @@ import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
 import { bridgeFor, bridgeRulesForLesson } from '@/lib/languages/russianPersianBridge';
 import { recordStudyDay } from '@/lib/studyStreak';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
-import { conversationPracticeForLesson } from '@/lib/branchingConversation';
 
 const stages = RUSSIAN_LESSON_STAGES;
 
@@ -109,7 +105,6 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const [revealed, setRevealed] = useState(false);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showCheckAnswers, setShowCheckAnswers] = useState(false);
-  const [conversation, setConversation] = useState<LessonConversationSession | undefined>();
   const [sessionReady, setSessionReady] = useState(false);
   const [sessionError, setSessionError] = useState('');
   const [completionError, setCompletionError] = useState('');
@@ -200,7 +195,6 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       setRevealed(saved.revealed);
       setAnswers(saved.answers);
       setShowCheckAnswers(saved.showCheckAnswers);
-      setConversation(saved.conversation);
       setSpeechError('');
       setSessionReady(true);
       trackLessonStarted('ru', lesson.id);
@@ -218,11 +212,11 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: RussianLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers, conversation };
+    const nextSession: RussianLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveRussianLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
-  }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
   const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
   const activeMicTargetRef = useRef<string | null>(null);
@@ -275,7 +269,6 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const speakConversationLine = useCallback((text: string, onDone: () => void) => {
     void playRussianSpeech(text, narrationRate('ru-RU', 'normal'), onDone, onDone);
   }, []);
-  const stopConversationSpeech = useCallback(() => { void stopRussianSpeech(); }, []);
 
   // Read the visible main sentence on entry, resume, and each sentence change (stage 1 & shadowing stage 3).
   useEffect(() => {
@@ -679,25 +672,6 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           accent={Palette.primary}
         /> : null}
 
-        {stage === 9 && <>
-          <LessonConversationRoom
-            key={lesson.id}
-            courseId="ru"
-            lessonId={lesson.id}
-            levelId={lesson.levelId}
-            situation={lesson.situation}
-            partnerRole="طرف مقابل"
-            dialogue={lesson.dialogue}
-            fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
-            locale="ru-RU"
-            onSpeak={speakConversationLine}
-            onStop={stopConversationSpeech}
-            initialSession={conversation}
-            onSessionChange={setConversation}
-            semanticPractice={conversationPracticeForLesson(lesson, 'ru-RU')}
-          />
-          <RealConversationEntry language="ru" lessonId={lesson.id} lessonTitle={lesson.title} levelId={lesson.levelId} situation={lesson.situation} />
-        </>}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}

@@ -29,7 +29,7 @@ export { TURKISH_PRE_A1_LESSONS };
 /** الفبای ۲۹حرفی ترکی استانبولی (İstanbul Türkçesi). */
 export const TURKISH_ALPHABET = [...'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'] as const;
 
-/** مراحل ۱۰گانهٔ درس‌ها — هماهنگ با دوره‌های انگلیسی و روسی، با «گفت‌وگوی درس» در پایان هر درس. */
+/** مراحل ۱۰گانهٔ درس‌ها — هماهنگ با دوره‌های انگلیسی و روسی، با «آزمون گفتاری» در پایان هر درس. */
 export const TURKISH_LESSON_STAGES = [
   { id: 'situation', labelFa: 'موقعیت', labelEn: 'Situation' },
   { id: 'core-sentences', labelFa: 'جمله‌های اصلی', labelEn: 'Core Sentences' },
@@ -40,7 +40,6 @@ export const TURKISH_LESSON_STAGES = [
   { id: 'grammar-through-usage', labelFa: 'دستور در کاربرد', labelEn: 'Grammar Through Usage' },
   { id: 'short-assessment', labelFa: 'سنجش کوتاه', labelEn: 'Short Assessment' },
   { id: 'speaking-check', labelFa: 'آزمون گفتاری', labelEn: 'Speaking Check' },
-  { id: 'conversation-room', labelFa: 'گفت‌وگوی درس', labelEn: 'Lesson Dialogue' },
 ] as const;
 
 export type TurkishLevelId = 0 | 1 | 2 | 3 | 4 | 5;

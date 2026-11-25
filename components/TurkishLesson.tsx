@@ -22,8 +22,6 @@ import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
 import { turkishBridgeFor, turkishBridgeRulesForLesson } from '@/lib/languages/turkishPersianBridge';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
-import LessonConversationRoom from '@/components/LessonConversationRoom';
-import RealConversationEntry from '@/components/RealConversationEntry';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
@@ -33,8 +31,6 @@ import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } f
 import { bandReadinessForLevel } from '@/lib/content/readiness';
 
 import type { TurkishLessonSession } from '@/lib/languages/turkishStudyState';
-import { withInferredDialogueRoles, type LessonConversationSession } from '@/lib/lessonConversation';
-import { conversationPracticeForLesson } from '@/lib/branchingConversation';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playTurkishSpeech, stopTurkishSpeech } from '@/lib/turkishSpeech';
 import { ensureRecordedAudio } from '@/lib/content/coreAudio';
@@ -102,7 +98,6 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   const [revealed, setRevealed] = useState(false);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showCheckAnswers, setShowCheckAnswers] = useState(false);
-  const [conversation, setConversation] = useState<LessonConversationSession | undefined>();
   const [sessionReady, setSessionReady] = useState(false);
   const [sessionError, setSessionError] = useState('');
   const [completionError, setCompletionError] = useState('');
@@ -123,11 +118,6 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   const coreStageLabel = lesson.learningMode === 'words' ? 'واژه‌های اصلی' : lesson.learningMode === 'chunks' ? 'ترکیب‌های اصلی' : 'جمله‌های اصلی';
   const stageLabelFa = stage === 1 ? coreStageLabel : stage === 4 && lesson.learningMode === 'words' ? 'یادآوری واژه' : stage === 4 && lesson.learningMode === 'chunks' ? 'ساخت ترکیب کوتاه' : stage === 5 && lesson.learningMode === 'words' ? 'مرور واژگان' : stages[stage].labelFa;
   const stageLabelEn = stage === 1 && lesson.learningMode === 'words' ? 'Core Words' : stage === 1 && lesson.learningMode === 'chunks' ? 'Core Chunks' : stage === 4 && lesson.learningMode === 'words' ? 'Word Recall' : stage === 4 && lesson.learningMode === 'chunks' ? 'Chunk Building' : stage === 5 && lesson.learningMode === 'words' ? 'Vocabulary Review' : stages[stage].labelEn;
-  const roledDialogue = useMemo(() => withInferredDialogueRoles(lesson.dialogue), [lesson.dialogue]);
-  const semanticPractice = useMemo(
-    () => conversationPracticeForLesson({ ...lesson, dialogue: roledDialogue }, 'tr-TR'),
-    [lesson, roledDialogue],
-  );
   const checks = useMemo(() => shuffleChecks(lesson.id, lesson.checks), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
@@ -169,7 +159,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
       // A level replay is explicitly temporary when it would otherwise overwrite a saved attempt.
       preserveExistingSession.current = replayingLevel && result.hasSavedSession;
       const saved = replayingLevel
-        ? { stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false, conversation: undefined }
+        ? { stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false }
         : result.session;
       if (restarting) {
         restartPromise.current = null;
@@ -185,7 +175,6 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
       setRevealed(saved.revealed);
       setAnswers(saved.answers);
       setShowCheckAnswers(saved.showCheckAnswers);
-      setConversation(saved.conversation);
       setSpeechError('');
       setSessionReady(true);
       trackLessonStarted('tr', lesson.id);
@@ -203,11 +192,11 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: TurkishLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers, conversation };
+    const nextSession: TurkishLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveTurkishLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
-  }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
   const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
   const activeMicTargetRef = useRef<string | null>(null);
@@ -258,10 +247,6 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
     }, onDone);
   }, [speakForTarget]);
 
-  const speakConversationLine = useCallback((text: string, onDone: () => void) => {
-    void playTurkishSpeech(text, NORMAL_SPEECH_RATE, onDone, onDone);
-  }, []);
-  const stopConversationSpeech = useCallback(() => { void stopTurkishSpeech(); }, []);
 
   const firstVocabWord = vocabulary[0]?.word.word ?? '';
 
@@ -632,25 +617,6 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
 
         {stage === 8 && lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
 
-        {stage === 9 && <>
-          <LessonConversationRoom
-            key={lesson.id}
-            courseId="tr"
-            lessonId={lesson.id}
-            levelId={lesson.levelId}
-            situation={lesson.situation}
-            partnerRole="طرف مقابل"
-            dialogue={roledDialogue}
-            fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
-            locale="tr-TR"
-            onSpeak={speakConversationLine}
-            onStop={stopConversationSpeech}
-            initialSession={conversation}
-            onSessionChange={setConversation}
-            semanticPractice={semanticPractice}
-          />
-          <RealConversationEntry language="tr" lessonId={lesson.id} lessonTitle={lesson.title} levelId={lesson.levelId} situation={lesson.situation} />
-        </>}
 
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
