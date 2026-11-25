@@ -2,8 +2,8 @@
  "schema": 1,
  "language": "ru",
  "band": "pre",
- "version": 9,
- "generatedAt": "2026-11-15",
+ "version": 10,
+ "generatedAt": "2026-11-25",
  "source": "factory v3 · hand-drafted lines: 10% sample review · generated lines: 100% linguistic review (72 reviewed frames + every line) · automatic gates · human native sign-off unavailable in this environment",
  "sentences": [
   {
@@ -73,17 +73,6 @@
    "audio": "milo-segment:ru-pre.mp3?start=6504&dur=1541"
   },
   {
-   "id": "ru-pre-007",
-   "text": "Книга на столе.",
-   "fa": "کتاب روی میز است.",
-   "pronunciation": "KNÍ-ga na sta-LYÉ",
-   "pattern": "<что> на <предл.>.",
-   "targetWords": [
-    "на"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=8045&dur=1071"
-  },
-  {
    "id": "ru-pre-008",
    "text": "Телефон на столе?",
    "fa": "تلفن روی میز است؟",
@@ -104,17 +93,6 @@
     "на"
    ],
    "audio": "milo-segment:ru-pre.mp3?start=10265&dur=1306"
-  },
-  {
-   "id": "ru-pre-010",
-   "text": "Кофе с молоком, пожалуйста.",
-   "fa": "قهوه با شیر، لطفاً.",
-   "pronunciation": "KÓ-fye s ma-la-KÓM",
-   "pattern": "<что> с <твор.>.",
-   "targetWords": [
-    "с"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=11571&dur=1802"
   },
   {
    "id": "ru-pre-011",
@@ -238,17 +216,6 @@
    "audio": "milo-segment:ru-pre.mp3?start=26408&dur=1358"
   },
   {
-   "id": "ru-pre-022",
-   "text": "У меня вопрос о времени.",
-   "fa": "سؤالی دربارهٔ زمان دارم.",
-   "pronunciation": "u mi-NYÁ va-PRÓS a VRYÉ-mi-ni",
-   "pattern": "У меня вопрос о <предл.>.",
-   "targetWords": [
-    "о"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=27766&dur=1593"
-  },
-  {
    "id": "ru-pre-023",
    "text": "Я иду к Анне.",
    "fa": "پیش آنا می‌روم.",
@@ -313,17 +280,6 @@
     "то"
    ],
    "audio": "milo-segment:ru-pre.mp3?start=36648&dur=1045"
-  },
-  {
-   "id": "ru-pre-029",
-   "text": "Если не чай, то кофе.",
-   "fa": "اگر چای نه، پس قهوه.",
-   "pronunciation": "YÉS-li ni chay, to KÓ-fye",
-   "pattern": "Если не <А>, то <Б>.",
-   "targetWords": [
-    "то"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=37693&dur=1698"
   },
   {
    "id": "ru-pre-030",
@@ -535,50 +491,6 @@
    "audio": "milo-segment:ru-pre.mp3?start=61515&dur=1123"
   },
   {
-   "id": "ru-pre-049",
-   "text": "Я был здесь.",
-   "fa": "من اینجا بودم.",
-   "pronunciation": "ya byl zdyes'",
-   "pattern": "Я был <где>.",
-   "targetWords": [
-    "был"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=62638&dur=993"
-  },
-  {
-   "id": "ru-pre-050",
-   "text": "Он был студент.",
-   "fa": "او دانشجو بود.",
-   "pronunciation": "on byl stu-DYÉNT",
-   "pattern": "Он был <кто>.",
-   "targetWords": [
-    "был"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=63631&dur=1149"
-  },
-  {
-   "id": "ru-pre-051",
-   "text": "Если да, то хорошо.",
-   "fa": "اگر بله، پس خوب است.",
-   "pronunciation": "YÉS-li da, to kha-ra-SHÓ",
-   "pattern": "Если <А>, то <Б>.",
-   "targetWords": [
-    "если"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=64780&dur=1593"
-  },
-  {
-   "id": "ru-pre-052",
-   "text": "Если не сегодня, то скоро.",
-   "fa": "اگر امروز نه، پس به‌زودی.",
-   "pronunciation": "YÉS-li ni si-VÓD-nya, to SKÓ-ra",
-   "pattern": "Если не <когда>, то <когда>.",
-   "targetWords": [
-    "если"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=66373&dur=1907"
-  },
-  {
    "id": "ru-pre-053",
    "text": "Когда ты здесь?",
    "fa": "کی اینجایی؟",
@@ -599,28 +511,6 @@
     "когда"
    ],
    "audio": "milo-segment:ru-pre.mp3?start=69482&dur=1306"
-  },
-  {
-   "id": "ru-pre-055",
-   "text": "Это было хорошо.",
-   "fa": "این خوب بود.",
-   "pronunciation": "É-ta BY-la kha-ra-SHÓ",
-   "pattern": "Это было <нареч.>.",
-   "targetWords": [
-    "было"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=70788&dur=1123"
-  },
-  {
-   "id": "ru-pre-056",
-   "text": "Было плохо, теперь хорошо.",
-   "fa": "بد بود، حالا خوب است.",
-   "pronunciation": "BY-la PLÓ-kha, ti-PYÉR' kha-ra-SHÓ",
-   "pattern": "Было <нареч.>, теперь <нареч.>.",
-   "targetWords": [
-    "было"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=71911&dur=1750"
   },
   {
    "id": "ru-pre-057",
@@ -788,17 +678,6 @@
    "audio": "milo-segment:ru-pre.mp3?start=90013&dur=1306"
   },
   {
-   "id": "ru-pre-072",
-   "text": "Она дома.",
-   "fa": "او در خانه است.",
-   "pronunciation": "a-NÁ DÓ-ma",
-   "pattern": "Она <где>.",
-   "targetWords": [
-    "она"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=91319&dur=758"
-  },
-  {
    "id": "ru-pre-073",
    "text": "Она сейчас здесь?",
    "fa": "او الان اینجاست؟",
@@ -898,28 +777,6 @@
    "audio": "milo-segment:ru-pre.mp3?start=102578&dur=1176"
   },
   {
-   "id": "ru-pre-082",
-   "text": "Мы были здесь.",
-   "fa": "ما اینجا بودیم.",
-   "pronunciation": "my BY-li zdyes'",
-   "pattern": "Мы были <где>.",
-   "targetWords": [
-    "были"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=103754&dur=1045"
-  },
-  {
-   "id": "ru-pre-083",
-   "text": "Они были студенты.",
-   "fa": "آن‌ها دانشجو بودند.",
-   "pronunciation": "a-NÍ BY-li stu-DYÉN-ty",
-   "pattern": "Они были <кто>.",
-   "targetWords": [
-    "были"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=104799&dur=1228"
-  },
-  {
    "id": "ru-pre-084",
    "text": "Чай со льдом, пожалуйста.",
    "fa": "چای با یخ، لطفاً.",
@@ -929,28 +786,6 @@
     "со"
    ],
    "audio": "milo-segment:ru-pre.mp3?start=106027&dur=1698"
-  },
-  {
-   "id": "ru-pre-085",
-   "text": "Она была здесь.",
-   "fa": "او اینجا بود.",
-   "pronunciation": "a-NÁ by-LÁ zdyes'",
-   "pattern": "Она была <где>.",
-   "targetWords": [
-    "была"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=107725&dur=1071"
-  },
-  {
-   "id": "ru-pre-086",
-   "text": "Это была Анна.",
-   "fa": "آن آنا بود.",
-   "pronunciation": "É-ta by-LÁ ÁN-na",
-   "pattern": "Это была <кто>.",
-   "targetWords": [
-    "была"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=108796&dur=993"
   },
   {
    "id": "ru-pre-087",
@@ -1017,17 +852,6 @@
     "быть"
    ],
    "audio": "milo-segment:ru-pre.mp3?start=116946&dur=1358"
-  },
-  {
-   "id": "ru-pre-093",
-   "text": "Где мой телефон?",
-   "fa": "تلفن من کجاست؟",
-   "pronunciation": "gdye moy ti-li-FÓN",
-   "pattern": "Где мой <что>?",
-   "targetWords": [
-    "где"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=118304&dur=1254"
   },
   {
    "id": "ru-pre-094",
@@ -1151,17 +975,6 @@
    "audio": "milo-segment:ru-pre.mp3?start=132489&dur=1306"
   },
   {
-   "id": "ru-pre-105",
-   "text": "Это более просто.",
-   "fa": "این ساده‌تر است.",
-   "pronunciation": "É-ta BÓ-lye-ye PRÓS-ta",
-   "pattern": "Это более <нареч.>.",
-   "targetWords": [
-    "более"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=133795&dur=1202"
-  },
-  {
    "id": "ru-pre-106",
    "text": "Ну, пока, Анна!",
    "fa": "خب، فعلاً، آنا!",
@@ -1204,17 +1017,6 @@
     "без"
    ],
    "audio": "milo-segment:ru-pre.mp3?start=138942&dur=1776"
-  },
-  {
-   "id": "ru-pre-110",
-   "text": "Мне двадцать лет.",
-   "fa": "من بیست سال دارم.",
-   "pronunciation": "mnye DVÁ-tsat' lyet",
-   "pattern": "Мне <число> лет.",
-   "targetWords": [
-    "лет"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=140718&dur=1280"
   },
   {
    "id": "ru-pre-111",
@@ -1468,17 +1270,6 @@
     "сегодня"
    ],
    "audio": "milo-segment:ru-pre.mp3?start=170781&dur=1541"
-  },
-  {
-   "id": "ru-pre-134",
-   "text": "Надо спешить.",
-   "fa": "باید عجله کرد.",
-   "pronunciation": "NÁ-da spi-SHÍT'",
-   "pattern": "Надо <глагол>.",
-   "targetWords": [
-    "надо"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=172322&dur=1019"
   },
   {
    "id": "ru-pre-135",
@@ -1877,28 +1668,6 @@
    "audio": "milo-segment:ru-pre.mp3?start=220545&dur=1776"
   },
   {
-   "id": "ru-pre-171",
-   "text": "Он сказал да.",
-   "fa": "او گفت بله.",
-   "pronunciation": "on ska-ZÁL da",
-   "pattern": "Он сказал <ответ>.",
-   "targetWords": [
-    "сказал"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=222321&dur=993"
-  },
-  {
-   "id": "ru-pre-172",
-   "text": "Кто это сказал?",
-   "fa": "کی این را گفت؟",
-   "pronunciation": "kto É-ta ska-ZÁL",
-   "pattern": "Кто это сказал?",
-   "targetWords": [
-    "сказал"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=223314&dur=1149"
-  },
-  {
    "id": "ru-pre-173",
    "text": "Тогда до вечера!",
    "fa": "پس تا عصر!",
@@ -1987,116 +1756,68 @@
    "audio": "milo-segment:ru-pre.mp3?start=233762&dur=1829"
   },
   {
-   "id": "ru-pre-181",
-   "text": "Сегодня я вижу «этом», «россии» и «того».",
-   "fa": "امروز «этом»، «россии» و «того» را میبینم.",
-   "pattern": "Сегодня я вижу <W1>, <W2> и <W3>.",
+   "id": "ru-pre-171",
+   "text": "У меня есть «холодный».",
+   "fa": "من «холодный» را دارم.",
+   "pattern": "У меня есть <W1>.",
    "targetWords": [
-    "этом",
-    "россии",
-    "того"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=235591&dur=2743"
+    "холодный"
+   ]
+  },
+  {
+   "id": "ru-pre-172",
+   "text": "Я хочу «тетрадь».",
+   "fa": "من «тетрадь» را میخواهم.",
+   "pattern": "Я хочу <W1>.",
+   "targetWords": [
+    "тетрадь"
+   ]
+  },
+  {
+   "id": "ru-pre-181",
+   "text": "Нужно «оно» и «ли».",
+   "fa": "به «оно» و «ли» نیاز است.",
+   "pattern": "Нужно <W1> и <W2>.",
+   "targetWords": [
+    "оно",
+    "ли"
+   ]
   },
   {
    "id": "ru-pre-182",
-   "text": "Теперь я знаю «этого», «том» и «г».",
-   "fa": "اکنون «этого»، «том» و «г» را میدانم.",
-   "pattern": "Теперь я знаю <W1>, <W2> и <W3>.",
+   "text": "Вот и «бы».",
+   "fa": "این هم «бы».",
+   "pattern": "Вот и <W1>.",
    "targetWords": [
-    "этого",
-    "том",
-    "г"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=238334&dur=2560"
+    "бы"
+   ]
   },
   {
    "id": "ru-pre-183",
-   "text": "Он говорит «году», «об» и «ли» ещё раз.",
-   "fa": "او دوباره «году»، «об» و «ли» را میگوید.",
-   "pattern": "Он говорит <W1>, <W2> и <W3> ещё раз.",
+   "text": "У меня есть «должен».",
+   "fa": "من «должен» را دارم.",
+   "pattern": "У меня есть <W1>.",
    "targetWords": [
-    "году",
-    "об",
-    "ли"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=240894&dur=2638"
+    "должен"
+   ]
   },
   {
    "id": "ru-pre-184",
-   "text": "Мы уже знаем «м», «них» и «сша».",
-   "fa": "ما از پیش «м»، «них» و «сша» را میدانیم.",
-   "pattern": "Мы уже знаем <W1>, <W2> и <W3>.",
+   "text": "Я хочу «жить».",
+   "fa": "من «жить» را میخواهم.",
+   "pattern": "Я хочу <W1>.",
    "targetWords": [
-    "м",
-    "них",
-    "сша"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=243532&dur=2403"
+    "жить"
+   ]
   },
   {
    "id": "ru-pre-185",
-   "text": "Тут есть «области» и «тем».",
-   "fa": "اینجا «области» و «тем» هستند.",
-   "pattern": "Тут есть <W1> и <W2>.",
+   "text": "Я хочу «яйцо».",
+   "fa": "من «яйцо» را میخواهم.",
+   "pattern": "Я хочу <W1>.",
    "targetWords": [
-    "области",
-    "тем"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=245935&dur=1829"
-  },
-  {
-   "id": "ru-pre-186",
-   "text": "Это слова «жизни» и «им».",
-   "fa": "این واژهها «жизни» و «им» هستند.",
-   "pattern": "Это слова <W1> и <W2>.",
-   "targetWords": [
-    "жизни",
-    "им"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=247764&dur=1750"
-  },
-  {
-   "id": "ru-pre-187",
-   "text": "Можно «между» и «этой»?",
-   "fa": "آیا «между» و «этой» ممکن است؟",
-   "pattern": "Можно <W1> и <W2>?",
-   "targetWords": [
-    "между",
-    "этой"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=249514&dur=1593"
-  },
-  {
-   "id": "ru-pre-188",
-   "text": "Нужно «себе» и «такой».",
-   "fa": "به «себе» و «такой» نیاز است.",
-   "pattern": "Нужно <W1> и <W2>.",
-   "targetWords": [
-    "себе",
-    "такой"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=251107&dur=1646"
-  },
-  {
-   "id": "ru-pre-189",
-   "text": "Вот и «него».",
-   "fa": "این هم «него».",
-   "pattern": "Вот и <W1>.",
-   "targetWords": [
-    "него"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=252753&dur=1071"
-  },
-  {
-   "id": "ru-pre-190",
-   "text": "У меня есть «однако».",
-   "fa": "من «однако» را دارم.",
-   "pattern": "У меня есть <W1>.",
-   "targetWords": [
-    "однако"
-   ],
-   "audio": "milo-segment:ru-pre.mp3?start=253824&dur=1384"
+    "яйцо"
+   ]
   }
  ]
 }

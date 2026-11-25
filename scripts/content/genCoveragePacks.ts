@@ -12,11 +12,12 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { CEFR_BANDS, COURSE_SPEC, bandOfLevel, type CefrBand } from '@/lib/content/courseSpec';
-import { FREQUENCY } from '@/lib/content/courseAudit';
+import { CEFR_BANDS, COURSE_SPEC, bandOfLevel, levelIdForBand, type CefrBand } from '@/lib/content/courseSpec';
+import { FREQUENCY, BEGINNER_FREQUENCY } from '@/lib/content/courseAudit';
 import { computeReadiness, tokenize, type AuditLesson, type CourseLanguage } from '@/lib/content/readiness';
 import type { ContentPack, PackSentence } from '@/lib/content/packs';
-import { lessonsOf } from './courses';
+import { bandGrammarViolations } from './bandGrammarGate';
+import { lessonsOf, LANGUAGES } from './courses';
 import { COVERAGE_TEMPLATES, REVIEW_NOTE, renderFrame, type CoverageTemplate } from './coverageTemplates';
 
 const argv = process.argv.slice(2);
@@ -32,7 +33,7 @@ const BANDS: CefrBand[] = bandsArg >= 0
   ? argv[bandsArg + 1].split(',') as CefrBand[]
   : ['pre', 'A1', 'A2', 'B1', 'B2', 'C1'];
 
-const levelIdFor: Record<CefrBand, number> = { pre: -1, A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
+const levelIdFor = levelIdForBand;
 const dummyFor: Record<CourseLanguage, string> = { en: 'the', de: 'die', fr: 'de', es: 'de', tr: 've', ru: 'и' };
 const norm = (t: string) => tokenize(t).join(' ');
 const stemEq = (a: string, b: string) => a === b || (a.length >= 5 && b.length >= 5 && a.slice(0, 5) === b.slice(0, 5) && Math.abs(a.length - b.length) <= 3);
@@ -117,13 +118,21 @@ function packLesson(lang: CourseLanguage, band: CefrBand, sentences: readonly Pa
     hasDialogue: false, checks: 0,
   };
 }
+/** Same target list the app readiness uses: the beginner core where the language has one. */
+function readinessOptions(lang: CourseLanguage) {
+  return { beginnerFrequency: BEGINNER_FREQUENCY[lang] };
+}
 function coverageOf(lang: CourseLanguage, band: CefrBand, sentences: readonly PackSentence[]): number {
   const lessons: AuditLesson[] = [...lessonsOf(lang), packLesson(lang, band, sentences)];
-  return computeReadiness(lang, lessons, FREQUENCY[lang], 1).bands.find(b => b.band === band)!.coverage;
+  return computeReadiness(lang, lessons, FREQUENCY[lang], 1, undefined, readinessOptions(lang)).bands.find(b => b.band === band)!.coverage;
 }
 function gapsOf(lang: CourseLanguage, band: CefrBand, sentences: readonly PackSentence[]): string[] {
   const lessons: AuditLesson[] = [...lessonsOf(lang), ...(sentences.length ? [packLesson(lang, band, sentences)] : [])];
-  return computeReadiness(lang, lessons, FREQUENCY[lang], 10000).bands.find(b => b.band === band)!.gaps;
+  return computeReadiness(lang, lessons, FREQUENCY[lang], 10000, undefined, readinessOptions(lang)).bands.find(b => b.band === band)!.gaps;
+}
+/** The band grammar gate: gap words the band may not contain yet never become fill candidates. */
+function bandSafeWords(lang: CourseLanguage, band: CefrBand, words: readonly string[]): string[] {
+  return words.filter(w => bandGrammarViolations(lang, band, w).length === 0);
 }
 
 interface Row {
@@ -136,22 +145,41 @@ const finalSentences = new Map<string, PackSentence[]>();
 for (const lang of LANGS) {
   for (const band of BANDS) {
     const existing = findExistingPack(lang, band);
-    // Only hand-drafted sentences survive a regeneration. Previously generated lines are rebuilt
-    // from the current reviewed frames, so a pack never carries stale, unreviewed wording.
-    const base: PackSentence[] = existing
-      ? existing.pack.sentences.filter(s => !(s.pattern && /<W\d+>/.test(s.pattern)))
-      : [];
     const version = existing ? existing.pack.version + 1 : 1;
     const file = path.join('content-packs', lang, `${band}.v${version}.json`);
     const shipped = lessonsOf(lang);
     const shippedTexts = new Set(shipped.flatMap(l => l.sentences.map(s => norm(s.text))));
-    const seenTexts = new Set<string>([...shippedTexts, ...base.map(s => norm(s.text))]);
     const rank = rankMap(lang);
     const taught = taughtStemsFor(lang, band);
+    // Only hand-drafted sentences survive a regeneration. Previously generated lines are rebuilt
+    // from the current reviewed frames, so a pack never carries stale, unreviewed wording — and a
+    // hand-drafted line that now violates a hard gate (a course redesign made it a duplicate,
+    // changed what the band teaches, or the band grammar gate forbids it) is dropped with its
+    // reason instead of being carried into the next version.
+    const [minW, maxW] = wordLimits(band);
+    const base: PackSentence[] = [];
+    const usedIds = new Set<string>();
+    let droppedBase = 0;
+    for (const s of existing ? existing.pack.sentences.filter(s => !(s.pattern && /<W\d+>/.test(s.pattern))) : []) {
+      const reasons: string[] = [];
+      const words = tokenize(s.text);
+      if (words.length < minW || words.length > maxW) reasons.push(`${words.length} words (allowed ${minW}–${maxW})`);
+      const n = norm(s.text);
+      if (shippedTexts.has(n)) reasons.push('already in the shipped course');
+      if (!s.fa.trim() || norm(s.fa) === n) reasons.push('Persian missing');
+      if (aboveCount(s.text, lang, band, rank, taught) > 1) reasons.push('more than one above-ceiling / untaught word');
+      const grammar = bandGrammarViolations(lang, band, s.text);
+      if (grammar.length) reasons.push(`band ${band} grammar gate rejects: ${grammar.join(', ')}`);
+      if (reasons.length) { droppedBase += 1; console.log(`  drop ${s.id} "${s.text}" — ${reasons.join('; ')}`); continue; }
+      base.push(s);
+      usedIds.add(s.id);
+    }
+    if (droppedBase) console.log(`  ${lang}/${band}: dropped ${droppedBase} stale/violating hand-drafted line(s)`);
+    const seenTexts = new Set<string>([...shippedTexts, ...base.map(s => norm(s.text))]);
     const templates = allowedTemplates(lang, band, rank, taught);
     if (!templates.length) throw new Error(`no band-safe templates for ${lang}/${band}`);
 
-    const beforeShipped = computeReadiness(lang, shipped, FREQUENCY[lang], 1).bands.find(b => b.band === band)!.coverage;
+    const beforeShipped = computeReadiness(lang, shipped, FREQUENCY[lang], 1, undefined, readinessOptions(lang)).bands.find(b => b.band === band)!.coverage;
     const beforePack = coverageOf(lang, band, base);
     const added: PackSentence[] = [];
     let coverage = beforePack;
@@ -171,7 +199,12 @@ for (const lang of LANGS) {
         const words = tokenize(r.text).length;
         const [min, max] = wordLimits(band);
         if (words < min || words > max || aboveCount(r.text, lang, band, rank, taught) > 1) continue;
-        const id = `${lang}-${band.toLowerCase()}-${String(base.length + added.length + 1).padStart(3, '0')}`;
+        if (bandGrammarViolations(lang, band, r.text).length) continue;
+        // Dropped base lines leave gaps in the id sequence; skip ahead instead of colliding.
+        let n = base.length + added.length + 1;
+        while (usedIds.has(`${lang}-${band.toLowerCase()}-${String(n).padStart(3, '0')}`)) n += 1;
+        const id = `${lang}-${band.toLowerCase()}-${String(n).padStart(3, '0')}`;
+        usedIds.add(id);
         added.push({ id, text: r.text, fa: r.fa, pattern: r.pattern, targetWords: chunk.flatMap(g => g.words) });
         seenTexts.add(norm(r.text));
         if (added.length % 10 === 0 || !groups.length) coverage = coverageOf(lang, band, [...base, ...added]);
@@ -179,10 +212,10 @@ for (const lang of LANGS) {
       coverage = coverageOf(lang, band, [...base, ...added]);
     };
 
-    buildRound(groupsFromGaps(gapsOf(lang, band, base)));
+    buildRound(groupsFromGaps(bandSafeWords(lang, band, gapsOf(lang, band, base))));
     if (coverage < TARGET) {
       // Exact-word pass: no stem grouping, useful for short words and any residual stem mismatch.
-      const residual = gapsOf(lang, band, [...base, ...added])
+      const residual = bandSafeWords(lang, band, gapsOf(lang, band, [...base, ...added]))
         .filter(w => tokenize(w).length === 1 && tokenize(w)[0] === w)
         .map(w => ({ rep: w, words: [w] } as Group));
       buildRound(residual);
@@ -190,6 +223,11 @@ for (const lang of LANGS) {
     if (coverage < TARGET) throw new Error(`${lang}/${band} reached only ${coverage}% (target ${TARGET}%)`);
 
     const sentences = [...base, ...added];
+    // Defence in depth: nothing the validator would reject may leave the factory, even if it
+    // arrived through a hand-drafted base pack.
+    const gateRejects = sentences.filter(s => bandGrammarViolations(lang, band, s.text).length);
+    if (gateRejects.length) throw new Error(`${lang}/${band}: band grammar gate rejects ${gateRejects.length} sentence(s), e.g. ${gateRejects[0].id} "${gateRejects[0].text}"`);
+
     const pack: ContentPack = {
       schema: 1, language: lang, band, version,
       generatedAt: new Date().toISOString().slice(0, 10),
@@ -213,7 +251,7 @@ for (const row of rows) {
     const sentences = finalSentences.get(`${row.lang}:${band}`);
     if (sentences?.length) lessons.push(packLesson(row.lang, band, sentences));
   }
-  row.full = computeReadiness(row.lang, lessons, FREQUENCY[row.lang], 1).bands.find(b => b.band === row.band)!.coverage;
+  row.full = computeReadiness(row.lang, lessons, FREQUENCY[row.lang], 1, undefined, readinessOptions(row.lang)).bands.find(b => b.band === row.band)!.coverage;
 }
 
 const md: string[] = [
@@ -223,5 +261,8 @@ const md: string[] = [
 ];
 for (const r of rows) md.push(`| ${r.lang}/${r.band} v${r.version} | ${r.beforeShipped}% | ${r.beforePack}% | **${r.after}%** | ${r.full}% | +${r.added} | ${r.total} |`);
 md.push('', 'Generated by `scripts/content/genCoveragePacks.ts --write`. Frequency artefacts were moved out of the teaching ranks by `scripts/content/curateFrequency.ts --write`.', '', 'All 72 frames and 100% of generated lines passed the linguistic review in `docs/native-review.md`; the structure half of readiness comes from real bundled review lessons, see `docs/readiness-uplift.md`.', '');
-if (write) fs.writeFileSync(path.resolve('docs/coverage-uplift.md'), md.join('\n'));
-console.log(`\nTarget ${TARGET}% · ${rows.length} band(s) · minimum after ${Math.min(...rows.map(r => r.after))}% · minimum all-packs ${Math.min(...rows.map(r => r.full))}%`);
+// Only a full six-language, six-band run replaces the coverage report; a subset run would
+// otherwise overwrite the table with its partial rows.
+const fullRun = LANGS.length === LANGUAGES.length && BANDS.length === CEFR_BANDS.length;
+if (write && fullRun) fs.writeFileSync(path.resolve('docs/coverage-uplift.md'), md.join('\n'));
+console.log(`\nTarget ${TARGET}% · ${rows.length} band(s) · minimum after ${Math.min(...rows.map(r => r.after))}% · minimum all-packs ${Math.min(...rows.map(r => r.full))}%${fullRun ? '' : ' (subset run: coverage-uplift.md not rewritten)'}`);

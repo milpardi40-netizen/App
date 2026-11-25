@@ -4,16 +4,16 @@
     {
       "language": "de",
       "band": "A1",
-      "version": 9,
-      "path": "de/A1.v9.json",
-      "sentences": 266
+      "version": 10,
+      "path": "de/A1.v10.json",
+      "sentences": 255
     },
     {
       "language": "de",
       "band": "A2",
-      "version": 9,
-      "path": "de/A2.v9.json",
-      "sentences": 496
+      "version": 10,
+      "path": "de/A2.v10.json",
+      "sentences": 485
     },
     {
       "language": "de",
@@ -81,9 +81,9 @@
     {
       "language": "en",
       "band": "pre",
-      "version": 8,
-      "path": "en/pre.v8.json",
-      "sentences": 40
+      "version": 9,
+      "path": "en/pre.v9.json",
+      "sentences": 69
     },
     {
       "language": "es",
@@ -130,9 +130,9 @@
     {
       "language": "fr",
       "band": "A1",
-      "version": 9,
-      "path": "fr/A1.v9.json",
-      "sentences": 258
+      "version": 10,
+      "path": "fr/A1.v10.json",
+      "sentences": 257
     },
     {
       "language": "fr",
@@ -172,9 +172,9 @@
     {
       "language": "ru",
       "band": "A1",
-      "version": 9,
-      "path": "ru/A1.v9.json",
-      "sentences": 263
+      "version": 10,
+      "path": "ru/A1.v10.json",
+      "sentences": 165
     },
     {
       "language": "ru",
@@ -207,9 +207,9 @@
     {
       "language": "ru",
       "band": "pre",
-      "version": 9,
-      "path": "ru/pre.v9.json",
-      "sentences": 190
+      "version": 10,
+      "path": "ru/pre.v10.json",
+      "sentences": 166
     },
     {
       "language": "tr",

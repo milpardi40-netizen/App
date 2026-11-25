@@ -1,10 +1,11 @@
 /** Quality gates for a content pack. Usage: npx tsx scripts/content/validatePack.ts <pack.json> */
 import fs from 'node:fs';
 import path from 'node:path';
-import { COURSE_SPEC, CEFR_BANDS, type CefrBand } from '@/lib/content/courseSpec';
-import { FREQUENCY } from '@/lib/content/courseAudit';
+import { COURSE_SPEC, CEFR_BANDS, bandOfLevel, levelIdForBand, type CefrBand } from '@/lib/content/courseSpec';
+import { FREQUENCY, BEGINNER_FREQUENCY } from '@/lib/content/courseAudit';
 import { computeReadiness, tokenize } from '@/lib/content/readiness';
 import { isValidPack, type ContentPack } from '@/lib/content/packs';
+import { bandGrammarViolations } from './bandGrammarGate';
 import { lessonsOf } from './courses';
 
 const file = process.argv[2];
@@ -28,11 +29,10 @@ const shippedTexts = new Set(shipped.flatMap(l => l.sentences.map(s => norm(s.te
 const shippedIds = new Set(shipped.map(l => l.id));
 const seenTexts = new Set<string>(); const seenIds = new Set<string>();
 const [minLen, maxLen] = pack.band === 'pre' || pack.band === 'A1' ? [3, 9] : [3, 14];
-const taughtStems = new Set(shipped.filter(l => CEFR_BANDS.indexOf(bandOf(l.levelId)) <= CEFR_BANDS.indexOf(pack.band)).flatMap(l => l.sentences.flatMap(s => tokenize(s.text))));
+const taughtStems = new Set(shipped.filter(l => CEFR_BANDS.indexOf(bandOfLevel(l.levelId)) <= CEFR_BANDS.indexOf(pack.band)).flatMap(l => l.sentences.flatMap(s => tokenize(s.text))));
 
 const fold = (w: string) => w.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 function norm(t: string) { return tokenize(t).join(' '); }
-function bandOf(levelId: number): CefrBand { return levelId <= -1 ? 'pre' : levelId <= 1 ? 'A1' : levelId === 2 ? 'A2' : levelId === 3 ? 'B1' : levelId === 4 ? 'B2' : 'C1'; }
 function stemEq(a: string, b: string) { return a === b || (a.length >= 5 && b.length >= 5 && a.slice(0, 5) === b.slice(0, 5) && Math.abs(a.length - b.length) <= 3); }
 
 for (const s of pack.sentences) {
@@ -44,6 +44,8 @@ for (const s of pack.sentences) {
   if (shippedTexts.has(n)) errors.push(`${where}: already in the shipped course`);
   if (seenTexts.has(n)) errors.push(`${where}: duplicate inside the pack`); seenTexts.add(n);
   if (!s.fa.trim() || norm(s.fa) === n) errors.push(`${where}: Persian missing`);
+  const grammar = bandGrammarViolations(pack.language, pack.band, s.text);
+  if (grammar.length) errors.push(`${where}: band ${pack.band} grammar gate rejects: ${grammar.join(', ')}`);
   const rawWords = s.text.split(/\s+/);
   const above = words.filter((w, i) => {
     const r = rank.get(w);
@@ -58,10 +60,10 @@ for (const s of pack.sentences) {
   if (s.lesson && !shippedIds.has(s.lesson)) errors.push(`${where}: lesson "${s.lesson}" does not exist`);
 }
 
-// Value: how much coverage this pack adds to its band.
-const before = computeReadiness(pack.language, shipped, frequency).bands.find(b => b.band === pack.band)!;
-const levelIdFor: Record<CefrBand, number> = { pre: -1, A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
-const after = computeReadiness(pack.language, [...shipped, { id: `pack:${pack.band}`, levelId: levelIdFor[pack.band], title: 'pack', sentences: pack.sentences.map(s => ({ text: s.text, pattern: s.pattern })), hasDialogue: false, checks: 0 }], frequency).bands.find(b => b.band === pack.band)!;
+// Value: how much coverage this pack adds to its band. Measured on the same target list the app
+// uses (beginner core where the language has one), so the printed numbers match what learners see.
+const before = computeReadiness(pack.language, shipped, frequency, 60, undefined, { beginnerFrequency: BEGINNER_FREQUENCY[pack.language] }).bands.find(b => b.band === pack.band)!;
+const after = computeReadiness(pack.language, [...shipped, { id: `pack:${pack.band}`, levelId: levelIdForBand[pack.band], title: 'pack', sentences: pack.sentences.map(s => ({ text: s.text, pattern: s.pattern })), hasDialogue: false, checks: 0 }], frequency, 60, undefined, { beginnerFrequency: BEGINNER_FREQUENCY[pack.language] }).bands.find(b => b.band === pack.band)!;
 
 console.log(`${pack.language}/${pack.band} v${pack.version}: ${pack.sentences.length} sentences · coverage ${before.coverage}% → ${after.coverage}% (${before.coveredWords} → ${after.coveredWords} of ${before.vocabularyCeiling})`);
 if (errors.length) { console.error(`✗ ${errors.length} violation(s):\n- ${errors.join('\n- ')}`); process.exit(1); }
