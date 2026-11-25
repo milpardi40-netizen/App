@@ -2,7 +2,7 @@ import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Bot, ChevronLeft, MessageCircle, UserRound } from 'lucide-react-native';
+import { Bot, ChevronLeft, MessageCircle, RefreshCw, UserRound } from 'lucide-react-native';
 import SpeakCheck, { type SpeakCheckResult } from '@/components/SpeakCheck';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { stop as stopCourseSpeech } from '@/lib/courseSpeech';
@@ -117,6 +117,39 @@ export default function LessonDialogueRoom({ language, lessonId, lessonTitle, le
     return Math.round(scored.reduce((sum, value) => sum + value, 0) / scored.length);
   }, [results, userIndexes]);
 
+  // Real error-finding from the recogniser results: per-line verdicts, the
+  // transcript the device actually heard, and the exact words to re-practise.
+  const summary = useMemo(() => {
+    if (phase !== 'done') return null;
+    const attempted = userIndexes.filter(index => results[index]);
+    const complete = attempted.filter(index => results[index]!.words.every(word => word.ok)).length;
+    const skipped = userIndexes.length - attempted.length;
+    const parts = [`${fa(complete)} جملهٔ کامل از ${fa(userIndexes.length)} نوبت تو`];
+    if (skipped) parts.push(`${fa(skipped)} جمله گفته نشد`);
+    return parts.join(' · ');
+  }, [phase, results, userIndexes]);
+
+  const problemWords = useMemo(() => {
+    if (phase !== 'done') return [];
+    const seen = new Set<string>();
+    for (const index of userIndexes) {
+      for (const word of results[index]?.words ?? []) {
+        if (!word.ok) seen.add(word.word);
+      }
+    }
+    return [...seen];
+  }, [phase, results, userIndexes]);
+
+  const restart = useCallback(() => {
+    void stopCourseSpeech();
+    spokenRef.current = new Set();
+    advancedRef.current = -1;
+    turnRef.current = 0;
+    setTurn(0);
+    setResults({});
+    setPhase('choose');
+  }, []);
+
   const openLiveConversation = useCallback(() => {
     router.push({ pathname: '/conversations', params: { language, lessonId, lessonTitle, levelId: String(levelId), situation } } as never);
   }, [router, language, lessonId, lessonTitle, levelId, situation]);
@@ -202,17 +235,28 @@ export default function LessonDialogueRoom({ language, lessonId, lessonTitle, le
             <Text style={[styles.doneScore, score >= 70 ? styles.scoreGood : styles.scoreWeak]}>{fa(score)}٪</Text>
           )}
           <Text style={styles.doneEvaluation}>{evaluationFor(score ?? 0)}</Text>
+          {summary ? <Text style={styles.doneSummary}>{summary}</Text> : null}
           {userIndexes.map(index => {
             const result = results[index];
             if (!result) return null;
-            const missed = result.words.filter(word => !word.ok).map(word => word.word);
+            const missed = result.words.filter(word => word.state === 'miss').map(word => word.word);
+            const near = result.words.filter(word => word.state === 'near').map(word => word.word);
+            const heard = result.heard;
             return (
               <View key={`review-${index}`} style={styles.reviewRow}>
                 <Text style={styles.reviewLine}>{lines[index]?.text}</Text>
-                {missed.length ? <Text style={styles.reviewMissed}>واژه‌های ناقص: {missed.join('، ')}</Text> : <Text style={styles.reviewOk}>روان و کامل</Text>}
+                {heard && missed.length ? <Text style={styles.reviewHeard}>دستگاه این را شنید: {heard}</Text> : null}
+                {missed.length ? <Text style={styles.reviewMissed}>شنیده نشد: {missed.join('، ')}</Text> : null}
+                {near.length ? <Text style={styles.reviewNear}>نزدیک بود ولی دقیق نبود: {near.join('، ')}</Text> : null}
+                {!missed.length && !near.length ? <Text style={styles.reviewOk}>روان و کامل</Text> : null}
               </View>
             );
           })}
+          {problemWords.length ? <Text style={styles.doneErrors}>برای تمرین دوباره: {problemWords.join('، ')}</Text> : null}
+          <Pressable accessibilityRole="button" accessibilityLabel="شروع مجدد گفت‌وگو" style={styles.restartButton} onPress={restart}>
+            <RefreshCw size={16} color={accent} />
+            <Text style={styles.restartText}>شروع مجدد گفت‌وگو</Text>
+          </Pressable>
         </View>
       ) : null}
 
@@ -260,6 +304,12 @@ const styles = StyleSheet.create({
   reviewLine: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Palette.ink, textAlign: 'right' },
   reviewOk: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Palette.success, textAlign: 'right', writingDirection: 'rtl' },
   reviewMissed: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Palette.danger, textAlign: 'right', writingDirection: 'rtl' },
+  reviewNear: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Palette.warning, textAlign: 'right', writingDirection: 'rtl' },
+  reviewHeard: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Palette.text, textAlign: 'right', writingDirection: 'rtl' },
+  doneSummary: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Palette.muted, textAlign: 'right', writingDirection: 'rtl' },
+  doneErrors: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Palette.primaryDark, textAlign: 'right', lineHeight: 22, writingDirection: 'rtl' },
+  restartButton: { minHeight: 44, borderRadius: Radius.lg, borderWidth: 1, borderColor: Palette.border, backgroundColor: Palette.canvas, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.xs, paddingVertical: Spacing.sm },
+  restartText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, color: Palette.primaryDark, textAlign: 'center', writingDirection: 'rtl' },
   liveCard: { width: '100%', marginTop: Spacing.xl, padding: Spacing.md, borderRadius: Radius.xl, backgroundColor: Palette.surface, borderWidth: 1, borderColor: Palette.border, ...Shadows.card },
   liveButton: { width: '100%', minHeight: 48, borderRadius: Radius.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.xs, paddingVertical: Spacing.sm },
   liveButtonText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, color: '#FFFFFF', textAlign: 'center', writingDirection: 'rtl' },
