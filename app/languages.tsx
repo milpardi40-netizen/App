@@ -261,18 +261,8 @@ export default function LanguagesHome() {
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={[styles.page, compact && styles.pageCompact]}>
-          <View style={[styles.header, Platform.OS === 'web' && styles.headerRtl, width < 420 && styles.headerStacked]}>
-            <View style={[styles.headerActions, width < 420 && styles.headerActionsStacked]}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="راهنمای استفاده از اپ"
-                accessibilityHint="شروع سریع و آموزش امکانات؛ بدون نیاز به ورود"
-                onPress={() => router.push('/help' as never)}
-                style={({ pressed }) => [styles.headerButton, styles.helpButton, pressed && styles.pressed]}
-              >
-                <CircleHelp size={19} color={palette.forest} strokeWidth={1.9} />
-                <Text style={styles.helpLabel}>راهنما</Text>
-              </Pressable>
+          <View style={[styles.header, Platform.OS === 'web' && styles.headerRtl]}>
+            <View style={styles.headerActions}>
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={registered ? 'پروفایل و تنظیمات (ثبت‌نام شده)' : 'پروفایل و تنظیمات'}
@@ -326,10 +316,22 @@ export default function LanguagesHome() {
                 زبان را از زندگی یاد بگیر
               </Text>
               <Text style={styles.subtitle}>
-                کوتاه، شنیدنی، ماندگار
+                کوتاه، شنیدنی، ماندگار{'\n'}با تمرین و تکرار یک زبان به صورت حرفه ای یادبگیر
               </Text>
             </View>
           </ImageBackground>
+
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="راهنمای استفاده از اپ"
+            accessibilityHint="شروع سریع و آموزش امکانات؛ بدون نیاز به ورود"
+            onPress={() => router.push('/help' as never)}
+            style={({ pressed }) => [styles.guideLink, pressed && styles.pressed]}
+          >
+            <CircleHelp size={18} color={palette.forest} strokeWidth={1.9} />
+            <Text style={styles.guideLinkText}>راهنمای استفاده از اپ</Text>
+            <ArrowLeft size={15} color={palette.forest} />
+          </Pressable>
 
           {(resumeBanner || dueReviewCount > 0) && (
             <View style={[styles.quickActions, compact && styles.quickActionsCompact]}>
@@ -420,10 +422,8 @@ const styles = StyleSheet.create({
   pageCompact: { paddingHorizontal: 16, paddingTop: 12, gap: 14 },
   header: { minHeight: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   headerRtl: { flexDirection: 'row-reverse' },
-  headerStacked: { flexDirection: 'column-reverse', alignItems: 'stretch', gap: 8 },
-  headerActionsStacked: { justifyContent: 'flex-start' },
-  helpButton: { width: 52, height: 48, gap: 1, backgroundColor: palette.sage, borderColor: palette.sageLine },
-  helpLabel: { fontFamily: 'Beiruti', fontSize: 11, lineHeight: 16, color: palette.forest },
+  guideLink: { alignSelf: 'flex-end', maxWidth: '100%', minHeight: 44, flexDirection: 'row-reverse', alignItems: 'center', gap: 8, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 13, borderWidth: 1, borderColor: palette.sageLine, backgroundColor: palette.sage },
+  guideLinkText: { flexShrink: 1, fontFamily: 'Beiruti', fontSize: 13, lineHeight: 22, color: palette.forest, textAlign: 'right' },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   profileButton: { borderColor: '#D7DECE', backgroundColor: '#F3F6EE' },
   profileButtonRegistered: { borderColor: '#EAD0C1', backgroundColor: '#FBEFE6' },

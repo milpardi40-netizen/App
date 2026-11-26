@@ -113,9 +113,15 @@ function routeExists(href) {
   equal(JSON.parse(globalThis.__guideStorage.get('milo_navigation_resume_v1')).href, saved.href, 'backgrounding guide retains lesson destination');
   await act(async () => { tree.unmount(); });
   const home = read('app/languages.tsx');
-  const helpButton = home.slice(home.indexOf('accessibilityLabel="راهنمای استفاده از اپ"'), home.indexOf('<ProfileIcon'));
-  check(helpButton.includes("router.push('/help'") && !helpButton.split('</Pressable>')[0].includes('disabled'), 'home help entry is never registration-gated');
-  check(home.includes('width < 420 && styles.headerStacked'), 'narrow headers allow room for new action');
+  const helpLabel = home.indexOf('accessibilityLabel="راهنمای استفاده از اپ"');
+  const helpButton = home.slice(home.lastIndexOf('<Pressable', helpLabel), home.indexOf('</Pressable>', helpLabel));
+  check(helpButton.includes("router.push('/help'") && !helpButton.includes('disabled'), 'home help entry is never registration-gated');
+  const originalHeader = JSON.parse(read('scripts/fixtures/home-header-before-guide.json'));
+  const currentHeader = home.slice(home.indexOf('          <View style={[styles.header,'), home.indexOf('\n\n          <ImageBackground'));
+  equal(currentHeader, originalHeader.header, 'original released header restored byte-for-byte: same three actions, order and logo');
+  for (const line of originalHeader.styles) check(home.includes(line), 'original header layout/style unchanged: ' + line.split(':')[0].trim());
+  check(helpLabel > home.indexOf('</ImageBackground>') && !currentHeader.includes("'/help'"), 'guide placed below hero, outside restored header');
+  check(!home.includes('headerStacked') && !home.includes('headerActionsStacked'), 'no guide-induced mobile header stacking');
   check(read('components/RegistrationGate.tsx').includes("pathname === '/help' || BYPASS_GATE || ready"), 'only read-only help is public in login builds');
   check(!read('app/help.tsx').includes('AsyncStorage') && !read('lib/appGuide.ts').includes('AsyncStorage'), 'reading help writes no learning/preferences data');
   check(!read('app/help.tsx').includes('fetch(') && !read('lib/appGuide.ts').includes('fetch('), 'help itself requires no network');
