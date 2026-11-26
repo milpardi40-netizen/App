@@ -57,8 +57,12 @@
     "validate:background-notifications": "node scripts/verify-background-notifications.mjs",
     "validate:dialogue-room": "node scripts/verify-dialogue-room.cjs",
     "validate:russian-pre-a1-masculine": "node scripts/verify-russian-pre-a1-masculine.cjs",
-    "validate:learner-controls": "node scripts/verify-foreground-restart.cjs && node scripts/verify-level-restart.cjs && node scripts/verify-speaking-skip.cjs",
-    "validate:russian-practical": "node scripts/verify-russian-practical.cjs"
+    "validate:learner-controls": "node scripts/verify-foreground-restart.cjs && node scripts/verify-level-restart.cjs && node scripts/verify-speaking-skip.cjs && node scripts/verify-lesson-stage-navigation.cjs && node scripts/verify-seven-language-lesson-ui.cjs",
+    "validate:russian-practical": "node scripts/verify-russian-practical.cjs && node scripts/verify-russian-prea1-ui-dedup.cjs",
+    "validate:six-prea1-practical": "node scripts/verify-six-prea1-practical.cjs",
+    "validate:prea1-balance": "node scripts/verify-prea1-balance.cjs",
+    "validate:study-reminder": "node scripts/verify-study-reminder.cjs",
+    "validate:app-guide": "node scripts/verify-app-guide.cjs"
   },
   "dependencies": {
     "@expo-google-fonts/beiruti": "^0.4.1",

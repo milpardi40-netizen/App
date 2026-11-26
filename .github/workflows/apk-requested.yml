@@ -259,6 +259,9 @@ jobs:
           npm run validate:assessment
           npm run validate:progress
           npm run validate:learner-controls
+          npm run validate:study-reminder
+          npm run validate:app-guide
+          npm run validate:prea1-balance
       - &build
         name: Build the release APK
         shell: bash

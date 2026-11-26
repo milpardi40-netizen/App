@@ -14,8 +14,9 @@ import { loadRuns, saveRun, uniqueMissedWords, type DialogueRun } from '@/lib/di
 
 /**
  * «اتاق گفت‌وگو» — the friendly closing room of every lesson.
- * No new content is invented here: the room runs exactly the sentences the
- * lesson already teaches (the standard eight). The operator reads half of
+ * No new content is invented here: Pre-A1 uses its authored exchange when
+ * available; word/sound lessons keep their own repetition list. Higher levels
+ * keep their existing sentence feed. The operator reads half of
  * them with their own distinct voice and the learner says the other half,
  * one pass, no retries; each learner line is scored by the device recogniser
  * and the room ends with a real error report, a progress trend against the
@@ -489,7 +490,7 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
                   />}
                 </>
               )}
-              <Text style={styles.progress}>{fa(Math.min(turn + 1, lines.length))} از {fa(lines.length)}</Text>
+
             </View>
           ) : null}
         </View>
@@ -538,7 +539,7 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
               <Text style={styles.bubbleForeign}>{lines[reviewIndexes[reviewIndex]].text}</Text>
               <Text style={styles.bubbleFa}>{lines[reviewIndexes[reviewIndex]].fa}</Text>
               <Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونهٔ جمله" onPress={() => replayOperator(lines[reviewIndexes[reviewIndex]].text)} style={styles.historyToggle}><Volume2 size={18} color={accent} /><Text style={styles.restartText}>شنیدن نمونه</Text></Pressable>
-              <SpeakCheck key={`review-${reviewIndex}`} text={lines[reviewIndexes[reviewIndex]].text} locale={locale} accent={accent} roomMode onSkip={() => setReviewIndex(reviewIndex + 1 < reviewIndexes.length ? reviewIndex + 1 : null)} />
+              <SpeakCheck key={`review-${reviewIndex}`} text={lines[reviewIndexes[reviewIndex]].text} locale={locale} accent={accent} roomMode />
               <Pressable accessibilityRole="button" onPress={() => setReviewIndex(reviewIndex + 1 < reviewIndexes.length ? reviewIndex + 1 : null)} style={styles.restartButton}><Text style={styles.restartText}>{reviewIndex + 1 < reviewIndexes.length ? 'جملهٔ بعدی' : 'پایان تمرین اشتباه‌ها'}</Text><ChevronLeft size={16} color={accent} /></Pressable>
             </View>
           ) : null}

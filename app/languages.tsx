@@ -4,7 +4,7 @@ import { AppState, ImageBackground, Linking, Platform, Pressable, ScrollView, St
 import { createAudioPlayer } from 'expo-audio';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { ArrowLeft, BookOpen, Globe, Headphones, LifeBuoy, MessageCircle, Play } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, CircleHelp, Globe, Headphones, LifeBuoy, MessageCircle, Play } from 'lucide-react-native';
 import { MiloLanguageBrand } from '@/components/MiloLanguageBrand';
 import { ProfileIcon } from '@/components/ProfileIcon';
 import { ensureOpenLearnerRegistered } from '@/lib/openLearnerAccount';
@@ -261,8 +261,18 @@ export default function LanguagesHome() {
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={[styles.page, compact && styles.pageCompact]}>
-          <View style={[styles.header, Platform.OS === 'web' && styles.headerRtl]}>
-            <View style={styles.headerActions}>
+          <View style={[styles.header, Platform.OS === 'web' && styles.headerRtl, width < 420 && styles.headerStacked]}>
+            <View style={[styles.headerActions, width < 420 && styles.headerActionsStacked]}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="راهنمای استفاده از اپ"
+                accessibilityHint="شروع سریع و آموزش امکانات؛ بدون نیاز به ورود"
+                onPress={() => router.push('/help' as never)}
+                style={({ pressed }) => [styles.headerButton, styles.helpButton, pressed && styles.pressed]}
+              >
+                <CircleHelp size={19} color={palette.forest} strokeWidth={1.9} />
+                <Text style={styles.helpLabel}>راهنما</Text>
+              </Pressable>
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={registered ? 'پروفایل و تنظیمات (ثبت‌نام شده)' : 'پروفایل و تنظیمات'}
@@ -410,6 +420,10 @@ const styles = StyleSheet.create({
   pageCompact: { paddingHorizontal: 16, paddingTop: 12, gap: 14 },
   header: { minHeight: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   headerRtl: { flexDirection: 'row-reverse' },
+  headerStacked: { flexDirection: 'column-reverse', alignItems: 'stretch', gap: 8 },
+  headerActionsStacked: { justifyContent: 'flex-start' },
+  helpButton: { width: 52, height: 48, gap: 1, backgroundColor: palette.sage, borderColor: palette.sageLine },
+  helpLabel: { fontFamily: 'Beiruti', fontSize: 11, lineHeight: 16, color: palette.forest },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   profileButton: { borderColor: '#D7DECE', backgroundColor: '#F3F6EE' },
   profileButtonRegistered: { borderColor: '#EAD0C1', backgroundColor: '#FBEFE6' },

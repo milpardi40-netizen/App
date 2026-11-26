@@ -114,7 +114,24 @@ const mocks = {
     await act(async () => { spoken.at(-1).done(); });
     await act(async () => { tree.root.findByType('SpeakCheck').props.onResult({ score: 100, heard: 'Hi there', words: [] }); });
     assert.equal(globalThis.__roomSaveKey, 'test-lesson:v4', 'new-content run uses the same versioned history key');
-    console.log('Dialogue-room checks passed: guided/cued/exam, help, safe sample playback, silent attempts, matching-only feedback, mode-specific trends and restart.');
+    // Shared cleanup applies to all seven languages and levels, without changing room behaviour.
+    for (const [language, lessonId] of [['ru', 'ru-pre-01-hello'], ['ru', 'ru-a1-introducing-yourself'], ...['en', 'tr', 'ar', 'de', 'fr', 'es'].map(language => [language, `${language}-test-lesson`])]) {
+      await act(async () => { tree.unmount(); });
+      await act(async () => { tree = create(React.createElement(Room, { ...props, language, lessonId })); });
+      await act(async () => { button('شروع گفت‌وگو').props.onPress(); });
+      await act(async () => { spoken.at(-1).done(); });
+      const counterCount = tree.root.findAllByType('Text').filter(node => node.children.join('') === '2 از 2').length;
+      assert.equal(counterCount, 1, language + ': one turn counter in the shared session header');
+      assert.equal(typeof tree.root.findByType('SpeakCheck').props.onSkip, 'function', 'live dialogue retains its only skip');
+      await act(async () => { tree.root.findByType('SpeakCheck').props.onResult({ score: 0, heard: '', words: [] }); });
+      await act(async () => { button('تمرین اشتباه‌ها').props.onPress(); });
+      assert.equal(typeof tree.root.findByType('SpeakCheck').props.onSkip, 'undefined', language + ': only duplicate review skip is removed');
+      const outerNext = tree.root.findAllByType('Pressable').find(node => node.findAllByType('Text').some(text => text.children.join('') === 'پایان تمرین اشتباه‌ها'));
+      assert.ok(outerNext, 'outer review navigation retained');
+      await act(async () => { outerNext.props.onPress(); });
+      assert.equal(tree.root.findAllByType('SpeakCheck').length, 0, 'outer action actually exits review');
+    }
+    console.log('Dialogue-room checks passed: guided/cued/exam, help, safe sample playback, silent attempts, matching-only feedback, mode-specific trends, restart and seven-language UI deduplication.');
   } finally {
     if (tree) await act(async () => { tree.unmount(); });
     fs.rmSync(outfile, { force: true });

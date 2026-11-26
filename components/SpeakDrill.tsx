@@ -409,7 +409,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
       <Text style={[styles.sentence, isRtlLocale && styles.rtlSentence]}>{current.text}</Text>
       {current.fa ? <Text keepColor style={styles.persian}>{current.fa}</Text> : null}
       {onSpeak ? <Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونه" style={styles.listen} onPress={() => speakAndOpenMic(current.text)}><Volume2 size={16} color={accent} /><Text keepColor style={[styles.listenText, { color: accent }]}>شنیدن نمونه</Text></Pressable> : null}
-      <SpeakCheck key={current.id} text={current.text} locale={locale} accent={accent} title="بگو" autoStart={micReady && !passNotice} onResult={onResult} onSkip={next} />
+      <SpeakCheck key={current.id} text={current.text} locale={locale} accent={accent} title="بگو" autoStart={micReady && !passNotice} onResult={onResult} />
       {passNotice ? (
         <View style={styles.passBanner}>
           <CheckCircle2 size={16} color="#15803D" />

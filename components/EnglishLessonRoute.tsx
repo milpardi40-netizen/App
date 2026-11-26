@@ -1,3 +1,4 @@
+import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { resetLessonChunks } from '@/lib/lessonChunks';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
 import {LessonGenderCard, SentenceGenderLabel} from './LessonGenderCard';
@@ -528,6 +529,18 @@ export default function SentenceLessonScreen() {
     finally { completing.current=false; setSaving(false); }
   };
 
+  const goToPreviousStage = () => {
+    if (!sessionReady || saving || sessionError || completing.current || resettingRef.current || stage < 2) return;
+    cancelSpeakingAdvance();
+    setMicReadyKey(null);
+    void stopResponsiveSpeech();
+    setStage(stage - 1);
+    setSentenceIndex(0);
+    setRevealed(false);
+    setSpeechResult(null);
+    setSpeechError(null);
+  };
+
   const goToPreviousSentence = () => {
     if (!sessionReady || saving || !!sessionError || stage !== 1) return;
     setSentenceIndex(previousSentenceIndex(sentenceIndex));
@@ -557,14 +570,7 @@ export default function SentenceLessonScreen() {
         </View>
       </LinearGradient>
       <View style={styles.stepperCard}>
-        <View style={styles.stepperHeading}>
-          <View>
-          </View>
-          <View style={styles.stepperNow}>
-            
-            <Text style={styles.stepperNowFa}>{stages[stage].labelFa}</Text>
-          </View>
-        </View>
+
         <View style={styles.stepSegments}>
           {stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}
         </View>
@@ -580,7 +586,7 @@ export default function SentenceLessonScreen() {
         {stage === 0 && (
           <View style={styles.centerStage}>
             <View style={styles.bigIcon}><Sparkles size={34} color={Colors.accent[400]} /></View>
-            <Text style={styles.stageTitle}>{lesson.title}</Text>
+
             <Text style={styles.situation}>{lesson.situation}</Text>
             {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.sentences.map((sentence, index) => ({ speaker: index % 2 ? 'You' : 'Partner', text: sentence.en, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Colors.primary[500]} /> : null}
             {lesson.teachingFa ? <View style={styles.teachingCard}>
@@ -610,7 +616,7 @@ export default function SentenceLessonScreen() {
               {lesson.levelId >= 3 ? <RevealText text={current.fa} style={styles.persian} resetKey={current.id} /> : <Text keepColor style={styles.persian}>{current.fa}</Text>}
               {current.pattern ? <View style={styles.pattern}><Text style={styles.patternLabel}>الگو</Text><Text style={styles.patternEnglish}>{current.pattern}</Text></View> : null}
             </View>
-            <EnglishSpeechRateControls onPlay={rate => speak(current.en, rate)} />
+            <EnglishSpeechRateControls showNormal={false} onPlay={rate => speak(current.en, rate)} />
             {!!audioNotice && <Text accessibilityLiveRegion="polite" style={styles.speechError}>{audioNotice}</Text>}
             <SpeakCheck
               key={current.id}
@@ -620,9 +626,7 @@ export default function SentenceLessonScreen() {
               accent={Colors.success[400]}
               autoStart={micReadyKey === `1:${current.id}`}
               onResult={result => {
-                if (sentenceIndex < chunkLastIndex) {
-                  scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
-                }
+                scheduleOnPass(result, () => { void next(); });
               }}
             />
           </View>
@@ -632,7 +636,7 @@ export default function SentenceLessonScreen() {
           <View style={styles.centerStage}>
             <View style={styles.bigIcon}><Headphones size={34} color={Colors.primary[400]} /></View>
             <Text style={styles.stageTitle}>شنیدن جمله‌ها</Text>
-            {showHint && <Text style={styles.stageDesc}>هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.</Text>}
+
             <View style={{ width: '100%' }} onLayout={event => { listenListOffsetRef.current = event.nativeEvent.layout.y; }}>
               <BlindListeningList
                 items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))}
@@ -663,7 +667,7 @@ export default function SentenceLessonScreen() {
               <Text style={styles.speechSentence}>{current.en}</Text>
               <EnglishSpeechRateControls onPlay={rate => speak(current.en, rate)} disabled={recorderState.isRecording || evaluatingSpeech} />
               {!!audioNotice && <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.speechError}>{audioNotice}</Text>}
-              <Text style={styles.speechHint}>پس از شنیدن، جمله را با صدای بلند تکرار کنید.</Text>
+
               <SpeakCheck
                 key={current.id}
                 onSkip={skipSpeakingSentence}
@@ -813,7 +817,8 @@ export default function SentenceLessonScreen() {
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          lines={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
+          contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          lines={lesson.levelId === 0 && lesson.dialogue.length > 0 ? lesson.dialogue.map(line => ({ text: line.text, fa: line.fa })) : lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
           locale="en-US"
           onSpeak={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone })}
           onSpeakOperator={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', pitch: 0.82, onDone, onError: onDone })}
@@ -826,6 +831,9 @@ export default function SentenceLessonScreen() {
 
       <View pointerEvents={resetting ? 'none' : 'auto'} style={styles.footer}>
         <View style={styles.footerButtons}>
+          {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
+            <Text style={styles.secondaryControlText}>مرحلهٔ قبل</Text>
+          </Pressable>}
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && { opacity: .45 }]}>
             <Text style={styles.secondaryControlText}>جمله قبلی</Text>
           </Pressable>}
@@ -856,15 +864,15 @@ export default function SentenceLessonScreen() {
 }
 
 /** Replay the current sentence at an explicit speed on every tap. */
-function EnglishSpeechRateControls({ onPlay, disabled = false }: { onPlay: (rate: number) => void; disabled?: boolean }) {
+function EnglishSpeechRateControls({ onPlay, disabled = false, showNormal = true }: { onPlay: (rate: number) => void; disabled?: boolean; showNormal?: boolean }) {
   return (
     <View style={styles.replayRow}>
       <Pressable accessibilityRole="button" accessibilityLabel="پخش آهستهٔ جملهٔ انگلیسی" accessibilityHint="جملهٔ فعلی را با سرعت آهسته پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={[styles.replayButton, disabled && styles.replayDisabled]} onPress={() => onPlay(ENGLISH_SLOW_SPEECH_RATE)}>
         <Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text>
       </Pressable>
-      <Pressable accessibilityRole="button" accessibilityLabel="پخش معمولی جملهٔ انگلیسی" accessibilityHint="جملهٔ فعلی را با سرعت معمولی پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={[styles.replayButton, disabled && styles.replayDisabled]} onPress={() => onPlay(ENGLISH_NORMAL_SPEECH_RATE)}>
+      {showNormal ? <Pressable accessibilityRole="button" accessibilityLabel="پخش معمولی جملهٔ انگلیسی" accessibilityHint="جملهٔ فعلی را با سرعت معمولی پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={[styles.replayButton, disabled && styles.replayDisabled]} onPress={() => onPlay(ENGLISH_NORMAL_SPEECH_RATE)}>
         <Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text>
-      </Pressable>
+      </Pressable> : null}
       <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" accessibilityHint="جملهٔ فعلی را با سرعت گفتار طبیعی پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={styles.replayButton} onPress={() => onPlay(ENGLISH_NATURAL_SPEECH_RATE)}>
         <Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text>
       </Pressable>

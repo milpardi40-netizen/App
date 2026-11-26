@@ -25,8 +25,9 @@ export interface LessonChunks {
   end: number;
 }
 
-export function lessonChunks(lessonId: string, sentenceCount: number, completedChunks: readonly number[] = []): LessonChunks {
-  if (sentenceCount <= CHUNK_THRESHOLD) {
+export function lessonChunks(lessonId: string, sentenceCount: number, completedChunks: readonly number[] = [], singlePass = false): LessonChunks {
+  // Splitting short Pre-A1 word lists into independent cards must not create new milestone screens.
+  if (singlePass || sentenceCount <= CHUNK_THRESHOLD) {
     return { total: 1, current: 1, size: sentenceCount, chunked: false, start: 0, end: sentenceCount };
   }
   const total = Math.ceil(sentenceCount / CHUNK_SIZE);

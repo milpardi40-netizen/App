@@ -16,9 +16,11 @@ export interface LessonRewards {
 }
 
 export async function finishLessonRewards(): Promise<LessonRewards> {
+  // A medal/storage error must not stop the native reminder from learning that today's lesson is done.
+  const studyReminder = noteStudyToday();
   const [progress, seen] = await Promise.all([loadMedalProgress(), loadSeenMedals()]);
   const medals = progress.length ? medalsEarnedNow(seen, progress) : [];
-  await Promise.all([claimMedals(medals, seen), noteStudyToday(), markPlanStep('lesson')]);
+  await Promise.all([claimMedals(medals, seen), studyReminder, markPlanStep('lesson')]);
   const today = new Date();
   const studiedDay = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   return { medals, studiedDay };

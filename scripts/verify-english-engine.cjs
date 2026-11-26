@@ -26,7 +26,7 @@ const esbuild = require('esbuild');
   check(app.SENTENCE_LESSONS.length === 274);
   check(app.EXISTING_SENTENCE_LESSONS.length === 174 && app.EXISTING_SENTENCE_LESSONS.every(lesson => { const actual = app.SENTENCE_LESSONS.find(item => item.id === lesson.id); if (!actual) return false; const { a2Section, role: _role, ...rest } = actual; const withoutRoles = item => ({ ...item, dialogue: item.dialogue.map(({ role: _lineRole, ...line }) => line) }); return JSON.stringify(withoutRoles({ ...rest, order: lesson.order })) === JSON.stringify(lesson); }));
   check(app.B1_INDEPENDENT_UNITS.length === 11 && app.B1_INDEPENDENT_UNITS.reduce((n, unit) => n + unit.topics.length, 0) === 55 && app.B1_INDEPENDENT_UNITS.every(unit => unit.topics.length === unit.rows.length));
-  check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4852);
+  check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4864);
   check(app.ENGLISH_CORE_DATABASE_FLOW.map(item => item.entity).join('|') === 'Situations|Sentence Patterns|Vocabulary|Grammar Through Usage|Exercises|User Progress|Spaced Repetition');
   // Band ids are stable; level numbers shifted when the Pre-A1 band and the practice labs were added.
   const foundation = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('foundation-'));
@@ -349,7 +349,7 @@ const esbuild = require('esbuild');
   check(counts.reduce((sum, item) => sum + item.lessonCount, 0) === 274);
   check(counts.reduce((sum, item) => sum + item.completedLessonCount, 0) === 1);
   check(counts.every(item => item.patternCount <= item.sentenceCount && item.vocabularyCount > 0));
-  check(counts.reduce((sum, item) => sum + item.patternCount, 0) === 3994);
+  check(counts.reduce((sum, item) => sum + item.patternCount, 0) === 3999);
   check(counts.find(item => item.levelId === 0).vocabularyCount === 98);
   check(counts.find(item => item.levelId === 2).sentenceCount === 1170
     && counts.find(item => item.levelId === 2).vocabularyCount === 2057);
@@ -382,5 +382,5 @@ const esbuild = require('esbuild');
     check(app.getLessonPatterns(lesson).length === lesson.sentences.filter(sentence => !!sentence.pattern).length);
   }
 
-  console.log(`${checks} engine checks passed; 6 levels (Pre-A1 to C1), 9 ordered lesson stages, 274 lesson records (existing lessons retained), 4852 sentences, the full evidence set across Pre-A1, Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
+  console.log(`${checks} engine checks passed; 6 levels (Pre-A1 to C1), 9 ordered lesson stages, 274 lesson records (existing lessons retained), 4864 sentences, the full evidence set across Pre-A1, Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
 })().catch(error => { console.error(error); process.exit(1); });

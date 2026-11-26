@@ -1,3 +1,4 @@
+import { enrichEuropeanPreA1 } from './preA1Practical/european';
 import type { LearningLesson } from './types';
 import type { CourseLevelId } from '../courseContent';
 import { createCourseProgressStore } from '../createCourseProgressStore';
@@ -236,7 +237,7 @@ function buildCourse(id: NewLanguageId) {
     ...lessons.filter(lesson => lesson.levelId === 3),
     ...lessons.filter(lesson => lesson.levelId === 4),
     ...lessons.filter(lesson => lesson.levelId === 5),
-  ].map((lesson, index) => ({...lesson, order: index + 1}));
+  ].map((lesson, index) => ({...enrichEuropeanPreA1(lesson), order: index + 1}));
   const b1Title: Record<NewLanguageId, string> = {fr:'B1 · Communication autonome', de:'B1 · Selbstständige Kommunikation', es:'B1 · Comunicación independiente'};
   const b2Title: Record<NewLanguageId, string> = {fr:'B2 · Communication avancée', de:'B2 · Selbstständige und differenzierte Kommunikation', es:'B2 · Comunicación avanzada'};
   const c1Title: Record<NewLanguageId, string> = {fr:'C1 · Communication avancée', de:'C1 · Fortgeschrittene Kommunikation', es:'C1 · Comunicación avanzada'};

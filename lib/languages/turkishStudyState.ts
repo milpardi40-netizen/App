@@ -1,3 +1,5 @@
+import { balancedSampleRevision, resumeBalancedSamples } from './preA1Practical/balanceRevision';
+import { practicalAssessmentRevision } from './preA1Practical/revisions';
 import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -7,6 +9,8 @@ import { TURKISH_LESSONS, TURKISH_LESSON_STAGES } from './turkish';
 export const TURKISH_STUDY_STORAGE_KEY = 'turkish_lesson_sessions_v1';
 
 export interface TurkishLessonSession {
+  sampleRevision?: string;
+  checksRevision?: string;
   stage: number;
   updatedAt?: string;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
@@ -51,7 +55,7 @@ function parseState(raw: string | null): TurkishStudyState {
   return { schema: 1, sessions: state.sessions as Record<string, TurkishLessonSession> };
 }
 
-function validateSession(lessonId: string, value: unknown): TurkishLessonSession {
+function validateSession(lessonId: string, value: unknown, restoring = false): TurkishLessonSession {
   const lesson = TURKISH_LESSONS.find(item => item.id === lessonId);
   if (!lesson || !value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('جلسهٔ ترکی برای این درس معتبر نیست.');
@@ -66,6 +70,8 @@ function validateSession(lessonId: string, value: unknown): TurkishLessonSession
   ) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس ترکی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
+  const checksRevision = practicalAssessmentRevision('tr', lessonId);
+  const retired = restoring && !!checksRevision && session.checksRevision !== checksRevision;
   const answers: Record<string, number> = {};
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
@@ -73,17 +79,21 @@ function validateSession(lessonId: string, value: unknown): TurkishLessonSession
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین ترکی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
-    answers[key] = answer!;
+    if (!retired) answers[key] = answer!;
   }
-  return {
+  const safe = {
+    ...(restoring && session.sampleRevision ? { sampleRevision: session.sampleRevision } : {}),
+    ...(!restoring && balancedSampleRevision(lessonId) ? { sampleRevision: balancedSampleRevision(lessonId) } : {}),
+    ...(checksRevision ? { checksRevision } : {}),
     stage,
     ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,
     sentenceIndex: session.sentenceIndex!,
     revealed: session.revealed,
     answers,
-    showCheckAnswers: session.showCheckAnswers,
+    showCheckAnswers: !retired && session.showCheckAnswers,
   };
+  return restoring ? resumeBalancedSamples(lessonId, safe) : safe;
 }
 
 export function loadTurkishPositions() {
@@ -93,7 +103,7 @@ export function loadTurkishPositions() {
     let unreadable = false;
     for (const [id, raw] of Object.entries(state.sessions)) {
       if (!TURKISH_LESSONS.some(lesson => lesson.id === id)) continue; // retired lesson
-      try { sessions[id] = validateSession(id, raw); } catch { unreadable = true; }
+      try { sessions[id] = validateSession(id, raw, true); } catch { unreadable = true; }
     }
     return { sessions, unreadable };
   });
@@ -107,7 +117,7 @@ export function loadTurkishLessonSessionWithPresence(
     const state = parseState(await readRaw());
     const saved = state.sessions[lessonId];
     return {
-      session: saved === undefined ? freshTurkishLessonSession() : validateSession(lessonId, saved),
+      session: saved === undefined ? freshTurkishLessonSession() : validateSession(lessonId, saved, true),
       hasSavedSession: saved !== undefined,
     };
   });

@@ -365,6 +365,17 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
     setListenRun(n => n + 1);
   };
 
+  const goToPreviousStage = () => {
+    if (!sessionReady || saving || sessionError || completing.current || stage < 2) return;
+    cancelSpeakingAdvance();
+    setMicReadyKey(null);
+    void stopRussianSpeech();
+    setStage(stage - 1);
+    setSentenceIndex(0);
+    setRevealed(false);
+    setSpeechError('');
+  };
+
   const goToPreviousSentence = () => {
     if (!sessionReady || saving || sessionError || stage !== 1 || sentenceIndex === 0) return;
     setSentenceIndex(previousSentenceIndex(sentenceIndex));
@@ -435,6 +446,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   };
 
   const timer = useStudyTimer(sessionReady && !celebration && !chunkCelebration, 'ru');
+  const headerError = speechError || timer.error;
   if (!sessionReady) return <View style={styles.root}><View style={styles.loadingCard}><ActivityIndicator color={Palette.primary} /><Text accessibilityRole={sessionError ? 'alert' : undefined} style={styles.loadingText}>{sessionError || 'در حال بازیابی جلسهٔ روسی…'}</Text>{sessionError ? <Pressable accessibilityRole="button" style={styles.loadingButton} onPress={() => setLoadingRetry(value => value + 1)}><Text style={styles.loadingButtonText}>تلاش دوباره</Text></Pressable> : null}{sessionError ? <Pressable accessibilityRole="button" style={styles.loadingButton} onPress={() => router.back()}><Text style={styles.loadingButtonText}>بازگشت</Text></Pressable> : null}</View></View>;
 
   return (
@@ -453,9 +465,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       </LinearGradient>
 
       <View style={styles.stepperCard}>
-        <View style={styles.stepperHeading}>
-                    <View style={styles.stepperNow}><Text style={styles.stepperNowFa}>{stageLabel}</Text></View>
-        </View>
+
         <View style={styles.stepSegments}>{stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}</View>
         {chunks.chunked ? <View style={styles.chunkBar}>
           <Text style={styles.chunkText}>بخش {fa(chunks.current)} از {fa(chunks.total)} · جملهٔ {fa(sentenceIndex + 1)} تا {fa(chunks.end)}</Text>
@@ -463,12 +473,12 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         </View> : null}
       </View>
 
-      {!!(sessionError || speechError || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || speechError || timer.error}</Text>}
+      {!!headerError && <Text accessibilityRole="alert" style={styles.error}>{headerError}</Text>}
       </View>
       <View style={styles.content} onLayout={event => setStageHeight(Math.round(event.nativeEvent.layout.height))}>
         {stage === 0 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
-          <Text style={styles.stageTitle}>{lesson.title}</Text>
+
           <Text style={styles.situation}>{lesson.situation}</Text>
           {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.sentences.map((sentence, index) => ({ speaker: index % 2 ? 'You' : 'Partner', text: sentence.text, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
           {lesson.teachingFa ? <View style={styles.noteCard}><Text style={styles.noteTitle}>نکتهٔ روسی به فارسی</Text><Text style={styles.noteText}>{lesson.teachingFa}</Text></View> : null}
@@ -503,7 +513,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <PersianBridgeCard sentence={current} masculineOnly={lesson.levelId === 0} />
           <View style={styles.replayRow}>
             <Pressable accessibilityRole="button" accessibilityLabel="پخش آهستهٔ جمله" style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="پخش معمولی جمله" style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
+
             <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, pace('natural'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
           </View>
           <SpeakCheck
@@ -514,9 +524,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             accent={Palette.success}
             autoStart={micReadyKey === `1:${current.id}`}
             onResult={result => {
-              if (sentenceIndex < chunkLastIndex) {
-                scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
-              }
+              scheduleOnPass(result, () => { void next(); });
             }}
           />
         </View>}
@@ -524,7 +532,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         {stage === 2 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Headphones size={34} color={Palette.primary} /></View>
           <Text style={styles.stageTitle}>شنیدن جمله‌ها</Text>
-          {showHint && <Text style={styles.stageDesc}>{lesson.id === RUSSIAN_HELLO_LESSON_ID ? 'اول بدون متن گوش کن: گوینده سلام می‌کند، تشکر می‌کند یا پیشنهاد را می‌پذیرد؟ کاربرد را انتخاب کن، بعد متن را ببین.' : 'هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.'}</Text>}
+          {showHint && lesson.id === RUSSIAN_HELLO_LESSON_ID && <Text style={styles.stageDesc}>{lesson.id === RUSSIAN_HELLO_LESSON_ID ? 'اول بدون متن گوش کن: گوینده سلام می‌کند، تشکر می‌کند یا پیشنهاد را می‌پذیرد؟ کاربرد را انتخاب کن، بعد متن را ببین.' : 'هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.'}</Text>}
           <View style={{ width: '100%' }} onLayout={event => { listenListOffsetRef.current = event.nativeEvent.layout.y; }}>
             <BlindListeningList
               items={russianListeningItems(lesson)}
@@ -549,7 +557,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             <Text style={styles.speechTitle}>جملهٔ انتخاب‌شده</Text>
             <Text style={styles.speechSentence}>{current.text}</Text>
             <Pressable accessibilityRole="button" style={styles.playSlowButton} onPress={() => speak(current.text, .68)}><Volume2 size={18} color="#FFFFFF" /><Text style={styles.recordButtonText}>پخش آهستهٔ نمونه</Text></Pressable>
-            <Text style={styles.speechHint}>{lesson.id === RUSSIAN_HELLO_LESSON_ID ? 'در «Приве́т» بخش آخر و در «Спаси́бо» بخش «سی» را پررنگ‌تر بگو. بار دوم نگاهت را از متن بردار و تکرار کن.' : 'پس از شنیدن، جمله را با صدای بلند تکرار کنید.'}</Text>
+            {lesson.id === RUSSIAN_HELLO_LESSON_ID ? <Text style={styles.speechHint}>{lesson.id === RUSSIAN_HELLO_LESSON_ID ? 'در «Приве́т» بخش آخر و در «Спаси́бо» بخش «سی» را پررنگ‌تر بگو. بار دوم نگاهت را از متن بردار و تکرار کن.' : 'پس از شنیدن، جمله را با صدای بلند تکرار کنید.'}</Text> : null}
             <SpeakCheck
               key={current.id}
               onSkip={skipSpeakingSentence}
@@ -598,7 +606,6 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
           <Text style={styles.stageTitle}>واژگان از دل جمله‌ها</Text>
           {showHint && <Text style={styles.stageDesc}>هر واژه را با معنی، جنسیت و جمله‌اش مرور کنید.</Text>}
-          {lesson.levelId === 0 ? <View style={styles.preGenderWrap}><LessonGenderCard language="ru" lesson={lesson} speak={speak} /></View> : null}
           <View style={styles.vocabList} onLayout={event => { vocabListOffsetRef.current = event.nativeEvent.layout.y; }}>{vocabulary.map(({ word, sentence }, vocabIndex) => {
             const badge = lesson.levelId === 0 ? preA1GenderBadge(word.meaning) : null;
             return <View key={`${word.word}-${sentence.id}`} onLayout={event => { vocabCardYsRef.current[vocabIndex] = event.nativeEvent.layout.y; }} style={styles.vocabCard}>
@@ -716,6 +723,9 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
 
       <View style={styles.footer}>
         <View style={styles.footerActions}>
+          {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
+            <Text style={styles.previousButtonText}>مرحلهٔ قبل</Text>
+          </Pressable>}
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && styles.nextButtonDisabled]}>
             <Text style={styles.previousButtonText}>جمله قبلی</Text>
           </Pressable>}

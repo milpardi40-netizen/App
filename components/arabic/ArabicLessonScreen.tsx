@@ -1,3 +1,4 @@
+import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -296,7 +297,7 @@ export default function ArabicLessonScreen() {
     setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
   }, []);
 
-  const chunks = lessonChunks(lesson?.id ?? '', lesson?.sentences.length ?? 0, doneChunks);
+  const chunks = lessonChunks(lesson?.id ?? '', lesson?.sentences.length ?? 0, doneChunks, lesson?.levelId === 0);
   useEffect(() => {
     if (chunks.chunked && sentenceIndex < chunks.start) setSentenceIndex(chunks.start);
   }, [chunks.chunked, chunks.start, lesson?.id, sentenceIndex]);
@@ -528,6 +529,16 @@ export default function ArabicLessonScreen() {
     }
   };
 
+  const goToPreviousStage = () => {
+    if (!sessionReady || saving || sessionError || completing.current || resettingRef.current || stage < 2) return;
+    cancelSpeakingAdvance();
+    setMicReadyKey(null);
+    void stopArabicSpeech();
+    setStage(stage - 1);
+    setSentenceIndex(0);
+    setRevealed(false);
+  };
+
   const goToPreviousSentence = () => {
     if (!sessionReady || saving || !!sessionError || stage !== 1) return;
     setSentenceIndex(previousSentenceIndex(sentenceIndex));
@@ -610,12 +621,7 @@ export default function ArabicLessonScreen() {
             </View>
           </LinearGradient>
           <View style={styles.stepperCard}>
-            <View style={styles.stepperHeading}>
-              <View />
-              <View style={styles.stepperNow}>
-                <Text style={styles.stepperNowFa}>{stages[stage].title}</Text>
-              </View>
-            </View>
+
             <View style={styles.stepSegments}>
               {stages.map((item, index) => (
                 <View
@@ -664,7 +670,7 @@ export default function ArabicLessonScreen() {
               <View style={styles.bigIcon}>
                 <Sparkles size={34} color={Colors.accent[400]} />
               </View>
-              <Text style={styles.stageTitle}>{lesson.title}</Text>
+
               <Text style={styles.situation}>{lesson.situation}</Text>
               {lesson.levelId >= 3 ? (
                 <ReadingFirstBlock
@@ -729,7 +735,7 @@ export default function ArabicLessonScreen() {
                   </View>
                 ) : null}
               </View>
-              <ArabicSpeechRateControls onPlay={rate => speak(current.ar, rate)} />
+              <ArabicSpeechRateControls showNormal={false} onPlay={rate => speak(current.ar, rate)} />
               {!!audioNotice && (
                 <Text accessibilityLiveRegion="polite" style={styles.speechError}>
                   {audioNotice}
@@ -743,12 +749,7 @@ export default function ArabicLessonScreen() {
                 accent={Colors.success[400]}
                 autoStart={micReadyKey === `1:${current.id}`}
                 onResult={result => {
-                  if (sentenceIndex < chunkLastIndex) {
-                    scheduleOnPass(result, () => {
-                      setSentenceIndex(sentenceIndex + 1);
-                      setRevealed(false);
-                    });
-                  }
+                  scheduleOnPass(result, () => { void next(); });
                 }}
               />
             </View>
@@ -760,9 +761,7 @@ export default function ArabicLessonScreen() {
                 <Headphones size={34} color={Colors.primary[400]} />
               </View>
               <Text style={styles.stageTitle}>شنیدن جمله‌ها</Text>
-              {showHint && (
-                <Text style={styles.stageDesc}>هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.</Text>
-              )}
+
               <View
                 style={{ width: '100%' }}
                 onLayout={event => {
@@ -811,7 +810,7 @@ export default function ArabicLessonScreen() {
                     {audioNotice}
                   </Text>
                 )}
-                <Text style={styles.speechHint}>پس از شنیدن، جمله را با صدای بلند تکرار کنید.</Text>
+
                 <SpeakCheck
                   key={`shadow-${current.id}`}
                   onSkip={skipSpeakingSentence}
@@ -1048,7 +1047,8 @@ export default function ArabicLessonScreen() {
               lessonTitle={lesson.title}
               levelId={lesson.levelId}
               situation={lesson.situation}
-              lines={lesson.sentences.map(sentence => ({ text: sentence.ar, fa: sentence.fa }))}
+              contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          lines={lesson.levelId === 0 && lesson.dialogue.length > 0 ? lesson.dialogue.map(line => ({ text: line.ar, fa: line.fa })) : lesson.sentences.map(sentence => ({ text: sentence.ar, fa: sentence.fa }))}
               locale="ar-SA"
               onSpeak={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone })}
               onSpeakOperator={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, pitch: 0.82, onDone, onError: onDone })}
@@ -1063,6 +1063,9 @@ export default function ArabicLessonScreen() {
 
       <View pointerEvents={resetting ? 'none' : 'auto'} style={styles.footer}>
         <View style={styles.footerButtons}>
+          {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
+            <Text style={styles.secondaryControlText}>مرحلهٔ قبل</Text>
+          </Pressable>}
           {stage === 1 && (
             <Pressable
               accessibilityRole="button"
@@ -1185,9 +1188,11 @@ export default function ArabicLessonScreen() {
 function ArabicSpeechRateControls({
   onPlay,
   disabled = false,
+  showNormal = true,
 }: {
   onPlay: (rate: number) => void;
   disabled?: boolean;
+  showNormal?: boolean;
 }) {
   return (
     <View style={styles.replayRow}>
@@ -1202,7 +1207,7 @@ function ArabicSpeechRateControls({
         <Volume2 size={18} color={Palette.primary} />
         <Text style={styles.replayText}>آهسته</Text>
       </Pressable>
-      <Pressable
+      {showNormal ? <Pressable
         accessibilityRole="button"
         accessibilityLabel="پخش معمولی جملهٔ عربی"
         accessibilityState={{ disabled }}
@@ -1212,7 +1217,7 @@ function ArabicSpeechRateControls({
       >
         <Volume2 size={18} color={Palette.primary} />
         <Text style={styles.replayText}>معمولی</Text>
-      </Pressable>
+      </Pressable> : null}
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="پخش با سرعت طبیعی"

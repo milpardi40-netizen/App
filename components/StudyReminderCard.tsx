@@ -1,13 +1,18 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
-import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Switch, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState, Linking, Platform, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { Bell, BellOff, Clock3 } from 'lucide-react-native';
+import * as Application from 'expo-application';
 import { Typography } from '@/lib/theme';
 import {
   REMINDER_OPTIONS,
+  STUDY_REMINDER_CHANNEL,
   loadStudyReminder,
   scheduleStudyReminder,
   studyReminderSummary,
+  studyReminderError,
+  testStudyReminder,
+  reconcileStudyReminder,
   type StudyReminderSettings,
   type StudyReminderStatus,
 } from '@/lib/studyReminder';
@@ -30,7 +35,10 @@ const STATUS_TEXT: Record<StudyReminderStatus, string> = {
   disabled: 'یادآور خاموش شد.',
   unsupported: 'در پیش‌نمایش وب اعلان زمان‌بندی نمی‌شود؛ روی گوشی فعال است.',
   'permission-denied': 'اجازهٔ اعلان داده نشد؛ از تنظیمات گوشی اجازه بده.',
-  error: 'زمان‌بندی انجام نشد؛ دوباره تلاش کن.',
+  'channel-blocked': 'کانال یادآور مطالعه در تنظیمات اعلان گوشی خاموش است؛ آن را روشن کن.',
+  'update-required': 'برای این اصلاح، نصب نسخهٔ جدید برنامه لازم است؛ نسخهٔ فعلی قابلیت جدید را ندارد.',
+  'test-scheduled': 'آزمایش ثبت شد؛ حدود ۱۰ ثانیه صبر کن و بخش اعلان‌های گوشی را ببین. در حالت ذخیرهٔ باتری ممکن است دیرتر برسد.',
+  error: 'ثبت یادآور انجام نشد. جزئیات خطا پایین آمده است؛ دوباره تلاش کن.',
 };
 
 /**
@@ -44,24 +52,61 @@ export default function StudyReminderCard() {
   const [settings, setSettings] = useState<StudyReminderSettings | null>(null);
   const [status, setStatus] = useState<StudyReminderStatus | null>(null);
   const [busy, setBusy] = useState(false);
+  const busyRef = useRef(false);
   const [summary, setSummary] = useState('');
+  const [detail, setDetail] = useState('');
 
   const refresh = useCallback(async () => {
     const next = await loadStudyReminder();
     setSettings(next);
     setSummary(await studyReminderSummary());
+    setDetail(await studyReminderError());
   }, []);
 
-  useEffect(() => { void refresh(); }, [refresh]);
-
-  const apply = useCallback(async (next: StudyReminderSettings) => {
-    setBusy(true);
-    setSettings(next);
-    const result = await scheduleStudyReminder(next);
-    setStatus(result);
-    await refresh();
-    setBusy(false);
+  useEffect(() => {
+    let mounted = true;
+    const sync = async () => {
+      if (busyRef.current) return;
+      const result = await reconcileStudyReminder();
+      if (!mounted || busyRef.current) return;
+      setStatus(result);
+      await refresh();
+    };
+    void sync();
+    const listener = AppState.addEventListener('change', state => { if (state === 'active') void sync(); });
+    return () => { mounted = false; listener.remove(); };
   }, [refresh]);
+
+  const run = useCallback(async (action: () => Promise<StudyReminderStatus>) => {
+    if (busyRef.current) return;
+    busyRef.current = true;
+    setBusy(true);
+    try {
+      setStatus(await action());
+    } catch {
+      setStatus('error');
+    } finally {
+      await refresh();
+      busyRef.current = false;
+      setBusy(false);
+    }
+  }, [refresh]);
+
+  const apply = useCallback((next: StudyReminderSettings) => run(() => scheduleStudyReminder(next)), [run]);
+  const openNotificationSettings = async () => {
+    try {
+      if (Platform.OS === 'android' && Application.applicationId) {
+        await Linking.sendIntent('android.settings.CHANNEL_NOTIFICATION_SETTINGS', [
+          { key: 'android.provider.extra.APP_PACKAGE', value: Application.applicationId },
+          { key: 'android.provider.extra.CHANNEL_ID', value: STUDY_REMINDER_CHANNEL },
+        ]);
+      } else await Linking.openSettings();
+    } catch {
+      try { await Linking.openSettings(); } catch { setStatus('error'); }
+    }
+  };
+  const blocked = status === 'permission-denied' || status === 'channel-blocked';
+  const failed = blocked || status === 'error' || status === 'update-required';
 
   if (!settings) return null;
 
@@ -71,11 +116,11 @@ export default function StudyReminderCard() {
         <View style={styles.icon}>{settings.enabled ? <Bell size={17} color={C.primary} /> : <BellOff size={17} color={C.muted} />}</View>
         <View style={styles.headCopy}>
           <Text style={styles.title}>یادآور مطالعه</Text>
-          <Text style={styles.hint}>یک اعلان آرام در روز؛ بدون توکن، بدون سرور.</Text>
+          <Text style={styles.hint}>یک یادآور محلی در روز؛ بدون نیاز به اینترنت.</Text>
         </View>
         <Switch
           value={settings.enabled}
-          disabled={busy}
+          disabled={busy || Platform.OS === 'web'}
           onValueChange={value => void apply({ ...settings, enabled: value })}
           trackColor={{ false: '#CBD5E1', true: C.primary }}
           thumbColor="#FFFFFF"
@@ -105,7 +150,20 @@ export default function StudyReminderCard() {
       ) : null}
 
       <Text style={styles.summary}>{summary}</Text>
-      {status ? <Text style={[styles.status, (status === 'error' || status === 'permission-denied') && styles.statusError]}>{STATUS_TEXT[status]}</Text> : null}
+      {status ? <Text accessibilityLiveRegion="polite" style={[styles.status, failed && styles.statusError]}>{STATUS_TEXT[status]}</Text> : null}
+      {status === 'error' && detail ? <Text selectable style={styles.detail}>{detail}</Text> : null}
+      {Platform.OS !== 'web' ? (
+        <View style={styles.times}>
+          <Pressable accessibilityRole="button" disabled={busy} onPress={() => void run(testStudyReminder)} style={styles.timeChip}>
+            <Text style={styles.timeText}>{busy ? 'در حال بررسی…' : 'آزمایش اعلان (۱۰ ثانیه)'}</Text>
+          </Pressable>
+          <Pressable accessibilityRole="button" disabled={busy} onPress={() => void openNotificationSettings()} style={styles.timeChip}>
+            <Text style={styles.timeText}>تنظیمات اعلان گوشی</Text>
+          </Pressable>
+          {status === 'error' ? <Pressable accessibilityRole="button" disabled={busy} onPress={() => void apply({ ...settings, enabled: true })} style={styles.timeChip}><Text style={styles.timeText}>تلاش دوباره</Text></Pressable> : null}
+        </View>
+      ) : null}
+      {settings.enabled ? <Text style={styles.hint}>در حالت ذخیرهٔ باتری ممکن است اعلان دیرتر برسد. پس از توقف اجباری برنامه، برای ادامهٔ یادآورها آن را دوباره باز کن.</Text> : null}
     </View>
   );
 }
@@ -125,5 +183,6 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.82 },
   summary: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: C.text, textAlign: 'right', writingDirection: 'rtl' },
   status: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: C.warning, backgroundColor: C.warningSoft, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7, textAlign: 'right', writingDirection: 'rtl' },
+  detail: { fontSize: 10, lineHeight: 16, color: C.danger, writingDirection: 'ltr', textAlign: 'left' },
   statusError: { color: C.danger, backgroundColor: '#FEE2E2' },
 });

@@ -152,10 +152,10 @@ export const PRE_A1_EVIDENCE: Readonly<Record<string,readonly Task[]>> = {
     preA1('13','read-notime','reading','«I have no time.» یعنی چه؟','من وقت ندارم.','no یعنی هیچ.',{ source:'I have no time.', options:['من وقت دارم.','من وقت ندارم.','من کار ندارم.'] }),
   ],
   'prea1-14-i-like': [
-    preA1('14','listen-like','listening','گوینده چه چیزی را دوست دارد؟','چای','I like tea یعنی چای دوست دارم.',{ audio:'I like tea.', options:['آب','چای','کتاب'] }),
-    preA1('14','pick-where','grammar','«گوشی من کجاست؟» کدام است؟','Where is my phone?','where یعنی کجا.',{ options:['Who is my phone?','Where is my phone?','Is it good?'] }),
-    preA1('14','gap-for','grammar','جای خالی را کامل کنید: It is ___ you.','for','for یعنی برای.',{ source:'It is for you.', options:['for','to','at'] }),
-    preA1('14','read-who','reading','«Who is this?» یعنی چه؟','این کیست؟','who یعنی چه کسی.',{ source:'Who is this?', options:['این چیست؟','این کیست؟','این کجاست؟'] }),
+    preA1('14','listen-like-practical-v1','listening','گوینده چه چیزی را دوست دارد؟','چای','I like tea یعنی چای دوست دارم.',{ audio:'I like tea.', options:['آب','چای','قهوه'] }),
+    preA1('14','pick-like-practical-v1','grammar','برای پرسیدن علاقه به قهوه کدام درست است؟','Do you like coffee?','Do you like … دربارهٔ علاقه می‌پرسد.',{ options:['Do you like coffee?','I like coffee.','Here you are.'] }),
+    preA1('14','gap-like-practical-v1','grammar','جای خالی را کامل کنید: I ___ tea.','like','I like یعنی دوست دارم.',{ source:'I like tea.', options:['do','like','not'] }),
+    preA1('14','read-refusal-practical-v1','reading','در پاسخ به Do you like coffee?، عبارت No, I do not. یعنی چه؟','نه، قهوه دوست ندارم.','پاسخ کوتاه به علاقه دربارهٔ قهوه مربوط است.',{ source:'Do you like coffee? No, I do not.', options:['بله، قهوه دوست دارم.','نه، قهوه دوست ندارم.','یک قهوه، لطفاً.'] }),
   ],
   'prea1-10-review': [
     preA1('10','listen-greeting','listening','گوینده چه گفت؟','Good morning, Ali.','Good morning سلام صبح است.',{ audio:'Good morning, Ali.', options:['Good night, Ali.','Good morning, Ali.','See you, Ali.'] }),

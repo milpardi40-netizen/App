@@ -2,12 +2,18 @@ const assert=require('node:assert/strict');
 const esbuild=require('esbuild');
 const React=require('react');
 const {act,create}=require('react-test-renderer');
-// Every real microphone call site must provide actual navigation, not just render a skip label.
+// Microphone practice supplies skip navigation; the speaking exam uses its existing outer action only.
 const ts=require('typescript');const fs=require('node:fs');
 const {createHash}=require('node:crypto');
 for (const file of ['components/RussianLesson.tsx','components/TurkishLesson.tsx','components/StarterLesson.tsx','components/EnglishLessonRoute.tsx','components/arabic/ArabicLessonScreen.tsx','components/LessonDialogueRoom.tsx','components/SpeakDrill.tsx','components/WordLab.tsx','components/arabic/ArabicVocabularyScreen.tsx','components/ReviewRecall.tsx']) {
  const ast=ts.createSourceFile(file,fs.readFileSync(file,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
- const visit=node=>{if(ts.isJsxSelfClosingElement(node)&&node.tagName.getText(ast)==='SpeakCheck')assert.ok(node.attributes.properties.some(p=>ts.isJsxAttribute(p)&&p.name.getText(ast)==='onSkip'),file+': missing real skip callback');ts.forEachChild(node,visit);};visit(ast);
+ const visit=node=>{if(ts.isJsxSelfClosingElement(node)&&node.tagName.getText(ast)==='SpeakCheck'){
+  const hasSkip=node.attributes.properties.some(p=>ts.isJsxAttribute(p)&&p.name.getText(ast)==='onSkip');
+  const reviewKey=node.attributes.properties.find(p=>ts.isJsxAttribute(p)&&p.name.getText(ast)==='key');
+  const hasOuterNavigation=file==='components/SpeakDrill.tsx'||(file==='components/LessonDialogueRoom.tsx'&&reviewKey?.getText(ast).includes('review-'));
+  assert.equal(hasSkip,!hasOuterNavigation,file+': exam/review must keep only outer navigation; other practice must retain real skip callbacks');
+ }ts.forEachChild(node,visit);};visit(ast);
+ if(file==='components/SpeakDrill.tsx')assert.ok(fs.readFileSync(file,'utf8').includes('onPress={next}><Text keepColor style={styles.buttonText}>{index < items.length - 1 ? (answered ? \'جملهٔ بعدی\' : \'رد کردن\') : \'پایان آزمون\'}</Text>'),'speaking exam must preserve its existing outer skip/next/finish action');
 }
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 globalThis.__speechEvents={};globalThis.__speechCalls=[];globalThis.__focused=true;

@@ -1,3 +1,4 @@
+import { enrichEnglishPreA1 } from './languages/preA1Practical/english';
 import { EXPANDED_SENTENCE_LESSONS } from './courseContentExpansion';
 import { ADVANCED_SENTENCE_LESSONS } from './courseContentExpansion2';
 import { ADVANCED_SENTENCE_LESSONS_2 } from './courseContentExpansion3';
@@ -715,7 +716,7 @@ function englishLabLesson(lab: LabLesson): SentenceLesson {
 }
 
 const baseSentenceLessons: SentenceLesson[] = [
-  ...PRE_A1_LESSONS,
+  ...PRE_A1_LESSONS.map(enrichEnglishPreA1),
   ...arrangedBeforeB1.slice(0, advancedStart),
   ...B1_INDEPENDENT_LESSONS,
   ...B2_UPPER_INTERMEDIATE_LESSONS,

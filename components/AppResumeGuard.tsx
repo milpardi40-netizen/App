@@ -45,6 +45,15 @@ export function AppResumeGuard() {
       const retry = setTimeout(() => setRevision(value => value + 1), 100);
       return () => clearTimeout(retry);
     }
+    // The public guide is transient: neither redirect it to a saved lesson nor
+    // overwrite that lesson's resume destination just because the user reads help.
+    if (pathname === '/help') {
+      ready.current = true;
+      initial.current = null;
+      pendingHref.current = null;
+      setRestoring(false);
+      return;
+    }
     if (!href) {
       // A valid saved destination takes priority over an unsupported incoming route.
       const saved = !ready.current ? initial.current : null;
@@ -115,7 +124,7 @@ export function AppResumeGuard() {
       } else if (state === 'active' && !active.current) {
         active.current = true;
         const saved = snapshot.current;
-        if (ready.current && saved) {
+        if (ready.current && saved && currentPathname.current !== '/help') {
           // A warm resume keeps the live navigation state untouched: the user is
           // still exactly where they left. Only a stale session (away too long or
           // a retired route) is redirected; anything else would move the user to a

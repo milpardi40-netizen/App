@@ -31,6 +31,7 @@ import { AppPopupPrompt } from '@/components/AppPopupPrompt';
 import { AndroidBackHistory } from '@/components/AndroidBackHistory';
 import { WebStatusBarSpacer } from '@/components/WebStatusBarSpacer';
 import { initAnalytics, watchAppStateForAbandonment } from '@/lib/analyticsSession';
+import { StudyReminderBridge } from '@/components/StudyReminderBridge';
 import { ChatNotificationBridge } from '@/components/ChatNotificationBridge';
 import { disableBackgroundChatChecks, reconcileBackgroundChatChecks } from '@/lib/backgroundChatChecks';
 import * as Notifications from 'expo-notifications';
@@ -227,6 +228,7 @@ export default function RootLayout() {
               {IS_ADMIN_APP && <AdminRouteGuard />}
               <AndroidBackHistory />
               {IS_ADMIN_APP && <ChatNotificationBridge />}
+              {!IS_ADMIN_APP && <StudyReminderBridge />}
               <AppUpdatePrompt />
               <AppUpdatedSheet />
               {!IS_ADMIN_APP && <AppPopupPrompt />}

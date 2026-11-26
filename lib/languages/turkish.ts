@@ -1,3 +1,4 @@
+import { enrichTurkishPreA1 } from './preA1Practical/turkish';
 import type { LearningLesson } from './types';
 import { createCourseProgressStore } from '../createCourseProgressStore';
 import { TURKISH_FOUNDATION_PART_A } from './turkishFoundationPartA';
@@ -213,7 +214,7 @@ function turkishLabLesson(lab: LabLesson): TurkishCourseLesson {
 export const TURKISH_LESSONS: readonly TurkishCourseLesson[] = insertLabLessons(
   TURKISH_BASE_LESSONS,
   labLessonsOf('tr').map(turkishLabLesson),
-).map((lesson, index) => ({ ...lesson, order: index + 1 }));
+).map((lesson, index) => ({ ...enrichTurkishPreA1(lesson), order: index + 1 }));
 
 export function findTurkishLesson(id: string | undefined): TurkishCourseLesson | undefined {
   return TURKISH_LESSONS.find(item => item.id === id);

@@ -1,3 +1,4 @@
+import { practicalAssessmentRevision, practicalSentenceRevision } from './languages/preA1Practical/revisions';
 import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -7,8 +8,8 @@ import { Platform } from 'react-native';
  * they feed the celebration sheet and the spaced-repetition deck instead of vanishing. Local only,
  * best-effort: a failed write never blocks finishing a lesson.
  */
-export interface SpeakingOutcome { attemptedOnly?: true; points?: number; average: number; scores: Record<string, number>; at: string }
-export interface AssessmentOutcome { attemptedOnly?: true; correct: number; total: number; at: string }
+export interface SpeakingOutcome { contentRevision?: string; attemptedOnly?: true; points?: number; average: number; scores: Record<string, number>; at: string }
+export interface AssessmentOutcome { contentRevision?: string; attemptedOnly?: true; correct: number; total: number; at: string }
 export interface OralExamOutcome {
   mode: 'listen-echo' | 'natural-flow' | 'oral-exam' | 'guided-practice';
   overall: number;
@@ -50,7 +51,16 @@ const keyOf = (course: string, lessonId: string) => `${course}:${lessonId}`;
 
 export async function getLessonOutcome(course: string, lessonId: string): Promise<LessonOutcome | null> {
   const all = await loadLessonOutcomes().catch(() => ({} as Store));
-  return all[keyOf(course, lessonId)] ?? null;
+  const saved = all[keyOf(course, lessonId)];
+  if (!saved) return null;
+  const speakingRevision = practicalSentenceRevision(course, lessonId);
+  const assessmentRevision = practicalAssessmentRevision(course, lessonId);
+  if (!speakingRevision && !assessmentRevision) return saved;
+  // Raw historical records remain available to the profile; changed questions never inherit them.
+  return { ...saved,
+    speaking: speakingRevision && saved.speaking?.contentRevision !== speakingRevision ? undefined : saved.speaking,
+    assessment: assessmentRevision && saved.assessment?.contentRevision !== assessmentRevision ? undefined : saved.assessment,
+  };
 }
 
 export function saveLessonOutcome(course: string, lessonId: string, patch: Partial<LessonOutcome>): Promise<void> {
@@ -65,8 +75,8 @@ export function saveLessonOutcome(course: string, lessonId: string, patch: Parti
         }
       : undefined;
     all[key] = { ...(all[key] ?? {}),
-      ...(patch.speaking ? { speaking: { ...patch.speaking, attemptedOnly: true } } : {}),
-      ...(patch.assessment ? { assessment: { ...patch.assessment, attemptedOnly: true } } : {}),
+      ...(patch.speaking ? { speaking: { ...patch.speaking, contentRevision: practicalSentenceRevision(course, lessonId), attemptedOnly: true } } : {}),
+      ...(patch.assessment ? { assessment: { ...patch.assessment, contentRevision: practicalAssessmentRevision(course, lessonId), attemptedOnly: true } } : {}),
       ...(nextOral ? { oralExam: nextOral } : {}),
     };
     // One result per catalogue lesson/task, not one entry per replay. Do not evict other courses.

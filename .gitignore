@@ -17,6 +17,9 @@ ios/
 !modules/milo-chat-foreground/android/**
 !modules/milo-apk-verifier/android/
 modules/milo-apk-verifier/android/build/
+!modules/milo-study-reminder/android/
+!modules/milo-study-reminder/android/**
+modules/milo-study-reminder/android/build/
 
 # native
 *.orig.*

@@ -1,3 +1,4 @@
+import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { useStudyTimer } from '@/components/useEnglishStudyTimer';
 import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
@@ -402,6 +403,17 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     setListenRun(n => n + 1);
   };
 
+  const goToPreviousStage = () => {
+    if (!sessionReady || saving || sessionError || completing.current || stage < 2) return;
+    cancelSpeakingAdvance();
+    setMicReadyKey(null);
+    void stopStarterSpeech();
+    setStage(stage - 1);
+    setSentenceIndex(0);
+    setRevealed(false);
+    setSpeechError('');
+  };
+
   const goToPreviousSentence = () => {
     if (!sessionReady || saving || sessionError || stage !== 1 || sentenceIndex === 0) return;
     setSentenceIndex(previousSentenceIndex(sentenceIndex));
@@ -484,18 +496,16 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       </LinearGradient>
 
       <View style={styles.stepperCard}>
-        <View style={styles.stepperHeading}>
-                    <View style={styles.stepperNow}><Text style={styles.stepperNowFa}>{stages[stage].labelFa}</Text></View>
-        </View>
+
         <View style={styles.stepSegments}>{stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}</View>
       </View>
 
-      {!!(sessionError || speechError || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || speechError || timer.error}</Text>}
+      {!!(speechError || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{speechError || timer.error}</Text>}
       </View>
       <View style={styles.content} onLayout={event => setStageHeight(Math.round(event.nativeEvent.layout.height))}>
         {stage === 0 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
-          <Text style={styles.stageTitle}>{lesson.title}</Text>
+
           <Text style={styles.situation}>{lesson.situation}</Text>
           {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={starterDisplayDialogue(lesson)} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
           {teachingNote ? <View style={styles.noteCard}><Text style={styles.noteTitle}>نکتهٔ این زبان به فارسی</Text><Text style={styles.noteText}>{teachingNote}</Text></View> : null}
@@ -514,7 +524,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           {bridgeLanguage ? <PersianBridgeCard sentence={current} language={bridgeLanguage} /> : null}
           <View style={styles.replayRow}>
             <Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
+
             <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, pace('natural'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
           </View>
           <SpeakCheck
@@ -525,9 +535,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
             accent={Palette.success}
             autoStart={micReadyKey === `1:${current.id}`}
             onResult={result => {
-              if (sentenceIndex < lesson.sentences.length - 1) {
-                scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
-              }
+              scheduleOnPass(result, () => { void next(); });
             }}
           />
         </View>}
@@ -535,7 +543,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         {stage === 2 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Headphones size={34} color={Palette.primary} /></View>
           <Text style={styles.stageTitle}>شنیدن {unitPlural}</Text>
-          {showHint && <Text style={styles.stageDesc}>{foundation ? `هر ${unit} را جداگانه گوش دهید و معنی آن را به یاد بیاورید.` : 'هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.'}</Text>}
+
           <View style={{ width: '100%' }} onLayout={event => { listenListOffsetRef.current = event.nativeEvent.layout.y; }}>
             <BlindListeningList
               items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}
@@ -561,7 +569,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
             <Text style={styles.speechTitle}>{unit} انتخاب‌شده</Text>
             <Text style={styles.speechSentence}>{current.text}</Text>
             <View style={styles.replayRow}><Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable><Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable></View>
-            <Text style={styles.speechHint}>پس از شنیدن، {unit} را با صدای بلند تکرار کنید.</Text>
+
             <SpeakCheck
               key={current.id}
               onSkip={skipSpeakingSentence}
@@ -718,7 +726,8 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          lines={lesson.levelId === 0 && lesson.dialogue.length > 0 ? lesson.dialogue.map(line => ({ text: line.text, fa: line.fa })) : lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
           locale={course.locale}
           onSpeak={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone)}
           onSpeakOperator={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone, { pitch: 0.82 })}
@@ -732,6 +741,9 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
 
       <View style={styles.footer}>
         <View style={styles.footerActions}>
+          {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
+            <Text style={styles.previousButtonText}>مرحلهٔ قبل</Text>
+          </Pressable>}
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel={foundation ? `${unit} قبلی` : "جملهٔ قبلی"} accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && styles.nextButtonDisabled]}>
             <Text style={styles.previousButtonText}>{unit} قبلی</Text>
           </Pressable>}

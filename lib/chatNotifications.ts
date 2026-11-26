@@ -7,6 +7,7 @@ import type { RealtimeChannel, SupabaseClient, Subscription } from '@supabase/su
 import { supabase } from './supabase';
 import { ensureChatIdentity } from './conversations';
 import { adminClient } from './educationAdmin';
+import { studiedToday } from './studyReminder';
 import { MANAGEMENT_BUILD } from './features';
 import { isBackgroundChatChecksEnabled } from './backgroundChatChecks';
 import {
@@ -53,7 +54,12 @@ Notifications.setNotificationHandler({
     const foreground = AppState.currentState === 'active';
     const eventId = notification.request.content.data?.eventId;
     const isLocalTest = typeof eventId === 'string' && eventId.startsWith('local-test:');
-    // Foreground delivery is shown by the quiet in-app banner below, not as an
+    // Study reminders (iOS fallback) have no chat banner; show unless already studied.
+    if (notification.request.content.data?.kind === 'study') {
+      const show = isLocalTest || !await studiedToday();
+      return { shouldShowBanner: show, shouldShowList: show, shouldPlaySound: show, shouldSetBadge: false };
+    }
+    // Foreground chat delivery is shown by the quiet in-app banner below, not as an
     // OS notification. The explicit local test is the exception: it must be
     // visible while the user is on the settings screen to test this device.
     return {

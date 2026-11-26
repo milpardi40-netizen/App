@@ -1,3 +1,5 @@
+import { balancedSampleRevision, resumeBalancedSamples } from './preA1Practical/balanceRevision';
+import { practicalAssessmentRevision } from './preA1Practical/revisions';
 import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -8,6 +10,8 @@ import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
 
 
 export interface StarterLessonSession {
+  sampleRevision?: string;
+  checksRevision?: string;
   stage: number;
   updatedAt?: string;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
@@ -72,22 +76,26 @@ function readSession(lessonId: string, value: unknown): StarterLessonSession {
     || !session.answers || typeof session.answers !== 'object' || Array.isArray(session.answers)) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس این زبان معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
+  const checksRevision = practicalAssessmentRevision(language, lessonId);
+  const retired = !!checksRevision && session.checksRevision !== checksRevision;
   const answers: Record<string, number> = {};
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
     const check = lesson.checks?.[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) continue;
-    answers[key] = answer!;
+    if (!retired) answers[key] = answer!;
   }
-  return {
+  return resumeBalancedSamples(lessonId, {
+    ...(session.sampleRevision ? { sampleRevision: session.sampleRevision } : {}),
+    ...(checksRevision ? { checksRevision } : {}),
     stage,
     ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,
     sentenceIndex: Math.min(Math.max(0, session.sentenceIndex!), lesson.sentences.length - 1),
     revealed: session.revealed,
     answers,
-    showCheckAnswers: session.showCheckAnswers,
-  };
+    showCheckAnswers: !retired && session.showCheckAnswers,
+  });
 }
 
 function validateSession(lessonId: string, value: unknown): StarterLessonSession {
@@ -111,6 +119,8 @@ function validateSession(lessonId: string, value: unknown): StarterLessonSession
     answers[key] = answer!;
   }
   return {
+    ...(balancedSampleRevision(lessonId) ? { sampleRevision: balancedSampleRevision(lessonId) } : {}),
+    ...(practicalAssessmentRevision(language, lessonId) ? { checksRevision: practicalAssessmentRevision(language, lessonId) } : {}),
     stage,
     ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,

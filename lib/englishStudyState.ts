@@ -1,3 +1,5 @@
+import { balancedSampleRevision, resumeBalancedSamples } from './languages/preA1Practical/balanceRevision';
+import { practicalAssessmentRevision, revisePracticalEvidence } from './languages/preA1Practical/revisions';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -14,6 +16,8 @@ export interface LessonAttempt {
 }
 
 export interface LessonSession {
+  sampleRevision?: string;
+  checksRevision?: string;
   stage: number;
   updatedAt?: string;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
@@ -82,7 +86,7 @@ export function parseStudy(raw: string | null): StudyState {
   for (const [id, value] of Object.entries(parsed.sessions as Record<string, LessonSession>)) {
     const stage = resumeStage(value.stage, value.stageVersion, ENGLISH_ENGINE_STEPS.length);
     if (stage === null) continue;
-    sessions[id] = { ...value, stage, stageVersion: LESSON_STAGE_VERSION };
+    sessions[id] = resumeBalancedSamples(id, revisePracticalEvidence('en', id, { ...value, stage, stageVersion: LESSON_STAGE_VERSION }));
     if (typeof value.updatedAt !== 'string' || !Number.isFinite(Date.parse(value.updatedAt))) delete sessions[id].updatedAt;
   }
   return {
@@ -141,7 +145,7 @@ export function saveLessonSession(id: string, value: LessonSession) {
     if (compareLessonAttempts(value.attempt, state.sessions[id]?.attempt) !== 0) {
       throw Error('این جلسه تغییر کرده است؛ درس را دوباره باز کنید.');
     }
-    state.sessions[id] = { ...value, updatedAt: positionTimestamp() };
+    state.sessions[id] = { ...value, ...(balancedSampleRevision(id) ? { sampleRevision: balancedSampleRevision(id) } : {}), checksRevision: practicalAssessmentRevision('en', id), updatedAt: positionTimestamp() };
   });
 }
 
@@ -153,7 +157,7 @@ export function resetLessonSession(id: string): Promise<StudyState> {
     if (!Number.isSafeInteger(generation)) throw Error('شروع مجدد این جلسه ممکن نیست.');
     // A unique tie-breaker lets independently restarted devices converge without wall-clock ordering.
     const attempt = { generation, id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}` };
-    state.sessions[id] = { ...freshSession(), attempt, attemptEvidence: {}, updatedAt: positionTimestamp() };
+    state.sessions[id] = { ...freshSession(), ...(balancedSampleRevision(id) ? { sampleRevision: balancedSampleRevision(id) } : {}), checksRevision: practicalAssessmentRevision('en', id), attempt, attemptEvidence: {}, updatedAt: positionTimestamp() };
   });
 }
 

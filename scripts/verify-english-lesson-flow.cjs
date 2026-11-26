@@ -138,7 +138,7 @@ const esbuild = require('esbuild');
   check(library.includes('firstLessonId={lessons[0]?.id}') && library.includes('lessonId={levelStartLesson?.id}'), 'level restart opens its first lesson with the one-shot reset');
   check(home.includes("params: { id: currentLesson.id }") && screen.includes('withStudyStorageLock(loadStudy)'), 'normal entry still resumes without resetting');
   check(screen.includes('جمله قبلی') && screen.includes('stage === 1') && !screen.includes('گوش‌دادن از ابتدا'), 'previous sentence is beside next, and old replay control is removed');
-  check((screen.match(/<EnglishSpeechRateControls onPlay=\{rate => speak\(current\.en, rate\)\}/g) || []).length === 2, 'sentence and shadowing stages replay the selected English sentence');
+  check((screen.match(/<EnglishSpeechRateControls (?:showNormal=\{false\} )?onPlay=\{rate => speak\(current\.en, rate\)\}/g) || []).length === 2, 'sentence and shadowing stages replay the selected English sentence');
   check(screen.includes('onPress={() => onPlay(ENGLISH_SLOW_SPEECH_RATE)}') && screen.includes('onPress={() => onPlay(ENGLISH_NORMAL_SPEECH_RATE)}'), 'both labelled buttons pass an explicit rate');
   check(screen.includes("fromStart === '1'") && screen.includes('resetLessonSession(lesson.id)') && !screen.includes('preserveExistingSession'), 'one-shot restart durably replaces the current attempt instead of replaying a stale session');
   check(screen.includes('await resetLessonSession(lesson.id)') && screen.includes('setStage(saved.stage)') && screen.includes('setEvidencePassed(false)'), 'in-lesson restart waits for persistence before presenting the fresh attempt');

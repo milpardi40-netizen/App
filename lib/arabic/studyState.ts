@@ -1,3 +1,5 @@
+import { balancedSampleRevision, resumeBalancedSamples } from '../languages/preA1Practical/balanceRevision';
+import { practicalAssessmentRevision, revisePracticalEvidence } from '../languages/preA1Practical/revisions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import type { Skill } from '@/lib/englishSupplement/content';
@@ -12,6 +14,8 @@ export interface ArabicLessonAttempt {
 }
 
 export interface ArabicLessonSession {
+  sampleRevision?: string;
+  checksRevision?: string;
   stage: number;
   updatedAt?: string;
   stageVersion?: number;
@@ -108,7 +112,7 @@ export function parseArabicStudy(raw: string | null): ArabicStudyState {
   for (const [id, value] of Object.entries(parsed.sessions as Record<string, ArabicLessonSession>)) {
     const stage = resumeStage(value.stage, value.stageVersion, ARABIC_ENGINE_STEPS.length);
     if (stage === null) continue;
-    sessions[id] = { ...value, stage, stageVersion: LESSON_STAGE_VERSION };
+    sessions[id] = resumeBalancedSamples(id, revisePracticalEvidence('ar', id, { ...value, stage, stageVersion: LESSON_STAGE_VERSION }));
     if (typeof value.updatedAt !== 'string' || !Number.isFinite(Date.parse(value.updatedAt))) {
       delete sessions[id].updatedAt;
     }
@@ -166,6 +170,8 @@ export async function saveArabicLessonSession(lessonId: string, session: ArabicL
   return update(state => {
     state.sessions[lessonId] = {
       ...session,
+      ...(balancedSampleRevision(lessonId) ? { sampleRevision: balancedSampleRevision(lessonId) } : {}),
+      checksRevision: practicalAssessmentRevision('ar', lessonId),
       stageVersion: LESSON_STAGE_VERSION,
       updatedAt: new Date().toISOString(),
     };

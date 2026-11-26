@@ -368,9 +368,9 @@ const esbuild = require('esbuild');
   check('Russian speaking test is optional and Continue remains available', !russianLessonScreen.includes('speakingTestComplete')
     && russianLessonScreen.includes('disabled={saving || !!sessionError}'));
   check('English lesson scope includes the original material, Pre-A1, practice labs and the A2, B1 and B2 lessons', app.SENTENCE_LESSONS.length === 274
-    && app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4852
+    && app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4864
     && app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0).length === 14
-    && app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0).reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 112
+    && app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 0).reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 124
     && app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 2).length === 37
     && app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 2).reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 1170
     && app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 3 && !lesson.b1Section).length === 26
