@@ -320,15 +320,10 @@ export default function ConversationsHome() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`رفتن به اتاق گفت‌وگوی ${copy.shortName}`}
-            // Concrete URL: pattern-style pushes with bracket segments have shown
-            // as "not found" on the web shell, so the segment is filled here.
-            onPress={() => {
-              const roomPath = `/dialogue-room/${displayCopyLang}` as never as { pathname: string };
-              router.push({
-                pathname: roomPath,
-                params: lessonId ? { lessonId } : {},
-              } as never);
-            }}
+            onPress={() => router.push({
+              pathname: '/dialogue-room/[language]',
+              params: lessonId ? { language: displayCopyLang, lessonId } : { language: displayCopyLang },
+            } as never)}
             style={styles.simRoomsButton}
           >
             <Text style={styles.simRoomsText}>
