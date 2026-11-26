@@ -443,14 +443,6 @@ const server = http.createServer((req, res) => {
       res.end();
       return;
     }
-    // A page URL pasted without the app's base path would boot the SPA outside
-    // its configured router base and match nothing (a "not found" screen).
-    // Redirect every base-less page-like path into the base first.
-    if (baseUrl && pathname !== baseUrl && !pathname.startsWith(baseUrl + '/') && !/\.[a-z0-9]{1,8}$/i.test(pathname)) {
-      res.writeHead(302, { Location: `${baseUrl}${pathname}${url.search}` });
-      res.end();
-      return;
-    }
     if (baseUrl && pathname === baseUrl) pathname = '/';
     else if (baseUrl && pathname.startsWith(baseUrl + '/')) pathname = pathname.slice(baseUrl.length);
     pathname = pathname.replace(/\0/g, '');
