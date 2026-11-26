@@ -8,7 +8,6 @@ import { KeyboardAwareScrollView } from '@/components/KeyboardRuntime';
 import { AppUpdateCard } from '@/components/AppUpdateCard';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Application from 'expo-application';
 import { useFocusEffect, useRouter } from 'expo-router';
 import {
   Activity, Award, BadgeCheck, BookOpenCheck, Brain, CalendarDays, ChevronDown, ChevronLeft, ChevronUp,
@@ -231,7 +230,7 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
         <View style={styles.page}>
           <View style={styles.header}>
             <PageNavigation tone="light" backFallback="/languages" />
-            <Text accessibilityRole="header" style={styles.pageTitle}>پروفایل من</Text>
+            <Text accessibilityRole="header" style={styles.pageTitle}>پروفایل و تنظیمات</Text>
           </View>
 
           {loading ? (
@@ -320,49 +319,6 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
               {!!notice && <Text style={styles.notice}>{notice}</Text>}
               {!!error && <Text accessibilityRole="alert" style={styles.error}>{error}</Text>}
 
-              {/* ───── 2. Quick Controls (visible immediately!) ───── */}
-              <View style={styles.quickControlsCard}>
-                <Text style={styles.sectionEyebrow}>تنظیمات و دسترسی سریع</Text>
-                <RecordedSpeechSetting />
-                <View style={styles.quickGrid}>
-                  <Pressable
-                    accessibilityRole="button"
-                    onPress={() => setShowTypography(v => !v)}
-                    style={({ pressed }) => [styles.quickGridBtn, showTypography && styles.quickGridBtnOn, pressed && styles.pressed]}
-                  >
-                    <Type size={16} color={palette.forest} />
-                    <Text style={styles.quickGridText}>قلم و اندازهٔ متن</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityRole="button"
-                    onPress={() => router.push('/lang/backup' as never)}
-                    style={({ pressed }) => [styles.quickGridBtn, pressed && styles.pressed]}
-                  >
-                    <Download size={16} color={palette.forest} />
-                    <Text style={styles.quickGridText}>پشتیبان محلی</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityRole="button"
-                    onPress={() => router.push('/app-lock' as never)}
-                    style={({ pressed }) => [styles.quickGridBtn, pressed && styles.pressed]}
-                  >
-                    <LockKeyhole size={16} color={palette.forest} />
-                    <Text style={styles.quickGridText}>قفل برنامه</Text>
-                  </Pressable>
-                  {summary?.reviewsDueNow ? (
-                    <Pressable
-                      accessibilityRole="button"
-                      onPress={() => { if (summary.nextReview) router.push(summary.nextReview.route as never); }}
-                      style={({ pressed }) => [styles.quickGridBtn, styles.quickGridBtnWarm, pressed && styles.pressed]}
-                    >
-                      <Repeat size={16} color={palette.terracotta} />
-                      <Text style={styles.quickGridText}>{fa(summary.reviewsDueNow)} مرور آماده</Text>
-                    </Pressable>
-                  ) : null}
-                </View>
-                {showTypography ? <View style={styles.inlinePanel}><DisplayTypographyCard /></View> : null}
-              </View>
-
               {(statsFailed || !!summary?.unavailable.length || summary?.languages.some(l => l.unreadable)) && (
                 <Pressable accessibilityRole="button" onPress={refreshStats}>
                   <Text style={styles.error}>بخشی از سابقه خوانده نشد{summary?.unavailable.length ? ` (${summary.unavailable.join('، ')})` : ''}؛ برای خواندن دوباره بزنید.</Text>
@@ -381,8 +337,6 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
                     onReview={() => { if (summary.nextReview) router.push(summary.nextReview.route as never); }}
                   />
 
-                  <StudyReminderCard />
-
                   {/* ───── 4. Languages Progress ───── */}
                   <LanguagesSection summary={summary} onOpen={home => router.push(home as never)} />
 
@@ -395,7 +349,7 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
                 </>
               ) : null}
 
-              {/* ───── 6. Account, Updates & Sync ───── */}
+              {/* Account management; app settings live once below. */}
               <AccountSection
                 expanded={showAccountDetails}
                 onToggleExpanded={() => setShowAccountDetails(v => !v)}
@@ -417,11 +371,47 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
                 syncing={syncing}
                 onSync={() => void syncNow()}
                 onManage={() => router.push('/personal-sync' as never)}
-                onBackup={() => router.push('/lang/backup' as never)}
                 onSignOut={confirmSignOut}
               />
             </>
           )}
+          {!loading ? <>
+              {/* One canonical settings area, also available without a profile. */}
+              <View style={styles.quickControlsCard}>
+                <Text style={styles.sectionEyebrow}>تنظیمات برنامه</Text>
+                <RecordedSpeechSetting />
+                <View style={styles.quickGrid}>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => setShowTypography(v => !v)}
+                    style={({ pressed }) => [styles.quickGridBtn, showTypography && styles.quickGridBtnOn, pressed && styles.pressed]}
+                  >
+                    <Type size={16} color={palette.forest} />
+                    <Text style={styles.quickGridText}>قلم و اندازهٔ متن</Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => router.push('/lang/backup' as never)}
+                    style={({ pressed }) => [styles.quickGridBtn, pressed && styles.pressed]}
+                  >
+                    <Download size={16} color={palette.forest} />
+                    <Text style={styles.quickGridText}>پشتیبان انگلیسی</Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => router.push('/app-lock' as never)}
+                    style={({ pressed }) => [styles.quickGridBtn, pressed && styles.pressed]}
+                  >
+                    <LockKeyhole size={16} color={palette.forest} />
+                    <Text style={styles.quickGridText}>قفل برنامه</Text>
+                  </Pressable>
+                </View>
+                {showTypography ? <View style={styles.inlinePanel}><DisplayTypographyCard /></View> : null}
+              </View>
+
+              <StudyReminderCard />
+              <AppUpdateCard />
+          </> : null}
         </View>
       </KeyboardAwareScrollView>
     </View>
@@ -696,7 +686,6 @@ function AccountSection({
   syncing,
   onSync,
   onManage,
-  onBackup,
   onSignOut,
 }: {
   expanded: boolean;
@@ -713,15 +702,10 @@ function AccountSection({
   syncing: boolean;
   onSync: () => void;
   onManage: () => void;
-  onBackup: () => void;
   onSignOut: () => void;
 }) {
-  const appVersion = Application.nativeApplicationVersion || '1.0.0';
-  const buildVersion = Application.nativeBuildVersion || '';
-
   return (
-    <Section icon={<Smartphone size={17} color={palette.forest} />} title="نسخهٔ برنامه، همگام‌سازی و حساب">
-      <AppUpdateCard />
+    <Section icon={<Smartphone size={17} color={palette.forest} />} title="حساب و همگام‌سازی">
 
       {!local || deviceAccount ? (
         <Pressable accessibilityRole="button" accessibilityState={{ disabled: syncing }} disabled={syncing} onPress={onSync} style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
@@ -740,23 +724,17 @@ function AccountSection({
       {expanded ? (
         <View style={styles.deepStatsWrap}>
           <KeyValueList rows={local ? [
-            ['نام نمایشی', profile.full_name || '—'],
-            ['ایمیل', profile.email, true],
             ['تاریخ ساخت پروفایل', formatDate(profile.registered_at)],
             ['فعال‌سازی', lastSignIn ? formatDate(lastSignIn, true) : '—'],
             ['آخرین فعالیت', profile.last_seen_at ? timeAgo(profile.last_seen_at) : '—'],
             ['کد ورود این دستگاه', localCode ? fa(localCode) : '—', true],
             ...(deviceAccount ? [['شناسهٔ دستگاه', userId ? `${userId.slice(0, 8)}…${userId.slice(-4)}` : 'در انتظار اتصال', true] as [string, string, boolean]] : []),
-            ['نسخهٔ برنامه', buildVersion ? `${appVersion} (${buildVersion})` : appVersion, true],
           ] : [
-            ['نام نمایشی', profile.full_name || '—'],
-            ['ایمیل', profile.email, true],
             ['تاریخ ثبت‌نام', formatDate(profile.registered_at)],
             ['آخرین ورود', lastSignIn ? formatDate(lastSignIn, true) : '—'],
             ['آخرین فعالیت ثبت‌شده', profile.last_seen_at ? timeAgo(profile.last_seen_at) : '—'],
             ['شناسهٔ کاربر', userId ? `${userId.slice(0, 8)}…${userId.slice(-4)}` : '—', true],
             ['آخرین همگام‌سازی', lastSynced ? formatDate(lastSynced, true) : 'در این نشست انجام نشده'],
-            ['نسخهٔ برنامه', buildVersion ? `${appVersion} (${buildVersion})` : appVersion, true],
           ]} />
 
           {deviceAccount && !serverRegisteredAt ? (
@@ -766,7 +744,6 @@ function AccountSection({
           ) : null}
 
           {!local && <ActionRow icon={<Mail size={16} color={palette.forest} />} title="مدیریت ایمیل و ورود" subtitle="تغییر ایمیل، دریافت کد تازه" onPress={onManage} />}
-          <ActionRow icon={<Download size={16} color={palette.forest} />} title="پشتیبان محلی پیشرفت" subtitle="ذخیره و بازیابی فایل پشتیبان" onPress={onBackup} />
           <ActionRow icon={<Layers size={16} color={palette.forest} />} title="حریم خصوصی" subtitle="فقط نام و ایمیل ذخیره می‌شود؛ محتوای تمرین‌ها خصوصی می‌ماند" />
 
           <Pressable accessibilityRole="button" onPress={onSignOut} style={({ pressed }) => [styles.dangerButton, pressed && styles.pressed]}>

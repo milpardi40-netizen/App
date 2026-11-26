@@ -26,13 +26,11 @@ import {
   Podcast,
   RefreshCw,
   RotateCcw,
-  SlidersHorizontal,
   Sparkles,
   Volume2,
 } from 'lucide-react-native';
 import { AppBottomNav } from '@/components/AppBottomNav';
 import { ProfileIcon } from '@/components/ProfileIcon';
-import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { PageNavigation } from '@/components/PageNavigation';
 import { COURSE_LEVELS, SENTENCE_LESSONS } from '@/lib/courseContent';
 import LevelReadinessLine from '@/components/LevelReadinessLine';
@@ -56,7 +54,6 @@ export default function LearningHome() {
   const { width } = useWindowDimensions();
   const compact = width < 640;
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [quickSettingsOpen, setQuickSettingsOpen] = useState(false);
   const { snapshot, progress, hasStartedCourse, plan, streak, error, retry } = useCourseHome('en');
   const measuredMinutes = Math.floor((snapshot?.study?.days[studyDay()] ?? 0) / 6000) / 10;
   const timeError = !!error;
@@ -403,19 +400,12 @@ export default function LearningHome() {
               </View>
               <ChevronLeft size={17} color={HomeColors.muted} />
             </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="تنظیمات فونت، صدا و نسخه" style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]} onPress={() => setQuickSettingsOpen(true)}>
-              <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><SlidersHorizontal size={18} color={HomeColors.accent} /></View>
-              <View style={styles.quickCopy}>
-                <Text style={styles.quickTitle}>تنظیمات قلم و صدا</Text>
-                <Text style={styles.quickDesc}>فونت نمایش، گوینده، قفل و نسخهٔ برنامه</Text>
-              </View>
-              <ChevronLeft size={17} color={HomeColors.muted} />
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="پروفایل و حساب کاربری" style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]} onPress={() => router.push('/profile' as never)}>
+
+            <Pressable accessibilityRole="button" accessibilityLabel="پروفایل و تنظیمات" style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]} onPress={() => router.push('/profile' as never)}>
               <View style={[styles.quickIcon, { backgroundColor: 'transparent' }]}><ProfileIcon size={34} /></View>
               <View style={styles.quickCopy}>
-                <Text style={styles.quickTitle}>پروفایل من</Text>
-                <Text style={styles.quickDesc}>حساب، سطح و پیشرفت</Text>
+                <Text style={styles.quickTitle}>پروفایل و تنظیمات</Text>
+                <Text style={styles.quickDesc}>حساب، پیشرفت و تنظیمات برنامه</Text>
               </View>
               <ChevronLeft size={17} color={HomeColors.muted} />
             </Pressable>
@@ -427,7 +417,6 @@ export default function LearningHome() {
           </View>
         </View>
       </ScrollView>
-      <QuickSettingsModal visible={quickSettingsOpen} onClose={() => setQuickSettingsOpen(false)} />
       <AppBottomNav />
     </View>
   );

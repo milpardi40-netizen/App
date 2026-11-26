@@ -4,10 +4,9 @@ import { AppState, ImageBackground, Linking, Platform, Pressable, ScrollView, St
 import { createAudioPlayer } from 'expo-audio';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { ArrowLeft, BookOpen, Globe, Headphones, LifeBuoy, MessageCircle, Play, SlidersHorizontal } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, Globe, Headphones, LifeBuoy, MessageCircle, Play } from 'lucide-react-native';
 import { MiloLanguageBrand } from '@/components/MiloLanguageBrand';
 import { ProfileIcon } from '@/components/ProfileIcon';
-import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { ensureOpenLearnerRegistered } from '@/lib/openLearnerAccount';
 import { supabase } from '@/lib/supabase';
 import { isLearnerRegistered } from '@/lib/registrationStatus';
@@ -79,7 +78,6 @@ export default function LanguagesHome() {
   const [registered, setRegistered] = useState(false);
   const [resumeBanner, setResumeBanner] = useState<ResumeBannerState | null>(null);
   const [dueReviewCount, setDueReviewCount] = useState(0);
-  const [quickSettingsOpen, setQuickSettingsOpen] = useState(false);
 
   useFocusEffect(useCallback(() => {
     let active = true;
@@ -159,7 +157,6 @@ export default function LanguagesHome() {
       void isLearnerRegistered().then(value => {
         if (!active || request !== revision) return;
         setRegistered(value);
-        if (!value) setQuickSettingsOpen(false);
       });
     };
     // Defer session reads until after Supabase's auth callback releases its lock.
@@ -268,7 +265,7 @@ export default function LanguagesHome() {
             <View style={styles.headerActions}>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={registered ? 'پروفایل من (ثبت‌نام شده)' : 'پروفایل من'}
+                accessibilityLabel={registered ? 'پروفایل و تنظیمات (ثبت‌نام شده)' : 'پروفایل و تنظیمات'}
                 style={({ pressed }) => [styles.headerButton, styles.profileButton, registered && styles.profileButtonRegistered, pressed && styles.pressed]}
                 onPress={() => router.push('/profile' as never)}
               >
@@ -285,17 +282,7 @@ export default function LanguagesHome() {
               >
                 <LifeBuoy size={16} color={palette.forest} strokeWidth={1.9} />
               </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="تنظیمات و قفل برنامه"
-                accessibilityState={{ disabled: !registered }}
-                accessibilityHint={!registered ? 'پس از ورود فعال می‌شود' : undefined}
-                disabled={!registered}
-                style={({ pressed }) => [styles.headerButton, !registered && styles.headerButtonDisabled, pressed && styles.pressed]}
-                onPress={() => { if (registered) setQuickSettingsOpen(true); }}
-              >
-                <SlidersHorizontal size={16} color={palette.forest} strokeWidth={1.9} />
-              </Pressable>
+
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="سایت و دانلود نسخهٔ اندروید"
@@ -407,7 +394,6 @@ export default function LanguagesHome() {
 
         </View>
       </ScrollView>
-      <QuickSettingsModal visible={quickSettingsOpen} onClose={() => setQuickSettingsOpen(false)} />
       <OpeningOverlay visible={opening} />
     </View>
   );

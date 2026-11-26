@@ -569,7 +569,7 @@ export default function ArabicHomeScreen() {
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="پروفایل و حساب کاربری"
+              accessibilityLabel="پروفایل و تنظیمات"
               style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]}
               onPress={() => router.push('/profile' as never)}
             >
@@ -577,8 +577,8 @@ export default function ArabicHomeScreen() {
                 <ProfileIcon size={34} />
               </View>
               <View style={styles.quickCopy}>
-                <Text style={styles.quickTitle}>پروفایل من</Text>
-                <Text style={styles.quickDesc}>حساب، سطح و پیشرفت</Text>
+                <Text style={styles.quickTitle}>پروفایل و تنظیمات</Text>
+                <Text style={styles.quickDesc}>حساب، پیشرفت و تنظیمات برنامه</Text>
               </View>
               <ChevronLeft size={17} color={HomeColors.muted} />
             </Pressable>
