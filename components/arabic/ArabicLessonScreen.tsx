@@ -814,6 +814,7 @@ export default function ArabicLessonScreen() {
                 <Text style={styles.speechHint}>پس از شنیدن، جمله را با صدای بلند تکرار کنید.</Text>
                 <SpeakCheck
                   key={`shadow-${current.id}`}
+                  onSkip={skipSpeakingSentence}
                   text={current.ar}
                   locale="ar-SA"
                   accent={Colors.success[400]}
