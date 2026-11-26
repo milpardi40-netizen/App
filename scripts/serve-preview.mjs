@@ -476,6 +476,12 @@ const server = http.createServer((req, res) => {
       const dynamicConv = path.join(dist, 'conversations/human/[conversationId].html');
       if (fs.existsSync(dynamicConv)) resolved = dynamicConv;
     }
+    if (!resolved && /^\/dialogue-room\/?$/.test(pathname)) {
+      res.statusCode = 302;
+      res.setHeader('Location', '/conversations');
+      res.end();
+      return;
+    }
     if (!resolved && /^\/dialogue-room\/[^/]+\/?$/.test(pathname)) {
       const dynamicRoom = path.join(dist, 'dialogue-room/[language].html');
       if (fs.existsSync(dynamicRoom)) resolved = dynamicRoom;

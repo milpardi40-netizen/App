@@ -42,7 +42,19 @@ function pickLessonId(ids: readonly string[], completed: readonly string[], less
   return ids.find(id => !completed.includes(id)) ?? ids[ids.length - 1] ?? null;
 }
 
-async function resolveRoomLesson(language: string, lessonIdParam: string): Promise<RoomLesson | null> {
+const ROOM_LANGUAGES = ['en', 'ru', 'tr', 'de', 'fr', 'es', 'ar'] as const;
+
+async function resolveRoomLesson(rawLanguage: string, lessonIdParam: string): Promise<RoomLesson | null> {
+  // An unknown or missing language must never end in a dead end: fall back to the first course.
+  const language = (ROOM_LANGUAGES as readonly string[]).includes(rawLanguage) ? rawLanguage : 'en';
+  try {
+    return await resolveFor(language, lessonIdParam) ?? (language === 'en' ? null : await resolveFor('en', lessonIdParam));
+  } catch {
+    return null;
+  }
+}
+
+async function resolveFor(language: string, lessonIdParam: string): Promise<RoomLesson | null> {
   switch (language) {
     case 'en': {
       const completed = await completedOf({ getCourseProgress: readLocalProgress });
@@ -69,6 +81,7 @@ async function resolveRoomLesson(language: string, lessonIdParam: string): Promi
     case 'fr':
     case 'es': {
       const course = NEW_COURSES[language];
+      if (!course) return null;
       const completed = await completedOf(course.progress);
       const id = pickLessonId(course.lessons.map(lesson => lesson.id), completed, lessonIdParam);
       const lesson = course.lessons.find(item => item.id === id);
@@ -163,7 +176,7 @@ export default function DialogueRoomScreen() {
         ) : (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyText}>
-              برای این زبان درسی برای تمرین گفت‌وگو پیدا نشد. یک‌بار از کتابخانه درس را باز کنید و دوباره بیایید.
+              هنوز درسی برای گفت‌وگو آماده نیست. از صفحهٔ اصلی یک زبان را باز کنید، چند درس را بگذرانید و دوباره بیایید.
             </Text>
           </View>
         )}
