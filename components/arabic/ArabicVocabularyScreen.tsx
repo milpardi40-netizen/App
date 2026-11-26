@@ -534,6 +534,7 @@ export default function ArabicVocabularyScreen() {
               accent={C.primary}
               title={hasArabicSentence(word) ? 'جملهٔ عربی را بگو' : 'واژهٔ عربی را بگو'}
               autoStart={recallMicReady}
+              onSkip={() => { if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current); autoAdvanceTimer.current = null; goNext(); }}
               onResult={result => {
                 setError('');
                 setSpokenScore(result.score);

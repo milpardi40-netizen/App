@@ -1,10 +1,11 @@
+import { useIsFocused } from '@react-navigation/native';
 import { isLanguageId } from '@/lib/languages/registry';
 import { localDay } from '@/lib/reviewHistory';
 import { addPracticeActivity } from '@/lib/practiceActivity';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { Typography } from '@/lib/theme';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { AppState, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
 import { Mic2, RefreshCw, Square, Volume2 } from 'lucide-react-native';
 import * as Speech from '@/lib/courseSpeech';
@@ -29,6 +30,7 @@ type Props = {
   roomMode?: boolean;
   title?: string;
   onResult?: (result: SpeakCheckResult) => void;
+  onSkip?: () => void;
   /** Opens the microphone by itself once (used right after the app pronounced the word). */
   autoStart?: boolean;
   /** Conversation mode: report even an empty attempt instead of forcing another recording. */
@@ -49,7 +51,11 @@ let micOwner: symbol | null = null;
  * each expected word is shown green (heard) or red (missed) together with a percentage.
  * Works on Android/iOS through the native recogniser and on web through the browser's Web Speech API.
  */
-export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, roomMode = false, title, onResult, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false, blindExam = false }: Props) {
+export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, roomMode = false, title, onResult, onSkip, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false, blindExam = false }: Props) {
+  const focused = useIsFocused();
+  const focusedRef = useRef(focused); focusedRef.current = focused;
+  const skipped = useRef(false);
+  const autoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const owner = useRef(Symbol('practice'));
   const generation = useRef(0);
   const [listening, setListening] = useState(false);
@@ -88,6 +94,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   }, []);
 
   useEffect(() => {
+    skipped.current = false;
     setResult(null);
     setPartial('');
     setError('');
@@ -99,16 +106,35 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     busyRetries.current = 0;
     clientRetries.current = 0;
   }, [text]);
-  useEffect(() => () => {
+  const cancelAttempt = useCallback(() => {
     generation.current++;
+    settledRef.current = true;
     clearListenTimers();
+    if (autoTimer.current) clearTimeout(autoTimer.current);
     if (retryTimer.current) clearTimeout(retryTimer.current);
-    retryTimer.current = null;
+    autoTimer.current = retryTimer.current = null;
     if (micOwner === owner.current) {
       micOwner = null;
-      if (listeningRef.current) void ExpoSpeechRecognitionModule.abort?.();
+      try { void ExpoSpeechRecognitionModule.abort?.(); } catch { /* no active recognizer */ }
     }
-  }, [text, clearListenTimers]);
+    listeningRef.current = false;
+    setListening(false);
+    setPartial('');
+  }, [clearListenTimers]);
+  useEffect(() => cancelAttempt, [text, locale, cancelAttempt]);
+  useEffect(() => {
+    if (!focused) cancelAttempt();
+    const sub = AppState.addEventListener('change', state => { if (state !== 'active') cancelAttempt(); });
+    return () => sub.remove();
+  }, [focused, cancelAttempt]);
+  const skip = () => {
+    if (skipped.current || !onSkip) return;
+    skipped.current = true;
+    cancelAttempt();
+    try { void Speech.stop(); } catch { /* no audio */ }
+    setResult(null); setError('');
+    onSkip(); // Deliberately no score, XP, attempt or practice-activity write.
+  };
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
   const prevAutoStart = useRef(false);
@@ -118,7 +144,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   useEffect(() => {
     const wasAutoStart = prevAutoStart.current;
     prevAutoStart.current = autoStart;
-    if (!autoStart) {
+    if (!autoStart || !focused || skipped.current) {
       autoStartedFor.current = '';
       if (retryTimer.current) {
         clearTimeout(retryTimer.current);
@@ -139,9 +165,9 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
     }
     if (!text || autoStartedFor.current === text) return;
     autoStartedFor.current = text;
-    const handle = setTimeout(() => { void startRef.current?.(); }, 420);
-    return () => clearTimeout(handle);
-  }, [autoStart, text, clearListenTimers]);
+    autoTimer.current = setTimeout(() => { autoTimer.current = null; void startRef.current?.(); }, 420);
+    return () => { if (autoTimer.current) clearTimeout(autoTimer.current); };
+  }, [autoStart, text, focused, clearListenTimers]);
 
   const finish = useCallback((heard: string) => {
     clearListenTimers();
@@ -280,7 +306,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       : code === 'language-not-supported'
         ? 'تشخیص گفتار این زبان روی دستگاه شما در دسترس نیست.'
         : code === 'network'
-          ? 'برای تشخیص گفتار این زبان، اتصال اینترنت لازم است.'
+          ? 'سرویس گفتار دستگاه خطای اتصال داد؛ دوباره امتحان کنید یا از «رد شو» استفاده کنید.'
           : code === 'audio-capture'
             ? 'میکروفن دستگاه در دسترس نیست؛ بررسی کنید برنامهٔ دیگری از آن استفاده نکند.'
             : code === 'too-many-requests'
@@ -289,6 +315,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   });
 
   const start = useCallback(async () => {
+    if (!focusedRef.current || skipped.current || (AppState.currentState && AppState.currentState !== 'active')) return;
     if (micOwner === owner.current && listeningRef.current) return;
     clearListenTimers();
     if (retryTimer.current) clearTimeout(retryTimer.current);
@@ -312,7 +339,9 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       if (token !== generation.current) return;
       if (micOwner && micOwner !== owner.current) { setError('ابتدا تمرین گفتاری فعال را پایان دهید.'); return; }
       if (!permission.granted) { setError('برای تمرین گفتاری، اجازهٔ میکروفن لازم است.'); return; }
-      try { void Speech.stop(); } catch { /* ignore */ }
+      // Await audio release before acquiring the microphone (not a fire-and-forget race).
+      try { await Speech.stop(); } catch { /* ignore */ }
+      if (token !== generation.current || !focusedRef.current || skipped.current) return;
       micOwner = owner.current;
       ExpoSpeechRecognitionModule.start({
         lang: locale,
@@ -321,9 +350,12 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         maxAlternatives: 5,
         contextualStrings: text.trim() ? [text] : undefined,
         requiresOnDeviceRecognition: false,
+        // Use packs already supplied by the device when its service supports them. No download/model.
+        androidIntentOptions: Platform.OS === 'android' ? { EXTRA_PREFER_OFFLINE: true } : undefined,
         addsPunctuation: false,
       });
     } catch {
+      if (token !== generation.current) return;
       if (micOwner === owner.current) micOwner = null;
       setError('تشخیص گفتار در دسترس نیست؛ سرویس گفتار گوگل را روی دستگاه بررسی کنید.');
     }
@@ -359,6 +391,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         accessibilityLabel={listening ? 'پایان گفتن' : result ? 'دوباره بگو' : 'شروع گفتن'}
         onPress={() => {
           if (listening) { stop(); return; }
+          skipped.current = false;
           emptyRetries.current = 0;
           busyRetries.current = 0;
           clientRetries.current = 0;
@@ -369,12 +402,15 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         {listening ? <Square size={roomMode ? 23 : compact ? 13 : 16} color="#FFFFFF" fill="#FFFFFF" /> : result ? <RefreshCw size={roomMode ? 26 : compact ? 15 : 18} color="#FFFFFF" /> : <Mic2 size={roomMode ? 28 : compact ? 16 : 19} color="#FFFFFF" />}
         {!roomMode ? <Text keepColor style={[styles.buttonText, compact && styles.buttonTextCompact]}>{listening ? 'تمام شد' : result ? 'دوباره بگو' : 'بگو'}</Text> : null}
       </Pressable>
+      {onSkip ? <Pressable accessibilityRole="button" accessibilityLabel="رد شو" onPress={skip} style={styles.skipButton}><Text style={styles.skipText}>رد شو</Text></Pressable> : null}
       {roomMode ? <Text style={styles.hint}>{listening ? 'در حال شنیدن · برای پایان لمس کن' : error ? 'برای تلاش دوباره، میکروفن را لمس کن' : result ? 'برای تکرار، میکروفن را لمس کن' : 'برای صحبت، میکروفن را لمس کن'}</Text> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  skipButton: { minHeight: 44, minWidth: 64, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 12 },
+  skipText: { fontSize: 13, color: '#64748B', fontFamily: Typography.fontFamily },
   roomWrap: { backgroundColor: 'transparent', borderWidth: 0, padding: 4, marginTop: 2, gap: 12 },
   roomMic: { width: 80, height: 80, borderRadius: 40, paddingHorizontal: 0, paddingVertical: 0, alignItems: 'center', justifyContent: 'center' },
   wrap: { width: '100%', marginTop: 10, padding: 12, borderRadius: 16, backgroundColor: '#F8FAFC', borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center', gap: 6 },

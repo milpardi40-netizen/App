@@ -305,7 +305,7 @@ const esbuild = require('esbuild');
     const unknown = new Set();
     for (const task of a1SkillTasks) for (const word of words(task.passage)) if (!known(word)) unknown.add(word);
     if (unknown.size) process.stdout.write(`  documented A1 prerequisite gap (A1 unchanged): ${[...unknown].join(', ')}\n`);
-    return unknown.size === 1 && unknown.has('мама');
+    return unknown.size === 0;
   })());
 
   check('A1 cold messages do not leak the answer through a fixed slot', new Set(a1SkillTasks.map(task => task.correctIndex)).size >= 2
@@ -391,8 +391,8 @@ const esbuild = require('esbuild');
   const russianHome = fs.readFileSync('components/RussianHome.tsx', 'utf8');
   const russianLesson = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
   const russianRoute = fs.readFileSync('app/learn/ru/lesson.tsx', 'utf8');
-  check('Russian home resets the displayed lesson while level replay is separate', russianHome.includes("id: heroLesson.id, fromStart: '1'")
-    && russianHome.includes('id: RUSSIAN_LESSONS[0].id, levelReplay:') && russianRoute.includes("fromStart === '1'"));
+  check('Russian home restarts the displayed lesson or the first lesson of its active level', russianHome.includes('lessonId={heroLesson.id}')
+    && russianHome.includes('firstLessonId={levelLessons[0]?.id}') && russianRoute.includes("fromStart === '1'"));
   check('Russian restart saves a fresh session and completion navigates after saving', russianLesson.includes('resetRussianLessonSession(lesson.id)')
     && russianLesson.includes('await russianProgress.completeSentenceLesson') && russianLesson.includes('params: { id: nextLesson.id }')
     && russianLesson.includes('currentProgressIndex > nextIndex') && russianLesson.includes('جملهٔ قبلی'));

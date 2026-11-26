@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -83,12 +84,6 @@ export default function LearningHome() {
   const openLevel = (levelId: number) => router.push({ pathname: '/lang/library', params: { level: String(levelId) } } as never);
   const openCurrentLesson = () => router.push({ pathname: '/course/lesson', params: { id: currentLesson.id } } as never);
 
-  const restartFromBeginnerLevel = () => {
-    Alert.alert('شروع مجدد از سطح ابتدایی', 'می‌خواهید دوباره از اولین درسِ سطح ابتدایی شروع کنید؟ محتوای درس‌ها دست‌نخورده می‌ماند.', [
-      { text: 'انصراف', style: 'cancel' },
-      { text: 'شروع مجدد', style: 'destructive', onPress: () => { void setCurrentLesson(SENTENCE_LESSONS[0].id).then(() => router.push({ pathname: '/course/lesson', params: { id: SENTENCE_LESSONS[0].id, fromStart: '1' } } as never)).catch(() => undefined); } },
-    ]);
-  };
 
   return (
     <View style={styles.root}>
@@ -286,14 +281,7 @@ export default function LearningHome() {
                 <Text style={styles.lessonCountLabel}>{lessonUnit(currentLesson.id)}</Text>
               </View>
             </View>
-            <Pressable accessibilityRole="button" accessibilityLabel="شروع از ابتدای درس انگلیسی" style={styles.startFromBeginningButton} onPress={() => router.push({ pathname: '/course/lesson', params: { id: currentLesson.id, fromStart: '1' } } as never)}>
-              <Volume2 size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>شروع از ابتدا</Text>
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="شروع مجدد آموزش انگلیسی از سطح ابتدایی" style={styles.startFromBeginningButton} onPress={restartFromBeginnerLevel}>
-              <RotateCcw size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>شروع مجدد از سطح ابتدایی</Text>
-            </Pressable>
+            <LessonRestartActions lessonPath="/course/lesson" firstLessonId={SENTENCE_LESSONS.find(item => item.levelId === currentLevel.id)?.id} lessonId={currentLesson.id} />
           </View>
 
           {plan.length ? <View style={{ marginBottom: 12 }}>

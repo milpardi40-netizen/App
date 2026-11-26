@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
 import { progressLabel } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -310,29 +311,7 @@ export default function ArabicLibraryScreen() {
                     <Text style={styles.levelStartButtonText}>{levelStartLabel}</Text>
                     <ChevronLeft size={18} color={selected.accent} />
                   </Pressable>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={`شروع از ابتدای سطح: ${selected.title}`}
-                    accessibilityState={{ disabled: !lessons[0] }}
-                    disabled={!lessons[0]}
-                    style={({ pressed }) => [
-                      styles.levelStartBeginningButton,
-                      pressed && styles.pressed,
-                      !lessons[0] && styles.levelStartButtonDisabled,
-                    ]}
-                    onPress={() => {
-                      if (lessons[0]) {
-                        router.push({
-                          pathname: '/learn/ar/lesson',
-                          params: { id: lessons[0].id, fromStart: '1' },
-                        } as never);
-                      }
-                    }}
-                  >
-                    <Play size={16} color={selected.accent} fill={selected.accent} />
-                    <Text style={styles.levelStartButtonText}>شروع از ابتدا</Text>
-                    <ChevronLeft size={18} color={selected.accent} />
-                  </Pressable>
+                  <LessonRestartActions lessonPath="/learn/ar/lesson" firstLessonId={lessons[0]?.id} lessonId={levelStartLesson?.id} color={selected.accent} />
                 </LinearGradient>
               )}
 

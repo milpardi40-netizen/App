@@ -485,6 +485,7 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
                     roomMode
                     blindExam={exam}
                     onResult={result => onUserResult(turn, result)}
+                    onSkip={() => advanceFor(turn)}
                   />}
                 </>
               )}
@@ -537,7 +538,7 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
               <Text style={styles.bubbleForeign}>{lines[reviewIndexes[reviewIndex]].text}</Text>
               <Text style={styles.bubbleFa}>{lines[reviewIndexes[reviewIndex]].fa}</Text>
               <Pressable accessibilityRole="button" accessibilityLabel="شنیدن نمونهٔ جمله" onPress={() => replayOperator(lines[reviewIndexes[reviewIndex]].text)} style={styles.historyToggle}><Volume2 size={18} color={accent} /><Text style={styles.restartText}>شنیدن نمونه</Text></Pressable>
-              <SpeakCheck key={`review-${reviewIndex}`} text={lines[reviewIndexes[reviewIndex]].text} locale={locale} accent={accent} roomMode />
+              <SpeakCheck key={`review-${reviewIndex}`} text={lines[reviewIndexes[reviewIndex]].text} locale={locale} accent={accent} roomMode onSkip={() => setReviewIndex(reviewIndex + 1 < reviewIndexes.length ? reviewIndex + 1 : null)} />
               <Pressable accessibilityRole="button" onPress={() => setReviewIndex(reviewIndex + 1 < reviewIndexes.length ? reviewIndex + 1 : null)} style={styles.restartButton}><Text style={styles.restartText}>{reviewIndex + 1 < reviewIndexes.length ? 'جملهٔ بعدی' : 'پایان تمرین اشتباه‌ها'}</Text><ChevronLeft size={16} color={accent} /></Pressable>
             </View>
           ) : null}

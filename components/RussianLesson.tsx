@@ -1,3 +1,4 @@
+import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { RUSSIAN_HELLO_LESSON_ID, PRE_A1_CONTENT_REVISION, russianRoomLines, russianListeningItems } from '@/lib/languages/russianPreA1';
 import {LessonGenderCard, SentenceGenderLabel} from './LessonGenderCard';
 import { useStudyTimer } from '@/components/useEnglishStudyTimer';
@@ -322,7 +323,14 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
     const targetY = Math.max(0, lessonScrollOffset(contentOffsetRef.current + contentY - 16, Dimensions.get('window').width));
     lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
   }, []);
-  const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+  const { scheduleOnPass, cancel: cancelSpeakingAdvance } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+  const skipSpeakingSentence = () => {
+    cancelSpeakingAdvance();
+    setMicReadyKey('');
+    const last = stage === 1 ? chunkLastIndex : lesson.sentences.length - 1;
+    if (sentenceIndex < last) { setSentenceIndex(sentenceIndex + 1); setRevealed(false); }
+    else { void next(); }
+  };
 
   // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
@@ -500,6 +508,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           </View>
           <SpeakCheck
             key={current.id}
+            onSkip={skipSpeakingSentence}
             text={current.text}
             locale="ru-RU"
             accent={Palette.success}
@@ -543,6 +552,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             <Text style={styles.speechHint}>{lesson.id === RUSSIAN_HELLO_LESSON_ID ? 'در «Приве́т» بخش آخر و در «Спаси́бо» بخش «سی» را پررنگ‌تر بگو. بار دوم نگاهت را از متن بردار و تکرار کن.' : 'پس از شنیدن، جمله را با صدای بلند تکرار کنید.'}</Text>
             <SpeakCheck
               key={current.id}
+              onSkip={skipSpeakingSentence}
               text={current.text}
               locale="ru-RU"
               accent={Palette.success}
@@ -607,6 +617,15 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
               locale="ru-RU"
               accent={Palette.success}
               autoStart={micReadyKey === `5:${vocabIndex}:${word.word}`}
+              onSkip={() => {
+                cancelSpeakingAdvance();
+                setMicReadyKey('');
+                if (vocabIndex < vocabulary.length - 1) {
+                  const nextVocab = vocabulary[vocabIndex + 1];
+                  scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0));
+                  speakForTarget(nextVocab.word.word, pace('normal'), `5:${vocabIndex + 1}:${nextVocab.word.word}`);
+                } else { void next(); }
+              }}
               onResult={result => {
                 if (vocabIndex < vocabulary.length - 1) {
                   const nextVocab = vocabulary[vocabIndex + 1];
@@ -720,7 +739,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           </View>
         </View>
       ) : null}
-      <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(RUSSIAN_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
+      <LessonCelebration onRestart={async () => { const target = await prepareLessonRestart('/learn/ru/lesson', lesson.id); router.replace(target as never); }} visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(RUSSIAN_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
       levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );

@@ -6,13 +6,15 @@ const fold = text => text.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, '�
 // Explicit inventory from the retired Pre-A1 content, including inflected forms.
 // Not an ending-based gender classifier: па́па, де́душка and ко́фе remain valid masculine nouns.
 const forbiddenStems = /^(?:мам|комнат|двер|окн|вод(?:а|у|ы|е|ой)|книг|ручк|ноч|имя|имен|слов|семь[яюие]|семе|сестр|подруг|учительниц|студентк|девоч|сумк|яблок|молок|кошк|собак|птиц|рыб|сред(?:а|у|ы|е|ой)|пятниц|суббот|воскресен|школ|кафе|улиц|утр|иранк|тетрад|кухн|чаш|евро|свидан|дела|сар(?:а|у|ы)|анн(?:а|у|ы)|мин(?:а|у|ы))/;
+const feminineLessons = /ru-pre-0[35]-/;
+const restoredForms = new Set(['мама','сестра','моя','она']);
 const forbiddenForms = new Set(('она оно ее ей моя мое твоя твое чья чье какая какое одна одно нужна рада эта та то белая белое черная черное красная красное зеленая зеленое большая большое маленькая маленькое хорошая хорошее новая новое старая плохая красивая красивое добрая умная вкусная свежее тихая светлая интересная синяя желтое хорошего всего').split(' '));
 function audit(value, context) {
   if (typeof value === 'string') {
     for (const token of fold(value).match(/[а-я]+/g) ?? []) {
-      assert.ok(!forbiddenStems.test(token) && !forbiddenForms.has(token), `${context}: retired form ${token}`);
+      assert.ok((!forbiddenStems.test(token) && !forbiddenForms.has(token)) || (feminineLessons.test(context) && (restoredForms.has(token) || (context.endsWith('.stem') && token === 'мам'))), `${context}: retired form ${token}`);
     }
-    assert.ok(!/مؤنث|مونث|خنثی/.test(value), `${context}: obsolete gender teaching`);
+    assert.ok(!/خنثی/.test(value) && (!/مؤنث|مونث/.test(value) || feminineLessons.test(context)), `${context}: obsolete gender teaching`);
   } else if (Array.isArray(value)) value.forEach((item, index) => audit(item, `${context}[${index}]`));
   else if (value && typeof value === 'object') for (const [key, item] of Object.entries(value)) audit(item, `${context}.${key}`);
 }
@@ -136,5 +138,5 @@ const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)
   assert.ok(!('sixTaskIndex' in JSON.parse(memory.get(app.RUSSIAN_STUDY_STORAGE_KEY)).sessions[pre[0].id]), 'next save retires experimental metadata');
   assert.deepEqual((await app.loadRussianLessonSession(a1.id)).answers, fields.answers, 'A1 remains intact after rollback');
   delete global.window;
-  console.log('31 Russian Pre-A1 lessons passed masculine-only audits: all lesson fields, vocabulary, dialogue overrides, checks, cards, bridge notes, grammar and verb examples. A1–C1 content snapshots and saved A1 answers are unchanged.');
+  console.log('31 Russian Pre-A1 lessons passed scoped gender audits (mother/sister and agreement restored only in lessons 03/05): all lesson fields, vocabulary, dialogue overrides, checks, cards, bridge notes, grammar and verb examples. A1–C1 content snapshots and saved A1 answers are unchanged.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

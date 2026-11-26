@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
 import { progressLabel } from '@/lib/levelProgress';
 import { syncPersonalLearningData } from '@/lib/personalLearningSync';
@@ -213,11 +214,7 @@ export default function EnglishLessonList() {
                     <Text style={styles.levelStartButtonText}>{levelStartLabel}</Text>
                     <ChevronLeft size={18} color={selected.color} />
                   </Pressable>
-                  <Pressable accessibilityRole="button" accessibilityLabel={`شروع از ابتدای سطح: ${selected.title}`} accessibilityState={{ disabled: !lessons[0] }} disabled={!lessons[0]} style={({ pressed }) => [styles.levelStartBeginningButton, pressed && styles.pressed, !lessons[0] && styles.levelStartButtonDisabled]} onPress={() => { if (lessons[0]) router.push({ pathname: '/course/lesson', params: { id: lessons[0].id, fromStart: '1' } } as never); }}>
-                    <Play size={16} color={selected.color} fill={selected.color} />
-                    <Text style={styles.levelStartButtonText}>شروع از ابتدا</Text>
-                    <ChevronLeft size={18} color={selected.color} />
-                  </Pressable>
+                  <LessonRestartActions lessonPath="/course/lesson" firstLessonId={lessons[0]?.id} lessonId={levelStartLesson?.id} color={selected.color} />
                 </LinearGradient>
               )}
 

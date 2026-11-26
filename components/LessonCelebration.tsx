@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { Animated, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { ArrowLeft, CheckCircle2, Flame, RefreshCw, Trophy } from 'lucide-react-native';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
@@ -28,6 +29,7 @@ interface Props {
   stats: CelebrationStats;
   hasNextLesson: boolean;
   onContinue: () => void;
+  onRestart?: () => void | Promise<void>;
   /** Spaced-repetition cards that are due right now; shows a short review suggestion when > 0. */
   dueReviews?: number;
   onReview?: () => void;
@@ -38,7 +40,20 @@ interface Props {
 }
 
 /** Shown once a lesson is saved as complete; the next lesson opens only when the learner taps. */
-export default function LessonCelebration({ visible, lessonTitle, stats, hasNextLesson, onContinue, dueReviews = 0, onReview, levelFinished, newAchievements = [] }: Props) {
+export default function LessonCelebration({ visible, lessonTitle, stats, hasNextLesson, onContinue, onRestart, dueReviews = 0, onReview, levelFinished, newAchievements = [] }: Props) {
+  const { height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const restarting = useRef(false);
+  const [restartError, setRestartError] = useState('');
+  const [restartPending, setRestartPending] = useState(false);
+  const maxCardHeight = Math.max(100, height - insets.top - insets.bottom - 32);
+  const restart = async () => {
+    if (restarting.current || !onRestart) return;
+    restarting.current = true; setRestartPending(true); setRestartError('');
+    try { await onRestart(); }
+    catch { setRestartError('شروع مجدد آماده نشد؛ دوباره تلاش کنید.'); }
+    finally { restarting.current = false; setRestartPending(false); }
+  };
   const scale = useRef(new Animated.Value(0.7)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -53,8 +68,9 @@ export default function LessonCelebration({ visible, lessonTitle, stats, hasNext
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onContinue}>
-      <View style={styles.backdrop}>
-        <Animated.View style={[styles.card, { opacity, transform: [{ scale }] }]}>
+      <View style={[styles.backdrop, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16 }]}>
+        <Animated.View style={[styles.card, { maxHeight: maxCardHeight, opacity, transform: [{ scale }] }]}>
+          <ScrollView style={styles.scroll} contentContainerStyle={styles.cardContent} showsVerticalScrollIndicator keyboardShouldPersistTaps="handled">
           <View style={styles.icon}><CheckCircle2 size={44} color={Palette.success} /></View>
           <Text style={styles.title}>آفرین!</Text>
           <Text style={styles.subtitle}>درس «{lessonTitle}» تمام شد.</Text>
@@ -90,10 +106,15 @@ export default function LessonCelebration({ visible, lessonTitle, stats, hasNext
             <RefreshCw size={16} color={Palette.primaryDark} />
             <Text style={styles.reviewText}>{`مرور ${fa(dueReviews)} کارت سررسید · حدود ${fa(Math.max(1, Math.ceil(dueReviews / 4)))} دقیقه`}</Text>
           </Pressable> : null}
-          <Pressable accessibilityRole="button" onPress={onContinue} style={styles.button}>
+          </ScrollView>
+          <View style={styles.actions}>
+          {restartError ? <Text accessibilityRole="alert" style={styles.restartError}>{restartError}</Text> : null}
+          {onRestart ? <Pressable accessibilityRole="button" accessibilityLabel="شروع از ابتدای این درس" accessibilityState={{ disabled: restartPending }} disabled={restartPending} onPress={() => void restart()} style={styles.restartButton}><RefreshCw size={16} color={Palette.primaryDark} /><Text style={styles.reviewText}>شروع از ابتدای این درس</Text></Pressable> : null}
+          <Pressable accessibilityRole="button" disabled={restartPending} onPress={onContinue} style={styles.button}>
             <Text style={styles.buttonText}>{hasNextLesson ? 'درس بعدی' : 'بازگشت به سطح‌ها'}</Text>
             <ArrowLeft size={18} color="#FFFFFF" />
           </Pressable>
+          </View>
         </Animated.View>
       </View>
     </Modal>
@@ -101,25 +122,30 @@ export default function LessonCelebration({ visible, lessonTitle, stats, hasNext
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: 'rgba(15,23,42,0.55)', alignItems: 'center', justifyContent: 'center', padding: 24 },
-  card: { width: '100%', maxWidth: 380, maxHeight: '90%', borderRadius: 24, backgroundColor: '#FFFFFF', padding: 24, alignItems: 'center', gap: 10 },
+  backdrop: { flex: 1, backgroundColor: 'rgba(15,23,42,0.55)', alignItems: 'center', justifyContent: 'center', padding: 16 },
+  card: { width: '100%', maxWidth: 380, borderRadius: 24, backgroundColor: '#FFFFFF', overflow: 'hidden', flexShrink: 1 },
+  scroll: { width: '100%', flexShrink: 1 },
+  cardContent: { padding: 20, alignItems: 'center', gap: 10 },
+  actions: { width: '100%', padding: 16, paddingTop: 10, gap: 8, borderTopWidth: 1, borderTopColor: '#E2E8F0' },
+  restartButton: { minHeight: 46, width: '100%', borderRadius: 14, borderWidth: 1, borderColor: '#DDE2FF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  restartError: { color: '#B91C1C', textAlign: 'right', fontFamily: Typography.fontFamily },
   icon: { width: 76, height: 76, borderRadius: 38, backgroundColor: Palette.successSoft, alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
   title: { fontFamily: Typography.fontFamily, fontSize: 26, color: Palette.ink, textAlign: 'center' },
   subtitle: { fontFamily: Typography.fontFamily, fontSize: 13, lineHeight: 22, color: Palette.text, textAlign: 'center', writingDirection: 'rtl' },
-  statsRow: { flexDirection: 'row-reverse', gap: 10, marginTop: 8, width: '100%', justifyContent: 'center' },
-  stat: { minWidth: 86, borderRadius: 16, backgroundColor: Palette.surfaceMuted, paddingVertical: 12, paddingHorizontal: 10, alignItems: 'center', gap: 2 },
+  statsRow: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8, marginTop: 8, width: '100%', justifyContent: 'center' },
+  stat: { flexGrow: 1, flexBasis: 76, minWidth: 65, borderRadius: 16, backgroundColor: Palette.surfaceMuted, paddingVertical: 12, paddingHorizontal: 10, alignItems: 'center', gap: 2 },
   statValue: { fontFamily: Typography.fontFamily, fontSize: 22, color: Palette.primaryDark },
   statLabel: { fontFamily: Typography.fontFamily, fontSize: 12, color: Palette.text },
   streakPill: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8, marginTop: 10, paddingHorizontal: 16, paddingVertical: 9, borderRadius: 999, backgroundColor: '#FEF3C7', borderWidth: 1, borderColor: '#FCD34D' },
   streakText: { fontFamily: Typography.fontFamily, fontSize: 14, color: '#92400E' },
   levelBox: { marginTop: 12, width: '100%', borderRadius: 16, backgroundColor: '#FFFBEB', borderWidth: 1, borderColor: '#FCD34D', padding: 12, gap: 8 },
   levelHead: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
-  levelTitle: { fontFamily: Typography.fontFamily, fontSize: 14, color: '#92400E', writingDirection: 'rtl' },
+  levelTitle: { flex: 1, minWidth: 0, fontFamily: Typography.fontFamily, fontSize: 14, color: '#92400E', writingDirection: 'rtl' },
   levelText: { fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, color: '#78350F', textAlign: 'right', writingDirection: 'rtl' },
   levelButton: { minHeight: 44, borderRadius: 12, backgroundColor: '#D97706', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8 },
   levelButtonText: { fontFamily: Typography.fontFamily, fontSize: 14, color: '#FFFFFF' },
   reviewButton: { marginTop: 12, width: '100%', minHeight: 46, borderRadius: 14, flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF' },
-  reviewText: { fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.primaryDark, writingDirection: 'rtl' },
+  reviewText: { flexShrink: 1, textAlign: 'center', fontFamily: Typography.fontFamily, fontSize: 13, color: Palette.primaryDark, writingDirection: 'rtl' },
   streakHint: { fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 18, color: '#8A929E', textAlign: 'center', writingDirection: 'rtl' },
   medalBox: { marginTop: 10, width: '100%', borderRadius: 16, backgroundColor: '#FFF7ED', borderWidth: 1, borderColor: '#FED7AA', padding: 12, gap: 8 },
   medalHead: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
@@ -129,6 +155,6 @@ const styles = StyleSheet.create({
   medalCopy: { flex: 1, alignItems: 'flex-end', gap: 1 },
   medalName: { fontFamily: Typography.fontFamily, fontSize: 13, color: '#7C2D12', writingDirection: 'rtl' },
   medalDesc: { fontFamily: Typography.fontFamily, fontSize: 10, lineHeight: 16, color: '#9A3412', textAlign: 'right', writingDirection: 'rtl' },
-  button: { marginTop: 14, width: '100%', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: Palette.primary, borderRadius: 16, paddingVertical: 14 },
+  button: { width: '100%', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: Palette.primary, borderRadius: 16, paddingVertical: 14 },
   buttonText: { fontFamily: Typography.fontFamily, fontSize: 15, color: '#FFFFFF' },
 });

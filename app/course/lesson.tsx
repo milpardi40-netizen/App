@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from 'expo-router';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { Suspense, lazy } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -5,6 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 const EnglishLessonRoute = lazy(() => import('@/components/EnglishLessonRoute'));
 
 export default function EnglishLessonScreen() {
+  const { restartToken } = useLocalSearchParams<{ restartToken?: string }>();
   return (
     <Suspense fallback={
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, backgroundColor: '#F8FAFF' }}>
@@ -14,7 +16,7 @@ export default function EnglishLessonScreen() {
         </Text>
       </View>
     }>
-      <EnglishLessonRoute />
+      <EnglishLessonRoute key={restartToken ?? "resume"} />
     </Suspense>
   );
 }

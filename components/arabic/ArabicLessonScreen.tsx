@@ -1,3 +1,4 @@
+import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -394,7 +395,15 @@ export default function ArabicLessonScreen() {
     );
     lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
   }, []);
-  const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson?.id ?? 'none'}:${stage}:${sentenceIndex}`);
+  const { scheduleOnPass, cancel: cancelSpeakingAdvance } = useSpeakAutoAdvance(`${lesson?.id ?? 'none'}:${stage}:${sentenceIndex}`);
+  const skipSpeakingSentence = () => {
+    cancelSpeakingAdvance();
+    setMicReadyKey('');
+    const last = stage === 1 ? chunkLastIndex : lesson.sentences.length - 1;
+    if (sentenceIndex < last) { setSentenceIndex(sentenceIndex + 1); setRevealed(false); }
+    else { void next(); }
+  };
+
 
   useEffect(() => {
     if (stage !== 2 || !lesson) return;
@@ -728,6 +737,7 @@ export default function ArabicLessonScreen() {
               )}
               <SpeakCheck
                 key={current.id}
+                onSkip={skipSpeakingSentence}
                 text={current.ar}
                 locale="ar-SA"
                 accent={Colors.success[400]}
@@ -911,6 +921,21 @@ export default function ArabicLessonScreen() {
                       locale="ar-SA"
                       accent={Colors.success[400]}
                       autoStart={micReadyKey === `5:${vocabIndex}:${item.word}`}
+                      onSkip={() => {
+                        cancelSpeakingAdvance();
+                        setMicReadyKey('');
+                        if (vocabIndex < vocabulary.length - 1) {
+                          const nextVocab = vocabulary[vocabIndex + 1];
+                          scrollToContentY(
+                          vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0),
+                          );
+                          speakForTarget(
+                          nextVocab.word,
+                          ARABIC_NORMAL_SPEECH_RATE,
+                          `5:${vocabIndex + 1}:${nextVocab.word}`,
+                          );
+                        } else { void next(); }
+                      }}
                       onResult={result => {
                         if (vocabIndex < vocabulary.length - 1) {
                           const nextVocab = vocabulary[vocabIndex + 1];
@@ -1111,7 +1136,7 @@ export default function ArabicLessonScreen() {
         </View>
       ) : null}
 
-      <LessonCelebration
+      <LessonCelebration onRestart={async () => { const target = await prepareLessonRestart('/learn/ar/lesson', lesson.id); router.replace(target as never); }}
         visible={!!celebration}
         lessonTitle={lesson.title}
         stats={

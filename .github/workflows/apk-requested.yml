@@ -258,6 +258,7 @@ jobs:
           npm run validate:narration
           npm run validate:assessment
           npm run validate:progress
+          npm run validate:learner-controls
       - &build
         name: Build the release APK
         shell: bash

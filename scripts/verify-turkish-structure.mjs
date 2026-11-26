@@ -269,7 +269,7 @@ check(english.SENTENCE_LESSONS.length === 274, 'English baseline lesson count (2
 check(english.SENTENCE_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 4852, 'English baseline sentence count (4852 at release 14) holds');
 // Russian Pre-A1 (28 zero-to-dialogue lessons, 8 sentences each) + 29 A1 lessons (16 sentences each).
 check(russian.RUSSIAN_LESSONS.length === 197, 'Russian baseline lesson count (197 after 31-lesson Pre-A1 completion) holds');
-check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1848, 'Russian baseline sentence count (1848 after 31-lesson Pre-A1 completion) holds');
+check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1852, 'Russian baseline sentence count (1852 after 31-lesson Pre-A1 completion) holds');
 
 // 2. Alphabet, levels, and A1 + A2 syllabus structure
 check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ', 'Turkish 29-letter alphabet is exact');

@@ -48,7 +48,26 @@ export async function loadCompletedChunks(lessonId: string): Promise<number[]> {
   return (await loadChunkMap().catch(() => ({} as Record<string, number[]>)))[lessonId] ?? [];
 }
 
-export async function markChunkDone(lessonId: string, chunk: number): Promise<number[]> {
+let chunkWrites: Promise<unknown> = Promise.resolve();
+function serializeChunks<T>(operation: () => Promise<T>): Promise<T> {
+  const next = chunkWrites.catch(() => undefined).then(operation);
+  chunkWrites = next;
+  return next;
+}
+
+export function resetLessonChunks(lessonId: string): Promise<void> {
+  return serializeChunks(async () => {
+    const current = await loadChunkMap();
+    delete current[lessonId];
+    await AsyncStorage.setItem(DONE_KEY, JSON.stringify(current));
+    notifyLearningChange();
+  });
+}
+
+export function markChunkDone(lessonId: string, chunk: number): Promise<number[]> {
+  return serializeChunks(() => markChunkDoneNow(lessonId, chunk));
+}
+async function markChunkDoneNow(lessonId: string, chunk: number): Promise<number[]> {
   const current = await loadCompletedChunks(lessonId);
   const next = [...new Set([...current, chunk])].sort((a, b) => a - b);
   try {

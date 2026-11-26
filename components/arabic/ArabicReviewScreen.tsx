@@ -86,6 +86,17 @@ export default function ArabicReviewScreen() {
     setSessionActive(true);
   };
 
+  const skipSpeakingCard = () => {
+    if (saving) return;
+    // Only remove from this temporary queue; its real review due date/score stays untouched.
+    setSessionCards(cards => cards.filter((_, index) => index !== cardIndex));
+    setSpokenScore(null); setRevealed(false);
+    if (cardIndex + 1 >= sessionCards.length) {
+      setSessionActive(false);
+      void load();
+    }
+  };
+
   const rate = async (rating: ArabicReviewRating) => {
     if (!currentCard || saving) return;
     setSaving(true);
@@ -145,7 +156,7 @@ export default function ArabicReviewScreen() {
             <Text style={styles.reviewFa}>{sentence.fa}</Text>
             {!revealed ? (
               <>
-                <ReviewSpeakGate
+                <ReviewSpeakGate onSkip={skipSpeakingCard}
                   text={sentence.ar}
                   locale="ar-SA"
                   accent={Palette.success}

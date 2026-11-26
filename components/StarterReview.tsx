@@ -68,6 +68,17 @@ export default function StarterReview({course}: {course: StarterCourse}) {
     setSessionActive(true);
   };
 
+  const skipSpeakingCard = () => {
+    if (saving) return;
+    // Only remove from this temporary queue; its real review due date/score stays untouched.
+    setSessionCards(cards => cards.filter((_, index) => index !== cardIndex));
+    setSpokenScore(null); setRevealed(false);
+    if (cardIndex + 1 >= sessionCards.length) {
+      setSessionActive(false);
+      void load();
+    }
+  };
+
   const rate = async (rating: ReviewRating) => {
     if (!currentCard || saving) return;
     setSaving(true);
@@ -105,7 +116,7 @@ export default function StarterReview({course}: {course: StarterCourse}) {
         <Text style={styles.recallLabel}>نمونهٔ این زبان را به یاد بیاورید</Text>
         <View style={styles.reviewCard}>
           <Text style={styles.reviewFa}>{sentence.fa}</Text>
-          {!revealed ? <><ReviewSpeakGate text={sentence.text} locale={course.locale} accent={Palette.success} onResult={result => { setSpokenScore(result.score); setRevealed(true); }} /><Pressable accessibilityRole="button" style={styles.revealButton} onPress={() => setRevealed(true)}><Text style={styles.revealButtonText}>میکروفون ندارم؛ نمایش پاسخ</Text></Pressable></> : <View style={styles.answerArea}>
+          {!revealed ? <><ReviewSpeakGate onSkip={skipSpeakingCard} text={sentence.text} locale={course.locale} accent={Palette.success} onResult={result => { setSpokenScore(result.score); setRevealed(true); }} /><Pressable accessibilityRole="button" style={styles.revealButton} onPress={() => setRevealed(true)}><Text style={styles.revealButtonText}>میکروفون ندارم؛ نمایش پاسخ</Text></Pressable></> : <View style={styles.answerArea}>
             <View style={styles.answerDivider} /><Text style={styles.reviewTarget}>{sentence.text}</Text><Text style={styles.reviewPronunciation}>{starterDisplayPronunciation(sentence)}</Text>
             <Pressable accessibilityRole="button" style={styles.soundButton} onPress={() => speak(sentence.text)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.soundText}>پخش نمونه</Text></Pressable>
             {vocabulary ? <View style={styles.vocabChip}><Sparkles size={13} color={Palette.warning} /><Text style={styles.vocabText}>{vocabulary}</Text></View> : null}

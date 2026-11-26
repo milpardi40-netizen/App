@@ -1,3 +1,4 @@
+import { useForegroundKeepAwake } from '@/hooks/useForegroundKeepAwake';
 import { useEffect, useState } from 'react';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -111,6 +112,7 @@ function CompanionRuntime() {
  */
 export default function RootLayout() {
   useFrameworkReady();
+  useForegroundKeepAwake();
   useEffect(() => {
     // Use the media output for lessons even before the first microphone exercise.
     if (Platform.OS === 'ios') {

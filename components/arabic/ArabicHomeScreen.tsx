@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -130,31 +131,6 @@ export default function ArabicHomeScreen() {
     }
   };
 
-  const restartFromBeginnerLevel = () => {
-    const first = ARABIC_LESSONS[0];
-    if (!first) return;
-    Alert.alert(
-      'شروع مجدد از سطح ابتدایی',
-      'می‌خواهید دوباره از اولین درسِ سطح ابتدایی شروع کنید؟ محتوای درس‌ها دست‌نخورده می‌ماند.',
-      [
-        { text: 'انصراف', style: 'cancel' },
-        {
-          text: 'شروع مجدد',
-          style: 'destructive',
-          onPress: () => {
-            void setArabicCurrentLesson(first.id)
-              .then(() =>
-                router.push({
-                  pathname: '/learn/ar/lesson',
-                  params: { id: first.id, fromStart: '1' },
-                } as never),
-              )
-              .catch(() => undefined);
-          },
-        },
-      ],
-    );
-  };
 
   return (
     <View style={styles.root}>
@@ -450,30 +426,7 @@ export default function ArabicHomeScreen() {
                 </View>
               </View>
 
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="شروع از ابتدای درس عربی"
-                style={styles.startFromBeginningButton}
-                onPress={() =>
-                  router.push({
-                    pathname: '/learn/ar/lesson',
-                    params: { id: currentLesson.id, fromStart: '1' },
-                  } as never)
-                }
-              >
-                <Volume2 size={17} color={HomeColors.accent} />
-                <Text style={styles.startFromBeginningText}>شروع از ابتدا</Text>
-              </Pressable>
-
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="شروع مجدد آموزش عربی از سطح ابتدایی"
-                style={styles.startFromBeginningButton}
-                onPress={restartFromBeginnerLevel}
-              >
-                <RotateCcw size={17} color={HomeColors.accent} />
-                <Text style={styles.startFromBeginningText}>شروع مجدد از سطح ابتدایی</Text>
-              </Pressable>
+              <LessonRestartActions lessonPath="/learn/ar/lesson" firstLessonId={ARABIC_LESSONS.find(item => item.levelId === currentLevel.id)?.id} lessonId={currentLesson.id} />
             </View>
           ) : null}
 

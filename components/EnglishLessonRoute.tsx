@@ -1,3 +1,5 @@
+import { resetLessonChunks } from '@/lib/lessonChunks';
+import { prepareLessonRestart } from '@/lib/lessonRestart';
 import {LessonGenderCard, SentenceGenderLabel} from './LessonGenderCard';
 import { addPracticeActivity } from '@/lib/practiceActivity';
 import { localDay } from '@/lib/reviewHistory';
@@ -332,6 +334,8 @@ export default function SentenceLessonScreen() {
         await recorder.stop();
         await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
       }
+      await resetLessonChunks(lesson.id);
+      setDoneChunks([]);
       const state = await resetLessonSession(lesson.id);
       if (screenRun.current !== run) return;
       const saved = state.sessions[lesson.id];
@@ -421,7 +425,14 @@ export default function SentenceLessonScreen() {
     const targetY = Math.max(0, lessonScrollOffset(contentOffsetRef.current + contentY - 16, Dimensions.get('window').width));
     lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
   }, []);
-  const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+  const { scheduleOnPass, cancel: cancelSpeakingAdvance } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+  const skipSpeakingSentence = () => {
+    cancelSpeakingAdvance();
+    setMicReadyKey('');
+    const last = stage === 1 ? chunkLastIndex : lesson.sentences.length - 1;
+    if (sentenceIndex < last) { setSentenceIndex(sentenceIndex + 1); setRevealed(false); }
+    else { void next(); }
+  };
 
   // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
@@ -603,6 +614,7 @@ export default function SentenceLessonScreen() {
             {!!audioNotice && <Text accessibilityLiveRegion="polite" style={styles.speechError}>{audioNotice}</Text>}
             <SpeakCheck
               key={current.id}
+              onSkip={skipSpeakingSentence}
               text={current.en}
               locale="en-US"
               accent={Colors.success[400]}
@@ -654,6 +666,7 @@ export default function SentenceLessonScreen() {
               <Text style={styles.speechHint}>پس از شنیدن، جمله را با صدای بلند تکرار کنید.</Text>
               <SpeakCheck
                 key={current.id}
+                onSkip={skipSpeakingSentence}
                 text={current.en}
                 locale="en-US"
                 accent={Colors.success[400]}
@@ -727,6 +740,15 @@ export default function SentenceLessonScreen() {
                     locale="en-US"
                     accent={Colors.success[400]}
                     autoStart={micReadyKey === `5:${vocabIndex}:${item.word}`}
+                    onSkip={() => {
+                      cancelSpeakingAdvance();
+                      setMicReadyKey('');
+                      if (vocabIndex < vocabulary.length - 1) {
+                        const nextVocab = vocabulary[vocabIndex + 1];
+                        scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0));
+                        speakForTarget(nextVocab.word, ENGLISH_NORMAL_SPEECH_RATE, `5:${vocabIndex + 1}:${nextVocab.word}`);
+                      } else { void next(); }
+                    }}
                     onResult={result => {
                       if (vocabIndex < vocabulary.length - 1) {
                         const nextVocab = vocabulary[vocabIndex + 1];
@@ -827,7 +849,7 @@ export default function SentenceLessonScreen() {
           </View>
         </View>
       ) : null}
-      <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(SENTENCE_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
+      <LessonCelebration onRestart={async () => { const target = await prepareLessonRestart('/course/lesson', lesson.id); router.replace(target as never); }} visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(SENTENCE_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
       levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );

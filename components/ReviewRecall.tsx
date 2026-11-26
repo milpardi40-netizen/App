@@ -38,8 +38,8 @@ export function reviewReason(card: SentenceReviewCard, lessonTitle: string): str
   return 'برای تثبیت، امروز دوباره آمده.';
 }
 
-export function ReviewSpeakGate({ text, locale, accent, onResult }: { text: string; locale: string; accent?: string; onResult: (result: SpeakCheckResult) => void }) {
-  return <SpeakCheck text={text} locale={locale} accent={accent} title="از حافظه بگو · پاسخ بعد از گفتن ظاهر می‌شود" onResult={onResult} />;
+export function ReviewSpeakGate({ text, locale, accent, onResult, onSkip }: { text: string; locale: string; accent?: string; onResult: (result: SpeakCheckResult) => void; onSkip?: () => void }) {
+  return <SpeakCheck text={text} locale={locale} accent={accent} title="از حافظه بگو · پاسخ بعد از گفتن ظاهر می‌شود" onResult={onResult} onSkip={onSkip} />;
 }
 
 export function ReviewRatingGrid({ saving, onRate, score, title = 'یادآوری این جمله چطور بود؟' }: { saving: boolean; onRate: (rating: ReviewRating) => void; score: number | null; title?: string }) {
