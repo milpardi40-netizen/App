@@ -1026,6 +1026,7 @@ export default function ArabicLessonScreen() {
               locale="ar-SA"
               onSpeak={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone })}
               onSpeakOperator={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, pitch: 0.82, onDone, onError: onDone })}
+              onSpeakSlow={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_SLOW_SPEECH_RATE, onDone, onError: onDone })}
             />
           )}
           {!!completionError && <Text style={styles.speechError}>{completionError}</Text>}

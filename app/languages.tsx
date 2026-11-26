@@ -1,6 +1,6 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useEffect, useState } from 'react';
-import { ImageBackground, Linking, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { AppState, ImageBackground, Linking, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { createAudioPlayer } from 'expo-audio';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
@@ -9,6 +9,7 @@ import { MiloLanguageBrand } from '@/components/MiloLanguageBrand';
 import { ProfileIcon } from '@/components/ProfileIcon';
 import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { ensureOpenLearnerRegistered } from '@/lib/openLearnerAccount';
+import { supabase } from '@/lib/supabase';
 import { isLearnerRegistered } from '@/lib/registrationStatus';
 import { LANGUAGES, findLanguage } from '@/lib/languages/catalog';
 import { FEATURES, LANGUAGE_SCOPE, RUSSIAN_ONLY_BUILD } from '@/lib/features';
@@ -150,14 +151,40 @@ export default function LanguagesHome() {
     };
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    let revision = 0;
+    const refresh = () => {
+      const request = ++revision;
+      void isLearnerRegistered().then(value => {
+        if (!active || request !== revision) return;
+        setRegistered(value);
+        if (!value) setQuickSettingsOpen(false);
+      });
+    };
+    // Defer session reads until after Supabase's auth callback releases its lock.
+    let authTimer: ReturnType<typeof setTimeout> | undefined;
+    const { data } = supabase.auth.onAuthStateChange(() => {
+      clearTimeout(authTimer);
+      authTimer = setTimeout(refresh, 0);
+    });
+    const app = AppState.addEventListener('change', state => { if (state === 'active') refresh(); });
+    if (Platform.OS === 'web' && typeof window !== 'undefined') window.addEventListener('storage', refresh);
+    return () => {
+      active = false; clearTimeout(authTimer); data.subscription.unsubscribe(); app.remove();
+      if (Platform.OS === 'web' && typeof window !== 'undefined') window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
   const openSupport = () => {
-    if (openingSupport) return;
+    if (!registered || openingSupport) return;
     setOpeningSupport(true);
     router.push('/feedback' as never);
     setOpeningSupport(false);
   };
 
   const openSite = () => {
+    if (!registered) return;
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const base = (process.env.EXPO_BASE_URL || '').replace(/\/$/, '');
       const target = base.endsWith('/app') ? `${base.slice(0, -4) || ''}/` : '/';
@@ -250,9 +277,10 @@ export default function LanguagesHome() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="انتقادات و پیشنهادات"
-                accessibilityState={{ disabled: openingSupport }}
-                disabled={openingSupport}
-                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
+                accessibilityState={{ disabled: !registered || openingSupport }}
+                accessibilityHint={!registered ? 'پس از ورود فعال می‌شود' : undefined}
+                disabled={!registered || openingSupport}
+                style={({ pressed }) => [styles.headerButton, !registered && styles.headerButtonDisabled, pressed && styles.pressed]}
                 onPress={openSupport}
               >
                 <LifeBuoy size={16} color={palette.forest} strokeWidth={1.9} />
@@ -260,15 +288,21 @@ export default function LanguagesHome() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="تنظیمات و قفل برنامه"
-                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
-                onPress={() => setQuickSettingsOpen(true)}
+                accessibilityState={{ disabled: !registered }}
+                accessibilityHint={!registered ? 'پس از ورود فعال می‌شود' : undefined}
+                disabled={!registered}
+                style={({ pressed }) => [styles.headerButton, !registered && styles.headerButtonDisabled, pressed && styles.pressed]}
+                onPress={() => { if (registered) setQuickSettingsOpen(true); }}
               >
                 <SlidersHorizontal size={16} color={palette.forest} strokeWidth={1.9} />
               </Pressable>
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="سایت و دانلود نسخهٔ اندروید"
-                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
+                accessibilityState={{ disabled: !registered }}
+                accessibilityHint={!registered ? 'پس از ورود فعال می‌شود' : undefined}
+                disabled={!registered}
+                style={({ pressed }) => [styles.headerButton, !registered && styles.headerButtonDisabled, pressed && styles.pressed]}
                 onPress={openSite}
               >
                 <Globe size={16} color={palette.forest} strokeWidth={1.9} />
@@ -439,5 +473,6 @@ const styles = StyleSheet.create({
   stepBadge: { width: 26, height: 26, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.sage },
   stepBadgeAccent: { backgroundColor: palette.terracottaSoft },
   stepTitle: { fontFamily: 'Beiruti', color: palette.ink, fontSize: 12.5, lineHeight: 19, textAlign: 'right', writingDirection: 'rtl' },
+  headerButtonDisabled: { opacity: 0.3 },
   pressed: { opacity: 0.84, transform: [{ scale: 0.985 }] },
 });

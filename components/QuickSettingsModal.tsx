@@ -69,6 +69,16 @@ export default function QuickSettingsModal({ visible, onClose }: Props) {
           </View>
 
           <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="قفل دستگاه"
+              onPress={() => navigate('/app-lock')}
+              style={({ pressed }) => [styles.deviceLockButton, pressed && styles.pressed]}
+            >
+              <LockKeyhole size={18} color={palette.forest} />
+              <Text style={styles.shortcutText}>قفل دستگاه</Text>
+            </Pressable>
+
             {/* Quick Voice Switch */}
             <View style={styles.quickCard}>
               <View style={styles.quickHead}>
@@ -98,14 +108,6 @@ export default function QuickSettingsModal({ visible, onClose }: Props) {
               >
                 <Download size={16} color={palette.forest} />
                 <Text style={styles.shortcutText}>پشتیبان پیشرفت</Text>
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                onPress={() => navigate('/app-lock')}
-                style={({ pressed }) => [styles.shortcutBtn, pressed && styles.pressed]}
-              >
-                <LockKeyhole size={16} color={palette.forest} />
-                <Text style={styles.shortcutText}>قفل برنامه</Text>
               </Pressable>
             </View>
 
@@ -201,6 +203,7 @@ const styles = StyleSheet.create({
   },
   switchTrackOn: { backgroundColor: palette.forest, alignItems: 'flex-end' },
   switchThumb: { width: 18, height: 18, borderRadius: 9, backgroundColor: '#FFFFFF' },
+  deviceLockButton: { minHeight: 50, borderRadius: 15, paddingHorizontal: 16, backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.border, flexDirection: 'row-reverse', alignItems: 'center', gap: 9 },
   shortcutRow: { flexDirection: 'row-reverse', gap: 10 },
   shortcutBtn: {
     flex: 1,

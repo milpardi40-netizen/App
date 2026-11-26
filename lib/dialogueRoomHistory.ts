@@ -1,3 +1,4 @@
+import type { RoomPracticeMode } from './dialogueRoomCoach';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
@@ -9,6 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export type DialogueRun = {
   /** Overall score 0..100 for the learner's lines in that run. */
   score: number;
+  mode?: RoomPracticeMode;
+  helped?: number;
   /** How many of the learner's turns were attempted. */
   attempted: number;
   /** How many learner turns exist in a full run. */

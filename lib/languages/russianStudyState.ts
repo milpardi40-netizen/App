@@ -2,7 +2,7 @@ import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
-import { STARTER_CHECKS_REVISION } from './russianPreA1';
+import { russianChecksRevisionFor } from './russianPreA1';
 import { RUSSIAN_LESSONS, RUSSIAN_LESSON_STAGES } from './russian';
 
 export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
@@ -63,7 +63,7 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     throw new Error('وضعیت ذخیره‌شدهٔ درس روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   // Validate the stored shape even for retired questions, but never grade a previous meaning.
-  const retiredChecks = lesson.levelId <= 1 && session.checksRevision !== STARTER_CHECKS_REVISION;
+  const retiredChecks = lesson.levelId <= 1 && session.checksRevision !== russianChecksRevisionFor(lessonId);
   const answers: Record<string, number> = {};
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
@@ -120,9 +120,10 @@ function serial<T>(job: () => Promise<T>): Promise<T> {
 export function saveRussianLessonSession(lessonId: string, value: RussianLessonSession): Promise<void> {
   return serial(async () => {
     // New writes come from the current UI. Migration applies on read of old persisted attempts.
-    const safe = validateSession(lessonId, { ...value, checksRevision: STARTER_CHECKS_REVISION });
+    const checksRevision = russianChecksRevisionFor(lessonId);
+    const safe = validateSession(lessonId, { ...value, checksRevision });
     const state = parseState(await readRaw());
-    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, checksRevision: STARTER_CHECKS_REVISION, updatedAt: positionTimestamp() } } }));
+    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, checksRevision, updatedAt: positionTimestamp() } } }));
     notifyLearningChange();
   });
 }

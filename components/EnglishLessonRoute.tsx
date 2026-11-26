@@ -795,6 +795,7 @@ export default function SentenceLessonScreen() {
           locale="en-US"
           onSpeak={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone })}
           onSpeakOperator={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', pitch: 0.82, onDone, onError: onDone })}
+          onSpeakSlow={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', rate: ENGLISH_SLOW_SPEECH_RATE, onDone, onError: onDone })}
         />}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}
       </View>

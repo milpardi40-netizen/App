@@ -253,7 +253,6 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
                   }
                 }}
               />
-              <DisplayTypographyCard />
             </>
           ) : !profile ? (
             <>
@@ -265,7 +264,6 @@ function ProfileEnabledScreen({ local }: { local: boolean }) {
                   <Mail size={16} color="#FFFFFF" /><Text keepColor style={styles.primaryButtonText}>ورود یا ثبت‌نام</Text>
                 </Pressable>
               </View>
-              <DisplayTypographyCard />
             </>
           ) : (
             <>

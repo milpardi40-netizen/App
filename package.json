@@ -54,7 +54,10 @@
     "validate:web-shell": "node scripts/verify-web-shell.mjs",
     "apk:report": "node scripts/apk-report.mjs",
     "podcast:audio": "node scripts/generate-podcast-audio.mjs",
-    "validate:background-notifications": "node scripts/verify-background-notifications.mjs"
+    "validate:background-notifications": "node scripts/verify-background-notifications.mjs",
+    "validate:dialogue-room": "node scripts/verify-dialogue-room.cjs",
+    "validate:russian-pre-a1-masculine": "node scripts/verify-russian-pre-a1-masculine.cjs",
+    "validate:russian-practical": "node scripts/verify-russian-practical.cjs"
   },
   "dependencies": {
     "@expo-google-fonts/beiruti": "^0.4.1",
@@ -116,6 +119,7 @@
     "eslint": "9.39.5",
     "eslint-config-expo": "~10.0.0",
     "espeak-ng": "1.0.2",
+    "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2"
   }
 }
