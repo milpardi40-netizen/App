@@ -2,8 +2,8 @@
  "schema": 1,
  "language": "fr",
  "band": "A1",
- "version": 9,
- "generatedAt": "2026-11-15",
+ "version": 10,
+ "generatedAt": "2026-11-25",
  "source": "factory v3 · hand-drafted lines: 10% sample review · generated lines: 100% linguistic review (72 reviewed frames + every line) · automatic gates · human native sign-off unavailable in this environment",
  "sentences": [
   {
@@ -1937,16 +1937,6 @@
    "audio": "milo-segment:fr-A1.mp3?start=267542&dur=940"
   },
   {
-   "id": "fr-a1-194",
-   "text": "Je n'ai pas d'argent sur moi.",
-   "fa": "پول همراهم نیست.",
-   "pattern": "Je n'ai pas d'argent sur moi.",
-   "targetWords": [
-    "argent"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=268482&dur=1646"
-  },
-  {
    "id": "fr-a1-195",
    "text": "Où changer de l'argent ?",
    "fa": "کجا پول عوض کنم؟",
@@ -2088,314 +2078,285 @@
   },
   {
    "id": "fr-a1-209",
-   "text": "Je peux maintenant mieux comprendre «mort», «politique» et «ca».",
-   "fa": "اکنون میتوانم «mort»، «politique» و «ca» را بهتر بفهمم.",
+   "text": "Je peux maintenant mieux comprendre «dire», «quoi» et «mort».",
+   "fa": "اکنون میتوانم «dire»، «quoi» و «mort» را بهتر بفهمم.",
    "pattern": "Je peux maintenant mieux comprendre <W1>, <W2> et <W3>.",
    "targetWords": [
-    "mort",
-    "politique",
-    "ca"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=289798&dur=3396"
+    "dire",
+    "quoi",
+    "mort"
+   ]
   },
   {
    "id": "fr-a1-210",
-   "text": "Ce sont «lors» et «serait».",
-   "fa": "اینها «lors» و «serait» هستند.",
+   "text": "Ce sont «politique» et «ca».",
+   "fa": "اینها «politique» و «ca» هستند.",
    "pattern": "Ce sont <W1> et <W2>.",
    "targetWords": [
-    "lors",
-    "serait"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=293194&dur=1698"
+    "politique",
+    "ca"
+   ]
   },
   {
    "id": "fr-a1-211",
-   "text": "Le professeur explique encore «avais» et «saint».",
-   "fa": "معلم باز هم «avais» و «saint» را توضیح میدهد.",
+   "text": "Le professeur explique encore «lors» et «serait».",
+   "fa": "معلم باز هم «lors» و «serait» را توضیح میدهد.",
    "pattern": "Le professeur explique encore <W1> et <W2>.",
    "targetWords": [
-    "avais",
-    "saint"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=294892&dur=2717"
+    "lors",
+    "serait"
+   ]
   },
   {
    "id": "fr-a1-212",
-   "text": "Dans le texte, on voit «étaient» et «aurait».",
-   "fa": "در متن «étaient» و «aurait» دیده میشود.",
+   "text": "Dans le texte, on voit «avais» et «saint».",
+   "fa": "در متن «avais» و «saint» دیده میشود.",
    "pattern": "Dans le texte, on voit <W1> et <W2>.",
    "targetWords": [
-    "étaient",
-    "aurait"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=297609&dur=2377"
+    "avais",
+    "saint"
+   ]
   },
   {
    "id": "fr-a1-213",
-   "text": "Nous avons «suite» et «société» ici.",
-   "fa": "ما «suite» و «société» را اینجا داریم.",
+   "text": "Nous avons «étaient» et «aurait» ici.",
+   "fa": "ما «étaient» و «aurait» را اینجا داریم.",
    "pattern": "Nous avons <W1> et <W2> ici.",
    "targetWords": [
-    "suite",
-    "société"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=299986&dur=2377"
+    "étaient",
+    "aurait"
+   ]
   },
   {
    "id": "fr-a1-214",
-   "text": "C'est «celle».",
-   "fa": "این «celle» است.",
+   "text": "C'est «suite».",
+   "fa": "این «suite» است.",
    "pattern": "C'est <W1>.",
    "targetWords": [
-    "celle"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=302363&dur=940"
+    "suite"
+   ]
   },
   {
    "id": "fr-a1-215",
-   "text": "J'ai «ailleurs» ici.",
-   "fa": "«ailleurs» را اینجا دارم.",
+   "text": "J'ai «société» ici.",
+   "fa": "«société» را اینجا دارم.",
    "pattern": "J'ai <W1> ici.",
    "targetWords": [
-    "ailleurs"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=303303&dur=1332"
+    "société"
+   ]
   },
   {
    "id": "fr-a1-216",
-   "text": "Je vois le mot «jeu».",
-   "fa": "واژهٔ «jeu» را میبینم.",
+   "text": "Je vois le mot «celle».",
+   "fa": "واژهٔ «celle» را میبینم.",
    "pattern": "Je vois le mot <W1>.",
    "targetWords": [
-    "jeu"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=304635&dur=1358"
+    "celle"
+   ]
   },
   {
    "id": "fr-a1-217",
-   "text": "Je peux mieux comprendre «effet».",
-   "fa": "میتوانم «effet» را بهتر بفهمم.",
+   "text": "Je peux mieux comprendre «ailleurs».",
+   "fa": "میتوانم «ailleurs» را بهتر بفهمم.",
    "pattern": "Je peux mieux comprendre <W1>.",
    "targetWords": [
-    "effet"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=305993&dur=1829"
+    "ailleurs"
+   ]
   },
   {
    "id": "fr-a1-218",
-   "text": "Je peux maintenant mieux comprendre «général», «jean» et «site».",
-   "fa": "اکنون میتوانم «général»، «jean» و «site» را بهتر بفهمم.",
+   "text": "Je peux maintenant mieux comprendre «jeu», «effet» et «général».",
+   "fa": "اکنون میتوانم «jeu»، «effet» و «général» را بهتر بفهمم.",
    "pattern": "Je peux maintenant mieux comprendre <W1>, <W2> et <W3>.",
    "targetWords": [
-    "général",
-    "jean",
-    "site"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=307822&dur=3448"
+    "jeu",
+    "effet",
+    "général"
+   ]
   },
   {
    "id": "fr-a1-219",
-   "text": "Ce sont «loi» et «rapport».",
-   "fa": "اینها «loi» و «rapport» هستند.",
+   "text": "Ce sont «jean» et «site».",
+   "fa": "اینها «jean» و «site» هستند.",
    "pattern": "Ce sont <W1> et <W2>.",
    "targetWords": [
-    "loi",
-    "rapport"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=311270&dur=1698"
+    "jean",
+    "site"
+   ]
   },
   {
    "id": "fr-a1-220",
-   "text": "Le professeur explique encore «fut» et «gouvernement».",
-   "fa": "معلم باز هم «fut» و «gouvernement» را توضیح میدهد.",
+   "text": "Le professeur explique encore «loi» et «rapport».",
+   "fa": "معلم باز هم «loi» و «rapport» را توضیح میدهد.",
    "pattern": "Le professeur explique encore <W1> et <W2>.",
    "targetWords": [
-    "fut",
-    "gouvernement"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=312968&dur=2978"
+    "loi",
+    "rapport"
+   ]
   },
   {
    "id": "fr-a1-221",
-   "text": "Dans le texte, on voit «guerre» et «article».",
-   "fa": "در متن «guerre» و «article» دیده میشود.",
+   "text": "Dans le texte, on voit «fut» et «gouvernement».",
+   "fa": "در متن «fut» و «gouvernement» دیده میشود.",
    "pattern": "Dans le texte, on voit <W1> et <W2>.",
    "targetWords": [
-    "guerre",
-    "article"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=315946&dur=2482"
+    "fut",
+    "gouvernement"
+   ]
   },
   {
    "id": "fr-a1-222",
-   "text": "Nous avons «président» et «dieu» ici.",
-   "fa": "ما «président» و «dieu» را اینجا داریم.",
+   "text": "Nous avons «guerre» et «article» ici.",
+   "fa": "ما «guerre» و «article» را اینجا داریم.",
    "pattern": "Nous avons <W1> et <W2> ici.",
    "targetWords": [
-    "président",
-    "dieu"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=318428&dur=2220"
+    "guerre",
+    "article"
+   ]
   },
   {
    "id": "fr-a1-223",
-   "text": "C'est «système».",
-   "fa": "این «système» است.",
+   "text": "C'est «président».",
+   "fa": "این «président» است.",
    "pattern": "C'est <W1>.",
    "targetWords": [
-    "système"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=320648&dur=1176"
+    "président"
+   ]
   },
   {
    "id": "fr-a1-224",
-   "text": "J'ai «notamment» ici.",
-   "fa": "«notamment» را اینجا دارم.",
+   "text": "J'ai «dieu» ici.",
+   "fa": "«dieu» را اینجا دارم.",
    "pattern": "J'ai <W1> ici.",
    "targetWords": [
-    "notamment"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=321824&dur=1411"
+    "dieu"
+   ]
   },
   {
    "id": "fr-a1-225",
-   "text": "Je vois le mot «corps».",
-   "fa": "واژهٔ «corps» را میبینم.",
+   "text": "Je vois le mot «système».",
+   "fa": "واژهٔ «système» را میبینم.",
    "pattern": "Je vois le mot <W1>.",
    "targetWords": [
-    "corps"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=323235&dur=1384"
+    "système"
+   ]
   },
   {
    "id": "fr-a1-226",
-   "text": "Je peux mieux comprendre «or».",
-   "fa": "میتوانم «or» را بهتر بفهمم.",
+   "text": "Je peux mieux comprendre «notamment».",
+   "fa": "میتوانم «notamment» را بهتر بفهمم.",
    "pattern": "Je peux mieux comprendre <W1>.",
    "targetWords": [
-    "or"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=324619&dur=1750"
+    "notamment"
+   ]
   },
   {
    "id": "fr-a1-227",
-   "text": "Je peux maintenant mieux comprendre «plutôt», «arrive» et «avaient».",
-   "fa": "اکنون میتوانم «plutôt»، «arrive» و «avaient» را بهتر بفهمم.",
+   "text": "Je peux maintenant mieux comprendre «p», «corps» et «or».",
+   "fa": "اکنون میتوانم «p»، «corps» و «or» را بهتر بفهمم.",
    "pattern": "Je peux maintenant mieux comprendre <W1>, <W2> et <W3>.",
    "targetWords": [
-    "plutôt",
-    "arrive",
-    "avaient"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=326369&dur=3474"
+    "p",
+    "corps",
+    "or"
+   ]
   },
   {
    "id": "fr-a1-228",
-   "text": "Ce sont «chef» et «europe».",
-   "fa": "اینها «chef» و «europe» هستند.",
+   "text": "Ce sont «plutôt» et «avaient».",
+   "fa": "اینها «plutôt» و «avaient» هستند.",
    "pattern": "Ce sont <W1> et <W2>.",
    "targetWords": [
-    "chef",
-    "europe"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=329843&dur=1829"
+    "plutôt",
+    "avaient"
+   ]
   },
   {
    "id": "fr-a1-229",
-   "text": "Le professeur explique encore «fort» et «public».",
-   "fa": "معلم باز هم «fort» و «public» را توضیح میدهد.",
+   "text": "Le professeur explique encore «chef» et «europe».",
+   "fa": "معلم باز هم «chef» و «europe» را توضیح میدهد.",
    "pattern": "Le professeur explique encore <W1> et <W2>.",
    "targetWords": [
-    "fort",
-    "public"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=331672&dur=2926"
+    "chef",
+    "europe"
+   ]
   },
   {
    "id": "fr-a1-230",
-   "text": "Dans le texte, on voit «ayant» et «terre».",
-   "fa": "در متن «ayant» و «terre» دیده میشود.",
+   "text": "Dans le texte, on voit «fort» et «public».",
+   "fa": "در متن «fort» و «public» دیده میشود.",
    "pattern": "Dans le texte, on voit <W1> et <W2>.",
    "targetWords": [
-    "ayant",
-    "terre"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=334598&dur=2403"
+    "fort",
+    "public"
+   ]
   },
   {
    "id": "fr-a1-231",
-   "text": "Nous avons «titre» et «mise» ici.",
-   "fa": "ما «titre» و «mise» را اینجا داریم.",
+   "text": "Nous avons «ayant» et «terre» ici.",
+   "fa": "ما «ayant» و «terre» را اینجا داریم.",
    "pattern": "Nous avons <W1> et <W2> ici.",
    "targetWords": [
-    "titre",
-    "mise"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=337001&dur=2116"
+    "ayant",
+    "terre"
+   ]
   },
   {
    "id": "fr-a1-232",
-   "text": "C'est «plan».",
-   "fa": "این «plan» است.",
+   "text": "C'est «titre».",
+   "fa": "این «titre» است.",
    "pattern": "C'est <W1>.",
    "targetWords": [
-    "plan"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=339117&dur=940"
+    "titre"
+   ]
   },
   {
    "id": "fr-a1-233",
-   "text": "J'ai «saison» ici.",
-   "fa": "«saison» را اینجا دارم.",
+   "text": "J'ai «mise» ici.",
+   "fa": "«mise» را اینجا دارم.",
    "pattern": "J'ai <W1> ici.",
    "targetWords": [
-    "saison"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=340057&dur=1384"
+    "mise"
+   ]
   },
   {
    "id": "fr-a1-234",
-   "text": "Je vois le mot «sait».",
-   "fa": "واژهٔ «sait» را میبینم.",
+   "text": "Je vois le mot «saison».",
+   "fa": "واژهٔ «saison» را میبینم.",
    "pattern": "Je vois le mot <W1>.",
    "targetWords": [
-    "sait"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=341441&dur=1332"
+    "saison"
+   ]
   },
   {
    "id": "fr-a1-235",
-   "text": "Je peux mieux comprendre «type».",
-   "fa": "میتوانم «type» را بهتر بفهمم.",
+   "text": "Je peux mieux comprendre «sait».",
+   "fa": "میتوانم «sait» را بهتر بفهمم.",
    "pattern": "Je peux mieux comprendre <W1>.",
    "targetWords": [
-    "type"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=342773&dur=1802"
+    "sait"
+   ]
   },
   {
    "id": "fr-a1-236",
-   "text": "Je peux maintenant mieux comprendre «afin», «ah» et «choix».",
-   "fa": "اکنون میتوانم «afin»، «ah» و «choix» را بهتر بفهمم.",
+   "text": "Je peux maintenant mieux comprendre «type», «afin» et «ah».",
+   "fa": "اکنون میتوانم «type»، «afin» و «ah» را بهتر بفهمم.",
    "pattern": "Je peux maintenant mieux comprendre <W1>, <W2> et <W3>.",
    "targetWords": [
+    "type",
     "afin",
-    "ah",
-    "choix"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=344575&dur=3187"
+    "ah"
+   ]
   },
   {
    "id": "fr-a1-237",
-   "text": "Ce sont «long» et «situation».",
-   "fa": "اینها «long» و «situation» هستند.",
+   "text": "Ce sont «choix» et «situation».",
+   "fa": "اینها «choix» و «situation» هستند.",
    "pattern": "Ce sont <W1> et <W2>.",
    "targetWords": [
-    "long",
+    "choix",
     "situation"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=347762&dur=1933"
+   ]
   },
   {
    "id": "fr-a1-238",
@@ -2405,189 +2366,171 @@
    "targetWords": [
     "yeux",
     "amour"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=349695&dur=2743"
+   ]
   },
   {
    "id": "fr-a1-239",
-   "text": "Dans le texte, on voit «base» et «nord».",
-   "fa": "در متن «base» و «nord» دیده میشود.",
+   "text": "Dans le texte, on voit «base» et «h».",
+   "fa": "در متن «base» و «h» دیده میشود.",
    "pattern": "Dans le texte, on voit <W1> et <W2>.",
    "targetWords": [
     "base",
-    "nord"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=352438&dur=2377"
+    "h"
+   ]
   },
   {
    "id": "fr-a1-240",
-   "text": "Nous avons «devrait» et «donné» ici.",
-   "fa": "ما «devrait» و «donné» را اینجا داریم.",
+   "text": "Nous avons «nord» et «devrait» ici.",
+   "fa": "ما «nord» و «devrait» را اینجا داریم.",
    "pattern": "Nous avons <W1> et <W2> ici.",
    "targetWords": [
-    "devrait",
-    "donné"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=354815&dur=2064"
+    "nord",
+    "devrait"
+   ]
   },
   {
    "id": "fr-a1-241",
-   "text": "C'est «grâce».",
-   "fa": "این «grâce» است.",
+   "text": "C'est «donné».",
+   "fa": "این «donné» است.",
    "pattern": "C'est <W1>.",
    "targetWords": [
-    "grâce"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=356879&dur=1019"
+    "donné"
+   ]
   },
   {
    "id": "fr-a1-242",
-   "text": "J'ai «moyen» ici.",
-   "fa": "«moyen» را اینجا دارم.",
+   "text": "J'ai «e» ici.",
+   "fa": "«e» را اینجا دارم.",
    "pattern": "J'ai <W1> ici.",
    "targetWords": [
-    "moyen"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=357898&dur=1384"
+    "e"
+   ]
   },
   {
    "id": "fr-a1-243",
-   "text": "Je vois le mot «ordre».",
-   "fa": "واژهٔ «ordre» را میبینم.",
+   "text": "Je vois le mot «grâce».",
+   "fa": "واژهٔ «grâce» را میبینم.",
    "pattern": "Je vois le mot <W1>.",
    "targetWords": [
-    "ordre"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=359282&dur=1437"
+    "grâce"
+   ]
   },
   {
    "id": "fr-a1-244",
-   "text": "Je peux mieux comprendre «étant».",
-   "fa": "میتوانم «étant» را بهتر بفهمم.",
+   "text": "Je peux mieux comprendre «moyen».",
+   "fa": "میتوانم «moyen» را بهتر بفهمم.",
    "pattern": "Je peux mieux comprendre <W1>.",
    "targetWords": [
-    "étant"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=360719&dur=1829"
+    "moyen"
+   ]
   },
   {
    "id": "fr-a1-245",
-   "text": "Je peux maintenant mieux comprendre «but», «manière» et «mars».",
-   "fa": "اکنون میتوانم «but»، «manière» و «mars» را بهتر بفهمم.",
+   "text": "Je peux maintenant mieux comprendre «ordre», «étant» et «but».",
+   "fa": "اکنون میتوانم «ordre»، «étant» و «but» را بهتر بفهمم.",
    "pattern": "Je peux maintenant mieux comprendre <W1>, <W2> et <W3>.",
    "targetWords": [
-    "but",
-    "manière",
-    "mars"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=362548&dur=3448"
+    "ordre",
+    "étant",
+    "but"
+   ]
   },
   {
    "id": "fr-a1-246",
-   "text": "Ce sont «pierre» et «québec».",
-   "fa": "اینها «pierre» و «québec» هستند.",
+   "text": "Ce sont «manière» et «mars».",
+   "fa": "اینها «manière» و «mars» هستند.",
    "pattern": "Ce sont <W1> et <W2>.",
    "targetWords": [
-    "pierre",
-    "québec"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=365996&dur=1829"
+    "manière",
+    "mars"
+   ]
   },
   {
    "id": "fr-a1-247",
-   "text": "Le professeur explique encore «semble» et «sujet».",
-   "fa": "معلم باز هم «semble» و «sujet» را توضیح میدهد.",
+   "text": "Le professeur explique encore «pierre» et «québec».",
+   "fa": "معلم باز هم «pierre» و «québec» را توضیح میدهد.",
    "pattern": "Le professeur explique encore <W1> et <W2>.",
    "targetWords": [
-    "semble",
-    "sujet"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=367825&dur=2926"
+    "pierre",
+    "québec"
+   ]
   },
   {
    "id": "fr-a1-248",
-   "text": "Dans le texte, on voit «truc» et «agit».",
-   "fa": "در متن «truc» و «agit» دیده میشود.",
+   "text": "Dans le texte, on voit «semble» et «sujet».",
+   "fa": "در متن «semble» و «sujet» دیده میشود.",
    "pattern": "Dans le texte, on voit <W1> et <W2>.",
    "targetWords": [
-    "truc",
-    "agit"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=370751&dur=2456"
+    "semble",
+    "sujet"
+   ]
   },
   {
    "id": "fr-a1-249",
-   "text": "Nous avons «ministre» et «parfois» ici.",
-   "fa": "ما «ministre» و «parfois» را اینجا داریم.",
+   "text": "Nous avons «truc» et «agit» ici.",
+   "fa": "ما «truc» و «agit» را اینجا داریم.",
    "pattern": "Nous avons <W1> et <W2> ici.",
    "targetWords": [
-    "ministre",
-    "parfois"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=373207&dur=2403"
+    "truc",
+    "agit"
+   ]
   },
   {
    "id": "fr-a1-250",
-   "text": "C'est «sud».",
-   "fa": "این «sud» است.",
+   "text": "C'est «ministre».",
+   "fa": "این «ministre» است.",
    "pattern": "C'est <W1>.",
    "targetWords": [
-    "sud"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=375610&dur=993"
+    "ministre"
+   ]
   },
   {
    "id": "fr-a1-251",
-   "text": "J'ai «super» ici.",
-   "fa": "«super» را اینجا دارم.",
+   "text": "J'ai «parfois» ici.",
+   "fa": "«parfois» را اینجا دارم.",
    "pattern": "J'ai <W1> ici.",
    "targetWords": [
-    "super"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=376603&dur=1411"
+    "parfois"
+   ]
   },
   {
    "id": "fr-a1-252",
-   "text": "Je vois le mot «unis».",
-   "fa": "واژهٔ «unis» را میبینم.",
+   "text": "Je vois le mot «super».",
+   "fa": "واژهٔ «super» را میبینم.",
    "pattern": "Je vois le mot <W1>.",
    "targetWords": [
-    "unis"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=378014&dur=1358"
+    "super"
+   ]
   },
   {
    "id": "fr-a1-253",
-   "text": "Je peux mieux comprendre «vidéo».",
-   "fa": "میتوانم «vidéo» را بهتر بفهمم.",
+   "text": "Je peux mieux comprendre «unis».",
+   "fa": "میتوانم «unis» را بهتر بفهمم.",
    "pattern": "Je peux mieux comprendre <W1>.",
    "targetWords": [
-    "vidéo"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=379372&dur=1933"
+    "unis"
+   ]
   },
   {
    "id": "fr-a1-254",
-   "text": "Je peux maintenant mieux comprendre «art», «région» et «entreprise».",
-   "fa": "اکنون میتوانم «art»، «région» و «entreprise» را بهتر بفهمم.",
+   "text": "Je peux maintenant mieux comprendre «vidéo», «art» et «région».",
+   "fa": "اکنون میتوانم «vidéo»، «art» و «région» را بهتر بفهمم.",
    "pattern": "Je peux maintenant mieux comprendre <W1>, <W2> et <W3>.",
    "targetWords": [
+    "vidéo",
     "art",
-    "région",
-    "entreprise"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=381305&dur=3736"
+    "région"
+   ]
   },
   {
    "id": "fr-a1-255",
-   "text": "Ce sont «longtemps» et «match».",
-   "fa": "اینها «longtemps» و «match» هستند.",
+   "text": "Ce sont «entreprise» et «match».",
+   "fa": "اینها «entreprise» و «match» هستند.",
    "pattern": "Ce sont <W1> et <W2>.",
    "targetWords": [
-    "longtemps",
+    "entreprise",
     "match"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=385041&dur=1724"
+   ]
   },
   {
    "id": "fr-a1-256",
@@ -2597,8 +2540,7 @@
    "targetWords": [
     "permet",
     "voit"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=386765&dur=2847"
+   ]
   },
   {
    "id": "fr-a1-257",
@@ -2609,8 +2551,7 @@
     "importe",
     "important",
     "juin"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=389612&dur=2508"
+   ]
   },
   {
    "id": "fr-a1-258",
@@ -2620,8 +2561,7 @@
    "targetWords": [
     "lorsque",
     "peur"
-   ],
-   "audio": "milo-segment:fr-A1.mp3?start=392120&dur=2168"
+   ]
   }
  ]
 }

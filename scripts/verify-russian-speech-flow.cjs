@@ -45,7 +45,8 @@ const esbuild = require('esbuild');
   assert.equal(global.__utterances[1].options.language, 'ru-RU');
   assert.equal(global.__utterances[1].options.rate, .5);
   const screen = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
-  assert(screen.includes('sessionReady || stage !== 1 || !current') && screen.includes('speak(current.text, pace(\'normal\'))'));
-  assert(screen.includes('lesson.id, sessionReady, stage, sentenceIndex, current?.text, speak'));
+  assert(screen.includes('if (!sessionReady || !current) return;')
+    && screen.includes("speakForTarget(current.text, stage === 3 ? .68 : pace('normal')"));
+  assert(screen.includes('[lesson.id, sessionReady, stage, sentenceIndex, current?.id, current?.text'));
   console.log('Russian speech: automatic main-sentence hook, serialized stop, latest-request cancellation and Android/iOS language checks passed.');
 })().catch(error => { console.error(error); process.exit(1); });

@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import type { Skill } from '@/lib/englishSupplement/content';
 import { LESSON_STAGE_VERSION, resumeStage } from '@/lib/lessonStages';
-import { isLessonConversationSession, type LessonConversationSession } from '@/lib/lessonConversation';
 import { ARABIC_ENGINE_STEPS } from './engine';
 
 export const ARABIC_STUDY_KEY = 'arabic_study_state_v1';
@@ -21,7 +20,6 @@ export interface ArabicLessonSession {
   evidencePassed: boolean;
   attempt?: ArabicLessonAttempt;
   attemptEvidence?: Record<string, boolean>;
-  conversation?: LessonConversationSession;
 }
 
 export interface ArabicCourseLessonEvidence {
@@ -80,8 +78,7 @@ export function parseArabicStudy(raw: string | null): ArabicStudyState {
             !value.attempt.id ||
             value.attempt.id.length > 128)) ||
         (value.attemptEvidence !== undefined &&
-          (!value.attempt || !isRecord(value.attemptEvidence) || Object.values(value.attemptEvidence).some(r => typeof r !== 'boolean'))) ||
-        (value.conversation !== undefined && !isLessonConversationSession(value.conversation)),
+          (!value.attempt || !isRecord(value.attemptEvidence) || Object.values(value.attemptEvidence).some(r => typeof r !== 'boolean'))),
     )
   ) {
     throw Error('اطلاعات جلسهٔ عربی معتبر نیست؛ داده‌های قبلی حفظ شدند.');

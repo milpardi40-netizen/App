@@ -9,6 +9,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
 import BlindListeningList from '@/components/BlindListeningList';
 import LessonCelebration, { type CelebrationStats } from '@/components/LessonCelebration';
+import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import { finishLessonRewards } from '@/lib/lessonRewards';
 import { trackLessonCompleted, trackLessonStarted, trackStageReached } from '@/lib/analyticsSession';
 import { CHUNK_THRESHOLD, lessonChunks, loadCompletedChunks, markChunkDone } from '@/lib/lessonChunks';
@@ -50,8 +51,6 @@ import { EnglishC1ExtendedModel } from '@/components/EnglishC1ExtendedModel';
 import { ENGLISH_ENGINE_STEPS, getLessonPatterns, getLessonVocabulary } from '@/lib/englishLearningEngine';
 import SpeakCheck from '@/components/SpeakCheck';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
-import LessonConversationRoom from '@/components/LessonConversationRoom';
-import RealConversationEntry from '@/components/RealConversationEntry';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { ENGLISH_LEVEL_GRADIENTS } from '@/components/EnglishUI';
@@ -65,7 +64,6 @@ import { PAID_AI_ENABLED, PAID_AI_DISABLED_MESSAGE } from '@/lib/paidAI';
 import { ENGLISH_NATURAL_SPEECH_RATE, ENGLISH_NORMAL_SPEECH_RATE, ENGLISH_SLOW_SPEECH_RATE, playResponsiveSpeech, stopResponsiveSpeech, warmSpeech } from '@/lib/responsiveSpeech';
 import { ensureRecordedAudio } from '@/lib/content/coreAudio';
 import { nextLessonInOrder, previousSentenceIndex } from '@/lib/englishLessonNavigation';
-import type { LessonConversationSession } from '@/lib/lessonConversation';
 import { B1_INDEPENDENT_UNITS } from '@/lib/courseContentB1Independent';
 import { B2_UPPER_INTERMEDIATE_UNITS } from '@/lib/courseContentB2UpperIntermediate';
 import { C1_ADVANCED_UNITS } from '@/lib/courseContentC1Advanced';
@@ -73,7 +71,6 @@ import { C1_TOPIC_PRACTICE, C1_SCENARIOS, C1_APPLICATION_PRACTICE } from '@/lib/
 import { C1_ADDITIONAL_APPLICATION } from '@/lib/englishC1AppliedAssessment';
 import { B2_GUIDANCE, B2_PRODUCTION } from '@/lib/englishB2Practice';
 import { A2_FOUNDATION_LESSONS } from '@/lib/courseContentA2Foundation';
-import { conversationPracticeForLesson } from '@/lib/branchingConversation';
 
 const stages = ENGLISH_ENGINE_STEPS;
 
@@ -92,7 +89,7 @@ export default function SentenceLessonScreen() {
   const assessmentResult = useRef<{ correct: number; total: number } | null>(null);
   useEffect(() => { assessmentResult.current = null; }, [lesson.id]);
   const [chunkCelebration, setChunkCelebration] = useState<{ chunk: number; total: number; done: number; nextStart: number } | null>(null);
-  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; onFreeConversation?: () => void; readiness?: number };
+  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
   const [completionError, setCompletionError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -139,7 +136,6 @@ export default function SentenceLessonScreen() {
   const [resetting, setResetting] = useState(false);
   const [reload, setReload] = useState(0);
   const [attemptEvidence, setAttemptEvidence] = useState<Record<string, boolean> | undefined>();
-  const [conversation, setConversation] = useState<LessonConversationSession | undefined>();
   const completing=useRef(false);
   const loadedLesson=useRef<string|null>(null);
   const attempt = useRef<LessonAttempt | undefined>(undefined);
@@ -195,7 +191,6 @@ export default function SentenceLessonScreen() {
       if (!alive || screenRun.current !== run) return;
       attempt.current = saved.attempt;
       setAttemptEvidence(saved.attempt ? (saved.attemptEvidence ?? {}) : undefined);
-      setConversation(saved.conversation);
       setStage(Math.min(saved.stage, stages.length - 1));
       setSentenceIndex(Math.min(saved.sentenceIndex, lesson.sentences.length - 1));
       setRevealed(saved.revealed);
@@ -216,12 +211,12 @@ export default function SentenceLessonScreen() {
     let currentSave = true;
     const run = screenRun.current;
     if (sessionReady && loadedLesson.current === lesson.id && !completing.current && !resettingRef.current && !sessionError) {
-      void saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence, conversation })
+      void saveLessonSession(lesson.id, { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, evidencePassed, attempt: attempt.current, attemptEvidence })
         .then(() => { if (currentSave && screenRun.current === run) setSessionError(''); })
         .catch(() => { if (currentSave && screenRun.current === run) setSessionError('جلسه ذخیره نشد؛ درس را دوباره باز کنید.'); });
     }
     return () => { currentSave = false; };
-  }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, evidencePassed, attemptEvidence, resetting, sessionError]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, evidencePassed, attemptEvidence, resetting, sessionError]);
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(recorder, 250);
   const [evaluatingSpeech, setEvaluatingSpeech] = useState(false);
@@ -242,10 +237,6 @@ export default function SentenceLessonScreen() {
   }, [chunks.chunked, chunks.start, lesson.id]);
   const chunkLastIndex = chunks.chunked ? chunks.end - 1 : lesson.sentences.length - 1;
   const current = lesson.sentences[sentenceIndex];
-  const speakConversationLine = useCallback((text: string, onDone: () => void) => {
-    playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone });
-  }, []);
-  const stopConversationSpeech = useCallback(() => { void stopResponsiveSpeech(); }, []);
   const vocabulary = useMemo(() => getLessonVocabulary(lesson), [lesson]);
   // One pattern per slot: the same «I am + feeling» repeated eight times is noise, not teaching.
   // Pre-A1 lessons are built around 1–2 slots, so the grammar stage shows each slot once.
@@ -520,7 +511,7 @@ export default function SentenceLessonScreen() {
       dueReviews,
       review: () => router.replace('/review' as never),
       newAchievements: rewards.medals,
-      levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness('en', auditLessonsFromEnglish(SENTENCE_LESSONS)), lesson.levelId)?.readiness, title: COURSE_LEVELS.find(item => item.id === lesson.levelId)?.title ?? '', lessons: SENTENCE_LESSONS.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: '/learn/en/studio', params: { level: String(lesson.levelId), mode: 'warmup' } } as never), onFreeConversation: () => router.replace({ pathname: '/conversation-rooms/[language]', params: { language: 'en', level: String(lesson.levelId), mode: 'level-free' } } as never) } : undefined,
+      levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness('en', auditLessonsFromEnglish(SENTENCE_LESSONS)), lesson.levelId)?.readiness, title: COURSE_LEVELS.find(item => item.id === lesson.levelId)?.title ?? '', lessons: SENTENCE_LESSONS.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: '/learn/en/studio', params: { level: String(lesson.levelId), mode: 'warmup' } } as never) } : undefined,
     });
     } catch { setCompletionError('پایان درس ذخیره نشد؛ دوباره تلاش کنید.'); }
     finally { completing.current=false; setSaving(false); }
@@ -793,25 +784,18 @@ export default function SentenceLessonScreen() {
         /> : null}
         {stage === 8 && lesson.levelId >= 4 ? <EnglishB2Scenario key={`${lesson.id}-scenario`} lessonId={lesson.id} speak={speak} scenario={C1_SCENARIOS[lesson.id]} /> : null}
         {stage === 8 && lesson.levelId >= 5 ? <EnglishC1ExtendedModel key={`${lesson.id}-extended-model`} lessonId={lesson.id} speak={speak} /> : null}
-        {stage === 9 && <>
-          <LessonConversationRoom
-            key={lesson.id}
-            courseId="en"
-            lessonId={lesson.id}
-            levelId={lesson.levelId}
-            situation={lesson.situation}
-            partnerRole="طرف مقابل"
-            dialogue={lesson.dialogue}
-            fallback={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
-            locale="en-US"
-            onSpeak={speakConversationLine}
-            onStop={stopConversationSpeech}
-            initialSession={conversation}
-            onSessionChange={setConversation}
-            semanticPractice={conversationPracticeForLesson(lesson, 'en-US')}
-          />
-          <RealConversationEntry language="en" lessonId={lesson.id} lessonTitle={lesson.title} levelId={lesson.levelId} situation={lesson.situation} />
-        </>}
+        {stage === 9 && <LessonDialogueRoom
+          key={lesson.id}
+          language="en"
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          levelId={lesson.levelId}
+          situation={lesson.situation}
+          lines={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
+          locale="en-US"
+          onSpeak={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone })}
+          onSpeakOperator={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', pitch: 0.82, onDone, onError: onDone })}
+        />}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}
       </View>
         <View style={{ height: bottomSpacer }} />
@@ -843,7 +827,7 @@ export default function SentenceLessonScreen() {
         </View>
       ) : null}
       <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(SENTENCE_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
-      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined, onFreeConversation: celebration.levelFinished.onFreeConversation ? () => { const go = celebration.levelFinished!.onFreeConversation!; setCelebration(null); go(); } : undefined } : undefined} />
+      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );
 }
@@ -918,9 +902,6 @@ const styles = StyleSheet.create({
   stageEyebrow: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs + 2, fontWeight: '400', color: Palette.primary, marginBottom: 4, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch' },
   stageTitle: { fontFamily: Typography.fontFamily, fontSize: 27, lineHeight: 36, fontWeight: '400', color: Palette.ink, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch' },
   stageDesc: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm + 2, fontWeight: '400', color: Palette.text, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch', lineHeight: 23, marginTop: Spacing.sm },
-  optionalConversationToggle: { alignSelf: 'stretch', minHeight: 44, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Palette.border, borderRadius: Radius.lg, backgroundColor: Palette.surface, paddingHorizontal: Spacing.md, marginTop: Spacing.md },
-  optionalConversationToggleText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Palette.primaryDark, textAlign: 'center', writingDirection: 'rtl' },
-  optionalConversationExtras: { width: '100%', gap: Spacing.md, marginTop: Spacing.md },
   situation: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md + 2, fontWeight: '400', color: Palette.text, textAlign: 'right', writingDirection: 'rtl', alignSelf: 'stretch', lineHeight: 27, marginTop: Spacing.md },
   promiseCard: { width: '100%', borderRadius: Radius.xl, backgroundColor: Palette.primarySoft, borderWidth: 1, borderColor: '#DDE2FF', padding: Spacing.lg, marginTop: Spacing.xl },
   teachingCard: { width: '100%', borderRadius: Radius.xl, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: Palette.border, padding: Spacing.lg, marginTop: Spacing.lg },

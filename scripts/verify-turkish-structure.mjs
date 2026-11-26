@@ -268,18 +268,18 @@ const EXPECTED_B1_SURVIVAL_TITLES = [
 check(english.SENTENCE_LESSONS.length === 274, 'English baseline lesson count (274 at release 14) holds');
 check(english.SENTENCE_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 4852, 'English baseline sentence count (4852 at release 14) holds');
 // Russian Pre-A1 (28 zero-to-dialogue lessons, 8 sentences each) + 29 A1 lessons (16 sentences each).
-check(russian.RUSSIAN_LESSONS.length === 194, 'Russian baseline lesson count (194 after 28-lesson Pre-A1 redesign) holds');
-check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1824, 'Russian baseline sentence count (1824 after 28-lesson Pre-A1 redesign) holds');
+check(russian.RUSSIAN_LESSONS.length === 197, 'Russian baseline lesson count (197 after 31-lesson Pre-A1 completion) holds');
+check(russian.RUSSIAN_LESSONS.reduce((n, l) => n + l.sentences.length, 0) === 1848, 'Russian baseline sentence count (1848 after 31-lesson Pre-A1 completion) holds');
 
 // 2. Alphabet, levels, and A1 + A2 syllabus structure
 check(turkish.TURKISH_ALPHABET.join('') === 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ', 'Turkish 29-letter alphabet is exact');
 check(turkish.TURKISH_LEVELS.map(level => level.cefr).join('|') === 'Pre-A1|A1|A2|B1|B2|C1', 'Turkish publishes six distinct CEFR bands');
 check(turkish.TURKISH_LEVELS.map(level => level.id).join('|') === russian.RUSSIAN_LEVELS.map(level => level.id).join('|'), 'Level ids agree across both maps');
 // Both ladders are ten stages long and share the exact same ten-stage progression
-// ending with «اتاق مکالمه» (Conversation Room) at stage 9.
+// ending with the dialogue room (اتاق گفت‌وگو) at stage 9.
 check(turkish.TURKISH_LESSON_STAGES.length === 10 && russian.RUSSIAN_LESSON_STAGES.length === 10
   && JSON.stringify(turkish.TURKISH_LESSON_STAGES) === JSON.stringify(russian.RUSSIAN_LESSON_STAGES)
-  && turkish.TURKISH_LESSON_STAGES[turkish.TURKISH_LESSON_STAGES.length - 1].id === 'conversation-room', 'Turkish and Russian share the exact ten-stage core ending with the conversation room');
+  && turkish.TURKISH_LESSON_STAGES[turkish.TURKISH_LESSON_STAGES.length - 1].id === 'dialogue-room', 'Turkish and Russian share the exact ten-stage core ending with the dialogue room');
 
 const availableLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'available');
 const plannedLevels = turkish.TURKISH_LEVELS.filter(level => level.status === 'planned');
@@ -451,8 +451,7 @@ for (const [file, component] of [
   ['components/routes/TurkishLessonScreen.tsx', 'TurkishLesson'],
   ['app/learn/[language]/review.tsx', 'TurkishReview'],
   ['components/TurkishLesson.tsx', 'TurkishSentenceBuilder'],
-  ['components/TurkishLesson.tsx', 'LessonConversationRoom'],
-  ['components/TurkishLesson.tsx', 'RealConversationEntry'],
+  ['components/TurkishLesson.tsx', 'LessonDialogueRoom'],
   ['lib/turkishSpeech.ts', "speechTagFor('tr-TR')"],
 ]) check(read(file).includes(component), `${file} connects ${component}`);
 check(!/courseContent|RUSSIAN_LESSONS|SENTENCE_LESSONS/.test(read('lib/languages/turkish.ts')), 'Turkish curriculum does not reuse English or Russian educational content');

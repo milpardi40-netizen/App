@@ -23,8 +23,6 @@ import SpeakCheck from '@/components/SpeakCheck';
 import { PersianBridgeCard, RuleCard } from '@/components/PersianBridgeCard';
 import { isStarterBridgeLanguage, starterBridgeFor, starterBridgeRulesForLesson } from '@/lib/languages/starterPersianBridge';
 import SpeakDrill, { type SpeakDrillResult } from '@/components/SpeakDrill';
-import LessonConversationRoom from '@/components/LessonConversationRoom';
-import RealConversationEntry from '@/components/RealConversationEntry';
 import { saveLessonOutcome, weakSpokenSentences } from '@/lib/lessonOutcomes';
 import { autoRead } from '@/lib/autoRead';
 import { useSpeakAutoAdvance } from '@/lib/useSpeakAutoAdvance';
@@ -48,8 +46,6 @@ import { bandReadinessForLevel } from '@/lib/content/readiness';
 import { ENGLISH_ENGINE_STEPS } from '@/lib/englishLearningEngine';
 type StarterCourseLesson = StarterLesson;
 import type { StarterLessonSession } from '@/lib/languages/starterSessions';
-import { withInferredDialogueRoles, type LessonConversationSession } from '@/lib/lessonConversation';
-import { conversationPracticeForLesson, type BranchingLocale } from '@/lib/branchingConversation';
 import { toPersianDigits as fa } from '@/lib/format';
 import { playStarterSpeech, stopStarterSpeech, warmStarterSpeech } from '@/lib/starterSpeech';
 import { ensureRecordedAudio } from '@/lib/content/coreAudio';
@@ -60,6 +56,7 @@ import { shuffleChecks } from '@/lib/shuffleChecks';
 import LessonFinalHub, { type FinalSection } from '@/components/LessonFinalHub';
 import BlindListeningList from '@/components/BlindListeningList';
 import LessonCelebration, { type CelebrationStats } from '@/components/LessonCelebration';
+import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import { finishLessonRewards } from '@/lib/lessonRewards';
 import { trackLessonCompleted, trackLessonStarted, trackStageReached } from '@/lib/analyticsSession';
 import { recordStudyDay } from '@/lib/studyStreak';
@@ -75,7 +72,7 @@ const foundationStageNames: Record<number, { labelFa: string; labelEn: string }>
   6: {labelFa:'نکتهٔ آموزشی', labelEn:'Learning Note'},
   7: {labelFa:'سنجش کوتاه', labelEn:'Short Assessment'},
   8: {labelFa:'آزمون گفتاری', labelEn:'Speaking Check'},
-  9: {labelFa:'اتاق مکالمه', labelEn:'Conversation Room'},
+  9: {labelFa:'اتاق گفت‌وگو', labelEn:'Dialogue Room'},
 };
 
 /** سرعت‌ها از قرارداد مشترک روایت می‌آیند تا درس، سطح و واژه‌ها یک صدای واحد داشته باشند. */
@@ -136,7 +133,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const [revealed, setRevealed] = useState(false);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showCheckAnswers, setShowCheckAnswers] = useState(false);
-  const [conversation, setConversation] = useState<LessonConversationSession | undefined>();
   const [sessionReady, setSessionReady] = useState(false);
   const [sessionError, setSessionError] = useState('');
   const [completionError, setCompletionError] = useState('');
@@ -156,17 +152,8 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const bridgeRules = useMemo(() => bridgeLanguage ? starterBridgeRulesForLesson(bridgeLanguage, lesson.sentences) : [], [bridgeLanguage, lesson.sentences]);
   const checks = useMemo(() => shuffleChecks(lesson.id, starterDisplayChecks(lesson)), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
-  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; onFreeConversation?: () => void; readiness?: number };
+  const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
-  const roledDialogue = useMemo(() => withInferredDialogueRoles(starterDisplayDialogue(lesson)), [lesson]);
-  const semanticPractice = useMemo(
-    () =>
-      conversationPracticeForLesson(
-        { id: lesson.id, levelId: lesson.levelId, sentences: lesson.sentences, dialogue: roledDialogue },
-        course.locale as BranchingLocale,
-      ),
-    [lesson, roledDialogue, course.locale],
-  );
   const teachingNote = starterTeachingNote(lesson);
   const allChecksPassed = checks.every((question, index) => answers[String(index)] === question.correctIndex);
   const progressPercent = Math.round(((stage + 1) / stages.length) * 100);
@@ -216,7 +203,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       // A level replay is explicitly temporary when it would otherwise overwrite a saved attempt.
       preserveExistingSession.current = replayingLevel && result.hasSavedSession;
       const saved = replayingLevel
-        ? { stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false, conversation: undefined }
+        ? { stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false }
         : result.session;
       if (restarting) {
         restartPromise.current = null;
@@ -232,7 +219,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       setRevealed(saved.revealed);
       setAnswers(saved.answers);
       setShowCheckAnswers(saved.showCheckAnswers);
-      setConversation(saved.conversation);
       setSpeechError('');
       setSessionReady(true);
       trackLessonStarted(course.id, lesson.id);
@@ -250,11 +236,11 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: StarterLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers, conversation };
+    const nextSession: StarterLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveStarterLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
-  }, [conversation, lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
+  }, [lesson.id, sessionReady, stage, sentenceIndex, revealed, answers, showCheckAnswers, saveRetry]);
 
   const [micReadyKey, setMicReadyKey] = useState<string | null>(null);
   const activeMicTargetRef = useRef<string | null>(null);
@@ -319,10 +305,6 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     );
   }, [course.locale, speakForTarget]);
 
-  const speakConversationLine = useCallback((text: string, onDone: () => void) => {
-    void playStarterSpeech(course.locale, text, narrationRate(course.locale, 'normal'), onDone, undefined, onDone);
-  }, [course.locale]);
-  const stopConversationSpeech = useCallback(() => { void stopStarterSpeech(); }, []);
 
   const firstVocabWord = vocabulary[0]?.word.word ?? '';
 
@@ -465,7 +447,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         dueReviews,
         review: () => router.replace(`${course.home}/review` as never),
         newAchievements: rewards.medals,
-        levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness(course.id as 'de' | 'fr' | 'es', auditLessonsFromLearning(course.lessons as ReadonlyArray<import('@/lib/languages/types').LearningLesson & { levelId: number }>)), lesson.levelId)?.readiness, title: course.levels.find(item => item.id === lesson.levelId)?.title ?? '', lessons: course.lessons.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: `${course.home}/studio`, params: { level: String(lesson.levelId), mode: 'warmup' } } as never), onFreeConversation: () => router.replace({ pathname: '/conversation-rooms/[language]', params: { language: course.id, level: String(lesson.levelId), mode: 'level-free' } } as never) } : undefined,
+        levelFinished: (!nextLesson || nextLesson.levelId !== lesson.levelId) ? { readiness: bandReadinessForLevel(courseReadiness(course.id as 'de' | 'fr' | 'es', auditLessonsFromLearning(course.lessons as ReadonlyArray<import('@/lib/languages/types').LearningLesson & { levelId: number }>)), lesson.levelId)?.readiness, title: course.levels.find(item => item.id === lesson.levelId)?.title ?? '', lessons: course.lessons.filter(item => item.levelId === lesson.levelId).length, onStart: () => router.replace({ pathname: `${course.home}/studio`, params: { level: String(lesson.levelId), mode: 'warmup' } } as never) } : undefined,
       });
     } catch {
       completing.current = false;
@@ -594,7 +576,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
               <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
               <Text style={styles.stageTitle}>{foundation ? `انتخاب ${unit}` : 'ساخت جمله'}</Text>
               {showHint && <Text style={styles.stageDesc}>{foundation ? `معنی ثبت‌شده را بخوانید و ${unit} مربوط به همان نمونهٔ درس را انتخاب کنید.` : lesson.levelId <= 0 ? 'جملهٔ درست و الگویش بالای صفحه دیده می‌شود؛ واژه‌ها را به ترتیب آن بچینید.' : 'الگوی ساختار و واژه‌های کلیدی را ببینید و جمله را بسازید.'}</Text>}
-              {foundation || current.text.trim().replace(/\s+([!?.;,:])/g, '$1').split(/\s+/).length === 1 ? (
+              {foundation || current.text.trim().replace(/\s+([!?.;,:])/g, '$1').split(/\s+/).length <= (lesson.levelId === 0 ? 2 : 1) ? (
                 <StarterWordChoice key={current.id} sentence={current} sentences={lesson.sentences} />
               ) : (
                 <LanguageSentenceBuilder
@@ -709,26 +691,19 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           accent={Palette.primary}
         /> : null}
 
-        {stage === 9 && <>
-          <LessonConversationRoom
-            key={lesson.id}
-            courseId={course.id}
-            lessonId={lesson.id}
-            levelId={lesson.levelId}
-            situation={lesson.situation}
-            partnerRole="طرف مقابل"
-            dialogue={roledDialogue}
-            fallback={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
-            locale={course.locale as BranchingLocale}
-            onSpeak={speakConversationLine}
-            onStop={stopConversationSpeech}
-            initialSession={conversation}
-            onSessionChange={setConversation}
-            semanticPractice={semanticPractice}
-          />
-          <RealConversationEntry language={course.id as 'de' | 'fr' | 'es'} lessonId={lesson.id} lessonTitle={lesson.title} levelId={lesson.levelId} situation={lesson.situation} />
-        </>}
 
+        {stage === 9 && <LessonDialogueRoom
+          key={lesson.id}
+          language={course.id}
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          levelId={lesson.levelId}
+          situation={lesson.situation}
+          lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          locale={course.locale}
+          onSpeak={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone)}
+          onSpeakOperator={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone, { pitch: 0.82 })}
+        />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
       </View>
@@ -747,7 +722,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         </View>
       </View>
       <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(lessons, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
-      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined, onFreeConversation: celebration.levelFinished.onFreeConversation ? () => { const go = celebration.levelFinished!.onFreeConversation!; setCelebration(null); go(); } : undefined } : undefined} />
+      levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );
 }

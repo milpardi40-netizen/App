@@ -18,7 +18,7 @@ export function GrammarLink({ fromLesson, onPress }: { fromLesson?: boolean; onP
   </Pressable>;
 }
 export function VoiceRoomLink({ fromLesson, onPress }: { fromLesson?: boolean; onPress: () => void }) {
-  const title = fromLesson ? 'مکالمهٔ صوتی همین درس' : 'اتاق مکالمهٔ روسی';
+  const title = fromLesson ? 'مکالمهٔ صوتی همین درس' : 'استودیوی گفتار';
   return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={({pressed}) => [w.link,{backgroundColor:'#123E39',borderColor:'#123E39',opacity:pressed ? .88 : 1}]}>
     <View style={[w.icon,{backgroundColor:'#D6E99C'}]}><Mic size={23} color="#16483E"/></View>
     <View style={{flex:1,gap:3}}>

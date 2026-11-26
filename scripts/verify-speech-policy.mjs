@@ -79,20 +79,19 @@ const read = file => readFileSync(path.join(root, file), 'utf8');
 const lesson = read('components/EnglishLessonRoute.tsx');
 const emmaRoute = read('app/conversations/emma.tsx');
 const human = read('features/chat/screens/HumanConversation.tsx');
+const voiceAnswer = read('components/VoiceAnswerInput.tsx');
 check(/if\s*\([^)]*!\s*PAID_AI_ENABLED[^)]*\)[\s\S]*?return;[\s\S]*?requestRecordingPermissionsAsync\(\)/.test(lesson), 'English lesson blocks before requesting the microphone permission');
 check(/SpeakDrill/.test(lesson) && /SpeakCheck/.test(read('components/SpeakDrill.tsx')) && /ExpoSpeechRecognitionModule/.test(read('components/SpeakCheck.tsx')), 'the lesson speaking checkpoint scores on-device recognition instead of paid AI');
-check(/if\s*\(!ONLINE_AUDIO_ENABLED\)[\s\S]*?return;[\s\S]*?requestRecordingPermissionsAsync\(\)/.test(human), 'human voice path blocks before requesting the microphone permission');
-check(/disabled=\{sending\s*\|\|\s*!ONLINE_AUDIO_ENABLED\}/.test(human), 'human voice control is disabled by the online-audio policy flag');
+check(voiceAnswer.indexOf('requireOnlineAudioEnabled()') !== -1
+  && voiceAnswer.indexOf('requireOnlineAudioEnabled()') < voiceAnswer.indexOf('requestPermissionsAsync'),
+  'human voice path blocks before requesting the microphone permission');
 check(/Redirect/.test(emmaRoute) && !/PAID_AI_ENABLED/.test(emmaRoute), 'the retired AI voice chat route only forwards to the real conversation screens');
-check(/requestRecordingPermissionsAsync\(\)[\s\S]*?prepareToRecordAsync\(\)[\s\S]*?recorder\.record\(\)/.test(human), 'human voice messages request permission and start a real native recording');
-check(/recorder\.stop\(\)[\s\S]*?sendVoiceMessage\(conversationId,\s*recorder\.uri,\s*duration\)/.test(human), 'stopping a recording uploads and sends the real audio file');
-check(/disabled=\{sending\s*\|\|\s*!ONLINE_AUDIO_ENABLED\}/.test(human), 'human voice-message control remains protected by the explicit online-audio policy');
 check(/requireOnlineAudioEnabled\(\);\s*const user = await ensureChatIdentity\(\);/.test(read('lib/conversations.ts')), 'lower-level voice upload API retains its product-policy gate before identity or upload work');
 check(/playResponsiveSpeech\(\{\s*text,\s*locale:\s*'en-US',\s*rate(?:\s*,|\s*\})/.test(lesson), 'device/platform speech playback remains available');
 // KeyboardStickyView owns the complete keyboard-aware footer. Human chat may
 // render the coach, recording state, and audio notice before the composer, so
 // the composer is not necessarily its first child.
-const stickyComposer = /<KeyboardAttachedView\b[^>]*>[\s\S]*?<View style=\{styles\.composer\}>[\s\S]*?<\/KeyboardAttachedView>/;
+const stickyComposer = /<KeyboardAttachedView\b[^>]*>[\s\S]*?<View style=\{styles\.answerCard\}>[\s\S]*?<\/KeyboardAttachedView>/;
 check(stickyComposer.test(human),
       'the chat composer animates as a complete unit with the keyboard');
 check(!/Platform\.OS === 'android' \? 'height'/.test(human),

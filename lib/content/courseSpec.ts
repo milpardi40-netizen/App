@@ -47,5 +47,13 @@ export function bandOfLevel(levelId: number): CefrBand {
   return 'C1';
 }
 
+/**
+ * CEFR band → internal course level id. The inverse of `bandOfLevel`, kept in this one file so the
+ * app ladder and the pack factory (validatePack / genCoveragePacks) can never drift apart again:
+ * the factory used to map Pre-A1 to −1 while the app maps it to 0, which emptied the pre band's
+ * «taught words» set and neutralised its pack gates (docs/RU-PRE-A1-A1-SPEC-ALIGNMENT-FA.md §۷.۲).
+ */
+export const levelIdForBand: Record<CefrBand, number> = { pre: 0, A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
+
 /** Below this readiness a band is labelled «در حال تکمیل». */
 export const READY_THRESHOLD = 40;

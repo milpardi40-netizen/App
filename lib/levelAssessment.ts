@@ -42,6 +42,52 @@ function dayKey(): string { const d = new Date(); return `${d.getFullYear()}-${d
 export function buildLevelExam(pool: ReturnType<typeof levelPool>, attempt: number): PracticeItem[] {
   return buildLessonPractice(pool, { count: ASSESSMENT_QUESTIONS, seedSalt: `exam-${attempt}` });
 }
+
+/**
+ * The seven «می‌توانم» bands of the end-of-level exam (spec, final-exam criteria):
+ * every exam question comes from a lesson sentence, and each lesson groups into one
+ * band — so the result card can say «در کدام توانمندی‌ها قوی بودید», not just a percent.
+ * Matching is keyword-based on the lesson id, so it works for every course that
+ * renders the level studio; unmatched sentences fall through to the daily-life band.
+ */
+export interface CanDoBand { id: string; label: string; keywords: readonly string[] }
+export const CAN_DO_BANDS: readonly CanDoBand[] = [
+  { id: 'self', label: 'معرفی و اطلاعات شخصی', keywords: ['introducing', 'personal', 'job', 'pronoun', 'numbers', 'alphabet', 'family', 'spelling'] },
+  { id: 'shopping', label: 'خرید و قیمت', keywords: ['shopping', 'buying', 'clothing', 'market', 'post-office', 'services'] },
+  { id: 'food', label: 'غذا و کافه', keywords: ['food', 'cafe', 'restaurant', 'drink', 'menu'] },
+  { id: 'city', label: 'مسیر، شهر و سفر', keywords: ['directions', 'transport', 'travel', 'hotel', 'renting', 'places', 'neighborhood'] },
+  { id: 'daily', label: 'زندگی روزمره و سرگرمی', keywords: ['routine', 'hobbies', 'weather', 'seasons', 'school', 'current'] },
+  { id: 'health', label: 'سلامتی و کمک‌خواستن', keywords: ['health', 'pharmacy', 'asking-for-help'] },
+  { id: 'plans', label: 'زمان، قرار و ارتباط', keywords: ['time', 'appointments', 'invitations', 'plans', 'phone', 'messages'] },
+];
+
+/** `ru-a1-cafe-and-food-03` → `ru-a1-cafe-and-food`; other sentence ids keep their lesson part. */
+function lessonPartOf(sentenceId: string): string {
+  return sentenceId.replace(/-\d{2,3}(-r)?$/, '');
+}
+
+export function canDoBandForSentence(sentenceId: string): CanDoBand {
+  const lessonId = lessonPartOf(sentenceId).toLowerCase();
+  for (const band of CAN_DO_BANDS) if (band.keywords.some(keyword => lessonId.includes(keyword))) return band;
+  return CAN_DO_BANDS[4];
+}
+
+export interface ExamItemResult { sentenceId: string; correct: boolean }
+export interface CanDoScore { band: string; label: string; correct: number; total: number }
+
+/** Per-band exam outcome, in the fixed band order; bands the paper did not touch are omitted. */
+export function examCanDoBreakdown(results: readonly ExamItemResult[]): CanDoScore[] {
+  const scores = new Map<string, { correct: number; total: number }>();
+  for (const item of results) {
+    const band = canDoBandForSentence(item.sentenceId);
+    const score = scores.get(band.id) ?? { correct: 0, total: 0 };
+    if (item.correct) score.correct += 1;
+    score.total += 1;
+    scores.set(band.id, score);
+  }
+  return CAN_DO_BANDS.filter(band => scores.has(band.id))
+    .map(band => ({ band: band.id, label: band.label, ...scores.get(band.id)! }));
+}
 /** Supplement: a fresh short round every day; one item is typed («بنویس»).
  * Typed production starts at A2 by default; the Russian course asks for it from A1,
  * because its A1 band already teaches the case endings the typed sentence needs. */

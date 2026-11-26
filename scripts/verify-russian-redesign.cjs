@@ -19,6 +19,7 @@ const es = require('esbuild');
     'ru-pre-13-greeting-name-phrases', 'ru-pre-14-polite-phrases', 'ru-pre-15-combos-pronoun-demo', 'ru-pre-16-combos-adj-verb',
     'ru-pre-17-sentences-be-have', 'ru-pre-18-sentences-verbs', 'ru-pre-19-questions-basic', 'ru-pre-20-questions-whose-yesno-count',
     'ru-pre-21-daily-identity-family-age', 'ru-pre-22-daily-likes-needs-wants', 'ru-pre-23-daily-descriptions',
+    'ru-pre-29-numbers-teens', 'ru-pre-30-question-words-2', 'ru-pre-31-more-descriptions',
     'ru-pre-24-conv-greeting-intro', 'ru-pre-25-conv-family-home', 'ru-pre-26-conv-objects',
     'ru-pre-27-conv-food-shopping', 'ru-pre-28-conv-classroom',
   ];
@@ -34,7 +35,7 @@ const es = require('esbuild');
       assert(q.correctIndex >= 0 && q.correctIndex < 4);
     }
   });
-  for (const [mode, n] of [['exam', 20], ['practice', 10], ['warmup', 28]]) {
+  for (const [mode, n] of [['exam', 20], ['practice', 10], ['warmup', 31]]) {
     for (const seed of [1, 2, 7, '2026-11-18']) {
       const items = x.russianStarterRound(lessons, mode, seed);
       assert.equal(items.length, n);
@@ -134,5 +135,5 @@ const es = require('esbuild');
     assert.equal((await x.loadRussianLessonSession(l.id)).stage, 0);
     assert.equal(storage.get('sentence_course_progress_ru_v2'), 'existing-completions-and-cards');
   }
-  console.log(`PASS: 28 Pre-A1 steps (zero-to-dialogue); ${paths} complete paths across all ${lessons.length} lessons; ${x.VERBS.length} verbs; ${x.GRAMMAR_UNITS.length} guided units; both session backends.`);
+  console.log(`PASS: 31 Pre-A1 steps (zero-to-dialogue); ${paths} complete paths across all ${lessons.length} lessons; ${x.VERBS.length} verbs; ${x.GRAMMAR_UNITS.length} guided units; both session backends.`);
 })().catch(e => { console.error(e); process.exitCode = 1; });

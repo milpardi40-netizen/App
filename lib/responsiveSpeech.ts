@@ -39,12 +39,15 @@ export function playResponsiveSpeech({
   text,
   locale,
   rate,
+  pitch,
   onDone,
   onError,
 }: {
   text: string;
   locale: SpeechLocale;
   rate?: number;
+  /** Optional voice colour: 0..2, below 1 sounds deeper. Used for the dialogue-room operator. */
+  pitch?: number;
   onDone?: () => void;
   onError?: () => void;
 }) {
@@ -69,6 +72,7 @@ export function playResponsiveSpeech({
         language: speechTagFor(locale),
         ...(voice ? { voice } : {}),
         rate: selectedRate,
+        ...(pitch !== undefined ? { pitch } : {}),
         onDone: () => {
           if (currentRequest !== requestId) return;
           finished = true; active = false; noteSpeechSuccess(); onDone?.();

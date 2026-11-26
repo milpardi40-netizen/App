@@ -583,22 +583,6 @@ export default function ArabicHomeScreen() {
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="اتاق مکالمهٔ درس‌های عربی"
-              style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]}
-              onPress={() => router.push('/conversation-rooms/ar' as never)}
-            >
-              <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}>
-                <MessageCircle size={18} color={HomeColors.accent} />
-              </View>
-              <View style={styles.quickCopy}>
-                <Text style={styles.quickTitle}>اتاق مکالمهٔ درس‌ها</Text>
-                <Text style={styles.quickDesc}>فقط مکالمه‌های هر سطح (Pre-A1 تا C1)</Text>
-              </View>
-              <ChevronLeft size={17} color={HomeColors.muted} />
-            </Pressable>
-
-            <Pressable
-              accessibilityRole="button"
               accessibilityLabel="باز کردن واژه‌خانهٔ عربی"
               style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]}
               onPress={() => router.push('/learn/ar/vocabulary' as never)}

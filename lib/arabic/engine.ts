@@ -1,5 +1,4 @@
 import type { LearningLesson } from '@/lib/languages/types';
-import type { ConversationLevel } from '@/lib/branchingConversation';
 import {
   ARABIC_LESSONS,
   ARABIC_LEVELS,
@@ -19,7 +18,7 @@ export interface ArabicEngineStep {
     | 'grammar-through-usage'
     | 'short-assessment'
     | 'speaking-check'
-    | 'conversation-room';
+    | 'dialogue-room';
   title: string;
   subtitle: string;
 }
@@ -27,7 +26,7 @@ export interface ArabicEngineStep {
 /**
  * Canonical 10-stage English-pattern learning flow for Arabic:
  * Situation -> Core Sentences -> Listening -> Shadowing -> Sentence Building (RTL)
- * -> Vocabulary from Sentences -> Grammar through Usage -> Short Assessment -> Speaking Exam -> Conversation Room.
+ * -> Vocabulary from Sentences -> Grammar through Usage -> Short Assessment -> Speaking Exam -> Dialogue Room.
  */
 export const ARABIC_ENGINE_STEPS: readonly ArabicEngineStep[] = [
   { key: 'situation', title: 'موقعیت', subtitle: 'درک صحنه و نیاز ارتباطی واقعی' },
@@ -39,7 +38,7 @@ export const ARABIC_ENGINE_STEPS: readonly ArabicEngineStep[] = [
   { key: 'grammar-through-usage', title: 'دستور در کاربرد', subtitle: 'قالب اسمی/فعلی و مطابقت از دل مثال‌ها' },
   { key: 'short-assessment', title: 'سنجش کوتاه', subtitle: 'شنیداری، خواندن، نوشتن و کاربرد' },
   { key: 'speaking-check', title: 'آزمون گفتاری', subtitle: 'سنجش بدون تکرار و ثبت خطاهای واقعی' },
-  { key: 'conversation-room', title: 'اتاق مکالمه', subtitle: 'گفت‌وگوی استاندارد و چالش زنده با زمان‌بندی تطبیقی' },
+  { key: 'dialogue-room', title: 'اتاق گفت‌وگو', subtitle: 'هشت جملهٔ درس در یک گفت‌وگوی دوستانه با اپراتور' },
 ] as const;
 
 export interface ArabicLevelBlueprint {
@@ -101,10 +100,6 @@ export const ARABIC_ENGINE_BLUEPRINT: readonly ArabicLevelBlueprint[] = [
     grammarGoal: 'ظرایف نحوی، تمیز، حال، اسلوب حصر و بلاغت کاربردی',
   },
 ] as const;
-
-export function arabicLevelToCefr(levelId: ArabicLevelId): ConversationLevel {
-  return ARABIC_LEVELS.find(item => item.id === levelId)?.cefr ?? 'A1';
-}
 
 export function getArabicLevelMetrics(levelId: ArabicLevelId, completedIds: readonly string[]) {
   const lessons = ARABIC_LESSONS.filter(item => item.levelId === levelId);
@@ -233,7 +228,7 @@ export function getArabicLessonPatterns(lesson: ArabicLesson) {
 
 /**
  * Adapts an ArabicLesson into the shared LearningLesson shape used by
- * WordLab, LessonConversationRoom, branchingConversation, and sharedLevel tools.
+ * WordLab and the shared course snapshot.
  */
 export function arabicLessonToLearningLesson(lesson: ArabicLesson): LearningLesson {
   return {
