@@ -7,7 +7,7 @@ import { Typography } from '@/lib/theme';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppState, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
-import { Mic2, RefreshCw, Square, Volume2 } from 'lucide-react-native';
+import { ChevronLeft, Mic2, RefreshCw, Square, Volume2 } from 'lucide-react-native';
 import * as Speech from '@/lib/courseSpeech';
 import { toPersianDigits as fa } from '@/lib/format';
 import { scoreSpeech, tokens, type SpeakCheckResult, type SpeakWordState } from '@/lib/speechScore';
@@ -53,6 +53,10 @@ let micOwner: symbol | null = null;
  */
 export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, roomMode = false, title, onResult, onSkip, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false, blindExam = false }: Props) {
   const focused = useIsFocused();
+  const [appState, setAppState] = useState(AppState.currentState);
+  const appStateRef = useRef(appState);
+  const [foregroundRun, setForegroundRun] = useState(0);
+  const isAppActive = appState !== 'background' && appState !== 'inactive';
   const focusedRef = useRef(focused); focusedRef.current = focused;
   const skipped = useRef(false);
   const autoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -124,7 +128,18 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   useEffect(() => cancelAttempt, [text, locale, cancelAttempt]);
   useEffect(() => {
     if (!focused) cancelAttempt();
-    const sub = AppState.addEventListener('change', state => { if (state !== 'active') cancelAttempt(); });
+    const sub = AppState.addEventListener('change', state => {
+      const previousState = appStateRef.current;
+      appStateRef.current = state;
+      setAppState(state);
+      if (state === 'background' || state === 'inactive') {
+        autoStartedFor.current = '';
+        cancelAttempt();
+      } else if (state === 'active' && (previousState === 'background' || previousState === 'inactive')) {
+        // React may batch a quick inactive → active pair from the permission dialog.
+        setForegroundRun(value => value + 1);
+      }
+    });
     return () => sub.remove();
   }, [focused, cancelAttempt]);
   const skip = () => {
@@ -144,7 +159,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   useEffect(() => {
     const wasAutoStart = prevAutoStart.current;
     prevAutoStart.current = autoStart;
-    if (!autoStart || !focused || skipped.current) {
+    if (!autoStart || !focused || !isAppActive || skipped.current) {
       autoStartedFor.current = '';
       if (retryTimer.current) {
         clearTimeout(retryTimer.current);
@@ -164,10 +179,12 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       return;
     }
     if (!text || autoStartedFor.current === text) return;
+    // Foreground/permission interruptions must re-arm the same narrated item on return.
+    // Do not consume its one automatic start while the app cannot open the microphone.
     autoStartedFor.current = text;
     autoTimer.current = setTimeout(() => { autoTimer.current = null; void startRef.current?.(); }, 420);
     return () => { if (autoTimer.current) clearTimeout(autoTimer.current); };
-  }, [autoStart, text, focused, clearListenTimers]);
+  }, [autoStart, text, focused, isAppActive, foregroundRun, clearListenTimers]);
 
   const finish = useCallback((heard: string) => {
     clearListenTimers();
@@ -315,7 +332,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   });
 
   const start = useCallback(async () => {
-    if (!focusedRef.current || skipped.current || (AppState.currentState && AppState.currentState !== 'active')) return;
+    if (!focusedRef.current || skipped.current || (['background', 'inactive'].includes(appStateRef.current))) return;
     if (micOwner === owner.current && listeningRef.current) return;
     clearListenTimers();
     if (retryTimer.current) clearTimeout(retryTimer.current);
@@ -341,7 +358,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       if (!permission.granted) { setError('برای تمرین گفتاری، اجازهٔ میکروفن لازم است.'); return; }
       // Await audio release before acquiring the microphone (not a fire-and-forget race).
       try { await Speech.stop(); } catch { /* ignore */ }
-      if (token !== generation.current || !focusedRef.current || skipped.current) return;
+      if (token !== generation.current || !focusedRef.current || skipped.current || ['background', 'inactive'].includes(appStateRef.current)) return;
       micOwner = owner.current;
       ExpoSpeechRecognitionModule.start({
         lang: locale,
@@ -402,15 +419,15 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         {listening ? <Square size={roomMode ? 23 : compact ? 13 : 16} color="#FFFFFF" fill="#FFFFFF" /> : result ? <RefreshCw size={roomMode ? 26 : compact ? 15 : 18} color="#FFFFFF" /> : <Mic2 size={roomMode ? 28 : compact ? 16 : 19} color="#FFFFFF" />}
         {!roomMode ? <Text keepColor style={[styles.buttonText, compact && styles.buttonTextCompact]}>{listening ? 'تمام شد' : result ? 'دوباره بگو' : 'بگو'}</Text> : null}
       </Pressable>
-      {onSkip ? <Pressable accessibilityRole="button" accessibilityLabel="رد شو" onPress={skip} style={styles.skipButton}><Text style={styles.skipText}>رد شو</Text></Pressable> : null}
+      {onSkip ? <Pressable accessibilityRole="button" accessibilityLabel="رد شو" onPress={skip} style={({ pressed }) => [styles.skipButton, pressed && styles.buttonPressed]}><Text keepColor style={styles.skipText}>رد شو</Text><ChevronLeft size={17} color="#FFFFFF" /></Pressable> : null}
       {roomMode ? <Text style={styles.hint}>{listening ? 'در حال شنیدن · برای پایان لمس کن' : error ? 'برای تلاش دوباره، میکروفن را لمس کن' : result ? 'برای تکرار، میکروفن را لمس کن' : 'برای صحبت، میکروفن را لمس کن'}</Text> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  skipButton: { minHeight: 44, minWidth: 64, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 12 },
-  skipText: { fontSize: 13, color: '#64748B', fontFamily: Typography.fontFamily },
+  skipButton: { minHeight: 48, flexDirection: 'row-reverse', justifyContent: 'center', alignItems: 'center', gap: 7, paddingHorizontal: 22, borderRadius: 999, backgroundColor: '#D97706', marginTop: 2 },
+  skipText: { fontSize: 13, color: '#FFFFFF', fontFamily: Typography.fontFamily, writingDirection: 'rtl' },
   roomWrap: { backgroundColor: 'transparent', borderWidth: 0, padding: 4, marginTop: 2, gap: 12 },
   roomMic: { width: 80, height: 80, borderRadius: 40, paddingHorizontal: 0, paddingVertical: 0, alignItems: 'center', justifyContent: 'center' },
   wrap: { width: '100%', marginTop: 10, padding: 12, borderRadius: 16, backgroundColor: '#F8FAFC', borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center', gap: 6 },

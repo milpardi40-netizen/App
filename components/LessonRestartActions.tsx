@@ -31,15 +31,15 @@ export function LessonRestartActions({ lessonPath, firstLessonId, lessonId, colo
         accessibilityState={{ disabled: !id || pending }} disabled={!id || pending}
         onPress={() => { if (id) void restart(id, label === 'شروع از ابتدای سطح'); }}
         style={({ pressed }) => [styles.button, (pressed || !id || pending) && { opacity: 0.55 }]}
-      ><RotateCcw size={16} color={color} /><Text style={[styles.label, { color }]}>{label}</Text></Pressable>)}
+      ><RotateCcw size={13} color={color} /><Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8} style={[styles.label, { color }]}>{label}</Text></Pressable>)}
     </View>
     {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
   </View>;
 }
 const styles = StyleSheet.create({
   wrap: { width: '100%', marginTop: 10 },
-  row: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8 },
-  button: { flexGrow: 1, flexBasis: 135, minHeight: 48, paddingVertical: 10, paddingHorizontal: 8, borderRadius: 14, borderWidth: 1, borderColor: '#DDE2EF', backgroundColor: '#F5F6FC', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 5 },
-  label: { flexShrink: 1, fontFamily: Typography.fontFamily, fontSize: 12, lineHeight: 20, textAlign: 'center', writingDirection: 'rtl' },
+  row: { flexDirection: 'row-reverse', gap: 6 },
+  button: { flex: 1, minWidth: 0, minHeight: 44, paddingVertical: 6, paddingHorizontal: 6, borderRadius: 10, borderWidth: 1, borderColor: '#DDE2EF', backgroundColor: '#F5F6FC', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 5 },
+  label: { flexShrink: 1, fontFamily: Typography.fontFamily, fontSize: 11, lineHeight: 16, textAlign: 'center', writingDirection: 'rtl' },
   error: { fontFamily: Typography.fontFamily, color: '#B91C1C', textAlign: 'right', marginTop: 6 },
 });

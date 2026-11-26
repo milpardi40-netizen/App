@@ -8,10 +8,13 @@ globalThis.__chunkStorage = new Map();
 globalThis.__wakeCalls = [];
 globalThis.__appState = { currentState: 'active', addEventListener: (_, callback) => { globalThis.__stateChanged = callback; return { remove() {} }; } };
 const mocks = {
+  'expo-router': `export const useRouter=()=>({push:target=>{globalThis.__restartNavigation=target;}});`,
+  '@/lib/levelRestart': `export const prepareLevelRestart=async(pathname,id)=>({pathname,params:{id,fromStart:'1'}});`,
+  './LocalizedText': `export const LocalizedText='Text';`,
   'react-native': `export const View='View',Pressable='Pressable',ScrollView='ScrollView',Modal='Modal';export const StyleSheet={create:x=>x};export const useWindowDimensions=()=>globalThis.__viewport||({width:360,height:480});export const AppState=globalThis.__appState,Platform={OS:'android'};export const Animated={View:'AnimatedView',Value:class{setValue(){}},parallel:()=>({start(){}}),spring:()=>({}),timing:()=>({})};`,
   'expo-keep-awake': `export const activateKeepAwakeAsync=async()=>{globalThis.__wakeCalls.push('activate')};export const deactivateKeepAwake=async()=>{globalThis.__wakeCalls.push('deactivate')};`,
   'react-native-safe-area-context': `export const useSafeAreaInsets=()=>({top:24,bottom:16,left:0,right:0});`,
-  'lucide-react-native': `export const ArrowLeft='ArrowLeft',CheckCircle2='CheckCircle2',Flame='Flame',RefreshCw='RefreshCw',Trophy='Trophy';`,
+  'lucide-react-native': `export const ArrowLeft='ArrowLeft',CheckCircle2='CheckCircle2',Flame='Flame',RefreshCw='RefreshCw',RotateCcw='RotateCcw',Trophy='Trophy';`,
   '@/components/LocalizedText': `export const LocalizedText='Text';`,
   '@/components/EnglishSupplementTask': `export const EnglishPalette=new Proxy({},{get:()=> '#5146E5'});`,
   '@/lib/theme': `export const Typography={fontFamily:'Test'};`,
@@ -26,7 +29,7 @@ async function bundle(contents) {
   const module={exports:{}};new Function('module','exports','require',output.outputFiles[0].text)(module,module.exports,require);return module.exports;
 }
 (async()=>{
-  const api=await bundle(`export * from './hooks/useForegroundKeepAwake';export * from './lib/lessonRestart';export * from './lib/lessonChunks';export {default as Celebration} from './components/LessonCelebration';`);
+  const api=await bundle(`export * from './hooks/useForegroundKeepAwake';export * from './lib/lessonRestart';export * from './lib/lessonChunks';export {default as Celebration} from './components/LessonCelebration';export {LessonRestartActions} from './components/LessonRestartActions';`);
   let tree;
   function Screen(){api.useForegroundKeepAwake();return null;}
   await act(async()=>{tree=create(React.createElement(Screen));});
@@ -75,6 +78,18 @@ async function bundle(contents) {
   await act(async()=>{tree.update(React.createElement(api.Celebration,{...props,onRestart:async()=>{throw Error('failed');}}));});
   assert.equal(flatten(tree.root.findByType('AnimatedView').props.style).maxHeight,248);
   await act(async()=>{restart().props.onPress();});assert.ok(tree.root.findAllByType('Text').some(node=>node.props.accessibilityRole==='alert'));
+  await act(async()=>{tree.unmount();});
+  await act(async()=>{tree=create(React.createElement(api.LessonRestartActions,{lessonPath:'/learn/ru/lesson',firstLessonId:'first',lessonId:'current'}));});
+  const restartButtons=tree.root.findAllByType('Pressable');
+  assert.deepEqual(restartButtons.map(node=>node.props.accessibilityLabel),['شروع از ابتدای سطح','شروع از ابتدای این درس']);
+  for (const node of restartButtons) {
+    const style=flatten(node.props.style({pressed:false}));
+    assert.equal(style.minHeight,44);assert.equal(style.flex,1);assert.equal(style.minWidth,0);
+    const label=node.findByType('Text');assert.equal(label.props.numberOfLines,1);assert.equal(label.props.adjustsFontSizeToFit,true);
+    assert.equal(flatten(label.props.style).fontSize,11);assert.equal(flatten(label.props.style).lineHeight,16);
+    assert.equal(node.findByType('RotateCcw').props.size,13);
+  }
+  await act(async()=>{restartButtons[1].props.onPress();});assert.equal(globalThis.__restartNavigation.params.id,'current');
   await act(async()=>{tree.unmount();});
   for(const file of ['components/RussianHome.tsx','components/TurkishHome.tsx','components/StarterHome.tsx','app/lang/index.tsx','components/arabic/ArabicHomeScreen.tsx','components/RussianLibrary.tsx','components/TurkishLibrary.tsx','components/StarterLibrary.tsx','app/lang/library.tsx','components/arabic/ArabicLibraryScreen.tsx'])assert.ok(fs.readFileSync(file,'utf8').includes('<LessonRestartActions'),file);
   for(const file of ['components/RussianLesson.tsx','components/TurkishLesson.tsx','components/StarterLesson.tsx','components/EnglishLessonRoute.tsx','components/arabic/ArabicLessonScreen.tsx'])assert.ok(fs.readFileSync(file,'utf8').includes('<LessonCelebration onRestart='),file);
