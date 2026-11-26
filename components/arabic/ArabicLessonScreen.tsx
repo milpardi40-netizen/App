@@ -1025,6 +1025,7 @@ export default function ArabicLessonScreen() {
               lines={lesson.sentences.map(sentence => ({ text: sentence.ar, fa: sentence.fa }))}
               locale="ar-SA"
               onSpeak={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone })}
+              onSpeakOperator={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, pitch: 0.82, onDone, onError: onDone })}
             />
           )}
           {!!completionError && <Text style={styles.speechError}>{completionError}</Text>}

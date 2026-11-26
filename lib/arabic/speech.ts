@@ -15,6 +15,8 @@ export function playArabicSpeech(
   options?: {
     slow?: boolean;
     rate?: number;
+    /** Optional voice colour: 0..2, below 1 sounds deeper. Used for the dialogue-room operator. */
+    pitch?: number;
     onDone?: () => void;
     onError?: () => void;
   },
@@ -35,7 +37,7 @@ export function playArabicSpeech(
       Speech.speak(trimmed, {
         language: speechTagFor(ARABIC_SPEECH_LOCALE),
         rate,
-        pitch: 1.0,
+        pitch: options?.pitch ?? 1.0,
         onDone: () => {
           if (reqId !== activeRequestId) return;
           speaking = false;

@@ -25,7 +25,7 @@ export function warmRussianSpeech(): void {
   void Speech.stop().catch(() => undefined);
 }
 
-export function playRussianSpeech(text: string, rate: number, onError?: () => void, onDone?: () => void): Promise<void> {
+export function playRussianSpeech(text: string, rate: number, onError?: () => void, onDone?: () => void, options?: { pitch?: number }): Promise<void> {
   const request = ++requestId;
   stopRecorded();
   const current = () => request === requestId;
@@ -46,6 +46,7 @@ export function playRussianSpeech(text: string, rate: number, onError?: () => vo
           language: speechTagFor('ru-RU'),
           ...(withVoice && voice ? { voice } : {}),
           rate,
+          ...(options?.pitch !== undefined ? { pitch: options.pitch } : {}),
           onDone: () => { if (request === requestId) { noteSpeechSuccess(); onDone?.(); } },
           // A rotated voice that fails to start falls back to the device default once,
           // then to a recording on devices whose engine is unreliable.

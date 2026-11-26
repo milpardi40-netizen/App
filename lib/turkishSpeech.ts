@@ -15,7 +15,7 @@ function enqueue(operation: () => Promise<void>): Promise<void> {
   return queue;
 }
 
-export function playTurkishSpeech(text: string, rate: number, onError?: () => void, onDone?: () => void): Promise<void> {
+export function playTurkishSpeech(text: string, rate: number, onError?: () => void, onDone?: () => void, options?: { pitch?: number }): Promise<void> {
   const request = ++requestId;
   return enqueue(async () => {
     if (request !== requestId) return;
@@ -33,6 +33,7 @@ export function playTurkishSpeech(text: string, rate: number, onError?: () => vo
           language: speechTagFor('tr-TR'),
           ...(withVoice && voice ? { voice } : {}),
           rate,
+          ...(options?.pitch !== undefined ? { pitch: options.pitch } : {}),
           onDone: () => { if (request === requestId) { noteSpeechSuccess(); onDone?.(); } },
           // A rotated voice that fails to start falls back to the device default once,
           // then to a recording on devices whose engine is unreliable.

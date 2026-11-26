@@ -684,6 +684,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
           locale="ru-RU"
           onSpeak={(text, onDone) => void playRussianSpeech(text, pace('normal'), onDone, onDone)}
+          onSpeakOperator={(text, onDone) => void playRussianSpeech(text, pace('normal'), onDone, onDone, { pitch: 0.82 })}
         />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}

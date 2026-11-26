@@ -87,25 +87,25 @@ async function resolveRoomLesson(language: string, lessonIdParam: string): Promi
   }
 }
 
-function speakFor(language: string, locale: string): (text: string, onDone: () => void) => void {
+function speakFor(language: string, locale: string, pitch?: number): (text: string, onDone: () => void) => void {
   return (text, onDone) => {
     switch (language) {
       case 'en':
-        playResponsiveSpeech({ text, locale: 'en-US', rate: ENGLISH_NORMAL_SPEECH_RATE, onDone, onError: onDone });
+        playResponsiveSpeech({ text, locale: 'en-US', rate: ENGLISH_NORMAL_SPEECH_RATE, pitch, onDone, onError: onDone });
         return;
       case 'ru':
-        void playRussianSpeech(text, narrationRate('ru-RU', 'normal'), onDone, onDone);
+        void playRussianSpeech(text, narrationRate('ru-RU', 'normal'), onDone, onDone, { pitch });
         return;
       case 'tr':
-        void playTurkishSpeech(text, TR_NORMAL_SPEECH_RATE, onDone, onDone);
+        void playTurkishSpeech(text, TR_NORMAL_SPEECH_RATE, onDone, onDone, { pitch });
         return;
       case 'de':
       case 'fr':
       case 'es':
-        void playStarterSpeech(locale, text, narrationRate(locale, 'normal'), onDone, undefined, onDone);
+        void playStarterSpeech(locale, text, narrationRate(locale, 'normal'), onDone, undefined, onDone, { pitch });
         return;
       case 'ar':
-        playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone });
+        playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, pitch, onDone, onError: onDone });
         return;
       default:
         onDone();
@@ -139,6 +139,7 @@ export default function DialogueRoomScreen() {
   }, [language, lessonIdParam, reload]);
 
   const speak = useCallback((text: string, onDone: () => void) => speakFor(language, lesson?.locale ?? '')(text, onDone), [language, lesson?.locale]);
+  const speakOperator = useCallback((text: string, onDone: () => void) => speakFor(language, lesson?.locale ?? '', 0.82)(text, onDone), [language, lesson?.locale]);
 
   return (
     <View style={styles.root}>
@@ -157,6 +158,7 @@ export default function DialogueRoomScreen() {
             lines={lesson.lines}
             locale={lesson.locale}
             onSpeak={speak}
+            onSpeakOperator={speakOperator}
           />
         ) : (
           <View style={styles.emptyCard}>

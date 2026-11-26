@@ -702,6 +702,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
           locale={course.locale}
           onSpeak={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone)}
+          onSpeakOperator={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone, { pitch: 0.82 })}
         />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}

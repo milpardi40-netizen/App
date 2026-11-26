@@ -629,6 +629,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
           lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
           locale="tr-TR"
           onSpeak={(text, onDone) => void playTurkishSpeech(text, NORMAL_SPEECH_RATE, onDone, onDone)}
+          onSpeakOperator={(text, onDone) => void playTurkishSpeech(text, NORMAL_SPEECH_RATE, onDone, onDone, { pitch: 0.82 })}
         />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}

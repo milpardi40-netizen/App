@@ -67,7 +67,7 @@ export function warmStarterSpeech(locale: string): void {
   void findVoices(locale).catch(() => undefined);
 }
 
-export function playStarterSpeech(locale: string, text: string, rate: number, onError?: () => void, onVoiceFallback?: () => void, onDone?: () => void) {
+export function playStarterSpeech(locale: string, text: string, rate: number, onError?: () => void, onVoiceFallback?: () => void, onDone?: () => void, options?: { pitch?: number }) {
   const request = ++requestId;
   queue = queue.catch(() => undefined).then(async () => {
     if (request !== requestId) return;
@@ -104,6 +104,7 @@ export function playStarterSpeech(locale: string, text: string, rate: number, on
           language: speechTagFor(locale),
           ...(candidate.voice ? { voice: candidate.voice } : {}),
           rate,
+          ...(options?.pitch !== undefined ? { pitch: options.pitch } : {}),
           onStart: () => { if (!failed && request === requestId && candidate.fallback) onVoiceFallback?.(); },
           onDone: () => { if (!failed && request === requestId) { noteSpeechSuccess(); onDone?.(); } },
           onError: retry,
