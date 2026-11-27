@@ -39,6 +39,7 @@
     "validate:turn-conversation": "node scripts/verify-turn-conversation.cjs",
     "validate:shared-level": "node scripts/verify-shared-level.cjs",
     "validate:registration-admin": "node scripts/verify-registration-admin.mjs",
+    "validate:update-reports": "node scripts/verify-update-reports-scope.cjs && node scripts/verify-update-reports-db.mjs && node scripts/verify-update-reports-client.cjs && node scripts/verify-update-reports-ui.cjs",
     "validate:apk-download": "node scripts/verify-apk-download.cjs",
     "validate:requested-updates": "node scripts/verify-requested-updates.mjs",
     "validate:backup": "node scripts/verify-english-backup.mjs",

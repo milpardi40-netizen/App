@@ -10,7 +10,7 @@ const target = 'file:///cache/updates/milo-update-116.apk';
 const pending = 'milo_update_pending_install_v1';
 
 function fixture({ http = 200, size = 20, exists = true, verdict = 'ok', installCode, beforeDownload } = {}) {
-  const calls = [], storage = new Map([['course-progress', 'keep']]);
+  const reports = [], calls = [], storage = new Map([['course-progress', 'keep']]);
   const deps = {
     'react-native': { Platform: { OS: 'android' } },
     'expo-application': { applicationId: 'com.devicecontrol.milofive', nativeBuildVersion: '115' },
@@ -29,10 +29,11 @@ function fixture({ http = 200, size = 20, exists = true, verdict = 'ok', install
     'expo-intent-launcher': { async startActivityAsync(...args) { calls.push(['install', ...args]); return { extra: { 'android.intent.extra.INSTALL_RESULT': installCode } }; } },
     '@react-native-async-storage/async-storage': { async setItem(k, v) { storage.set(k, v); }, async removeItem(k) { storage.delete(k); } },
     './pairing': {}, './supabase': {},
+    './updateReporting': {reportVerifiedUpdateDownload: b=>reports.push(['download_verified',b]),reportUpdateInstallerRequested: b=>reports.push(['installer_requested',b])},
   };
   const mod = { exports: {} };
   new Function('require', 'module', 'exports', js)(name => { assert.ok(name in deps, name); return deps[name]; }, mod, mod.exports);
-  return { download: mod.exports.downloadAndInstall, calls, storage };
+  return { download: mod.exports.downloadAndInstall, calls, storage, reports };
 }
 
 (async () => {
@@ -47,7 +48,9 @@ function fixture({ http = 200, size = 20, exists = true, verdict = 'ok', install
     assert.deepEqual(f.calls[2], ['verify', target, 116, verifyHash]);
     assert.deepEqual(f.calls.at(-1), ['install', 'android.intent.action.VIEW', { data: 'content://private/updates/file.apk', type: 'application/vnd.android.package-archive', flags: 1, extra: { 'android.intent.extra.RETURN_RESULT': true } }]);
     assert.equal(JSON.parse(f.storage.get(pending)).version_code, 116);
-    assert.equal(f.storage.get('course-progress'), 'keep'); count++;
+    assert.equal(f.storage.get('course-progress'), 'keep');
+    assert.deepEqual(f.reports.map(r=>r[0]),['download_verified','installer_requested']);
+    assert.equal(f.reports[0][1].code,116); count++;
   }
   for (const [setup, override] of [
     [{ http: 206 }, {}], [{ http: 302 }, {}], [{ http: 403 }, {}], [{ size: 0 }, { file_size: null }],
@@ -58,6 +61,7 @@ function fixture({ http = 200, size = 20, exists = true, verdict = 'ok', install
     const f = fixture(setup);
     await assert.rejects(f.download({ ...release, ...override }));
     assert.ok(!f.calls.some(([c]) => c === 'share' || c === 'install'));
+    assert.deepEqual(f.reports,[],'no fake download or installer counts for rejected APKs');
     if (f.calls.some(([c]) => c === 'download')) assert.deepEqual(f.calls.at(-1), ['delete', target]);
     assert.deepEqual([...f.storage], [['course-progress', 'keep']]); count++;
   }

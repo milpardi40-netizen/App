@@ -1,3 +1,4 @@
+import { reportVerifiedUpdateDownload, reportUpdateInstallerRequested } from './updateReporting';
 /**
  * Learner-side in-app updates (Android). The app asks the server for the
  * newest published release of its own package, downloads the APK into the
@@ -129,11 +130,14 @@ export async function downloadAndInstall(release: AppRelease, onProgress?: Downl
     }
     const verdict = await requireNativeModule<ApkVerifier>('MiloApkVerifier').check(target, release.version_code, hash);
     if (verdict !== 'ok') throw new Error(archiveErrors[verdict] || archiveErrors.invalid);
+    const reportingBuild = { package: installedVersion().package || '', code: release.version_code, name: release.version_name };
+    reportVerifiedUpdateDownload(reportingBuild);
     const contentUri = await FileSystem.getContentUriAsync(target);
     onProgress?.(1);
     // Store notes before opening the installer: an accepted upgrade kills this process.
     await AsyncStorage.setItem(PENDING_INSTALL_KEY, JSON.stringify({ version_code: release.version_code, version_name: release.version_name, release_notes: release.release_notes || '' })).catch(() => undefined);
     handedOff = true;
+    reportUpdateInstallerRequested(reportingBuild);
     const response = await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
       data: contentUri,
       type: 'application/vnd.android.package-archive',
