@@ -9,8 +9,8 @@ export default function FoundationA1Entry({language}: {language:FoundationLangua
   const router = useRouter();
   return <Pressable accessibilityRole="button" accessibilityLabel="نقشهٔ جدید Foundation A1" style={s.card} onPress={()=>router.push({pathname:'/foundation/[language]',params:{language}} as never)}>
     <Text style={s.title}>Foundation A1 · مسیر جمله‌محور</Text>
-    <Text style={s.description}>آغاز تدوین ۱۲ سرفصل هماهنگ؛ محتوای قبلی و پیشرفت آن محفوظ است.</Text>
-    <Text style={s.action}>دیدن سرفصل‌ها ←</Text>
+    <Text style={s.description}>{language === 'tr' ? 'مسیر کامل ۶۴درسی A1 ترکی؛ از جمله‌های ساده تا گفت‌وگوی مرتبط، با حفظ سابقهٔ قبلی.' : 'آغاز تدوین ۱۲ سرفصل هماهنگ؛ محتوای قبلی و پیشرفت آن محفوظ است.'}</Text>
+    <Text style={s.action}>{language === 'tr' ? 'دیدن درس‌های ترکی ←' : 'دیدن سرفصل‌ها ←'}</Text>
   </Pressable>;
 }
 const s=StyleSheet.create({

@@ -201,9 +201,13 @@ export async function loadLearnerProfileSummary(now = new Date()): Promise<Learn
       if (n > 0) { days.add(day); dailyReviews[day] = (dailyReviews[day] ?? 0) + n; }
     }
     for (const card of snap.validCards) {
-      const h = ratingsOf(card);
-      reviewsDone += h.undated; reviewLowerBound ||= h.lowerBound;
-      for (const [day, n] of Object.entries(datedRatings(h))) { reviewsDone += n; addReviewDay(day, n); }
+      // Revised slots start fresh scheduling; archived reviews still count as actual historical activity.
+      const previous = (id === 'en' || id === 'de' || id === 'fr' || id === 'es' || id === 'tr' || id === 'ar') ? (card as SentenceReviewCard).previousContent : undefined;
+      const histories = [ratingsOf(card), ...(previous ? [ratingsOf(previous)] : [])];
+      for (const h of histories) {
+        reviewsDone += h.undated; reviewLowerBound ||= h.lowerBound;
+        for (const [day, n] of Object.entries(datedRatings(h))) { reviewsDone += n; addReviewDay(day, n); }
+      }
     }
     const wordDeck = { seen: 0, mastered: 0, due: 0, reviews: 0 };
     if ((id === 'ru' || id === 'de') && Object.keys(words.cards).length) {

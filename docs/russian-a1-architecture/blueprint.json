@@ -1,0 +1,1225 @@
+{
+  "schemaVersion": 1,
+  "designRevision": "ru-a1-architecture-draft-1",
+  "status": "review-required-not-runtime",
+  "date": "2026-11-26",
+  "baselineCommit": "acdbd68c06cc02311a4b066ea5f625b112b11413",
+  "target": "CEFR A1-aligned learning pathway; not certification or complete TORFL exam preparation",
+  "supersedes": "docs/RUSSIAN-A1-SEQUENCE-PROPOSAL.md",
+  "sourceIds": [
+    "CEFR-CV-2020",
+    "SPBU-A1-DEMO"
+  ],
+  "outcomes": [
+    {
+      "id": "listening",
+      "descriptionFa": "استخراج اطلاعات عینی آشنا از گفتار بسیار آهسته و روشن با امکان تکرار"
+    },
+    {
+      "id": "reading",
+      "descriptionFa": "فهم نام، تابلو، فرم و پیام بسیار کوتاه با امکان بازخوانی"
+    },
+    {
+      "id": "interaction",
+      "descriptionFa": "پرسش و پاسخ کوتاه دربارهٔ نیاز یا موضوع آشنا با همکاری مخاطب"
+    },
+    {
+      "id": "spoken-production",
+      "descriptionFa": "بیان اطلاعات شخصی و توصیف ساده با عبارت‌ها و جمله‌های کوتاه"
+    },
+    {
+      "id": "writing",
+      "descriptionFa": "ثبت مشخصات و تولید پیام یا معرفی کوتاه با جمله‌های ساده"
+    }
+  ],
+  "modules": [
+    {
+      "id": "M1",
+      "titleFa": "ورود به A1 و ابزار یادگیری",
+      "lessonIds": [
+        "ru-a1-introducing-yourself",
+        "ru-a1-pronouns-and-be",
+        "ru-a1-alphabet-and-spelling",
+        "ru-a1-asking-for-help",
+        "ru-a1-school-and-learning"
+      ],
+      "checkpointAfter": "ru-a1-school-and-learning"
+    },
+    {
+      "id": "M2",
+      "titleFa": "عدد، مالکیت و جای چیزها",
+      "lessonIds": [
+        "ru-a1-numbers-and-contact",
+        "ru-a1-family-and-possessions",
+        "ru-a1-objects-and-places"
+      ],
+      "checkpointAfter": "ru-a1-objects-and-places"
+    },
+    {
+      "id": "M3",
+      "titleFa": "زمان و کارهای روزمره",
+      "lessonIds": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-everyday-routine",
+        "ru-a1-current-activities"
+      ],
+      "checkpointAfter": "ru-a1-current-activities"
+    },
+    {
+      "id": "M4",
+      "titleFa": "توصیف و علاقه",
+      "lessonIds": [
+        "ru-a1-weather-and-seasons",
+        "ru-a1-hobbies-and-free-time"
+      ],
+      "checkpointAfter": "ru-a1-hobbies-and-free-time"
+    },
+    {
+      "id": "M5",
+      "titleFa": "خرید و سفارش",
+      "lessonIds": [
+        "ru-a1-buying-something",
+        "ru-a1-shopping-and-clothing",
+        "ru-a1-cafe-and-food"
+      ],
+      "checkpointAfter": "ru-a1-cafe-and-food"
+    },
+    {
+      "id": "M6",
+      "titleFa": "حرکت در شهر",
+      "lessonIds": [
+        "ru-a1-directions-and-neighborhood",
+        "ru-a1-public-transport"
+      ],
+      "checkpointAfter": "ru-a1-public-transport"
+    },
+    {
+      "id": "M7",
+      "titleFa": "تجربه، برنامه و اطلاعات رسمی",
+      "lessonIds": [
+        "ru-a1-past-and-future-plans",
+        "ru-a1-invitations-and-plans",
+        "ru-a1-appointments-and-time",
+        "ru-a1-personal-information"
+      ],
+      "checkpointAfter": "ru-a1-personal-information"
+    },
+    {
+      "id": "M8",
+      "titleFa": "سفر، ارتباط و کمک",
+      "lessonIds": [
+        "ru-a1-travel-and-tickets",
+        "ru-a1-hotel-and-stay",
+        "ru-a1-phone-and-messages",
+        "ru-a1-health-and-pharmacy"
+      ],
+      "checkpointAfter": "ru-a1-health-and-pharmacy"
+    },
+    {
+      "id": "M9",
+      "titleFa": "کاربرد ترکیبی",
+      "lessonIds": [
+        "ru-a1-services-and-post-office",
+        "ru-a1-renting-a-home",
+        "ru-a1-job-interview"
+      ],
+      "checkpointAfter": "ru-a1-job-interview"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ru-a1-introducing-yourself",
+      "proposedOrder": 1,
+      "currentOrder": 1,
+      "moduleId": "M1",
+      "titleFa": "معرفی خود",
+      "prerequisiteLessonIds": [],
+      "baselineLessonIds": [
+        "ru-pre-13-greeting-name-phrases",
+        "ru-pre-17-sentences-be-have",
+        "ru-pre-21-daily-identity-family-age",
+        "ru-pre-24-conv-greeting-intro"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "spoken-production"
+      ],
+      "goalFa": "خودم را با نام، کشور و محل زندگی معرفی کنم و همین اطلاعات را از مخاطب بپرسم.",
+      "vocabularySeeds": [
+        "имя",
+        "страна",
+        "город",
+        "жить"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "معرفی و پرسش آشنا؛ из + کشور و в + شهر در چند نمونه؛ بدون آموزش هم‌زمان همهٔ حالت‌ها.",
+      "transferTaskFa": "کارت شخصیت تازه را بخواند و با تغییر نام و شهر، معرفی و دو سؤال بسازد.",
+      "reviewAt": [
+        "ru-a1-pronouns-and-be",
+        "ru-a1-alphabet-and-spelling"
+      ]
+    },
+    {
+      "id": "ru-a1-pronouns-and-be",
+      "proposedOrder": 2,
+      "currentOrder": 5,
+      "moduleId": "M1",
+      "titleFa": "ضمیرها و جمله‌های پایه",
+      "prerequisiteLessonIds": [
+        "ru-a1-introducing-yourself"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-05-pronouns-family",
+        "ru-pre-15-combos-pronoun-demo",
+        "ru-pre-17-sentences-be-have",
+        "ru-pre-19-questions-basic"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "spoken-production"
+      ],
+      "goalFa": "دربارهٔ خودم و فرد دیگر جملهٔ اسمی مثبت، منفی و پرسشی بسازم.",
+      "vocabularySeeds": [
+        "я",
+        "ты",
+        "вы",
+        "он",
+        "она",
+        "мы",
+        "они"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "ضمیرها؛ نبود فعل ربطی در حال؛ не؛ تمایز ты/вы؛ فقط سؤال بله/خیر همان الگو.",
+      "transferTaskFa": "هویت یا مکان دو نفر را از تصویر تشخیص دهد و یک برداشت غلط مخاطب را اصلاح کند.",
+      "reviewAt": [
+        "ru-a1-alphabet-and-spelling",
+        "ru-a1-asking-for-help"
+      ]
+    },
+    {
+      "id": "ru-a1-alphabet-and-spelling",
+      "proposedOrder": 3,
+      "currentOrder": 4,
+      "moduleId": "M1",
+      "titleFa": "الفبا و هجی‌کردن",
+      "prerequisiteLessonIds": [
+        "ru-a1-introducing-yourself",
+        "ru-a1-pronouns-and-be"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-06-people-objects",
+        "ru-pre-13-greeting-name-phrases",
+        "ru-pre-24-conv-greeting-intro"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "reading",
+        "writing",
+        "interaction"
+      ],
+      "goalFa": "نام و یک اطلاعات کوتاه را به سیریلیک بخوانم، هجی و تصحیح کنم.",
+      "vocabularySeeds": [
+        "буква",
+        "фамилия",
+        "адрес",
+        "правильно"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "نام حروف در برابر صدا؛ بزرگ/کوچک؛ تفاوت حروف شبیه لاتین؛ نام آشنا سپس نشانی کوتاه.",
+      "transferTaskFa": "نام تازهٔ کوتاه را از روی کارت هجی کند و یک حرف نادرست فرم را اصلاح کند.",
+      "reviewAt": [
+        "ru-a1-asking-for-help",
+        "ru-a1-school-and-learning"
+      ]
+    },
+    {
+      "id": "ru-a1-asking-for-help",
+      "proposedOrder": 4,
+      "currentOrder": 2,
+      "moduleId": "M1",
+      "titleFa": "درخواست کمک",
+      "prerequisiteLessonIds": [
+        "ru-a1-introducing-yourself",
+        "ru-a1-pronouns-and-be",
+        "ru-a1-alphabet-and-spelling"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-14-polite-phrases",
+        "ru-pre-18-sentences-verbs",
+        "ru-pre-28-conv-classroom"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "listening"
+      ],
+      "goalFa": "نفهمیدن را مشخص کنم و تکرار، آهسته‌گویی یا نوشتن بخواهم.",
+      "vocabularySeeds": [
+        "понимать",
+        "повторить",
+        "помочь",
+        "медленно"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "درخواست‌های امری مؤدبانه در حد عبارت آماده؛ мне در کمک؛ نه جدول کامل صرف امر.",
+      "transferTaskFa": "در گفت‌وگویی با نام نامفهوم، درخواست تکرار کند و نام را تأیید کند.",
+      "reviewAt": [
+        "ru-a1-school-and-learning",
+        "ru-a1-phone-and-messages"
+      ]
+    },
+    {
+      "id": "ru-a1-school-and-learning",
+      "proposedOrder": 5,
+      "currentOrder": 27,
+      "moduleId": "M1",
+      "titleFa": "کلاس و یادگیری",
+      "prerequisiteLessonIds": [
+        "ru-a1-alphabet-and-spelling",
+        "ru-a1-asking-for-help"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-04-food-study-daily",
+        "ru-pre-12-verbs",
+        "ru-pre-28-conv-classroom"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "listening",
+        "reading",
+        "writing"
+      ],
+      "goalFa": "معنی واژه را بپرسم، دستور یک‌مرحله‌ای کلاس را بفهمم و پاسخ کوتاه بنویسم.",
+      "vocabularySeeds": [
+        "слово",
+        "вопрос",
+        "ответ",
+        "писать",
+        "читать"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "Что значит…?؛ Как сказать…?؛ بازیابی حال؛ فعل امر کلاسی در عبارت‌های ثابت.",
+      "transferTaskFa": "دستور تازهٔ «بخوان/بنویس» را اجرا کند و معنی یک واژهٔ مشخص را بپرسد.",
+      "reviewAt": [
+        "ru-a1-numbers-and-contact"
+      ]
+    },
+    {
+      "id": "ru-a1-numbers-and-contact",
+      "proposedOrder": 6,
+      "currentOrder": 6,
+      "moduleId": "M2",
+      "titleFa": "عددها و اطلاعات تماس",
+      "prerequisiteLessonIds": [
+        "ru-a1-introducing-yourself",
+        "ru-a1-alphabet-and-spelling",
+        "ru-a1-school-and-learning"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-09-numbers",
+        "ru-pre-21-daily-identity-family-age",
+        "ru-pre-29-numbers-teens"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "interaction",
+        "writing"
+      ],
+      "goalFa": "شماره و سن را دقیق بگویم، عددهای تا صد را بفهمم و ثبت کنم.",
+      "vocabularySeeds": [
+        "номер",
+        "телефон",
+        "тридцать",
+        "пятьдесят",
+        "сто"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "دهگان و یکان؛ رقم‌خوانی؛ سن با год/года/лет و استثنای ۱۱–۱۴؛ عدد در برابر تعداد.",
+      "transferTaskFa": "شماره و سن از پیام تازه را ثبت و رقم اشتباه را تصحیح کند.",
+      "reviewAt": [
+        "ru-a1-family-and-possessions",
+        "ru-a1-time-and-calendar"
+      ]
+    },
+    {
+      "id": "ru-a1-family-and-possessions",
+      "proposedOrder": 7,
+      "currentOrder": 7,
+      "moduleId": "M2",
+      "titleFa": "خانواده و مالکیت",
+      "prerequisiteLessonIds": [
+        "ru-a1-pronouns-and-be",
+        "ru-a1-numbers-and-contact"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-03-family-home",
+        "ru-pre-05-pronouns-family",
+        "ru-pre-15-combos-pronoun-demo",
+        "ru-pre-17-sentences-be-have",
+        "ru-pre-20-questions-whose-yesno-count",
+        "ru-pre-25-conv-family-home"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "spoken-production",
+        "writing"
+      ],
+      "goalFa": "خانواده را معرفی کنم و داشتن، نداشتن و مالکیت را بیان کنم.",
+      "vocabularySeeds": [
+        "семья",
+        "мама",
+        "сестра",
+        "родители",
+        "сумка"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "мой/моя/моё/мои؛ есть/нет و اضافه در نمونه‌های محدود؛ чей/чья؛ جنس اسم نه جنس مالک.",
+      "transferTaskFa": "با عکس خانوادهٔ تازه چند جمله و دو پاسخ مالکیت بسازد.",
+      "reviewAt": [
+        "ru-a1-objects-and-places",
+        "ru-a1-buying-something"
+      ]
+    },
+    {
+      "id": "ru-a1-objects-and-places",
+      "proposedOrder": 8,
+      "currentOrder": 10,
+      "moduleId": "M2",
+      "titleFa": "وسایل و مکان‌های نزدیک",
+      "prerequisiteLessonIds": [
+        "ru-a1-pronouns-and-be",
+        "ru-a1-family-and-possessions"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-17-sentences-be-have",
+        "ru-pre-26-conv-objects"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "reading",
+        "interaction",
+        "spoken-production"
+      ],
+      "goalFa": "جای وسیله و ویژگی سادهٔ اتاق را توضیح بدهم.",
+      "vocabularySeeds": [
+        "комната",
+        "стол",
+        "ключ",
+        "окно",
+        "рядом"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "в/на + مکان ثابت؛ جنس/عدد صفت در именительный؛ рядом с در ترکیب محدود؛ نه همهٔ حروف اضافه.",
+      "transferTaskFa": "با نقشهٔ اتاق تازه جای دو وسیله را بگوید و یک سؤال بپرسد.",
+      "reviewAt": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-everyday-routine"
+      ]
+    },
+    {
+      "id": "ru-a1-time-and-calendar",
+      "proposedOrder": 9,
+      "currentOrder": 8,
+      "moduleId": "M3",
+      "titleFa": "زمان و تقویم",
+      "prerequisiteLessonIds": [
+        "ru-a1-numbers-and-contact",
+        "ru-a1-objects-and-places"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-10-days-places",
+        "ru-pre-30-question-words-2"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "reading",
+        "interaction",
+        "writing"
+      ],
+      "goalFa": "روز هفته و ساعت یک برنامه را بخوانم، بپرسم و ثبت کنم.",
+      "vocabularySeeds": [
+        "час",
+        "минута",
+        "сегодня",
+        "завтра",
+        "среда",
+        "суббота"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "ساعت کامل/نیم‌ساعت و ساعت دیجیتال ساده؛ в + ساعت/روز؛ عدد و اسم زمان؛ ماه و تاریخ کامل فعلاً نه.",
+      "transferTaskFa": "از برنامهٔ جدید روز و ساعت را پیدا کند و در یک پیام کوتاه بنویسد.",
+      "reviewAt": [
+        "ru-a1-everyday-routine",
+        "ru-a1-weather-and-seasons"
+      ]
+    },
+    {
+      "id": "ru-a1-everyday-routine",
+      "proposedOrder": 10,
+      "currentOrder": 9,
+      "moduleId": "M3",
+      "titleFa": "کارهای روزمره",
+      "prerequisiteLessonIds": [
+        "ru-a1-pronouns-and-be",
+        "ru-a1-objects-and-places",
+        "ru-a1-time-and-calendar"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-12-verbs",
+        "ru-pre-16-combos-adj-verb",
+        "ru-pre-18-sentences-verbs"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "spoken-production",
+        "writing"
+      ],
+      "goalFa": "روز معمولی خودم را با زمان و ترتیب ساده شرح بدهم.",
+      "vocabularySeeds": [
+        "работать",
+        "завтракать",
+        "вставать",
+        "утром",
+        "потом"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "حال افعال پرتکرار؛ افعال انعکاسی لازم در مثال؛ и/потом؛ همیشه/گاهی/هیچ‌وقت و نفی؛ حرکت فعلاً هدف نیست.",
+      "transferTaskFa": "روال شخص تازه را بفهمد و چند جمله دربارهٔ برنامهٔ خودش بسازد.",
+      "reviewAt": [
+        "ru-a1-current-activities",
+        "ru-a1-hobbies-and-free-time"
+      ]
+    },
+    {
+      "id": "ru-a1-current-activities",
+      "proposedOrder": 11,
+      "currentOrder": 28,
+      "moduleId": "M3",
+      "titleFa": "کارهایی که همین حالا انجام می‌دهیم",
+      "prerequisiteLessonIds": [
+        "ru-a1-pronouns-and-be",
+        "ru-a1-everyday-routine"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-12-verbs",
+        "ru-pre-16-combos-adj-verb",
+        "ru-pre-18-sentences-verbs"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "interaction",
+        "spoken-production"
+      ],
+      "goalFa": "کار همین لحظهٔ خودم و دیگران را از عادت روزانه جدا کنم.",
+      "vocabularySeeds": [
+        "сейчас",
+        "делать",
+        "слушать",
+        "готовить"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "گسترش حال به فاعل‌های دیگر؛ сейчас/обычно؛ مفعول مستقیم با اسم آشنا؛ نبودِ زمان صرفی جدا برای استمراری.",
+      "transferTaskFa": "از تصویر تازه بگوید هرکس چه می‌کند و از مخاطب یک سؤال بپرسد.",
+      "reviewAt": [
+        "ru-a1-weather-and-seasons",
+        "ru-a1-hobbies-and-free-time"
+      ]
+    },
+    {
+      "id": "ru-a1-weather-and-seasons",
+      "proposedOrder": 12,
+      "currentOrder": 22,
+      "moduleId": "M4",
+      "titleFa": "آب‌وهوا و فصل‌ها",
+      "prerequisiteLessonIds": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-current-activities"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-11-adjectives",
+        "ru-pre-23-daily-descriptions",
+        "ru-pre-31-more-descriptions"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "reading",
+        "spoken-production"
+      ],
+      "goalFa": "اطلاعات سادهٔ هوای امروز و فصل را بفهمم و بیان کنم.",
+      "vocabularySeeds": [
+        "погода",
+        "тепло",
+        "холодно",
+        "дождь",
+        "зима",
+        "лето"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "جمله‌های بی‌شخص هوا؛ идёт дождь در حد ترکیب؛ فصل به صورت قید؛ بازیابی صفت، نه آیندهٔ جدید.",
+      "transferTaskFa": "از کارت هوای دو شهر، شهر مناسب یک فعالیت آشنا را انتخاب و اطلاعات آن را منتقل کند.",
+      "reviewAt": [
+        "ru-a1-hobbies-and-free-time",
+        "ru-a1-shopping-and-clothing"
+      ]
+    },
+    {
+      "id": "ru-a1-hobbies-and-free-time",
+      "proposedOrder": 13,
+      "currentOrder": 20,
+      "moduleId": "M4",
+      "titleFa": "سرگرمی و اوقات فراغت",
+      "prerequisiteLessonIds": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-everyday-routine",
+        "ru-a1-current-activities",
+        "ru-a1-weather-and-seasons"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-18-sentences-verbs",
+        "ru-pre-19-questions-basic",
+        "ru-pre-22-daily-likes-needs-wants"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "spoken-production",
+        "writing"
+      ],
+      "goalFa": "علاقه، فعالیت اوقات فراغت و یک دلیل ساده را بیان کنم.",
+      "vocabularySeeds": [
+        "музыка",
+        "фильм",
+        "спорт",
+        "свободный",
+        "потому что"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "любить + مصدر/مفعول؛ нравится/нравятся در نمونه؛ потому что در یک علت کوتاه؛ творительный فعالیت در نمونهٔ لازم.",
+      "transferTaskFa": "پیام دوست دربارهٔ علاقه را بخواند و با علاقهٔ خودش و یک سؤال جواب بدهد.",
+      "reviewAt": [
+        "ru-a1-buying-something",
+        "ru-a1-cafe-and-food"
+      ]
+    },
+    {
+      "id": "ru-a1-buying-something",
+      "proposedOrder": 14,
+      "currentOrder": 3,
+      "moduleId": "M5",
+      "titleFa": "خرید ساده",
+      "prerequisiteLessonIds": [
+        "ru-a1-numbers-and-contact",
+        "ru-a1-family-and-possessions",
+        "ru-a1-hobbies-and-free-time"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-20-questions-whose-yesno-count",
+        "ru-pre-27-conv-food-shopping"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "interaction",
+        "reading"
+      ],
+      "goalFa": "قیمت و مقدار ساده را بپرسم و یک خرید کوچک انجام بدهم.",
+      "vocabularySeeds": [
+        "магазин",
+        "цена",
+        "рубль",
+        "яблоко",
+        "бутылка"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "стоить مفرد/جمع؛ винительный خواستن/خریدن؛ مقدار و родительный؛ کارت پرداخت در عبارت آماده.",
+      "transferTaskFa": "از قیمت‌نامهٔ تازه کالای خواسته‌شده را انتخاب و مقدار و پرداخت را مشخص کند.",
+      "reviewAt": [
+        "ru-a1-shopping-and-clothing",
+        "ru-a1-cafe-and-food"
+      ]
+    },
+    {
+      "id": "ru-a1-shopping-and-clothing",
+      "proposedOrder": 15,
+      "currentOrder": 17,
+      "moduleId": "M5",
+      "titleFa": "لباس و خرید روزمره",
+      "prerequisiteLessonIds": [
+        "ru-a1-family-and-possessions",
+        "ru-a1-weather-and-seasons",
+        "ru-a1-buying-something"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-08-animals-colors",
+        "ru-pre-11-adjectives",
+        "ru-pre-23-daily-descriptions",
+        "ru-pre-31-more-descriptions"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "reading",
+        "spoken-production"
+      ],
+      "goalFa": "اندازه و رنگ لباس بخواهم و یک اندازهٔ نامناسب را عوض کنم.",
+      "vocabularySeeds": [
+        "куртка",
+        "обувь",
+        "размер",
+        "цвет",
+        "примерить"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "صفت و اسم در винительный مؤنث؛ این/آن؛ мал/велик در ترکیب؛ بزرگ‌تر فقط برای اندازه.",
+      "transferTaskFa": "در نقش مشتری، با توجه به اندازه و رنگ متفاوت از مثال، گزینهٔ مناسب بخواهد.",
+      "reviewAt": [
+        "ru-a1-cafe-and-food"
+      ]
+    },
+    {
+      "id": "ru-a1-cafe-and-food",
+      "proposedOrder": 16,
+      "currentOrder": 16,
+      "moduleId": "M5",
+      "titleFa": "غذا و سفارش در کافه",
+      "prerequisiteLessonIds": [
+        "ru-a1-hobbies-and-free-time",
+        "ru-a1-buying-something",
+        "ru-a1-shopping-and-clothing"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-07-food-drinks",
+        "ru-pre-22-daily-likes-needs-wants",
+        "ru-pre-27-conv-food-shopping"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "interaction",
+        "reading"
+      ],
+      "goalFa": "از منوی ساده سفارش بدهم، یک ترجیح بگویم و صورت‌حساب بخواهم.",
+      "vocabularySeeds": [
+        "меню",
+        "суп",
+        "чай",
+        "кофе",
+        "счёт",
+        "сахар"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "с + افزودنی و без + اسم در ترکیب؛ ظرف/مقدار؛ بازیابی مفعول؛ دستور غذا و واژگان سنگین نه.",
+      "transferTaskFa": "از منوی جدید دو مورد سفارش دهد و یک افزودنی را حذف کند.",
+      "reviewAt": [
+        "ru-a1-invitations-and-plans"
+      ]
+    },
+    {
+      "id": "ru-a1-directions-and-neighborhood",
+      "proposedOrder": 17,
+      "currentOrder": 14,
+      "moduleId": "M6",
+      "titleFa": "محله و مسیرها",
+      "prerequisiteLessonIds": [
+        "ru-a1-objects-and-places",
+        "ru-a1-time-and-calendar",
+        "ru-a1-buying-something"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-10-days-places",
+        "ru-pre-26-conv-objects"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "reading",
+        "interaction"
+      ],
+      "goalFa": "مکان آشنا را پیدا کنم و مسیر کوتاه روشن را دنبال کنم.",
+      "vocabularySeeds": [
+        "улица",
+        "банк",
+        "аптека",
+        "прямо",
+        "направо",
+        "налево"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "где/куда و в/на مکان/مقصد؛ до + مقصد؛ идти برای حرکت مشخص؛ امر مسیر فقط در قالب‌های آموخته.",
+      "transferTaskFa": "مسیر دو/سه‌مرحله‌ای تازه را روی نقشه پیدا کند؛ نه توضیح مسیر پیچیده بدون کمک.",
+      "reviewAt": [
+        "ru-a1-public-transport"
+      ]
+    },
+    {
+      "id": "ru-a1-public-transport",
+      "proposedOrder": 18,
+      "currentOrder": 15,
+      "moduleId": "M6",
+      "titleFa": "حمل‌ونقل عمومی",
+      "prerequisiteLessonIds": [
+        "ru-a1-numbers-and-contact",
+        "ru-a1-time-and-calendar",
+        "ru-a1-buying-something",
+        "ru-a1-directions-and-neighborhood"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-12-verbs",
+        "ru-pre-26-conv-objects"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "interaction",
+        "reading"
+      ],
+      "goalFa": "مقصد وسیله، بلیت و ایستگاه پیاده‌شدن را با کمک مخاطب مشخص کنم.",
+      "vocabularySeeds": [
+        "автобус",
+        "метро",
+        "билет",
+        "остановка",
+        "ехать"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "идти/ехать حرکت مشخص؛ ходить/ездить عادت با مقایسهٔ محدود؛ на + وسیله در ترکیب؛ ایستگاه بعدی.",
+      "transferTaskFa": "از نقشهٔ خط ساده، وسیله و محل پیاده‌شدن را بپرسد و پاسخ آهسته را تأیید کند.",
+      "reviewAt": [
+        "ru-a1-past-and-future-plans",
+        "ru-a1-travel-and-tickets"
+      ]
+    },
+    {
+      "id": "ru-a1-past-and-future-plans",
+      "proposedOrder": 19,
+      "currentOrder": 29,
+      "moduleId": "M7",
+      "titleFa": "دیروز و برنامهٔ فردا",
+      "prerequisiteLessonIds": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-everyday-routine",
+        "ru-a1-current-activities",
+        "ru-a1-public-transport"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-12-verbs",
+        "ru-pre-18-sentences-verbs",
+        "ru-pre-30-question-words-2"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "spoken-production",
+        "interaction",
+        "writing"
+      ],
+      "goalFa": "دو کار دیروز و یک برنامهٔ فردا را با افعال آشنا بیان کنم.",
+      "vocabularySeeds": [
+        "вчера",
+        "завтра",
+        "быть",
+        "делать",
+        "сделать"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "دو زیربخش مستقل: گذشته و جنس/جمع، سپس буду + مصدر؛ یک تقابل محدود делать/сделать و пойду آماده؛ نه نظام کامل وجه/پیشوند.",
+      "transferTaskFa": "پس از دو تمرین جدا، از کارت زمانی تازه دیروز و فردا را مقایسه کند.",
+      "reviewAt": [
+        "ru-a1-invitations-and-plans",
+        "ru-a1-appointments-and-time"
+      ]
+    },
+    {
+      "id": "ru-a1-invitations-and-plans",
+      "proposedOrder": 20,
+      "currentOrder": 21,
+      "moduleId": "M7",
+      "titleFa": "دعوت و برنامه‌ریزی",
+      "prerequisiteLessonIds": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-hobbies-and-free-time",
+        "ru-a1-cafe-and-food",
+        "ru-a1-past-and-future-plans"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-13-greeting-name-phrases",
+        "ru-pre-14-polite-phrases",
+        "ru-pre-27-conv-food-shopping"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "reading",
+        "writing"
+      ],
+      "goalFa": "دعوت ساده را قبول یا رد کنم و زمان و مکان مشخص کنم.",
+      "vocabularySeeds": [
+        "вместе",
+        "встречаться",
+        "приглашать",
+        "можно"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "Хочешь…?؛ Давай… در عبارت آماده؛ مصدر حرکت آشنا؛ بافت دوستانه/رسمی روشن.",
+      "transferTaskFa": "به دعوت تازه با زمان متفاوت جواب بدهد و محل را تأیید کند.",
+      "reviewAt": [
+        "ru-a1-appointments-and-time",
+        "ru-a1-phone-and-messages"
+      ]
+    },
+    {
+      "id": "ru-a1-appointments-and-time",
+      "proposedOrder": 21,
+      "currentOrder": 18,
+      "moduleId": "M7",
+      "titleFa": "قرارها و برنامهٔ روزانه",
+      "prerequisiteLessonIds": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-past-and-future-plans",
+        "ru-a1-invitations-and-plans"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-10-days-places",
+        "ru-pre-30-question-words-2"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "listening",
+        "writing"
+      ],
+      "goalFa": "زمان مناسب پیشنهاد کنم و برای تغییر یا تأخیر کوتاه پیام بدهم.",
+      "vocabularySeeds": [
+        "свободен",
+        "занят",
+        "позже",
+        "удобно",
+        "перенести"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "صورت زن/مرد صفت کوتاه؛ вам/мне удобно؛ مدت با на؛ آیندهٔ عبارت آشنا.",
+      "transferTaskFa": "در برنامهٔ دو نفر زمان مشترک را پیدا کند و یک تغییر را در پیام کوتاه اعلام کند.",
+      "reviewAt": [
+        "ru-a1-phone-and-messages",
+        "ru-a1-health-and-pharmacy"
+      ]
+    },
+    {
+      "id": "ru-a1-personal-information",
+      "proposedOrder": 22,
+      "currentOrder": 13,
+      "moduleId": "M7",
+      "titleFa": "اطلاعات شخصی و فرم‌ها",
+      "prerequisiteLessonIds": [
+        "ru-a1-introducing-yourself",
+        "ru-a1-alphabet-and-spelling",
+        "ru-a1-numbers-and-contact",
+        "ru-a1-time-and-calendar",
+        "ru-a1-past-and-future-plans"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-13-greeting-name-phrases",
+        "ru-pre-21-daily-identity-family-age",
+        "ru-pre-24-conv-greeting-intro"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "reading",
+        "writing",
+        "interaction"
+      ],
+      "goalFa": "فرم مشخصات ساده را تکمیل و نام، نشانی و تاریخ تولد را تصحیح کنم.",
+      "vocabularySeeds": [
+        "паспорт",
+        "дата",
+        "рождение",
+        "подпись",
+        "май",
+        "январь"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "ماه و تاریخ شخصی با عدد ترتیبی در قالب محدود؛ родился/родилась؛ تابعیت و قومیت جدا؛ نه حفظ همهٔ صرف تاریخ.",
+      "transferTaskFa": "فرم تازهٔ کوتاه را با اطلاعات خود یا شخصیت فرضی پر کند و یک اشتباه را توضیح بدهد.",
+      "reviewAt": [
+        "ru-a1-travel-and-tickets",
+        "ru-a1-hotel-and-stay"
+      ]
+    },
+    {
+      "id": "ru-a1-travel-and-tickets",
+      "proposedOrder": 23,
+      "currentOrder": 23,
+      "moduleId": "M8",
+      "titleFa": "سفر و بلیت",
+      "prerequisiteLessonIds": [
+        "ru-a1-time-and-calendar",
+        "ru-a1-public-transport",
+        "ru-a1-past-and-future-plans",
+        "ru-a1-personal-information"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-09-numbers",
+        "ru-pre-10-days-places",
+        "ru-pre-26-conv-objects"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "reading",
+        "interaction"
+      ],
+      "goalFa": "بلیت سفر بخواهم و ساعت، مقصد و سکوی حرکت را پیدا کنم.",
+      "vocabularySeeds": [
+        "поезд",
+        "вокзал",
+        "платформа",
+        "туда",
+        "обратно"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "до/в + مقصد؛ с + مبدأ در نمونه؛ حرکت و رسیدن در قالب؛ ترتیبی سکو؛ نه همهٔ افعال پیشونددار.",
+      "transferTaskFa": "از بلیت و اعلام آهستهٔ تازه مقصد و سکو را تأیید کند و بلیت مناسب بخواهد.",
+      "reviewAt": [
+        "ru-a1-hotel-and-stay"
+      ]
+    },
+    {
+      "id": "ru-a1-hotel-and-stay",
+      "proposedOrder": 24,
+      "currentOrder": 24,
+      "moduleId": "M8",
+      "titleFa": "هتل و اقامت",
+      "prerequisiteLessonIds": [
+        "ru-a1-objects-and-places",
+        "ru-a1-buying-something",
+        "ru-a1-past-and-future-plans",
+        "ru-a1-personal-information",
+        "ru-a1-travel-and-tickets"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-17-sentences-be-have",
+        "ru-pre-22-daily-likes-needs-wants",
+        "ru-pre-26-conv-objects"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "reading",
+        "interaction",
+        "writing"
+      ],
+      "goalFa": "نام رزرو را بگویم و اطلاعات پایهٔ اتاق و زمان خروج را بپرسم.",
+      "vocabularySeeds": [
+        "гостиница",
+        "номер",
+        "бронь",
+        "ночь",
+        "ключ"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "گذشتهٔ رزرو؛ مدت اقامت با на؛ включён/включена در عبارت آماده؛ طبقه در الگوی محدود.",
+      "transferTaskFa": "کارت رزرو تازه را به درخواست اتاق و دو پرسش دربارهٔ اقامت تبدیل کند.",
+      "reviewAt": [
+        "ru-a1-renting-a-home"
+      ]
+    },
+    {
+      "id": "ru-a1-phone-and-messages",
+      "proposedOrder": 25,
+      "currentOrder": 25,
+      "moduleId": "M8",
+      "titleFa": "تلفن و پیام کوتاه",
+      "prerequisiteLessonIds": [
+        "ru-a1-asking-for-help",
+        "ru-a1-numbers-and-contact",
+        "ru-a1-past-and-future-plans",
+        "ru-a1-invitations-and-plans",
+        "ru-a1-appointments-and-time"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-14-polite-phrases",
+        "ru-pre-28-conv-classroom"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "listening",
+        "reading",
+        "writing",
+        "interaction"
+      ],
+      "goalFa": "پیام کوتاه آشنا را بفهمم، درخواست تکرار کنم و پیام ساده بگذارم.",
+      "vocabularySeeds": [
+        "сообщение",
+        "звонить",
+        "связь",
+        "позже",
+        "слышать"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "кому با мне/ему/ей و نام لازم؛ позвонить + дательный در نمونه؛ عبارت شمارهٔ اشتباه؛ تماس آزاد هستهٔ A1 نیست.",
+      "transferTaskFa": "پیام تأخیر تازه را بخواند و پاسخ کوتاه بنویسد؛ تماس تمرینی فقط با متن آماده و تکرارپذیر.",
+      "reviewAt": [
+        "ru-a1-health-and-pharmacy",
+        "ru-a1-services-and-post-office"
+      ]
+    },
+    {
+      "id": "ru-a1-health-and-pharmacy",
+      "proposedOrder": 26,
+      "currentOrder": 19,
+      "moduleId": "M8",
+      "titleFa": "سلامت و داروخانه",
+      "prerequisiteLessonIds": [
+        "ru-a1-asking-for-help",
+        "ru-a1-objects-and-places",
+        "ru-a1-appointments-and-time",
+        "ru-a1-phone-and-messages"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-14-polite-phrases",
+        "ru-pre-18-sentences-verbs",
+        "ru-pre-31-more-descriptions"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "listening",
+        "reading"
+      ],
+      "goalFa": "درد ساده را بگویم، کمک بخواهم و محل یا زمان مراجعه را بفهمم.",
+      "vocabularySeeds": [
+        "врач",
+        "голова",
+        "горло",
+        "болеть",
+        "помощь"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "У меня болит/болят؛ мне нужно؛ к врачу در ترکیب؛ نه تجویز/دوز دارو.",
+      "transferTaskFa": "از کارت علامت و برنامهٔ پذیرش برای کمک درخواست روشن بسازد.",
+      "reviewAt": []
+    },
+    {
+      "id": "ru-a1-services-and-post-office",
+      "proposedOrder": 27,
+      "currentOrder": 26,
+      "moduleId": "M9",
+      "titleFa": "خدمات روزمره و ادارهٔ پست",
+      "prerequisiteLessonIds": [
+        "ru-a1-numbers-and-contact",
+        "ru-a1-buying-something",
+        "ru-a1-past-and-future-plans",
+        "ru-a1-personal-information",
+        "ru-a1-phone-and-messages"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-20-questions-whose-yesno-count",
+        "ru-pre-27-conv-food-shopping"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "interaction",
+        "reading",
+        "listening",
+        "writing"
+      ],
+      "goalFa": "برای ارسال بسته، قیمت، نشانی و زمان رسیدن را بپرسم.",
+      "vocabularySeeds": [
+        "почта",
+        "посылка",
+        "очередь",
+        "квитанция",
+        "отправить"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "گیرندهٔ ساده داتیو در مثال؛ وزن/مدت؛ وجه فعل فقط در وظیفهٔ آشنا؛ مذاکرات بانکی تخصصی نه.",
+      "transferTaskFa": "برگهٔ سادهٔ ارسال را تکمیل کند و از میان دو گزینهٔ روشن، خدمت مناسب بخواهد.",
+      "reviewAt": []
+    },
+    {
+      "id": "ru-a1-renting-a-home",
+      "proposedOrder": 28,
+      "currentOrder": 12,
+      "moduleId": "M9",
+      "titleFa": "پیدا کردن خانه",
+      "prerequisiteLessonIds": [
+        "ru-a1-family-and-possessions",
+        "ru-a1-objects-and-places",
+        "ru-a1-buying-something",
+        "ru-a1-public-transport",
+        "ru-a1-appointments-and-time",
+        "ru-a1-personal-information",
+        "ru-a1-hotel-and-stay"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-17-sentences-be-have",
+        "ru-pre-23-daily-descriptions",
+        "ru-pre-25-conv-family-home"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "reading",
+        "interaction",
+        "spoken-production"
+      ],
+      "goalFa": "دربارهٔ قیمت، اتاق و امکانات خانه پرسش ساده مطرح کنم.",
+      "vocabularySeeds": [
+        "квартира",
+        "аренда",
+        "месяц",
+        "мебель",
+        "этаж"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "توصیف و مکان/قیمت ماهانهٔ آشنا؛ طبقه؛ مبله در عبارت؛ قرارداد حقوقی و مذاکره خارج از هسته.",
+      "transferTaskFa": "از آگهی بسیار کوتاه قیمت و دو ویژگی را استخراج کند و یک سؤال از صاحب‌خانه بپرسد.",
+      "reviewAt": []
+    },
+    {
+      "id": "ru-a1-job-interview",
+      "proposedOrder": 29,
+      "currentOrder": 11,
+      "moduleId": "M9",
+      "titleFa": "معرفی توانایی‌های کاری",
+      "prerequisiteLessonIds": [
+        "ru-a1-introducing-yourself",
+        "ru-a1-everyday-routine",
+        "ru-a1-hobbies-and-free-time",
+        "ru-a1-past-and-future-plans",
+        "ru-a1-appointments-and-time",
+        "ru-a1-personal-information"
+      ],
+      "baselineLessonIds": [
+        "ru-pre-06-people-objects",
+        "ru-pre-18-sentences-verbs",
+        "ru-pre-21-daily-identity-family-age",
+        "ru-pre-31-more-descriptions"
+      ],
+      "baselineEvidenceStatus": "observed-in-content-not-proven-mastery",
+      "outcomeIds": [
+        "spoken-production",
+        "interaction",
+        "writing"
+      ],
+      "goalFa": "خودم، شغل یا درس، یک مهارت و یک تجربهٔ ساده را معرفی کنم.",
+      "vocabularySeeds": [
+        "работа",
+        "учиться",
+        "уметь",
+        "опыт",
+        "начинать"
+      ],
+      "vocabularyStatus": "proposed-not-complete-not-certified-new",
+      "grammarScopeFa": "Я инженер / работаю инженером در حد تقابل محدود؛ умею + مصدر؛ گذشته و زمان آمادگی؛ نه مصاحبهٔ حرفه‌ای.",
+      "transferTaskFa": "معرفی کوتاه تازه دربارهٔ خود بنویسد/بگوید و دو سؤال سادهٔ مخاطب را پاسخ دهد.",
+      "reviewAt": []
+    }
+  ]
+}

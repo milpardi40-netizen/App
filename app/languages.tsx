@@ -65,7 +65,7 @@ export default function LanguagesHome() {
   const tiny = width < 370;
 
   useEffect(() => { void ensureOpenLearnerRegistered(); }, []);
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     const stops = [
       prefetchLater([() => import('@/components/routes/NewCourseHomeScreen')], 900),
       prefetchLater([() => import('@/components/RussianHome')], 2600),
@@ -73,7 +73,7 @@ export default function LanguagesHome() {
       prefetchLater([() => import('@/components/arabic/ArabicHomeScreen')], 5600),
     ];
     return () => stops.forEach(stop => stop());
-  }, []);
+  }, []));
 
   const [registered, setRegistered] = useState(false);
   const [resumeBanner, setResumeBanner] = useState<ResumeBannerState | null>(null);

@@ -66,11 +66,12 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
   }
   // Validate the stored shape even for retired questions, but never grade a previous meaning.
   const expanded = session.checksRevision !== russianChecksRevisionFor(lessonId);
-  const retiredChecks = expanded && session.checksRevision !== previousChecksRevisionFor(lessonId) && !(lesson.levelId > 1 && !session.checksRevision);
+  const retiredChecks = expanded && (lesson.levelId === 1 || (session.checksRevision !== previousChecksRevisionFor(lessonId) && !(lesson.levelId > 1 && !session.checksRevision)));
   const answers: Record<string, number> = {};
+  let checks: ReturnType<typeof expandedChoiceChecks> | undefined;
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
-    const check = expandedChoiceChecks(lesson)[checkIndex];
+    const check = (checks ??= expandedChoiceChecks(lesson))[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= (retiredChecks ? 4 : check.choices.length)) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
@@ -128,6 +129,19 @@ export function saveRussianLessonSession(lessonId: string, value: RussianLessonS
     const safe = validateSession(lessonId, { ...value, checksRevision });
     const state = parseState(await readRaw());
     await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, checksRevision, updatedAt: positionTimestamp() } } }));
+    notifyLearningChange();
+  });
+}
+
+/** One serialized state write for the selected band; no other session changes. */
+export function resetRussianLessonSessions(ids: readonly string[]): Promise<void> {
+  return serial(async () => {
+    const state = parseState(await readRaw()), sessions = {...state.sessions};
+    for(const id of new Set(ids)) {
+      const checksRevision=russianChecksRevisionFor(id);
+      sessions[id]={...validateSession(id,{...freshRussianLessonSession(),checksRevision}),checksRevision,updatedAt:positionTimestamp()};
+    }
+    await writeRaw(JSON.stringify({...state,sessions}));
     notifyLearningChange();
   });
 }

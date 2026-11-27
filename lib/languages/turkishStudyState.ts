@@ -1,3 +1,4 @@
+import {isTurkishA1Core, turkishA1SentenceRevision, TURKISH_A1_ASSESSMENT_REVISION} from './turkishA1Scope';
 import { practicalAssessmentRevision as previousAssessmentRevision } from './preA1Practical/revisions';
 import { balancedSampleRevision, resumeBalancedSamples } from './preA1Practical/balanceRevision';
 import { assessmentRevisionFor as practicalAssessmentRevision, expandedChoiceChecks } from '../lessonAssessment';
@@ -27,8 +28,8 @@ interface TurkishStudyState {
   sessions: Record<string, TurkishLessonSession>;
 }
 
-export function freshTurkishLessonSession(): TurkishLessonSession {
-  return { stage: 0, stageVersion: LESSON_STAGE_VERSION, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false };
+export function freshTurkishLessonSession(lessonId?: string): TurkishLessonSession {
+  return { ...(lessonId && isTurkishA1Core(lessonId) ? {sampleRevision:turkishA1SentenceRevision(lessonId),checksRevision:TURKISH_A1_ASSESSMENT_REVISION} : {}), stage: 0, stageVersion: LESSON_STAGE_VERSION, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false };
 }
 
 async function readRaw(): Promise<string | null> {
@@ -71,13 +72,19 @@ function validateSession(lessonId: string, value: unknown, restoring = false): T
   ) {
     throw new Error('وضعیت ذخیره‌شدهٔ درس ترکی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
+  if(isTurkishA1Core(lessonId)) {
+    const stale = session.sampleRevision !== turkishA1SentenceRevision(lessonId) || session.checksRevision !== TURKISH_A1_ASSESSMENT_REVISION;
+    if(!restoring && stale) throw Error('محتوای درس تغییر کرده است؛ درس را دوباره باز کنید.');
+    if(restoring && stale) return {...freshTurkishLessonSession(lessonId), ...(session.updatedAt ? {updatedAt:session.updatedAt} : {})};
+  }
   const checksRevision = practicalAssessmentRevision('tr', lessonId);
   const expanded = restoring && session.checksRevision !== checksRevision;
   const retired = expanded && session.checksRevision !== previousAssessmentRevision('tr', lessonId);
   const answers: Record<string, number> = {};
+  let checks: ReturnType<typeof expandedChoiceChecks> | undefined;
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
-    const check = expandedChoiceChecks(lesson)[checkIndex];
+    const check = (checks ??= expandedChoiceChecks(lesson))[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین ترکی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
@@ -85,7 +92,7 @@ function validateSession(lessonId: string, value: unknown, restoring = false): T
   }
   const safe = {
     ...(restoring && session.sampleRevision ? { sampleRevision: session.sampleRevision } : {}),
-    ...(!restoring && balancedSampleRevision(lessonId) ? { sampleRevision: balancedSampleRevision(lessonId) } : {}),
+    ...(!restoring && (turkishA1SentenceRevision(lessonId) ?? balancedSampleRevision(lessonId)) ? { sampleRevision: turkishA1SentenceRevision(lessonId) ?? balancedSampleRevision(lessonId) } : {}),
     ...(checksRevision ? { checksRevision } : {}),
     stage,
     ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
@@ -119,7 +126,7 @@ export function loadTurkishLessonSessionWithPresence(
     const state = parseState(await readRaw());
     const saved = state.sessions[lessonId];
     return {
-      session: saved === undefined ? freshTurkishLessonSession() : validateSession(lessonId, saved, true),
+      session: saved === undefined ? freshTurkishLessonSession(lessonId) : validateSession(lessonId, saved, true),
       hasSavedSession: saved !== undefined,
     };
   });
@@ -136,18 +143,43 @@ function serial<T>(job: () => Promise<T>): Promise<T> {
   return next;
 }
 
+async function archivePreviousSession(lessonId: string, old: TurkishLessonSession | undefined): Promise<void> {
+  if(isTurkishA1Core(lessonId) && old && (old.sampleRevision !== turkishA1SentenceRevision(lessonId) || old.checksRevision !== TURKISH_A1_ASSESSMENT_REVISION)) {
+    const key = `${TURKISH_STUDY_STORAGE_KEY}:history:${lessonId}:${old.sampleRevision ?? 'legacy'}:${old.checksRevision ?? 'legacy'}`;
+    const previous = Platform.OS === 'web' ? window.localStorage.getItem(key) : await AsyncStorage.getItem(key);
+    if(previous === null) {
+      if(Platform.OS === 'web') window.localStorage.setItem(key,JSON.stringify(old));
+      else await AsyncStorage.setItem(key,JSON.stringify(old));
+    }
+  }
+}
+
 export function saveTurkishLessonSession(lessonId: string, value: TurkishLessonSession): Promise<void> {
   return serial(async () => {
     const safe = validateSession(lessonId, value);
     const state = parseState(await readRaw());
+    await archivePreviousSession(lessonId,state.sessions[lessonId]);
     await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, updatedAt: positionTimestamp() } } }));
+    notifyLearningChange();
+  });
+}
+
+/** Same selected attempts, one primary state write and one change notification. */
+export function resetTurkishLessonSessions(ids: readonly string[]): Promise<void> {
+  return serial(async () => {
+    const state = parseState(await readRaw());
+    const sessions = {...state.sessions};
+    // Validate the entire selection before any archive or primary state is written.
+    for (const id of new Set(ids)) sessions[id] = {...validateSession(id,freshTurkishLessonSession(id)),updatedAt:positionTimestamp()};
+    for (const id of new Set(ids)) await archivePreviousSession(id,state.sessions[id]);
+    await writeRaw(JSON.stringify({...state,sessions}));
     notifyLearningChange();
   });
 }
 
 /** Replace only this lesson's attempt, after any earlier queued saves. */
 export async function resetTurkishLessonSession(lessonId: string): Promise<TurkishLessonSession> {
-  const fresh = freshTurkishLessonSession();
+  const fresh = freshTurkishLessonSession(lessonId);
   await saveTurkishLessonSession(lessonId, fresh);
   return fresh;
 }

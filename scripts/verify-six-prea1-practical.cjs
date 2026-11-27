@@ -40,9 +40,9 @@ const { modules } = require('./helpers/practical-storage.cjs');
     let expression, revision;
     function visit(node) { if (ts.isJsxSelfClosingElement(node) && node.tagName.getText(ast) === 'LessonDialogueRoom') for (const prop of node.attributes.properties) if (ts.isJsxAttribute(prop)) { if (prop.name.getText(ast) === 'pairs') expression = prop.initializer.expression.getText(ast); if (prop.name.getText(ast) === 'contentRevision') revision = prop.initializer.expression.getText(ast); } ts.forEachChild(node, visit); } visit(ast);
     assert.ok(expression && revision);
-    const feed = new Function('lesson', 'lessonDialoguePairs', `return (${expression});`);
+    const feed = new Function('lesson', 'lessonDialoguePairs', 'englishLessonRoomPairs', 'germanLessonRoomPairs', 'frenchLessonRoomPairs', 'isFrenchA1Core', 'spanishLessonRoomPairs', 'isSpanishA1Core', 'turkishLessonRoomPairs', 'arabicLessonRoomPairs', `return (${expression});`);
     for (const lesson of inventory[language]) {
-      assert.deepEqual(feed(lesson, app.pairs.lessonDialoguePairs).map(pair => pair.learner), lesson.sentences.map(line => ({ text: line.text ?? line.en ?? line.ar, fa: line.fa })), file + ': all taught sentences are learner targets');
+      assert.deepEqual(feed(lesson, app.pairs.lessonDialoguePairs, app.englishA1.englishLessonRoomPairs, app.germanA1.germanLessonRoomPairs, app.frenchA1.frenchLessonRoomPairs, app.isFrenchA1Core, app.spanishA1.spanishLessonRoomPairs, app.isSpanishA1Core, app.turkishA1.turkishLessonRoomPairs, app.arabicA1.arabicLessonRoomPairs).filter(pair => pair.section !== 'dialogue').map(pair => pair.learner), lesson.sentences.map(line => ({ text: line.text ?? line.en ?? line.ar, fa: line.fa })), file + ': all taught sentences are learner targets');
     }
     assert.match(revision, /lesson.levelId === 0/);
   }
@@ -92,5 +92,5 @@ const { modules } = require('./helpers/practical-storage.cjs');
   assert.equal(revision('fr', 'fr-a1-greetings'), undefined);
   const unchanged = { evidencePassed: true }; assert.equal(revisePracticalEvidence('en', 'prea1-01-hello', unchanged), unchanged);
   const tasks = app.evidence.PRE_A1_EVIDENCE['prea1-14-i-like']; assert.equal(tasks.length, 4); assert.ok(tasks.every(t => t.id.includes('practical-v1')));
-  console.log('Six-language Pre-A1 practical checks passed: 140 lessons / 1225 examples; stable structure, untouched Russian/A1–C1, tailored foundations, full-lesson learner coverage, valid checks, and web/native old-answer/evidence/score isolation with historical data retained.');
+  console.log('Six-language Pre-A1 practical checks passed: 140 lessons / 1225 examples; stable structure, protected non-target inventory (approved Russian/English A1 revisions accounted for), tailored foundations, full-lesson learner coverage, valid checks, and web/native old-answer/evidence/score isolation with historical data retained.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

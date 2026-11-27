@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-26",
+  "scope": "approved Turkish A1 implementation only; APK on hold",
+  "counts": {
+    "lessons": 64,
+    "rows": 512,
+    "changedRows": 511,
+    "unchangedRows": 1,
+    "sceneTurns": 228,
+    "oddLengthScenes": 30,
+    "authoredChecks": 128,
+    "expandedChecks": 320,
+    "independentSkills": 128,
+    "production": 64,
+    "storageCases": 128,
+    "renderedRooms": 128,
+    "renderedLearnerReviewTargets": 1024
+  },
+  "results": [
+    {
+      "script": "scripts/verify-turkish-a1.cjs",
+      "status": "PASS",
+      "seconds": 2.64,
+      "log": ".cache/turkish-a1-implementation/final-turkish-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-turkish-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 3.76,
+      "log": ".cache/turkish-a1-implementation/final-turkish-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-spanish-a1.cjs",
+      "status": "PASS",
+      "seconds": 3.62,
+      "log": ".cache/turkish-a1-implementation/final-spanish-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-spanish-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 4.35,
+      "log": ".cache/turkish-a1-implementation/final-spanish-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-french-a1.cjs",
+      "status": "PASS",
+      "seconds": 3.44,
+      "log": ".cache/turkish-a1-implementation/final-french-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-french-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 4.45,
+      "log": ".cache/turkish-a1-implementation/final-french-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-german-a1.cjs",
+      "status": "PASS",
+      "seconds": 3.09,
+      "log": ".cache/turkish-a1-implementation/final-german-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-german-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 4.34,
+      "log": ".cache/turkish-a1-implementation/final-german-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-a1.cjs",
+      "status": "PASS",
+      "seconds": 1.98,
+      "log": ".cache/turkish-a1-implementation/final-english-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 5.46,
+      "log": ".cache/turkish-a1-implementation/final-english-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-russian-a1.cjs",
+      "status": "PASS",
+      "seconds": 4.99,
+      "log": ".cache/turkish-a1-implementation/final-russian-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-russian-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 3.34,
+      "log": ".cache/turkish-a1-implementation/final-russian-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-six-prea1-practical.cjs",
+      "status": "PASS",
+      "seconds": 2.28,
+      "log": ".cache/turkish-a1-implementation/final-six-prea1-practical.cjs.log"
+    },
+    {
+      "script": "scripts/verify-prea1-balance.cjs",
+      "status": "PASS",
+      "seconds": 2.65,
+      "log": ".cache/turkish-a1-implementation/final-prea1-balance.cjs.log"
+    },
+    {
+      "script": "scripts/verify-lesson-assessment.cjs",
+      "status": "PASS",
+      "seconds": 6.87,
+      "log": ".cache/turkish-a1-implementation/final-lesson-assessment.cjs.log"
+    },
+    {
+      "script": "scripts/verify-level-resume.cjs",
+      "status": "PASS",
+      "seconds": 20.92,
+      "log": ".cache/turkish-a1-implementation/final-level-resume.cjs.log"
+    },
+    {
+      "script": "scripts/verify-personal-sync.mjs",
+      "status": "PASS",
+      "seconds": 3.27,
+      "log": ".cache/turkish-a1-implementation/final-personal-sync.mjs.log"
+    },
+    {
+      "script": "scripts/verify-progress-display.mjs",
+      "status": "PASS",
+      "seconds": 40.42,
+      "log": ".cache/turkish-a1-implementation/final-progress-display.mjs.log"
+    },
+    {
+      "script": "scripts/verify-english-backup.mjs",
+      "status": "PASS",
+      "seconds": 0.59,
+      "log": ".cache/turkish-a1-implementation/final-english-backup.mjs.log"
+    },
+    {
+      "script": "scripts/verify-english-engine.cjs",
+      "status": "PASS",
+      "seconds": 2.59,
+      "log": ".cache/turkish-a1-implementation/final-english-engine.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-four.cjs",
+      "status": "PASS",
+      "seconds": 2.48,
+      "log": ".cache/turkish-a1-implementation/final-english-four.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-lesson-flow.cjs",
+      "status": "PASS",
+      "seconds": 0.37,
+      "log": ".cache/turkish-a1-implementation/final-english-lesson-flow.cjs.log"
+    },
+    {
+      "script": "scripts/verify-operator-speech.cjs",
+      "status": "PASS",
+      "seconds": 0.05,
+      "log": ".cache/turkish-a1-implementation/final-operator-speech.cjs.log"
+    },
+    {
+      "script": "scripts/verify-seven-language-lesson-ui.cjs",
+      "status": "PASS",
+      "seconds": 1.66,
+      "log": ".cache/turkish-a1-implementation/final-seven-language-lesson-ui.cjs.log"
+    },
+    {
+      "script": "scripts/verify-foreground-restart.cjs",
+      "status": "PASS",
+      "seconds": 0.11,
+      "log": ".cache/turkish-a1-implementation/final-foreground-restart.cjs.log"
+    },
+    {
+      "script": "scripts/verify-level-restart.cjs",
+      "status": "PASS",
+      "seconds": 1.05,
+      "log": ".cache/turkish-a1-implementation/final-level-restart.cjs.log"
+    },
+    {
+      "script": "scripts/verify-speaking-skip.cjs",
+      "status": "PASS",
+      "seconds": 12.87,
+      "log": ".cache/turkish-a1-implementation/final-speaking-skip.cjs.log"
+    },
+    {
+      "script": "scripts/verify-lesson-stage-navigation.cjs",
+      "status": "PASS",
+      "seconds": 1.59,
+      "log": ".cache/turkish-a1-implementation/final-lesson-stage-navigation.cjs.log"
+    },
+    {
+      "script": "scripts/verify-turkish-structure.mjs",
+      "status": "PASS",
+      "seconds": 1.04,
+      "log": ".cache/turkish-a1-implementation/final-turkish-structure.mjs.log"
+    },
+    {
+      "script": "scripts/verify-nonenglish-restart.cjs",
+      "status": "PASS",
+      "seconds": 0.99,
+      "log": ".cache/turkish-a1-implementation/final-nonenglish-restart.cjs.log"
+    },
+    {
+      "script": "scripts/verify-dialogue-room.cjs",
+      "status": "PASS",
+      "seconds": 0.52,
+      "log": ".cache/turkish-a1-implementation/final-dialogue-room.cjs.log"
+    }
+  ],
+  "extra": [
+    {
+      "command": "npm run typecheck",
+      "status": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "deterministicGeneration": true,
+  "sha256": {
+    "lib/languages/turkishA1.generated.ts": "2c1acf8815fc70ceca8e54040b91cc7d517a341745c3009b5494c646bfedf4d2",
+    "lib/languages/turkishA1ChangedSlots.generated.json": "753df8f73357a09bd41e85810addd513a9fbbb9dd5168895240d47ac1f47efce",
+    "docs/turkish-a1-design/runtime/migration.json": "753df8f73357a09bd41e85810addd513a9fbbb9dd5168895240d47ac1f47efce",
+    "docs/turkish-a1-design/runtime/introduced-forms.json": "3c0c0c08fb6733e4d3f51a36d6dd89cd8a484678b009cbbec8866cf73766a879"
+  },
+  "allPassed": true
+}

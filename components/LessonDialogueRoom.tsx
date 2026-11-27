@@ -26,6 +26,8 @@ type Props = {
   situation: string;
   lines?: readonly DialogueLine[];
   pairs?: readonly LessonDialoguePair[];
+  /** An intact authored scene before review pairs. Supports odd turn counts without padding. */
+  scene?: readonly DialogueLine[];
   locale: string;
   onSpeak: (text: string, onDone: () => void) => void;
   /** Device-default operator speech, with recording fallback only on failure. */
@@ -107,13 +109,13 @@ function OperatorPresence({ speaking, accent }: { speaking: boolean; accent: str
   );
 }
 
-export default function LessonDialogueRoom({ language, lessonId, contentRevision, lessonTitle, levelId, situation, lines: legacyLines = [], pairs, locale, onSpeak, onSpeakOperator, onSpeakSlow, accent = Palette.primary }: Props) {
+export default function LessonDialogueRoom({ language, lessonId, contentRevision, lessonTitle, levelId, situation, lines: legacyLines = [], pairs, scene, locale, onSpeak, onSpeakOperator, onSpeakSlow, accent = Palette.primary }: Props) {
   const router = useRouter();
   const revision = pairs ? `${LESSON_DIALOGUE_REVISION}:${contentRevision ?? "original"}` : contentRevision;
   const historyKey = revision ? `${lessonId}:${revision}` : lessonId;
   const [phase, setPhase] = useState<'choose' | 'run' | 'done'>('choose');
   const [starter, setStarter] = useState<Speaker>('operator');
-  const lines = useMemo(() => pairs ? dialoguePairLines(pairs, starter) : legacyLines, [pairs, starter, legacyLines]);
+  const lines = useMemo(() => [...(scene ?? []), ...(pairs ? dialoguePairLines(pairs, starter) : legacyLines)], [pairs, starter, legacyLines, scene]);
   const [practicePath, setPracticePath] = useState<'guided' | 'cued'>('guided');
   const [helpVisible, setHelpVisible] = useState(false);
   const [hintKind, setHintKind] = useState<'none' | 'cue' | 'sample'>('none');
@@ -124,6 +126,7 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
   const [reviewIndex, setReviewIndex] = useState<number | null>(null);
   const savedRef = useRef(false);
   const [turn, setTurn] = useState(0);
+  const activeSection = scene?.length && turn < scene.length ? 'dialogue' : pairs?.[Math.floor((turn - (scene?.length ?? 0)) / 2)]?.section;
   const [results, setResults] = useState<Record<number, SpeakCheckResult>>({});
   const [pastRuns, setPastRuns] = useState<DialogueRun[]>([]);
 
@@ -145,7 +148,11 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
   const slowSpeakRef = useRef(onSpeakSlow);
   slowSpeakRef.current = onSpeakSlow;
 
-  const speakerOf = useCallback((index: number): Speaker => ((index % 2 === 0) === (starter === 'operator') ? 'operator' : 'me'), [starter]);
+  // Review starts its own role cycle after a 3/5-turn scene; never let odd scene parity swap targets.
+  const speakerOf = useCallback((index: number): Speaker => {
+    const localIndex = scene?.length && index >= scene.length ? index - scene.length : index;
+    return ((localIndex % 2 === 0) === (starter === 'operator') ? 'operator' : 'me');
+  }, [starter, scene?.length]);
 
   // One advance per turn, bound to that turn: a late callback for an earlier
   // line (a voice stopped without callbacks, a stale recogniser result) must
@@ -158,10 +165,8 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
     else setPhase('done');
   }, []);
 
-  // Every turn carries its own watchdog: the operator's voice reports done or
-  // error itself, and if any engine never reports either (a stopped utterance,
-  // a dead microphone), the generous timekeeper carries the room to the end so
-  // the dialogue always runs through — fully hands-free.
+  // Operator turns end on actual playback completion/error, not a word/time budget.
+  // Only the learner's existing recognition watchdog remains time-limited.
   useEffect(() => {
     if (phase !== 'run' || samplePlaying) return;
     const line = linesRef.current[turn];
@@ -173,7 +178,8 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
         spokenRef.current.add(key);
         onSpeakOperatorRef.current(line.text, () => advanceFor(turn));
       }
-      watchdog = setTimeout(() => advanceFor(turn), Math.min(30000, Math.max(15000, 4000 + line.text.length * 150)));
+      // Do not advance/stop a speaking operator on a duration estimate.
+      // Completion/error comes from the speech adapter; long utterances have no turn cap.
     } else {
       // The learner's turn: SpeakCheck opens the microphone by itself; if the
       // recogniser never returns anything at all, move on and mark it skipped.
@@ -198,13 +204,13 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
     let active = true;
     const done = () => { if (active) setSamplePlaying(false); };
     // The microphone has unmounted before this effect plays the sample.
-    const timer = setTimeout(done, 25000);
+    // Replay ends only when playback actually completes or reports an error.
     void stopCourseSpeech().then(() => {
       if (!active) return;
       const speak = slowSpeakRef.current ?? onSpeakRef.current;
       try { speak(linesRef.current[turn]?.text ?? '', done); } catch { done(); }
     }).catch(done);
-    return () => { active = false; clearTimeout(timer); void stopCourseSpeech(); };
+    return () => { active = false; void stopCourseSpeech(); };
   }, [samplePlaying, phase, turn]);
 
   const requestHelp = (kind: 'cue' | 'sample' | 'audio') => {
@@ -369,7 +375,7 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
           <View style={styles.metaItem}><Mic size={14} color={Palette.primaryDark} /><Text style={styles.metaText}>تمرین نوبتی</Text></View>
           <View style={styles.metaItem}><Headphones size={14} color={Palette.primaryDark} /><Text style={styles.metaText}>گوش کن و پاسخ بده</Text></View>
         </View>
-        <Text style={styles.headerNote}>{pairs ? `برای هر یک از ${fa(pairs.length)} جملهٔ درس، یک نوبت اپراتور و یک نوبت شماست؛ همهٔ جمله‌ها را تمرین می‌کنی. در موارد بدون پرسشِ مرتبط، نمونه را بشنو و تکرار کن.` : 'نوبت اپراتور و شما به‌ترتیب است؛ هر نوبت یک‌بار.'}</Text>
+        <Text style={styles.headerNote}>{scene?.length || pairs?.some(pair => pair.section === 'dialogue') ? `ابتدا مکالمهٔ پیوستهٔ درس را با نقش انتخابی اجرا می‌کنی؛ سپس هر ${fa(pairs?.filter(pair => pair.section === 'review').length ?? 0)} جملهٔ آموزشی را جداگانه مرور می‌کنی. مرور جمله‌ها تمرین هدایت‌شده است، نه مکالمهٔ آزاد. اگر شما شروع کنید، اول از حافظه بگو و بعد نمونه را بشنو.` : pairs ? `برای هر یک از ${fa(pairs.length)} جملهٔ درس، یک نوبت اپراتور و یک نوبت شماست؛ همهٔ جمله‌ها را تمرین می‌کنی. در موارد بدون پرسشِ مرتبط، نمونه را بشنو و تکرار کن.` : 'نوبت اپراتور و شما به‌ترتیب است؛ هر نوبت یک‌بار.'}</Text>
       </View>
 
       {phase === 'choose' ? (
@@ -414,6 +420,7 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
             <Text style={styles.headerEyebrow}>{fa(Math.min(turn + 1, lines.length))} از {fa(lines.length)}</Text>
           </View>
           <View style={styles.sessionTrack}><View style={[styles.sessionFill, { backgroundColor: accent, width: `${lines.length ? Math.min(100, turn / lines.length * 100) : 0}%` }]} /></View>
+          {activeSection ? <Text style={styles.headerEyebrow}>{activeSection === 'dialogue' ? 'بخش اول · مکالمهٔ پیوسته' : 'بخش دوم · مرور همهٔ جمله‌های آموزشی'}</Text> : null}
           {exam ? <Text style={styles.headerEyebrow}>حالت آزمون · متن جمله‌ها پنهان است</Text> : null}
         </View>
       ) : null}

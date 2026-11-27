@@ -1,4 +1,6 @@
-import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import {turkishLessonRoomPairs, turkishA1RoomScene, turkishA1Production, turkishA1Skills} from '@/lib/languages/turkishA1Practice';
+import {isTurkishA1Core, turkishA1SentenceRevision, TURKISH_A1_ASSESSMENT_REVISION, TURKISH_A1_ROOM_REVISION} from '@/lib/languages/turkishA1Scope';
+import StarterA1Skill from '@/components/StarterA1Skill';
 import { speakOperator } from '@/lib/operatorSpeech';
 import { expandedChoiceChecks } from '@/lib/lessonAssessment';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
@@ -124,13 +126,18 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   const coreStageLabel = lesson.learningMode === 'words' ? 'واژه‌های اصلی' : lesson.learningMode === 'chunks' ? 'ترکیب‌های اصلی' : 'جمله‌های اصلی';
   const stageLabelFa = stage === 1 ? coreStageLabel : stage === 4 && lesson.learningMode === 'words' ? 'یادآوری واژه' : stage === 4 && lesson.learningMode === 'chunks' ? 'ساخت ترکیب کوتاه' : stage === 5 && lesson.learningMode === 'words' ? 'مرور واژگان' : stages[stage].labelFa;
   const stageLabelEn = stage === 1 && lesson.learningMode === 'words' ? 'Core Words' : stage === 1 && lesson.learningMode === 'chunks' ? 'Core Chunks' : stage === 4 && lesson.learningMode === 'words' ? 'Word Recall' : stage === 4 && lesson.learningMode === 'chunks' ? 'Chunk Building' : stage === 5 && lesson.learningMode === 'words' ? 'Vocabulary Review' : stages[stage].labelEn;
+  const a1 = isTurkishA1Core(lesson.id);
+  const skills = turkishA1Skills(lesson.id) ?? [];
+  const listeningTask = skills.find(t=>t.kind==='listening');
+  const readingTask = skills.find(t=>t.kind==='reading');
   const checks = useMemo(() => shuffleChecks(lesson.id, expandedChoiceChecks({ ...lesson, checks: lesson.checks })), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
   const allChecksPassed = checks.every((question, index) => answers[String(index)] === question.correctIndex);
   const progressPercent = Math.round(((stage + 1) / stages.length) * 100);
-  const bridgeRules = useMemo(() => turkishBridgeRulesForLesson(lesson.sentences), [lesson.sentences]);
+  // Authored A1 notes replace broad regex hints that can introduce future/-miş paradigms too early.
+  const bridgeRules = useMemo(() => a1 ? [] : turkishBridgeRulesForLesson(lesson.sentences), [a1, lesson.sentences]);
   const vocabulary = useMemo(() => {
     const byWord = new Map<string, { word: LearningLessonVocabulary; sentence: TurkishCourseLesson['sentences'][number] }>();
     lesson.sentences.forEach(sentence => sentence.vocabulary.forEach(word => {
@@ -198,7 +205,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: TurkishLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
+    const nextSession: TurkishLessonSession = { ...(isTurkishA1Core(lesson.id) ? {sampleRevision:turkishA1SentenceRevision(lesson.id),checksRevision:TURKISH_A1_ASSESSMENT_REVISION} : {}), stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveTurkishLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
@@ -232,9 +239,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
       clearNarratorFallback();
       if (targetKey) setMicReadyKey(targetKey);
     };
-    if (targetKey) {
-      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-    }
+    // Recognition starts only on playback completion/error, never on an estimated duration.
     void playTurkishSpeech(text, rate, () => {
       setSpeechError('صدای ترکی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.');
       armMic();
@@ -464,7 +469,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
             {lesson.levelId >= 3 ? <RevealText text={current.fa} style={styles.persian} resetKey={current.id} /> : <Text keepColor style={styles.persian}>{current.fa}</Text>}
             {current.pattern ? <View style={styles.pattern}><Text style={styles.patternLabel}>الگو</Text><Text style={styles.patternText}>{current.pattern}</Text></View> : null}
           </View>
-          <PersianBridgeCard sentence={current} language="tr" />
+          {!a1 && <PersianBridgeCard sentence={current} language="tr" />}
           <View style={styles.replayRow}>
             <Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unitLabel}`} style={styles.replayButton} onPress={() => speak(current.text, SLOW_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
             <Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unitLabel}`} style={styles.replayButton} onPress={() => speak(current.text, NORMAL_SPEECH_RATE)}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
@@ -500,6 +505,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
               unitLabel={unitLabel}
             />
           </View>
+          {listeningTask && <StarterA1Skill key={`${lesson.id}-listening`} task={listeningTask} onSpeak={speak} />}
           <View style={styles.shadowTip}><Headphones size={18} color={Palette.primary} /><Text style={styles.shadowText}>فعلاً فقط گوش دهید؛ مرحلهٔ بعد برای تکرار و سایه‌خوانی است.</Text></View>
         </View>}
 
@@ -530,7 +536,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
         </View>}
 
         {stage === 4 && (() => {
-          const bridgeRule = turkishBridgeFor(current).rule;
+          const bridgeRule = a1 ? undefined : turkishBridgeFor(current).rule;
           return (
             <View style={styles.centerStage}>
               <View style={styles.bigIcon}><RotateCcw size={33} color={Palette.success} /></View>
@@ -628,25 +634,26 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
               <Text style={styles.questionPrompt}>{question.promptFa}</Text>
               {question.choices.map((choice, choiceIndex) => {
                 const selected = answers[String(index)] === choiceIndex;
-                const shownCorrect = showCheckAnswers && choiceIndex === question.correctIndex;
-                const locked = answers[String(index)] === question.correctIndex || showCheckAnswers;
+                const shownCorrect = !a1 && showCheckAnswers && choiceIndex === question.correctIndex;
+                const locked = answers[String(index)] === question.correctIndex || (!a1 && showCheckAnswers);
                 return <Pressable key={`${index}-${choiceIndex}`} accessibilityRole="radio" accessibilityState={{ checked: selected || shownCorrect, disabled: locked }} disabled={locked} onPress={() => setAnswers(value => ({ ...value, [String(index)]: choiceIndex }))} style={[styles.choice, (selected || shownCorrect) && styles.choiceSelected, shownCorrect && styles.choiceCorrect]}>
                   <View style={[styles.choiceIndicator, (selected || shownCorrect) && styles.choiceIndicatorActive]}><Text style={styles.choiceIndicatorText}>{selected || shownCorrect ? '✓' : ''}</Text></View><Text style={[ /[A-Za-zÇçĞğİıÖöŞşÜüÂâ]/.test(choice) ? styles.choiceTurkish : styles.choicePersian, styles.choiceLabel ]}>{choice}</Text>
                 </Pressable>;
               })}
-              {(answers[String(index)] !== undefined || showCheckAnswers) && <View style={styles.feedbackBox}>
-                <Text style={showCheckAnswers || answers[String(index)] === question.correctIndex ? styles.feedbackTitle : styles.feedbackError}>{showCheckAnswers && answers[String(index)] !== question.correctIndex ? `پاسخ نمونه: ${question.choices[question.correctIndex]}` : answers[String(index)] === question.correctIndex ? 'درست است.' : 'دوباره تلاش کنید.'}</Text>
-                <Text style={styles.feedbackText}>{question.explanationFa}</Text>
-                {answers[String(index)] !== undefined && answers[String(index)] !== question.correctIndex && !showCheckAnswers ? <Pressable accessibilityRole="button" style={styles.retryAnswer} onPress={() => setAnswers(value => { const nextAnswers = { ...value }; delete nextAnswers[String(index)]; return nextAnswers; })}><Text style={styles.retryAnswerText}>دوباره امتحان کن</Text></Pressable> : null}
+              {(answers[String(index)] !== undefined || (!a1 && showCheckAnswers)) && <View style={styles.feedbackBox}>
+                <Text style={(!a1 && showCheckAnswers) || answers[String(index)] === question.correctIndex ? styles.feedbackTitle : styles.feedbackError}>{!a1 && showCheckAnswers && answers[String(index)] !== question.correctIndex ? `پاسخ نمونه: ${question.choices[question.correctIndex]}` : answers[String(index)] === question.correctIndex ? 'درست است.' : 'دوباره تلاش کنید.'}</Text>
+                {(!a1 || answers[String(index)] === question.correctIndex) && <Text style={styles.feedbackText}>{question.explanationFa}</Text>}
+                {answers[String(index)] !== undefined && answers[String(index)] !== question.correctIndex && (a1 || !showCheckAnswers) ? <Pressable accessibilityRole="button" style={styles.retryAnswer} onPress={() => setAnswers(value => { const nextAnswers = { ...value }; delete nextAnswers[String(index)]; return nextAnswers; })}><Text style={styles.retryAnswerText}>دوباره امتحان کن</Text></Pressable> : null}
               </View>}
             </View>)}
-            {!showCheckAnswers && <Pressable accessibilityRole="button" style={styles.showAnswersButton} onPress={() => setShowCheckAnswers(true)}><Text style={styles.showAnswersText}>نمایش توضیح همهٔ پاسخ‌ها</Text></Pressable>}
+            {!a1 && !showCheckAnswers && <Pressable accessibilityRole="button" style={styles.showAnswersButton} onPress={() => setShowCheckAnswers(true)}><Text style={styles.showAnswersText}>نمایش توضیح همهٔ پاسخ‌ها</Text></Pressable>}
           </View>
+          {readingTask && <StarterA1Skill key={`${lesson.id}-reading`} task={readingTask} onSpeak={speak} />}
             </> },
           ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
 
-        {stage === 8 && lesson.levelId >= 3 ? <ProductionTask key={`${lesson.id}-production`} source={lesson} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
+        {stage === 8 && (isTurkishA1Core(lesson.id) || lesson.levelId >= 3) ? <ProductionTask key={`${lesson.id}-production`} source={lesson} explicit={turkishA1Production(lesson.id)} contentRevision={turkishA1SentenceRevision(lesson.id)} levelLabel={isTurkishA1Core(lesson.id) ? 'A1' : undefined} examples={lesson.sentences} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
 
 
         {stage === 9 && <LessonDialogueRoom
@@ -656,8 +663,9 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
+          contentRevision={isTurkishA1Core(lesson.id) ? TURKISH_A1_ROOM_REVISION : lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          pairs={turkishLessonRoomPairs(lesson)}
+          scene={turkishA1RoomScene(lesson)}
           locale="tr-TR"
           onSpeak={(text, onDone) => void playTurkishSpeech(text, NORMAL_SPEECH_RATE, onDone, onDone)}
           onSpeakOperator={(text, onDone) => speakOperator(text, 'tr-TR', 'tr', onDone)}

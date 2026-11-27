@@ -1,3 +1,9 @@
+import {mergeArabicReviewCards, isArabicA1Core, ARABIC_A1_CONTENT_REVISION, reviseArabicA1Completions, mergeArabicA1Completions, validArabicA1CompletionHistory, type ArabicA1CompletionHistory} from './arabic/a1Scope';
+import {mergeTurkishReviewCards, isTurkishA1Core, TURKISH_A1_CONTENT_REVISION, reviseTurkishA1Completions, mergeTurkishA1Completions, validTurkishA1CompletionHistory, type TurkishA1CompletionHistory} from './languages/turkishA1Scope';
+import {mergeSpanishReviewCards, isSpanishA1Core} from './languages/spanishA1Scope';
+import {mergeFrenchReviewCards} from './languages/frenchA1Scope';
+import {sequencedStarterSentenceRevision, reviseSequencedStarterReviewCard, isSequencedStarterA1} from './languages/sequencedStarterA1';
+import {validGermanReviewArchive, mergeGermanReviewCards, isGermanA1Core, type PreviousGermanA1ReviewContent} from './languages/germanA1Scope';
 import { resumeAt, validResumePoints, mergedResume } from './courseResume';
 import { withMergedRatings, addRating, validHistory, type RatingHistory } from './reviewHistory';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
@@ -11,6 +17,8 @@ const DAY = 24 * 60 * MINUTE;
 export type ReviewRating = 'again' | 'hard' | 'good' | 'easy';
 
 export interface SentenceReviewCard {
+  contentRevision?: string;
+  previousContent?: PreviousGermanA1ReviewContent;
   id: string;
   lessonId: string;
   sentenceId: string;
@@ -23,7 +31,7 @@ export interface SentenceReviewCard {
   ratingHistory?: RatingHistory;
 }
 
-export interface CourseProgress {
+export interface CourseProgress extends TurkishA1CompletionHistory, ArabicA1CompletionHistory {
   completedLessonIds: string[];
   currentLessonId: string;
   resumeUpdatedAt?: string;
@@ -91,6 +99,7 @@ function cardsForLesson(lessonId: string, dueAt = new Date()): SentenceReviewCar
   const lesson = SENTENCE_LESSONS.find((item) => item.id === lessonId);
   if (!lesson) return [];
   return lesson.sentences.map((sentence) => ({
+    ...(sequencedStarterSentenceRevision(lesson.id) ? {contentRevision: sequencedStarterSentenceRevision(lesson.id)} : {}),
     id: reviewCardId(lesson.id, sentence.id),
     lessonId: lesson.id,
     sentenceId: sentence.id,
@@ -105,8 +114,11 @@ function cardsForLesson(lessonId: string, dueAt = new Date()): SentenceReviewCar
 function normalizeProgress(value: Partial<CourseProgress>): CourseProgress {
   const base = initialProgress();
   if (!value || typeof value!=='object' || Array.isArray(value)) throw new Error('پیشرفت ذخیره‌شده معتبر نیست؛ نسخه پشتیبان را بررسی کنید.');
+  if (SENTENCE_LESSONS.some(l=>isArabicA1Core(l.id)) && !validArabicA1CompletionHistory(value)) throw Error('سابقهٔ تکمیل عربی خوانده نشد؛ دادهٔ اصلی حفظ شده است.');
+  if (SENTENCE_LESSONS.some(l=>isTurkishA1Core(l.id)) && !validTurkishA1CompletionHistory(value)) throw Error('سابقهٔ تکمیل ترکی خوانده نشد؛ دادهٔ اصلی حفظ شده است.');
   const completedLessonIds = Array.isArray(value.completedLessonIds) ? value.completedLessonIds.filter(x=>typeof x==='string') : [];
   const existingCards = Array.isArray(value.reviewCards) ? value.reviewCards.filter(card=>card&&typeof card.id==='string'&&typeof card.lessonId==='string'&&typeof card.sentenceId==='string'&&Number.isFinite(Date.parse(card.dueAt))&&[card.intervalDays,card.ease,card.repetitions,card.lapses].every(n=>Number.isFinite(n)&&n>=0)) : [];
+  if (existingCards.some(card=>isSequencedStarterA1(card.lessonId) && card.previousContent !== undefined && !validGermanReviewArchive(card.previousContent))) throw Error('سابقهٔ مرور خوانده نشد؛ دادهٔ اصلی حفظ شده است.');
   const cardMap = new Map(existingCards.map((card) => [card.id, card]));
 
   // Preview users who finished lessons before the scheduler existed are
@@ -125,9 +137,10 @@ function normalizeProgress(value: Partial<CourseProgress>): CourseProgress {
     resumePoints: validResumePoints(value.resumePoints, SENTENCE_LESSONS),
     currentLessonId: SENTENCE_LESSONS.some(l=>l.id===value.currentLessonId)?value.currentLessonId!:base.currentLessonId,
     updatedAt: typeof value.updatedAt==='string'&&Number.isFinite(Date.parse(value.updatedAt))?value.updatedAt:base.updatedAt,
-    completedLessonIds,
+    ...(SENTENCE_LESSONS.some(l=>isTurkishA1Core(l.id)) ? reviseTurkishA1Completions({completedLessonIds, ...(value.turkishA1CompletionRevisions ? {turkishA1CompletionRevisions:value.turkishA1CompletionRevisions} : {}), ...(value.previousTurkishA1CompletedLessonIds ? {previousTurkishA1CompletedLessonIds:value.previousTurkishA1CompletedLessonIds} : {})}) : {completedLessonIds}),
+    ...(SENTENCE_LESSONS.some(l=>isArabicA1Core(l.id)) ? reviseArabicA1Completions({completedLessonIds, ...(value.arabicA1CompletionRevisions ? {arabicA1CompletionRevisions:value.arabicA1CompletionRevisions} : {}), ...(value.previousArabicA1CompletedLessonIds ? {previousArabicA1CompletedLessonIds:value.previousArabicA1CompletedLessonIds} : {})}) : {}),
     reviewSentenceIds: Array.isArray(value.reviewSentenceIds) ? value.reviewSentenceIds : [],
-    reviewCards: Array.from(cardMap.values()),
+    reviewCards: Array.from(cardMap.values()).map(reviseSequencedStarterReviewCard),
     learnedEssential504Words: Array.isArray(value.learnedEssential504Words) ? value.learnedEssential504Words : [],
     activityDate: localDateKey(),
     todayMinutes: isNewDay ? 0 : (Number.isFinite(value.todayMinutes)?Math.max(0,value.todayMinutes!):0),
@@ -263,7 +276,9 @@ async function completeSentenceLesson(lessonId: string, nextLessonId?: string): 
   const next = addDailyActivity({
     ...current,
     completedLessonIds: Array.from(new Set([...current.completedLessonIds, lessonId])),
-    reviewCards: Array.from(cardMap.values()),
+    ...(isArabicA1Core(lessonId) ? {arabicA1CompletionRevisions:{...current.arabicA1CompletionRevisions,[lessonId]:ARABIC_A1_CONTENT_REVISION}} : {}),
+    ...(isTurkishA1Core(lessonId) ? {turkishA1CompletionRevisions:{...current.turkishA1CompletionRevisions,[lessonId]:TURKISH_A1_CONTENT_REVISION}} : {}),
+    reviewCards: Array.from(cardMap.values()).map(reviseSequencedStarterReviewCard),
     learnedEssential504Words: Array.from(
       new Set([
         ...current.learnedEssential504Words,
@@ -359,6 +374,8 @@ function validBackup(value: unknown): value is { schema: 1; courseKey: string; p
   const envelope = value as Record<string, unknown>;
   if (envelope.schema !== 1 || envelope.courseKey !== KEY || !envelope.progress || typeof envelope.progress !== 'object' || Array.isArray(envelope.progress)) return false;
   const progress = envelope.progress as Record<string, unknown>;
+  if (SENTENCE_LESSONS.some(l=>isArabicA1Core(l.id)) && !validArabicA1CompletionHistory(progress as ArabicA1CompletionHistory)) return false;
+  if (SENTENCE_LESSONS.some(l=>isTurkishA1Core(l.id)) && !validTurkishA1CompletionHistory(progress as TurkishA1CompletionHistory)) return false;
   const lessonIds = new Set(SENTENCE_LESSONS.map(lesson => lesson.id));
   const validCurrentLessonId = typeof progress.currentLessonId === 'string'
     && (lessonIds.has(progress.currentLessonId) || (options.allowEmpty === true && SENTENCE_LESSONS.length === 0 && progress.currentLessonId === ''));
@@ -381,6 +398,8 @@ function validBackup(value: unknown): value is { schema: 1; courseKey: string; p
       || !Number.isFinite(card.ease) || card.ease! < 1.3 || card.ease! > 3
       || !Number.isInteger(card.repetitions) || card.repetitions! < 0
       || !Number.isInteger(card.lapses) || card.lapses! < 0
+      || (card.contentRevision !== undefined && typeof card.contentRevision !== 'string')
+      || (card.previousContent !== undefined && !validGermanReviewArchive(card.previousContent))
       || !validHistory(card.ratingHistory as RatingHistory | undefined)
       || (card.lastReviewedAt !== undefined && (typeof card.lastReviewedAt !== 'string' || !Number.isFinite(Date.parse(card.lastReviewedAt))))) return false;
     cardIds.add(card.id);
@@ -435,14 +454,17 @@ return { getCourseProgress, syncCourseProgress, mergeRemoteProgress,
 }
 
 /** Union of non-destructive learning evidence; scheduling conflicts use the latest card review. */
-export function mergeCourseProgress(a:CourseProgress,b:CourseProgress):CourseProgress {
+export function mergeCourseProgress(a:CourseProgress,b:CourseProgress, mergeCard?: (a: SentenceReviewCard, b: SentenceReviewCard) => SentenceReviewCard):CourseProgress {
+ a=reviseArabicA1Completions(reviseTurkishA1Completions(a));b=reviseArabicA1Completions(reviseTurkishA1Completions(b));
  const difference=Date.parse(a.updatedAt)-Date.parse(b.updatedAt);
  const newer=difference>0?a:difference<0?b:JSON.stringify(a)>=JSON.stringify(b)?a:b;
  const cards=new Map<string,SentenceReviewCard>();
- for(const card of [...a.reviewCards,...b.reviewCards]){const prev=cards.get(card.id);const time=(x:SentenceReviewCard)=>Date.parse(x.lastReviewedAt??'1970-01-01')||0;
+ for(const source of [...a.reviewCards,...b.reviewCards]){const card=reviseSequencedStarterReviewCard(source);const prev=cards.get(card.id);const time=(x:SentenceReviewCard)=>Date.parse(x.lastReviewedAt??'1970-01-01')||0;
   if (!prev) { cards.set(card.id, card); continue; }
+  if (isSequencedStarterA1(card.lessonId)) { cards.set(card.id, isArabicA1Core(card.lessonId) ? mergeArabicReviewCards(card, prev) : isTurkishA1Core(card.lessonId) ? mergeTurkishReviewCards(card, prev) : isGermanA1Core(card.lessonId) ? mergeGermanReviewCards(card, prev) : isSpanishA1Core(card.lessonId) ? mergeSpanishReviewCards(card, prev) : mergeFrenchReviewCards(card, prev)); continue; }
+  if (mergeCard) { cards.set(card.id, mergeCard(card, prev)); continue; }
   const latest = time(card) > time(prev) || (time(card) === time(prev) && JSON.stringify(card) > JSON.stringify(prev));
   cards.set(card.id, latest ? withMergedRatings(card, prev) : withMergedRatings(prev, card));
  }
- return {...newer,...mergedResume(newer,newer===a?b:a),completedLessonIds:[...new Set([...a.completedLessonIds,...b.completedLessonIds])].sort(),reviewSentenceIds:[...new Set([...a.reviewSentenceIds,...b.reviewSentenceIds])].sort(),learnedEssential504Words:[...new Set([...a.learnedEssential504Words,...b.learnedEssential504Words])].sort(),reviewCards:[...cards.values()].sort((x,y)=>x.id.localeCompare(y.id)),totalMinutes:Math.max(a.totalMinutes,b.totalMinutes),longestStreak:Math.max(a.longestStreak,b.longestStreak)};
+ return {...newer,...mergeTurkishA1Completions(a,b),...mergeArabicA1Completions(a,b),...mergedResume(newer,newer===a?b:a),completedLessonIds:[...new Set([...a.completedLessonIds,...b.completedLessonIds])].sort(),reviewSentenceIds:[...new Set([...a.reviewSentenceIds,...b.reviewSentenceIds])].sort(),learnedEssential504Words:[...new Set([...a.learnedEssential504Words,...b.learnedEssential504Words])].sort(),reviewCards:[...cards.values()].sort((x,y)=>x.id.localeCompare(y.id)),totalMinutes:Math.max(a.totalMinutes,b.totalMinutes),longestStreak:Math.max(a.longestStreak,b.longestStreak)};
 }

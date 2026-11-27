@@ -1,3 +1,4 @@
+import {currentEnglishChunkMap} from './englishA1Scope';
 import { courseResumeLesson } from './courseResume';
 import { expandedChoiceChecks } from './lessonAssessment';
 import type { LanguageId } from './languages/registry';
@@ -31,9 +32,10 @@ async function sourceFor(id: LanguageId): Promise<Source> {
       for (const lesson of lessons) {
         const session = study.sessions[lesson.id];
         if (session && session.stage !== 8) continue; // a restart does not inherit an old attempt's checks
-        const tasks = englishEvidenceFor(lesson).map(task => task.id);
         const evidence = session?.attempt ? session.attemptEvidence : { ...extra?.evidence, ...study.lessonEvidence[lesson.id] };
-        if (evidence) checks[lesson.id] = tasks.filter(task => Object.hasOwn(evidence, task)).length / tasks.length;
+        if (!evidence || Object.keys(evidence).length === 0) continue;
+        const tasks = englishEvidenceFor(lesson).map(task => task.id);
+        checks[lesson.id] = tasks.filter(task => Object.hasOwn(evidence, task)).length / tasks.length;
       }
       return { sessions: study.sessions, study, checks, unreadable: !extra };
     } };
@@ -70,15 +72,16 @@ export async function loadCourseSnapshot(id: LanguageId) {
     source.read(), source.positions().catch((): Positions => ({ sessions: {}, unreadable: true })),
     id === 'en' ? loadChunkMap().catch(() => null) : {} as Record<string, number[]>,
   ]);
+  const currentChunks = id === 'en' ? currentEnglishChunkMap(chunks ?? {}) : chunks ?? {};
   const { lessons, levels } = source;
   const known = new Map(lessons.map(l => [l.id, l]));
   const sessions = Object.fromEntries(Object.entries(positions.sessions).filter(([id]) => known.has(id)));
-  const current = courseResumeLesson(lessons, progress, sessions, chunks ?? {}, positions.checks);
-  const resumeForLevel = (levelId: number) => courseResumeLesson(lessons.filter(lesson => lesson.levelId === levelId), progress, sessions, chunks ?? {}, positions.checks);
+  const current = courseResumeLesson(lessons, progress, sessions, currentChunks, positions.checks);
+  const resumeForLevel = (levelId: number) => courseResumeLesson(lessons.filter(lesson => lesson.levelId === levelId), progress, sessions, currentChunks, positions.checks);
   const validCards = progress.reviewCards.filter(card => card.id === `${card.lessonId}:${card.sentenceId}` && Number.isFinite(Date.parse(card.dueAt)) &&
     Number.isInteger(card.repetitions) && card.repetitions >= 0 && Number.isInteger(card.lapses) && card.lapses >= 0 && known.get(card.lessonId)?.sentences.some(s => s.id === card.sentenceId));
   return { id, progress, sessions, resumeForLevel, answerKey: source.answerKey, study: positions.study, lessons, current, validCards,
     unreadable: positions.unreadable || chunks === null,
-    ...courseTallies(lessons, progress.completedLessonIds, sessions, source.stages, chunks ?? {}, positions.checks), levelDefinitions: levels };
+    ...courseTallies(lessons, progress.completedLessonIds, sessions, source.stages, currentChunks, positions.checks), levelDefinitions: levels };
 }
 export type CourseSnapshot = Awaited<ReturnType<typeof loadCourseSnapshot>>;

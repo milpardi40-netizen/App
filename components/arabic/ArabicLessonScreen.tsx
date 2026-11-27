@@ -1,4 +1,7 @@
-import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import {arabicLessonRoomPairs, arabicA1RoomScene, arabicA1Production, arabicA1Skills} from '@/lib/arabic/a1Practice';
+import {isArabicA1Core, arabicA1SentenceRevision, ARABIC_A1_ASSESSMENT_REVISION, ARABIC_A1_ROOM_REVISION} from '@/lib/arabic/a1Scope';
+import StarterA1Skill from '@/components/StarterA1Skill';
+import ProductionTask from '@/components/ProductionTask';
 import { speakOperator } from '@/lib/operatorSpeech';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
@@ -222,7 +225,7 @@ export default function ArabicLessonScreen() {
     void (startFromBeginning ? resetArabicLessonSession(lesson.id) : loadArabicStudy())
       .then(state => {
         if (!alive || screenRun.current !== run) return;
-        const saved = state.sessions[lesson.id] ?? freshArabicSession();
+        const saved = state.sessions[lesson.id] ?? freshArabicSession(lesson.id);
         attempt.current = saved.attempt;
         setAttemptEvidence(saved.attempt ? (saved.attemptEvidence ?? {}) : undefined);
         setStage(Math.min(saved.stage, stages.length - 1));
@@ -263,6 +266,7 @@ export default function ArabicLessonScreen() {
       !sessionError
     ) {
       void saveArabicLessonSession(lesson.id, {
+        ...(isArabicA1Core(lesson.id) ? {sampleRevision:arabicA1SentenceRevision(lesson.id),checksRevision:ARABIC_A1_ASSESSMENT_REVISION} : {}),
         stageVersion: LESSON_STAGE_VERSION,
         stage,
         sentenceIndex,
@@ -324,9 +328,7 @@ export default function ArabicLessonScreen() {
         clearNarratorFallback();
         if (targetKey) setMicReadyKey(targetKey);
       };
-      if (targetKey) {
-        narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-      }
+      // Recognition starts only on playback completion/error, never on an estimated duration.
       playArabicSpeech(text, {
         rate,
         onDone: armMic,
@@ -486,6 +488,7 @@ export default function ArabicLessonScreen() {
       for (const sId of weak) await addArabicSentenceToReview(sId, lesson.id).catch(() => undefined);
 
       await saveArabicLessonSession(lesson.id, {
+        ...(isArabicA1Core(lesson.id) ? {sampleRevision:arabicA1SentenceRevision(lesson.id),checksRevision:ARABIC_A1_ASSESSMENT_REVISION} : {}),
         stageVersion: LESSON_STAGE_VERSION,
         stage,
         sentenceIndex,
@@ -763,6 +766,7 @@ export default function ArabicLessonScreen() {
                 <Headphones size={34} color={Colors.primary[400]} />
               </View>
               <Text style={styles.stageTitle}>شنیدن جمله‌ها</Text>
+              {arabicA1Skills(lesson.id)?.filter(t=>t.kind==='listening').map(t=><StarterA1Skill key={`${lesson.id}-listening`} task={t} onSpeak={speak} foreignStyle={styles.listenArabic} />)}
 
               <View
                 style={{ width: '100%' }}
@@ -969,6 +973,7 @@ export default function ArabicLessonScreen() {
                 }
               />
               {lesson.teachingFa ? <GrammarNoteCard title="نکتهٔ آموزشی درس" text={lesson.teachingFa} /> : null}
+              {arabicA1Skills(lesson.id)?.filter(t=>t.kind==='reading').map(t=><StarterA1Skill key={`${lesson.id}-reading`} task={t} onSpeak={speak} foreignStyle={styles.listenArabic} />)}
               {patterns.map((p, idx) => (
                 <GrammarPatternCard
                   key={`${p.pattern}-${idx}`}
@@ -1041,6 +1046,8 @@ export default function ArabicLessonScreen() {
           )}
 
 
+          {stage === 8 && isArabicA1Core(lesson.id) ? <ProductionTask key={`${lesson.id}-production`} source={lesson} explicit={arabicA1Production(lesson.id)} contentRevision={arabicA1SentenceRevision(lesson.id)} levelLabel={isArabicA1Core(lesson.id) ? 'A1' : undefined} examples={lesson.sentences.map(s=>({text:s.ar,fa:s.fa}))} onSpeak={text=>speak(text)} foreignStyle={styles.listenArabic} /> : null}
+
           {stage === 9 && (
             <LessonDialogueRoom
               key={lesson.id}
@@ -1049,8 +1056,9 @@ export default function ArabicLessonScreen() {
               lessonTitle={lesson.title}
               levelId={lesson.levelId}
               situation={lesson.situation}
-              contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue.map(line => ({ text: line.ar, fa: line.fa })))}
+              contentRevision={isArabicA1Core(lesson.id) ? ARABIC_A1_ROOM_REVISION : lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+              scene={arabicA1RoomScene(lesson)}
+          pairs={arabicLessonRoomPairs(lesson)}
               locale="ar-SA"
               onSpeak={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone })}
               onSpeakOperator={(text, onDone) => speakOperator(text, 'ar-SA', 'ar', onDone)}

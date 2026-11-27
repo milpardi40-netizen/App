@@ -1,3 +1,4 @@
+import {isArabicA1Core, ARABIC_A1_ASSESSMENT_REVISION} from './arabic/a1Scope';
 import { SENTENCE_LESSONS, type SentenceLesson } from './courseContent';
 import type { ArabicLesson } from './arabic/content';
 import type { Task } from './englishSupplement/content';
@@ -8,18 +9,23 @@ export function englishEvidenceFor(lesson: SentenceLesson): Task[] {
   return expandedEvidenceTasks(lesson, CORE_LESSON_EVIDENCE[lesson.id] ?? fallbackEnglish(lesson));
 }
 export function arabicEvidenceFor(lesson: ArabicLesson): Task[] {
-  return expandedEvidenceTasks(lesson, lesson.checks?.length ? lesson.checks : fallbackArabic(lesson));
+  const tasks=expandedEvidenceTasks(lesson, lesson.checks?.length ? lesson.checks : fallbackArabic(lesson));
+  return isArabicA1Core(lesson.id) ? tasks.map(t=>({...t,id:`${ARABIC_A1_ASSESSMENT_REVISION}:${t.id}`})) : tasks;
 }
 export function currentEnglishEvidenceComplete(lesson: SentenceLesson, evidence: Record<string, { correct: boolean; heard: boolean }> = {}): boolean {
   const tasks = englishEvidenceFor(lesson);
   return tasks.length > 0 && tasks.every(task => evidence[task.id]?.correct && (task.skill !== 'listening' || evidence[task.id]?.heard));
 }
 
+// The immutable curriculum pool is shared across fallback lessons, built only if needed.
+let englishFallbackMeanings: string[] | undefined;
+
 // Retain the original fallback question IDs/meaning so their evidence is still usable.
 function fallbackEnglish(lesson: SentenceLesson): Task[] {
   const sentence = lesson.sentences[0], other = lesson.sentences[1] ?? sentence;
   if (!sentence) return [];
-  const distractors = [...new Set(SENTENCE_LESSONS.flatMap(item => item.sentences.map(entry => entry.fa)))].filter(value => value !== sentence.fa).slice(0, 2);
+  const meanings = englishFallbackMeanings ??= [...new Set(SENTENCE_LESSONS.flatMap(item => item.sentences.map(entry => entry.fa)))];
+  const distractors = meanings.filter(value => value !== sentence.fa).slice(0, 2);
   const options = [sentence.fa, ...distractors];
   const offset = lesson.order % options.length;
   options.push(...options.splice(0, offset));

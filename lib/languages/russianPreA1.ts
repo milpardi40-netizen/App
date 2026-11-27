@@ -22,9 +22,9 @@ export function russianChecksRevisionFor(lessonId: string): string {
     : lessonId.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : STARTER_CHECKS_REVISION;
 }
 
-/** Pre-A1 rooms use authored dialogue; higher-level room sources stay unchanged. */
+/** Beginner rooms use their taught dialogue; A2–C1 room sources stay unchanged. */
 export function russianRoomLines(lesson: Pick<LearningLesson, 'id' | 'sentences' | 'dialogue'>) {
-  return lesson.id.startsWith('ru-pre-')
+  return lesson.id.startsWith('ru-pre-') || lesson.id.startsWith('ru-a1-')
     ? lesson.dialogue : lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }));
 }
 

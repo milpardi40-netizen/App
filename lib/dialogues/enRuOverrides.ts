@@ -1,4 +1,6 @@
 import { RUSSIAN_PRE_A1_LESSONS } from '../languages/russianPreA1';
+import { A1_FOUNDATION } from '../languages/russianBeginner/a1Band1';
+import { A1_SURVIVAL } from '../languages/russianBeginner/a1Band2';
 import type { DialogueMap } from './types';
 
 export const EN_RU_DIALOGUE_OVERRIDES: DialogueMap = {
@@ -17,4 +19,5 @@ export const EN_RU_DIALOGUE_OVERRIDES: DialogueMap = {
   ],
   // All Russian Pre-A1 rooms use exactly their taught, authored conversations.
   ...Object.fromEntries(RUSSIAN_PRE_A1_LESSONS.map(lesson => [lesson.id, lesson.dialogue])),
+  ...Object.fromEntries([...A1_FOUNDATION, ...A1_SURVIVAL].map(lesson => [lesson.id, lesson.dialogue])),
 };

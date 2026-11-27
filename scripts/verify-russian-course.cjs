@@ -61,18 +61,7 @@ const esbuild = require('esbuild');
     'ru-pre-24-conv-greeting-intro', 'ru-pre-25-conv-family-home', 'ru-pre-26-conv-objects',
     'ru-pre-27-conv-food-shopping', 'ru-pre-28-conv-classroom',
   ];
-  const expectedA1Ids = [
-    'ru-a1-introducing-yourself', 'ru-a1-asking-for-help', 'ru-a1-buying-something',
-    'ru-a1-alphabet-and-spelling', 'ru-a1-pronouns-and-be', 'ru-a1-numbers-and-contact',
-    'ru-a1-family-and-possessions', 'ru-a1-time-and-calendar', 'ru-a1-everyday-routine',
-    'ru-a1-objects-and-places', 'ru-a1-job-interview', 'ru-a1-renting-a-home',
-    'ru-a1-personal-information', 'ru-a1-directions-and-neighborhood', 'ru-a1-public-transport',
-    'ru-a1-cafe-and-food', 'ru-a1-shopping-and-clothing', 'ru-a1-appointments-and-time',
-    'ru-a1-health-and-pharmacy', 'ru-a1-hobbies-and-free-time', 'ru-a1-invitations-and-plans',
-    'ru-a1-weather-and-seasons', 'ru-a1-travel-and-tickets', 'ru-a1-hotel-and-stay',
-    'ru-a1-phone-and-messages', 'ru-a1-services-and-post-office', 'ru-a1-school-and-learning',
-    'ru-a1-current-activities', 'ru-a1-past-and-future-plans',
-  ];
+  const expectedA1Ids = require('../docs/russian-a1-architecture/blueprint.json').lessons.map(l => l.id);
   const expectedLessonIds = [...expectedA1Ids, 'ru-l3-past-simple','ru-l3-future-simple','ru-l3-plans','ru-l3-appearance','ru-l3-comparisons','ru-l3-advice','ru-l3-likes-opinions','ru-l3-work-study','ru-l3-home','ru-l3-hobbies-sport','ru-l3-travel','ru-l3-conditions','ru-l3-daily-sequence','ru-l3-shopping-return','ru-l3-health-doctor','ru-l3-phone-internet','ru-l3-public-service','ru-l3-weather-seasons','ru-l3-cooking-food','ru-l3-conversation-tools'];
 
   check('Cyrillic alphabet has 33 unique letters', app.RUSSIAN_ALPHABET.length === 33 && new Set(app.RUSSIAN_ALPHABET).size === 33);
@@ -270,8 +259,8 @@ const esbuild = require('esbuild');
       && [...lesson.sentences, ...lesson.dialogue].every(item => !/[A-Za-zÀ-ÿ]/.test(item.text) && !/[^аеёиоуыэюяАЕЁИОУЫЭЮЯ]\u0301/.test(item.text))));
   const preLines = new Set(lessonsByLevel[0].flatMap(l => l.sentences.map(s => normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
   const shared = a1.flatMap(l => l.sentences.filter(s => preLines.has(normalizeRussian(s.text).replace(/[^а-я0-9 ]/g,''))));
-  check('A1 does not duplicate the Pre-A1 utterance list and teaches Cyrillic reading/spelling in its dedicated alphabet lesson', !shared.length
-    && a1.filter(l => l.id !== 'ru-a1-alphabet-and-spelling').every(l => !l.teachingFa.includes('الفبا')));
+  check('A1 reuses prerequisites deliberately and keeps dedicated spelling instruction', shared.length < a1.reduce((n,l) => n + l.sentences.length, 0) / 3
+    && a1.find(l => l.id === 'ru-a1-alphabet-and-spelling').teachingFa.includes('هجی'));
   // Optional cold comprehension for the Russian A1 band (lib/languages/russianA1Skills.ts).
   const a1Skills = app.RUSSIAN_A1_SKILLS;
   const a1SkillTasks = Object.values(a1Skills).flat();
@@ -285,10 +274,8 @@ const esbuild = require('esbuild');
     && task.correctIndex >= 0 && task.correctIndex < 3 && !!task.promptFa && !!task.explanationFa));
   const bandLines = new Set(lessonsByLevel[0].concat(lessonsByLevel[1]).flatMap(lesson => lesson.sentences.map(sentence => sentence.text)));
   check('A1 cold messages never reuse a rehearsed dialogue line', !a1SkillTasks.some(task => bandLines.has(task.passage)));
-  // Pre-A1 is now masculine-only. A1 content is intentionally unchanged: its existing
-  // cold message still uses ма́ма, formerly introduced in Pre-A1. Track that exact
-  // legacy prerequisite gap rather than silently changing A1 or declaring it taught.
-  check('A1 cold messages have only the documented legacy prerequisite gap after the Pre-A1-only revision', (() => {
+  // The rebuilt A1 tasks use forms actually introduced by the beginner band.
+  check('A1 cold messages have no untaught beginner-band lexical gaps', (() => {
     const fold = value => value.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е');
     const words = value => (value.match(/[А-Яа-яЁё\u0301]+(?:-[А-Яа-яЁё\u0301]+)*/g) ?? []).map(fold);
     const taught = new Set();
@@ -304,7 +291,7 @@ const esbuild = require('esbuild');
       || stems.has(word.slice(0, 4)) || (word.endsWith('ла') && taught.has(word.slice(0, -2) + 'л'));
     const unknown = new Set();
     for (const task of a1SkillTasks) for (const word of words(task.passage)) if (!known(word)) unknown.add(word);
-    if (unknown.size) process.stdout.write(`  documented A1 prerequisite gap (A1 unchanged): ${[...unknown].join(', ')}\n`);
+    if (unknown.size) process.stdout.write(`  A1 prerequisite gap: ${[...unknown].join(', ')}\n`);
     return unknown.size === 0;
   })());
 
@@ -358,7 +345,7 @@ const esbuild = require('esbuild');
   check('A2 shopping spelling correction preserves the saved answer slot', shoppingCheck.correctIndex === 0
     && shoppingCheck.choices[0] === 'чек' && shoppingCheck.choices[2] === 'ски́дка');
   const timeCheck = app.RUSSIAN_LESSONS.find(lesson => lesson.id === 'ru-a1-time-and-calendar').checks[0];
-  check('A1 calendar check tests yesterday/day comprehension', timeCheck.choices[timeCheck.correctIndex] === 'دیروز یکشنبه بود.');
+  check('A1 calendar check tests the taught weekday and time', timeCheck.choices[timeCheck.correctIndex] === 'چهارشنبه ساعت ده‌ونیم');
   check('Russian follows the shared ten-stage lesson flow ending at the dialogue room', app.RUSSIAN_LESSON_STAGES.length === 10
     && app.RUSSIAN_LESSON_STAGES[app.RUSSIAN_LESSON_STAGES.length - 1].id === 'dialogue-room'
     && app.RUSSIAN_LESSON_STAGES.every((stage, index) => stage.id === app.ENGLISH_ENGINE_STEPS[index].id

@@ -1,9 +1,11 @@
+import { splitSpeechText } from './speechChunks';
 import * as NativeSpeech from 'expo-speech';
 import { Platform } from 'react-native';
 
 export * from 'expo-speech';
 
 const START_WATCHDOG_MS = 3000;
+let generation = 0;
 const activeTimers = new Set<ReturnType<typeof setTimeout>>();
 
 function clearAllWatchdogs() {
@@ -12,6 +14,7 @@ function clearAllWatchdogs() {
 }
 
 export function stop(): Promise<void> {
+  generation++;
   clearAllWatchdogs();
   return NativeSpeech.stop();
 }
@@ -19,6 +22,30 @@ export function stop(): Promise<void> {
 export function speak(text: string, options: NativeSpeech.SpeechOptions = {}): void {
   if (Platform.OS === 'web') {
     NativeSpeech.speak(text, options);
+    return;
+  }
+
+  const run = generation;
+  const engineLimit = NativeSpeech.maxSpeechInputLength;
+  const limit = Number.isFinite(engineLimit) && engineLimit >= 2 ? engineLimit : 4000;
+  if (text.length > limit) {
+    const chunks = splitSpeechText(text, limit);
+    let began = false, offset = 0;
+    const next = (index: number) => {
+      if (run !== generation) return;
+      if (index === chunks.length) { options.onDone?.(); return; }
+      speak(chunks[index], {
+        ...options,
+        onStart: () => { if (!began) { began = true; options.onStart?.(); } },
+        onBoundary: (event: {charIndex: number; charLength: number}) => {
+          if (run !== generation || !options.onBoundary) return;
+          const boundary = event;
+          (options.onBoundary as (event: {charIndex: number; charLength: number}) => void)({...boundary,charIndex:offset+boundary.charIndex});
+        },
+        onDone: () => { offset += chunks[index].length; next(index + 1); },
+      });
+    };
+    next(0);
     return;
   }
 
@@ -35,12 +62,12 @@ export function speak(text: string, options: NativeSpeech.SpeechOptions = {}): v
   };
 
   watchdog = setTimeout(() => {
-    if (started || settled) return;
+    if (run !== generation || started || settled) return;
     const verify = typeof NativeSpeech.isSpeakingAsync === 'function'
       ? NativeSpeech.isSpeakingAsync().catch(() => false)
       : Promise.resolve(false);
     void verify.then((speaking) => {
-      if (started || settled) return;
+      if (run !== generation || started || settled) return;
       if (speaking) {
         started = true;
         cleanup();
@@ -58,32 +85,32 @@ export function speak(text: string, options: NativeSpeech.SpeechOptions = {}): v
     NativeSpeech.speak(text, {
       ...options,
       onStart: () => {
-        if (settled) return;
+        if (run !== generation || settled) return;
         started = true;
         cleanup();
         options.onStart?.();
       },
       onDone: () => {
-        if (settled) return;
+        if (run !== generation || settled) return;
         settled = true;
         cleanup();
         options.onDone?.();
       },
       onStopped: () => {
-        if (settled) return;
+        if (run !== generation || settled) return;
         settled = true;
         cleanup();
         options.onStopped?.();
       },
       onError: (error: Error) => {
-        if (settled) return;
+        if (run !== generation || settled) return;
         settled = true;
         cleanup();
         options.onError?.(error);
       },
     });
   } catch (error) {
-    if (!settled) {
+    if (run === generation && !settled) {
       settled = true;
       cleanup();
       options.onError?.(error instanceof Error ? error : new Error('Device speech failed'));

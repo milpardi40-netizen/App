@@ -61,7 +61,7 @@ const fs = require('node:fs');
     }
   }
   assert.equal(app.russianChecksRevisionFor('ru-a1-alphabet-and-spelling'), app.STARTER_CHECKS_REVISION);
-  assert.deepEqual(app.russianRoomLines({ id: 'ru-a1-test', sentences: [{ text: 'Original', fa: 'اصلی' }], dialogue: [] }), [{ text: 'Original', fa: 'اصلی' }]);
+  assert.deepEqual(app.russianRoomLines({ id: 'ru-l3-test', sentences: [{ text: 'Original', fa: 'اصلی' }], dialogue: [] }), [{ text: 'Original', fa: 'اصلی' }]);
   const screen = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
   for (let stage = 0; stage < 10; stage++) assert.ok(screen.includes(`stage === ${stage}`), `original page ${stage + 1}`);
   console.log('31 practical Pre-A1 plans passed: stable 252 IDs, individual goals, in-context contrast, 62 situational checks, fully pre-taught alternating dialogues, both room sources and revision isolation.');

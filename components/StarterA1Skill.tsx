@@ -1,12 +1,12 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, type StyleProp, type TextStyle } from 'react-native';
 import { Volume2 } from 'lucide-react-native';
 import type { A1SkillTask } from '@/lib/languages/a1Skills';
 import { Typography } from '@/lib/theme';
 
 /** Optional practice is deliberately separate from saved lesson completion. */
-export default function StarterA1Skill({task, onSpeak}: {task: A1SkillTask; onSpeak: (text: string, rate?: number) => void}) {
+export default function StarterA1Skill({task, onSpeak, foreignStyle}: {task: A1SkillTask; foreignStyle?: StyleProp<TextStyle>; onSpeak: (text: string, rate?: number) => void}) {
   const [open, setOpen] = useState(false);
   const [answer, setAnswer] = useState<number | null>(null);
   const listening = task.kind === 'listening';
@@ -16,10 +16,10 @@ export default function StarterA1Skill({task, onSpeak}: {task: A1SkillTask; onSp
     </Pressable>
     {open && <>
       <Text style={s.description}>{listening ? 'به پیام کوتاه گوش کنید و پاسخ را انتخاب کنید. اگر صدا در دسترس نیست، این تمرین را رد کنید.' : 'پیام کوتاه را بخوانید و بر اساس آن پاسخ دهید.'}</Text>
-      {listening ? <Pressable accessibilityRole="button" accessibilityLabel="پخش پیام تمرین شنیداری" style={s.audio} onPress={() => onSpeak(task.passage, 0.8)}><Volume2 size={19} color="#5148C8"/><Text style={s.audioText}>پخش پیام</Text></Pressable> : <Text style={s.passage}>{task.passage}</Text>}
+      {listening ? <Pressable accessibilityRole="button" accessibilityLabel="پخش پیام تمرین شنیداری" style={s.audio} onPress={() => onSpeak(task.passage, 0.8)}><Volume2 size={19} color="#5148C8"/><Text style={s.audioText}>پخش پیام</Text></Pressable> : <Text style={[s.passage,foreignStyle]}>{task.passage}</Text>}
       <Text style={s.prompt}>{task.promptFa}</Text>
       {task.choices.map((choice, index) => <Pressable key={choice} accessibilityRole="radio" accessibilityState={{checked: answer === index}} onPress={() => setAnswer(index)} style={[s.choice, answer === index && s.selected]}><Text style={s.choiceText}>{choice}</Text></Pressable>)}
-      {answer !== null && <View accessibilityLiveRegion="polite" style={s.feedback}><Text style={s.feedbackText}>{answer === task.correctIndex ? `درست است. ${task.explanationFa}` : 'این گزینه درست نیست؛ دوباره تلاش کنید.'}</Text>{listening && answer === task.correctIndex ? <Text style={s.passage}>{task.passage}</Text> : null}</View>}
+      {answer !== null && <View accessibilityLiveRegion="polite" style={s.feedback}><Text style={s.feedbackText}>{answer === task.correctIndex ? `درست است. ${task.explanationFa}` : 'این گزینه درست نیست؛ دوباره تلاش کنید.'}</Text>{listening && answer === task.correctIndex ? <Text style={[s.passage,foreignStyle]}>{task.passage}</Text> : null}</View>}
       <Text style={s.note}>این تمرین اختیاری است؛ پاسخ آن ذخیره نمی‌شود و شرط پایان درس نیست.</Text>
     </>}
   </View>;

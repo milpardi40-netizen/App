@@ -1,3 +1,4 @@
+import {resumeSequencedStarterSamples, sequencedStarterSentenceRevision, isSequencedStarterA1} from './sequencedStarterA1';
 import { practicalAssessmentRevision as previousAssessmentRevision } from './preA1Practical/revisions';
 import { balancedSampleRevision, resumeBalancedSamples } from './preA1Practical/balanceRevision';
 import { assessmentRevisionFor as practicalAssessmentRevision, expandedChoiceChecks } from '../lessonAssessment';
@@ -31,8 +32,8 @@ interface StarterStudyState {
 export function createStarterSessions(language: NewLanguageId, lessons: readonly StarterLesson[]) {
 const storageKey = `${language}_starter_lesson_sessions_v1`;
 const stages = { length: ENGLISH_ENGINE_STEPS.length };
-function freshStarterLessonSession(): StarterLessonSession {
-  return { stage: 0, stageVersion: LESSON_STAGE_VERSION, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false };
+function freshStarterLessonSession(lessonId?: string): StarterLessonSession {
+  return { ...(lessonId && isSequencedStarterA1(lessonId) ? {sampleRevision:sequencedStarterSentenceRevision(lessonId),checksRevision:practicalAssessmentRevision(language,lessonId)} : {}), stage: 0, stageVersion: LESSON_STAGE_VERSION, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false };
 }
 
 async function readRaw(): Promise<string | null> {
@@ -81,13 +82,14 @@ function readSession(lessonId: string, value: unknown): StarterLessonSession {
   const expanded = session.checksRevision !== checksRevision;
   const retired = expanded && session.checksRevision !== previousAssessmentRevision(language, lessonId);
   const answers: Record<string, number> = {};
+  let checks: ReturnType<typeof expandedChoiceChecks> | undefined;
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
-    const check = expandedChoiceChecks(lesson)[checkIndex];
+    const check = (checks ??= expandedChoiceChecks(lesson))[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) continue;
-    if (!retired && (!expanded || checkIndex < (lesson.checks?.length ?? 0))) answers[key] = answer!;
+    if (!(isSequencedStarterA1(lessonId) && expanded) && !retired && (!expanded || checkIndex < (lesson.checks?.length ?? 0))) answers[key] = answer!;
   }
-  return resumeBalancedSamples(lessonId, {
+  return resumeSequencedStarterSamples(lessonId, resumeBalancedSamples(lessonId, {
     ...(session.sampleRevision ? { sampleRevision: session.sampleRevision } : {}),
     ...(checksRevision ? { checksRevision } : {}),
     stage,
@@ -97,13 +99,14 @@ function readSession(lessonId: string, value: unknown): StarterLessonSession {
     revealed: session.revealed,
     answers,
     showCheckAnswers: !expanded && session.showCheckAnswers,
-  });
+  }));
 }
 
 function validateSession(lessonId: string, value: unknown): StarterLessonSession {
   const lesson = lessons.find(item => item.id === lessonId);
   if (!lesson || !value || typeof value !== 'object' || Array.isArray(value)) throw new Error('جلسهٔ این زبان برای این درس معتبر نیست.');
   const session = value as Partial<StarterLessonSession>;
+  if (isSequencedStarterA1(lessonId) && (session.sampleRevision !== sequencedStarterSentenceRevision(lessonId) || session.checksRevision !== practicalAssessmentRevision(language,lessonId))) throw Error('محتوای درس تغییر کرده است؛ درس را دوباره باز کنید.');
   const stage = resumeStage(Number(session.stage), session.stageVersion, stages.length);
   if (stage === null
     || !Number.isInteger(session.sentenceIndex) || session.sentenceIndex! < 0 || session.sentenceIndex! >= lesson.sentences.length
@@ -112,16 +115,17 @@ function validateSession(lessonId: string, value: unknown): StarterLessonSession
     throw new Error('وضعیت ذخیره‌شدهٔ درس این زبان معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   const answers: Record<string, number> = {};
+  let checks: ReturnType<typeof expandedChoiceChecks> | undefined;
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
-    const check = expandedChoiceChecks(lesson)[checkIndex];
+    const check = (checks ??= expandedChoiceChecks(lesson))[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین این زبان معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
     answers[key] = answer!;
   }
   return {
-    ...(balancedSampleRevision(lessonId) ? { sampleRevision: balancedSampleRevision(lessonId) } : {}),
+    ...((sequencedStarterSentenceRevision(lessonId) ?? balancedSampleRevision(lessonId)) ? { sampleRevision: sequencedStarterSentenceRevision(lessonId) ?? balancedSampleRevision(lessonId) } : {}),
     ...(practicalAssessmentRevision(language, lessonId) ? { checksRevision: practicalAssessmentRevision(language, lessonId) } : {}),
     stage,
     ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
@@ -151,7 +155,7 @@ function loadStarterLessonSessionWithPresence(lessonId: string): Promise<{ sessi
     if (!lessons.some(item => item.id === lessonId)) throw new Error('درس این زبان پیدا نشد.');
     const state = parseState(await readRaw());
     const saved = state.sessions[lessonId];
-    return { session: saved === undefined ? freshStarterLessonSession() : readSession(lessonId, saved), hasSavedSession: saved !== undefined };
+    return { session: saved === undefined ? freshStarterLessonSession(lessonId) : readSession(lessonId, saved), hasSavedSession: saved !== undefined };
   });
 }
 
@@ -166,18 +170,43 @@ function serial<T>(job: () => Promise<T>): Promise<T> {
   return next;
 }
 
+async function archivePreviousSession(lessonId: string, old: StarterLessonSession | undefined): Promise<void> {
+  if (isSequencedStarterA1(lessonId) && old && old.sampleRevision !== sequencedStarterSentenceRevision(lessonId)) {
+    const historyKey = `${storageKey}:history:${lessonId}:${old.sampleRevision ?? 'legacy'}`;
+    const existing = Platform.OS === 'web' ? window.localStorage.getItem(historyKey) : await AsyncStorage.getItem(historyKey);
+    if (existing === null) {
+      if (Platform.OS === 'web') window.localStorage.setItem(historyKey, JSON.stringify(old));
+      else await AsyncStorage.setItem(historyKey, JSON.stringify(old));
+    }
+  }
+}
+
 function saveStarterLessonSession(lessonId: string, value: StarterLessonSession): Promise<void> {
   return serial(async () => {
     const safe = validateSession(lessonId, value);
     const state = parseState(await readRaw());
+    await archivePreviousSession(lessonId,state.sessions[lessonId]);
     await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, updatedAt: positionTimestamp() } } }));
+    notifyLearningChange();
+  });
+}
+
+/** Same selected attempts, one primary state write and one change notification. */
+function resetStarterLessonSessions(ids: readonly string[]): Promise<void> {
+  return serial(async () => {
+    const state = parseState(await readRaw());
+    const sessions = {...state.sessions};
+    // Validate the entire selection before any archive or primary state is written.
+    for (const id of new Set(ids)) sessions[id] = {...validateSession(id,freshStarterLessonSession(id)),updatedAt:positionTimestamp()};
+    for (const id of new Set(ids)) await archivePreviousSession(id,state.sessions[id]);
+    await writeRaw(JSON.stringify({...state,sessions}));
     notifyLearningChange();
   });
 }
 
 /** Replace only this lesson's attempt, after any earlier queued saves. */
 async function resetStarterLessonSession(lessonId: string): Promise<StarterLessonSession> {
-  const fresh = freshStarterLessonSession();
+  const fresh = freshStarterLessonSession(lessonId);
   await saveStarterLessonSession(lessonId, fresh);
   return fresh;
 }
@@ -196,5 +225,5 @@ function clearStarterLessonSession(lessonId: string): Promise<void> {
   });
 }
 
-return { loadStarterPositions, loadStarterLessonSessionWithPresence, loadStarterLessonSession, saveStarterLessonSession, resetStarterLessonSession, clearStarterLessonSession };
+return { loadStarterPositions, loadStarterLessonSessionWithPresence, loadStarterLessonSession, saveStarterLessonSession, resetStarterLessonSession, resetStarterLessonSessions, clearStarterLessonSession };
 }

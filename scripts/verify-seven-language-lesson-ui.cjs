@@ -46,6 +46,14 @@ const handlerHashes = {
     visit(ast);
     // Only the assessment denominator inside `next` changed, not navigation/speech control flow.
     if (file === 'components/EnglishLessonRoute.tsx') handlers.next = handlers.next.replace('englishEvidenceFor(lesson).length', 'CORE_LESSON_EVIDENCE[lesson.id]?.length ?? 2');
+    // The Arabic A1 save stamps a content generation; navigation/speech logic is protected by the original hash.
+    if (file === 'components/arabic/ArabicLessonScreen.tsx') handlers.next = handlers.next.replace("        ...(isArabicA1Core(lesson.id) ? {sampleRevision:arabicA1SentenceRevision(lesson.id),checksRevision:ARABIC_A1_ASSESSMENT_REVISION} : {}),\n", '');
+    // Allow exactly the requested removal of the 7.5s narrator-to-microphone race.
+    // Keep the original hash protecting EVERY other handler, stage and control.
+    assert.ok(!handlers.speakForTarget.includes('setTimeout(armMic,'));
+    assert.equal((handlers.speakForTarget.match(/Recognition starts only on playback completion\/error, never on an estimated duration\./g) || []).length, 1);
+    handlers.speakForTarget = handlers.speakForTarget.replace(/^([ \t]*)\/\/ Recognition starts only on playback completion\/error, never on an estimated duration\.$/m,
+      (_, indent) => `${indent}if (targetKey) {\n${indent}  narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));\n${indent}}`);
     assert.equal(digest(handlers), expectedHash, file + ': narration, skip, forward/back navigation and restart handlers unchanged');
     assert.equal(titles, 1, file + ': lesson title retained in header');
     assert.equal(stageTitles, 0, file + ': no duplicate intro title');
@@ -82,5 +90,5 @@ const handlerHashes = {
   assert.equal((sources['components/StarterLesson.tsx'].match(/پخش معمولی/g) || []).length, 1, 'German/French/Spanish keep normal in shadowing only');
   for (const file of ['components/RussianLesson.tsx', 'components/StarterLesson.tsx', 'components/TurkishLesson.tsx']) assert.ok(sources[file].includes('{sessionError || completionError}</Text>'), 'session error kept once next to retry');
   const total = Object.values(inventory).reduce((sum, lessons) => sum + lessons.length, 0);
-  console.log(`Seven-language lesson UI checks passed: ${total} structurally preserved lessons, ten-stage render paths, unchanged control handlers, duplicate-free headers, replay helper execution, Turkish rate exception and preserved independent practice.`);
+  console.log(`Seven-language lesson UI checks passed: ${total} structurally preserved lessons, ten-stage render paths, protected control handlers plus the approved completion-only mic fix, duplicate-free headers, replay helper execution, Turkish rate exception and preserved independent practice.`);
 })().catch(error => { console.error(error); process.exitCode = 1; });

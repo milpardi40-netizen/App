@@ -104,8 +104,8 @@ const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)
   for (const verb of app.VERBS) audit(app.studyExamples(verb, 0), `preVerb.${verb.lemma}`);
 
   // Snapshots of the base commit's shipped content, not source-format hashes.
-  assert.equal(digest(app.RUSSIAN_LESSONS.filter(lesson => lesson.levelId > 0)), 'eb3cf3027a6fd16cefb00ca3d92851c61907e0d77d906cf20943a813a47a9141', 'A1–C1 content must remain byte-for-byte identical after JSON serialization');
-  assert.equal(digest(Object.fromEntries(Object.entries(app.genderCards).filter(([id]) => !id.startsWith('ru-pre-')))), '6da0679bc49c08fcc2ef626e6fac5a1046beac85240f3161062b25283619f01b', 'higher-level gender cards unchanged');
+  assert.equal(digest(app.RUSSIAN_LESSONS.filter(lesson => lesson.levelId !== 1)), require('./fixtures/russian-a1-before.json').protected.ru, 'all non-A1 Russian content stays byte-identical');
+  assert.equal(digest(Object.fromEntries(Object.entries(app.genderCards).filter(([id]) => !id.startsWith('ru-a1-')))), require('./fixtures/russian-a1-before.json').protectedGender, 'all non-A1 gender cards unchanged');
   assert.equal(digest(app.GRAMMAR_UNITS.filter(unit => unit.level > 0)), 'bba9124c2105b0a983d63566e89456a4716fdb6f7cf2e5c0da36bb915c5318ce', 'higher-level grammar units unchanged');
 
   const memory = new Map();
@@ -123,7 +123,10 @@ const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)
   assert.deepEqual(migrated.answers, {}, 'retire only the replaced Pre-A1 question answers');
   assert.equal(migrated.sentenceIndex, fields.sentenceIndex);
   const preserved = await app.loadRussianLessonSession(a1.id);
-  assert.deepEqual(preserved.answers, fields.answers, 'A1 saved answers are not invalidated');
+  assert.deepEqual(preserved.answers, {}, 'changed A1 question meanings retire old answers only');
+  assert.equal(preserved.stage, fields.stage);
+  assert.equal(preserved.sentenceIndex, fields.sentenceIndex);
+  await app.saveRussianLessonSession(a1.id, fields);
   await app.saveRussianLessonSession(pre[0].id, fields);
   assert.equal(JSON.parse(memory.get(app.RUSSIAN_STUDY_STORAGE_KEY)).sessions[pre[0].id].checksRevision, app.LESSON_ASSESSMENT_REVISION);
   // Retired experimental metadata must not block resuming the restored ten-page path.
@@ -139,5 +142,5 @@ const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)
   assert.ok(!('sixTaskIndex' in JSON.parse(memory.get(app.RUSSIAN_STUDY_STORAGE_KEY)).sessions[pre[0].id]), 'next save retires experimental metadata');
   assert.deepEqual((await app.loadRussianLessonSession(a1.id)).answers, fields.answers, 'A1 remains intact after rollback');
   delete global.window;
-  console.log('31 Russian Pre-A1 lessons passed scoped gender audits (mother/sister and agreement restored only in lessons 03/05): all lesson fields, vocabulary, dialogue overrides, checks, cards, bridge notes, grammar and verb examples. A1–C1 content snapshots and saved A1 answers are unchanged.');
+  console.log('31 Russian Pre-A1 lessons passed scoped gender audits (mother/sister and agreement restored only in lessons 03/05): all lesson fields, vocabulary, dialogue overrides, checks, cards, bridge notes, grammar and verb examples. Non-A1 content snapshots and current A1 answers are unchanged; old A1 answers retire safely.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

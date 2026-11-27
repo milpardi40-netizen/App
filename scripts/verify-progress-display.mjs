@@ -358,6 +358,32 @@ for (const os of ['android', 'web']) {
     must.equal(l.assessment.answered, 2); must.equal(l.assessment.correct, 1);
     must.equal(l.levels[5].exam?.last ?? null, l.id === 'en' ? null : 75);
   }
+  // Real profile totals include archived French/Spanish/Turkish reviews, without inheriting old mastery.
+  const profileDisk = os === 'web' ? webStorage : deviceStorage;
+  for (const id of ['fr', 'es', 'tr']) {
+    const course = id === 'tr' ? {lessons:app.turkish.TURKISH_LESSONS,progress:app.turkish.turkishProgress} : app.newCourses.NEW_COURSES[id], store = course.progress;
+    const lesson = course.lessons.find(l => l.id === (id === 'tr' ? 'tr-l1-greetings' : `${id}-a1-greetings`)), sentence = lesson.sentences[0];
+    const key = id === 'tr' ? 'sentence_course_progress_tr_v1' : `sentence_course_progress_${id}_starter_v1`;
+    const rawProgress = JSON.parse(profileDisk.get(key));
+    const oldCard = {id:`${lesson.id}:${sentence.id}`,lessonId:lesson.id,sentenceId:sentence.id,
+      dueAt:'2030-01-01T00:00:00Z',intervalDays:40,ease:2.5,repetitions:10,lapses:0,lastReviewedAt:`${yesterday}T12:00:00Z`,
+      ratingHistory:{days:{[yesterday]:10},undated:0,lowerBound:false}};
+    rawProgress.reviewCards.push(oldCard);
+    if(id === 'tr') rawProgress.completedLessonIds.push(lesson.id);
+    profileDisk.set(key, JSON.stringify(rawProgress));
+    const migrated = await app.loadCourseSnapshot(id), card = migrated.validCards.find(c => c.id === oldCard.id);
+    if(id === 'tr') {
+      must.equal(migrated.levels[1].completed,0);
+      must.ok(migrated.progress.previousTurkishA1CompletedLessonIds.includes(lesson.id));
+      must.ok(JSON.parse(profileDisk.get(key)).completedLessonIds.includes(lesson.id)); // reads leave original bytes alone
+    }
+    must.equal(card.repetitions,0); must.equal(card.previousContent.repetitions,10);
+    const beforeNewReview = (await app.profile.loadLearnerProfileSummary()).languages.find(l => l.id === id);
+    must.equal(beforeNewReview.reviewsDone,12); must.equal(beforeNewReview.reviews.mastered,0);
+    await store.rateReviewCard(oldCard.id,'good');
+    const afterNewReview = (await launch(outfile).profile.loadLearnerProfileSummary()).languages.find(l => l.id === id);
+    must.equal(afterNewReview.reviewsDone,13); must.equal(afterNewReview.reviews.mastered,0);
+  }
   const long = app.content.SENTENCE_LESSONS.find(l => l.sentences.length >= 30);
   await app.chunks.markChunkDone(long.id, 1); await app.chunks.markChunkDone(long.id, 1);
   const chunked = await app.loadCourseSnapshot('en'); must.equal(chunked.course.partial, 2);

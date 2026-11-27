@@ -1,3 +1,6 @@
+import {isSpanishA1Core} from './spanishA1Scope';
+import {isFrenchA1Core} from './frenchA1Scope';
+import {isGermanA1Core} from './germanA1Scope';
 import type { StarterLesson } from './newCourses';
 
 type Check = NonNullable<StarterLesson['checks']>[number];
@@ -22,8 +25,9 @@ export function starterDisplayPronunciation(sentence: StarterLesson['sentences']
     'fr-a1-cafe-s3':'اِ یون بوتِی دو، سیل وو پله',
     'es-a1-directions-s2':'اِستا خونتو آ لا پلاثا',
   };
+  if (isFrenchA1Core(sentence.id.replace(/-s\d+$/, '')) || isSpanishA1Core(sentence.id.replace(/-s\d+$/, ''))) return sentence.pronunciation;
   let result = exact[sentence.id] ?? sentence.pronunciation;
-  if (sentence.id.startsWith('de-')) {
+  if (sentence.id.startsWith('de-') && !isGermanA1Core(sentence.id.replace(/-s\d+$/, ''))) {
     if (/können/i.test(sentence.text)) result = result.replace(/کِنِن/g, 'کونِن');
     if (/sprechen/i.test(sentence.text)) result = result.replace(/اِشپرِخِن/g, 'اِشپرِشِن');
   }
@@ -49,6 +53,7 @@ export function starterDisplayChecks(lesson: StarterLesson): Check[] {
 
 /** Correct dialogue speaker labels at presentation time without changing saved lessons. */
 export function starterDisplayDialogue(lesson: StarterLesson): StarterLesson['dialogue'] {
+  if (isGermanA1Core(lesson.id) || isFrenchA1Core(lesson.id) || isSpanishA1Core(lesson.id)) return lesson.dialogue;
   // The original records stay byte-for-byte stable; only the presented roles change.
   // German Pre-A1 is authored with its own alternating roles, so it needs no relabeling here.
   if (/^(fr|es)-(a1-cafe|pre-18)$/.test(lesson.id) || lesson.id === 'de-a1-cafe') {

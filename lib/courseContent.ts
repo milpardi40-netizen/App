@@ -1,3 +1,4 @@
+import {arrangeEnglishA1} from './englishA1Practice';
 import { enrichEnglishPreA1 } from './languages/preA1Practical/english';
 import { EXPANDED_SENTENCE_LESSONS } from './courseContentExpansion';
 import { ADVANCED_SENTENCE_LESSONS } from './courseContentExpansion2';
@@ -724,11 +725,11 @@ const baseSentenceLessons: SentenceLesson[] = [
   ...C1_ADVANCED_LESSONS,
 ];
 
-export const SENTENCE_LESSONS: SentenceLesson[] = insertLabLessons(
+export const SENTENCE_LESSONS: SentenceLesson[] = arrangeEnglishA1(insertLabLessons(
   baseSentenceLessons,
   labLessonsOf('en').map(englishLabLesson),
   'en',
-).map((lesson, index) => ({
+)).map((lesson, index) => ({
   ...lesson,
   order: index + 1,
   // Keep the role explicit at the runtime boundary, even for legacy lesson sources.

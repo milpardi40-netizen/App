@@ -1,3 +1,4 @@
+import {englishA1ChunkKey} from './englishA1Scope';
 import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -46,7 +47,7 @@ export async function loadChunkMap(): Promise<Record<string, number[]>> {
   return Object.fromEntries(Object.entries(parsed).filter((entry): entry is [string, number[]] => Array.isArray(entry[1])));
 }
 export async function loadCompletedChunks(lessonId: string): Promise<number[]> {
-  return (await loadChunkMap().catch(() => ({} as Record<string, number[]>)))[lessonId] ?? [];
+  return (await loadChunkMap().catch(() => ({} as Record<string, number[]>)))[englishA1ChunkKey(lessonId)] ?? [];
 }
 
 let chunkWrites: Promise<unknown> = Promise.resolve();
@@ -57,9 +58,14 @@ function serializeChunks<T>(operation: () => Promise<T>): Promise<T> {
 }
 
 export function resetLessonChunks(lessonId: string): Promise<void> {
+  return resetLessonsChunks([lessonId]);
+}
+
+/** One read/write for a level; preserve every other lesson's chunk markers. */
+export function resetLessonsChunks(lessonIds: readonly string[]): Promise<void> {
   return serializeChunks(async () => {
     const current = await loadChunkMap();
-    delete current[lessonId];
+    for (const id of lessonIds) delete current[englishA1ChunkKey(id)];
     await AsyncStorage.setItem(DONE_KEY, JSON.stringify(current));
     notifyLearningChange();
   });
@@ -74,7 +80,7 @@ async function markChunkDoneNow(lessonId: string, chunk: number): Promise<number
   try {
     const raw = await AsyncStorage.getItem(DONE_KEY);
     const parsed = raw ? JSON.parse(raw) as Record<string, unknown> : {};
-    await AsyncStorage.setItem(DONE_KEY, JSON.stringify({ ...parsed, [lessonId]: next }));
+    await AsyncStorage.setItem(DONE_KEY, JSON.stringify({ ...parsed, [englishA1ChunkKey(lessonId)]: next }));
     notifyLearningChange();
   } catch {
     /* Local only; losing a chunk marker must never block the lesson. */

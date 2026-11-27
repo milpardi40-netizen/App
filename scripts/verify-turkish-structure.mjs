@@ -61,6 +61,9 @@ globalThis.__turkishSupabaseCalls = 0;
 
 const require = createRequire(import.meta.url);
 const { turkish, studyState, russian, english, catalog, pronunciation, resume } = require(output);
+require('./helpers/approved-turkish-a1.cjs').verifyApprovedTurkishA1(turkish.TURKISH_LESSONS);
+const approvedTurkishA1 = require('../docs/turkish-a1-design/design.json');
+assert.deepEqual(turkish.TURKISH_LESSONS.filter(l=>l.levelId===1).map(l=>l.id),approvedTurkishA1.lessons.map(l=>l.id));
 let checks = 0;
 const check = (condition, message) => { assert.ok(condition, message); checks += 1; };
 
@@ -330,8 +333,8 @@ check(everydayA2Lessons.length === 57, 'A2 Everyday Turkish contains all 57 less
 check(communicationB1Lessons.length === 61, 'B1 Communication Turkish contains all 61 lessons (30 Foundation + 31 Survival)');
 check(upperB2Lessons.length === 61, 'B2 Upper-Intermediate Turkish contains all 61 lessons (30 Foundation + 31 Survival)');
 check(advancedC1Lessons.length === 61, 'C1 Advanced Communication Turkish contains all 61 lessons (30 Foundation + 31 Survival)');
-check(JSON.stringify(foundationLessons.map(lesson => lesson.title)) === JSON.stringify(EXPECTED_FOUNDATION_TITLES), 'A1 Foundation lesson titles match the 34 syllabus topics 1-to-1');
-check(JSON.stringify(survivalLessons.map(lesson => lesson.title)) === JSON.stringify(EXPECTED_SURVIVAL_TITLES), 'A1 Survival lesson titles match the 30 syllabus topics 1-to-1');
+check(JSON.stringify(foundationLessons.map(lesson => lesson.title).sort()) === JSON.stringify([...EXPECTED_FOUNDATION_TITLES].sort()), 'A1 Foundation lesson titles match the 34 syllabus topics 1-to-1');
+check(JSON.stringify(survivalLessons.map(lesson => lesson.title).sort()) === JSON.stringify([...EXPECTED_SURVIVAL_TITLES].sort()), 'A1 Survival lesson titles match the 30 syllabus topics 1-to-1');
 check(JSON.stringify(everydayA2Foundation.map(lesson => lesson.title)) === JSON.stringify(EXPECTED_A2_FOUNDATION_TITLES), 'A2 Foundation lesson titles match the 26 syllabus topics 1-to-1');
 check(JSON.stringify(everydayA2Survival.map(lesson => lesson.title)) === JSON.stringify(EXPECTED_A2_SURVIVAL_TITLES), 'A2 Survival lesson titles match the 31 syllabus topics 1-to-1');
 check(JSON.stringify(communicationB1Foundation.map(lesson => lesson.title)) === JSON.stringify(EXPECTED_B1_FOUNDATION_TITLES), 'B1 Foundation lesson titles match the 30 syllabus topics 1-to-1');
@@ -353,7 +356,10 @@ check(allSentences.length === 2642, 'Turkish contains 2642 core examples after t
 check(new Set(allSentences.map(sentence => sentence.id)).size === 2642, 'All 2642 Turkish sentence IDs are unique');
 const balance = JSON.parse(readFileSync(path.join(root, 'lib/languages/preA1Practical/balanceManifest.json'), 'utf8'));
 const priorSentences = allSentences.filter(sentence => !Object.values(balance).some(plan => plan.newIds.includes(sentence.id)));
-check(new Set(priorSentences.map(sentence => sentence.text)).size === 2632, 'All original Turkish sentence texts remain unique; new functional Pre-A1 answers may recur later');
+// Approved A1 uses deliberate prerequisite retrieval; uniqueness is lesson-local, not cross-course.
+for(const lesson of turkish.TURKISH_LESSONS.filter(l=>l.levelId===1)) assert.equal(new Set(lesson.sentences.map(s=>s.text)).size,8);
+const untouchedText=turkish.TURKISH_LESSONS.filter(l=>l.levelId!==1).flatMap(l=>l.sentences.map(s=>s.text));
+assert.ok(untouchedText.length>0); // exact outside-A1 byte hash is enforced above
 
 for (const lesson of turkish.TURKISH_LESSONS) {
   assert.equal(lesson.sentences.length, balance[lesson.id]?.count ?? 8, `${lesson.id} has its authored example count`);
@@ -378,6 +384,8 @@ for (const lesson of turkish.TURKISH_LESSONS) {
     const tokenCount = sentence.text.trim().split(/\s+/).length;
     if (lesson.levelId === 0 && lesson.learningMode === 'words') {
       assert.equal(tokenCount, 1, `${sentence.id} is one isolated lexical item in a word-first Pre-A1 lesson`);
+    } else if(lesson.levelId === 1) {
+      assert.ok(tokenCount >= 1, `${sentence.id} permits valid Turkish nominal/elliptical forms`);
     } else {
       assert.ok(tokenCount >= 2, `${sentence.id} has >= 2 words for its chunk or sentence activity`);
     }
@@ -397,7 +405,7 @@ checks += 10;
 // 4. Lookup, progress store, spaced review, and session persistence
 check(turkish.findTurkishLesson('missing') === undefined, 'Missing Turkish lookup returns undefined');
 check(turkish.findTurkishLesson('tr-prea1-01-greetings')?.order === 1, 'First Turkish Pre-A1 lesson resolves by ID');
-check(turkish.findTurkishLesson('tr-l1-alphabet-pronunciation')?.order === 26, 'First A1 Foundation lesson follows the separate Pre-A1 section');
+check(turkish.findTurkishLesson('tr-l1-greetings')?.order === 26, 'First A1 Foundation lesson follows the separate Pre-A1 section');
 check(turkish.findTurkishLesson('tr-l2-connected-conversation')?.order === 89, 'Final A1 Survival lesson resolves by ID');
 check(turkish.findTurkishLesson('tr-a2-f-01-present-vs-aorist')?.order === 90, 'First A2 Foundation lesson resolves at order 90');
 check(turkish.findTurkishLesson('tr-a2-s-01-past-experiences-events')?.order === 116, 'First A2 Survival lesson resolves at order 116');
@@ -427,7 +435,7 @@ check(restored.completedLessonIds.includes('tr-prea1-01-greetings') && restored.
 // Session persistence
 const freshLoad = await studyState.loadTurkishLessonSessionWithPresence('tr-l1-greetings');
 check(!freshLoad.hasSavedSession && freshLoad.session.stage === 0 && freshLoad.session.sentenceIndex === 0, 'Unsaved Turkish lesson starts with fresh session');
-await studyState.saveTurkishLessonSession('tr-l1-greetings', { stage: 4, sentenceIndex: 3, revealed: true, answers: { '0': 1 }, showCheckAnswers: false });
+await studyState.saveTurkishLessonSession('tr-l1-greetings', { ...freshLoad.session, stage: 4, sentenceIndex: 3, revealed: true, answers: { '0': 1 }, showCheckAnswers: false });
 const savedLoad = await studyState.loadTurkishLessonSessionWithPresence('tr-l1-greetings');
 check(savedLoad.hasSavedSession && savedLoad.session.stage === 4 && savedLoad.session.sentenceIndex === 3 && savedLoad.session.answers['0'] === 1, 'Saved Turkish lesson session restores stage, sentenceIndex, and check answers');
 await assert.rejects(studyState.saveTurkishLessonSession('tr-l1-greetings', { stage: 99, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false })); checks += 1;

@@ -59,13 +59,20 @@
     "validate:russian-pre-a1-masculine": "node scripts/verify-russian-pre-a1-masculine.cjs",
     "validate:learner-controls": "node scripts/verify-foreground-restart.cjs && node scripts/verify-level-restart.cjs && node scripts/verify-speaking-skip.cjs && node scripts/verify-lesson-stage-navigation.cjs && node scripts/verify-seven-language-lesson-ui.cjs",
     "validate:russian-practical": "node scripts/verify-russian-practical.cjs && node scripts/verify-russian-prea1-ui-dedup.cjs",
+    "validate:russian-a1": "node scripts/verify-russian-a1.cjs && node scripts/verify-russian-a1-integration.cjs",
     "validate:six-prea1-practical": "node scripts/verify-six-prea1-practical.cjs",
     "validate:prea1-balance": "node scripts/verify-prea1-balance.cjs",
     "validate:study-reminder": "node scripts/verify-study-reminder.cjs",
     "validate:lesson-assessment": "node scripts/verify-lesson-assessment.cjs",
     "validate:level-resume": "node scripts/verify-level-resume.cjs",
     "validate:operator-speech": "node scripts/verify-operator-speech.cjs",
-    "validate:app-guide": "node scripts/verify-app-guide.cjs"
+    "validate:app-guide": "node scripts/verify-app-guide.cjs",
+    "validate:english-a1": "node scripts/verify-english-a1.cjs && node scripts/verify-english-a1-integration.cjs",
+    "validate:arabic-a1": "node scripts/verify-arabic-a1.cjs && node scripts/verify-arabic-a1-integration.cjs",
+    "validate:turkish-a1": "node scripts/verify-turkish-a1.cjs && node scripts/verify-turkish-a1-integration.cjs",
+    "validate:spanish-a1": "node scripts/verify-spanish-a1.cjs && node scripts/verify-spanish-a1-integration.cjs",
+    "validate:french-a1": "node scripts/verify-french-a1.cjs && node scripts/verify-french-a1-integration.cjs",
+    "validate:german-a1": "node scripts/verify-german-a1.cjs && node scripts/verify-german-a1-integration.cjs"
   },
   "dependencies": {
     "@expo-google-fonts/beiruti": "^0.4.1",

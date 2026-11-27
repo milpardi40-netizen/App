@@ -1,3 +1,4 @@
+import {mergeEnglishReviewCards, isEnglishA1Core, englishA1SentenceRevision, reviseEnglishA1ReviewCard, type PreviousEnglishA1ReviewContent} from './englishA1Scope';
 import { resumeAt, validResumePoints, courseResumeLesson } from './courseResume';
 import { addRating, validHistory, type RatingHistory } from './reviewHistory';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
@@ -15,6 +16,8 @@ const DAY = 24 * 60 * MINUTE;
 export type ReviewRating = 'again' | 'hard' | 'good' | 'easy';
 
 export interface SentenceReviewCard {
+  contentRevision?: string;
+  previousContent?: PreviousEnglishA1ReviewContent;
   id: string;
   lessonId: string;
   sentenceId: string;
@@ -77,6 +80,7 @@ function currentLessonAfterCurriculumExpansion(value: Partial<CourseProgress>, c
   const storedId = typeof value.currentLessonId === 'string' && SENTENCE_LESSONS.some(lesson => lesson.id === value.currentLessonId)
     ? value.currentLessonId
     : base.currentLessonId;
+  if (isEnglishA1Core(storedId)) return storedId;
   if (value.resumeUpdatedAt && Number.isFinite(Date.parse(value.resumeUpdatedAt))) return storedId;
   const storedIndex = SENTENCE_LESSONS.findIndex(lesson => lesson.id === storedId);
   const lastOriginalFoundationIndex = SENTENCE_LESSONS.findIndex(lesson => lesson.id === 'foundation-buying-something');
@@ -114,6 +118,7 @@ function cardsForLesson(lessonId: string, dueAt = new Date()): SentenceReviewCar
   if (!lesson) return [];
   return lesson.sentences.map((sentence) => ({
     id: reviewCardId(lesson.id, sentence.id),
+    ...(englishA1SentenceRevision(lesson.id) ? {contentRevision: englishA1SentenceRevision(lesson.id)} : {}),
     lessonId: lesson.id,
     sentenceId: sentence.id,
     dueAt: dueAt.toISOString(),
@@ -146,7 +151,7 @@ function normalizeProgress(value: Partial<CourseProgress>): CourseProgress {
     resumePoints: validResumePoints(value.resumePoints, SENTENCE_LESSONS),
     currentLessonId: currentLessonAfterCurriculumExpansion(value, completedLessonIds, base),
     reviewSentenceIds: Array.isArray(value.reviewSentenceIds) ? value.reviewSentenceIds : [],
-    reviewCards: Array.from(cardMap.values()),
+    reviewCards: Array.from(cardMap.values()).map(reviseEnglishA1ReviewCard),
     learnedEssential504Words: Array.isArray(value.learnedEssential504Words) ? value.learnedEssential504Words : [],
     activityDate: localDateKey(),
     todayMinutes: isNewDay ? 0 : (value.todayMinutes ?? 0),
@@ -189,6 +194,8 @@ export function parseCourseProgressBackup(value: unknown): CourseProgress {
       const lessonSentences = sentenceIds.get(card.lessonId);
       return !lessonSentences || !lessonSentences.has(card.sentenceId)
         || card.id !== `${card.lessonId}:${card.sentenceId}`
+        || (card.contentRevision !== undefined && typeof card.contentRevision !== 'string')
+        || (card.previousContent !== undefined && !isRecord(card.previousContent))
         || typeof card.dueAt !== 'string' || !Number.isFinite(Date.parse(card.dueAt))
         || typeof card.intervalDays !== 'number' || !Number.isFinite(card.intervalDays) || card.intervalDays < 0
         || typeof card.ease !== 'number' || !Number.isFinite(card.ease) || card.ease < 1.3 || card.ease > 3
@@ -340,7 +347,7 @@ export async function getCourseProgress(): Promise<CourseProgress> {
   // completion/review evidence with this device instead of replacing one side by timestamp.
   return withCourseProgressLock(async () => {
     const latest = await readLocalProgress();
-    const merged = mergeSharedCourseProgress(latest, remote);
+    const merged = mergeSharedCourseProgress(latest, remote, mergeEnglishReviewCards);
     if (JSON.stringify(merged) !== JSON.stringify(latest)) {
       await writeRaw(JSON.stringify(merged));
       notifyLearningChange();

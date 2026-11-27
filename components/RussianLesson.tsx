@@ -1,4 +1,4 @@
-import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import { russianLessonRoomPairs, russianA1Production, russianA1ProductionLabel, isRussianA1, RUSSIAN_A1_ROOM_REVISION } from '@/lib/languages/russianA1Practice';
 import { speakOperator } from '@/lib/operatorSpeech';
 import { expandedChoiceChecks } from '@/lib/lessonAssessment';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
@@ -252,9 +252,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
       clearNarratorFallback();
       if (targetKey) setMicReadyKey(targetKey);
     };
-    if (targetKey) {
-      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-    }
+    // Recognition starts only on playback completion/error, never on an estimated duration.
     void playRussianSpeech(text, rate, () => {
       setSpeechError('صدای روسی دستگاه در دسترس نیست؛ متن و راهنمای خوانش همچنان دیده می‌شوند.');
       armMic();
@@ -697,6 +695,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
         {stage === 8 && lesson.levelId >= 1 ? <ProductionTask
           key={`${lesson.id}-production`}
           source={lesson}
+          explicit={russianA1Production(lesson)}
+          levelLabel={russianA1ProductionLabel(lesson)}
           examples={lesson.sentences}
           onSpeak={text => speak(text)}
           foreignStyle={styles.practiceForeign}
@@ -711,8 +711,8 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
-          contentRevision={lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}
+          pairs={russianLessonRoomPairs(lesson)}
+          contentRevision={isRussianA1(lesson) ? RUSSIAN_A1_ROOM_REVISION : lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}
           locale="ru-RU"
           onSpeak={(text, onDone) => void playRussianSpeech(text, pace('normal'), onDone, onDone)}
           onSpeakOperator={(text, onDone) => speakOperator(text, 'ru-RU', 'ru', onDone)}

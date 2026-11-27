@@ -1,4 +1,6 @@
-import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import {englishLessonRoomPairs, englishA1Production, englishA1ProductionLabel, englishA1Skills} from '@/lib/englishA1Practice';
+import {isEnglishA1Core, ENGLISH_A1_ROOM_REVISION, englishA1SentenceRevision} from '@/lib/englishA1Scope';
+import StarterA1Skill from './StarterA1Skill';
 import { speakOperator } from '@/lib/operatorSpeech';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { resetLessonChunks } from '@/lib/lessonChunks';
@@ -267,9 +269,7 @@ export default function SentenceLessonScreen() {
       clearNarratorFallback();
       if (targetKey) setMicReadyKey(targetKey);
     };
-    if (targetKey) {
-      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-    }
+    // Recognition starts only on playback completion/error, never on an estimated duration.
     playResponsiveSpeech({
       text,
       locale: 'en-US',
@@ -793,10 +793,13 @@ export default function SentenceLessonScreen() {
             ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
           </View>
         )}
+        {(stage === 2 || stage === 8) ? englishA1Skills(lesson.id).filter(task => task.kind === (stage === 2 ? 'listening' : 'reading')).map(task => <StarterA1Skill key={`${lesson.id}-${task.kind}`} task={task} onSpeak={(text, rate) => speak(text, rate)} />) : null}
         {stage === 8 && lesson.levelId >= 1 ? <ProductionTask
           key={`${lesson.id}-production`}
           source={lesson}
-          explicit={B2_PRODUCTION[lesson.id]}
+          explicit={englishA1Production(lesson.id) ?? B2_PRODUCTION[lesson.id]}
+          levelLabel={englishA1ProductionLabel(lesson.id)}
+          contentRevision={englishA1SentenceRevision(lesson.id)}
           examples={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
           onSpeak={text => speak(text)}
           foreignStyle={styles.practiceForeign}
@@ -811,8 +814,8 @@ export default function SentenceLessonScreen() {
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
+          contentRevision={isEnglishA1Core(lesson.id) ? ENGLISH_A1_ROOM_REVISION : lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          pairs={englishLessonRoomPairs(lesson)}
           locale="en-US"
           onSpeak={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone })}
           onSpeakOperator={(text, onDone) => speakOperator(text, 'en-US', 'en', onDone)}

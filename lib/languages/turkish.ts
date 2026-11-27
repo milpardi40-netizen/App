@@ -1,3 +1,5 @@
+import {arrangeTurkishA1} from './turkishA1Practice';
+import {TURKISH_A1_IDS} from './turkishA1Scope';
 import { enrichTurkishPreA1 } from './preA1Practical/turkish';
 import type { LearningLesson } from './types';
 import { createCourseProgressStore } from '../createCourseProgressStore';
@@ -117,7 +119,7 @@ export const TURKISH_LEVELS: readonly TurkishCourseLevel[] = [
     cefr: 'A1',
     description: 'یک سطح A1 کامل: الفبا و تلفظ، ضمایر و پسوندهای شخصی، حال استمراری، حالت‌های اسم، توانایی و ترتیب کلمات، همراه با مکالمه و موقعیت‌های روزمره',
     color: '#27A1D6',
-    modules: [...FOUNDATION_RAW.map(item => item.title), ...SURVIVAL_RAW.map(item => item.title)],
+    modules: TURKISH_A1_IDS.map(id => [...FOUNDATION_RAW, ...SURVIVAL_RAW].find(item => item.id === id)!.title),
     status: 'available',
   },
   {
@@ -211,10 +213,10 @@ function turkishLabLesson(lab: LabLesson): TurkishCourseLesson {
   };
 }
 
-export const TURKISH_LESSONS: readonly TurkishCourseLesson[] = insertLabLessons(
+export const TURKISH_LESSONS: readonly TurkishCourseLesson[] = arrangeTurkishA1(insertLabLessons(
   TURKISH_BASE_LESSONS,
   labLessonsOf('tr').map(turkishLabLesson),
-).map((lesson, index) => ({ ...enrichTurkishPreA1(lesson), order: index + 1 }));
+).map((lesson, index) => ({ ...enrichTurkishPreA1(lesson), order: index + 1 })));
 
 export function findTurkishLesson(id: string | undefined): TurkishCourseLesson | undefined {
   return TURKISH_LESSONS.find(item => item.id === id);

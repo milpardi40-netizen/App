@@ -52,7 +52,7 @@ const esbuild = require('esbuild');
   check(next(lessons, lessons[0].id).id === lessons[1].id, 'first lesson advances to the next course lesson');
   check(next(lessons, lessons[lessons.length - 1].id) === undefined, 'end of course has no phantom lesson');
   check(next(lessons, 'missing') === undefined, 'an invalid lesson cannot jump to the first lesson');
-  check(next(lessons, 'survival-past-and-future-plans').id === 'lab-en-a1-01', 'the A1 band continues into its practice lab');
+  check(next(lessons, 'survival-health-and-pharmacy').id === 'lab-en-a1-01', 'the A1 band continues into its practice lab');
   check(next(lessons, 'lab-en-a1-08').id === 'a2-foundation-past', 'the A1 lab hands over to the A2 bridge');
   check(next(lessons, 'lab-en-a2-12').id === 'communication-university-discussion', 'the A2 lab hands over to the communication band');
   check(next(lessons, 'a2-foundation-past').id === 'a2-foundation-future', 'A2 bridge lessons are consecutive');

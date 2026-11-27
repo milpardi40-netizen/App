@@ -1,10 +1,27 @@
+import {isArabicA1Core, ARABIC_A1_ASSESSMENT_REVISION} from './arabic/a1Scope';
+import {isTurkishA1Core, TURKISH_A1_ASSESSMENT_REVISION} from './languages/turkishA1Scope';
+import {isSpanishA1Core, SPANISH_A1_ASSESSMENT_REVISION} from './languages/spanishA1Scope';
+import {isFrenchA1Core, FRENCH_A1_ASSESSMENT_REVISION} from './languages/frenchA1Scope';
+import {isGermanA1Core, GERMAN_A1_ASSESSMENT_REVISION} from './languages/germanA1Scope';
+import {isEnglishA1Core, ENGLISH_A1_ASSESSMENT_REVISION} from './englishA1Scope';
 import type { Task } from './englishSupplement/content';
 import { normalizeArabic } from './arabic/text';
 
 export const LESSON_ASSESSMENT_REVISION = 'adaptive-lesson-assessment-v1';
 export interface AssessmentSample { id: string; text?: string; en?: string; ar?: string; fa: string }
 export interface LessonChoiceCheck { promptFa: string; choices: string[]; correctIndex: number; explanationFa: string }
-export function assessmentRevisionFor(_language: string, _lessonId: string): string { return LESSON_ASSESSMENT_REVISION; }
+// Only Russian A1 questions changed; all other courses keep their existing answers.
+export const RUSSIAN_A1_ASSESSMENT_REVISION = 'ru-a1-sequenced-assessment-v1';
+export function assessmentRevisionFor(language: string, lessonId: string): string {
+  if (language === 'ar' && isArabicA1Core(lessonId)) return ARABIC_A1_ASSESSMENT_REVISION;
+  if (language === 'tr' && isTurkishA1Core(lessonId)) return TURKISH_A1_ASSESSMENT_REVISION;
+  if (language === 'es' && isSpanishA1Core(lessonId)) return SPANISH_A1_ASSESSMENT_REVISION;
+  if (language === 'fr' && isFrenchA1Core(lessonId)) return FRENCH_A1_ASSESSMENT_REVISION;
+  if (language === 'de' && isGermanA1Core(lessonId)) return GERMAN_A1_ASSESSMENT_REVISION;
+  if (language === 'en' && isEnglishA1Core(lessonId)) return ENGLISH_A1_ASSESSMENT_REVISION;
+  return language === 'ru' && lessonId.startsWith('ru-a1-')
+    ? RUSSIAN_A1_ASSESSMENT_REVISION : LESSON_ASSESSMENT_REVISION;
+}
 export function shortAssessmentCount(sentenceCount: number): number {
   return sentenceCount <= 10 ? 5 : sentenceCount <= 16 ? 6 : sentenceCount <= 24 ? 7 : 8;
 }
@@ -76,6 +93,7 @@ function extraChecks(samples: readonly AssessmentSample[], limit: number): Array
 export function expandedChoiceChecks(lesson: { sentences: readonly AssessmentSample[]; checks?: readonly LessonChoiceCheck[] }): LessonChoiceCheck[] {
   const authored = [...(lesson.checks ?? [])];
   const target = Math.max(authored.length, shortAssessmentCount(lesson.sentences.length));
+  if (authored.length >= target) return authored; // No discarded question construction on navigation.
   const seen = new Set(authored.map(item => key(item.promptFa)));
   const additional = extraChecks(lesson.sentences, target).filter(item => {
     const signature = key(item.promptFa);
@@ -88,6 +106,7 @@ export function expandedChoiceChecks(lesson: { sentences: readonly AssessmentSam
 /** Existing task IDs remain valid; only new questions get new IDs. No old evidence is deleted. */
 export function expandedEvidenceTasks(lesson: { id: string; sentences: readonly AssessmentSample[] }, authored: readonly Task[] = []): Task[] {
   const target = Math.max(authored.length, shortAssessmentCount(lesson.sentences.length));
+  if (authored.length >= target) return [...authored];
   let hasListening = authored.some(task => task.skill === 'listening');
   const additions = extraChecks(lesson.sentences, target).slice(0, target - authored.length).map((check): Task => {
     const listening = !check.reverse && !hasListening;
@@ -114,5 +133,8 @@ export function expandedEvidenceTasks(lesson: { id: string; sentences: readonly 
 }
 
 export function reviseExpandedEvidence<T extends { evidencePassed: boolean; attemptEvidence?: Record<string, boolean>; checksRevision?: string }>(_language: string, _id: string, session: T): T {
-  return session.checksRevision === LESSON_ASSESSMENT_REVISION ? session : { ...session, checksRevision: LESSON_ASSESSMENT_REVISION, evidencePassed: false };
+  const revision = _language === 'ar' && isArabicA1Core(_id) ? ARABIC_A1_ASSESSMENT_REVISION : _language === 'en' && isEnglishA1Core(_id) ? ENGLISH_A1_ASSESSMENT_REVISION : LESSON_ASSESSMENT_REVISION;
+  return session.checksRevision === revision ? session : { ...session, checksRevision: revision, evidencePassed: false,
+    ...((_language === 'ar' && isArabicA1Core(_id)) || (_language === 'en' && isEnglishA1Core(_id)) ? {attemptEvidence: {}} : {}),
+  };
 }

@@ -1,3 +1,8 @@
+import {isArabicA1Core} from './arabic/a1Scope';
+import {isTurkishA1Core} from './languages/turkishA1Scope';
+import {isSpanishA1Core} from './languages/spanishA1Scope';
+import {isFrenchA1Core} from './languages/frenchA1Scope';
+import {isGermanA1Core} from './languages/germanA1Scope';
 import { assessmentRevisionFor as practicalAssessmentRevision } from './lessonAssessment';
 import { practicalSentenceRevision } from './languages/preA1Practical/revisions';
 import { notifyLearningChange } from './learningChanges';
@@ -68,6 +73,13 @@ export function saveLessonOutcome(course: string, lessonId: string, patch: Parti
   queue = queue.then(async () => {
     const all = await readAll();
     const key = keyOf(course, lessonId);
+    const prior = all[key];
+    if (((course === 'ar' && isArabicA1Core(lessonId)) || (course === 'tr' && isTurkishA1Core(lessonId)) || (course === 'de' && isGermanA1Core(lessonId)) || (course === 'fr' && isFrenchA1Core(lessonId)) || (course === 'es' && isSpanishA1Core(lessonId))) && prior &&
+      ((patch.speaking && prior.speaking && prior.speaking.contentRevision !== practicalSentenceRevision(course,lessonId)) ||
+       (patch.assessment && prior.assessment && prior.assessment.contentRevision !== practicalAssessmentRevision(course,lessonId)))) {
+      const historyKey = `${key}:previous:${prior.speaking?.contentRevision ?? prior.assessment?.contentRevision ?? 'legacy'}`;
+      all[historyKey] ??= prior;
+    }
     const prevOral = all[key]?.oralExam;
     const nextOral = patch.oralExam
       ? {

@@ -1,3 +1,9 @@
+import {spanishLessonRoomPairs, spanishA1Production, spanishA1Skills} from '@/lib/languages/spanishA1Practice';
+import {isSpanishA1Core, SPANISH_A1_ROOM_REVISION, SPANISH_A1_ASSESSMENT_REVISION, spanishA1SentenceRevision} from '@/lib/languages/spanishA1Scope';
+import {frenchLessonRoomPairs, frenchA1Production, frenchA1Skills} from '@/lib/languages/frenchA1Practice';
+import {isFrenchA1Core, FRENCH_A1_ROOM_REVISION, FRENCH_A1_ASSESSMENT_REVISION, frenchA1SentenceRevision} from '@/lib/languages/frenchA1Scope';
+import {germanLessonRoomPairs, germanA1Production, germanA1Skills} from '@/lib/languages/germanA1Practice';
+import {isGermanA1Core, GERMAN_A1_ROOM_REVISION, GERMAN_A1_ASSESSMENT_REVISION, germanA1SentenceRevision} from '@/lib/languages/germanA1Scope';
 import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
 import { speakOperator } from '@/lib/operatorSpeech';
 import { expandedChoiceChecks } from '@/lib/lessonAssessment';
@@ -169,7 +175,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     }));
     return [...byWord.values()];
   }, [lesson]);
-  const skills = lesson.id === `${course.id}-a2-present` ? A2_FIRST_SKILLS[course.id] : lesson.levelId === 2 ? (a2UnitSkills(course.id)[lesson.id] ?? a2ExpansionSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 3 ? (b1UnitSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 4 ? (b2UnitSkills(course.id)[lesson.id] ?? []) : A1_SKILLS[lesson.id] ?? [];
+  const skills = spanishA1Skills(lesson.id) ?? frenchA1Skills(lesson.id) ?? germanA1Skills(lesson.id) ?? (lesson.id === `${course.id}-a2-present` ? A2_FIRST_SKILLS[course.id] : lesson.levelId === 2 ? (a2UnitSkills(course.id)[lesson.id] ?? a2ExpansionSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 3 ? (b1UnitSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 4 ? (b2UnitSkills(course.id)[lesson.id] ?? []) : A1_SKILLS[lesson.id] ?? []);
   const listeningTask = skills.find(task => task.kind === 'listening');
   const readingTask = skills.find(task => task.kind === 'reading');
   const a2Patterns = lesson.levelId === 2 ? a2GrammarPatterns(course.id, lesson.id) : lesson.levelId === 3 ? b1GrammarPatterns(course.id, lesson.id) : lesson.levelId === 4 ? b2GrammarPatterns(course.id, lesson.id) : [];
@@ -241,7 +247,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: StarterLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
+    const nextSession: StarterLessonSession = { ...(isGermanA1Core(lesson.id) ? {sampleRevision:germanA1SentenceRevision(lesson.id),checksRevision:GERMAN_A1_ASSESSMENT_REVISION} : isFrenchA1Core(lesson.id) ? {sampleRevision:frenchA1SentenceRevision(lesson.id),checksRevision:FRENCH_A1_ASSESSMENT_REVISION} : isSpanishA1Core(lesson.id) ? {sampleRevision:spanishA1SentenceRevision(lesson.id),checksRevision:SPANISH_A1_ASSESSMENT_REVISION} : {}), stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveStarterLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
@@ -275,9 +281,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       clearNarratorFallback();
       if (targetKey) setMicReadyKey(targetKey);
     };
-    if (targetKey) {
-      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-    }
+    // Recognition starts only on playback completion/error, never on an estimated duration.
     void playStarterSpeech(
       course.locale,
       text,
@@ -711,10 +715,12 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
 
-        {stage === 8 && !foundation && lesson.levelId >= 3 ? <ProductionTask
+        {stage === 8 && !foundation && (isGermanA1Core(lesson.id) || isFrenchA1Core(lesson.id) || isSpanishA1Core(lesson.id) || lesson.levelId >= 3) ? <ProductionTask
           key={`${lesson.id}-production`}
           source={lesson}
-          explicit={lesson.levelId === 3 ? b1Production(course.id, lesson.id) : lesson.levelId === 4 ? b2Production(course.id, lesson.id) : undefined}
+          levelLabel={isGermanA1Core(lesson.id) || isFrenchA1Core(lesson.id) || isSpanishA1Core(lesson.id) ? 'A1' : undefined}
+          contentRevision={spanishA1SentenceRevision(lesson.id) ?? frenchA1SentenceRevision(lesson.id) ?? germanA1SentenceRevision(lesson.id)}
+          explicit={spanishA1Production(lesson.id) ?? frenchA1Production(lesson.id) ?? germanA1Production(lesson.id) ?? (lesson.levelId === 3 ? b1Production(course.id, lesson.id) : lesson.levelId === 4 ? b2Production(course.id, lesson.id) : undefined)}
           examples={lesson.sentences}
           onSpeak={text => speak(text)}
           foreignStyle={styles.practiceForeign}
@@ -729,8 +735,8 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
+          contentRevision={isSpanishA1Core(lesson.id) ? SPANISH_A1_ROOM_REVISION : isFrenchA1Core(lesson.id) ? FRENCH_A1_ROOM_REVISION : isGermanA1Core(lesson.id) ? GERMAN_A1_ROOM_REVISION : lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          pairs={isSpanishA1Core(lesson.id) ? spanishLessonRoomPairs(lesson) : isFrenchA1Core(lesson.id) ? frenchLessonRoomPairs(lesson) : germanLessonRoomPairs(lesson)}
           locale={course.locale}
           onSpeak={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone)}
           onSpeakOperator={(text, onDone) => speakOperator(text, course.locale, course.id, onDone)}
