@@ -1,10 +1,11 @@
+import { isEnglishLessonAvailable } from './englishLessonAvailability';
 import {mergeEnglishReviewCards, isEnglishA1Core, englishA1SentenceRevision, reviseEnglishA1ReviewCard, type PreviousEnglishA1ReviewContent} from './englishA1Scope';
 import { resumeAt, validResumePoints, courseResumeLesson } from './courseResume';
 import { addRating, validHistory, type RatingHistory } from './reviewHistory';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { EVERYDAY_EXPANSION_LESSON_IDS, FOUNDATION_EXPANSION_LESSON_IDS, SENTENCE_LESSONS, SURVIVAL_EXPANSION_LESSON_IDS } from './courseContent';
+import { EVERYDAY_EXPANSION_LESSON_IDS, FOUNDATION_EXPANSION_LESSON_IDS, ENGLISH_LEARNER_LESSONS, SENTENCE_LESSONS, SURVIVAL_EXPANSION_LESSON_IDS } from './courseContent';
 import { mergeCourseProgress as mergeSharedCourseProgress } from './createCourseProgressStore';
 import { supabase } from './supabase';
 
@@ -360,7 +361,7 @@ export async function getCourseProgress(): Promise<CourseProgress> {
 /** Reset the resume point to a lesson without touching any content (used by "start over from the beginner level"). */
 export async function setCurrentLesson(lessonId: string): Promise<CourseProgress> {
   return withCourseProgressLock(async () => {
-    if (!SENTENCE_LESSONS.some(lesson => lesson.id === lessonId)) throw new Error('Unknown lesson for this course');
+    if (!ENGLISH_LEARNER_LESSONS.some(lesson => lesson.id === lessonId)) throw new Error('Unknown lesson for this course');
     const current = await readLocalProgress();
     return saveProgress({ ...current, ...resumeAt(current, lessonId, positionTimestamp()), updatedAt: new Date().toISOString() });
   });
@@ -368,7 +369,7 @@ export async function setCurrentLesson(lessonId: string): Promise<CourseProgress
 
 export async function completeSentenceLesson(lessonId: string, nextLessonId?: string): Promise<CourseProgress> {
   return withCourseProgressLock(async () => {
-    if (!SENTENCE_LESSONS.some(l => l.id === lessonId)) throw new Error('Unknown lesson for this course');
+    if (!ENGLISH_LEARNER_LESSONS.some(l => l.id === lessonId)) throw new Error('Unknown lesson for this course');
     const current = await readLocalProgress();
     const cardMap = new Map(current.reviewCards.map((card) => [card.id, card]));
     cardsForLesson(lessonId).forEach((card) => {
@@ -380,10 +381,10 @@ export async function completeSentenceLesson(lessonId: string, nextLessonId?: st
     const requestedNextIndex = nextLessonId ? SENTENCE_LESSONS.findIndex(lesson => lesson.id === nextLessonId) : -1;
     const levelId = SENTENCE_LESSONS.find(lesson => lesson.id === lessonId)!.levelId;
     const replaying = current.completedLessonIds.includes(lessonId)
-      && courseResumeLesson(SENTENCE_LESSONS.filter(lesson => lesson.levelId === levelId), current, {})?.id === lessonId;
+      && courseResumeLesson(ENGLISH_LEARNER_LESSONS.filter(lesson => lesson.levelId === levelId), current, {})?.id === lessonId;
     const advancesPath = requestedNextIndex >= 0 && (requestedNextIndex > currentIndex || replaying);
     const nextUncompletedLesson = advancesPath && !replaying
-      ? SENTENCE_LESSONS.slice(requestedNextIndex).find(lesson => !completedSet.has(lesson.id))
+      ? SENTENCE_LESSONS.slice(requestedNextIndex).find(lesson => isEnglishLessonAvailable(lesson) && !completedSet.has(lesson.id))
       : undefined;
     const next = addDailyActivity({
       ...current,
@@ -400,7 +401,7 @@ export async function completeSentenceLesson(lessonId: string, nextLessonId?: st
 export async function getDueReviewCards(now = new Date()): Promise<SentenceReviewCard[]> {
   const progress = await getCourseProgress();
   const validIds = new Set(
-    SENTENCE_LESSONS.flatMap((lesson) => lesson.sentences.map((sentence) => reviewCardId(lesson.id, sentence.id))),
+    ENGLISH_LEARNER_LESSONS.flatMap((lesson) => lesson.sentences.map((sentence) => reviewCardId(lesson.id, sentence.id))),
   );
   return progress.reviewCards
     .filter((card) => validIds.has(card.id) && new Date(card.dueAt).getTime() <= now.getTime())

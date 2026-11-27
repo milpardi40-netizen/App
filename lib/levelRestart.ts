@@ -4,7 +4,7 @@ import { resetLessonsChunks } from './lessonChunks';
 /** Reset attempts in exactly one band. Keep completion history, review schedules and other bands. */
 export async function prepareLevelRestart(pathname: string, firstId: string) {
   if (pathname === '/course/lesson') {
-    const [{ SENTENCE_LESSONS }, { resetLessonSessions }, { setCurrentLesson }] = await Promise.all([
+    const [{ ENGLISH_LEARNER_LESSONS: SENTENCE_LESSONS }, { resetLessonSessions }, { setCurrentLesson }] = await Promise.all([
       import('./courseContent'), import('./englishStudyState'), import('./courseProgress'),
     ]);
     const first = SENTENCE_LESSONS.find(item => item.id === firstId);

@@ -29,22 +29,28 @@ const words = text => text.toLowerCase().replace(/\u0301/g, '').match(/[а-яё]
       const ids = new Set(english.core.map(l=>l.id));
       assert.equal(digest(lessons.filter(l=>!ids.has(l.id))), english.protected.en, 'English outside its separately approved A1 scope stays byte-identical');
     } else {
-    assert.equal(digest(language === 'ru' ? lessons.filter(l => l.levelId !== 1) : lessons), baseline.protected[language], `${language}: all non-target content byte-identical`);
+    assert.equal(digest(language === 'ru' ? require('./helpers/approved-russian-prea1.cjs').historicalPre(lessons).filter(l => l.levelId !== 1) : lessons), baseline.protected[language], `${language}: all non-target content byte-identical`);
     }
   }
-  // The approved correction changes only four A1 wiring points, not the ten-stage layout.
+  // Preserve the A1 wiring guard; strip the explicitly tested Pre-A1-only additions too.
   const screen = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
   // The separately requested playback fix removes ONLY this early-microphone timer.
   // Restore it for this older layout/content hash; verify-long-narration executes the new behavior.
   assert.equal((screen.match(/Recognition starts only on playback completion\/error, never on an estimated duration\./g) || []).length, 1);
   assert.ok(!screen.includes('setTimeout(armMic,'));
   const beforeWiring = screen
+    .replace("import RussianPreA1Transfer, { RussianPreA1Everyday } from '@/components/RussianPreA1Transfer';\n", '')
+    .replace("              {lesson.levelId === 0 ? <RussianPreA1Transfer key={lesson.id} lessonId={lesson.id} onSpeak={text => { cancelSpeakingAdvance(); speakForTarget(text, pace('normal'), null); }} /> : null}\n", '')
+    .replace("          {lesson.levelId === 0 ? <RussianPreA1Everyday key={lesson.id} lessonId={lesson.id} onSpeak={text => { cancelSpeakingAdvance(); speakForTarget(text, pace('normal'), null); }} /> : null}\n", '')
+    .replace("import RussianPreA1Scaffold, { RussianPreA1VerbPacing } from '@/components/RussianPreA1Scaffold';\n", '')
+    .replace("          {lesson.levelId === 0 ? <RussianPreA1Scaffold key={lesson.id} lessonId={lesson.id} onSpeak={text => speak(text)} /> : null}\n", '')
+    .replace("          {lesson.levelId === 0 ? <RussianPreA1VerbPacing lessonId={lesson.id} sentenceIndex={sentenceIndex} /> : null}\n", '')
     .replace('    // Recognition starts only on playback completion/error, never on an estimated duration.', '    if (targetKey) {\n      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));\n    }')
-    .replace("import { russianLessonRoomPairs, russianA1Production, russianA1ProductionLabel, isRussianA1, RUSSIAN_A1_ROOM_REVISION } from '@/lib/languages/russianA1Practice';", "import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';")
+    .replace("import { russianLessonRoomPairs, russianA1Production, russianA1ProductionLabel, isRussianA1, RUSSIAN_A1_ROOM_REVISION, RUSSIAN_PRE_A1_ROOM_REVISION, russianPreA1RoomRevisionFor } from '@/lib/languages/russianA1Practice';", "import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';")
     .replace('          explicit={russianA1Production(lesson)}\n          levelLabel={russianA1ProductionLabel(lesson)}\n', '')
     .replace('pairs={russianLessonRoomPairs(lesson)}', 'pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}')
-    .replace("contentRevision={isRussianA1(lesson) ? RUSSIAN_A1_ROOM_REVISION : lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}", "contentRevision={lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}");
-  assert.equal(createHash('sha256').update(beforeWiring).digest('hex'), baseline.stageSourceHash, 'outside the approved A1 wiring the screen, layout and stages stay identical');
+    .replace("contentRevision={isRussianA1(lesson) ? RUSSIAN_A1_ROOM_REVISION : lesson.id.startsWith('ru-pre-') ? russianPreA1RoomRevisionFor(lesson.id) : undefined}", "contentRevision={lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}");
+  assert.equal(createHash('sha256').update(beforeWiring).digest('hex'), baseline.stageSourceHash, 'outside approved A1 wiring and Pre-A1 support insertions the screen, layout and stages stay identical');
   const built = await esbuild.build({ stdin: { contents: `
     export {RUSSIAN_A1_SKILLS as skills} from './lib/languages/russianA1Skills';
     export {russianRoomLines} from './lib/languages/russianPreA1';
@@ -54,7 +60,7 @@ const words = text => text.toLowerCase().replace(/\u0301/g, '').match(/[а-яё]
   `, resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'cjs', write: false });
   const module = { exports: {} }; new Function('module', 'exports', built.outputFiles[0].text)(module, module.exports);
   const content = module.exports;
-  assert.equal(digest(Object.fromEntries(Object.entries(content.cards).filter(([id]) => !id.startsWith('ru-a1-')))), baseline.protectedGender);
+  assert.equal(digest(Object.fromEntries(Object.entries(require('./helpers/approved-russian-prea1.cjs').historicalGender(content.cards)).filter(([id]) => !id.startsWith('ru-a1-')))), baseline.protectedGender);
   const a1 = inventory.ru.filter(l => l.levelId === 1);
   const verbIndex = require('../lib/languages/russianGrammar/verbs.generated.json');
   const outsideA1 = entries => Object.fromEntries(Object.entries(entries).filter(([id]) => !id.startsWith('ru-a1-')));
@@ -131,7 +137,7 @@ const words = text => text.toLowerCase().replace(/\u0301/g, '').match(/[а-яё]
       migrated++;
     }
     for (const lesson of inventory.ru.filter(l => l.levelId !== 1)) {
-      assert.equal(app.assessment.assessmentRevisionFor('ru', lesson.id), app.assessment.LESSON_ASSESSMENT_REVISION);
+      assert.equal(app.assessment.assessmentRevisionFor('ru', lesson.id), ['ru-pre-03-family-home','ru-pre-08-animals-colors','ru-pre-10-days-places','ru-pre-11-adjectives'].includes(lesson.id) ? 'ru-pre-a1-self-contained-contexts-v1' : lesson.id === 'ru-pre-12-verbs' ? 'ru-pre-a1-light-verbs-checks-v1' : lesson.id === 'ru-pre-29-numbers-teens' ? 'ru-pre-a1-teens-stress-v1' : app.assessment.LESSON_ASSESSMENT_REVISION);
     }
   }
   const historical = { speaking: { average: 91, scores: { [a1[0].sentences[0].id]: 91 }, at: '2026-11-25T12:00:00Z' }, assessment: { correct: 6, total: 6, at: '2026-11-25T12:00:00Z', contentRevision: app.assessment.LESSON_ASSESSMENT_REVISION } };

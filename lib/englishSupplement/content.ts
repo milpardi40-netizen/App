@@ -70,7 +70,7 @@ const units:Omit<Unit,'id'|'level'>[]=[
  checkpoint:[t('grammar','کدام واژه تضاد را نشان می‌دهد؟','but','but یعنی اما.',{options:['because','but','then']}),t('reading','نویسنده عصر چه می‌کند؟','انگلیسی می‌خواند','In the evening زمان مطالعه را نشان می‌دهد.',{source:'I live in York. I work at home in the morning. In the evening, I study English because I enjoy it.',options:['کار می‌کند','انگلیسی می‌خواند','می‌خوابد']}),t('listening','قرار چه ساعتی است؟','11:00','eleven یعنی یازده.',{audio:'Hi Tom. Let us meet at the park at eleven. Please reply.',options:['10:00','11:00','12:00']}),t('writing','مرتب کنید: at ten / meet / Let’s','Let’s meet at ten.','Let’s برای پیشنهاد کار مشترک است.')]}
 ];
 const originalUnits:Unit[]=units.map((u,i)=>({...u,id:`foundation-${i+1}`,level:i<4?'Foundation':'A1',practice:u.practice.map((x,j)=>({...x,id:`foundation-${i+1}-practice-${j+1}`})),checkpoint:u.checkpoint.map((x,j)=>({...x,id:`foundation-${i+1}-check-${j+1}`}))}));
-const stableA1Units:Unit[]=ENGLISH_A1_UNITS.map(u=>({...u,practice:u.practice.map((x,j)=>({...x,id:`${u.id}-practice-${j+1}`})),checkpoint:u.checkpoint.map((x,j)=>({...x,id:`${u.id}-check-${j+1}`}))}));
+const stableA1Units:Unit[]=ENGLISH_A1_UNITS.map(u=>({...u,practice:u.practice.map((x,j)=>({...x,id:x.id || `${u.id}-practice-${j+1}`})),checkpoint:u.checkpoint.map((x,j)=>({...x,id:x.id || `${u.id}-check-${j+1}`}))}));
 /**
  * Pre-A1 goal checks. They never ask a beginner to type an English sentence: every task is a
  * choice or a single-word gap fill, and each one is tied to a sentence the lesson already taught.

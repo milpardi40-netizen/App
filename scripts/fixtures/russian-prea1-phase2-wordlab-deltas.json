@@ -1,0 +1,339 @@
+{
+  "core": [
+    {
+      "id": "ru-core-я",
+      "fields": [
+        "sentence",
+        "sentenceFa",
+        "sentencePronunciation",
+        "lessonTitle"
+      ],
+      "before": {
+        "sentence": "Я учи́тель.",
+        "sentenceFa": "من معلم هستم (مذکر).",
+        "sentencePronunciation": "یا اوچیتِل.",
+        "lessonTitle": "ترکیب ضمیر، ملکی و عدد با اسم مذکر"
+      },
+      "after": {
+        "sentence": "Я понима́ю.",
+        "sentenceFa": "من متوجه می‌شوم.",
+        "sentencePronunciation": "یا پانیمایو.",
+        "lessonTitle": "افعال ساده؛ خواستن و کارهای کلاس"
+      }
+    },
+    {
+      "id": "ru-core-хочу",
+      "fields": [
+        "sentence",
+        "sentenceFa",
+        "sentencePronunciation",
+        "lessonTitle"
+      ],
+      "before": {
+        "sentence": "Я хочу́ ко́фе.",
+        "sentenceFa": "من قهوه می‌خواهم.",
+        "sentencePronunciation": "یا خاچو کُفِه.",
+        "lessonTitle": "علاقه، مالکیت، نیاز و خواسته"
+      },
+      "after": {
+        "sentence": "Я хочу́ чай.",
+        "sentenceFa": "من چای می‌خواهم.",
+        "sentencePronunciation": "یا خاچو چای.",
+        "lessonTitle": "افعال ساده؛ خواستن و کارهای کلاس"
+      }
+    },
+    {
+      "id": "ru-core-читаю",
+      "fields": [
+        "sentence",
+        "sentenceFa",
+        "sentencePronunciation",
+        "lessonTitle"
+      ],
+      "before": {
+        "sentence": "Я зна́ю. Я чита́ю.",
+        "sentenceFa": "من می‌دانم. من می‌خوانم.",
+        "sentencePronunciation": "یا زْنایو. یا چیتایو.",
+        "lessonTitle": "ترکیب اسم، صفت، فعل و قید"
+      },
+      "after": {
+        "sentence": "Я чита́ю текст.",
+        "sentenceFa": "من متن می‌خوانم.",
+        "sentencePronunciation": "یا چیتایو تِکْست.",
+        "lessonTitle": "افعال ساده؛ خواستن و کارهای کلاس"
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "ru-word-я",
+      "fields": [
+        "exampleTarget",
+        "exampleFa",
+        "note",
+        "examplePronunciation"
+      ],
+      "before": {
+        "exampleTarget": "Я учи́тель.",
+        "exampleFa": "من معلم هستم (مذکر).",
+        "note": "از درس «ترکیب ضمیر، ملکی و عدد با اسم مذکر»",
+        "examplePronunciation": "یا اوچیتِل."
+      },
+      "after": {
+        "exampleTarget": "Я понима́ю.",
+        "exampleFa": "من متوجه می‌شوم.",
+        "note": "از درس «افعال ساده؛ خواستن و کارهای کلاس»",
+        "examplePronunciation": "یا پانیمایو."
+      }
+    },
+    {
+      "id": "ru-word-хочу",
+      "fields": [
+        "exampleTarget",
+        "exampleFa",
+        "examplePronunciation"
+      ],
+      "before": {
+        "exampleTarget": "Я хочу́ ко́фе.",
+        "exampleFa": "من قهوه می‌خواهم.",
+        "examplePronunciation": "یا خاچو کُفِه."
+      },
+      "after": {
+        "exampleTarget": "Я хочу́ чай.",
+        "exampleFa": "من چای می‌خواهم.",
+        "examplePronunciation": "یا خاچو چای."
+      }
+    },
+    {
+      "id": "ru-word-читаю",
+      "fields": [
+        "exampleTarget",
+        "exampleFa",
+        "note",
+        "examplePronunciation"
+      ],
+      "before": {
+        "exampleTarget": "Я зна́ю. Я чита́ю.",
+        "exampleFa": "من می‌دانم. من می‌خوانم.",
+        "note": "از درس «ترکیب اسم، صفت، فعل و قید»",
+        "examplePronunciation": "یا زْنایو. یا چیتایو."
+      },
+      "after": {
+        "exampleTarget": "Я чита́ю текст.",
+        "exampleFa": "من متن می‌خوانم.",
+        "note": "از درس «افعال ساده؛ خواستن و کارهای کلاس»",
+        "examplePronunciation": "یا چیتایو تِکْست."
+      }
+    },
+    {
+      "id": "ru-word-понимаю",
+      "fields": [
+        "fa",
+        "exampleTarget",
+        "exampleFa",
+        "note"
+      ],
+      "before": {
+        "fa": "می‌فهمم",
+        "exampleTarget": "Я говорю́. Я понима́ю. Я могу́.",
+        "exampleFa": "من صحبت می‌کنم. من می‌فهمم. من می‌توانم.",
+        "note": "یعنی «می‌فهمم»؛ یک بار در روسی شنیده می‌شود، بعد معنی فارسی‌اش."
+      },
+      "after": {
+        "fa": "متوجه می‌شوم",
+        "exampleTarget": "Я понима́ю.",
+        "exampleFa": "من متوجه می‌شوم.",
+        "note": "یعنی «متوجه می‌شوم»؛ یک بار در روسی شنیده می‌شود، بعد معنی فارسی‌اش."
+      }
+    },
+    {
+      "id": "ru-word-хочешь",
+      "fields": [
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "exampleTarget": "Я хочу́ чай. Ты хо́чешь чай? Вы хоти́те чай?",
+        "exampleFa": "من چای می‌خواهم. تو چای می‌خواهی؟ شما چای می‌خواهید؟"
+      },
+      "after": {
+        "exampleTarget": "Ты хо́чешь чай?",
+        "exampleFa": "چای می‌خواهی؟"
+      }
+    },
+    {
+      "id": "ru-word-знаешь",
+      "fields": [
+        "fa",
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "fa": "می‌دانی",
+        "exampleTarget": "Я зна́ю текст. Ты зна́ешь текст.",
+        "exampleFa": "من متن را بلدم. تو متن را بلدی."
+      },
+      "after": {
+        "fa": "می‌دانی / بلدی",
+        "exampleTarget": "Ты зна́ешь текст?",
+        "exampleFa": "متن را بلدی؟"
+      }
+    },
+    {
+      "id": "ru-word-хотите",
+      "fields": [
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "exampleTarget": "Я хочу́ чай. Ты хо́чешь чай? Вы хоти́те чай?",
+        "exampleFa": "من چای می‌خواهم. تو چای می‌خواهی؟ شما چای می‌خواهید؟"
+      },
+      "after": {
+        "exampleTarget": "Что вы хоти́те?",
+        "exampleFa": "شما چه می‌خواهید؟"
+      }
+    },
+    {
+      "id": "ru-word-говорю",
+      "fields": [
+        "exampleTarget",
+        "exampleFa",
+        "levelId"
+      ],
+      "before": {
+        "exampleTarget": "Я говорю́. Я понима́ю. Я могу́.",
+        "exampleFa": "من صحبت می‌کنم. من می‌فهمم. من می‌توانم.",
+        "levelId": 0
+      },
+      "after": {
+        "exampleTarget": "Я говорю́ по-пе́рсидски и немно́го по-ру́сски.",
+        "exampleFa": "فارسی و کمی روسی صحبت می‌کنم.",
+        "levelId": 1
+      }
+    },
+    {
+      "id": "ru-word-любишь",
+      "fields": [
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "exampleTarget": "Я люблю́ чай. Ты лю́бишь чай?",
+        "exampleFa": "من چای دوست دارم. تو چای دوست داری؟"
+      },
+      "after": {
+        "exampleTarget": "Что ты лю́бишь? Я люблю́ чай.",
+        "exampleFa": "چه دوست داری؟ من چای دوست دارم."
+      }
+    },
+    {
+      "id": "ru-word-иду",
+      "fields": [
+        "fa",
+        "exampleTarget",
+        "exampleFa",
+        "note",
+        "levelId"
+      ],
+      "before": {
+        "fa": "می‌روم",
+        "exampleTarget": "Я иду́. Ты идёшь. Здесь есть чай. Чай сто́ит два́дцать.",
+        "exampleFa": "من می‌روم. تو می‌روی. اینجا چای هست. چای بیست قیمت دارد.",
+        "note": "یعنی «می‌روم»؛ یک بار در روسی شنیده می‌شود، بعد معنی فارسی‌اش.",
+        "levelId": 0
+      },
+      "after": {
+        "fa": "پیاده می‌روم",
+        "exampleTarget": "Я иду́ в магази́н.",
+        "exampleFa": "من دارم پیاده به فروشگاه می‌روم.",
+        "note": "یعنی «پیاده می‌روم»؛ یک بار در روسی شنیده می‌شود، بعد معنی فارسی‌اش.",
+        "levelId": 1
+      }
+    },
+    {
+      "id": "ru-word-живет",
+      "fields": [
+        "fa",
+        "exampleTarget",
+        "exampleFa",
+        "note",
+        "levelId"
+      ],
+      "before": {
+        "fa": "او زندگی می‌کند",
+        "exampleTarget": "Я живу́ здесь. Он живёт здесь.",
+        "exampleFa": "من اینجا زندگی می‌کنم. او اینجا زندگی می‌کند.",
+        "note": "یعنی «او زندگی می‌کند»؛ یک بار در روسی شنیده می‌شود، بعد معنی فارسی‌اش.",
+        "levelId": 0
+      },
+      "after": {
+        "fa": "زندگی می‌کند",
+        "exampleTarget": "Она́ живёт в Москве́.",
+        "exampleFa": "او در مسکو زندگی می‌کند. (زن)",
+        "note": "یعنی «زندگی می‌کند»؛ یک بار در روسی شنیده می‌شود، بعد معنی فارسی‌اش.",
+        "levelId": 1
+      }
+    },
+    {
+      "id": "ru-word-пишу",
+      "fields": [
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "exampleTarget": "Я пишу́ текст. Мы пи́шем текст.",
+        "exampleFa": "من متن می‌نویسم. ما متن می‌نویسیم."
+      },
+      "after": {
+        "exampleTarget": "Я пишу́ текст.",
+        "exampleFa": "من متن می‌نویسم."
+      }
+    },
+    {
+      "id": "ru-word-идешь",
+      "fields": [
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "exampleTarget": "Я иду́. Ты идёшь. Здесь есть чай. Чай сто́ит два́дцать.",
+        "exampleFa": "من می‌روم. تو می‌روی. اینجا چای هست. چای بیست قیمت دارد."
+      },
+      "after": {
+        "exampleTarget": "Куда́ ты идёшь? Туда́, в класс.",
+        "exampleFa": "کجا می‌روی؟ آنجا، به کلاس."
+      }
+    },
+    {
+      "id": "ru-word-пишем",
+      "fields": [
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "exampleTarget": "Я пишу́ текст. Мы пи́шем текст.",
+        "exampleFa": "من متن می‌نویسم. ما متن می‌نویسیم."
+      },
+      "after": {
+        "exampleTarget": "Чита́ем и пи́шем текст.",
+        "exampleFa": "متن را می‌خوانیم و می‌نویسیم."
+      }
+    },
+    {
+      "id": "ru-word-читаем",
+      "fields": [
+        "exampleTarget",
+        "exampleFa"
+      ],
+      "before": {
+        "exampleTarget": "Я чита́ю текст. Мы чита́ем текст.",
+        "exampleFa": "من متن می‌خوانم. ما متن می‌خوانیم."
+      },
+      "after": {
+        "exampleTarget": "Чита́ем и пи́шем текст.",
+        "exampleFa": "متن را می‌خوانیم و می‌نویسیم."
+      }
+    }
+  ]
+}

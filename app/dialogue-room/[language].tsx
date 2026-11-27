@@ -12,7 +12,7 @@ import { playRussianSpeech } from '@/lib/russianSpeech';
 import { playTurkishSpeech } from '@/lib/turkishSpeech';
 import { playStarterSpeech } from '@/lib/starterSpeech';
 import { ARABIC_NORMAL_SPEECH_RATE, ARABIC_SLOW_SPEECH_RATE, playArabicSpeech } from '@/lib/arabic/speech';
-import { SENTENCE_LESSONS } from '@/lib/courseContent';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import { RUSSIAN_LESSONS, russianProgress } from '@/lib/languages/russian';
 import { TURKISH_LESSONS, turkishProgress } from '@/lib/languages/turkish';
 import { NEW_COURSES } from '@/lib/languages/newCourses';

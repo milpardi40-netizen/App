@@ -8,7 +8,7 @@ import * as Speech from '@/lib/courseSpeech';
 import { speechTagFor } from '@/lib/speechLanguage';
 import { AppBottomNav } from '@/components/AppBottomNav';
 import { PageNavigation } from '@/components/PageNavigation';
-import { SENTENCE_LESSONS } from '@/lib/courseContent';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import { markPlanStep } from '@/lib/dailyPlan';
 import {
   getCourseProgress,

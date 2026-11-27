@@ -7,7 +7,7 @@ const esbuild = require('esbuild');
   const mod = { exports: {} }; new Function('module', 'exports', build.outputFiles[0].text)(mod, mod.exports);
   const { RUSSIAN_PRE_A1_LESSONS: lessons, narrationRate } = mod.exports;
   assert.equal(lessons.length, 31);
-  assert.equal(crypto.createHash('sha256').update(JSON.stringify(lessons)).digest('hex'), 'c30f3da3e50a0d5e57df73bd1788ca12b3d22b1225a11399357d98508003865a', 'all authored lesson content, order, vocabulary, patterns, checks and dialogues must remain unchanged');
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(require('./helpers/approved-russian-prea1.cjs').historicalPre(lessons))).digest('hex'), 'c30f3da3e50a0d5e57df73bd1788ca12b3d22b1225a11399357d98508003865a', 'historical content plus separately guarded phase-1/2 corrections');
   assert.equal(narrationRate('ru-RU', 'listen'), narrationRate('ru-RU', 'normal'), 'removed replay really duplicates the retained sound button');
   assert.equal(new Set(['slow', 'normal', 'natural'].map(pace => narrationRate('ru-RU', pace))).size, 3);
   const source = fs.readFileSync('components/RussianLesson.tsx', 'utf8');
@@ -26,5 +26,5 @@ const esbuild = require('esbuild');
     assert.ok(source.includes(marker), lesson.id + ': teaching stage retained');
     assert.ok(lesson.sentences.length && lesson.checks.length && lesson.dialogue.length);
   }
-  console.log('31 Russian Pre-A1 lessons retain their exact authored-content SHA-256, ten stages, unique lesson-one coaching, grammar gender card and all distinct playback speeds under the shared seven-language cleanup.');
+  console.log('31 Russian Pre-A1 lessons retain the approved current content SHA-256, ten stages, unique lesson-one coaching, grammar gender card and all distinct playback speeds under the shared seven-language cleanup.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

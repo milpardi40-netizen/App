@@ -20,7 +20,7 @@ interface Source {
 // Do not evaluate the five other curricula to open a single language's map.
 async function sourceFor(id: LanguageId): Promise<Source> {
   if (id === 'en') {
-    const [{ SENTENCE_LESSONS: lessons, COURSE_LEVELS: levels }, { readLocalProgress: read }, { loadStudy, withStudyStorageLock }, { ENGLISH_ENGINE_STEPS }] = await Promise.all([
+    const [{ ENGLISH_LEARNER_LESSONS: lessons, COURSE_LEVELS: levels }, { readLocalProgress: read }, { loadStudy, withStudyStorageLock }, { ENGLISH_ENGINE_STEPS }] = await Promise.all([
       import('./courseContent'), import('./courseProgress'), import('./englishStudyState'), import('./englishLearningEngine'),
     ]);
     return { lessons, levels, read, stages: ENGLISH_ENGINE_STEPS.length, positions: async () => {

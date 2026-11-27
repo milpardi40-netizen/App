@@ -1,5 +1,10 @@
+import EnglishA1ListeningTransfer from './EnglishA1ListeningTransfer';
+import EnglishA1Interaction from './EnglishA1Interaction';
+import { EnglishA1SupportLinks } from './EnglishA1Support';
+import EnglishA1ScaffoldCard from './EnglishA1Scaffold';
+import { englishA1Scaffold } from '@/lib/englishA1Scaffolding';
 import {englishLessonRoomPairs, englishA1Production, englishA1ProductionLabel, englishA1Skills} from '@/lib/englishA1Practice';
-import {isEnglishA1Core, ENGLISH_A1_ROOM_REVISION, englishA1SentenceRevision} from '@/lib/englishA1Scope';
+import {isEnglishA1Core, ENGLISH_A1_ROOM_REVISION, englishA1SentenceRevision, englishA1ProductionRevision} from '@/lib/englishA1Scope';
 import StarterA1Skill from './StarterA1Skill';
 import { speakOperator } from '@/lib/operatorSpeech';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
@@ -38,7 +43,7 @@ import { Check, ChevronLeft, Headphones, MessageCircle, Mic2, RefreshCw, RotateC
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
 import ProductionTask from '@/components/ProductionTask';
 import RevealText from '@/components/RevealText';
-import { COURSE_LEVELS, getSentenceLesson, SENTENCE_LESSONS } from '@/lib/courseContent';
+import { COURSE_LEVELS, getSentenceLesson, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } from '@/lib/content/courseAudit';
 import { bandReadinessForLevel } from '@/lib/content/readiness';
 
@@ -585,7 +590,7 @@ export default function SentenceLessonScreen() {
 
             <Text style={styles.situation}>{lesson.situation}</Text>
             {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.sentences.map((sentence, index) => ({ speaker: index % 2 ? 'You' : 'Partner', text: sentence.en, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Colors.primary[500]} /> : null}
-            {lesson.teachingFa ? <View style={styles.teachingCard}>
+            {englishA1Scaffold(lesson.id) ? <EnglishA1ScaffoldCard key={lesson.id} lessonId={lesson.id} overviewFa={lesson.teachingFa ?? ''} onSpeak={text => speak(text)} /> : lesson.teachingFa ? <View style={styles.teachingCard}>
               <Text style={styles.teachingTitle}>چطور این درس را یاد بگیریم</Text>
               {lesson.teachingFa.split('\n').map(line => <Text key={line} style={styles.teachingLine}>{line}</Text>)}
             </View> : null}
@@ -771,7 +776,7 @@ export default function SentenceLessonScreen() {
             <LessonGenderCard language="en" lesson={lesson} speak={speak} />
             {B2_GUIDANCE[lesson.id]?.map((note, index) => <GrammarNoteCard key={`${lesson.id}-guide-${index}`} title={lessonTopics?.[index] ?? ''} text={note} />)}
             {c1Unit?.topics.map((topic, index) => <GrammarNoteCard key={`${lesson.id}-c1-guide-${index}`} title={topic[0]} text={topic[5]} />)}
-            {grammarPatterns.length ? grammarPatterns.map((item, index) => (
+            {englishA1Scaffold(lesson.id) ? <EnglishA1ScaffoldCard key={`${lesson.id}-grammar`} lessonId={lesson.id} overviewFa={lesson.teachingFa ?? ''} onSpeak={text => speak(text)} /> : grammarPatterns.length ? grammarPatterns.map((item, index) => (
               <GrammarPatternCard key={item.sentenceId} index={index + 1} pattern={item.pattern} example={item.exampleEn} translation={item.exampleFa} onSpeak={() => speak(item.exampleEn)} />
             )) : null}
             {lesson.c1Section && lessonTopics && <EnglishB2TopicPractice key={lesson.id} lessonId={lesson.id} topics={lessonTopics} practice={C1_TOPIC_PRACTICE[lesson.id]} />}
@@ -793,13 +798,17 @@ export default function SentenceLessonScreen() {
             ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
           </View>
         )}
-        {(stage === 2 || stage === 8) ? englishA1Skills(lesson.id).filter(task => task.kind === (stage === 2 ? 'listening' : 'reading')).map(task => <StarterA1Skill key={`${lesson.id}-${task.kind}`} task={task} onSpeak={(text, rate) => speak(text, rate)} />) : null}
+        {(stage === 2 || stage === 8) ? englishA1Skills(lesson.id).filter(task => task.kind === (stage === 2 ? 'listening' : 'reading')).map(task => task.kind === 'listening' && isEnglishA1Core(lesson.id)
+          ? <EnglishA1ListeningTransfer key={`${lesson.id}-${task.kind}`} lessonId={lesson.id} task={task} />
+          : <StarterA1Skill key={`${lesson.id}-${task.kind}`} task={task} headingFa={task.kind === 'reading' ? 'تمرین اختیاری · کاربرد در اطلاعات تازه' : undefined} onSpeak={(text, rate) => speak(text, rate)} />) : null}
+        {stage === 8 && isEnglishA1Core(lesson.id) && <Text style={styles.stageDesc}>این تکلیف با اطلاعات تازه تمرین می‌شود؛ پیش‌نویس تکلیف قبلی جدا حفظ شده است. معیارهای زیر برای خودسنجی‌اند؛ رسیدن به تعداد واژه، درست‌بودن پاسخ را ثابت نمی‌کند.</Text>}
         {stage === 8 && lesson.levelId >= 1 ? <ProductionTask
           key={`${lesson.id}-production`}
           source={lesson}
           explicit={englishA1Production(lesson.id) ?? B2_PRODUCTION[lesson.id]}
           levelLabel={englishA1ProductionLabel(lesson.id)}
-          contentRevision={englishA1SentenceRevision(lesson.id)}
+          titleFa={isEnglishA1Core(lesson.id) ? 'کاربرد و تولید کوتاه' : undefined}
+          contentRevision={englishA1ProductionRevision(lesson.id)}
           examples={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
           onSpeak={text => speak(text)}
           foreignStyle={styles.practiceForeign}
@@ -807,6 +816,8 @@ export default function SentenceLessonScreen() {
         /> : null}
         {stage === 8 && lesson.levelId >= 4 ? <EnglishB2Scenario key={`${lesson.id}-scenario`} lessonId={lesson.id} speak={speak} scenario={C1_SCENARIOS[lesson.id]} /> : null}
         {stage === 8 && lesson.levelId >= 5 ? <EnglishC1ExtendedModel key={`${lesson.id}-extended-model`} lessonId={lesson.id} speak={speak} /> : null}
+        {stage === 9 && isEnglishA1Core(lesson.id) && <EnglishA1Interaction key={`${lesson.id}-interaction`} lessonId={lesson.id} onSpeak={(text, rate) => speak(text, rate)} />}
+        {stage === 0 && isEnglishA1Core(lesson.id) && <EnglishA1SupportLinks lessonId={lesson.id} onOpen={unit => router.push({ pathname: '/lang/a1-support', params: { unit } } as never)} />}
         {stage === 9 && <LessonDialogueRoom
           key={lesson.id}
           language="en"
@@ -827,6 +838,7 @@ export default function SentenceLessonScreen() {
       </FitScrollView>
 
       <View pointerEvents={resetting ? 'none' : 'auto'} style={styles.footer}>
+        {isEnglishA1Core(lesson.id) && stage === stages.length - 1 && <Text style={styles.stageDesc}>پایان درس، ثبت طی‌کردن مسیر است؛ قبولی سنجش و خودسنجیِ تولید، جدا از آن هستند و گواهی تسلط A1 نیستند.</Text>}
         <View style={styles.footerButtons}>
           {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
             <Text style={styles.secondaryControlText}>مرحلهٔ قبل</Text>

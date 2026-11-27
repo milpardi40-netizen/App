@@ -32,7 +32,7 @@ import {
 import { AppBottomNav } from '@/components/AppBottomNav';
 import { ProfileIcon } from '@/components/ProfileIcon';
 import { PageNavigation } from '@/components/PageNavigation';
-import { COURSE_LEVELS, SENTENCE_LESSONS } from '@/lib/courseContent';
+import { COURSE_LEVELS, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import LevelReadinessLine from '@/components/LevelReadinessLine';
 import PlacementCard from '@/components/PlacementCard';
 import { auditLessonsFromEnglish, courseReadiness } from '@/lib/content/courseAudit';

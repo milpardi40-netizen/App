@@ -6,13 +6,13 @@ import type { A1SkillTask } from '@/lib/languages/a1Skills';
 import { Typography } from '@/lib/theme';
 
 /** Optional practice is deliberately separate from saved lesson completion. */
-export default function StarterA1Skill({task, onSpeak, foreignStyle}: {task: A1SkillTask; foreignStyle?: StyleProp<TextStyle>; onSpeak: (text: string, rate?: number) => void}) {
+export default function StarterA1Skill({task, onSpeak, foreignStyle, headingFa}: {task: A1SkillTask; foreignStyle?: StyleProp<TextStyle>; headingFa?: string; onSpeak: (text: string, rate?: number) => void}) {
   const [open, setOpen] = useState(false);
   const [answer, setAnswer] = useState<number | null>(null);
   const listening = task.kind === 'listening';
   return <View style={s.card}>
     <Pressable accessibilityRole="button" accessibilityState={{expanded:open}} onPress={() => setOpen(value => !value)} style={s.toggle}>
-      <Text style={s.title}>تمرین اختیاری {listening ? 'درک شنیداری' : 'درک مطلب'}</Text><Text style={s.icon}>{open ? '−' : '+'}</Text>
+      <Text style={s.title}>{headingFa ?? `تمرین اختیاری ${listening ? 'درک شنیداری' : 'درک مطلب'}`}</Text><Text style={s.icon}>{open ? '−' : '+'}</Text>
     </Pressable>
     {open && <>
       <Text style={s.description}>{listening ? 'به پیام کوتاه گوش کنید و پاسخ را انتخاب کنید. اگر صدا در دسترس نیست، این تمرین را رد کنید.' : 'پیام کوتاه را بخوانید و بر اساس آن پاسخ دهید.'}</Text>

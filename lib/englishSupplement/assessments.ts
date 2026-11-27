@@ -30,7 +30,7 @@ export const A1_FINAL_CHECK: Task[] = [
   q('a1-final-g7', 'grammar', 'Did you ___ the old museum?', 'visit', 'بعد از did، فعل به شکل ساده می‌آید.', { options: ['visit', 'visited', 'visiting'] }),
   q('a1-final-g8', 'grammar', 'Our trip is ___ July.', 'in', 'برای ماه از in استفاده می‌کنیم.', { options: ['at', 'on', 'in'] }),
 
-  q('a1-final-r1', 'reading', 'کافه روز شنبه چه ساعتی باز می‌شود؟', '8:00', 'ساعت بازشدن فردا 8:00 است.', { source: 'RIVER CAFÉ\nToday: 9:00–17:00\nSaturday: 8:00–14:00\nClosed Sunday', options: ['8:00', '9:00', '14:00'] }),
+  q('a1-final-r1', 'reading', 'کافه روز شنبه چه ساعتی باز می‌شود؟', '8:00', 'ساعت بازشدن روز شنبه 8:00 است.', { source: 'RIVER CAFÉ\nToday: 9:00–17:00\nSaturday: 8:00–14:00\nClosed Sunday', options: ['8:00', '9:00', '14:00'] }),
   q('a1-final-r2', 'reading', 'قیمت سوپ چقدر است؟', '6 dollars', 'قیمت سوپ در منو $6 درج شده است.', { source: 'MENU\nSoup $6\nSalad $5\nTea $2', options: ['2 dollars', '5 dollars', '6 dollars'] }),
   q('a1-final-r3', 'reading', 'چرا جُو به خانه می‌رود؟', 'He feels ill.', 'او می‌گوید حالش خوب نیست و می‌خواهد استراحت کند.', { source: 'Hi Sam. I am going home now because I feel ill. I am going to rest. See you tomorrow, Joe.', options: ['He feels ill.', 'He is going shopping.', 'He has a new job.'] }),
   q('a1-final-r4', 'reading', 'قطار شمارهٔ ۱۰ چه زمانی به لِیدز می‌رسد؟', '12:40', 'ردیف قطار Leeds زمان رسیدن 12:40 را نشان می‌دهد.', { source: 'Train 10: London 11:00 — Leeds 12:40.\nTrain 12: London 12:00 — Leeds 13:35.', options: ['11:00', '12:40', '13:35'] }),
@@ -44,18 +44,18 @@ export const A1_FINAL_CHECK: Task[] = [
   q('a1-final-l3', 'listening', 'مشتری چه نوشیدنی سفارش می‌دهد؟', 'a coffee', 'در سفارش، a coffee شنیده می‌شود.', { audio: 'Could I have a coffee and a cheese sandwich, please?', options: ['a tea', 'a coffee', 'some water'] }),
   q('a1-final-l4', 'listening', 'مسافر به کدام سکو برود؟', 'platform 3', 'در پاسخ، platform three گفته می‌شود.', { audio: 'Excuse me, where is the train to Bath? It leaves from platform three.', options: ['platform 1', 'platform 2', 'platform 3'] }),
   q('a1-final-l5', 'listening', 'گوینده چه زمانی معمولاً ورزش می‌کند؟', 'on Fridays', 'عادت او on Fridays بیان می‌شود.', { audio: 'I usually go swimming on Fridays. Today I am staying home.', options: ['on Mondays', 'on Fridays', 'on Sundays'] }),
-  q('a1-final-l6', 'listening', 'دوست گوینده چه توانایی‌ای دارد؟', 'play the piano', 'در فایل می‌شنوید: can play the piano.', { audio: 'My sister can play the piano, but she cannot sing very well.', options: ['play the piano', 'drive a bus', 'speak Japanese'] }),
+  q('a1-final-l6', 'listening', 'خواهر گوینده چه توانایی‌ای دارد؟', 'play the piano', 'در فایل می‌شنوید: can play the piano.', { audio: 'My sister can play the piano, but she cannot sing very well.', options: ['play the piano', 'drive a bus', 'speak Japanese'] }),
   q('a1-final-l7', 'listening', 'گوینده دیروز کجا بود؟', 'at the beach', 'گوینده می‌گوید: We were at the beach.', { audio: 'Yesterday it was sunny. We were at the beach and we ate lunch there.', options: ['at home', 'at the beach', 'at school'] }),
   q('a1-final-l8', 'listening', 'قرار چه ساعتی است؟', '5:30', 'پاسخ شنیداری five thirty برابر 5:30 است.', { audio: 'Can we meet after work? Yes. Let us meet at five thirty by the station.', options: ['5:00', '5:30', '6:30'] }),
 
-  q('a1-final-w1', 'writing', 'جمله را کامل کنید: The children ___ in the park now.', 'are playing', 'برای جمع و کاری که اکنون جریان دارد، are playing درست است.', { options: ['play', 'are playing', 'plays'] }),
-  q('a1-final-w2', 'writing', 'جمله را کامل کنید: There ___ a supermarket next to my home.', 'is', 'برای یک supermarket از there is استفاده می‌کنیم.', { options: ['is', 'are', 'do'] }),
-  q('a1-final-w3', 'writing', 'درخواست مودبانه را کامل کنید: Could you ___ me, please?', 'help', 'پس از could از شکل سادهٔ فعل استفاده می‌شود.', { options: ['help', 'helps', 'helping'] }),
-  q('a1-final-w4', 'writing', 'جمله را کامل کنید: I didn’t ___ a film yesterday.', 'watch', 'بعد از didn’t شکل سادهٔ watch می‌آید.', { options: ['watch', 'watched', 'watching'] }),
-  q('a1-final-w5', 'writing', 'پیشنهاد را کامل کنید: Would you like ___ come with us?', 'to', 'الگوی دعوت Would you like to + فعل ساده است.', { options: ['to', 'for', 'at'] }),
-  q('a1-final-w6', 'writing', 'جمله را کامل کنید: These ___ are too small. (کفش‌ها)', 'shoes', 'these با اسم جمع shoes می‌آید.', { options: ['shoe', 'shoes', 'a shoe'] }),
-  q('a1-final-w7', 'writing', 'جمله را کامل کنید: She usually ___ breakfast at seven.', 'has', 'برای she در حال ساده از has استفاده می‌کنیم.', { options: ['have', 'has', 'having'] }),
-  q('a1-final-w8', 'writing', 'پیام را با عبارت مودبانه کامل کنید: Thanks for your help. See you ___.', 'tomorrow', 'tomorrow برای دیدار روز بعد مناسب است.', { options: ['yesterday', 'tomorrow', 'last week'] }),
+  q('a1-final-w1', 'grammar', 'جمله را کامل کنید: The children ___ in the park now.', 'are playing', 'برای جمع و کاری که اکنون جریان دارد، are playing درست است.', { options: ['play', 'are playing', 'plays'] }),
+  q('a1-final-w2', 'grammar', 'جمله را کامل کنید: There ___ a supermarket next to my home.', 'is', 'برای یک supermarket از there is استفاده می‌کنیم.', { options: ['is', 'are', 'do'] }),
+  q('a1-final-w3', 'grammar', 'درخواست مودبانه را کامل کنید: Could you ___ me, please?', 'help', 'پس از could از شکل سادهٔ فعل استفاده می‌شود.', { options: ['help', 'helps', 'helping'] }),
+  q('a1-final-w4', 'grammar', 'جمله را کامل کنید: I didn’t ___ a film yesterday.', 'watch', 'بعد از didn’t شکل سادهٔ watch می‌آید.', { options: ['watch', 'watched', 'watching'] }),
+  q('a1-final-w5', 'grammar', 'پیشنهاد را کامل کنید: Would you like ___ come with us?', 'to', 'الگوی دعوت Would you like to + فعل ساده است.', { options: ['to', 'for', 'at'] }),
+  q('a1-final-w6', 'grammar', 'جمله را کامل کنید: These ___ are too small. (کفش‌ها)', 'shoes', 'these با اسم جمع shoes می‌آید.', { options: ['shoe', 'shoes', 'a shoe'] }),
+  q('a1-final-w7', 'grammar', 'جمله را کامل کنید: She usually ___ breakfast at seven.', 'has', 'برای she در حال ساده از has استفاده می‌کنیم.', { options: ['have', 'has', 'having'] }),
+  q('a1-final-w8', 'grammar', 'پیام را با عبارت مودبانه کامل کنید: Thanks for your help. See you ___.', 'tomorrow', 'tomorrow برای دیدار روز بعد مناسب است.', { options: ['yesterday', 'tomorrow', 'last week'] }),
 ];
 
 export const ASSESSMENTS: Record<EnglishUnitLevel, Task[]> = {

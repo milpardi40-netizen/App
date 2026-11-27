@@ -1,3 +1,5 @@
+import { russianPreA1ContextChecksRevisionFor } from './russianPreA1Phase3';
+import { RUSSIAN_PRE_A1_LIGHT_VERBS_ID } from './russianPreA1Phase2';
 import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -66,7 +68,7 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
   }
   // Validate the stored shape even for retired questions, but never grade a previous meaning.
   const expanded = session.checksRevision !== russianChecksRevisionFor(lessonId);
-  const retiredChecks = expanded && (lesson.levelId === 1 || (session.checksRevision !== previousChecksRevisionFor(lessonId) && !(lesson.levelId > 1 && !session.checksRevision)));
+  const retiredChecks = expanded && (!!russianPreA1ContextChecksRevisionFor(lesson.id) || lesson.id === 'ru-pre-29-numbers-teens' || lesson.id === RUSSIAN_PRE_A1_LIGHT_VERBS_ID || lesson.levelId === 1 || (session.checksRevision !== previousChecksRevisionFor(lessonId) && !(lesson.levelId > 1 && !session.checksRevision)));
   const answers: Record<string, number> = {};
   let checks: ReturnType<typeof expandedChoiceChecks> | undefined;
   for (const [key, answer] of Object.entries(session.answers)) {

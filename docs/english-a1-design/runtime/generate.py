@@ -13,6 +13,10 @@ load=lambda p:json.loads(p.read_text())
 BEFORE=load(ROOT/'scripts/fixtures/english-a1-before.json')
 PRON=load(HERE/'pronunciation.json')
 GLOSS=load(HERE/'vocabulary.json')
+APPLICATIONS=load(HERE/'applications.json')
+LISTENING_APPLICATIONS=load(HERE/'listeningApplications.json')
+assert set(LISTENING_APPLICATIONS)=={lesson['id'] for lesson in D}
+assert set(APPLICATIONS)=={lesson['id'] for lesson in D}
 SITUATIONS=[
 'در کلاس تازه با هم‌کلاسی آشنا می‌شوید و نام، کشور و شهر خود را می‌گویید.',
 'هم‌کلاسی نام شما را می‌پرسد؛ نام را کوتاه می‌گویید و هجی می‌کنید.',
@@ -77,10 +81,12 @@ def vocab(en):
     if not found and re.fullmatch(r'(?:[A-Z]-)+[A-Z][.]?',en):
         return [dict(word=en.rstrip('.'),meaning='نام این حروف در الفبای انگلیسی')]
     assert found,('no literal vocabulary',en)
-    return found[:10]
+    selected=found[:10]
+    assert all(item['meaning'] != 'واژهٔ پرتکرار' for item in selected),('placeholder glossary is not teaching',en)
+    return selected
 def pattern(en,authored):
     if authored:return authored
-    patterns=[('My name is','My name is + name'),('I am from','I am from + country'),('I live in','I live in + city'),('I would like','I would like + request'),('Can I','Can I + verb?'),('Can you','Can you + verb?'),('Please','Please + verb'),('I am going to','I am going to + verb'),('I have','I have + noun'),('There is','There is + singular noun'),('There are','There are + plural noun'),('Where is','Where is + noun?'),('How much','How much + is/are ...?'),('What time','What time + question?'),('Do you','Do you + verb?'),('Did you','Did you + verb?'),('I did not','I did not + base verb'),('I do not','I do not + base verb')]
+    patterns=[('My name is','My name is + name'),('I am from','I am from + country'),('I live in','I live in + city'),('I would like','I would like + request'),('Can I','Can I + verb?'),('Can you','Can you + verb?'),('Please','Please + verb'),('I am going to','I am going to + verb'),('I have','I have + noun'),('There is no','There is no + singular noun'),('There is','There is + singular noun'),('There are','There are + plural noun'),('Where is','Where is + noun?'),('How much','How much + is/are ...?'),('What time','What time + question?'),('Do you','Do you + verb?'),('Did you','Did you + verb?'),('I did not','I did not + base verb'),('I do not','I do not + base verb')]
     return next((p for prefix,p in patterns if en.startswith(prefix)),None)
 def options(answer,wrong,index):
     choices=[answer,*wrong]
@@ -103,19 +109,22 @@ for i,plan in enumerate(D):
     scene.extend([dict(speaker='partner',role='partner',text=ending[0],fa=ending[1]),dict(speaker='learner',role='learner',text=ending[2],fa=ending[3])])
     tasks=[]
     for j,c in enumerate(plan['checks']):
-        tasks.append(dict(id=f'en-a1-sequenced-v1:{id}:check-{j+1}',skill='reading' if j==0 else 'grammar',prompt=c['promptFa'],**({'source':c['source']} if 'source'in c else {}),options=c['choices'],answers=[c['choices'][c['correctIndex']]],explanation=c['explanationFa']))
+        tasks.append(dict(id=f'en-a1-sequenced-v2:{id}:check-{j+1}',skill='reading' if j==0 else 'grammar',prompt=c['promptFa'],**({'source':c['source']} if 'source'in c else {}),options=c['choices'],answers=[c['choices'][c['correctIndex']]],explanation=c['explanationFa']))
     sk=[]
     for j,kind in enumerate(['listening','reading']):
         t=plan[kind];choices=options(t['answer'],DISTRACTORS[i][j*2:j*2+2],i+j)
-        sk.append(dict(kind=kind,passage=t['passage'],promptFa=t['questionFa'],choices=choices,correctIndex=choices.index(t['answer']),explanationFa=f"پاسخ از متن همین تمرین: {t['answer']}"))
-        tasks.append(dict(id=f'en-a1-sequenced-v1:{id}:{kind}',skill=kind,prompt=t['questionFa'],**({'audio':t['passage']} if kind=='listening' else {'source':t['passage']}),options=choices,answers=[t['answer']],explanation=f"پاسخ از متن همین تمرین: {t['answer']}"))
+        # Optional reading transfers the goal to NEW functional data, not a duplicate of saved evidence.
+        optional=APPLICATIONS[id] if kind=='reading' else LISTENING_APPLICATIONS[id]
+        assert optional['kind']==kind and len(optional['choices'])==3 and 0<=optional['correctIndex']<3
+        sk.append(optional)
+        tasks.append(dict(id=f'en-a1-sequenced-v2:{id}:{kind}',skill=kind,prompt=t['questionFa'],**({'audio':t['passage']} if kind=='listening' else {'source':t['passage']}),options=choices,answers=[t['answer']],explanation=f"پاسخ از متن همین تمرین: {t['answer']}"))
     for j,n in enumerate([1,4]):
         row=sentence_rows[n]
-        tasks.append(dict(id=f'en-a1-sequenced-v1:{id}:write-{j+1}',skill='writing',prompt='عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.',source=row['fa'],answers=list(dict.fromkeys(s['en'] for s in sentence_rows if s['fa']==row['fa'])),explanation=row['en']+' — '+row['fa']))
+        tasks.append(dict(id=f'en-a1-sequenced-v2:{id}:write-{j+1}',skill='writing',prompt='عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.',source=row['fa'],answers=list(dict.fromkeys(s['en'] for s in sentence_rows if s['fa']==row['fa'])),explanation=row['en']+' — '+row['fa']))
     for j,n in enumerate([21,43]):
         row=sentence_rows[n];wrong=[s['fa'] for s in sentence_rows if s['fa']!=row['fa']][:2]
         choices=options(row['fa'],wrong,i+j)
-        tasks.append(dict(id=f'en-a1-sequenced-v1:{id}:review-{j+1}',skill='reading',prompt='معنی همین نمونه چیست؟',source=row['en'],options=choices,answers=[row['fa']],explanation=row['en']+' — '+row['fa']))
+        tasks.append(dict(id=f'en-a1-sequenced-v2:{id}:review-{j+1}',skill='reading',prompt='معنی همین نمونه چیست؟',source=row['en'],options=choices,answers=[row['fa']],explanation=row['en']+' — '+row['fa']))
     assert len(tasks)==8
     note='\n'.join(['هدف: '+plan['outcomeFa'],'بازیابی: '+plan['retrievalFa'],'واژگان هسته: '+plan['vocabularyFa'],'ساختار: '+plan['grammarFa'],'تلفظ: '+plan['pronunciationFa'],'آوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.','مرز این درس: '+plan['outOfScopeFa'],'احتیاط: '+plan['commonErrorFa'],'نوشتن اختیاری: '+plan['writingFa']])
     content[id]=dict(id=id,order=15+i,title=plan['titleFa'],subtitle=plan['outcomeFa'],situation=SITUATIONS[i],teachingFa=note,sentences=sentence_rows,dialogue=scene)

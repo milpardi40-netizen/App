@@ -262,7 +262,9 @@ const esbuild = require('esbuild');
 
   const completed = [app.SENTENCE_LESSONS[0].id];
   const counts = app.COURSE_LEVELS.map(level => app.getEnglishLevelMetrics(level.id, completed));
-  check(counts.reduce((sum, item) => sum + item.lessonCount, 0) === 274);
+  // Learner metrics exclude exactly eight quarantined A1 labs; the legacy inventory stays at 274.
+  check(counts.reduce((sum, item) => sum + item.lessonCount, 0) === 266);
+  check(counts.find(item => item.levelId === 1).lessonCount === 29);
   check(counts.reduce((sum, item) => sum + item.completedLessonCount, 0) === 1);
   check(counts.every(item => item.patternCount <= item.sentenceCount && item.vocabularyCount > 0));
   check(counts.filter(item=>item.levelId!==1).reduce((sum,item)=>sum+item.patternCount,0) === 2485);

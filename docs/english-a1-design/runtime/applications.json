@@ -1,0 +1,350 @@
+{
+  "foundation-introducing-yourself": {
+    "kind": "reading",
+    "passage": "Name: Emma. From: Italy. City: Rome.",
+    "promptFa": "برای پرکردن فیلد City کدام اطلاعات را برمی‌دارید؟",
+    "choices": [
+      "Rome",
+      "Italy",
+      "Emma"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "City شهر است؛ Rome شهر است و Italy کشور."
+  },
+  "foundation-alphabet-and-spelling": {
+    "kind": "reading",
+    "passage": "First name: Tim. Last name: Green. Check: G-R-E-E-N.",
+    "promptFa": "مسئول فرم نام خانوادگی را می‌خواهد؛ کدام را هجی می‌کنید؟",
+    "choices": [
+      "T-I-M.",
+      "Tim Green.",
+      "G-R-E-E-N."
+    ],
+    "correctIndex": 2,
+    "explanationFa": "Last name برابر Green است؛ Tim نام کوچک است."
+  },
+  "foundation-asking-for-help": {
+    "kind": "reading",
+    "passage": "Partner: My name is Ben. You: I do not understand.",
+    "promptFa": "نام را درست نشنیده‌اید؛ کدام پاسخ به حل مشکل کمک می‌کند؟",
+    "choices": [
+      "I am from Iran.",
+      "Please say that again, slowly.",
+      "Goodbye."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "درخواست تکرار آهسته، مشکلِ نفهمیدن نام را هدف می‌گیرد."
+  },
+  "foundation-pronouns-and-be": {
+    "kind": "reading",
+    "passage": "Anna: teacher. Ben: student. Sara: student.",
+    "promptFa": "برای اشارهٔ هم‌زمان به بن و سارا کدام جمله مناسب است؟",
+    "choices": [
+      "They are students.",
+      "She is a teacher.",
+      "He is a teacher."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "Ben و Sara دو نفرند؛ برای اشاره به آن‌ها از they are استفاده می‌کنیم."
+  },
+  "foundation-numbers-and-contact": {
+    "kind": "reading",
+    "passage": "Contact: Ben. Phone: 020 7314. Age: 24.",
+    "promptFa": "فرم شمارهٔ تماس می‌خواهد، نه سن؛ کدام را وارد می‌کنید؟",
+    "choices": [
+      "24",
+      "Ben",
+      "020 7314"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "Phone شمارهٔ تماس است؛ 24 در فیلد Age آمده است."
+  },
+  "foundation-family-and-possessions": {
+    "kind": "reading",
+    "passage": "Anna is my sister. Ben is my brother. This is Ben's book.",
+    "promptFa": "کتاب را به چه کسی می‌دهید؟",
+    "choices": [
+      "The passage does not say.",
+      "Ben",
+      "Anna"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "Ben's book مالکیت کتاب را روشن کرده است."
+  },
+  "foundation-objects-and-places": {
+    "kind": "reading",
+    "passage": "On the table: a phone. Under the chair: a bag. In the bag: a key.",
+    "promptFa": "کلید را کجا پیدا می‌کنید؟",
+    "choices": [
+      "In the bag.",
+      "On the table.",
+      "Under the table."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "فهرست می‌گوید کلید در کیف است؛ گوشی روی میز است."
+  },
+  "foundation-time-and-calendar": {
+    "kind": "reading",
+    "passage": "English class: Monday 9:00. English class: Tuesday 10:00.",
+    "promptFa": "سه‌شنبه برای شروع کلاس چه ساعتی حاضر می‌شوید؟",
+    "choices": [
+      "9:00",
+      "The passage does not say.",
+      "10:00"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "ردیف Tuesday ساعت 10:00 را نشان می‌دهد؛ 9:00 برای دوشنبه است."
+  },
+  "foundation-everyday-routine": {
+    "kind": "reading",
+    "passage": "Sara — Monday: work. Sunday: study at home; no work.",
+    "promptFa": "کدام پیام با برنامهٔ سارا سازگار است؟",
+    "choices": [
+      "Sara does not study on Sunday.",
+      "Sara does not work on Sunday.",
+      "Sara works on Sunday."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "یکشنبه روز درس‌خواندن در خانه و بدون کار است؛ بعد از does not، work ساده می‌آید."
+  },
+  "survival-current-activities": {
+    "kind": "reading",
+    "passage": "Every day: Ben walks to work. Now: Ben is waiting for the bus.",
+    "promptFa": "دوستتان می‌پرسد بن همین الان چه می‌کند؛ کدام جواب درست است؟",
+    "choices": [
+      "He is waiting for the bus.",
+      "He is walking to work now.",
+      "He is working now."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "Now وضعیت فعلی را مشخص می‌کند؛ پیاده‌رفتن عادت اوست، نه کار الان."
+  },
+  "survival-hobbies-and-free-time": {
+    "kind": "reading",
+    "passage": "Anna likes reading. She does not like football. Ben likes music.",
+    "promptFa": "برای فعالیتی که آنا دوست دارد کدام پیشنهاد مناسب‌تر است؟",
+    "choices": [
+      "Play football.",
+      "The passage does not say what Anna likes.",
+      "Read a book."
+    ],
+    "correctIndex": 2,
+    "explanationFa": "آنا خواندن را دوست دارد و فوتبال را دوست ندارد؛ علاقهٔ Ben را به او نسبت نمی‌دهیم."
+  },
+  "survival-weather-and-seasons": {
+    "kind": "reading",
+    "passage": "Today: cold and rainy. Tomorrow: warm and sunny.",
+    "promptFa": "برای توصیف هوای فردا کدام عبارت را از اعلان انتخاب می‌کنید؟",
+    "choices": [
+      "Cold and sunny.",
+      "Warm and sunny.",
+      "Cold and rainy."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "Tomorrow به warm and sunny مربوط است؛ وضعیت امروز متفاوت است."
+  },
+  "foundation-buying-something": {
+    "kind": "reading",
+    "passage": "Book: $6. Pen: $2. Bag: —",
+    "promptFa": "قیمت کیف نوشته نشده؛ کدام سؤال اطلاعاتِ لازم را می‌گیرد؟",
+    "choices": [
+      "How much is the bag?",
+      "How old are you?",
+      "Where are you from?"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "اطلاعاتِ گمشده قیمت کیف است؛ نباید قیمت کتاب را برای آن فرض کنیم."
+  },
+  "survival-shopping-and-clothing": {
+    "kind": "reading",
+    "passage": "Blue shirt: medium. Red shirt: small. Black shoes: large.",
+    "promptFa": "مشتری پیراهن با اندازهٔ medium می‌خواهد؛ کدام را نشان می‌دهید؟",
+    "choices": [
+      "The red shirt.",
+      "The black shoes.",
+      "The blue shirt."
+    ],
+    "correctIndex": 2,
+    "explanationFa": "تنها پیراهن آبی medium است؛ کفش اندازهٔ large دارد."
+  },
+  "survival-cafe-and-food": {
+    "kind": "reading",
+    "passage": "Customer: A coffee, please. No sugar. Server: A tea with sugar?",
+    "promptFa": "برای اصلاح اشتباه فروشنده کدام پاسخ خواستهٔ مشتری را حفظ می‌کند؟",
+    "choices": [
+      "A tea too, please.",
+      "No, a coffee without sugar, please.",
+      "Yes, a tea with sugar, please."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "در سفارش اول نوشیدنی coffee و ترجیح بدون شکر مشخص است؛ هر دو باید حفظ شوند."
+  },
+  "survival-directions-and-neighborhood": {
+    "kind": "reading",
+    "passage": "Start: bank. Go straight. Turn right. The café is next to the station.",
+    "promptFa": "پس از مستقیم رفتن، قدم بعدی در این مسیر چیست؟",
+    "choices": [
+      "Turn right.",
+      "Turn left.",
+      "Go into the bank."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "دستور پس از Go straight برابر Turn right است؛ راست و چپ را حدس نمی‌زنیم."
+  },
+  "survival-public-transport": {
+    "kind": "reading",
+    "passage": "Bus 4: town centre, 9:00. Bus 8: station, 10:00.",
+    "promptFa": "برای رفتن به مرکز شهر طبق همین اعلان کدام اتوبوس را انتخاب می‌کنید؟",
+    "choices": [
+      "Bus 8 at 10:00.",
+      "Bus 4 at 10:00.",
+      "Bus 4 at 9:00."
+    ],
+    "correctIndex": 2,
+    "explanationFa": "مقصد town centre در ردیف Bus 4 و زمان آن 9:00 آمده است."
+  },
+  "survival-appointments-and-time": {
+    "kind": "reading",
+    "passage": "Your appointment: Monday at ten. New time: Tuesday at eleven.",
+    "promptFa": "بعد از تغییر قرار، چه زمانی مراجعه می‌کنید؟",
+    "choices": [
+      "Tuesday at ten.",
+      "Tuesday at eleven.",
+      "Monday at ten."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "New time زمان نهایی را مشخص می‌کند؛ نباید روز تازه را با ساعت قبلی ترکیب کنیم."
+  },
+  "survival-school-and-learning": {
+    "kind": "reading",
+    "passage": "English class — Read: page 12. Homework: page 14.",
+    "promptFa": "برای تکلیف خانه کدام صفحه را آماده می‌کنید؟",
+    "choices": [
+      "Page 14.",
+      "Page 12.",
+      "The passage does not say."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "Homework به page 14 مربوط است؛ صفحهٔ خواندن در کلاس 12 است."
+  },
+  "survival-invitations-and-plans": {
+    "kind": "reading",
+    "passage": "A: A café on Friday? B: Sorry, I cannot. How about Saturday? A: Yes. At ten? B: Yes.",
+    "promptFa": "در پایان، روی چه زمانی توافق شده است؟",
+    "choices": [
+      "Friday at ten.",
+      "Saturday, but no time is agreed.",
+      "Saturday at ten."
+    ],
+    "correctIndex": 2,
+    "explanationFa": "Saturday و ساعت ten هر دو با Yes پذیرفته شده‌اند؛ این بار فقط پیشنهاد نیست."
+  },
+  "survival-past-and-future-plans": {
+    "kind": "reading",
+    "passage": "Yesterday: Ben was at home. He studied English. Tomorrow: he is going to visit Anna.",
+    "promptFa": "برای گزارش یک کار انجام‌شده در دیروز کدام جمله مناسب است؟",
+    "choices": [
+      "Ben visits Anna every day.",
+      "Ben studied English.",
+      "Ben is going to visit Anna."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "studied در بخش Yesterday آمده است؛ دیدار Anna هنوز برنامهٔ فرداست."
+  },
+  "survival-job-interview": {
+    "kind": "reading",
+    "passage": "Job: cook. Work: Monday morning. Anna: I can cook. I can work on Monday. Ben: I cannot cook.",
+    "promptFa": "طبق اطلاعات کارت، کدام فرد توانایی و زمان لازم را دارد؟",
+    "choices": [
+      "Anna",
+      "Ben",
+      "The passage does not say who can cook."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "Anna هم توانایی cook و هم امکان کار در Monday را بیان کرده است."
+  },
+  "survival-personal-information": {
+    "kind": "reading",
+    "passage": "First name: Tim. Last name: Lee. Address: 18 Park Street. Email: tim@example.com.",
+    "promptFa": "در فیلد Address کدام داده را منتقل می‌کنید؟",
+    "choices": [
+      "Lee",
+      "tim@example.com",
+      "18 Park Street"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "Address نشانی است؛ نام خانوادگی و ایمیل فیلدهای جدا دارند."
+  },
+  "survival-renting-a-home": {
+    "kind": "reading",
+    "passage": "ROOM: near the station. Kitchen: yes. Bathroom: shared. Rent: $500 a month. Visit: Friday.",
+    "promptFa": "کدام اطلاعات در آگهی صریحاً آمده است؟",
+    "choices": [
+      "The rent is $500 a week.",
+      "The bathroom is shared.",
+      "There is no kitchen."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "shared برای bathroom آمده است و اجاره ماهانه است، نه هفتگی."
+  },
+  "survival-travel-and-tickets": {
+    "kind": "reading",
+    "passage": "Train 4: Leeds, Monday 10:00. Return: Tuesday 15:00. Train 6: York, Monday 11:00.",
+    "promptFa": "برای بلیت رفت‌وبرگشت قطار ۴، روز برگشت چیست؟",
+    "choices": [
+      "Tuesday",
+      "Monday",
+      "The passage does not say."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "Return در اطلاعات Train 4 روز Tuesday را مشخص کرده است؛ Train 6 مسیر دیگری است."
+  },
+  "survival-hotel-and-stay": {
+    "kind": "reading",
+    "passage": "Lee: room 8. Breakfast 7:00–9:00. Green: room 12. Breakfast 8:00–10:00.",
+    "promptFa": "مهمانی با نام خانوادگی Lee به کدام اتاق می‌رود؟",
+    "choices": [
+      "Room 12.",
+      "Room 7.",
+      "Room 8."
+    ],
+    "correctIndex": 2,
+    "explanationFa": "شمارهٔ اتاق Lee برابر 8 است؛ 7:00 ساعت شروع صبحانه است."
+  },
+  "survival-phone-and-messages": {
+    "kind": "reading",
+    "passage": "For: Anna. From: Ben. Message: Please call after six.",
+    "promptFa": "پیام باید به چه کسی برسد؟",
+    "choices": [
+      "The passage does not say.",
+      "Anna",
+      "Ben"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "For گیرنده را معرفی می‌کند؛ Ben فرستندهٔ پیام است."
+  },
+  "survival-services-and-post-office": {
+    "kind": "reading",
+    "passage": "To: Sara Lee, 14 Park Street, York. From: Ben Green, 8 Hill Street, Leeds.",
+    "promptFa": "نامه برای کدام شهر فرستاده می‌شود؟",
+    "choices": [
+      "York",
+      "Leeds",
+      "The passage does not say."
+    ],
+    "correctIndex": 0,
+    "explanationFa": "بخش To نشانی گیرنده در York است؛ Leeds شهر فرستنده است."
+  },
+  "survival-health-and-pharmacy": {
+    "kind": "reading",
+    "passage": "Ben: I have a headache. Sara: I have a sore throat.",
+    "promptFa": "برای توضیح مشکل خیالی Sara کدام را انتخاب می‌کنید؟",
+    "choices": [
+      "She has a headache.",
+      "She has a stomach ache.",
+      "She has a sore throat."
+    ],
+    "correctIndex": 2,
+    "explanationFa": "sore throat برای Sara است؛ سردرد متعلق به Ben است. این فقط تمرین زبان است، نه تشخیص پزشکی."
+  }
+}

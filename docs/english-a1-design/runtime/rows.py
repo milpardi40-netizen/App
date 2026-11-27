@@ -431,7 +431,7 @@ v('A single to {x}, please.','یک بلیت یک‌طرفه به {f}، لطفا�
 v('The ticket is {x} pounds.','بلیت {f} پوند است.','ten|ده;twenty|بیست;thirty|سی;forty|چهل','The ticket is + price'),
 v('My first name is {x}.','نام کوچک من {f} است.',NAMES,'My first name is + name'),
 v('Is this platform {x}?','آیا این سکوی {f} است؟','one|یک;two|دو;three|سه;four|چهار','Is this platform + number?'),
-v('I am going to travel to {x} tomorrow. I would like a return ticket.','من قصد دارم فردا به {f} بروم. یک بلیت رفت‌وبرگشت می‌خواهم.',PLACES,'I am going to + place; I would like ...'),
+v('I am going to travel to {x} tomorrow. I would like a return ticket.','من قصد دارم فردا به {f} بروم. یک بلیت رفت‌وبرگشت می‌خواهم.',PLACES,'I am going to + verb; I would like + noun'),
 v('The train leaves at ten and arrives at {x}.','قطار ساعت ده حرکت می‌کند و ساعت {f} می‌رسد.','eleven|یازده;twelve|دوازده;one|یک;two|دو','leaves at ... and arrives at ...'),
 ])
 

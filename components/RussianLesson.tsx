@@ -1,4 +1,6 @@
-import { russianLessonRoomPairs, russianA1Production, russianA1ProductionLabel, isRussianA1, RUSSIAN_A1_ROOM_REVISION } from '@/lib/languages/russianA1Practice';
+import { russianLessonRoomPairs, russianA1Production, russianA1ProductionLabel, isRussianA1, RUSSIAN_A1_ROOM_REVISION, RUSSIAN_PRE_A1_ROOM_REVISION, russianPreA1RoomRevisionFor } from '@/lib/languages/russianA1Practice';
+import RussianPreA1Transfer, { RussianPreA1Everyday } from '@/components/RussianPreA1Transfer';
+import RussianPreA1Scaffold, { RussianPreA1VerbPacing } from '@/components/RussianPreA1Scaffold';
 import { speakOperator } from '@/lib/operatorSpeech';
 import { expandedChoiceChecks } from '@/lib/lessonAssessment';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
@@ -481,11 +483,13 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
 
           <Text style={styles.situation}>{lesson.situation}</Text>
+          {lesson.levelId === 0 ? <RussianPreA1Scaffold key={lesson.id} lessonId={lesson.id} onSpeak={text => speak(text)} /> : null}
           {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.sentences.map((sentence, index) => ({ speaker: index % 2 ? 'You' : 'Partner', text: sentence.text, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
           {lesson.teachingFa ? <View style={styles.noteCard}><Text style={styles.noteTitle}>نکتهٔ روسی به فارسی</Text><Text style={styles.noteText}>{lesson.teachingFa}</Text></View> : null}
         </View>}
 
         {stage === 1 && <View style={styles.sentenceStage} onLayout={event => { stageOffsetRef.current = event.nativeEvent.layout.y; }}>
+          {lesson.levelId === 0 ? <RussianPreA1VerbPacing lessonId={lesson.id} sentenceIndex={sentenceIndex} /> : null}
           <Text style={styles.counter}>جملهٔ {fa(sentenceIndex + 1)} از {fa(lesson.sentences.length)}</Text>
           <View style={styles.sentenceCard}>
             <Pressable accessibilityRole="button" accessibilityLabel="شنیدن جملهٔ روسی" style={styles.soundButton} onPress={() => speak(current.text)}><Volume2 size={25} color="#FFFFFF" /></Pressable>
@@ -598,6 +602,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
                 onBuilt={markBuiltSentence}
                 onNextSentence={sentenceIndex < lesson.sentences.length - 1 ? () => setSentenceIndex(sentenceIndex + 1) : undefined}
               />
+              {lesson.levelId === 0 ? <RussianPreA1Transfer key={lesson.id} lessonId={lesson.id} onSpeak={text => { cancelSpeakingAdvance(); speakForTarget(text, pace('normal'), null); }} /> : null}
               <View style={styles.dots}>{lesson.sentences.map((sentence, index) => <Pressable key={sentence.id} accessibilityRole="button" accessibilityLabel={`جمله ${fa(index + 1)}`} onPress={() => setSentenceIndex(index)} style={[styles.dot, index === sentenceIndex && styles.dotActive]} />)}</View>
             </View>
           );
@@ -646,6 +651,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
             />
           </View>;
           })}</View>
+          {lesson.levelId === 0 ? <RussianPreA1Everyday key={lesson.id} lessonId={lesson.id} onSpeak={text => { cancelSpeakingAdvance(); speakForTarget(text, pace('normal'), null); }} /> : null}
         </View>}
 
         {stage === 6 && <View style={styles.grammarStage}>
@@ -712,7 +718,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           levelId={lesson.levelId}
           situation={lesson.situation}
           pairs={russianLessonRoomPairs(lesson)}
-          contentRevision={isRussianA1(lesson) ? RUSSIAN_A1_ROOM_REVISION : lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}
+          contentRevision={isRussianA1(lesson) ? RUSSIAN_A1_ROOM_REVISION : lesson.id.startsWith('ru-pre-') ? russianPreA1RoomRevisionFor(lesson.id) : undefined}
           locale="ru-RU"
           onSpeak={(text, onDone) => void playRussianSpeech(text, pace('normal'), onDone, onDone)}
           onSpeakOperator={(text, onDone) => speakOperator(text, 'ru-RU', 'ru', onDone)}

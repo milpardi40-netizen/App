@@ -21,8 +21,11 @@ export const ENGLISH_A1_IDS = [
 const ids = new Set<string>(ENGLISH_A1_IDS);
 export const isEnglishA1Core = (id: string): boolean => ids.has(id);
 export const ENGLISH_A1_CONTENT_REVISION = 'en-a1-sequenced-content-v1';
-export const ENGLISH_A1_ASSESSMENT_REVISION = 'en-a1-sequenced-assessment-v1';
-export const ENGLISH_A1_ROOM_REVISION = 'en-a1-scene-and-coverage-v1';
+export const ENGLISH_A1_ASSESSMENT_REVISION = 'en-a1-sequenced-assessment-v2';
+export const ENGLISH_A1_ROOM_REVISION = 'en-a1-scene-and-coverage-v2';
+/** Production tasks changed, not the meaning/order of the 1450 sentence slots. */
+export const ENGLISH_A1_PRODUCTION_REVISION = 'en-a1-production-transfer-v2';
+export const englishA1ProductionRevision = (id: string): string | undefined => isEnglishA1Core(id) ? ENGLISH_A1_PRODUCTION_REVISION : undefined;
 export const englishA1SentenceRevision = (id: string): string | undefined => isEnglishA1Core(id) ? ENGLISH_A1_CONTENT_REVISION : undefined;
 /** Keep completed chunks for the old meaning as history, not as skips in the rewritten lesson. */
 export const englishA1ChunkKey = (id: string): string => isEnglishA1Core(id) ? `${id}:${ENGLISH_A1_CONTENT_REVISION}` : id;

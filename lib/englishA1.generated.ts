@@ -10,7 +10,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "معرفی خود و آشنایی",
     "subtitle": "نام، کشور و شهر محل زندگی را بگویم و همین اطلاعات را از دیگری بپرسم.",
     "situation": "در کلاس تازه با هم‌کلاسی آشنا می‌شوید و نام، کشور و شهر خود را می‌گویید.",
-    "teachingFa": "هدف: نام، کشور و شهر محل زندگی را بگویم و همین اطلاعات را از دیگری بپرسم.\nبازیابی: سلام، I am و Nice to meet you را از Pre-A1 بدون متن بازیابی کن.\nواژگان هسته: name=نام؛ country=کشور؛ city=شهر؛ live=زندگی‌کردن؛ from=اهلِ / از\nساختار: My name is / I am؛ پرسش What is your name?؛ I am from؛ I live in به‌صورت قالب آمادهٔ معرفی. تحلیل حال ساده و نظام پرسش با do در درس روزمره می‌آید؛ در این درس همهٔ صرف فعل live امتحان نمی‌شود.\nتلفظ: پیوند my name is و تمایز نام/کشور؛ مدل صوتی کوتاه و طبیعی، بدون اجبار به تقلید لهجه.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: شغل و مهارت کاری، همهٔ ضمیرها، خانوادهٔ گسترده و معرفی طولانی در همین درس تدریس نشود.\nاحتیاط: I from به جای I am from؛ یکی‌گرفتن کشور مبدأ با شهر محل زندگی.\nنوشتن اختیاری: با اطلاعات خیالی سه جمله دربارهٔ نام، کشور و شهر بنویس.",
+    "teachingFa": "هدف: نام، کشور و شهر محل زندگی را بگویم و همین اطلاعات را از دیگری بپرسم.\nبازیابی: سلام، I am و Nice to meet you را از Pre-A1 بدون متن بازیابی کن.\nواژگان هسته: name=نام؛ country=کشور؛ city=شهر؛ live=زندگی‌کردن؛ from=اهلِ / از\nساختار: My name is / I am؛ پرسش What is your name?؛ I am from؛ I live in به‌صورت قالب آمادهٔ معرفی. تحلیل حال ساده و نظام پرسش با do در درس روزمره می‌آید؛ در این درس همهٔ صرف فعل live امتحان نمی‌شود.\nتلفظ: پیوند my name is و تمایز نام/کشور؛ مدل صوتی کوتاه و طبیعی، بدون اجبار به تقلید لهجه.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: شغل و مهارت کاری، همهٔ ضمیرها، خانوادهٔ گسترده و معرفی طولانی در همین درس تدریس نشود.\nاحتیاط: I from به جای I am from؛ یکی‌گرفتن کشور مبدأ با شهر محل زندگی.\nنوشتن اختیاری: کارت خیالی: نام Emma، کشور Italy، شهر Rome. از زبان این شخصیت سه جمله برای آشنایی با هم‌کلاسی بنویس؛ بعد نام او را بپرس.",
     "sentences": [
       {
         "id": "s1",
@@ -208,7 +208,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "live",
@@ -400,7 +400,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "Italy",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "ایتالیا (کشور)"
           },
           {
             "word": "from",
@@ -949,7 +949,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "See you",
-            "meaning": "شما را دیدن"
+            "meaning": "می‌بینمت / می‌بینمتان (برای خداحافظی)"
           },
           {
             "word": "Anna",
@@ -974,7 +974,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "See you",
-            "meaning": "شما را دیدن"
+            "meaning": "می‌بینمت / می‌بینمتان (برای خداحافظی)"
           },
           {
             "word": "Ben",
@@ -999,7 +999,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "See you",
-            "meaning": "شما را دیدن"
+            "meaning": "می‌بینمت / می‌بینمتان (برای خداحافظی)"
           },
           {
             "word": "Sara",
@@ -1024,7 +1024,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "See you",
-            "meaning": "شما را دیدن"
+            "meaning": "می‌بینمت / می‌بینمتان (برای خداحافظی)"
           },
           {
             "word": "Tim",
@@ -1359,7 +1359,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "نام و هجی‌کردن",
     "subtitle": "نام کوتاهی را هجی کنم و هجی نام مخاطب را بفهمم.",
     "situation": "هم‌کلاسی نام شما را می‌پرسد؛ نام را کوتاه می‌گویید و هجی می‌کنید.",
-    "teachingFa": "هدف: نام کوتاهی را هجی کنم و هجی نام مخاطب را بفهمم.\nبازیابی: نام خودت را بگو و نام هم‌کلاسی را بپرس.\nواژگان هسته: spell=هجی‌کردن؛ letter=حرف؛ again=دوباره؛ slowly=آهسته؛ first name=نام کوچک؛ last name=نام خانوادگی\nساختار: How do you spell ...? و Can you spell ...? فعلاً دو قالب آماده‌اند. نام حروف A–Z در گروه‌های کوتاه و تقابل A/E/I و G/J؛ انگلیسی حرف‌به‌حرف خوانده نمی‌شود.\nتلفظ: نام حروف A/E/I و G/J را با دو نام کوتاه مقایسه کن؛ هجی و تلفظ کلمه جدا تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: فهرست الفبا یک جملهٔ اجباری طولانی نباشد؛ نوشتن ایمیل، نشانی و صرف کامل do/can وارد نشود.\nاحتیاط: نام حرف با صدای آن در کلمه یکی نیست؛ هجی نام با تلفظ خود نام فرق دارد.\nنوشتن اختیاری: یک نام خیالی کوتاه و هجی آن را بنویس؛ مثال‌های دیگر لازم نیست جملهٔ کامل باشند.",
+    "teachingFa": "هدف: نام کوتاهی را هجی کنم و هجی نام مخاطب را بفهمم.\nبازیابی: نام خودت را بگو و نام هم‌کلاسی را بپرس.\nواژگان هسته: spell=هجی‌کردن؛ letter=حرف؛ again=دوباره؛ slowly=آهسته؛ first name=نام کوچک؛ last name=نام خانوادگی\nساختار: How do you spell ...? و Can you spell ...? فعلاً دو قالب آماده‌اند. نام حروف A–Z در گروه‌های کوتاه و تقابل A/E/I و G/J؛ انگلیسی حرف‌به‌حرف خوانده نمی‌شود.\nتلفظ: نام حروف A/E/I و G/J را با دو نام کوتاه مقایسه کن؛ هجی و تلفظ کلمه جدا تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: فهرست الفبا یک جملهٔ اجباری طولانی نباشد؛ نوشتن ایمیل، نشانی و صرف کامل do/can وارد نشود.\nاحتیاط: نام حرف با صدای آن در کلمه یکی نیست؛ هجی نام با تلفظ خود نام فرق دارد.\nنوشتن اختیاری: فرم خیالی: First name = Ben؛ Last name = Lee. دو فیلد را بنویس و نام خانوادگی را با حروف جدا هجی کن. جملهٔ بلند لازم نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -1817,7 +1817,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Smith",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "اسمیت (نام خانوادگی)"
           },
           {
             "word": "is",
@@ -2668,7 +2668,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "درخواست کمک و روشن‌کردن معنی",
     "subtitle": "در کلاس یا گفت‌وگوی ساده کمک، تکرار و آهسته‌گویی بخواهم.",
     "situation": "نام یا واژه‌ای را نفهمیده‌اید؛ درخواست کمک، تکرار و آهسته‌گویی می‌کنید.",
-    "teachingFa": "هدف: در کلاس یا گفت‌وگوی ساده کمک، تکرار و آهسته‌گویی بخواهم.\nبازیابی: لطفاً، ممنون و درخواست هجی نام را بازیابی کن.\nواژگان هسته: help=کمک؛ understand=فهمیدن؛ repeat=تکرارکردن؛ say=گفتن؛ slowly=آهسته؛ word=واژه\nساختار: Can you help me?؛ Please + فعل؛ I do not understand به‌صورت قالب؛ this word از اشارهٔ آشنا. تعمیم do در درس روزمره خواهد آمد.\nتلفظ: تکیهٔ slowly و again؛ عبارت Please say that again با مکث طبیعی و بدون بلندگویی اجباری.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: عددهای ۱ تا ۱۰۰، همهٔ ماه‌ها، تقویم و مسیریابی از هدف این درس خارج‌اند و به درس‌های اختصاصی منتقل می‌شوند.\nاحتیاط: استفاده از Sorry بدون درخواست روشن؛ حذف please در بافت مؤدبانه به‌عنوان خطای دستوری نمره‌گذاری نشود.\nنوشتن اختیاری: دو درخواست برای آهسته‌گویی و تکرار بنویس؛ لازم نیست معرفی بلند بنویسی.",
+    "teachingFa": "هدف: در کلاس یا گفت‌وگوی ساده کمک، تکرار و آهسته‌گویی بخواهم.\nبازیابی: لطفاً، ممنون و درخواست هجی نام را بازیابی کن.\nواژگان هسته: help=کمک؛ understand=فهمیدن؛ repeat=تکرارکردن؛ say=گفتن؛ slowly=آهسته؛ word=واژه\nساختار: Can you help me?؛ Please + فعل؛ I do not understand به‌صورت قالب؛ this word از اشارهٔ آشنا. تعمیم do در درس روزمره خواهد آمد.\nتلفظ: تکیهٔ slowly و again؛ عبارت Please say that again با مکث طبیعی و بدون بلندگویی اجباری.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: عددهای ۱ تا ۱۰۰، همهٔ ماه‌ها، تقویم و مسیریابی از هدف این درس خارج‌اند و به درس‌های اختصاصی منتقل می‌شوند.\nاحتیاط: استفاده از Sorry بدون درخواست روشن؛ حذف please در بافت مؤدبانه به‌عنوان خطای دستوری نمره‌گذاری نشود.\nنوشتن اختیاری: موقعیت خیالی: هم‌کلاسی نامش را گفته ولی نفهمیده‌ای. دو درخواست کوتاه متفاوت بنویس: اول تکرار آهسته، بعد هجی نام. نام را حدس نزن.",
     "sentences": [
       {
         "id": "s1",
@@ -2835,7 +2835,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s8",
         "en": "What does this word mean?",
         "fa": "این واژه چه معنی می‌دهد؟",
-        "pronunciation": "وَت داز ذیس وِرد مین",
+        "pronunciation": "وَت دَز ذیس وِرد مین",
         "vocabulary": [
           {
             "word": "does",
@@ -4114,7 +4114,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "اشخاص و جمله‌های کوتاه با be",
     "subtitle": "خودم و افراد آشنا را با ضمیر درست معرفی یا توصیف کنم و سؤال ساده با be بسازم.",
     "situation": "خود و دو هم‌کلاسی خیالی را با ضمیر و جملهٔ کوتاه معرفی می‌کنید.",
-    "teachingFa": "هدف: خودم و افراد آشنا را با ضمیر درست معرفی یا توصیف کنم و سؤال ساده با be بسازم.\nبازیابی: I am، He is و They are آشنای Pre-A1 را با نام‌های خیالی تطبیق بده.\nواژگان هسته: I/you/he/she/it/we/they=ضمیرهای فاعلی؛ student=دانش‌آموز/دانشجو؛ teacher=معلم؛ ready=آماده\nساختار: am/is/are؛ جایگزینی اسم با ضمیر؛ be + not؛ جابه‌جایی be در سؤال؛ صورت کوتاه I’m/isn’t/aren’t کنار صورت کامل، نه هدف املایی جداگانه.\nتلفظ: am/is/are کامل و صورت کوتاه؛ تلفظ ضعیف are پذیرفته شود؛ he/she با کارت فرد مشخص تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: همهٔ انواع فعل، زمان‌های گذشته و استمراری و ضمیرهای مفعولی تدریس نشوند.\nاحتیاط: I is / They is؛ حذف a پیش از شغل مفرد؛ برای he/she جنسیت فرد فرض نشود و در کارت معرفی مشخص باشد.\nنوشتن اختیاری: سه جمله با I، he یا she و we بنویس؛ یکی منفی باشد.",
+    "teachingFa": "هدف: خودم و افراد آشنا را با ضمیر درست معرفی یا توصیف کنم و سؤال ساده با be بسازم.\nبازیابی: I am، He is و They are آشنای Pre-A1 را با نام‌های خیالی تطبیق بده.\nواژگان هسته: I/you/he/she/it/we/they=ضمیرهای فاعلی؛ student=دانش‌آموز/دانشجو؛ teacher=معلم؛ ready=آماده\nساختار: am/is/are؛ جایگزینی اسم با ضمیر؛ be + not؛ جابه‌جایی be در سؤال؛ صورت کوتاه I’m/isn’t/aren’t کنار صورت کامل، نه هدف املایی جداگانه.\nتلفظ: am/is/are کامل و صورت کوتاه؛ تلفظ ضعیف are پذیرفته شود؛ he/she با کارت فرد مشخص تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: همهٔ انواع فعل، زمان‌های گذشته و استمراری و ضمیرهای مفعولی تدریس نشوند.\nاحتیاط: I is / They is؛ حذف a پیش از شغل مفرد؛ برای he/she جنسیت فرد فرض نشود و در کارت معرفی مشخص باشد.\nنوشتن اختیاری: دو کارت خیالی: Anna معلم است و Ben دانش‌آموز است. چهار جمله بنویس: هرکدام را معرفی کن؛ سپس با she و he به آن‌ها اشاره کن. یک جمله می‌تواند منفی باشد.",
     "sentences": [
       {
         "id": "s1",
@@ -5346,7 +5346,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "عدد، سن و شمارهٔ تماس",
     "subtitle": "سن و شمارهٔ تماس خیالی را بگویم و تفاوت عدد کامل با رقم‌های شماره را بفهمم.",
     "situation": "سن و یک کد تماس کاملاً خیالی را می‌گویید و رقم‌ها را بررسی می‌کنید.",
-    "teachingFa": "هدف: سن و شمارهٔ تماس خیالی را بگویم و تفاوت عدد کامل با رقم‌های شماره را بفهمم.\nبازیابی: اعداد ۱ تا ۱۰ و هجی نام را بازیابی کن.\nواژگان هسته: zero=صفر؛ eleven–nineteen=۱۱ تا ۱۹؛ twenty/thirty/forty/fifty/sixty/seventy/eighty/ninety=دهگان؛ hundred=صد؛ number=شماره؛ age=سن\nساختار: ترکیب دهگان و یکان تا ۱۰۰؛ How old are you? / I am ...؛ What is your phone number?؛ صفر به‌صورت zero و آشنایی شنیداری با oh. phone number رقم‌به‌رقم.\nتلفظ: تکیه و کشش thirteen/thirty و fifteen/fifty؛ رقم‌های کد با مکث کوتاه خوانده شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: تقویم، تاریخ تولد کامل، قیمت اعشاری و ایمیل در این درس جمع نشوند.\nاحتیاط: thirteen/thirty و fifteen/fifty؛ شماره به عدد چندرقمی تبدیل نشود. نمونهٔ چهاررقمی کد تمرینی است، نه طول معمول شمارهٔ تلفن.\nنوشتن اختیاری: برای شخصیت خیالی یک سن و کد چهاررقمی تماس بنویس؛ شمارهٔ واقعی لازم نیست.",
+    "teachingFa": "هدف: سن و شمارهٔ تماس خیالی را بگویم و تفاوت عدد کامل با رقم‌های شماره را بفهمم.\nبازیابی: اعداد ۱ تا ۱۰ و هجی نام را بازیابی کن.\nواژگان هسته: zero=صفر؛ eleven–nineteen=۱۱ تا ۱۹؛ twenty/thirty/forty/fifty/sixty/seventy/eighty/ninety=دهگان؛ hundred=صد؛ number=شماره؛ age=سن\nساختار: ترکیب دهگان و یکان تا ۱۰۰؛ How old are you? / I am ...؛ What is your phone number?؛ صفر به‌صورت zero و آشنایی شنیداری با oh. phone number رقم‌به‌رقم.\nتلفظ: تکیه و کشش thirteen/thirty و fifteen/fifty؛ رقم‌های کد با مکث کوتاه خوانده شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: تقویم، تاریخ تولد کامل، قیمت اعشاری و ایمیل در این درس جمع نشوند.\nاحتیاط: thirteen/thirty و fifteen/fifty؛ شماره به عدد چندرقمی تبدیل نشود. نمونهٔ چهاررقمی کد تمرینی است، نه طول معمول شمارهٔ تلفن.\nنوشتن اختیاری: فرم تمرینی و غیرواقعی: نام Tim؛ سن ۲۶؛ کد تماس ۲۰۴۶. دو جمله برای سن و کد تماس بنویس؛ سپس رقم‌های کد را جداگانه به انگلیسی بنویس. این کد شمارهٔ واقعی نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -6827,7 +6827,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "خانواده و مالکیت ساده",
     "subtitle": "دو عضو خانوادهٔ خیالی را معرفی کنم و بگویم یک وسیله مال چه کسی است.",
     "situation": "خانواده‌ای خیالی را معرفی می‌کنید و می‌گویید کتاب یا کیف مال چه کسی است.",
-    "teachingFa": "هدف: دو عضو خانوادهٔ خیالی را معرفی کنم و بگویم یک وسیله مال چه کسی است.\nبازیابی: This is my ... و his/her name و I have را یادآوری کن.\nواژگان هسته: mother=مادر؛ father=پدر؛ sister=خواهر؛ brother=برادر؛ family=خانواده؛ bag=کیف\nساختار: my/your/his/her/our/their پیش از اسم؛ I have / Do you have از قبل؛ مالکیت اسم + ’s برای یک مالک؛ جمع معمولی -s بدون فهرست استثناها.\nتلفظ: آشنایی شنیداری با پایان brothers و Ben’s؛ از نوشتن فارسی به‌عنوان تلفظ دقیق استفاده نشود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: خویشاوندان دور، گذشتهٔ زندگی‌نامه و have got در کنار have یک‌جا تدریس نشوند؛ s مالکیت از is کوتاه‌شده جدا شود.\nاحتیاط: انتخاب his/her به مالک مربوط است نه جنس دستوری وسیله؛ Ben’s bag با Ben is اشتباه نشود. has در خواندن همراه توضیح کوتاه و در روزمره تثبیت شود.\nنوشتن اختیاری: با خانوادهٔ کاملاً خیالی دو شخص و مالک یک وسیله را در سه جمله معرفی کن.",
+    "teachingFa": "هدف: دو عضو خانوادهٔ خیالی را معرفی کنم و بگویم یک وسیله مال چه کسی است.\nبازیابی: This is my ... و his/her name و I have را یادآوری کن.\nواژگان هسته: mother=مادر؛ father=پدر؛ sister=خواهر؛ brother=برادر؛ family=خانواده؛ bag=کیف\nساختار: my/your/his/her/our/their پیش از اسم؛ I have / Do you have از قبل؛ مالکیت اسم + ’s برای یک مالک؛ جمع معمولی -s بدون فهرست استثناها.\nتلفظ: آشنایی شنیداری با پایان brothers و Ben’s؛ از نوشتن فارسی به‌عنوان تلفظ دقیق استفاده نشود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: خویشاوندان دور، گذشتهٔ زندگی‌نامه و have got در کنار have یک‌جا تدریس نشوند؛ s مالکیت از is کوتاه‌شده جدا شود.\nاحتیاط: انتخاب his/her به مالک مربوط است نه جنس دستوری وسیله؛ Ben’s bag با Ben is اشتباه نشود. has در خواندن همراه توضیح کوتاه و در روزمره تثبیت شود.\nنوشتن اختیاری: خانوادهٔ خیالی: Sara خواهر تو و Tim برادر توست. کتاب برای Sara و کیف برای Tim است. چهار جملهٔ کوتاه برای معرفی این دو نفر و مالکیت وسایلشان بنویس.",
     "sentences": [
       {
         "id": "s1",
@@ -8244,7 +8244,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "وسایل و جای آن‌ها",
     "subtitle": "نام و جای چند وسیلهٔ آشنا را بپرسم و بگویم.",
     "situation": "در اتاقی خیالی دنبال کتاب و گوشی می‌گردید؛ جای وسایل را می‌پرسید و می‌گویید.",
-    "teachingFa": "هدف: نام و جای چند وسیلهٔ آشنا را بپرسم و بگویم.\nبازیابی: This/that و These are my books را از قبل بازیابی کن.\nواژگان هسته: key=کلید؛ table=میز؛ chair=صندلی؛ room=اتاق؛ in=داخل؛ on=روی؛ under=زیر؛ next to=کنار\nساختار: this/that/these/those؛ is/are برای مفرد/جمع؛ Where is/are؛ there is/are برای وجود؛ a/an برحسب صدای آغاز، نه صرفاً حرف.\nتلفظ: مقایسهٔ this/these و /ð/ در نمونه‌های آشنا؛ فهم‌پذیری مهم‌تر از لهجهٔ بومی است.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: جهت حرکت، کل شبکهٔ شهر و حروف اضافهٔ انتزاعی وارد نشوند.\nاحتیاط: There is two؛ خلط there is با it is؛ از تصویر یا اشارهٔ بیرونیِ موجودنبودن استفاده نشود.\nنوشتن اختیاری: بدون نیاز به عکس، یک اتاق خیالی با دو وسیله و جای آن‌ها را در سه جمله توصیف کن.",
+    "teachingFa": "هدف: نام و جای چند وسیلهٔ آشنا را بپرسم و بگویم.\nبازیابی: This/that و These are my books را از قبل بازیابی کن.\nواژگان هسته: key=کلید؛ table=میز؛ chair=صندلی؛ room=اتاق؛ in=داخل؛ on=روی؛ under=زیر؛ next to=کنار\nساختار: this/that/these/those؛ is/are برای مفرد/جمع؛ Where is/are؛ there is/are برای وجود؛ a/an برحسب صدای آغاز، نه صرفاً حرف.\nتلفظ: مقایسهٔ this/these و /ð/ در نمونه‌های آشنا؛ فهم‌پذیری مهم‌تر از لهجهٔ بومی است.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: جهت حرکت، کل شبکهٔ شهر و حروف اضافهٔ انتزاعی وارد نشوند.\nاحتیاط: There is two؛ خلط there is با it is؛ از تصویر یا اشارهٔ بیرونیِ موجودنبودن استفاده نشود.\nنوشتن اختیاری: چیدمان خیالی: گوشی روی صندلی است؛ کیف زیر میز است؛ کلید داخل کیف است. سه جمله برای راهنمایی دوستی که دنبال وسایل می‌گردد بنویس.",
     "sentences": [
       {
         "id": "s1",
@@ -8326,8 +8326,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ کی اِن ذِ بَگ",
         "vocabulary": [
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
           },
           {
             "word": "bag",
@@ -8340,10 +8340,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "in",
             "meaning": "داخل / در"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -8383,20 +8379,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر آر تو چِرز اِن ذِ روم",
         "vocabulary": [
           {
+            "word": "There are",
+            "meaning": "وجود دارند / هستند (برای جمع)"
+          },
+          {
             "word": "chairs",
             "meaning": "صندلی‌ها"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
-          },
-          {
             "word": "room",
             "meaning": "اتاق"
-          },
-          {
-            "word": "are",
-            "meaning": "هستید / هستند"
           },
           {
             "word": "two",
@@ -8796,12 +8788,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ تِیبَل اِن ذِ روم",
         "vocabulary": [
           {
-            "word": "table",
-            "meaning": "میز"
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "table",
+            "meaning": "میز"
           },
           {
             "word": "room",
@@ -8810,10 +8802,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "in",
             "meaning": "داخل / در"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -8829,12 +8817,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ چِر اِن ذِ روم",
         "vocabulary": [
           {
-            "word": "chair",
-            "meaning": "صندلی"
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "chair",
+            "meaning": "صندلی"
           },
           {
             "word": "room",
@@ -8843,10 +8831,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "in",
             "meaning": "داخل / در"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -8862,8 +8846,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ بَگ اِن ذِ روم",
         "vocabulary": [
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
           },
           {
             "word": "room",
@@ -8876,10 +8860,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "in",
             "meaning": "داخل / در"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -8895,12 +8875,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ فُون اِن ذِ روم",
         "vocabulary": [
           {
-            "word": "phone",
-            "meaning": "گوشی"
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "phone",
+            "meaning": "گوشی"
           },
           {
             "word": "room",
@@ -8909,10 +8889,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "in",
             "meaning": "داخل / در"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -9324,20 +9300,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ بوک آن ذِ چِر",
         "vocabulary": [
           {
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
+          },
+          {
             "word": "chair",
             "meaning": "صندلی"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
-          },
-          {
             "word": "book",
             "meaning": "کتاب"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "on",
@@ -9357,20 +9329,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ پِن آن ذِ چِر",
         "vocabulary": [
           {
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
+          },
+          {
             "word": "chair",
             "meaning": "صندلی"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
-          },
-          {
             "word": "pen",
             "meaning": "خودکار"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "on",
@@ -9390,20 +9358,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ فُون آن ذِ چِر",
         "vocabulary": [
           {
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
+          },
+          {
             "word": "chair",
             "meaning": "صندلی"
           },
           {
             "word": "phone",
             "meaning": "گوشی"
-          },
-          {
-            "word": "There",
-            "meaning": "آنجا"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "on",
@@ -9423,20 +9387,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز اِ بَگ آن ذِ چِر",
         "vocabulary": [
           {
+            "word": "There is",
+            "meaning": "وجود دارد / هست (برای مفرد)"
+          },
+          {
             "word": "chair",
             "meaning": "صندلی"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
-          },
-          {
             "word": "bag",
             "meaning": "کیف"
-          },
-          {
-            "word": "is",
-            "meaning": "است"
           },
           {
             "word": "on",
@@ -9642,14 +9602,14 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
       {
         "speaker": "partner",
         "role": "partner",
-        "text": "Is it your bag?",
-        "fa": "آیا کیف شماست؟"
+        "text": "My bag is under the chair. Thank you.",
+        "fa": "کیف من زیر صندلی است. ممنون."
       },
       {
         "speaker": "learner",
         "role": "learner",
-        "text": "Yes, it is. Thank you.",
-        "fa": "بله، هست. ممنون."
+        "text": "You are welcome.",
+        "fa": "خواهش می‌کنم."
       }
     ]
   },
@@ -9659,7 +9619,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "ساعت و تقویم کاربردی",
     "subtitle": "زمان کلاس را با روز و ساعت بگویم و یک تاریخ کوتاه را بخوانم.",
     "situation": "روز و ساعت کلاس را از اعلان کوتاه می‌فهمید و یک تاریخ روشن می‌خوانید.",
-    "teachingFa": "هدف: زمان کلاس را با روز و ساعت بگویم و یک تاریخ کوتاه را بخوانم.\nبازیابی: عددها، tomorrow و See you tomorrow را یادآوری کن.\nواژگان هسته: today=امروز؛ tomorrow=فردا؛ Monday–Sunday=روزهای هفته؛ January–December=ماه‌ها؛ morning=صبح؛ afternoon=بعدازظهر؛ o’clock=سر ساعت\nساختار: What time / What day؛ at + ساعت، on + روز/تاریخ، in + ماه؛ ساعت دیجیتال سپس half past/quarter past/to؛ تاریخ نوشتاری بی‌ابهام 3 May و خواندن May third یا the third of May با پذیرش هر دو.\nتلفظ: تمایز شنیداری nine/nineteen و quarter/half؛ ساعت را نخست دیجیتال تمرین کن.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: کل روزها و ماه‌ها در یک هدف گفتاری طولانی امتحان نشوند؛ سال‌های پیچیده و منطقهٔ زمانی هدف نیستند.\nاحتیاط: on Monday نه in Monday؛ What time does it start فعلاً قالب آماده است و does در درس بعد توضیح داده می‌شود؛ در نمونه starts هم s معرفی کوتاه دارد.\nنوشتن اختیاری: یک اعلان خیالی برای کلاس با روز، ساعت و یک تاریخ بنویس؛ از تاریخ مبهم مثل 03/05 پرهیز کن.",
+    "teachingFa": "هدف: زمان کلاس را با روز و ساعت بگویم و یک تاریخ کوتاه را بخوانم.\nبازیابی: عددها، tomorrow و See you tomorrow را یادآوری کن.\nواژگان هسته: today=امروز؛ tomorrow=فردا؛ Monday–Sunday=روزهای هفته؛ January–December=ماه‌ها؛ morning=صبح؛ afternoon=بعدازظهر؛ o’clock=سر ساعت\nساختار: What time / What day؛ at + ساعت، on + روز/تاریخ، in + ماه؛ ساعت دیجیتال سپس half past/quarter past/to؛ تاریخ نوشتاری بی‌ابهام 3 May و خواندن May third یا the third of May با پذیرش هر دو.\nتلفظ: تمایز شنیداری nine/nineteen و quarter/half؛ ساعت را نخست دیجیتال تمرین کن.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: کل روزها و ماه‌ها در یک هدف گفتاری طولانی امتحان نشوند؛ سال‌های پیچیده و منطقهٔ زمانی هدف نیستند.\nاحتیاط: on Monday نه in Monday؛ What time does it start فعلاً قالب آماده است و does در درس بعد توضیح داده می‌شود؛ در نمونه starts هم s معرفی کوتاه دارد.\nنوشتن اختیاری: اعلان خیالی: کلاس انگلیسی روز Friday ساعت ۱۰ صبح، تاریخ 12 June است. یک اعلان کوتاه به انگلیسی بنویس که روز، ساعت و تاریخ را روشن برساند. شکل فهرستی هم پذیرفتنی است.",
     "sentences": [
       {
         "id": "s1",
@@ -10693,7 +10653,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "fourth",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "چهارم"
           },
           {
             "word": "Today",
@@ -11044,7 +11004,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "کارهای روزمره",
     "subtitle": "برنامهٔ معمول خودم و یک فرد خیالی را با زمان ساده شرح بدهم.",
     "situation": "دربارهٔ زمان بیدارشدن، کار و درس در یک روز معمولی گفت‌وگو می‌کنید.",
-    "teachingFa": "هدف: برنامهٔ معمول خودم و یک فرد خیالی را با زمان ساده شرح بدهم.\nبازیابی: I go to work و ساعت و روز را بازیابی کن.\nواژگان هسته: get up=بیدارشدن/بلندشدن؛ work=کارکردن؛ study=درس‌خواندن؛ eat=خوردن؛ breakfast=صبحانه؛ every day=هر روز\nساختار: حال ساده I/you/we/they و he/she + s؛ do/does برای سؤال و don’t/doesn’t برای نفی؛ فعل اصلی پس از does بدون s. has فقط با مثال پربسامد.\nتلفظ: سه تلفظ s سوم‌شخص با نمونه‌های works/reads/watches در تألیف نهایی معرفی شوند، نه حفظ جدول.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: حال استمراری در همین درس تدریس نشود؛ همهٔ قیدهای بسامد و تمام تغییرات املایی s حفظ نشوند.\nاحتیاط: Does she works / She don’t؛ حذف s سوم‌شخص؛ پاسخ تمرین با معیار معنی و الگوی هدف بررسی شود، نه اجبار به جملهٔ حفظی.\nنوشتن اختیاری: سه یا چهار جمله دربارهٔ یک روز معمول خیالی بنویس؛ یکی منفی باشد.",
+    "teachingFa": "هدف: برنامهٔ معمول خودم و یک فرد خیالی را با زمان ساده شرح بدهم.\nبازیابی: I go to work و ساعت و روز را بازیابی کن.\nواژگان هسته: get up=بیدارشدن/بلندشدن؛ work=کارکردن؛ study=درس‌خواندن؛ eat=خوردن؛ breakfast=صبحانه؛ every day=هر روز\nساختار: چهار گام جدا: ۱) عادت با I/you؛ ۲) جملهٔ مثبت با he/she و s؛ ۳) پرسش با do/does و فعل ساده؛ ۴) منفی با do not/does not و فعل ساده. هر گام را با یک نمونه و بازیابی کوتاه تمام کن؛ بعد سراغ بعدی برو.\nتلفظ: سه تلفظ s سوم‌شخص با نمونه‌های works/reads/watches در تألیف نهایی معرفی شوند، نه حفظ جدول.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: حال استمراری در همین درس تدریس نشود؛ همهٔ قیدهای بسامد و تمام تغییرات املایی s حفظ نشوند.\nاحتیاط: Does she works / She don’t؛ حذف s سوم‌شخص؛ پاسخ تمرین با معیار معنی و الگوی هدف بررسی شود، نه اجبار به جملهٔ حفظی.\nنوشتن اختیاری: برنامهٔ خیالی Ben: ساعت ۷ بیدار می‌شود؛ ساعت ۹ کار را شروع می‌کند؛ یکشنبه کار نمی‌کند. اول دو جملهٔ مثبت دربارهٔ روز معمول او بنویس؛ بعد یک جملهٔ منفی دربارهٔ یکشنبه. در پایان از او بپرس آیا دوشنبه کار می‌کند. هر بخش را جدا انجام بده.",
     "sentences": [
       {
         "id": "s1",
@@ -11139,12 +11099,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s5",
         "en": "He does not work on Sunday.",
         "fa": "او یکشنبه کار نمی‌کند. (مرد)",
-        "pronunciation": "هی داز نات وِرک آن سَندِی",
+        "pronunciation": "هی دَز نات وِرک آن سَندِی",
         "vocabulary": [
-          {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
           {
             "word": "Sunday",
             "meaning": "یکشنبه"
@@ -11154,12 +11110,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "فعل کمکی سوم‌شخص حال ساده"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "not",
             "meaning": "نه؛ نشانهٔ نفی"
           },
           {
             "word": "He",
             "meaning": "او (مرد)"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ]
       },
@@ -11167,7 +11131,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s6",
         "en": "What time does she get up?",
         "fa": "او چه ساعتی بیدار می‌شود؟ (زن)",
-        "pronunciation": "وَت تایم داز شی گِت اَپ",
+        "pronunciation": "وَت تایم دَز شی گِت اَپ",
         "vocabulary": [
           {
             "word": "What time",
@@ -11555,12 +11519,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "دو یو وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -11569,6 +11533,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you + verb + time?"
@@ -11584,8 +11552,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -11594,6 +11562,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you + verb + time?"
@@ -11605,12 +11577,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "دو یو وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -11619,6 +11591,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you + verb + time?"
@@ -11634,8 +11610,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -11644,6 +11620,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you + verb + time?"
@@ -11652,7 +11632,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s27",
         "en": "He does not study on Monday.",
         "fa": "او دوشنبه درس نمی‌خواند. (مرد)",
-        "pronunciation": "هی داز نات ستَدی آن مَندی",
+        "pronunciation": "هی دَز نات ستَدی آن مَندی",
         "vocabulary": [
           {
             "word": "Monday",
@@ -11685,7 +11665,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s28",
         "en": "He does not study on Tuesday.",
         "fa": "او سه‌شنبه درس نمی‌خواند. (مرد)",
-        "pronunciation": "هی داز نات ستَدی آن توزدی",
+        "pronunciation": "هی دَز نات ستَدی آن توزدی",
         "vocabulary": [
           {
             "word": "Tuesday",
@@ -11718,7 +11698,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s29",
         "en": "He does not study on Friday.",
         "fa": "او جمعه درس نمی‌خواند. (مرد)",
-        "pronunciation": "هی داز نات ستَدی آن فرایدی",
+        "pronunciation": "هی دَز نات ستَدی آن فرایدی",
         "vocabulary": [
           {
             "word": "Friday",
@@ -11751,7 +11731,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s30",
         "en": "He does not study on Saturday.",
         "fa": "او شنبه درس نمی‌خواند. (مرد)",
-        "pronunciation": "هی داز نات ستَدی آن سَتِردی",
+        "pronunciation": "هی دَز نات ستَدی آن سَتِردی",
         "vocabulary": [
           {
             "word": "Saturday",
@@ -12111,10 +12091,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن مَندی بَت آی دو نات ستَدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "do not",
             "meaning": "نمی‌"
           },
@@ -12127,8 +12103,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "درس‌خواندن"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "but",
             "meaning": "اما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -12148,10 +12132,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "do not",
             "meaning": "نمی‌"
           },
@@ -12160,8 +12140,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "درس‌خواندن"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "but",
             "meaning": "اما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -12177,10 +12165,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن فرایدی بَت آی دو نات ستَدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "do not",
             "meaning": "نمی‌"
           },
@@ -12193,8 +12177,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "درس‌خواندن"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "but",
             "meaning": "اما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -12214,10 +12206,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "do not",
             "meaning": "نمی‌"
           },
@@ -12226,8 +12214,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "درس‌خواندن"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "but",
             "meaning": "اما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -12240,7 +12236,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s47",
         "en": "What time does Anna start work?",
         "fa": "آنا چه ساعتی کار را شروع می‌کند؟",
-        "pronunciation": "وَت تایم داز اَنا ستارت وِرک",
+        "pronunciation": "وَت تایم دَز اَنا ستارت وِرک",
         "vocabulary": [
           {
             "word": "start work",
@@ -12265,7 +12261,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s48",
         "en": "What time does Ben start work?",
         "fa": "بن چه ساعتی کار را شروع می‌کند؟",
-        "pronunciation": "وَت تایم داز بِن ستارت وِرک",
+        "pronunciation": "وَت تایم دَز بِن ستارت وِرک",
         "vocabulary": [
           {
             "word": "start work",
@@ -12290,7 +12286,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s49",
         "en": "What time does Sara start work?",
         "fa": "سارا چه ساعتی کار را شروع می‌کند؟",
-        "pronunciation": "وَت تایم داز سارا ستارت وِرک",
+        "pronunciation": "وَت تایم دَز سارا ستارت وِرک",
         "vocabulary": [
           {
             "word": "start work",
@@ -12315,7 +12311,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s50",
         "en": "What time does Tim start work?",
         "fa": "تیم چه ساعتی کار را شروع می‌کند؟",
-        "pronunciation": "وَت تایم داز تیم ستارت وِرک",
+        "pronunciation": "وَت تایم دَز تیم ستارت وِرک",
         "vocabulary": [
           {
             "word": "start work",
@@ -12382,7 +12378,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "الان چه کاری انجام می‌دهیم؟",
     "subtitle": "فعالیت جاری را توصیف کنم و آن را از عادت روزانه جدا کنم.",
     "situation": "در تماس با دوست می‌گویید الان چه می‌کنید و تفاوت آن با برنامهٔ همیشگی را بیان می‌کنید.",
-    "teachingFa": "هدف: فعالیت جاری را توصیف کنم و آن را از عادت روزانه جدا کنم.\nبازیابی: I work every day را در برابر now مقایسه کن و am/is/are را بازیابی کن.\nواژگان هسته: now=الان؛ read=خواندن؛ write=نوشتن؛ wait=منتظربودن؛ cook=آشپزی‌کردن؛ listen=گوش‌دادن\nساختار: am/is/are + ing، نفی و سؤال؛ چند فعل آشنا؛ تفاوت I work every day / I am working now؛ بدون فهرست افعال حالت و استثناها.\nتلفظ: پایان ing و شنیدن am/is پیش از آن؛ read و reading کنار هم شنیده شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: اسم مفعول، حال کامل و برنامهٔ قطعی آینده با استمراری هدف این درس نیستند.\nاحتیاط: I reading؛ I am read؛ تعمیم حال استمراری به I am liking tea در هدف این درس پذیرفته نشود.\nنوشتن اختیاری: دو جمله دربارهٔ الان و یک جمله دربارهٔ عادت روزانهٔ شخصیت خیالی بنویس.",
+    "teachingFa": "هدف: فعالیت جاری را توصیف کنم و آن را از عادت روزانه جدا کنم.\nبازیابی: I work every day را در برابر now مقایسه کن و am/is/are را بازیابی کن.\nواژگان هسته: now=الان؛ read=خواندن؛ write=نوشتن؛ wait=منتظربودن؛ cook=آشپزی‌کردن؛ listen=گوش‌دادن\nساختار: am/is/are + ing، نفی و سؤال؛ چند فعل آشنا؛ تفاوت I work every day / I am working now؛ بدون فهرست افعال حالت و استثناها.\nتلفظ: پایان ing و شنیدن am/is پیش از آن؛ read و reading کنار هم شنیده شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: اسم مفعول، حال کامل و برنامهٔ قطعی آینده با استمراری هدف این درس نیستند.\nاحتیاط: I reading؛ I am read؛ تعمیم حال استمراری به I am liking tea در هدف این درس پذیرفته نشود.\nنوشتن اختیاری: کارت خیالی Sara: معمولاً با اتوبوس به محل کار می‌رود؛ الان در خانه کتاب می‌خواند. یک جمله دربارهٔ عادت و دو جمله دربارهٔ الان بنویس؛ جملهٔ سوم بگوید الان کار نمی‌کند.",
     "sentences": [
       {
         "id": "s1",
@@ -13083,12 +13079,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -13108,8 +13108,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -13125,12 +13129,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -13150,8 +13158,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -13694,7 +13706,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "علاقه‌ها و اوقات فراغت",
     "subtitle": "دو علاقه و یک بی‌علاقگی را بیان کنم و دربارهٔ علاقهٔ دیگری بپرسم.",
     "situation": "با دوست دربارهٔ کتاب، موسیقی و کارهای آخر هفته گفت‌وگو می‌کنید.",
-    "teachingFa": "هدف: دو علاقه و یک بی‌علاقگی را بیان کنم و دربارهٔ علاقهٔ دیگری بپرسم.\nبازیابی: I like tea و Do you like ... و خواندن را بازیابی کن.\nواژگان هسته: music=موسیقی؛ book=کتاب؛ football=فوتبال؛ walk=پیاده‌روی‌کردن؛ weekend=آخر هفته؛ often=اغلب\nساختار: like + اسم / ing؛ do/does؛ often و sometimes در چند جایگاه نمونه؛ and/but برای پیوند دو جمله. like reading با am reading مقایسه شود.\nتلفظ: گروه‌بندی like reading و do you like؛ do you در گفتار طبیعی هم شنیده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مقایسهٔ پیشرفته، would rather، همهٔ فعل‌های دو ساختاری و اصطلاحات ورزش وارد نشوند.\nاحتیاط: I like read؛ مخلوط‌کردن like reading و am reading؛ استفادهٔ درست از like to read هم رد نشود.\nنوشتن اختیاری: سه جمله دربارهٔ علاقه‌های یک شخصیت خیالی بنویس؛ and یا but را یک بار به کار ببر.",
+    "teachingFa": "هدف: دو علاقه و یک بی‌علاقگی را بیان کنم و دربارهٔ علاقهٔ دیگری بپرسم.\nبازیابی: I like tea و Do you like ... و خواندن را بازیابی کن.\nواژگان هسته: music=موسیقی؛ book=کتاب؛ football=فوتبال؛ walk=پیاده‌روی‌کردن؛ weekend=آخر هفته؛ often=اغلب\nساختار: like + اسم / ing؛ do/does؛ often و sometimes در چند جایگاه نمونه؛ and/but برای پیوند دو جمله. like reading با am reading مقایسه شود.\nتلفظ: گروه‌بندی like reading و do you like؛ do you در گفتار طبیعی هم شنیده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مقایسهٔ پیشرفته، would rather، همهٔ فعل‌های دو ساختاری و اصطلاحات ورزش وارد نشوند.\nاحتیاط: I like read؛ مخلوط‌کردن like reading و am reading؛ استفادهٔ درست از like to read هم رد نشود.\nنوشتن اختیاری: دوست خیالی تو موسیقی را دوست دارد ولی فوتبال را دوست ندارد. سه جمله برای معرفی علاقه‌های او بنویس؛ یک جمله با but و یک پرسش دربارهٔ کتاب‌خواندن اضافه کن.",
     "sentences": [
       {
         "id": "s1",
@@ -14565,12 +14577,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "دو یو وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -14579,6 +14591,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you work on + day?"
@@ -14594,8 +14610,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -14604,6 +14620,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you work on + day?"
@@ -14615,12 +14635,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "دو یو وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -14629,6 +14649,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you work on + day?"
@@ -14644,8 +14668,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
@@ -14654,6 +14678,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "Do",
             "meaning": "انجام‌دادن / فعل کمکی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Do you work on + day?"
@@ -14790,7 +14818,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "hobby-free-concert",
         "en": "Does Anna like music?",
         "fa": "آیا آنا موسیقی دوست دارد؟",
-        "pronunciation": "داز اَنا لایک میوزِک",
+        "pronunciation": "دَز اَنا لایک میوزِک",
         "vocabulary": [
           {
             "word": "music",
@@ -14815,7 +14843,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "hobby-photo-show",
         "en": "Does Ben like music?",
         "fa": "آیا بن موسیقی دوست دارد؟",
-        "pronunciation": "داز بِن لایک میوزِک",
+        "pronunciation": "دَز بِن لایک میوزِک",
         "vocabulary": [
           {
             "word": "music",
@@ -14840,7 +14868,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "hobby-drawing-notebook",
         "en": "Does Sara like music?",
         "fa": "آیا سارا موسیقی دوست دارد؟",
-        "pronunciation": "داز سارا لایک میوزِک",
+        "pronunciation": "دَز سارا لایک میوزِک",
         "vocabulary": [
           {
             "word": "music",
@@ -14865,7 +14893,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "hobby-try-new-this-week",
         "en": "Does Tim like music?",
         "fa": "آیا تیم موسیقی دوست دارد؟",
-        "pronunciation": "داز تیم لایک میوزِک",
+        "pronunciation": "دَز تیم لایک میوزِک",
         "vocabulary": [
           {
             "word": "music",
@@ -14932,7 +14960,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "آب‌وهوا و فصل‌ها",
     "subtitle": "وضع فعلی هوا و فصل مورد علاقه را ساده بیان کنم.",
     "situation": "دربارهٔ هوای خیالی امروز و فصل مورد علاقه با هم‌کلاسی صحبت می‌کنید.",
-    "teachingFa": "هدف: وضع فعلی هوا و فصل مورد علاقه را ساده بیان کنم.\nبازیابی: It is و I like و now را بازیابی کن.\nواژگان هسته: weather=آب‌وهوا؛ sunny=آفتابی؛ cold=سرد؛ hot=گرم؛ rain=باریدن باران؛ spring/summer/autumn/winter=فصل‌ها\nساختار: It is + صفت برای هوا؛ It is raining؛ in + فصل؛ because برای یک علت ساده با واژه‌های آشنا؛ یک it غیرارجاعی، نه ضمیر برای جسم مشخص.\nتلفظ: تمایز weather/whether در املا موضوع نیست؛ cold/hot و raining با صدای روشن و عادی تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: پیش‌بینی با will، داده‌های هواشناسی، sunrise/sunset و گزارش بلند هدف نیستند.\nاحتیاط: Is cold بدون it؛ I am cold دربارهٔ احساس فرد است و با It is cold دربارهٔ هوا فرق دارد.\nنوشتن اختیاری: سه جمله برای هوای خیالی امروز و فصل مورد علاقه بنویس؛ یک علت ساده اختیاری است.",
+    "teachingFa": "هدف: وضع فعلی هوا و فصل مورد علاقه را ساده بیان کنم.\nبازیابی: It is و I like و now را بازیابی کن.\nواژگان هسته: weather=آب‌وهوا؛ sunny=آفتابی؛ cold=سرد؛ hot=گرم؛ rain=باریدن باران؛ spring/summer/autumn/winter=فصل‌ها\nساختار: It is + صفت برای هوا؛ It is raining؛ in + فصل؛ because برای یک علت ساده با واژه‌های آشنا؛ یک it غیرارجاعی، نه ضمیر برای جسم مشخص.\nتلفظ: تمایز weather/whether در املا موضوع نیست؛ cold/hot و raining با صدای روشن و عادی تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: پیش‌بینی با will، داده‌های هواشناسی، sunrise/sunset و گزارش بلند هدف نیستند.\nاحتیاط: Is cold بدون it؛ I am cold دربارهٔ احساس فرد است و با It is cold دربارهٔ هوا فرق دارد.\nنوشتن اختیاری: گزارش خیالی امروز: هوا آفتابی ولی سرد است. سه جمله بنویس: دو ویژگی هوای امروز را با but بگو؛ بعد فصل دلخواهت را انتخاب کن و بگو هوای سرد را دوست داری یا نه. از باران‌بودن، نبود آفتاب را حدس نزن.",
     "sentences": [
       {
         "id": "s1",
@@ -16296,7 +16324,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "خرید ساده و قیمت",
     "subtitle": "یک کالای ساده بخواهم، قیمت را بپرسم و روش پرداخت را بگویم.",
     "situation": "در فروشگاه کتاب یا خودکار می‌خواهید، قیمت و روش پرداخت را می‌پرسید.",
-    "teachingFa": "هدف: یک کالای ساده بخواهم، قیمت را بپرسم و روش پرداخت را بگویم.\nبازیابی: This/that، please، عددهای ۱ تا ۱۰۰ و I want را بازیابی کن.\nواژگان هسته: price=قیمت؛ cost=قیمت‌داشتن؛ pound=پوند؛ cash=پول نقد؛ card=کارت؛ buy=خریدن\nساختار: How much is ...? / How much are ...?؛ I would like به‌صورت درخواست مؤدبانهٔ آماده؛ Can I pay by card?؛ a/one/two + اسم.\nتلفظ: پایان pounds و تفاوت قیمت کامل با رقم‌های تماس؛ I’d like فقط کنار I would like معرفی شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: تخفیف، مرجوعی، شرطی، مذاکره و همهٔ پول‌های جهان هدف نیستند؛ قیمت اعشاری پیچیده به این مرحله تحمیل نشود.\nاحتیاط: How many برای قیمت؛ How much is these؛ پول و قیمت در کل صحنه ثابت بماند.\nنوشتن اختیاری: یک درخواست خرید، یک پرسش قیمت و یک پرسش روش پرداخت بنویس.",
+    "teachingFa": "هدف: یک کالای ساده بخواهم، قیمت را بپرسم و روش پرداخت را بگویم.\nبازیابی: This/that، please، عددهای ۱ تا ۱۰۰ و I want را بازیابی کن.\nواژگان هسته: price=قیمت؛ cost=قیمت‌داشتن؛ pound=پوند؛ cash=پول نقد؛ card=کارت؛ buy=خریدن\nساختار: How much is ...? / How much are ...?؛ I would like به‌صورت درخواست مؤدبانهٔ آماده؛ Can I pay by card?؛ a/one/two + اسم.\nتلفظ: پایان pounds و تفاوت قیمت کامل با رقم‌های تماس؛ I’d like فقط کنار I would like معرفی شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: تخفیف، مرجوعی، شرطی، مذاکره و همهٔ پول‌های جهان هدف نیستند؛ قیمت اعشاری پیچیده به این مرحله تحمیل نشود.\nاحتیاط: How many برای قیمت؛ How much is these؛ پول و قیمت در کل صحنه ثابت بماند.\nنوشتن اختیاری: در فروشگاه خیالی یک کیف می‌خواهی. قیمت کیف روی برچسب نیست و نمی‌دانی کارت قبول می‌کنند یا نه. یک درخواست خرید، یک پرسش قیمت و یک پرسش دربارهٔ پرداخت با کارت بنویس؛ قیمت اختراع نکن.",
     "sentences": [
       {
         "id": "s1",
@@ -17698,7 +17726,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "خرید لباس با رنگ و اندازه",
     "subtitle": "لباسی با رنگ و اندازهٔ مشخص بخواهم و دربارهٔ اندازه‌بودن آن بگویم.",
     "situation": "لباس را با رنگ و اندازه می‌خواهید و دربارهٔ مناسب‌بودن اندازه حرف می‌زنید.",
-    "teachingFa": "هدف: لباسی با رنگ و اندازهٔ مشخص بخواهم و دربارهٔ اندازه‌بودن آن بگویم.\nبازیابی: قیمت‌پرسیدن و this/these را بازیابی کن.\nواژگان هسته: shirt=پیراهن؛ coat=پالتو/کت؛ shoes=کفش؛ blue=آبی؛ red=قرمز؛ small/medium/large=کوچک/متوسط/بزرگ؛ size=اندازه\nساختار: رنگ پیش از اسم؛ a blue shirt؛ these shoes؛ too + صفت برای too small؛ Can I try it on? به‌صورت قالب. it/them در همین دو نمونه معرفی شوند.\nتلفظ: رنگ و اندازه با تکیهٔ معنایی؛ shoes و shirt در شنیدن اشتباه نشوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مقایسهٔ تفضیلی، جنس پارچه، سیاست مرجوعی و شکایت چندمرحله‌ای وارد نشوند.\nاحتیاط: shirt blue به جای blue shirt؛ It are؛ colour/color هر دو پذیرفته شوند.\nنوشتن اختیاری: برای یک لباس خیالی رنگ، اندازه و درخواست امتحان‌کردن را بنویس.",
+    "teachingFa": "هدف: لباسی با رنگ و اندازهٔ مشخص بخواهم و دربارهٔ اندازه‌بودن آن بگویم.\nبازیابی: قیمت‌پرسیدن و this/these را بازیابی کن.\nواژگان هسته: shirt=پیراهن؛ coat=پالتو/کت؛ shoes=کفش؛ blue=آبی؛ red=قرمز؛ small/medium/large=کوچک/متوسط/بزرگ؛ size=اندازه\nساختار: رنگ پیش از اسم؛ a blue shirt؛ these shoes؛ too + صفت برای too small؛ Can I try it on? به‌صورت قالب. it/them در همین دو نمونه معرفی شوند.\nتلفظ: رنگ و اندازه با تکیهٔ معنایی؛ shoes و shirt در شنیدن اشتباه نشوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مقایسهٔ تفضیلی، جنس پارچه، سیاست مرجوعی و شکایت چندمرحله‌ای وارد نشوند.\nاحتیاط: shirt blue به جای blue shirt؛ It are؛ colour/color هر دو پذیرفته شوند.\nنوشتن اختیاری: در فروشگاه خیالی پیراهن قرمزِ small می‌خواهی. رنگ و اندازه را در درخواستت بگو و اجازهٔ امتحان‌کردن بخواه؛ بعد از امتحان فرض کن کوچک است و اندازهٔ medium درخواست کن.",
     "sentences": [
       {
         "id": "s1",
@@ -17889,7 +17917,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "too large",
-            "meaning": "بیش‌ازحد بزرگ"
+            "meaning": "بیش از حد بزرگ"
           },
           {
             "word": "is",
@@ -18248,7 +18276,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "too large",
-            "meaning": "بیش‌ازحد بزرگ"
+            "meaning": "بیش از حد بزرگ"
           },
           {
             "word": "shoes",
@@ -19059,7 +19087,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "سفارش در کافه",
     "subtitle": "یک نوشیدنی و خوراکی سفارش بدهم، ترجیح ساده بگویم و صورت‌حساب بخواهم.",
     "situation": "در کافه یک نوشیدنی و خوراکی سفارش می‌دهید و یک ترجیح ساده می‌گویید.",
-    "teachingFa": "هدف: یک نوشیدنی و خوراکی سفارش بدهم، ترجیح ساده بگویم و صورت‌حساب بخواهم.\nبازیابی: Tea, please و I would like و قیمت را بازیابی کن.\nواژگان هسته: coffee=قهوه؛ tea=چای؛ sandwich=ساندویچ؛ milk=شیر؛ sugar=شکر؛ bill=صورت‌حساب؛ with/without=با/بدون\nساختار: a cup of / a glass of در مقدارهای ساده؛ a sandwich و some water؛ with/without؛ I’d like کنار I would like؛ bill please. برای نوشیدنی a tea در بافت سفارش هم درست است.\nتلفظ: گروه‌های a cup of و with milk را یک‌جا بشنو؛ صورت‌های کوتاه درخواست را کنار صورت کامل نگه دار.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: همهٔ قواعد شمارش‌پذیری، رژیم غذایی تخصصی، دستور پخت و ادعای رفع حساسیت هدف نیستند.\nاحتیاط: ردکردن a tea به‌عنوان همیشه غلط؛ استفاده از with no sugar هم درست است؛ ضمیرهای صحنه با نقش مشتری/فروشنده ثابت بمانند.\nنوشتن اختیاری: یک سفارش کوتاه با یک نوشیدنی، یک خوراکی و یک ترجیح بنویس.",
+    "teachingFa": "هدف: یک نوشیدنی و خوراکی سفارش بدهم، ترجیح ساده بگویم و صورت‌حساب بخواهم.\nبازیابی: Tea, please و I would like و قیمت را بازیابی کن.\nواژگان هسته: coffee=قهوه؛ tea=چای؛ sandwich=ساندویچ؛ milk=شیر؛ sugar=شکر؛ bill=صورت‌حساب؛ with/without=با/بدون\nساختار: a cup of / a glass of در مقدارهای ساده؛ a sandwich و some water؛ with/without؛ I’d like کنار I would like؛ bill please. برای نوشیدنی a tea در بافت سفارش هم درست است.\nتلفظ: گروه‌های a cup of و with milk را یک‌جا بشنو؛ صورت‌های کوتاه درخواست را کنار صورت کامل نگه دار.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: همهٔ قواعد شمارش‌پذیری، رژیم غذایی تخصصی، دستور پخت و ادعای رفع حساسیت هدف نیستند.\nاحتیاط: ردکردن a tea به‌عنوان همیشه غلط؛ استفاده از with no sugar هم درست است؛ ضمیرهای صحنه با نقش مشتری/فروشنده ثابت بمانند.\nنوشتن اختیاری: در کافهٔ خیالی یک چای بدون شکر و یک ساندویچ پنیر می‌خواهی. سفارش کوتاه بنویس. پیشخدمت اشتباهاً قهوه را تکرار می‌کند؛ در یک پاسخ مؤدبانه نوشیدنی را اصلاح کن.",
     "sentences": [
       {
         "id": "s1",
@@ -19687,7 +19715,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "drink",
-            "meaning": "نوشیدن"
+            "meaning": "نوشیدنی"
           },
           {
             "word": "sugar",
@@ -20410,7 +20438,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "پرسیدن مسیر کوتاه",
     "subtitle": "جای یک مکان عمومی را بپرسم و مسیر دو یا سه‌مرحله‌ای ساده بفهمم.",
     "situation": "جای ایستگاه را می‌پرسید و یک مسیر متنی کوتاه را بدون نیاز به نقشه دنبال می‌کنید.",
-    "teachingFa": "هدف: جای یک مکان عمومی را بپرسم و مسیر دو یا سه‌مرحله‌ای ساده بفهمم.\nبازیابی: Where is، next to و درخواست آهسته‌گویی را بازیابی کن.\nواژگان هسته: station=ایستگاه؛ bank=بانک؛ street=خیابان؛ left=چپ؛ right=راست؛ straight=مستقیم؛ near=نزدیک\nساختار: Where is ...?؛ امر Go/Turn؛ next to/opposite؛ first/then برای ترتیب؛ Is it near? با be. مسیر با متن خودبسنده، بدون نقشهٔ غایب.\nتلفظ: کلمات جهت با تکیهٔ واضح؛ left/right در دستور دو مرحله‌ای با یک مکث تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: توصیف شبکهٔ پیچیده، فاصلهٔ دقیق، شرطی مسیر و عبارت‌های چندمعنایی طولانی وارد نشوند.\nاحتیاط: مخلوط‌شدن left و right؛ حرکت مسیر نباید به مکان یا نقشهٔ معرفی‌نشده وابسته باشد.\nنوشتن اختیاری: مسیر خیالی دو مرحله‌ای از بانک به کافه بنویس؛ همهٔ اطلاعات لازم در متن خودت باشد.",
+    "teachingFa": "هدف: جای یک مکان عمومی را بپرسم و مسیر دو یا سه‌مرحله‌ای ساده بفهمم.\nبازیابی: Where is، next to و درخواست آهسته‌گویی را بازیابی کن.\nواژگان هسته: station=ایستگاه؛ bank=بانک؛ street=خیابان؛ left=چپ؛ right=راست؛ straight=مستقیم؛ near=نزدیک\nساختار: Where is ...?؛ امر Go/Turn؛ next to/opposite؛ first/then برای ترتیب؛ Is it near? با be. مسیر با متن خودبسنده، بدون نقشهٔ غایب.\nتلفظ: کلمات جهت با تکیهٔ واضح؛ left/right در دستور دو مرحله‌ای با یک مکث تمرین شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: توصیف شبکهٔ پیچیده، فاصلهٔ دقیق، شرطی مسیر و عبارت‌های چندمعنایی طولانی وارد نشوند.\nاحتیاط: مخلوط‌شدن left و right؛ حرکت مسیر نباید به مکان یا نقشهٔ معرفی‌نشده وابسته باشد.\nنوشتن اختیاری: مسیر خیالی: شروع کنار بانک؛ مستقیم برو؛ کنار پارک به چپ بپیچ؛ ایستگاه کنار کافه است. سه راهنمای کوتاه برای رسیدن به ایستگاه بنویس؛ به نقشهٔ بیرون این تمرین نیازی نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -20588,7 +20616,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           }
         ]
       },
@@ -21373,7 +21401,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "at",
@@ -21398,7 +21426,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "at",
@@ -21427,7 +21455,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "at",
@@ -21456,7 +21484,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "at",
@@ -21639,7 +21667,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "اتوبوس و قطار شهری",
     "subtitle": "بلیت شهری بخواهم و شماره، مقصد و زمان حرکت را بفهمم.",
     "situation": "برای رفتن به مرکز شهر بلیت می‌خواهید و شمارهٔ اتوبوس یا سکوی قطار را بررسی می‌کنید.",
-    "teachingFa": "هدف: بلیت شهری بخواهم و شماره، مقصد و زمان حرکت را بفهمم.\nبازیابی: عدد، ساعت، قیمت و Where is ... را بازیابی کن.\nواژگان هسته: bus=اتوبوس؛ train=قطار؛ ticket=بلیت؛ stop=ایستگاه اتوبوس؛ platform=سکو؛ leave=حرکت‌کردن؛ centre=مرکز\nساختار: One ticket to ...؛ Which bus ...?؛ Does this bus go to ...?؛ leaves at از حال ساده؛ platform + عدد؛ پرسش مقصد پیش از سوارشدن.\nتلفظ: عدد اتوبوس، زمان و سکو جدا شنیده شوند؛ bus و buses فقط با واژهٔ معرفی‌شده.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: پرواز، بار، قوانین تعویض و تغییر مسیر چنداتصالی به درس سفر مربوط‌اند و اینجا لازم نیستند.\nاحتیاط: Does this bus goes؛ خلط شمارهٔ اتوبوس، ساعت و شمارهٔ سکو؛ centre/center هر دو پذیرفته شوند.\nنوشتن اختیاری: یک درخواست بلیت و یک سؤال برای مطمئن‌شدن از مقصد بنویس.",
+    "teachingFa": "هدف: بلیت شهری بخواهم و شماره، مقصد و زمان حرکت را بفهمم.\nبازیابی: عدد، ساعت، قیمت و Where is ... را بازیابی کن.\nواژگان هسته: bus=اتوبوس؛ train=قطار؛ ticket=بلیت؛ stop=ایستگاه اتوبوس؛ platform=سکو؛ leave=حرکت‌کردن؛ centre=مرکز\nساختار: One ticket to ...؛ Which bus ...?؛ Does this bus go to ...?؛ leaves at از حال ساده؛ platform + عدد؛ پرسش مقصد پیش از سوارشدن.\nتلفظ: عدد اتوبوس، زمان و سکو جدا شنیده شوند؛ bus و buses فقط با واژهٔ معرفی‌شده.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: پرواز، بار، قوانین تعویض و تغییر مسیر چنداتصالی به درس سفر مربوط‌اند و اینجا لازم نیستند.\nاحتیاط: Does this bus goes؛ خلط شمارهٔ اتوبوس، ساعت و شمارهٔ سکو؛ centre/center هر دو پذیرفته شوند.\nنوشتن اختیاری: در ایستگاه خیالی اتوبوس شمارهٔ ۶ را می‌بینی اما مقصدش را نمی‌دانی. یک بلیت برای مرکز شهر بخواه، بپرس این اتوبوس به مرکز می‌رود یا نه، و زمان حرکت را بپرس. مقصد یا زمان را حدس نزن.",
     "sentences": [
       {
         "id": "s1",
@@ -21673,7 +21701,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s2",
         "en": "Does this bus go to the station?",
         "fa": "آیا این اتوبوس به ایستگاه می‌رود؟",
-        "pronunciation": "داز ذیس بَس گو تو ذِ ستِیشَن",
+        "pronunciation": "دَز ذیس بَس گو تو ذِ ستِیشَن",
         "vocabulary": [
           {
             "word": "station",
@@ -21855,7 +21883,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s10",
         "en": "Does this train go to the centre?",
         "fa": "آیا این قطار به مرکز شهر می‌رود؟",
-        "pronunciation": "داز ذیس ترِین گو تو ذِ سِنتِر",
+        "pronunciation": "دَز ذیس ترِین گو تو ذِ سِنتِر",
         "vocabulary": [
           {
             "word": "centre",
@@ -22051,7 +22079,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "transport-bicycle-train",
         "en": "Does bus number two go to the station?",
         "fa": "آیا اتوبوس شمارهٔ دو به ایستگاه می‌رود؟",
-        "pronunciation": "داز بَس نَمبِر تو گو تو ذِ ستِیشَن",
+        "pronunciation": "دَز بَس نَمبِر تو گو تو ذِ ستِیشَن",
         "vocabulary": [
           {
             "word": "station",
@@ -22084,7 +22112,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "transport-next-bus-arrives",
         "en": "Does bus number five go to the station?",
         "fa": "آیا اتوبوس شمارهٔ پنج به ایستگاه می‌رود؟",
-        "pronunciation": "داز بَس نَمبِر فایو گو تو ذِ ستِیشَن",
+        "pronunciation": "دَز بَس نَمبِر فایو گو تو ذِ ستِیشَن",
         "vocabulary": [
           {
             "word": "station",
@@ -22117,7 +22145,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "transport-missed-train",
         "en": "Does bus number ten go to the station?",
         "fa": "آیا اتوبوس شمارهٔ ده به ایستگاه می‌رود؟",
-        "pronunciation": "داز بَس نَمبِر تِن گو تو ذِ ستِیشَن",
+        "pronunciation": "دَز بَس نَمبِر تِن گو تو ذِ ستِیشَن",
         "vocabulary": [
           {
             "word": "station",
@@ -22150,7 +22178,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "transport-after-midnight",
         "en": "Does bus number twelve go to the station?",
         "fa": "آیا اتوبوس شمارهٔ دوازده به ایستگاه می‌رود؟",
-        "pronunciation": "داز بَس نَمبِر توِلو گو تو ذِ ستِیشَن",
+        "pronunciation": "دَز بَس نَمبِر توِلو گو تو ذِ ستِیشَن",
         "vocabulary": [
           {
             "word": "station",
@@ -22945,7 +22973,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "گرفتن و تغییر قرار",
     "subtitle": "برای یک خدمت ساده زمان قرار بخواهم و یک زمان جایگزین پیشنهاد کنم.",
     "situation": "برای یک قرار ساده روز و ساعت می‌خواهید و در صورت نیاز زمان دیگری را تأیید می‌کنید.",
-    "teachingFa": "هدف: برای یک خدمت ساده زمان قرار بخواهم و یک زمان جایگزین پیشنهاد کنم.\nبازیابی: روز، ساعت و Do you have time ... را بازیابی کن.\nواژگان هسته: appointment=قرار؛ free=وقت‌آزادداشتن؛ available=در دسترس؛ morning=صبح؛ afternoon=بعدازظهر؛ change=تغییردادن\nساختار: I would like an appointment؛ Are you free on ...?؛ Can I come at ...?؛ on/at؛ دو انتخاب زمانی با or. هدف قرار اداری/کلاس است نه شرح درمان.\nتلفظ: روز و ساعت نهایی با تکیهٔ اصلاحی تکرار شوند؛ Tuesday/Thursday پیش از آزمون مقایسه شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: شرطی پیچیده، cancel/reschedule رسمی و درخواست علت پزشکی لازم نیستند.\nاحتیاط: تأیید ساعت ردشده در پایان مکالمه؛ همهٔ نوبت‌ها باید یک زمان نهایی مشترک داشته باشند.\nنوشتن اختیاری: یک درخواست قرار و یک پیام تأیید روز و ساعت با اطلاعات خیالی بنویس.",
+    "teachingFa": "هدف: برای یک خدمت ساده زمان قرار بخواهم و یک زمان جایگزین پیشنهاد کنم.\nبازیابی: روز، ساعت و Do you have time ... را بازیابی کن.\nواژگان هسته: appointment=قرار؛ free=وقت‌آزادداشتن؛ available=در دسترس؛ morning=صبح؛ afternoon=بعدازظهر؛ change=تغییردادن\nساختار: I would like an appointment؛ Are you free on ...?؛ Can I come at ...?؛ on/at؛ دو انتخاب زمانی با or. هدف قرار اداری/کلاس است نه شرح درمان.\nتلفظ: روز و ساعت نهایی با تکیهٔ اصلاحی تکرار شوند؛ Tuesday/Thursday پیش از آزمون مقایسه شوند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: شرطی پیچیده، cancel/reschedule رسمی و درخواست علت پزشکی لازم نیستند.\nاحتیاط: تأیید ساعت ردشده در پایان مکالمه؛ همهٔ نوبت‌ها باید یک زمان نهایی مشترک داشته باشند.\nنوشتن اختیاری: قرار خیالی قبلی دوشنبه ساعت ۱۰ است. پیام تازه می‌گوید سه‌شنبه ساعت ۱۱ وقت آزاد هست. یک درخواست تغییر قرار و یک پیام تأیید برای زمان تازه بنویس؛ روز و ساعت هر دو روشن باشند.",
     "sentences": [
       {
         "id": "s1",
@@ -23882,12 +23910,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -23907,8 +23939,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -23924,12 +23960,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -23949,8 +23989,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -24317,7 +24361,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "کاربرد زبان در کلاس",
     "subtitle": "دربارهٔ شروع کلاس و تکلیف سؤال کنم و دستور کوتاه معلم را بفهمم.",
     "situation": "در کلاس دربارهٔ واژه، صفحه و تکلیف سؤال می‌کنید و دستور کوتاه معلم را می‌فهمید.",
-    "teachingFa": "هدف: دربارهٔ شروع کلاس و تکلیف سؤال کنم و دستور کوتاه معلم را بفهمم.\nبازیابی: Please say that again و هجی‌کردن و زمان کلاس را بازیابی کن.\nواژگان هسته: lesson=درس؛ homework=تکلیف؛ page=صفحه؛ question=پرسش؛ answer=پاسخ؛ open=بازکردن\nساختار: امر مثبت/منفی Open/Don’t ...؛ When does ... start?؛ What does ... mean? به‌صورت قالب سؤال دربارهٔ واژه؛ Can I ask ...?؛ a/an در مثال‌های آشنا.\nتلفظ: شمارهٔ page و question جدا شنیده شوند؛ واژهٔ city در سؤال معنی و هجی یکسان بماند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: اصطلاحات مدرسه و نظام آموزشی کشورها یا دستور زبان انتزاعی کامل وارد نشوند.\nاحتیاط: What means city؛ homework در این کاربرد جمع s نمی‌گیرد؛ متن خودبسنده جای صفحهٔ کتاب بیرونی را بگیرد.\nنوشتن اختیاری: پیام کوتاهی به معلم خیالی بنویس: زمان کلاس را بپرس و دربارهٔ معنی city سؤال کن.",
+    "teachingFa": "هدف: دربارهٔ شروع کلاس و تکلیف سؤال کنم و دستور کوتاه معلم را بفهمم.\nبازیابی: Please say that again و هجی‌کردن و زمان کلاس را بازیابی کن.\nواژگان هسته: lesson=درس؛ homework=تکلیف؛ page=صفحه؛ question=پرسش؛ answer=پاسخ؛ open=بازکردن\nساختار: امر مثبت/منفی Open/Don’t ...؛ When does ... start?؛ What does ... mean? به‌صورت قالب سؤال دربارهٔ واژه؛ Can I ask ...?؛ a/an در مثال‌های آشنا.\nتلفظ: شمارهٔ page و question جدا شنیده شوند؛ واژهٔ city در سؤال معنی و هجی یکسان بماند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: اصطلاحات مدرسه و نظام آموزشی کشورها یا دستور زبان انتزاعی کامل وارد نشوند.\nاحتیاط: What means city؛ homework در این کاربرد جمع s نمی‌گیرد؛ متن خودبسنده جای صفحهٔ کتاب بیرونی را بگیرد.\nنوشتن اختیاری: اعلان خیالی کلاس: تکلیف صفحهٔ ۸ است، اما واژهٔ city را نمی‌فهمی. پیام کوتاهی به معلم بنویس: صفحهٔ تکلیف را برای تأیید بپرس و معنی city را هم بخواه.",
     "sentences": [
       {
         "id": "s1",
@@ -24400,7 +24444,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s4",
         "en": "What does “city” mean?",
         "fa": "«city» چه معنی می‌دهد؟",
-        "pronunciation": "وَت داز سِتی مین",
+        "pronunciation": "وَت دَز سِتی مین",
         "vocabulary": [
           {
             "word": "city",
@@ -24445,7 +24489,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s6",
         "en": "When does the class start?",
         "fa": "کلاس چه زمانی شروع می‌شود؟",
-        "pronunciation": "وِن داز ذِ کلَس ستارت",
+        "pronunciation": "وِن دَز ذِ کلَس ستارت",
         "vocabulary": [
           {
             "word": "class",
@@ -24506,7 +24550,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "close",
-            "meaning": "بسته شدن"
+            "meaning": "بستن"
           },
           {
             "word": "book",
@@ -24911,7 +24955,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "school-share-book",
         "en": "What does “room” mean?",
         "fa": "«room» چه معنی می‌دهد؟",
-        "pronunciation": "وَت داز روم مین",
+        "pronunciation": "وَت دَز روم مین",
         "vocabulary": [
           {
             "word": "does",
@@ -24936,7 +24980,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "school-partner-name",
         "en": "What does “street” mean?",
         "fa": "«street» چه معنی می‌دهد؟",
-        "pronunciation": "وَت داز ستریت مین",
+        "pronunciation": "وَت دَز ستریت مین",
         "vocabulary": [
           {
             "word": "street",
@@ -24961,7 +25005,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "school-classroom-number",
         "en": "What does “class” mean?",
         "fa": "«class» چه معنی می‌دهد؟",
-        "pronunciation": "وَت داز کلَس مین",
+        "pronunciation": "وَت دَز کلَس مین",
         "vocabulary": [
           {
             "word": "class",
@@ -24986,7 +25030,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "school-find-classroom",
         "en": "What does “homework” mean?",
         "fa": "«homework» چه معنی می‌دهد؟",
-        "pronunciation": "وَت داز هُوموِرک مین",
+        "pronunciation": "وَت دَز هُوموِرک مین",
         "vocabulary": [
           {
             "word": "homework",
@@ -25709,7 +25753,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "دعوت و توافق روی برنامه",
     "subtitle": "دعوت ساده کنم، آن را قبول یا مؤدبانه رد کنم و روی زمان توافق کنم.",
     "situation": "دوست را به کافه دعوت می‌کنید؛ پس از پذیرش یا رد، روی یک زمان مشترک توافق می‌کنید.",
-    "teachingFa": "هدف: دعوت ساده کنم، آن را قبول یا مؤدبانه رد کنم و روی زمان توافق کنم.\nبازیابی: روز/ساعت، Do you like و قهوه‌خواستن را بازیابی کن.\nواژگان هسته: invite=دعوت‌کردن؛ meet=دیدن/ملاقات‌کردن؛ together=با هم؛ busy=گرفتار؛ tomorrow=فردا؛ great=عالی\nساختار: Would you like to ...? به‌صورت دعوت؛ Let’s + فعل؛ I’d love to به‌صورت پذیرش آماده؛ Sorry, I can’t؛ Are you free ...?؛ توافق روز/ساعت.\nتلفظ: پذیرش و رد دعوت با لحن محترمانه؛ can/can’t فقط به یک تمایز صوتی شکننده وابسته نباشند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: کل شرطی would، آیندهٔ will و وعدهٔ قطعی استمراری در این درس تدریس نشوند.\nاحتیاط: Let’s to meet؛ رد دعوت و سپس تأیید همان روز بدون رفع تعارض.\nنوشتن اختیاری: دعوت کوتاه با زمان و مکان خیالی بنویس و برای رد آن یک پاسخ مؤدبانهٔ جایگزین هم بده.",
+    "teachingFa": "هدف: دعوت ساده کنم، آن را قبول یا مؤدبانه رد کنم و روی زمان توافق کنم.\nبازیابی: روز/ساعت، Do you like و قهوه‌خواستن را بازیابی کن.\nواژگان هسته: invite=دعوت‌کردن؛ meet=دیدن/ملاقات‌کردن؛ together=با هم؛ busy=گرفتار؛ tomorrow=فردا؛ great=عالی\nساختار: Would you like to ...? به‌صورت دعوت؛ Let’s + فعل؛ I’d love to به‌صورت پذیرش آماده؛ Sorry, I can’t؛ Are you free ...?؛ توافق روز/ساعت.\nتلفظ: پذیرش و رد دعوت با لحن محترمانه؛ can/can’t فقط به یک تمایز صوتی شکننده وابسته نباشند.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: کل شرطی would، آیندهٔ will و وعدهٔ قطعی استمراری در این درس تدریس نشوند.\nاحتیاط: Let’s to meet؛ رد دعوت و سپس تأیید همان روز بدون رفع تعارض.\nنوشتن اختیاری: دوست خیالی تو برای سه‌شنبه دعوتت کرده است ولی وقت نداری. دعوت را مؤدبانه رد کن، چهارشنبه ساعت ۵ در کافه را پیشنهاد بده و تأیید بخواه. از طرف دوستت قبول‌کردن را فرض نکن.",
     "sentences": [
       {
         "id": "s1",
@@ -25843,7 +25887,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "See you",
-            "meaning": "شما را دیدن"
+            "meaning": "می‌بینمت / می‌بینمتان (برای خداحافظی)"
           },
           {
             "word": "Great",
@@ -26985,7 +27029,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "دیروز و برنامهٔ فردا",
     "subtitle": "یک کار سادهٔ دیروز و یک برنامهٔ فردا را با نشانهٔ زمانی روشن بگویم.",
     "situation": "دربارهٔ یک کار سادهٔ دیروز و برنامهٔ خیالی فردا با نشانهٔ زمانی روشن حرف می‌زنید.",
-    "teachingFa": "هدف: یک کار سادهٔ دیروز و یک برنامهٔ فردا را با نشانهٔ زمانی روشن بگویم.\nبازیابی: I work every day / I am working now را با yesterday و tomorrow مقایسه کن.\nواژگان هسته: yesterday=دیروز؛ tomorrow=فردا؛ last night=دیشب؛ next week=هفتهٔ بعد؛ was/were=گذشتهٔ be؛ went=گذشتهٔ go\nساختار: was/were؛ worked/studied/went در چند نمونهٔ پربسامد؛ did not + بن فعل و Did you ...? محدود؛ be going to + فعل برای برنامه. تمرین در دو گذر دیروز/فردا، نه آزمون هم‌زمان همهٔ زمان‌ها.\nتلفظ: worked /t/ و studied /d/ در نمونه‌ها؛ تفاوت went با go به‌صورت واژهٔ کامل، نه قاعدهٔ ساختگی.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: فهرست افعال بی‌قاعده، حال کامل، تفاوت‌های ظریف will/going to و داستان بلند خارج از دامنه‌اند.\nاحتیاط: Did you went / I did not worked؛ I going to؛ در تألیف نهایی واژه‌های زمان پیش از تغییر فعل تمرین شوند.\nنوشتن اختیاری: دو جمله با yesterday و دو جمله با tomorrow بنویس؛ گذشتهٔ افعال تازه لازم نیست.",
+    "teachingFa": "هدف: یک کار سادهٔ دیروز و یک برنامهٔ فردا را با نشانهٔ زمانی روشن بگویم.\nبازیابی: I work every day / I am working now را با yesterday و tomorrow مقایسه کن.\nواژگان هسته: yesterday=دیروز؛ tomorrow=فردا؛ last night=دیشب؛ next week=هفتهٔ بعد؛ was/were=گذشتهٔ be؛ went=گذشتهٔ go\nساختار: پنج گام جدا: ۱) دیروز با was/were؛ ۲) کار گذشتهٔ باقاعده با worked/studied؛ ۳) یک صورت پرتکرار went؛ ۴) پرسش/منفی گذشته با did و فعل ساده؛ ۵) برنامهٔ فردا با am/is/are going to + فعل ساده. نخست دیروز را تثبیت کن، سپس با مکث و نشانهٔ tomorrow به برنامهٔ آینده برو؛ افعال نامنظم بیشتر هدف این درس نیستند.\nتلفظ: worked /t/ و studied /d/ در نمونه‌ها؛ تفاوت went با go به‌صورت واژهٔ کامل، نه قاعدهٔ ساختگی.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: فهرست افعال بی‌قاعده، حال کامل، تفاوت‌های ظریف will/going to و داستان بلند خارج از دامنه‌اند.\nاحتیاط: Did you went / I did not worked؛ I going to؛ در تألیف نهایی واژه‌های زمان پیش از تغییر فعل تمرین شوند.\nنوشتن اختیاری: کارت خیالی: دیروز در خانه بودی و انگلیسی خواندی؛ فردا قصد داری آنا را ببینی. ابتدا دو جمله دربارهٔ دیروز بنویس و مکث کن؛ سپس یک جمله با going to دربارهٔ فردا بنویس. استفاده از فعل گذشتهٔ تازه لازم نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -27134,7 +27178,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "were",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "بودید / بودیم / بودند؛ با you، we و they"
           },
           {
             "word": "We",
@@ -27194,7 +27238,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Were",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "بودید / بودیم / بودند؛ با you، we و they"
           },
           {
             "word": "you",
@@ -27709,12 +27753,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -27734,8 +27782,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -27751,12 +27803,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -27776,8 +27832,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -27961,16 +28021,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "قصد داشتن"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
           },
           {
             "word": "I am",
             "meaning": "من هستم"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -27998,12 +28062,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "I am",
             "meaning": "من هستم"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -28027,16 +28095,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "قصد داشتن"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
           },
           {
             "word": "I am",
             "meaning": "من هستم"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -28064,12 +28136,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "I am",
             "meaning": "من هستم"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -28208,7 +28284,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "معرفی توانایی کاری ساده",
     "subtitle": "شغل، توانایی ساده و زمان در دسترس بودن را در یک آشنایی کاری بگویم.",
     "situation": "در آشنایی کاری کوتاه، شغل، یک توانایی و روز در دسترس بودن را می‌گویید؛ نه مصاحبهٔ تخصصی.",
-    "teachingFa": "هدف: شغل، توانایی ساده و زمان در دسترس بودن را در یک آشنایی کاری بگویم.\nبازیابی: شغل‌های آشنا، I work و روزهای هفته را بازیابی کن.\nواژگان هسته: job=شغل؛ shop=فروشگاه؛ computer=رایانه؛ use=استفاده‌کردن؛ speak=صحبت‌کردن؛ start=شروع‌کردن\nساختار: can/can’t + بن فعل برای توانایی؛ Can you ...?؛ I work in ...؛ available on ...؛ a + شغل. can درخواست در درس کمک اکنون با توانایی مقایسه شود.\nتلفظ: can در جملهٔ خبری ممکن است ضعیف شود؛ در سنجش can’t برای رفع ابهام متن/بافت کافی داده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مصاحبهٔ حرفه‌ای، رزومه، دستمزد/قرارداد، سابقه با present perfect و استدلال اقناعی هدف A1 نیستند.\nاحتیاط: can to use / can uses؛ عنوان قدیمی job-interview نباید به وعدهٔ آمادگی مصاحبهٔ واقعی تعبیر شود. shop assistant با ترجمهٔ فروشنده معرفی شود.\nنوشتن اختیاری: برای یک شخصیت خیالی شغل، یک توانایی و یک زمان آزاد را در سه جمله بنویس.",
+    "teachingFa": "هدف: شغل، توانایی ساده و زمان در دسترس بودن را در یک آشنایی کاری بگویم.\nبازیابی: شغل‌های آشنا، I work و روزهای هفته را بازیابی کن.\nواژگان هسته: job=شغل؛ shop=فروشگاه؛ computer=رایانه؛ use=استفاده‌کردن؛ speak=صحبت‌کردن؛ start=شروع‌کردن\nساختار: can/can’t + بن فعل برای توانایی؛ Can you ...?؛ I work in ...؛ available on ...؛ a + شغل. can درخواست در درس کمک اکنون با توانایی مقایسه شود.\nتلفظ: can در جملهٔ خبری ممکن است ضعیف شود؛ در سنجش can’t برای رفع ابهام متن/بافت کافی داده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مصاحبهٔ حرفه‌ای، رزومه، دستمزد/قرارداد، سابقه با present perfect و استدلال اقناعی هدف A1 نیستند.\nاحتیاط: can to use / can uses؛ عنوان قدیمی job-interview نباید به وعدهٔ آمادگی مصاحبهٔ واقعی تعبیر شود. shop assistant با ترجمهٔ فروشنده معرفی شود.\nنوشتن اختیاری: برای یک آشنایی کاری خیالی سه جمله بنویس: آشپزی بلدی، دوشنبه صبح می‌توانی کار کنی، یکشنبه نمی‌توانی. لازم نیست سابقهٔ کاری یا پاسخ مصاحبهٔ تخصصی بسازی.",
     "sentences": [
       {
         "id": "job-keen",
@@ -28406,16 +28482,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی کَنات وِرک آن سَندِی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "cannot",
             "meaning": "نتوانستن"
           },
           {
             "word": "Sunday",
             "meaning": "یکشنبه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -28455,16 +28535,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی کَن وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -28484,12 +28568,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -28505,16 +28593,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی کَن وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -28534,12 +28626,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -29195,16 +29291,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "دِد یو وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "you",
             "meaning": "تو / شما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Did you work on + day?"
@@ -29220,12 +29320,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
             "meaning": "تو / شما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Did you work on + day?"
@@ -29237,16 +29341,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "دِد یو وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "you",
             "meaning": "تو / شما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Did you work on + day?"
@@ -29262,12 +29370,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "you",
             "meaning": "تو / شما"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           }
         ],
         "pattern": "Did you work on + day?"
@@ -29283,12 +29395,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "صبح‌ها"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "but",
@@ -29301,6 +29413,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "not",
             "meaning": "نه؛ نشانهٔ نفی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -29324,8 +29440,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "but",
@@ -29338,6 +29454,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "not",
             "meaning": "نه؛ نشانهٔ نفی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -29357,12 +29477,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "صبح‌ها"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
+          },
+          {
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "but",
@@ -29375,6 +29495,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "not",
             "meaning": "نه؛ نشانهٔ نفی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -29398,8 +29522,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "but",
@@ -29412,6 +29536,10 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "not",
             "meaning": "نه؛ نشانهٔ نفی"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -29582,7 +29710,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "اطلاعات خیالی و فرم ساده",
     "subtitle": "یک فرم ساده را با نام، شهر، نشانی و راه تماس خیالی کامل کنم.",
     "situation": "یک فرم کوتاه با نام، شهر، نشانی و ایمیل کاملاً خیالی کامل می‌کنید.",
-    "teachingFa": "هدف: یک فرم ساده را با نام، شهر، نشانی و راه تماس خیالی کامل کنم.\nبازیابی: نام، هجی، عدد، سن و شغل را بازیابی کن.\nواژگان هسته: address=نشانی؛ email=ایمیل؛ street=خیابان؛ form=فرم؛ first name=نام کوچک؛ last name=نام خانوادگی؛ dot=نقطه؛ at=ات‌ساین در ایمیل\nساختار: What is your ...?؛ My ... is ...؛ حرف‌به‌حرف‌گویی و رقم‌ها؛ نشانی 12 Park Street؛ ایمیل نمونه با example.com. فرم الزاماً جملهٔ کامل نمی‌خواهد.\nتلفظ: dot و at در خواندن ایمیل؛ نشانی نوشتاری با خواندن رقم‌ها تطبیق داده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مدرک هویتی، گذرواژه، اطلاعات بانکی، تاریخ تولد واقعی یا بارگذاری سند درخواست نشود.\nاحتیاط: جابجایی first/last name؛ اطلاعات واقعی ضروری نیست؛ نام‌گذاری فضای ذخیره باید lessonId و sentenceId را با هم در نظر بگیرد.\nنوشتن اختیاری: فرم خیالی چهارخانه‌ای را کامل کن: First name، Last name، Address، Email. از example.com استفاده کن.",
+    "teachingFa": "هدف: یک فرم ساده را با نام، شهر، نشانی و راه تماس خیالی کامل کنم.\nبازیابی: نام، هجی، عدد، سن و شغل را بازیابی کن.\nواژگان هسته: address=نشانی؛ email=ایمیل؛ street=خیابان؛ form=فرم؛ first name=نام کوچک؛ last name=نام خانوادگی؛ dot=نقطه؛ at=ات‌ساین در ایمیل\nساختار: What is your ...?؛ My ... is ...؛ حرف‌به‌حرف‌گویی و رقم‌ها؛ نشانی 12 Park Street؛ ایمیل نمونه با example.com. فرم الزاماً جملهٔ کامل نمی‌خواهد.\nتلفظ: dot و at در خواندن ایمیل؛ نشانی نوشتاری با خواندن رقم‌ها تطبیق داده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: مدرک هویتی، گذرواژه، اطلاعات بانکی، تاریخ تولد واقعی یا بارگذاری سند درخواست نشود.\nاحتیاط: جابجایی first/last name؛ اطلاعات واقعی ضروری نیست؛ نام‌گذاری فضای ذخیره باید lessonId و sentenceId را با هم در نظر بگیرد.\nنوشتن اختیاری: اطلاعات کاملاً خیالی: نام Anna، نام خانوادگی Green، نشانی پلاک ۱۴ خیابان Park، ایمیل anna@example.com. فرم چهارخانه‌ای First name / Last name / Address / Email را کامل کن؛ جملهٔ کامل لازم نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -29803,7 +29931,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "city",
@@ -29990,7 +30118,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Smith",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "اسمیت (نام خانوادگی)"
           },
           {
             "word": "is",
@@ -30127,7 +30255,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "live",
@@ -30402,16 +30530,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی کَن وِرک آن مَندی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Monday",
             "meaning": "دوشنبه"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -30431,12 +30563,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "سه‌شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -30452,16 +30588,20 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "آی کَن وِرک آن فرایدی",
         "vocabulary": [
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
-          },
-          {
             "word": "Friday",
             "meaning": "جمعه"
           },
           {
+            "word": "work",
+            "meaning": "کارکردن"
+          },
+          {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -30481,12 +30621,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "شنبه"
           },
           {
-            "word": "work on",
-            "meaning": "روی چیزی کارکردن"
+            "word": "work",
+            "meaning": "کارکردن"
           },
           {
             "word": "can",
             "meaning": "توانستن"
+          },
+          {
+            "word": "on",
+            "meaning": "روی / در روزِ"
           },
           {
             "word": "I",
@@ -30937,7 +31081,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "پرس‌وجوی ساده برای اتاق",
     "subtitle": "یک آگهی کوتاه اتاق را بفهمم و دربارهٔ قیمت، امکانات و زمان دیدن آن سؤال کنم.",
     "situation": "آگهی متنی کوتاه اتاق را می‌خوانید و دربارهٔ اجاره، امکانات و زمان بازدید می‌پرسید.",
-    "teachingFa": "هدف: یک آگهی کوتاه اتاق را بفهمم و دربارهٔ قیمت، امکانات و زمان دیدن آن سؤال کنم.\nبازیابی: there is/are، قیمت، جای مکان و زمان قرار را بازیابی کن.\nواژگان هسته: room=اتاق؛ rent=اجاره؛ month=ماه؛ kitchen=آشپزخانه؛ bathroom=حمام/دستشویی؛ internet=اینترنت؛ included=شامل‌شده\nساختار: Is there ...?؛ How much is the rent?؛ per month به‌صورت واحد قیمت؛ Can I see ...?؛ Is ... included? قالب آماده. واحد پول در آگهی/صحنه یکسان بماند.\nتلفظ: five hundred با fifty مقایسه شود؛ per month یک واحد معنایی و صوتی باشد.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: قرارداد، حقوق مستأجر، ضمانت، مذاکرهٔ شرایط و شکایت حقوقی هدف نیستند.\nاحتیاط: ۵۰۰ و ۶۰۰ نیاز به گسترش عددهای آشنا با hundred پیش از شنیدن دارند؛ وعدهٔ آموزش قرارداد از عنوان حذف شود؛ shared=مشترک پیش از متن معرفی شود.\nنوشتن اختیاری: برای آگهی داده‌شده دو سؤال دربارهٔ اتاق و یک درخواست زمان بازدید بنویس.",
+    "teachingFa": "هدف: یک آگهی کوتاه اتاق را بفهمم و دربارهٔ قیمت، امکانات و زمان دیدن آن سؤال کنم.\nبازیابی: there is/are، قیمت، جای مکان و زمان قرار را بازیابی کن.\nواژگان هسته: room=اتاق؛ rent=اجاره؛ month=ماه؛ kitchen=آشپزخانه؛ bathroom=حمام/دستشویی؛ internet=اینترنت؛ included=شامل‌شده\nساختار: Is there ...?؛ How much is the rent?؛ per month به‌صورت واحد قیمت؛ Can I see ...?؛ Is ... included? قالب آماده. واحد پول در آگهی/صحنه یکسان بماند.\nتلفظ: five hundred با fifty مقایسه شود؛ per month یک واحد معنایی و صوتی باشد.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: قرارداد، حقوق مستأجر، ضمانت، مذاکرهٔ شرایط و شکایت حقوقی هدف نیستند.\nاحتیاط: ۵۰۰ و ۶۰۰ نیاز به گسترش عددهای آشنا با hundred پیش از شنیدن دارند؛ وعدهٔ آموزش قرارداد از عنوان حذف شود؛ shared=مشترک پیش از متن معرفی شود.\nنوشتن اختیاری: آگهی خیالی: یک اتاق نزدیک ایستگاه؛ آشپزخانه دارد؛ حمام مشترک است. اجاره و ساعت بازدید نوشته نشده‌اند. یک پیام کوتاه بنویس: اجارهٔ ماهانه و زمان بازدید را بپرس؛ دوباره دربارهٔ داشتن آشپزخانه سؤال نکن.",
     "sentences": [
       {
         "id": "home-vacant",
@@ -31023,16 +31167,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ایز ذِر اِ کِچَن",
         "vocabulary": [
           {
+            "word": "Is there",
+            "meaning": "آیا ... هست؟ (برای مفرد)"
+          },
+          {
             "word": "kitchen",
             "meaning": "آشپزخانه"
-          },
-          {
-            "word": "there",
-            "meaning": "آنجا"
-          },
-          {
-            "word": "Is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -31164,12 +31304,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "حمام/دستشویی"
           },
           {
-            "word": "there",
-            "meaning": "آنجا"
-          },
-          {
-            "word": "Is",
-            "meaning": "است"
+            "word": "Is there",
+            "meaning": "آیا ... هست؟ (برای مفرد)"
           },
           {
             "word": "a",
@@ -31316,16 +31452,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ایز ذِر اِ تِیبَل",
         "vocabulary": [
           {
+            "word": "Is there",
+            "meaning": "آیا ... هست؟ (برای مفرد)"
+          },
+          {
             "word": "table",
             "meaning": "میز"
-          },
-          {
-            "word": "there",
-            "meaning": "آنجا"
-          },
-          {
-            "word": "Is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -31341,16 +31473,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ایز ذِر اِ چِر",
         "vocabulary": [
           {
+            "word": "Is there",
+            "meaning": "آیا ... هست؟ (برای مفرد)"
+          },
+          {
             "word": "chair",
             "meaning": "صندلی"
-          },
-          {
-            "word": "there",
-            "meaning": "آنجا"
-          },
-          {
-            "word": "Is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -31366,16 +31494,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ایز ذِر اِ فُون",
         "vocabulary": [
           {
+            "word": "Is there",
+            "meaning": "آیا ... هست؟ (برای مفرد)"
+          },
+          {
             "word": "phone",
             "meaning": "گوشی"
-          },
-          {
-            "word": "there",
-            "meaning": "آنجا"
-          },
-          {
-            "word": "Is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -31391,16 +31515,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ایز ذِر اِ بوک",
         "vocabulary": [
           {
-            "word": "there",
-            "meaning": "آنجا"
+            "word": "Is there",
+            "meaning": "آیا ... هست؟ (برای مفرد)"
           },
           {
             "word": "book",
             "meaning": "کتاب"
-          },
-          {
-            "word": "Is",
-            "meaning": "است"
           },
           {
             "word": "a",
@@ -31960,20 +32080,16 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر آر تو چِرز اِن ذِ روم",
         "vocabulary": [
           {
+            "word": "There are",
+            "meaning": "وجود دارند / هستند (برای جمع)"
+          },
+          {
             "word": "chairs",
             "meaning": "صندلی‌ها"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
-          },
-          {
             "word": "room",
             "meaning": "اتاق"
-          },
-          {
-            "word": "are",
-            "meaning": "هستید / هستند"
           },
           {
             "word": "two",
@@ -31993,12 +32109,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر آر ثری چِرز اِن ذِ روم",
         "vocabulary": [
           {
-            "word": "chairs",
-            "meaning": "صندلی‌ها"
+            "word": "There are",
+            "meaning": "وجود دارند / هستند (برای جمع)"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "chairs",
+            "meaning": "صندلی‌ها"
           },
           {
             "word": "three",
@@ -32007,10 +32123,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "room",
             "meaning": "اتاق"
-          },
-          {
-            "word": "are",
-            "meaning": "هستید / هستند"
           },
           {
             "word": "in",
@@ -32026,12 +32138,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر آر فار چِرز اِن ذِ روم",
         "vocabulary": [
           {
-            "word": "chairs",
-            "meaning": "صندلی‌ها"
+            "word": "There are",
+            "meaning": "وجود دارند / هستند (برای جمع)"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "chairs",
+            "meaning": "صندلی‌ها"
           },
           {
             "word": "four",
@@ -32040,10 +32152,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "room",
             "meaning": "اتاق"
-          },
-          {
-            "word": "are",
-            "meaning": "هستید / هستند"
           },
           {
             "word": "in",
@@ -32059,12 +32167,12 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر آر فایو چِرز اِن ذِ روم",
         "vocabulary": [
           {
-            "word": "chairs",
-            "meaning": "صندلی‌ها"
+            "word": "There are",
+            "meaning": "وجود دارند / هستند (برای جمع)"
           },
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "chairs",
+            "meaning": "صندلی‌ها"
           },
           {
             "word": "five",
@@ -32073,10 +32181,6 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           {
             "word": "room",
             "meaning": "اتاق"
-          },
-          {
-            "word": "are",
-            "meaning": "هستید / هستند"
           },
           {
             "word": "in",
@@ -32435,7 +32539,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "سفر و بلیت بین‌شهری",
     "subtitle": "بلیت بین‌شهری با مقصد و روز مشخص بخواهم و زمان رفت‌وبرگشت را بررسی کنم.",
     "situation": "برای سفر بین‌شهری بلیت رفت‌وبرگشت با مقصد و روز مشخص می‌خواهید.",
-    "teachingFa": "هدف: بلیت بین‌شهری با مقصد و روز مشخص بخواهم و زمان رفت‌وبرگشت را بررسی کنم.\nبازیابی: بلیت شهری، روز/ساعت و برنامهٔ tomorrow را بازیابی کن.\nواژگان هسته: single=یک‌طرفه؛ return=رفت‌وبرگشت؛ journey=سفر؛ arrive=رسیدن؛ leave=حرکت‌کردن؛ tomorrow=فردا\nساختار: A single/return to ...؛ on/at؛ What time does ... arrive?؛ I am going to travel ...؛ ترجیح واژگانی British single/return همراه یادداشت one-way/round-trip فقط برای تشخیص.\nتلفظ: single/return و leave/arrive در جمله؛ مدل صوتی مقصدهای Leeds/London قبل از شنیدن.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: قوانین ویزا، بار مجاز، تعویض/استرداد و مشکل اتصال پرواز هدف این درس نیستند.\nاحتیاط: خلط arrive/leave؛ departure=حرکت و arrival=رسیدن پیش از خواندن آموزش داده شوند؛ مقصد و روز برگشت در صحنه ناسازگار نشوند.\nنوشتن اختیاری: درخواست بلیت با مقصد، روز رفت و روز برگشت خیالی بنویس.",
+    "teachingFa": "هدف: بلیت بین‌شهری با مقصد و روز مشخص بخواهم و زمان رفت‌وبرگشت را بررسی کنم.\nبازیابی: بلیت شهری، روز/ساعت و برنامهٔ tomorrow را بازیابی کن.\nواژگان هسته: single=یک‌طرفه؛ return=رفت‌وبرگشت؛ journey=سفر؛ arrive=رسیدن؛ leave=حرکت‌کردن؛ tomorrow=فردا\nساختار: A single/return to ...؛ on/at؛ What time does ... arrive?؛ I am going to travel ...؛ ترجیح واژگانی British single/return همراه یادداشت one-way/round-trip فقط برای تشخیص.\nتلفظ: single/return و leave/arrive در جمله؛ مدل صوتی مقصدهای Leeds/London قبل از شنیدن.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: قوانین ویزا، بار مجاز، تعویض/استرداد و مشکل اتصال پرواز هدف این درس نیستند.\nاحتیاط: خلط arrive/leave؛ departure=حرکت و arrival=رسیدن پیش از خواندن آموزش داده شوند؛ مقصد و روز برگشت در صحنه ناسازگار نشوند.\nنوشتن اختیاری: سفر خیالی: رفت از لندن به Leeds روز Monday؛ برگشت روز Tuesday. درخواست بلیت رفت‌وبرگشت با مقصد و هر دو روز بنویس؛ سپس ساعت حرکت قطار رفت را بپرس چون روی کارت نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -32489,7 +32593,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s3",
         "en": "What time does the train leave?",
         "fa": "قطار چه ساعتی حرکت می‌کند؟",
-        "pronunciation": "وَت تایم داز ذِ ترِین لیو",
+        "pronunciation": "وَت تایم دَز ذِ ترِین لیو",
         "vocabulary": [
           {
             "word": "What time",
@@ -32497,7 +32601,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "leave",
-            "meaning": "گذاشتن در leave a message"
+            "meaning": "حرکت‌کردن (قطار یا اتوبوس)"
           },
           {
             "word": "train",
@@ -32534,7 +32638,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "id": "s5",
         "en": "What time does it arrive?",
         "fa": "چه ساعتی می‌رسد؟",
-        "pronunciation": "وَت تایم داز اِت اِرایو",
+        "pronunciation": "وَت تایم دَز اِت اِرایو",
         "vocabulary": [
           {
             "word": "What time",
@@ -32592,7 +32696,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "please",
@@ -32694,7 +32798,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "please",
@@ -32768,7 +32872,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "York",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "یورک (شهر)"
           },
           {
             "word": "to",
@@ -33135,7 +33239,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "York",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "یورک (شهر)"
           },
           {
             "word": "to",
@@ -33510,7 +33614,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "return",
@@ -33533,7 +33637,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "یک"
           }
         ],
-        "pattern": "I am going to + place; I would like ..."
+        "pattern": "I am going to + verb; I would like + noun"
       },
       {
         "id": "travel-mobile-data",
@@ -33578,7 +33682,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "یک"
           }
         ],
-        "pattern": "I am going to + place; I would like ..."
+        "pattern": "I am going to + verb; I would like + noun"
       },
       {
         "id": "travel-map-airport",
@@ -33619,7 +33723,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "یک"
           }
         ],
-        "pattern": "I am going to + place; I would like ..."
+        "pattern": "I am going to + verb; I would like + noun"
       },
       {
         "id": "travel-flight-number",
@@ -33660,7 +33764,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "یک"
           }
         ],
-        "pattern": "I am going to + place; I would like ..."
+        "pattern": "I am going to + verb; I would like + noun"
       },
       {
         "id": "travel-direct-flight",
@@ -33824,7 +33928,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "ورود و درخواست ساده در هتل",
     "subtitle": "رزرو خیالی را معرفی کنم، شمارهٔ اتاق و ساعت صبحانه را بپرسم و درخواست کوتاه بگویم.",
     "situation": "با رزرو خیالی وارد هتل می‌شوید و شمارهٔ اتاق، ساعت صبحانه و حوله می‌خواهید.",
-    "teachingFa": "هدف: رزرو خیالی را معرفی کنم، شمارهٔ اتاق و ساعت صبحانه را بپرسم و درخواست کوتاه بگویم.\nبازیابی: نام، عدد اتاق، امکانات و ساعت را بازیابی کن.\nواژگان هسته: booking=رزرو؛ night=شب؛ key=کلید؛ breakfast=صبحانه؛ towel=حوله؛ reception=پذیرش\nساختار: I have a booking؛ for two nights؛ What time is ...?؛ Can I have ...? درخواست مؤدبانه؛ there is/isn’t برای یک مشکل ساده، نه شکایت تفصیلی.\nتلفظ: booking و breakfast با تکیهٔ درست؛ room twelve با room twenty اشتباه نشود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: پرداخت شرکتی، جریمه، مذاکرهٔ جبران خسارت و پیش‌پرداخت حقوقی لازم نیستند.\nاحتیاط: عدم تمایز two nights/two rooms؛ ground floor=طبقهٔ همکف پیش از خواندن معرفی شود؛ نوبت چهارم صحنه سؤال باز طبیعی است، نه پاسخ‌گیری اجباری خارج از متن.\nنوشتن اختیاری: برای پذیرش یک پیام کوتاه بنویس: شمارهٔ اتاق خیالی و درخواست حوله.",
+    "teachingFa": "هدف: رزرو خیالی را معرفی کنم، شمارهٔ اتاق و ساعت صبحانه را بپرسم و درخواست کوتاه بگویم.\nبازیابی: نام، عدد اتاق، امکانات و ساعت را بازیابی کن.\nواژگان هسته: booking=رزرو؛ night=شب؛ key=کلید؛ breakfast=صبحانه؛ towel=حوله؛ reception=پذیرش\nساختار: I have a booking؛ for two nights؛ What time is ...?؛ Can I have ...? درخواست مؤدبانه؛ there is/isn’t برای یک مشکل ساده، نه شکایت تفصیلی.\nتلفظ: booking و breakfast با تکیهٔ درست؛ room twelve با room twenty اشتباه نشود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: پرداخت شرکتی، جریمه، مذاکرهٔ جبران خسارت و پیش‌پرداخت حقوقی لازم نیستند.\nاحتیاط: عدم تمایز two nights/two rooms؛ ground floor=طبقهٔ همکف پیش از خواندن معرفی شود؛ نوبت چهارم صحنه سؤال باز طبیعی است، نه پاسخ‌گیری اجباری خارج از متن.\nنوشتن اختیاری: رزرو خیالی تو به نام Ben Lee، اتاق ۱۲ است. در اتاق حوله نیست. پیام کوتاهی برای پذیرش بنویس: خودت و اتاق را مشخص کن، مشکل حوله را بگو و مؤدبانه حوله بخواه.",
     "sentences": [
       {
         "id": "s1",
@@ -34029,8 +34133,8 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "pronunciation": "ذِر ایز نو تاوَل اِن مای روم",
         "vocabulary": [
           {
-            "word": "There",
-            "meaning": "آنجا"
+            "word": "There is no",
+            "meaning": "وجود ندارد / نیست (برای مفرد)"
           },
           {
             "word": "towel",
@@ -34045,19 +34149,11 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
             "meaning": "داخل / در"
           },
           {
-            "word": "is",
-            "meaning": "است"
-          },
-          {
             "word": "my",
             "meaning": "مال من"
-          },
-          {
-            "word": "no",
-            "meaning": "نه"
           }
         ],
-        "pattern": "There is + singular noun"
+        "pattern": "There is no + singular noun"
       },
       {
         "id": "s9",
@@ -34750,7 +34846,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Smith",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "اسمیت (نام خانوادگی)"
           },
           {
             "word": "is",
@@ -35365,7 +35461,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "تماس و پیام کوتاه",
     "subtitle": "خودم را در تماس معرفی کنم و پیامی کوتاه با زمان تماس مجدد بنویسم.",
     "situation": "در تماس خود را معرفی می‌کنید و برای فردی که حاضر نیست پیام کوتاه می‌گذارید.",
-    "teachingFa": "هدف: خودم را در تماس معرفی کنم و پیامی کوتاه با زمان تماس مجدد بنویسم.\nبازیابی: Can you call me? و ساعت و درخواست تکرار را بازیابی کن.\nواژگان هسته: call=تماس‌گرفتن؛ message=پیام؛ later=بعداً؛ busy=گرفتار؛ number=شماره؛ leave=گذاشتن در leave a message\nساختار: This is ... speaking به‌صورت قالب تماس؛ Can I speak to ...?؛ Can I leave a message?؛ Please call me at ...؛ is working now برای علت در دسترس نبودن.\nتلفظ: This is ... speaking به‌صورت گروه؛ نام و ساعت در پیام واضح باشند، نه وابسته به کیفیت واقعی خط تلفن.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: نقل‌قول غیرمستقیم، تماس اداری پیچیده و ضبط/ارسال اطلاعات واقعی هدف نیستند.\nاحتیاط: I am Sara به‌عنوان تنها شکل درست تحمیل نشود؛ در شنیدن/پاسخ نقش تماس‌گیرنده و گیرنده ثابت بماند؛ ask him to یک قالب محدود پایانی است.\nنوشتن اختیاری: پیام خیالی سه‌جمله‌ای بنویس: نام، جای فعلی و زمان تماس؛ شمارهٔ واقعی لازم نیست.",
+    "teachingFa": "هدف: خودم را در تماس معرفی کنم و پیامی کوتاه با زمان تماس مجدد بنویسم.\nبازیابی: Can you call me? و ساعت و درخواست تکرار را بازیابی کن.\nواژگان هسته: call=تماس‌گرفتن؛ message=پیام؛ later=بعداً؛ busy=گرفتار؛ number=شماره؛ leave=گذاشتن در leave a message\nساختار: This is ... speaking به‌صورت قالب تماس؛ Can I speak to ...?؛ Can I leave a message?؛ Please call me at ...؛ is working now برای علت در دسترس نبودن.\nتلفظ: This is ... speaking به‌صورت گروه؛ نام و ساعت در پیام واضح باشند، نه وابسته به کیفیت واقعی خط تلفن.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: نقل‌قول غیرمستقیم، تماس اداری پیچیده و ضبط/ارسال اطلاعات واقعی هدف نیستند.\nاحتیاط: I am Sara به‌عنوان تنها شکل درست تحمیل نشود؛ در شنیدن/پاسخ نقش تماس‌گیرنده و گیرنده ثابت بماند؛ ask him to یک قالب محدود پایانی است.\nنوشتن اختیاری: در تماس خیالی Sara حاضر نیست. تو Tim هستی، الان در ایستگاه هستی و می‌خواهی Sara بعد از ساعت ۶ با تو تماس بگیرد. یک پیام کوتاه برای منتقل‌شدن به Sara بنویس؛ شمارهٔ واقعی لازم نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -35448,7 +35544,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "leave a message",
-            "meaning": "پیام گذاشتن"
+            "meaning": "پیام‌گذاشتن"
           },
           {
             "word": "Can",
@@ -36766,7 +36862,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "خدمات ساده و ادارهٔ پست",
     "subtitle": "برای ارسال یک نامه کمک بخواهم، مقصد و قیمت را بفهمم و یک فرم ساده را بخوانم.",
     "situation": "در ادارهٔ پست می‌خواهید یک نامه بفرستید و مقصد، تمبر و فرم را بررسی می‌کنید.",
-    "teachingFa": "هدف: برای ارسال یک نامه کمک بخواهم، مقصد و قیمت را بفهمم و یک فرم ساده را بخوانم.\nبازیابی: نشانی، قیمت، Please و Where is را بازیابی کن.\nواژگان هسته: letter=نامه؛ stamp=تمبر؛ post office=ادارهٔ پست؛ send=فرستادن؛ parcel=بسته؛ form=فرم\nساختار: I would like to send ...؛ to + مقصد؛ How much is ...?؛ Do I need ...?؛ Please write ...؛ مرور can برای کمک. stamp=تمبر با price اشتباه نشود.\nتلفظ: letter و later در بافت خود؛ مقصد پس از to روشن شنیده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: بانکداری، بیمه، ترخیص گمرکی، ردیابی حقوقی و همهٔ خدمات شهر در یک درس جمع نشوند.\nاحتیاط: send to با جهت from اشتباه نشود؛ here در متن به خانهٔ فرم نمایش‌داده‌شده اشاره کند، نه تصویر غایب.\nنوشتن اختیاری: برای نامهٔ خیالی نام و نشانی گیرنده را بنویس و یک پرسش دربارهٔ هزینه اضافه کن.",
+    "teachingFa": "هدف: برای ارسال یک نامه کمک بخواهم، مقصد و قیمت را بفهمم و یک فرم ساده را بخوانم.\nبازیابی: نشانی، قیمت، Please و Where is را بازیابی کن.\nواژگان هسته: letter=نامه؛ stamp=تمبر؛ post office=ادارهٔ پست؛ send=فرستادن؛ parcel=بسته؛ form=فرم\nساختار: I would like to send ...؛ to + مقصد؛ How much is ...?؛ Do I need ...?؛ Please write ...؛ مرور can برای کمک. stamp=تمبر با price اشتباه نشود.\nتلفظ: letter و later در بافت خود؛ مقصد پس از to روشن شنیده شود.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: بانکداری، بیمه، ترخیص گمرکی، ردیابی حقوقی و همهٔ خدمات شهر در یک درس جمع نشوند.\nاحتیاط: send to با جهت from اشتباه نشود؛ here در متن به خانهٔ فرم نمایش‌داده‌شده اشاره کند، نه تصویر غایب.\nنوشتن اختیاری: نامهٔ خیالی برای Anna Green در ۱۲ Park Street در شهر York است. نشانی گیرنده را بنویس و در ادارهٔ پست هزینهٔ فرستادن همین نامه را بپرس؛ نشانی واقعی لازم نیست.",
     "sentences": [
       {
         "id": "s1",
@@ -36809,7 +36905,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
         "vocabulary": [
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "please",
@@ -37150,7 +37246,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "York",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "یورک (شهر)"
           },
           {
             "word": "to",
@@ -37919,7 +38015,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "London",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "لندن (شهر)"
           },
           {
             "word": "stamp",
@@ -38107,7 +38203,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "on",
@@ -38144,7 +38240,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "Ben",
@@ -38189,7 +38285,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "on",
@@ -38226,7 +38322,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
           },
           {
             "word": "Then",
-            "meaning": "واژهٔ پرتکرار"
+            "meaning": "سپس / آن موقع"
           },
           {
             "word": "Tim",
@@ -38285,7 +38381,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
     "title": "بیان حال و درخواست کمک در داروخانه",
     "subtitle": "یک علامت ساده را بگویم و درخواست کمک زبانی کنم، بدون تشخیص یا توصیهٔ درمانی.",
     "situation": "در داروخانه علامت خیالی ساده‌ای را می‌گویید و کمک زبانی می‌خواهید؛ تشخیص و دارو هدف نیستند.",
-    "teachingFa": "هدف: یک علامت ساده را بگویم و درخواست کمک زبانی کنم، بدون تشخیص یا توصیهٔ درمانی.\nبازیابی: I am tired، I need help و وقت ملاقات و تماس را بازیابی کن.\nواژگان هسته: headache=سردرد؛ pain=درد؛ ill=بیمار؛ doctor=پزشک؛ pharmacy=داروخانه؛ help=کمک؛ water=آب\nساختار: I have a headache؛ My ... hurts به‌صورت قالب محدود؛ I feel ...؛ Can you help me?؛ Where is ...?؛ نیاز فوری با I need help now. تولید جملهٔ علائم خیالی، نه دادهٔ حساس واقعی.\nتلفظ: headache و pharmacy/pharmacist پیش از سنجش شنیده شوند؛ فهم علامت هدف است، نه ارزیابی پزشکی.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: تشخیص، دوز، نام دارو، تضمین درمان و توصیهٔ ایمنی پزشکی نوشته نشود؛ درس جای خدمات درمانی نیست.\nاحتیاط: I have headache بدون a در مدل هدف؛ stomach=شکم و pharmacist=داروساز پیش از نمونه/صحنه معرفی شوند؛ پاسخ زبانی هرگز نمرهٔ سلامت تلقی نشود.\nنوشتن اختیاری: برای یک شخصیت خیالی دو جمله دربارهٔ حال او و یک درخواست کمک بنویس؛ نام دارو لازم نیست.",
+    "teachingFa": "هدف: یک علامت ساده را بگویم و درخواست کمک زبانی کنم، بدون تشخیص یا توصیهٔ درمانی.\nبازیابی: I am tired، I need help و وقت ملاقات و تماس را بازیابی کن.\nواژگان هسته: headache=سردرد؛ pain=درد؛ ill=بیمار؛ doctor=پزشک؛ pharmacy=داروخانه؛ help=کمک؛ water=آب\nساختار: I have a headache؛ My ... hurts به‌صورت قالب محدود؛ I feel ...؛ Can you help me?؛ Where is ...?؛ نیاز فوری با I need help now. تولید جملهٔ علائم خیالی، نه دادهٔ حساس واقعی.\nتلفظ: headache و pharmacy/pharmacist پیش از سنجش شنیده شوند؛ فهم علامت هدف است، نه ارزیابی پزشکی.\nآوانویسی فارسی تقریبی است؛ شنیدن صوت مرجع است.\nمرز این درس: تشخیص، دوز، نام دارو، تضمین درمان و توصیهٔ ایمنی پزشکی نوشته نشود؛ درس جای خدمات درمانی نیست.\nاحتیاط: I have headache بدون a در مدل هدف؛ stomach=شکم و pharmacist=داروساز پیش از نمونه/صحنه معرفی شوند؛ پاسخ زبانی هرگز نمرهٔ سلامت تلقی نشود.\nنوشتن اختیاری: موقعیت کاملاً خیالی: سردرد داری و توضیح مخاطب را خوب نمی‌فهمی. سه عبارت کوتاه بنویس: علامت را بگو، بگو متوجه نمی‌شوی و درخواست آهسته‌گویی کن. تشخیص، نام دارو یا مقدار مصرف ننویس.",
     "sentences": [
       {
         "id": "s1",
@@ -39702,7 +39798,7 @@ export const ENGLISH_A1_CONTENT: Record<string, Pick<SentenceLesson, 'id' | 'ord
 export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   "foundation-introducing-yourself": [
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:check-1",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "Hello, my name is Sara.",
@@ -39717,7 +39813,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "سلام، اسم من سارا است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:check-2",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:check-2",
       "skill": "grammar",
       "prompt": "I ___ from Iran.",
       "options": [
@@ -39731,7 +39827,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "با I در معرفی از am استفاده می‌شود."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:listening",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:listening",
       "skill": "listening",
       "prompt": "آنا اهل کدام کشور است؟",
       "audio": "Hello, my name is Anna. I am from Spain. I live in London.",
@@ -39746,7 +39842,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Spain"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:reading",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:reading",
       "skill": "reading",
       "prompt": "رضا در چه شهری زندگی می‌کند؟",
       "source": "My name is Reza. I am from Iran. I live in Leeds.",
@@ -39761,7 +39857,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Leeds"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:write-1",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "اسم شما چیست؟",
@@ -39771,7 +39867,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "What is your name? — اسم شما چیست؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:write-2",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "شما اهل کجا هستید؟",
@@ -39781,7 +39877,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Where are you from? — شما اهل کجا هستید؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:review-1",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I live in Toronto.",
@@ -39796,7 +39892,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I live in Toronto. — من در تورنتو زندگی می‌کنم."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-introducing-yourself:review-2",
+      "id": "en-a1-sequenced-v2:foundation-introducing-yourself:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "My name is Ben. I am from Iran.",
@@ -39813,7 +39909,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-alphabet-and-spelling": [
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:check-1",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "My first name is Sara.",
@@ -39828,7 +39924,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "نام کوچک من سارا است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:check-2",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:check-2",
       "skill": "grammar",
       "prompt": "برای فهمیدن املای نام کدام درخواست درست است؟",
       "options": [
@@ -39842,10 +39938,10 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "spell دربارهٔ هجی است، نه سن یا کشور."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:listening",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:listening",
       "skill": "listening",
       "prompt": "کدام نام هجی شد؟",
-      "audio": "My name is Tim. T-I-M.",
+      "audio": "T. I. M.",
       "options": [
         "Tom",
         "Ben",
@@ -39857,7 +39953,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Tim"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:reading",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:reading",
       "skill": "reading",
       "prompt": "نام خانوادگی چیست؟",
       "source": "First name: Sara. Last name: Ali.",
@@ -39872,7 +39968,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Ali"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:write-1",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "نام خانوادگی من علی است.",
@@ -39882,7 +39978,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "My last name is Ali. — نام خانوادگی من علی است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:write-2",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "لطفاً دوباره آن را هجی کنید.",
@@ -39892,7 +39988,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please spell it again. — لطفاً دوباره آن را هجی کنید."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:review-1",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "My last name is Smith.",
@@ -39907,7 +40003,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "My last name is Smith. — نام خانوادگی من اسمیت است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-alphabet-and-spelling:review-2",
+      "id": "en-a1-sequenced-v2:foundation-alphabet-and-spelling:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Please spell Ben slowly.",
@@ -39924,7 +40020,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-asking-for-help": [
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:check-1",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "Excuse me.",
@@ -39939,7 +40035,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "ببخشید. (برای جلب توجه)"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:check-2",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:check-2",
       "skill": "grammar",
       "prompt": "برای درخواست آهسته‌گویی کدام جمله مناسب است؟",
       "options": [
@@ -39953,7 +40049,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "درخواست باید دقیقاً عمل مورد نیاز را روشن کند."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:listening",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:listening",
       "skill": "listening",
       "prompt": "گوینده از مخاطب چه می‌خواهد؟",
       "audio": "Please speak slowly. I do not understand.",
@@ -39968,7 +40064,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Speak slowly."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:reading",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:reading",
       "skill": "reading",
       "prompt": "کدام واژه باید تکرار شود؟",
       "source": "New word: city. City means شهر. Please say city again.",
@@ -39983,7 +40079,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: city"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:write-1",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "می‌توانید لطفاً به من کمک کنید؟",
@@ -39993,7 +40089,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Can you help me, please? — می‌توانید لطفاً به من کمک کنید؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:write-2",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "لطفاً آن را دوباره بگویید.",
@@ -40003,7 +40099,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please say that again. — لطفاً آن را دوباره بگویید."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:review-1",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Can you spell Tim, please?",
@@ -40018,7 +40114,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Can you spell Tim, please? — می‌توانید لطفاً تیم را هجی کنید؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-asking-for-help:review-2",
+      "id": "en-a1-sequenced-v2:foundation-asking-for-help:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Excuse me, Ben. Please speak slowly.",
@@ -40035,7 +40131,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-pronouns-and-be": [
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:check-1",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I am a student.",
@@ -40050,7 +40146,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من دانشجو هستم."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:check-2",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:check-2",
       "skill": "grammar",
       "prompt": "They ___ ready.",
       "options": [
@@ -40064,7 +40160,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "با they از are استفاده می‌شود."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:listening",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:listening",
       "skill": "listening",
       "prompt": "چه کسی معلم است؟",
       "audio": "Anna is a teacher. Ben and Tim are students.",
@@ -40079,7 +40175,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Anna"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:reading",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:reading",
       "skill": "reading",
       "prompt": "She به چه کسی اشاره می‌کند؟",
       "source": "I am Sara. This is Anna. She is my teacher. We are ready.",
@@ -40094,7 +40190,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Anna"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:write-1",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "او معلم من است. (زن)",
@@ -40104,7 +40200,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "She is my teacher. — او معلم من است. (زن)"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:write-2",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "آیا شما دانشجو هستید؟",
@@ -40114,7 +40210,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Are you a student? — آیا شما دانشجو هستید؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:review-1",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "She is at home.",
@@ -40129,7 +40225,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "She is at home. — او در خانه است. (زن)"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-pronouns-and-be:review-2",
+      "id": "en-a1-sequenced-v2:foundation-pronouns-and-be:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Is Ben a student?",
@@ -40146,7 +40242,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-numbers-and-contact": [
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:check-1",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I am twenty-one.",
@@ -40161,7 +40257,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من بیست‌ویک سال دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:check-2",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:check-2",
       "skill": "grammar",
       "prompt": "عدد ۳۰ کدام است؟",
       "options": [
@@ -40175,7 +40271,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "thirteen برابر ۱۳ است؛ thirty برابر ۳۰."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:listening",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:listening",
       "skill": "listening",
       "prompt": "کد چهاررقمی چیست؟",
       "audio": "My number is zero seven two four.",
@@ -40190,7 +40286,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: 0724"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:reading",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:reading",
       "skill": "reading",
       "prompt": "آنا چند سال دارد؟",
       "source": "Name: Anna. Age: 30. Contact code: 0712.",
@@ -40205,7 +40301,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: 30"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:write-1",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "چند سال دارید؟",
@@ -40215,7 +40311,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "How old are you? — چند سال دارید؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:write-2",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "شمارهٔ تلفن شما چیست؟",
@@ -40225,7 +40321,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "What is your phone number? — شمارهٔ تلفن شما چیست؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:review-1",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "He is eighty years old.",
@@ -40240,7 +40336,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "He is eighty years old. — او هشتاد سال دارد. (مرد)"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-numbers-and-contact:review-2",
+      "id": "en-a1-sequenced-v2:foundation-numbers-and-contact:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I am twenty-four. How old are you?",
@@ -40257,7 +40353,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-family-and-possessions": [
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:check-1",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "This is my sister, Anna.",
@@ -40272,7 +40368,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "این خواهر من، آنا است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:check-2",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:check-2",
       "skill": "grammar",
       "prompt": "Anna is my sister. ___ name is Anna.",
       "options": [
@@ -40286,7 +40382,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "در این کارت آنا خواهر معرفی شده است؛ her به مالک برمی‌گردد."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:listening",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:listening",
       "skill": "listening",
       "prompt": "کیف متعلق به چه کسی است؟",
       "audio": "This is my brother, Tim. His bag is here.",
@@ -40301,7 +40397,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Tim"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:reading",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:reading",
       "skill": "reading",
       "prompt": "کتاب مال چه کسی است؟",
       "source": "Ben has a sister. Her name is Anna. This is Anna’s book.",
@@ -40316,7 +40412,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Anna"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:write-1",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "اسم او آنا است.",
@@ -40326,7 +40422,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Her name is Anna. — اسم او آنا است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:write-2",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "این کتاب شماست؟",
@@ -40336,7 +40432,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Is this your book? — این کتاب شماست؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:review-1",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "This is her bag.",
@@ -40351,7 +40447,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "This is her bag. — این کیف اوست. (زن)"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-family-and-possessions:review-2",
+      "id": "en-a1-sequenced-v2:foundation-family-and-possessions:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "My sister is twenty. She is a student.",
@@ -40368,7 +40464,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-objects-and-places": [
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:check-1",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "Where is my book?",
@@ -40383,7 +40479,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "کتاب من کجاست؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:check-2",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:check-2",
       "skill": "grammar",
       "prompt": "There ___ two chairs in the room.",
       "options": [
@@ -40397,7 +40493,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "با دو صندلی از there are استفاده می‌کنیم."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:listening",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:listening",
       "skill": "listening",
       "prompt": "کلید کجاست؟",
       "audio": "The book is on the table. The key is in the bag.",
@@ -40412,7 +40508,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: In the bag."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:reading",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:reading",
       "skill": "reading",
       "prompt": "چند کتاب روی میز است؟",
       "source": "There is a table in the room. Two books are on the table. A bag is under it.",
@@ -40427,7 +40523,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Two."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:write-1",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "روی میز است.",
@@ -40437,7 +40533,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "It is on the table. — روی میز است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:write-2",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "این‌ها کتاب‌های من هستند.",
@@ -40447,7 +40543,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "These are my books. — این‌ها کتاب‌های من هستند."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:review-1",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Where is the bag?",
@@ -40462,7 +40558,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Where is the bag? — کیف کجاست؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-objects-and-places:review-2",
+      "id": "en-a1-sequenced-v2:foundation-objects-and-places:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "There is a pen on the chair.",
@@ -40479,7 +40575,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-time-and-calendar": [
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:check-1",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "What time is it?",
@@ -40494,7 +40590,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "ساعت چند است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:check-2",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:check-2",
       "skill": "grammar",
       "prompt": "The class is ___ Monday.",
       "options": [
@@ -40508,7 +40604,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "برای روز هفته on به کار می‌رود."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:listening",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:listening",
       "skill": "listening",
       "prompt": "کلاس چه ساعتی است؟",
       "audio": "The class is on Tuesday at nine thirty in the morning.",
@@ -40523,7 +40619,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: 9:30 a.m."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:reading",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:reading",
       "skill": "reading",
       "prompt": "کلاس در کدام اتاق است؟",
       "source": "English class: Monday, 3 May, 10:00 a.m. Room 2.",
@@ -40538,7 +40634,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Room 2."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:write-1",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "ساعت نه و نیم است.",
@@ -40548,7 +40644,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "It is nine thirty. — ساعت نه و نیم است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:write-2",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "امروز سوم ماه مه است.",
@@ -40558,7 +40654,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Today is the third of May. — امروز سوم ماه مه است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:review-1",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "The class is in April.",
@@ -40573,7 +40669,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "The class is in April. — کلاس در ماه آوریل است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-time-and-calendar:review-2",
+      "id": "en-a1-sequenced-v2:foundation-time-and-calendar:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "The class is on Tuesday at ten.",
@@ -40590,7 +40686,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-everyday-routine": [
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:check-1",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I get up at seven.",
@@ -40605,7 +40701,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من ساعت هفت بیدار می‌شوم."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:check-2",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:check-2",
       "skill": "grammar",
       "prompt": "Does she ___ on Sunday?",
       "options": [
@@ -40619,7 +40715,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "بعد از does بن فعل بدون s می‌آید."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:listening",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:listening",
       "skill": "listening",
       "prompt": "آنا کار را چه ساعتی شروع می‌کند؟",
       "audio": "Anna gets up at seven. She starts work at nine.",
@@ -40634,7 +40730,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: At nine."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:reading",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:reading",
       "skill": "reading",
       "prompt": "بن چه روزی درس نمی‌خواند؟",
       "source": "Ben studies on Monday and Tuesday. He does not study on Sunday.",
@@ -40649,7 +40745,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Sunday."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:write-1",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "من در خانه صبحانه می‌خورم.",
@@ -40659,7 +40755,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I eat breakfast at home. — من در خانه صبحانه می‌خورم."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:write-2",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "او یکشنبه کار نمی‌کند. (مرد)",
@@ -40669,7 +40765,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "He does not work on Sunday. — او یکشنبه کار نمی‌کند. (مرد)"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:review-1",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "She works at ten.",
@@ -40684,7 +40780,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "She works at ten. — او ساعت ده کار می‌کند. (زن)"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-everyday-routine:review-2",
+      "id": "en-a1-sequenced-v2:foundation-everyday-routine:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I work on Tuesday, but I do not study.",
@@ -40701,7 +40797,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-current-activities": [
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:check-1",
+      "id": "en-a1-sequenced-v2:survival-current-activities:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I am reading now.",
@@ -40716,7 +40812,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من الان دارم مطالعه می‌کنم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:check-2",
+      "id": "en-a1-sequenced-v2:survival-current-activities:check-2",
       "skill": "grammar",
       "prompt": "I ___ reading now.",
       "options": [
@@ -40730,7 +40826,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "حال استمراری با I am + ing ساخته می‌شود."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:listening",
+      "id": "en-a1-sequenced-v2:survival-current-activities:listening",
       "skill": "listening",
       "prompt": "بن الان چه کار می‌کند؟",
       "audio": "Anna is cooking. Ben is reading in the room.",
@@ -40745,7 +40841,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: He is reading."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:reading",
+      "id": "en-a1-sequenced-v2:survival-current-activities:reading",
       "skill": "reading",
       "prompt": "کدام کار همین الان در حال انجام است؟",
       "source": "I study every day. Today I am at home. I am writing a message now.",
@@ -40760,7 +40856,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Writing a message."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:write-1",
+      "id": "en-a1-sequenced-v2:survival-current-activities:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "او دارد یک پیام می‌نویسد. (زن)",
@@ -40770,7 +40866,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "She is writing a message. — او دارد یک پیام می‌نویسد. (زن)"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:write-2",
+      "id": "en-a1-sequenced-v2:survival-current-activities:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "نه.",
@@ -40780,7 +40876,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "No, I am not. — نه."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:review-1",
+      "id": "en-a1-sequenced-v2:survival-current-activities:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "We are working now.",
@@ -40795,7 +40891,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "We are working now. — ما الان داریم کار می‌کنیم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-current-activities:review-2",
+      "id": "en-a1-sequenced-v2:survival-current-activities:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Is Ben working now?",
@@ -40812,7 +40908,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-hobbies-and-free-time": [
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:check-1",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I like music.",
@@ -40827,7 +40923,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من موسیقی دوست دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:check-2",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:check-2",
       "skill": "grammar",
       "prompt": "برای بیان علاقهٔ کلی کدام درست است؟",
       "options": [
@@ -40841,7 +40937,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "like reading علاقه را بیان می‌کند، نه لزوماً فعالیت همین الان."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:listening",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:listening",
       "skill": "listening",
       "prompt": "گوینده چه چیزی را دوست ندارد؟",
       "audio": "I like music and reading. I do not like football.",
@@ -40856,7 +40952,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Football."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:reading",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:reading",
       "skill": "reading",
       "prompt": "چه کسی اغلب آشپزی می‌کند؟",
       "source": "Anna reads at the weekend. Ben often cooks. They both like music.",
@@ -40871,7 +40967,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Ben."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:write-1",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "من کتاب‌خواندن را دوست دارم.",
@@ -40881,7 +40977,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I like reading books. — من کتاب‌خواندن را دوست دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:write-2",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "او اغلب آخر هفته پیاده‌روی می‌کند. (زن)",
@@ -40891,7 +40987,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "She often walks at the weekend. — او اغلب آخر هفته پیاده‌روی می‌کند. (زن)"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:review-1",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I do not like milk.",
@@ -40906,7 +41002,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I do not like milk. — من شیر را دوست ندارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hobbies-and-free-time:review-2",
+      "id": "en-a1-sequenced-v2:survival-hobbies-and-free-time:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I like reading, but I do not like music.",
@@ -40923,7 +41019,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-weather-and-seasons": [
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:check-1",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "It is sunny today.",
@@ -40938,7 +41034,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "امروز هوا آفتابی است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:check-2",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:check-2",
       "skill": "grammar",
       "prompt": "___ is cold today.",
       "options": [
@@ -40952,10 +41048,10 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "برای بیان وضعیت هوا از it استفاده می‌کنیم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:listening",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:listening",
       "skill": "listening",
       "prompt": "آیا امروز هوا آفتابی است؟",
-      "audio": "It is cold today. It is raining too.",
+      "audio": "It is not sunny today. It is cold and it is raining.",
       "options": [
         "The passage does not say.",
         "No.",
@@ -40967,9 +41063,9 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: No."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:reading",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:reading",
       "skill": "reading",
-      "prompt": "فصل مورد علاقهٔ آنا چیست؟",
+      "prompt": "آنا کدام فصل را دوست دارد؟",
       "source": "Spring: warm. Summer: hot. Winter: cold. Anna likes spring.",
       "options": [
         "Spring.",
@@ -40982,7 +41078,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Spring."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:write-1",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "در زمستان هوا سرد است.",
@@ -40992,7 +41088,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "It is cold in winter. — در زمستان هوا سرد است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:write-2",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "من بهار را دوست دارم.",
@@ -41002,7 +41098,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I like spring. — من بهار را دوست دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:review-1",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I do not like winter.",
@@ -41017,7 +41113,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I do not like winter. — من زمستان را دوست ندارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-weather-and-seasons:review-2",
+      "id": "en-a1-sequenced-v2:survival-weather-and-seasons:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "It is warm, but we are at home.",
@@ -41034,7 +41130,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "foundation-buying-something": [
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:check-1",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I would like this book, please.",
@@ -41049,7 +41145,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "این کتاب را می‌خواهم، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:check-2",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:check-2",
       "skill": "grammar",
       "prompt": "How much ___ these pens?",
       "options": [
@@ -41063,7 +41159,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "pens جمع است؛ are می‌خواهد."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:listening",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:listening",
       "skill": "listening",
       "prompt": "قیمت کتاب چقدر است؟",
       "audio": "The book is twelve pounds. The pen is two pounds.",
@@ -41078,7 +41174,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Twelve pounds."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:reading",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:reading",
       "skill": "reading",
       "prompt": "آیا پرداخت با کارت ممکن است؟",
       "source": "Book: £10. Pen: £2. Pay by cash or card.",
@@ -41093,7 +41189,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Yes."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:write-1",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "قیمتش چقدر است؟",
@@ -41103,7 +41199,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "How much is it? — قیمتش چقدر است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:write-2",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "می‌توانم با کارت پرداخت کنم؟",
@@ -41113,7 +41209,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Can I pay by card? — می‌توانم با کارت پرداخت کنم؟"
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:review-1",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "It is thirty pounds.",
@@ -41128,7 +41224,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "It is thirty pounds. — سی پوند است."
     },
     {
-      "id": "en-a1-sequenced-v1:foundation-buying-something:review-2",
+      "id": "en-a1-sequenced-v2:foundation-buying-something:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I would like this book. Is it twelve pounds?",
@@ -41145,7 +41241,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-shopping-and-clothing": [
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:check-1",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I would like a blue shirt.",
@@ -41160,7 +41256,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "یک پیراهن آبی می‌خواهم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:check-2",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:check-2",
       "skill": "grammar",
       "prompt": "کدام عبارت یک پیراهن آبی را بیان می‌کند؟",
       "options": [
@@ -41174,7 +41270,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "رنگ پیش از اسم می‌آید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:listening",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:listening",
       "skill": "listening",
       "prompt": "مشتری چه رنگی می‌خواهد؟",
       "audio": "I would like a red shirt, size small.",
@@ -41189,7 +41285,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Red."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:reading",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:reading",
       "skill": "reading",
       "prompt": "قیمت پیراهن آبی چقدر است؟",
       "source": "Blue shirt: medium, £20. Red shirt: small, £15.",
@@ -41204,7 +41300,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: £20."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:write-1",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "اندازهٔ متوسط دارید؟",
@@ -41214,7 +41310,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Do you have a medium? — اندازهٔ متوسط دارید؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:write-2",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "این کفش‌ها قرمز هستند.",
@@ -41224,7 +41320,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "These shoes are red. — این کفش‌ها قرمز هستند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:review-1",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "These shoes are too large.",
@@ -41239,7 +41335,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "These shoes are too large. — این کفش‌ها بیش از حد بزرگ هستند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-shopping-and-clothing:review-2",
+      "id": "en-a1-sequenced-v2:survival-shopping-and-clothing:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I like this red shirt. Can I try it on?",
@@ -41256,7 +41352,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-cafe-and-food": [
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:check-1",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I would like a cup of tea, please.",
@@ -41271,7 +41367,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "یک فنجان چای می‌خواهم، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:check-2",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:check-2",
       "skill": "grammar",
       "prompt": "برای درخواست مؤدبانهٔ چای کدام جمله درست است؟",
       "options": [
@@ -41285,7 +41381,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "would like در اینجا درخواست است؛ like به‌تنهایی می‌تواند علاقه را بیان کند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:listening",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:listening",
       "skill": "listening",
       "prompt": "قهوه با چه چیزی سفارش داده شده است؟",
       "audio": "A coffee with milk, please. No sugar.",
@@ -41300,7 +41396,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Milk, no sugar."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:reading",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:reading",
       "skill": "reading",
       "prompt": "قیمت ساندویچ چقدر است؟",
       "source": "Tea £2. Coffee £3. Sandwich £5. Milk is available.",
@@ -41315,7 +41411,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: £5."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:write-1",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "با شیر، لطفاً.",
@@ -41325,7 +41421,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "With milk, please. — با شیر، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:write-2",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "قیمت ساندویچ چقدر است؟",
@@ -41335,7 +41431,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "How much is the sandwich? — قیمت ساندویچ چقدر است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:review-1",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "How much is the water?",
@@ -41350,7 +41446,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "How much is the water? — قیمت آب چقدر است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-cafe-and-food:review-2",
+      "id": "en-a1-sequenced-v2:survival-cafe-and-food:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I would like a coffee and a sandwich.",
@@ -41367,7 +41463,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-directions-and-neighborhood": [
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:check-1",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "Excuse me, where is the station?",
@@ -41382,7 +41478,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "ببخشید، ایستگاه کجاست؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:check-2",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:check-2",
       "skill": "grammar",
       "prompt": "Turn ___ at the bank. (به چپ)",
       "options": [
@@ -41396,7 +41492,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "left یعنی چپ؛ go straight یعنی مستقیم برو."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:listening",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:listening",
       "skill": "listening",
       "prompt": "کنار کافه به کدام سمت باید پیچید؟",
       "audio": "Go straight. Turn right at the café. The bank is there.",
@@ -41411,7 +41507,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Right."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:reading",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:reading",
       "skill": "reading",
       "prompt": "چه مکانی روبه‌روی بانک است؟",
       "source": "The café is next to the bank. The station is opposite the bank.",
@@ -41426,7 +41522,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: The station."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:write-1",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "مستقیم بروید.",
@@ -41436,7 +41532,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Go straight. — مستقیم بروید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:write-2",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "به اینجا نزدیک است؟",
@@ -41446,7 +41542,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Is it near here? — به اینجا نزدیک است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:review-1",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Turn left at the bus stop.",
@@ -41461,7 +41557,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Turn left at the bus stop. — کنار ایستگاه اتوبوس به چپ بپیچید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-directions-and-neighborhood:review-2",
+      "id": "en-a1-sequenced-v2:survival-directions-and-neighborhood:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Go straight, then turn left at the café.",
@@ -41478,7 +41574,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-public-transport": [
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:check-1",
+      "id": "en-a1-sequenced-v2:survival-public-transport:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "One ticket to the city centre, please.",
@@ -41493,7 +41589,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "یک بلیت به مرکز شهر، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:check-2",
+      "id": "en-a1-sequenced-v2:survival-public-transport:check-2",
       "skill": "grammar",
       "prompt": "Does this bus ___ to the station?",
       "options": [
@@ -41507,7 +41603,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پس از does از go استفاده می‌شود."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:listening",
+      "id": "en-a1-sequenced-v2:survival-public-transport:listening",
       "skill": "listening",
       "prompt": "سکو چند است؟",
       "audio": "The train to Leeds leaves at ten from platform three.",
@@ -41522,7 +41618,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Three."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:reading",
+      "id": "en-a1-sequenced-v2:survival-public-transport:reading",
       "skill": "reading",
       "prompt": "کدام اتوبوس ساعت نه‌ونیم به ایستگاه می‌رود؟",
       "source": "Bus 10: City Centre, 09:00. Bus 12: Station, 09:30.",
@@ -41537,7 +41633,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Bus 12."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:write-1",
+      "id": "en-a1-sequenced-v2:survival-public-transport:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "آیا این اتوبوس به ایستگاه می‌رود؟",
@@ -41547,7 +41643,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Does this bus go to the station? — آیا این اتوبوس به ایستگاه می‌رود؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:write-2",
+      "id": "en-a1-sequenced-v2:survival-public-transport:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "قطار ساعت نه حرکت می‌کند.",
@@ -41557,7 +41653,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "The train leaves at nine. — قطار ساعت نه حرکت می‌کند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:review-1",
+      "id": "en-a1-sequenced-v2:survival-public-transport:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Does bus number twelve go to the station?",
@@ -41572,7 +41668,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Does bus number twelve go to the station? — آیا اتوبوس شمارهٔ دوازده به ایستگاه می‌رود؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-public-transport:review-2",
+      "id": "en-a1-sequenced-v2:survival-public-transport:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "The train leaves at eight from platform two.",
@@ -41589,7 +41685,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-appointments-and-time": [
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:check-1",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I would like an appointment, please.",
@@ -41604,7 +41700,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "یک وقت ملاقات می‌خواهم، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:check-2",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:check-2",
       "skill": "grammar",
       "prompt": "قرار سه‌شنبه ساعت ۱۱ است. کدام تأیید درست است؟",
       "options": [
@@ -41618,7 +41714,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "در تأیید قرار هم روز و هم ساعت باید یکسان باشند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:listening",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:listening",
       "skill": "listening",
       "prompt": "قرار چه روزی است؟",
       "audio": "Your appointment is on Friday at two in the afternoon.",
@@ -41633,7 +41729,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Friday."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:reading",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:reading",
       "skill": "reading",
       "prompt": "آنا چه ساعتی باید بیاید؟",
       "source": "Appointment: Anna, Tuesday, 11:00 a.m. Please come to room 2.",
@@ -41648,7 +41744,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: 11:00 a.m."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:write-1",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "سه‌شنبه وقت آزاد دارید؟",
@@ -41658,7 +41754,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Are you free on Tuesday? — سه‌شنبه وقت آزاد دارید؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:write-2",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "ساعت یازده مناسب است؟",
@@ -41668,7 +41764,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Is eleven OK? — ساعت یازده مناسب است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:review-1",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I am busy on Saturday.",
@@ -41683,7 +41779,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I am busy on Saturday. — من شنبه گرفتارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-appointments-and-time:review-2",
+      "id": "en-a1-sequenced-v2:survival-appointments-and-time:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "My appointment is on Tuesday at eleven.",
@@ -41700,7 +41796,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-school-and-learning": [
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:check-1",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "Open your book at page ten.",
@@ -41715,7 +41811,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "کتابتان را در صفحهٔ ده باز کنید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:check-2",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:check-2",
       "skill": "grammar",
       "prompt": "برای پرسیدن معنی city کدام درست است؟",
       "options": [
@@ -41729,7 +41825,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "در این قالب پرسشی does پیش از city می‌آید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:listening",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:listening",
       "skill": "listening",
       "prompt": "کدام سؤال باید خوانده شود؟",
       "audio": "Open your book at page twelve. Read question two.",
@@ -41744,7 +41840,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Question two."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:reading",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:reading",
       "skill": "reading",
       "prompt": "برای تکلیف چه صفحه‌ای باید خوانده شود؟",
       "source": "Homework: Read page 10. Write answers to questions 1 and 2. Class: Monday at 10.",
@@ -41759,7 +41855,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Page 10."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:write-1",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "لطفاً سؤال را بخوانید.",
@@ -41769,7 +41865,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please read the question. — لطفاً سؤال را بخوانید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:write-2",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "می‌توانم یک سؤال بپرسم؟",
@@ -41779,7 +41875,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Can I ask a question? — می‌توانم یک سؤال بپرسم؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:review-1",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Please write the word name.",
@@ -41794,7 +41890,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please write the word name. — لطفاً واژهٔ نام را بنویسید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-school-and-learning:review-2",
+      "id": "en-a1-sequenced-v2:survival-school-and-learning:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I do not understand question three. Please help me.",
@@ -41811,7 +41907,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-invitations-and-plans": [
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:check-1",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "Would you like to have coffee tomorrow?",
@@ -41826,7 +41922,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "دوست داری فردا قهوه بخوریم؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:check-2",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:check-2",
       "skill": "grammar",
       "prompt": "Let us ___ at ten.",
       "options": [
@@ -41840,7 +41936,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "بعد از let us بن فعل می‌آید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:listening",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:listening",
       "skill": "listening",
       "prompt": "روز پیشنهادی نهایی کدام است؟",
       "audio": "I am busy on Tuesday. Let us meet on Wednesday at ten.",
@@ -41855,7 +41951,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Wednesday."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:reading",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:reading",
       "skill": "reading",
       "prompt": "کافه کجاست؟",
       "source": "Hi Anna. Coffee on Saturday at ten? At the café next to the station. — Ben",
@@ -41870,7 +41966,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Next to the station."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:write-1",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "بله، خیلی دوست دارم.",
@@ -41880,7 +41976,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Yes, I would love to. — بله، خیلی دوست دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:write-2",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "بیا ساعت ده همدیگر را ببینیم.",
@@ -41890,7 +41986,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Let us meet at ten. — بیا ساعت ده همدیگر را ببینیم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:review-1",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Sorry, I am busy on Sunday.",
@@ -41905,7 +42001,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Sorry, I am busy on Sunday. — ببخشید، یکشنبه گرفتارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-invitations-and-plans:review-2",
+      "id": "en-a1-sequenced-v2:survival-invitations-and-plans:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Let us meet on Tuesday at ten.",
@@ -41922,7 +42018,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-past-and-future-plans": [
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:check-1",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I was at home yesterday.",
@@ -41937,7 +42033,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من دیروز در خانه بودم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:check-2",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:check-2",
       "skill": "grammar",
       "prompt": "Did you ___ yesterday?",
       "options": [
@@ -41951,7 +42047,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "بعد از did از بن فعل استفاده می‌کنیم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:listening",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:listening",
       "skill": "listening",
       "prompt": "برنامهٔ فردا چیست؟",
       "audio": "I worked yesterday. Tomorrow I am going to study at home.",
@@ -41966,7 +42062,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Study at home."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:reading",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:reading",
       "skill": "reading",
       "prompt": "بن دیروز کجا بود؟",
       "source": "Yesterday Ben was at home. Tomorrow he is going to meet Anna at ten.",
@@ -41981,7 +42077,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: At home."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:write-1",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "من دیروز کار کردم.",
@@ -41991,7 +42087,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I worked yesterday. — من دیروز کار کردم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:write-2",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "من دیروز کار نکردم.",
@@ -42001,7 +42097,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I did not work yesterday. — من دیروز کار نکردم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:review-1",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "She went to the class yesterday.",
@@ -42016,7 +42112,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "She went to the class yesterday. — او دیروز به کلاس رفت. (زن)"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-past-and-future-plans:review-2",
+      "id": "en-a1-sequenced-v2:survival-past-and-future-plans:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I studied yesterday. I am going to work on Tuesday.",
@@ -42033,7 +42129,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-job-interview": [
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:check-1",
+      "id": "en-a1-sequenced-v2:survival-job-interview:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I work in a shop.",
@@ -42048,7 +42144,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من در فروشگاه کار می‌کنم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:check-2",
+      "id": "en-a1-sequenced-v2:survival-job-interview:check-2",
       "skill": "grammar",
       "prompt": "I can ___ a computer.",
       "options": [
@@ -42062,7 +42158,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "بعد از can بن فعل بدون to و s می‌آید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:listening",
+      "id": "en-a1-sequenced-v2:survival-job-interview:listening",
       "skill": "listening",
       "prompt": "چه روزی می‌تواند کار کند؟",
       "audio": "I can use a computer. I can work on Tuesday, but not Monday.",
@@ -42077,7 +42173,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Tuesday."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:reading",
+      "id": "en-a1-sequenced-v2:survival-job-interview:reading",
       "skill": "reading",
       "prompt": "سارا چه زمانی وقت آزاد دارد؟",
       "source": "Name: Sara. Job: shop assistant. Available: Monday morning. Languages: Persian, a little English.",
@@ -42092,7 +42188,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Monday morning."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:write-1",
+      "id": "en-a1-sequenced-v2:survival-job-interview:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "من می‌توانم از رایانه استفاده کنم.",
@@ -42102,7 +42198,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I can use a computer. — من می‌توانم از رایانه استفاده کنم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:write-2",
+      "id": "en-a1-sequenced-v2:survival-job-interview:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "من دوشنبه وقت آزاد دارم.",
@@ -42112,7 +42208,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I am available on Monday. — من دوشنبه وقت آزاد دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:review-1",
+      "id": "en-a1-sequenced-v2:survival-job-interview:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I am available on Wednesday.",
@@ -42127,7 +42223,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I am available on Wednesday. — من چهارشنبه وقت آزاد دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-job-interview:review-2",
+      "id": "en-a1-sequenced-v2:survival-job-interview:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I can work on Tuesday, but not in the morning.",
@@ -42144,7 +42240,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-personal-information": [
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:check-1",
+      "id": "en-a1-sequenced-v2:survival-personal-information:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "My first name is Sara.",
@@ -42159,7 +42255,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "نام کوچک من سارا است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:check-2",
+      "id": "en-a1-sequenced-v2:survival-personal-information:check-2",
       "skill": "grammar",
       "prompt": "در فرم First name به کدام اطلاعات نیاز دارد؟",
       "options": [
@@ -42173,7 +42269,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "First name نام کوچک است و Last name نام خانوادگی."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:listening",
+      "id": "en-a1-sequenced-v2:survival-personal-information:listening",
       "skill": "listening",
       "prompt": "شمارهٔ پلاک چیست؟",
       "audio": "My address is fourteen Park Street. One four.",
@@ -42188,7 +42284,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: 14"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:reading",
+      "id": "en-a1-sequenced-v2:survival-personal-information:reading",
       "skill": "reading",
       "prompt": "نام خانوادگی چیست؟",
       "source": "First name: Ben. Last name: Lee. Address: 12 Park Street. Email: ben@example.com.",
@@ -42203,7 +42299,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Lee"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:write-1",
+      "id": "en-a1-sequenced-v2:survival-personal-information:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "نام خانوادگی من علی است.",
@@ -42213,7 +42309,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "My last name is Ali. — نام خانوادگی من علی است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:write-2",
+      "id": "en-a1-sequenced-v2:survival-personal-information:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "ایمیل من sara@example.com است.",
@@ -42223,7 +42319,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "My email is sara@example.com. — ایمیل من sara@example.com است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:review-1",
+      "id": "en-a1-sequenced-v2:survival-personal-information:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "My address is twenty Park Street.",
@@ -42238,7 +42334,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "My address is twenty Park Street. — نشانی من پلاک بیست، خیابان پارک است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-personal-information:review-2",
+      "id": "en-a1-sequenced-v2:survival-personal-information:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "My name is Ben. I live at 12 Park Street.",
@@ -42255,7 +42351,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-renting-a-home": [
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:check-1",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I am looking for a room.",
@@ -42270,7 +42366,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "من دنبال یک اتاق هستم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:check-2",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:check-2",
       "skill": "grammar",
       "prompt": "£500 per month یعنی چه؟",
       "options": [
@@ -42284,7 +42380,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "per month یعنی در ماه؛ five hundred یعنی پانصد."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:listening",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:listening",
       "skill": "listening",
       "prompt": "اجارهٔ ماهانه چقدر است؟",
       "audio": "The room is six hundred pounds per month. Internet is included.",
@@ -42299,7 +42395,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Six hundred pounds."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:reading",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:reading",
       "skill": "reading",
       "prompt": "آیا اتاق نزدیک ایستگاه است؟",
       "source": "Room: £500 per month. Shared kitchen. Near the station. Internet included.",
@@ -42314,7 +42410,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Yes."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:write-1",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "اجاره چقدر است؟",
@@ -42324,7 +42420,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "How much is the rent? — اجاره چقدر است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:write-2",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "آیا اینترنت در قیمت اجاره حساب شده است؟",
@@ -42334,7 +42430,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Is internet included? — آیا اینترنت در قیمت اجاره حساب شده است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:review-1",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Can I see the room on Wednesday?",
@@ -42349,7 +42445,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Can I see the room on Wednesday? — می‌توانم چهارشنبه اتاق را ببینم؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-renting-a-home:review-2",
+      "id": "en-a1-sequenced-v2:survival-renting-a-home:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I can come on Tuesday. Is ten OK?",
@@ -42366,7 +42462,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-travel-and-tickets": [
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:check-1",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "A return ticket to Leeds, please.",
@@ -42381,7 +42477,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "یک بلیت رفت‌وبرگشت به لیدز، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:check-2",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:check-2",
       "skill": "grammar",
       "prompt": "برای بلیت رفت‌وبرگشت کدام را می‌خواهیم؟",
       "options": [
@@ -42395,7 +42491,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "در نمونهٔ بریتانیایی return ticket رفت‌وبرگشت است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:listening",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:listening",
       "skill": "listening",
       "prompt": "قطار چه ساعتی می‌رسد؟",
       "audio": "The train leaves at ten and arrives at twelve.",
@@ -42410,7 +42506,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: At twelve."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:reading",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:reading",
       "skill": "reading",
       "prompt": "قطار برگشت چه روزی است؟",
       "source": "London → Leeds. Departure: 10:00. Arrival: 12:00. Return: Friday, 15:00.",
@@ -42425,7 +42521,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Friday."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:write-1",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "برای فردا، لطفاً.",
@@ -42435,7 +42531,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "For tomorrow, please. — برای فردا، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:write-2",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "چه ساعتی می‌رسد؟",
@@ -42445,7 +42541,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "What time does it arrive? — چه ساعتی می‌رسد؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:review-1",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I am going to return on Sunday.",
@@ -42460,7 +42556,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I am going to return on Sunday. — من قصد دارم یکشنبه برگردم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-travel-and-tickets:review-2",
+      "id": "en-a1-sequenced-v2:survival-travel-and-tickets:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I am going to travel to Tehran tomorrow. I would like a return ticket.",
@@ -42477,7 +42573,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-hotel-and-stay": [
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:check-1",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I have a booking. My name is Sara Ali.",
@@ -42492,7 +42588,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "رزرو دارم. اسم من سارا علی است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:check-2",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:check-2",
       "skill": "grammar",
       "prompt": "A room for two ___ . (دو شب)",
       "options": [
@@ -42506,7 +42602,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "مدت اقامت با nights بیان شده است، نه تعداد اتاق."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:listening",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:listening",
       "skill": "listening",
       "prompt": "صبحانه چه ساعتی است؟",
       "audio": "Your room is fourteen. Breakfast is at seven thirty.",
@@ -42521,7 +42617,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: 7:30."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:reading",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:reading",
       "skill": "reading",
       "prompt": "شمارهٔ اتاق سارا چیست؟",
       "source": "Hotel Park. Breakfast: 7:30–9:00. Reception: ground floor. Room 12: Sara Ali.",
@@ -42536,7 +42632,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: 12"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:write-1",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "یک اتاق برای دو شب، لطفاً.",
@@ -42546,7 +42642,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "A room for two nights, please. — یک اتاق برای دو شب، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:write-2",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "صبحانه چه ساعتی است؟",
@@ -42556,7 +42652,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "What time is breakfast? — صبحانه چه ساعتی است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:review-1",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Breakfast is at ten.",
@@ -42571,7 +42667,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Breakfast is at ten. — صبحانه ساعت ده است."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-hotel-and-stay:review-2",
+      "id": "en-a1-sequenced-v2:survival-hotel-and-stay:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I am in room eleven. Can I have a towel?",
@@ -42588,7 +42684,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-phone-and-messages": [
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:check-1",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "Hello, this is Sara speaking.",
@@ -42603,7 +42699,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "سلام، سارا هستم. (در تماس)"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:check-2",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:check-2",
       "skill": "grammar",
       "prompt": "Ben is working now. کدام پیام مناسب است؟",
       "options": [
@@ -42617,7 +42713,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پیام تماس باید گیرنده، نام تماس‌گیرنده و زمان را روشن کند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:listening",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:listening",
       "skill": "listening",
       "prompt": "تماس باید چه ساعتی باشد؟",
       "audio": "Hi Ben. This is Sara. Please call me at six, not five.",
@@ -42632,7 +42728,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: At six."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:reading",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:reading",
       "skill": "reading",
       "prompt": "چه کسی پیام را نوشته است؟",
       "source": "Hi Anna. I am at the station. Please call me at four. Thanks, Ben.",
@@ -42647,7 +42743,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Ben."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:write-1",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "می‌توانم با بن صحبت کنم، لطفاً؟",
@@ -42657,7 +42753,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Can I speak to Ben, please? — می‌توانم با بن صحبت کنم، لطفاً؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:write-2",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "لطفاً ساعت پنج به من زنگ بزن.",
@@ -42667,7 +42763,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please call me at five. — لطفاً ساعت پنج به من زنگ بزن."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:review-1",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Please call me at eight.",
@@ -42682,7 +42778,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please call me at eight. — لطفاً ساعت هشت به من زنگ بزن."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-phone-and-messages:review-2",
+      "id": "en-a1-sequenced-v2:survival-phone-and-messages:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "This is Ben. I am at the café. Please call me.",
@@ -42699,7 +42795,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-services-and-post-office": [
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:check-1",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I would like to send this letter.",
@@ -42714,7 +42810,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "می‌خواهم این نامه را بفرستم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:check-2",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:check-2",
       "skill": "grammar",
       "prompt": "I would like to send this letter ___ London.",
       "options": [
@@ -42728,7 +42824,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "to مقصد ارسال را معرفی می‌کند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:listening",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:listening",
       "skill": "listening",
       "prompt": "چه دو اطلاعاتی باید نوشته شود؟",
       "audio": "Please write the name and address on the form.",
@@ -42743,7 +42839,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: Name and address."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:reading",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:reading",
       "skill": "reading",
       "prompt": "شهر مقصد کدام است؟",
       "source": "To: Anna Lee. Address: 12 Park Street, London. Stamp: £2.",
@@ -42758,7 +42854,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: London."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:write-1",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "به لندن، لطفاً.",
@@ -42768,7 +42864,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "To London, please. — به لندن، لطفاً."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:write-2",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "لطفاً نشانی را اینجا بنویسید.",
@@ -42778,7 +42874,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please write the address here. — لطفاً نشانی را اینجا بنویسید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:review-1",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Please write your number here.",
@@ -42793,7 +42889,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Please write your number here. — لطفاً شماره‌تان را اینجا بنویسید."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-services-and-post-office:review-2",
+      "id": "en-a1-sequenced-v2:survival-services-and-post-office:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I am sending a letter to Tehran. Do I need a stamp?",
@@ -42810,7 +42906,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
   ],
   "survival-health-and-pharmacy": [
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:check-1",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:check-1",
       "skill": "reading",
       "prompt": "معنی این نمونه در همین بافت چیست؟",
       "source": "I do not feel well.",
@@ -42825,7 +42921,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "حالم خوب نیست."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:check-2",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:check-2",
       "skill": "grammar",
       "prompt": "کدام جمله سردرد را بیان می‌کند؟",
       "options": [
@@ -42839,7 +42935,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "headache یعنی سردرد؛ تشخیص و دارو جزو سنجش نیستند."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:listening",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:listening",
       "skill": "listening",
       "prompt": "علامت گفته‌شده چیست؟",
       "audio": "I have a headache. I need to speak to the pharmacist.",
@@ -42854,7 +42950,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: A headache."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:reading",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:reading",
       "skill": "reading",
       "prompt": "آیا داروخانه یکشنبه باز است؟",
       "source": "Park Pharmacy. Open Monday to Friday, 9:00–17:00. Closed Sunday.",
@@ -42869,7 +42965,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "پاسخ از متن همین تمرین: No."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:write-1",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:write-1",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "سردرد دارم.",
@@ -42879,7 +42975,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "I have a headache. — سردرد دارم."
     },
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:write-2",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:write-2",
       "skill": "writing",
       "prompt": "عبارت متناظر را مطابق نمونهٔ همین درس بنویس؛ این پرسش بازنویسی کنترل‌شده است، نه تولید آزاد.",
       "source": "داروخانه کجاست؟",
@@ -42889,7 +42985,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Where is the pharmacy? — داروخانه کجاست؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:review-1",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:review-1",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "Is the pharmacy open on Saturday?",
@@ -42904,7 +43000,7 @@ export const ENGLISH_A1_EVIDENCE: Readonly<Record<string, readonly Task[]>> = {
       "explanation": "Is the pharmacy open on Saturday? — آیا داروخانه شنبه باز است؟"
     },
     {
-      "id": "en-a1-sequenced-v1:survival-health-and-pharmacy:review-2",
+      "id": "en-a1-sequenced-v2:survival-health-and-pharmacy:review-2",
       "skill": "reading",
       "prompt": "معنی همین نمونه چیست؟",
       "source": "I do not feel well. Can I come at eight?",
@@ -42924,1046 +43020,1046 @@ export const ENGLISH_A1_SKILLS: Readonly<Record<string, readonly A1SkillTask[]>>
   "foundation-introducing-yourself": [
     {
       "kind": "listening",
-      "passage": "Hello, my name is Anna. I am from Spain. I live in London.",
-      "promptFa": "آنا اهل کدام کشور است؟",
+      "passage": "Hello. I am Anna. I am from Canada. I live in Paris.",
+      "promptFa": "گوینده اهل کدام کشور است؟",
       "choices": [
-        "Spain",
-        "Iran",
+        "Paris",
+        "France",
         "Canada"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Spain"
+      "correctIndex": 2,
+      "explanationFa": "Canada کشور مبدأ است؛ Paris شهر محل زندگی است."
     },
     {
       "kind": "reading",
-      "passage": "My name is Reza. I am from Iran. I live in Leeds.",
-      "promptFa": "رضا در چه شهری زندگی می‌کند؟",
+      "passage": "Name: Emma. From: Italy. City: Rome.",
+      "promptFa": "برای پرکردن فیلد City کدام اطلاعات را برمی‌دارید؟",
       "choices": [
-        "London",
-        "Tehran",
-        "Leeds"
+        "Rome",
+        "Italy",
+        "Emma"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Leeds"
+      "correctIndex": 0,
+      "explanationFa": "City شهر است؛ Rome شهر است و Italy کشور."
     }
   ],
   "foundation-alphabet-and-spelling": [
     {
       "kind": "listening",
-      "passage": "My name is Tim. T-I-M.",
-      "promptFa": "کدام نام هجی شد؟",
+      "passage": "L. E. E.",
+      "promptFa": "کدام نام خانوادگی هجی شد؟",
       "choices": [
-        "Tom",
-        "Ben",
-        "Tim"
+        "Tim",
+        "Lee",
+        "Lea"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Tim"
+      "correctIndex": 1,
+      "explanationFa": "حرف‌های L، E، E نام Lee را می‌سازند؛ نام کامل پیش از هجی گفته نشده است."
     },
     {
       "kind": "reading",
-      "passage": "First name: Sara. Last name: Ali.",
-      "promptFa": "نام خانوادگی چیست؟",
+      "passage": "First name: Tim. Last name: Green. Check: G-R-E-E-N.",
+      "promptFa": "مسئول فرم نام خانوادگی را می‌خواهد؛ کدام را هجی می‌کنید؟",
       "choices": [
-        "First name",
-        "Ali",
-        "Sara"
+        "T-I-M.",
+        "Tim Green.",
+        "G-R-E-E-N."
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Ali"
+      "correctIndex": 2,
+      "explanationFa": "Last name برابر Green است؛ Tim نام کوچک است."
     }
   ],
   "foundation-asking-for-help": [
     {
       "kind": "listening",
-      "passage": "Please speak slowly. I do not understand.",
-      "promptFa": "گوینده از مخاطب چه می‌خواهد؟",
+      "passage": "My last name is Green. Sorry, can you spell that, please?",
+      "promptFa": "مخاطب برای روشن‌شدن نام چه درخواستی دارد؟",
       "choices": [
-        "Write a number.",
-        "Speak slowly.",
-        "Speak quickly."
+        "هجی نام خانوادگی",
+        "گفتن سن",
+        "گفتن شهر"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Speak slowly."
+      "correctIndex": 0,
+      "explanationFa": "درخواست can you spell that دربارهٔ هجی نامِ شنیده‌شده است."
     },
     {
       "kind": "reading",
-      "passage": "New word: city. City means شهر. Please say city again.",
-      "promptFa": "کدام واژه باید تکرار شود؟",
+      "passage": "Partner: My name is Ben. You: I do not understand.",
+      "promptFa": "نام را درست نشنیده‌اید؛ کدام پاسخ به حل مشکل کمک می‌کند؟",
       "choices": [
-        "city",
-        "name",
-        "country"
+        "I am from Iran.",
+        "Please say that again, slowly.",
+        "Goodbye."
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: city"
+      "correctIndex": 1,
+      "explanationFa": "درخواست تکرار آهسته، مشکلِ نفهمیدن نام را هدف می‌گیرد."
     }
   ],
   "foundation-pronouns-and-be": [
     {
       "kind": "listening",
-      "passage": "Anna is a teacher. Ben and Tim are students.",
-      "promptFa": "چه کسی معلم است؟",
+      "passage": "I am Ben. Sara and I are students. Anna is our teacher.",
+      "promptFa": "آنا چه نقشی دارد؟",
       "choices": [
-        "Anna",
-        "Ben",
-        "Tim"
+        "دانش‌آموز",
+        "در پیام گفته نشده",
+        "معلم"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Anna"
+      "correctIndex": 2,
+      "explanationFa": "عبارت Anna is our teacher نقش آنا را روشن می‌کند."
     },
     {
       "kind": "reading",
-      "passage": "I am Sara. This is Anna. She is my teacher. We are ready.",
-      "promptFa": "She به چه کسی اشاره می‌کند؟",
+      "passage": "Anna: teacher. Ben: student. Sara: student.",
+      "promptFa": "برای اشارهٔ هم‌زمان به بن و سارا کدام جمله مناسب است؟",
       "choices": [
-        "Ben",
-        "A group of students",
-        "Anna"
+        "They are students.",
+        "She is a teacher.",
+        "He is a teacher."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Anna"
+      "correctIndex": 0,
+      "explanationFa": "Ben و Sara دو نفرند؛ برای اشاره به آن‌ها از they are استفاده می‌کنیم."
     }
   ],
   "foundation-numbers-and-contact": [
     {
       "kind": "listening",
-      "passage": "My number is zero seven two four.",
-      "promptFa": "کد چهاررقمی چیست؟",
+      "passage": "My name is Tim. I am twenty-six. The code is two, zero, four, six.",
+      "promptFa": "کد تمرینی کدام است، نه سن گوینده؟",
       "choices": [
-        "0742",
-        "0274",
-        "0724"
+        "2064",
+        "2046",
+        "26"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: 0724"
+      "correctIndex": 1,
+      "explanationFa": "چهار رقم به ترتیب two, zero, four, six گفته شدند؛ twenty-six سن است."
     },
     {
       "kind": "reading",
-      "passage": "Name: Anna. Age: 30. Contact code: 0712.",
-      "promptFa": "آنا چند سال دارد؟",
+      "passage": "Contact: Ben. Phone: 020 7314. Age: 24.",
+      "promptFa": "فرم شمارهٔ تماس می‌خواهد، نه سن؛ کدام را وارد می‌کنید؟",
       "choices": [
-        "21",
-        "30",
-        "13"
+        "24",
+        "Ben",
+        "020 7314"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: 30"
+      "correctIndex": 2,
+      "explanationFa": "Phone شمارهٔ تماس است؛ 24 در فیلد Age آمده است."
     }
   ],
   "foundation-family-and-possessions": [
     {
       "kind": "listening",
-      "passage": "This is my brother, Tim. His bag is here.",
-      "promptFa": "کیف متعلق به چه کسی است؟",
+      "passage": "This is my sister, Anna. The bag is my brother Ben's bag.",
+      "promptFa": "کیف مال چه کسی است؟",
       "choices": [
-        "The teacher",
-        "Tim",
-        "Anna"
+        "Ben",
+        "Anna",
+        "گوینده"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Tim"
+      "correctIndex": 0,
+      "explanationFa": "مالکیت کیف با Ben گفته شده است؛ Anna خواهر معرفی شده است."
     },
     {
       "kind": "reading",
-      "passage": "Ben has a sister. Her name is Anna. This is Anna’s book.",
-      "promptFa": "کتاب مال چه کسی است؟",
+      "passage": "Anna is my sister. Ben is my brother. This is Ben's book.",
+      "promptFa": "کتاب را به چه کسی می‌دهید؟",
       "choices": [
-        "Anna",
+        "The passage does not say.",
         "Ben",
-        "Sara"
+        "Anna"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Anna"
+      "correctIndex": 1,
+      "explanationFa": "Ben's book مالکیت کتاب را روشن کرده است."
     }
   ],
   "foundation-objects-and-places": [
     {
       "kind": "listening",
-      "passage": "The book is on the table. The key is in the bag.",
-      "promptFa": "کلید کجاست؟",
+      "passage": "Your phone is on the chair. Your bag is under the table. The key is in your bag.",
+      "promptFa": "برای پیدا کردن کلید کجا را نگاه می‌کنید؟",
       "choices": [
-        "In the bag.",
-        "On the table.",
-        "Under the chair."
+        "روی صندلی",
+        "روی میز",
+        "داخل کیف"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: In the bag."
+      "correctIndex": 2,
+      "explanationFa": "کلید داخل کیف است؛ گوشی روی صندلی است."
     },
     {
       "kind": "reading",
-      "passage": "There is a table in the room. Two books are on the table. A bag is under it.",
-      "promptFa": "چند کتاب روی میز است؟",
+      "passage": "On the table: a phone. Under the chair: a bag. In the bag: a key.",
+      "promptFa": "کلید را کجا پیدا می‌کنید؟",
       "choices": [
-        "One.",
-        "Three.",
-        "Two."
+        "In the bag.",
+        "On the table.",
+        "Under the table."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Two."
+      "correctIndex": 0,
+      "explanationFa": "فهرست می‌گوید کلید در کیف است؛ گوشی روی میز است."
     }
   ],
   "foundation-time-and-calendar": [
     {
       "kind": "listening",
-      "passage": "The class is on Tuesday at nine thirty in the morning.",
+      "passage": "The English class is on Friday at ten in the morning. Not at nine.",
       "promptFa": "کلاس چه ساعتی است؟",
       "choices": [
-        "9:00 a.m.",
-        "10:30 a.m.",
-        "9:30 a.m."
+        "10:00 p.m.",
+        "10:00 a.m.",
+        "9:00 a.m."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: 9:30 a.m."
+      "correctIndex": 1,
+      "explanationFa": "گوینده ten in the morning را تأیید و nine را رد می‌کند."
     },
     {
       "kind": "reading",
-      "passage": "English class: Monday, 3 May, 10:00 a.m. Room 2.",
-      "promptFa": "کلاس در کدام اتاق است؟",
+      "passage": "English class: Monday 9:00. English class: Tuesday 10:00.",
+      "promptFa": "سه‌شنبه برای شروع کلاس چه ساعتی حاضر می‌شوید؟",
       "choices": [
-        "Room 3.",
-        "Room 2.",
-        "Room 1."
+        "9:00",
+        "The passage does not say.",
+        "10:00"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Room 2."
+      "correctIndex": 2,
+      "explanationFa": "ردیف Tuesday ساعت 10:00 را نشان می‌دهد؛ 9:00 برای دوشنبه است."
     }
   ],
   "foundation-everyday-routine": [
     {
       "kind": "listening",
-      "passage": "Anna gets up at seven. She starts work at nine.",
-      "promptFa": "آنا کار را چه ساعتی شروع می‌کند؟",
+      "passage": "Ben gets up at seven. He starts work at nine. He does not work on Sunday.",
+      "promptFa": "بن یکشنبه چه وضعیتی دارد؟",
       "choices": [
-        "At eight.",
-        "At nine.",
-        "At seven."
+        "کار نمی‌کند",
+        "ساعت هفت کار را شروع می‌کند",
+        "ساعت نه درس می‌خواند"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: At nine."
+      "correctIndex": 0,
+      "explanationFa": "does not work on Sunday نبودِ کار در یکشنبه را روشن می‌کند."
     },
     {
       "kind": "reading",
-      "passage": "Ben studies on Monday and Tuesday. He does not study on Sunday.",
-      "promptFa": "بن چه روزی درس نمی‌خواند؟",
+      "passage": "Sara — Monday: work. Sunday: study at home; no work.",
+      "promptFa": "کدام پیام با برنامهٔ سارا سازگار است؟",
       "choices": [
-        "Sunday.",
-        "Monday.",
-        "Tuesday."
+        "Sara does not study on Sunday.",
+        "Sara does not work on Sunday.",
+        "Sara works on Sunday."
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Sunday."
+      "correctIndex": 1,
+      "explanationFa": "یکشنبه روز درس‌خواندن در خانه و بدون کار است؛ بعد از does not، work ساده می‌آید."
     }
   ],
   "survival-current-activities": [
     {
       "kind": "listening",
-      "passage": "Anna is cooking. Ben is reading in the room.",
-      "promptFa": "بن الان چه کار می‌کند؟",
+      "passage": "Anna usually goes to work by bus. Today she is at home. She is reading a book now.",
+      "promptFa": "آنا همین الان چه می‌کند؟",
       "choices": [
-        "He is reading.",
-        "He is cooking.",
-        "He is writing."
+        "با اتوبوس به کار می‌رود",
+        "در محل کار است",
+        "کتاب می‌خواند"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: He is reading."
+      "correctIndex": 2,
+      "explanationFa": "عادت رفت‌وآمد با وضعیت الان فرق دارد؛ اکنون is reading گفته شده است."
     },
     {
       "kind": "reading",
-      "passage": "I study every day. Today I am at home. I am writing a message now.",
-      "promptFa": "کدام کار همین الان در حال انجام است؟",
+      "passage": "Every day: Ben walks to work. Now: Ben is waiting for the bus.",
+      "promptFa": "دوستتان می‌پرسد بن همین الان چه می‌کند؛ کدام جواب درست است؟",
       "choices": [
-        "Studying every day.",
-        "Cooking now.",
-        "Writing a message."
+        "He is waiting for the bus.",
+        "He is walking to work now.",
+        "He is working now."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Writing a message."
+      "correctIndex": 0,
+      "explanationFa": "Now وضعیت فعلی را مشخص می‌کند؛ پیاده‌رفتن عادت اوست، نه کار الان."
     }
   ],
   "survival-hobbies-and-free-time": [
     {
       "kind": "listening",
-      "passage": "I like music and reading. I do not like football.",
-      "promptFa": "گوینده چه چیزی را دوست ندارد؟",
+      "passage": "I like music, but I do not like football. My brother likes football.",
+      "promptFa": "گوینده خودش چه چیزی را دوست دارد؟",
       "choices": [
-        "Music.",
-        "Reading.",
-        "Football."
+        "هیچ‌کدام",
+        "موسیقی",
+        "فوتبال"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Football."
+      "correctIndex": 1,
+      "explanationFa": "I like music دربارهٔ خود گوینده است؛ علاقهٔ برادر را به او نسبت نمی‌دهیم."
     },
     {
       "kind": "reading",
-      "passage": "Anna reads at the weekend. Ben often cooks. They both like music.",
-      "promptFa": "چه کسی اغلب آشپزی می‌کند؟",
+      "passage": "Anna likes reading. She does not like football. Ben likes music.",
+      "promptFa": "برای فعالیتی که آنا دوست دارد کدام پیشنهاد مناسب‌تر است؟",
       "choices": [
-        "Both Anna and Ben.",
-        "Ben.",
-        "Anna."
+        "Play football.",
+        "The passage does not say what Anna likes.",
+        "Read a book."
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Ben."
+      "correctIndex": 2,
+      "explanationFa": "آنا خواندن را دوست دارد و فوتبال را دوست ندارد؛ علاقهٔ Ben را به او نسبت نمی‌دهیم."
     }
   ],
   "survival-weather-and-seasons": [
     {
       "kind": "listening",
-      "passage": "It is cold today. It is raining too.",
-      "promptFa": "آیا امروز هوا آفتابی است؟",
+      "passage": "It is sunny today, but it is cold. It is not raining today.",
+      "promptFa": "هوای امروز چگونه توصیف شده است؟",
       "choices": [
-        "The passage does not say.",
-        "No.",
-        "Yes."
+        "آفتابی و سرد",
+        "بارانی و گرم",
+        "بارانی و سرد"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: No."
+      "correctIndex": 0,
+      "explanationFa": "sunny و cold هر دو برای امروز گفته شده‌اند؛ نبودِ باران نیز صریح است."
     },
     {
       "kind": "reading",
-      "passage": "Spring: warm. Summer: hot. Winter: cold. Anna likes spring.",
-      "promptFa": "فصل مورد علاقهٔ آنا چیست؟",
+      "passage": "Today: cold and rainy. Tomorrow: warm and sunny.",
+      "promptFa": "برای توصیف هوای فردا کدام عبارت را از اعلان انتخاب می‌کنید؟",
       "choices": [
-        "Spring.",
-        "Summer.",
-        "Winter."
+        "Cold and sunny.",
+        "Warm and sunny.",
+        "Cold and rainy."
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Spring."
+      "correctIndex": 1,
+      "explanationFa": "Tomorrow به warm and sunny مربوط است؛ وضعیت امروز متفاوت است."
     }
   ],
   "foundation-buying-something": [
     {
       "kind": "listening",
-      "passage": "The book is twelve pounds. The pen is two pounds.",
-      "promptFa": "قیمت کتاب چقدر است؟",
+      "passage": "How much is this bag? It is eight dollars. Can I pay by card? Yes, you can.",
+      "promptFa": "قیمت کیف چقدر است؟",
       "choices": [
-        "Twelve pounds.",
-        "Two pounds.",
-        "Ten pounds."
+        "2 dollars",
+        "18 dollars",
+        "8 dollars"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Twelve pounds."
+      "correctIndex": 2,
+      "explanationFa": "پاسخ قیمت eight dollars است؛ پرسش بعدی دربارهٔ کارت است."
     },
     {
       "kind": "reading",
-      "passage": "Book: £10. Pen: £2. Pay by cash or card.",
-      "promptFa": "آیا پرداخت با کارت ممکن است؟",
+      "passage": "Book: $6. Pen: $2. Bag: —",
+      "promptFa": "قیمت کیف نوشته نشده؛ کدام سؤال اطلاعاتِ لازم را می‌گیرد؟",
       "choices": [
-        "No.",
-        "Only cash.",
-        "Yes."
+        "How much is the bag?",
+        "How old are you?",
+        "Where are you from?"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Yes."
+      "correctIndex": 0,
+      "explanationFa": "اطلاعاتِ گمشده قیمت کیف است؛ نباید قیمت کتاب را برای آن فرض کنیم."
     }
   ],
   "survival-shopping-and-clothing": [
     {
       "kind": "listening",
-      "passage": "I would like a red shirt, size small.",
-      "promptFa": "مشتری چه رنگی می‌خواهد؟",
+      "passage": "A red shirt in small, please. This one is too small. Do you have medium?",
+      "promptFa": "مشتری در پایان چه اندازه‌ای می‌خواهد؟",
       "choices": [
-        "Blue.",
-        "Green.",
-        "Red."
+        "large",
+        "medium",
+        "small"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Red."
+      "correctIndex": 1,
+      "explanationFa": "small اندازهٔ اول بود؛ پس از امتحان medium درخواست می‌شود."
     },
     {
       "kind": "reading",
-      "passage": "Blue shirt: medium, £20. Red shirt: small, £15.",
-      "promptFa": "قیمت پیراهن آبی چقدر است؟",
+      "passage": "Blue shirt: medium. Red shirt: small. Black shoes: large.",
+      "promptFa": "مشتری پیراهن با اندازهٔ medium می‌خواهد؛ کدام را نشان می‌دهید؟",
       "choices": [
-        "£30.",
-        "£20.",
-        "£15."
+        "The red shirt.",
+        "The black shoes.",
+        "The blue shirt."
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: £20."
+      "correctIndex": 2,
+      "explanationFa": "تنها پیراهن آبی medium است؛ کفش اندازهٔ large دارد."
     }
   ],
   "survival-cafe-and-food": [
     {
       "kind": "listening",
-      "passage": "A coffee with milk, please. No sugar.",
-      "promptFa": "قهوه با چه چیزی سفارش داده شده است؟",
+      "passage": "A tea without sugar, please. A coffee? No, a tea, please.",
+      "promptFa": "سفارش نهایی نوشیدنی چیست؟",
       "choices": [
-        "Sugar, no milk.",
-        "Milk, no sugar.",
-        "Milk and sugar."
+        "چای بدون شکر",
+        "قهوه بدون شکر",
+        "چای با شکر"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Milk, no sugar."
+      "correctIndex": 0,
+      "explanationFa": "مشتری اشتباهِ coffee را به tea اصلاح می‌کند و ترجیح بدون شکر تغییر نکرده است."
     },
     {
       "kind": "reading",
-      "passage": "Tea £2. Coffee £3. Sandwich £5. Milk is available.",
-      "promptFa": "قیمت ساندویچ چقدر است؟",
+      "passage": "Customer: A coffee, please. No sugar. Server: A tea with sugar?",
+      "promptFa": "برای اصلاح اشتباه فروشنده کدام پاسخ خواستهٔ مشتری را حفظ می‌کند؟",
       "choices": [
-        "£5.",
-        "£2.",
-        "£3."
+        "A tea too, please.",
+        "No, a coffee without sugar, please.",
+        "Yes, a tea with sugar, please."
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: £5."
+      "correctIndex": 1,
+      "explanationFa": "در سفارش اول نوشیدنی coffee و ترجیح بدون شکر مشخص است؛ هر دو باید حفظ شوند."
     }
   ],
   "survival-directions-and-neighborhood": [
     {
       "kind": "listening",
-      "passage": "Go straight. Turn right at the café. The bank is there.",
-      "promptFa": "کنار کافه به کدام سمت باید پیچید؟",
+      "passage": "Go straight from the bank. Turn left at the park. The station is next to the café.",
+      "promptFa": "کنار پارک به کدام سمت می‌پیچید؟",
       "choices": [
-        "Right.",
-        "Left.",
-        "Straight, without turning."
+        "راست",
+        "هیچ پیچیدنی گفته نشده",
+        "چپ"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Right."
+      "correctIndex": 2,
+      "explanationFa": "دستور کنار پارک turn left است."
     },
     {
       "kind": "reading",
-      "passage": "The café is next to the bank. The station is opposite the bank.",
-      "promptFa": "چه مکانی روبه‌روی بانک است؟",
+      "passage": "Start: bank. Go straight. Turn right. The café is next to the station.",
+      "promptFa": "پس از مستقیم رفتن، قدم بعدی در این مسیر چیست؟",
       "choices": [
-        "The café.",
-        "The bank.",
-        "The station."
+        "Turn right.",
+        "Turn left.",
+        "Go into the bank."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: The station."
+      "correctIndex": 0,
+      "explanationFa": "دستور پس از Go straight برابر Turn right است؛ راست و چپ را حدس نمی‌زنیم."
     }
   ],
   "survival-public-transport": [
     {
       "kind": "listening",
-      "passage": "The train to Leeds leaves at ten from platform three.",
-      "promptFa": "سکو چند است؟",
+      "passage": "Does bus six go to the town centre? Yes. It leaves at eleven.",
+      "promptFa": "اتوبوس شمارهٔ شش چه ساعتی حرکت می‌کند؟",
       "choices": [
-        "One.",
-        "Ten.",
-        "Three."
+        "10:00",
+        "11:00",
+        "6:00"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Three."
+      "correctIndex": 1,
+      "explanationFa": "six شمارهٔ اتوبوس است؛ eleven ساعت حرکت است."
     },
     {
       "kind": "reading",
-      "passage": "Bus 10: City Centre, 09:00. Bus 12: Station, 09:30.",
-      "promptFa": "کدام اتوبوس ساعت نه‌ونیم به ایستگاه می‌رود؟",
+      "passage": "Bus 4: town centre, 9:00. Bus 8: station, 10:00.",
+      "promptFa": "برای رفتن به مرکز شهر طبق همین اعلان کدام اتوبوس را انتخاب می‌کنید؟",
       "choices": [
-        "Bus 2.",
-        "Bus 12.",
-        "Bus 10."
+        "Bus 8 at 10:00.",
+        "Bus 4 at 10:00.",
+        "Bus 4 at 9:00."
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Bus 12."
+      "correctIndex": 2,
+      "explanationFa": "مقصد town centre در ردیف Bus 4 و زمان آن 9:00 آمده است."
     }
   ],
   "survival-appointments-and-time": [
     {
       "kind": "listening",
-      "passage": "Your appointment is on Friday at two in the afternoon.",
-      "promptFa": "قرار چه روزی است؟",
+      "passage": "Your appointment is Monday at ten. Please change it to Tuesday at eleven. Tuesday at eleven? Yes, thank you.",
+      "promptFa": "قرار جدید چه زمانی است؟",
       "choices": [
-        "Thursday.",
-        "Friday.",
-        "Tuesday."
+        "سه‌شنبه ساعت ۱۱",
+        "دوشنبه ساعت ۱۰",
+        "سه‌شنبه ساعت ۱۰"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Friday."
+      "correctIndex": 0,
+      "explanationFa": "پیام new appointment را Tuesday at eleven مشخص می‌کند؛ زمان قبلی لغو شده است."
     },
     {
       "kind": "reading",
-      "passage": "Appointment: Anna, Tuesday, 11:00 a.m. Please come to room 2.",
-      "promptFa": "آنا چه ساعتی باید بیاید؟",
+      "passage": "Your appointment: Monday at ten. New time: Tuesday at eleven.",
+      "promptFa": "بعد از تغییر قرار، چه زمانی مراجعه می‌کنید؟",
       "choices": [
-        "11:00 a.m.",
-        "10:00 a.m.",
-        "11:00 p.m."
+        "Tuesday at ten.",
+        "Tuesday at eleven.",
+        "Monday at ten."
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: 11:00 a.m."
+      "correctIndex": 1,
+      "explanationFa": "New time زمان نهایی را مشخص می‌کند؛ نباید روز تازه را با ساعت قبلی ترکیب کنیم."
     }
   ],
   "survival-school-and-learning": [
     {
       "kind": "listening",
-      "passage": "Open your book at page twelve. Read question two.",
-      "promptFa": "کدام سؤال باید خوانده شود؟",
+      "passage": "Please read page twelve in class. Your homework is on page fourteen.",
+      "promptFa": "صفحهٔ تکلیف خانه کدام است؟",
       "choices": [
-        "Question two.",
-        "Question one.",
-        "Question twelve."
+        "12",
+        "4",
+        "14"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Question two."
+      "correctIndex": 2,
+      "explanationFa": "page fourteen برای homework گفته شده؛ page twelve برای خواندن در کلاس است."
     },
     {
       "kind": "reading",
-      "passage": "Homework: Read page 10. Write answers to questions 1 and 2. Class: Monday at 10.",
-      "promptFa": "برای تکلیف چه صفحه‌ای باید خوانده شود؟",
+      "passage": "English class — Read: page 12. Homework: page 14.",
+      "promptFa": "برای تکلیف خانه کدام صفحه را آماده می‌کنید؟",
       "choices": [
-        "Page 1.",
-        "Page 2.",
-        "Page 10."
+        "Page 14.",
+        "Page 12.",
+        "The passage does not say."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Page 10."
+      "correctIndex": 0,
+      "explanationFa": "Homework به page 14 مربوط است؛ صفحهٔ خواندن در کلاس 12 است."
     }
   ],
   "survival-invitations-and-plans": [
     {
       "kind": "listening",
-      "passage": "I am busy on Tuesday. Let us meet on Wednesday at ten.",
-      "promptFa": "روز پیشنهادی نهایی کدام است؟",
+      "passage": "Would you like to meet on Friday? Sorry, I cannot. How about Saturday at ten? Yes, Saturday at ten is good.",
+      "promptFa": "روی کدام زمان توافق شد؟",
       "choices": [
-        "Tuesday.",
-        "Thursday.",
-        "Wednesday."
+        "فقط پیشنهاد داده شده و پذیرفته نشده",
+        "شنبه ساعت ۱۰",
+        "جمعه ساعت ۱۰"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Wednesday."
+      "correctIndex": 1,
+      "explanationFa": "پاسخ Yes زمان Saturday at ten را صریحاً پذیرفته است."
     },
     {
       "kind": "reading",
-      "passage": "Hi Anna. Coffee on Saturday at ten? At the café next to the station. — Ben",
-      "promptFa": "کافه کجاست؟",
+      "passage": "A: A café on Friday? B: Sorry, I cannot. How about Saturday? A: Yes. At ten? B: Yes.",
+      "promptFa": "در پایان، روی چه زمانی توافق شده است؟",
       "choices": [
-        "At the station.",
-        "Next to the station.",
-        "Opposite the bank."
+        "Friday at ten.",
+        "Saturday, but no time is agreed.",
+        "Saturday at ten."
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Next to the station."
+      "correctIndex": 2,
+      "explanationFa": "Saturday و ساعت ten هر دو با Yes پذیرفته شده‌اند؛ این بار فقط پیشنهاد نیست."
     }
   ],
   "survival-past-and-future-plans": [
     {
       "kind": "listening",
-      "passage": "I worked yesterday. Tomorrow I am going to study at home.",
-      "promptFa": "برنامهٔ فردا چیست؟",
+      "passage": "Yesterday I was at home. I studied English. Tomorrow I am going to visit Anna.",
+      "promptFa": "کدام کار برنامهٔ فرداست؟",
       "choices": [
-        "Meet Anna.",
-        "Study at home.",
-        "Work at home."
+        "دیدن آنا",
+        "درس‌خواندنِ انجام‌شده",
+        "بودن در خانه در دیروز"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Study at home."
+      "correctIndex": 0,
+      "explanationFa": "visit Anna بعد از Tomorrow و going to آمده؛ دو جملهٔ اول دربارهٔ دیروزند."
     },
     {
       "kind": "reading",
-      "passage": "Yesterday Ben was at home. Tomorrow he is going to meet Anna at ten.",
-      "promptFa": "بن دیروز کجا بود؟",
+      "passage": "Yesterday: Ben was at home. He studied English. Tomorrow: he is going to visit Anna.",
+      "promptFa": "برای گزارش یک کار انجام‌شده در دیروز کدام جمله مناسب است؟",
       "choices": [
-        "At home.",
-        "At the café.",
-        "At the station."
+        "Ben visits Anna every day.",
+        "Ben studied English.",
+        "Ben is going to visit Anna."
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: At home."
+      "correctIndex": 1,
+      "explanationFa": "studied در بخش Yesterday آمده است؛ دیدار Anna هنوز برنامهٔ فرداست."
     }
   ],
   "survival-job-interview": [
     {
       "kind": "listening",
-      "passage": "I can use a computer. I can work on Tuesday, but not Monday.",
-      "promptFa": "چه روزی می‌تواند کار کند؟",
+      "passage": "I can cook. I can work on Monday morning, but I cannot work on Sunday.",
+      "promptFa": "چه زمانی برای کار در دسترس است؟",
       "choices": [
-        "Tuesday.",
-        "Monday.",
-        "Sunday."
+        "یکشنبه صبح",
+        "هر دو روز",
+        "دوشنبه صبح"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Tuesday."
+      "correctIndex": 2,
+      "explanationFa": "امکان کار Monday morning گفته شده و Sunday رد شده است."
     },
     {
       "kind": "reading",
-      "passage": "Name: Sara. Job: shop assistant. Available: Monday morning. Languages: Persian, a little English.",
-      "promptFa": "سارا چه زمانی وقت آزاد دارد؟",
+      "passage": "Job: cook. Work: Monday morning. Anna: I can cook. I can work on Monday. Ben: I cannot cook.",
+      "promptFa": "طبق اطلاعات کارت، کدام فرد توانایی و زمان لازم را دارد؟",
       "choices": [
-        "Tuesday morning.",
-        "Monday afternoon.",
-        "Monday morning."
+        "Anna",
+        "Ben",
+        "The passage does not say who can cook."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Monday morning."
+      "correctIndex": 0,
+      "explanationFa": "Anna هم توانایی cook و هم امکان کار در Monday را بیان کرده است."
     }
   ],
   "survival-personal-information": [
     {
       "kind": "listening",
-      "passage": "My address is fourteen Park Street. One four.",
-      "promptFa": "شمارهٔ پلاک چیست؟",
+      "passage": "My first name is Anna. My last name is Green. My address is fourteen Park Street.",
+      "promptFa": "پلاک نشانی کدام است؟",
       "choices": [
-        "40",
-        "41",
-        "14"
+        "4",
+        "14",
+        "40"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: 14"
+      "correctIndex": 1,
+      "explanationFa": "fourteen برابر 14 است؛ نام و نام خانوادگی فیلدهای جدا هستند."
     },
     {
       "kind": "reading",
-      "passage": "First name: Ben. Last name: Lee. Address: 12 Park Street. Email: ben@example.com.",
-      "promptFa": "نام خانوادگی چیست؟",
+      "passage": "First name: Tim. Last name: Lee. Address: 18 Park Street. Email: tim@example.com.",
+      "promptFa": "در فیلد Address کدام داده را منتقل می‌کنید؟",
       "choices": [
-        "Park",
         "Lee",
-        "Ben"
+        "tim@example.com",
+        "18 Park Street"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Lee"
+      "correctIndex": 2,
+      "explanationFa": "Address نشانی است؛ نام خانوادگی و ایمیل فیلدهای جدا دارند."
     }
   ],
   "survival-renting-a-home": [
     {
       "kind": "listening",
-      "passage": "The room is six hundred pounds per month. Internet is included.",
-      "promptFa": "اجارهٔ ماهانه چقدر است؟",
+      "passage": "The room is near the station. The rent is five hundred dollars a month. You can visit on Friday.",
+      "promptFa": "اجارهٔ گفته‌شده برای چه بازه‌ای است؟",
       "choices": [
-        "Seven hundred pounds.",
-        "Six hundred pounds.",
-        "Five hundred pounds."
+        "هر ماه",
+        "هر هفته",
+        "هر شب"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: Six hundred pounds."
+      "correctIndex": 0,
+      "explanationFa": "a month یعنی هر ماه؛ نباید مبلغ را هفتگی برداشت کرد."
     },
     {
       "kind": "reading",
-      "passage": "Room: £500 per month. Shared kitchen. Near the station. Internet included.",
-      "promptFa": "آیا اتاق نزدیک ایستگاه است؟",
+      "passage": "ROOM: near the station. Kitchen: yes. Bathroom: shared. Rent: $500 a month. Visit: Friday.",
+      "promptFa": "کدام اطلاعات در آگهی صریحاً آمده است؟",
       "choices": [
-        "Yes.",
-        "No.",
-        "The advert does not say."
+        "The rent is $500 a week.",
+        "The bathroom is shared.",
+        "There is no kitchen."
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Yes."
+      "correctIndex": 1,
+      "explanationFa": "shared برای bathroom آمده است و اجاره ماهانه است، نه هفتگی."
     }
   ],
   "survival-travel-and-tickets": [
     {
       "kind": "listening",
-      "passage": "The train leaves at ten and arrives at twelve.",
-      "promptFa": "قطار چه ساعتی می‌رسد؟",
+      "passage": "A return ticket to Leeds, please. I am going on Monday and coming back on Tuesday.",
+      "promptFa": "روز برگشت کدام است؟",
       "choices": [
-        "At twelve.",
-        "At ten.",
-        "At two."
+        "Monday",
+        "Friday",
+        "Tuesday"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: At twelve."
+      "correctIndex": 2,
+      "explanationFa": "coming back on Tuesday روز برگشت را مشخص می‌کند؛ Monday روز رفت است."
     },
     {
       "kind": "reading",
-      "passage": "London → Leeds. Departure: 10:00. Arrival: 12:00. Return: Friday, 15:00.",
-      "promptFa": "قطار برگشت چه روزی است؟",
+      "passage": "Train 4: Leeds, Monday 10:00. Return: Tuesday 15:00. Train 6: York, Monday 11:00.",
+      "promptFa": "برای بلیت رفت‌وبرگشت قطار ۴، روز برگشت چیست؟",
       "choices": [
-        "Monday.",
-        "Thursday.",
-        "Friday."
+        "Tuesday",
+        "Monday",
+        "The passage does not say."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: Friday."
+      "correctIndex": 0,
+      "explanationFa": "Return در اطلاعات Train 4 روز Tuesday را مشخص کرده است؛ Train 6 مسیر دیگری است."
     }
   ],
   "survival-hotel-and-stay": [
     {
       "kind": "listening",
-      "passage": "Your room is fourteen. Breakfast is at seven thirty.",
-      "promptFa": "صبحانه چه ساعتی است؟",
+      "passage": "My name is Ben Lee. I am in room twelve. There is no towel in my room.",
+      "promptFa": "برای رساندن حوله به کدام اتاق می‌روید؟",
       "choices": [
-        "7:00.",
-        "8:30.",
-        "7:30."
+        "20",
+        "12",
+        "2"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: 7:30."
+      "correctIndex": 1,
+      "explanationFa": "شمارهٔ اتاق twelve است؛ این جزئیات برای انجام درخواست لازم است."
     },
     {
       "kind": "reading",
-      "passage": "Hotel Park. Breakfast: 7:30–9:00. Reception: ground floor. Room 12: Sara Ali.",
-      "promptFa": "شمارهٔ اتاق سارا چیست؟",
+      "passage": "Lee: room 8. Breakfast 7:00–9:00. Green: room 12. Breakfast 8:00–10:00.",
+      "promptFa": "مهمانی با نام خانوادگی Lee به کدام اتاق می‌رود؟",
       "choices": [
-        "14",
-        "12",
-        "10"
+        "Room 12.",
+        "Room 7.",
+        "Room 8."
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: 12"
+      "correctIndex": 2,
+      "explanationFa": "شمارهٔ اتاق Lee برابر 8 است؛ 7:00 ساعت شروع صبحانه است."
     }
   ],
   "survival-phone-and-messages": [
     {
       "kind": "listening",
-      "passage": "Hi Ben. This is Sara. Please call me at six, not five.",
-      "promptFa": "تماس باید چه ساعتی باشد؟",
+      "passage": "This is Tim. Please give Sara a message. I am at the station. Please call me after six.",
+      "promptFa": "سارا چه زمانی باید تماس بگیرد؟",
       "choices": [
-        "At four.",
-        "At six.",
-        "At five."
+        "بعد از ساعت ۶",
+        "قبل از ساعت ۶",
+        "دقیقاً ساعت ۶"
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: At six."
+      "correctIndex": 0,
+      "explanationFa": "after six یعنی بعد از شش، نه قبل یا لزوماً دقیقاً در ساعت شش."
     },
     {
       "kind": "reading",
-      "passage": "Hi Anna. I am at the station. Please call me at four. Thanks, Ben.",
-      "promptFa": "چه کسی پیام را نوشته است؟",
+      "passage": "For: Anna. From: Ben. Message: Please call after six.",
+      "promptFa": "پیام باید به چه کسی برسد؟",
       "choices": [
-        "Ben.",
-        "Anna.",
-        "Sara."
+        "The passage does not say.",
+        "Anna",
+        "Ben"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Ben."
+      "correctIndex": 1,
+      "explanationFa": "For گیرنده را معرفی می‌کند؛ Ben فرستندهٔ پیام است."
     }
   ],
   "survival-services-and-post-office": [
     {
       "kind": "listening",
-      "passage": "Please write the name and address on the form.",
-      "promptFa": "چه دو اطلاعاتی باید نوشته شود؟",
+      "passage": "I am sending this letter to Anna Green in York. Do I need a stamp? Yes, one stamp.",
+      "promptFa": "نامه به کدام شهر فرستاده می‌شود؟",
       "choices": [
-        "Name and address.",
-        "Name and age.",
-        "Age and number."
+        "Leeds",
+        "London",
+        "York"
       ],
-      "correctIndex": 0,
-      "explanationFa": "پاسخ از متن همین تمرین: Name and address."
+      "correctIndex": 2,
+      "explanationFa": "York شهر مقصد نامه است؛ پرسش بعدی دربارهٔ تمبر است."
     },
     {
       "kind": "reading",
-      "passage": "To: Anna Lee. Address: 12 Park Street, London. Stamp: £2.",
-      "promptFa": "شهر مقصد کدام است؟",
+      "passage": "To: Sara Lee, 14 Park Street, York. From: Ben Green, 8 Hill Street, Leeds.",
+      "promptFa": "نامه برای کدام شهر فرستاده می‌شود؟",
       "choices": [
-        "Leeds.",
-        "Paris.",
-        "London."
+        "York",
+        "Leeds",
+        "The passage does not say."
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: London."
+      "correctIndex": 0,
+      "explanationFa": "بخش To نشانی گیرنده در York است؛ Leeds شهر فرستنده است."
     }
   ],
   "survival-health-and-pharmacy": [
     {
       "kind": "listening",
-      "passage": "I have a headache. I need to speak to the pharmacist.",
-      "promptFa": "علامت گفته‌شده چیست؟",
+      "passage": "I have a sore throat. I do not understand. Can you speak slowly, please?",
+      "promptFa": "گوینده برای فهمیدن توضیح چه کمکی می‌خواهد؟",
       "choices": [
-        "A stomach ache.",
-        "A cold.",
-        "A headache."
+        "گفتن قیمت بلیت",
+        "آهسته‌تر صحبت‌کردن",
+        "دادن مقدار مصرف دارو"
       ],
-      "correctIndex": 2,
-      "explanationFa": "پاسخ از متن همین تمرین: A headache."
+      "correctIndex": 1,
+      "explanationFa": "درخواست زبانی speak slowly است؛ پیام هیچ دوز یا تشخیص پزشکی نمی‌دهد."
     },
     {
       "kind": "reading",
-      "passage": "Park Pharmacy. Open Monday to Friday, 9:00–17:00. Closed Sunday.",
-      "promptFa": "آیا داروخانه یکشنبه باز است؟",
+      "passage": "Ben: I have a headache. Sara: I have a sore throat.",
+      "promptFa": "برای توضیح مشکل خیالی Sara کدام را انتخاب می‌کنید؟",
       "choices": [
-        "Only in the morning.",
-        "No.",
-        "Yes."
+        "She has a headache.",
+        "She has a stomach ache.",
+        "She has a sore throat."
       ],
-      "correctIndex": 1,
-      "explanationFa": "پاسخ از متن همین تمرین: No."
+      "correctIndex": 2,
+      "explanationFa": "sore throat برای Sara است؛ سردرد متعلق به Ben است. این فقط تمرین زبان است، نه تشخیص پزشکی."
     }
   ]
 };
 export const ENGLISH_A1_PRODUCTION: Readonly<Record<string, ProductionPrompt>> = {
   "foundation-introducing-yourself": {
-    "writing": "با اطلاعات خیالی سه جمله دربارهٔ نام، کشور و شهر بنویس.",
-    "speaking": "بدون حفظ متن، نام خیالی، کشور و شهر خود را در سه جمله معرفی کن.",
+    "writing": "کارت خیالی: نام Emma، کشور Italy، شهر Rome. از زبان این شخصیت سه جمله برای آشنایی با هم‌کلاسی بنویس؛ بعد نام او را بپرس.",
+    "speaking": "کارت را بخوان، سپس کنار بگذار. خودت را با همین هویت خیالی معرفی کن و نام مخاطب را بپرس.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "نام Emma و کشور Italy را از هم جدا و درست معرفی کرده‌ام.",
+      "برای شهر Rome از I live in استفاده کرده‌ام.",
+      "یک پرسش دربارهٔ نام مخاطب نوشته‌ام؛ همهٔ اطلاعات خیالی‌اند."
     ],
     "minWords": 6
   },
   "foundation-alphabet-and-spelling": {
-    "writing": "یک نام خیالی کوتاه و هجی آن را بنویس؛ مثال‌های دیگر لازم نیست جملهٔ کامل باشند.",
-    "speaking": "نام کوتاه خیالی را بگو و حرف‌به‌حرف هجی کن؛ اگر لازم بود با Please spell it again درخواست تکرار کن.",
+    "writing": "فرم خیالی: First name = Ben؛ Last name = Lee. دو فیلد را بنویس و نام خانوادگی را با حروف جدا هجی کن. جملهٔ بلند لازم نیست.",
+    "speaking": "دوستت فقط نام کوچک Ben را شنیده است. نام خانوادگی Lee را بگو و هجی کن؛ اگر نشنید دوباره بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "Ben را در فیلد نام کوچک و Lee را در نام خانوادگی گذاشته‌ام.",
+      "Lee را با L-E-E هجی کرده‌ام، نه نام کوچک را.",
+      "حرف اول هر نام بزرگ است؛ این تمرین فرم و هجی است، نه انشانویسی."
     ],
     "minWords": 1
   },
   "foundation-asking-for-help": {
-    "writing": "دو درخواست برای آهسته‌گویی و تکرار بنویس؛ لازم نیست معرفی بلند بنویسی.",
-    "speaking": "فرض کن نام مخاطب را نفهمیده‌ای؛ درخواست تکرار کن و بعد تشکر کن.",
+    "writing": "موقعیت خیالی: هم‌کلاسی نامش را گفته ولی نفهمیده‌ای. دو درخواست کوتاه متفاوت بنویس: اول تکرار آهسته، بعد هجی نام. نام را حدس نزن.",
+    "speaking": "از یک همراه بخواه یک نام خیالی بگوید. اگر روشن نبود درخواست تکرار و سپس هجی کن؛ در تمرین انفرادی هر دو نوبت را خودت بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "درخواست اول مشخصاً تکرار آهسته می‌خواهد.",
+      "درخواست دوم دربارهٔ هجی است، نه سن یا کشور.",
+      "از please استفاده کرده‌ام و اطلاعات نشنیده را حدس نزده‌ام."
     ],
     "minWords": 6
   },
   "foundation-pronouns-and-be": {
-    "writing": "سه جمله با I، he یا she و we بنویس؛ یکی منفی باشد.",
-    "speaking": "خودت و یک هم‌کلاسی خیالی را معرفی کن و یک سؤال با be بپرس.",
+    "writing": "دو کارت خیالی: Anna معلم است و Ben دانش‌آموز است. چهار جمله بنویس: هرکدام را معرفی کن؛ سپس با she و he به آن‌ها اشاره کن. یک جمله می‌تواند منفی باشد.",
+    "speaking": "دو کارت را معرفی کن؛ سپس بدون گفتن دوبارهٔ نام‌ها، با ضمیر بگو هرکدام معلم یا دانش‌آموز است.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "Anna و Ben را در معرفی‌ها جابه‌جا نکرده‌ام.",
+      "برای Anna از she و برای Ben از he استفاده کرده‌ام.",
+      "am/is/are را با همان فاعل هماهنگ کرده‌ام؛ اگر منفی نوشته‌ام، معنی با کارت سازگار است."
     ],
     "minWords": 6
   },
   "foundation-numbers-and-contact": {
-    "writing": "برای شخصیت خیالی یک سن و کد چهاررقمی تماس بنویس؛ شمارهٔ واقعی لازم نیست.",
-    "speaking": "یک سن را به‌صورت عدد کامل و یک کد را رقم‌به‌رقم بگو؛ سپس برای اطمینان درخواست تکرار کن.",
+    "writing": "فرم تمرینی و غیرواقعی: نام Tim؛ سن ۲۶؛ کد تماس ۲۰۴۶. دو جمله برای سن و کد تماس بنویس؛ سپس رقم‌های کد را جداگانه به انگلیسی بنویس. این کد شمارهٔ واقعی نیست.",
+    "speaking": "با همین کارت تمرینی سن را بگو؛ کد تماس را رقم‌به‌رقم بگو و یک‌بار برای تأیید تکرار کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "سن ۲۶ را با کد ۲۰۴۶ اشتباه نگرفته‌ام.",
+      "چهار رقم کد را به ترتیب two, zero, four, six آورده‌ام.",
+      "از اطلاعات واقعی خودم یا دیگری استفاده نکرده‌ام."
     ],
     "minWords": 6
   },
   "foundation-family-and-possessions": {
-    "writing": "با خانوادهٔ کاملاً خیالی دو شخص و مالک یک وسیله را در سه جمله معرفی کن.",
-    "speaking": "دو عضو یک خانوادهٔ خیالی را معرفی کن و یک سؤال دربارهٔ مالکیت وسیله بپرس.",
+    "writing": "خانوادهٔ خیالی: Sara خواهر تو و Tim برادر توست. کتاب برای Sara و کیف برای Tim است. چهار جملهٔ کوتاه برای معرفی این دو نفر و مالکیت وسایلشان بنویس.",
+    "speaking": "این دو نفر و وسایلشان را معرفی کن. همراهت بپرسد کتاب مال چه کسی است؛ جواب بده. تنها هستی؟ هر دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "نسبت Sara و Tim را درست گفته‌ام.",
+      "کتاب را به Sara و کیف را به Tim نسبت داده‌ام.",
+      "برای مالکیت از my/her/his یا نام + s مالکیت به‌درستی استفاده کرده‌ام."
     ],
     "minWords": 6
   },
   "foundation-objects-and-places": {
-    "writing": "بدون نیاز به عکس، یک اتاق خیالی با دو وسیله و جای آن‌ها را در سه جمله توصیف کن.",
-    "speaking": "در یک اتاق خیالی جای دو وسیله را بگو و جای یک وسیله را بپرس.",
+    "writing": "چیدمان خیالی: گوشی روی صندلی است؛ کیف زیر میز است؛ کلید داخل کیف است. سه جمله برای راهنمایی دوستی که دنبال وسایل می‌گردد بنویس.",
+    "speaking": "همراهت جای کلید را بپرسد. جای کلید و سپس جای کیف را بگو تا بتواند آن را پیدا کند. در تمرین انفرادی هر دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "برای گوشی on the chair و برای کیف under the table را به‌کار برده‌ام.",
+      "گفته‌ام کلید داخل کیف است، نه روی میز.",
+      "ارجاع my/your/it را بدون عوض‌شدن صاحب یا شیء ادامه داده‌ام."
     ],
     "minWords": 6
   },
   "foundation-time-and-calendar": {
-    "writing": "یک اعلان خیالی برای کلاس با روز، ساعت و یک تاریخ بنویس؛ از تاریخ مبهم مثل 03/05 پرهیز کن.",
-    "speaking": "روز و ساعت یک کلاس را بگو؛ سپس روز و ساعت کلاس دیگری را بپرس.",
+    "writing": "اعلان خیالی: کلاس انگلیسی روز Friday ساعت ۱۰ صبح، تاریخ 12 June است. یک اعلان کوتاه به انگلیسی بنویس که روز، ساعت و تاریخ را روشن برساند. شکل فهرستی هم پذیرفتنی است.",
+    "speaking": "اعلان را به دوستت بگو؛ او ساعت را دوباره بپرسد و تو تأیید کن. اگر تنها هستی دو نقش را تمرین کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "روز Friday و تاریخ 12 June را روشن نوشته‌ام.",
+      "ساعت را ten a.m. یا 10:00 a.m. نوشته‌ام تا صبح و شب مبهم نباشد.",
+      "در جملهٔ کامل از on با روز و at با ساعت استفاده کرده‌ام؛ اگر فهرست نوشته‌ام، برچسب‌ها روشن‌اند."
     ],
     "minWords": 6
   },
   "foundation-everyday-routine": {
-    "writing": "سه یا چهار جمله دربارهٔ یک روز معمول خیالی بنویس؛ یکی منفی باشد.",
-    "speaking": "برنامهٔ یک روزت را در سه جمله بگو و با do یا does دربارهٔ برنامهٔ فرد دیگری سؤال کن.",
+    "writing": "برنامهٔ خیالی Ben: ساعت ۷ بیدار می‌شود؛ ساعت ۹ کار را شروع می‌کند؛ یکشنبه کار نمی‌کند. اول دو جملهٔ مثبت دربارهٔ روز معمول او بنویس؛ بعد یک جملهٔ منفی دربارهٔ یکشنبه. در پایان از او بپرس آیا دوشنبه کار می‌کند. هر بخش را جدا انجام بده.",
+    "speaking": "با همین برنامه، همراهت نقش Ben را بگیرد. ساعت بیدارشدن و روز کار را از او بپرس؛ سپس برنامه‌اش را با he برای نفر سوم بگو. تنها هستی؟ دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "۷ زمان بیدارشدن و ۹ زمان شروع کار است؛ این دو را جابه‌جا نکرده‌ام.",
+      "در جمله‌های مثبت با he، gets up / starts را نوشته‌ام.",
+      "برای یکشنبه از does not work و در پرسش از Do you work استفاده کرده‌ام، نه does not works."
     ],
     "minWords": 6
   },
   "survival-current-activities": {
-    "writing": "دو جمله دربارهٔ الان و یک جمله دربارهٔ عادت روزانهٔ شخصیت خیالی بنویس.",
-    "speaking": "بدون نیاز به عکس، دو فعالیت خیالیِ الان را بگو و یک سؤال استمراری بپرس.",
+    "writing": "کارت خیالی Sara: معمولاً با اتوبوس به محل کار می‌رود؛ الان در خانه کتاب می‌خواند. یک جمله دربارهٔ عادت و دو جمله دربارهٔ الان بنویس؛ جملهٔ سوم بگوید الان کار نمی‌کند.",
+    "speaking": "بدون نگاه به متن نوشته‌شده بگو Sara معمولاً چه می‌کند و الان چه می‌کند؛ همراهت بپرسد آیا الان کار می‌کند و تو جواب بده.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "عادت رفت‌وآمد را با حال ساده بیان کرده‌ام.",
+      "برای خواندن فعلی از is reading استفاده کرده‌ام.",
+      "جملهٔ منفیِ الان با is not working با بقیهٔ پیام تناقض ندارد."
     ],
     "minWords": 6
   },
   "survival-hobbies-and-free-time": {
-    "writing": "سه جمله دربارهٔ علاقه‌های یک شخصیت خیالی بنویس؛ and یا but را یک بار به کار ببر.",
-    "speaking": "دو علاقه را بگو و یک سؤال دربارهٔ علاقهٔ مخاطب بپرس.",
+    "writing": "دوست خیالی تو موسیقی را دوست دارد ولی فوتبال را دوست ندارد. سه جمله برای معرفی علاقه‌های او بنویس؛ یک جمله با but و یک پرسش دربارهٔ کتاب‌خواندن اضافه کن.",
+    "speaking": "از همراهت دربارهٔ دو فعالیت بپرس و با یک جملهٔ کوتاه پاسخ او را به نفر سوم بگو؛ اگر تنهایی از کارت خیالی استفاده کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "علاقه به موسیقی و بی‌علاقگی به فوتبال را جابه‌جا نکرده‌ام.",
+      "but دو بخشِ دارای تفاوت را پیوند می‌دهد.",
+      "پرسش دربارهٔ کتاب‌خواندن است و بعد از does، فعل s ندارد."
     ],
     "minWords": 6
   },
   "survival-weather-and-seasons": {
-    "writing": "سه جمله برای هوای خیالی امروز و فصل مورد علاقه بنویس؛ یک علت ساده اختیاری است.",
-    "speaking": "هوای امروزِ خیالی را توصیف کن و بگو کدام فصل را دوست داری.",
+    "writing": "گزارش خیالی امروز: هوا آفتابی ولی سرد است. سه جمله بنویس: دو ویژگی هوای امروز را با but بگو؛ بعد فصل دلخواهت را انتخاب کن و بگو هوای سرد را دوست داری یا نه. از باران‌بودن، نبود آفتاب را حدس نزن.",
+    "speaking": "بدون خواندن نوشته، هوای کارت را توصیف کن و به پرسش دوستت دربارهٔ هوای دلخواه جواب بده.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "آفتابی و سردبودن را هم‌زمان ممکن دانسته‌ام.",
+      "ویژگی‌های امروز را با It is ... بیان کرده‌ام.",
+      "فصل و علاقهٔ انتخابی من با جملهٔ مثبت یا منفیِ بعدی سازگارند."
     ],
     "minWords": 6
   },
   "foundation-buying-something": {
-    "writing": "یک درخواست خرید، یک پرسش قیمت و یک پرسش روش پرداخت بنویس.",
-    "speaking": "کالای خیالی بخواه، قیمت را بپرس و پس از شنیدن قیمت تشکر کن.",
+    "writing": "در فروشگاه خیالی یک کیف می‌خواهی. قیمت کیف روی برچسب نیست و نمی‌دانی کارت قبول می‌کنند یا نه. یک درخواست خرید، یک پرسش قیمت و یک پرسش دربارهٔ پرداخت با کارت بنویس؛ قیمت اختراع نکن.",
+    "speaking": "همراهت فروشنده باشد: کیف بخواه، قیمت را بپرس و روش پرداخت را روشن کن؛ در تمرین انفرادی نقش فروشنده را هم با قیمت خیالی بازی کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "خرید کیف را مؤدبانه درخواست کرده‌ام.",
+      "قیمت نامعلوم را پرسیده‌ام، نه اینکه قیمت کالای دیگری را جای آن بگذارم.",
+      "یک پرسش روشن دربارهٔ پرداخت با کارت نوشته‌ام."
     ],
     "minWords": 6
   },
   "survival-shopping-and-clothing": {
-    "writing": "برای یک لباس خیالی رنگ، اندازه و درخواست امتحان‌کردن را بنویس.",
-    "speaking": "لباسی بخواه و اگر اندازه مناسب نبود با too small یا too large بگو.",
+    "writing": "در فروشگاه خیالی پیراهن قرمزِ small می‌خواهی. رنگ و اندازه را در درخواستت بگو و اجازهٔ امتحان‌کردن بخواه؛ بعد از امتحان فرض کن کوچک است و اندازهٔ medium درخواست کن.",
+    "speaking": "همراهت فروشنده باشد؛ رنگ و اندازه را روشن کن، اجازهٔ امتحان بگیر و سپس یک اندازهٔ دیگر بخواه. تنها هستی؟ هر دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "در درخواست اول red و small را روشن کرده‌ام.",
+      "اجازهٔ امتحان‌کردن خواسته‌ام.",
+      "پس از گفتن too small، اندازهٔ medium خواسته‌ام؛ درخواست تازه با مشکل سازگار است."
     ],
     "minWords": 6
   },
   "survival-cafe-and-food": {
-    "writing": "یک سفارش کوتاه با یک نوشیدنی، یک خوراکی و یک ترجیح بنویس.",
-    "speaking": "سفارش بده؛ به یک پرسش دربارهٔ شیر یا شکر جواب بده و صورت‌حساب بخواه.",
+    "writing": "در کافهٔ خیالی یک چای بدون شکر و یک ساندویچ پنیر می‌خواهی. سفارش کوتاه بنویس. پیشخدمت اشتباهاً قهوه را تکرار می‌کند؛ در یک پاسخ مؤدبانه نوشیدنی را اصلاح کن.",
+    "speaking": "همراهت سفارش را یک‌بار اشتباه تکرار کند و تو فقط بخش اشتباه را روشن و مؤدبانه اصلاح کن؛ تنها هستی؟ هر دو نقش را تمرین کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "نوشیدنی tea و خوراکی cheese sandwich در سفارش آمده‌اند.",
+      "ترجیح without sugar را گفته‌ام.",
+      "در پاسخ به اشتباه، خواستهٔ اصلی را عوض نکرده‌ام و از please استفاده کرده‌ام."
     ],
     "minWords": 6
   },
   "survival-directions-and-neighborhood": {
-    "writing": "مسیر خیالی دو مرحله‌ای از بانک به کافه بنویس؛ همهٔ اطلاعات لازم در متن خودت باشد.",
-    "speaking": "جای ایستگاه را بپرس و برای اطمینان دو دستور شنیده‌شده را بازگو کن.",
+    "writing": "مسیر خیالی: شروع کنار بانک؛ مستقیم برو؛ کنار پارک به چپ بپیچ؛ ایستگاه کنار کافه است. سه راهنمای کوتاه برای رسیدن به ایستگاه بنویس؛ به نقشهٔ بیرون این تمرین نیازی نیست.",
+    "speaking": "همراهت دنبال ایستگاه باشد و تو همین مسیر را بگو؛ او دربارهٔ چپ یا راست سؤال کند و تو روشن کن. در تمرین انفرادی دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "ابتدا مستقیم‌رفتن و بعد پیچیدن به چپ را آورده‌ام.",
+      "پارک نشانهٔ پیچیدن است و ایستگاه کنار کافه است.",
+      "دستورهای کوتاه با فعل ساده شروع می‌شوند؛ راست را به جای چپ نگفته‌ام."
     ],
     "minWords": 6
   },
   "survival-public-transport": {
-    "writing": "یک درخواست بلیت و یک سؤال برای مطمئن‌شدن از مقصد بنویس.",
-    "speaking": "برای مرکز شهر بلیت بخواه و شماره یا زمان حرکت را برای اطمینان تکرار کن.",
+    "writing": "در ایستگاه خیالی اتوبوس شمارهٔ ۶ را می‌بینی اما مقصدش را نمی‌دانی. یک بلیت برای مرکز شهر بخواه، بپرس این اتوبوس به مرکز می‌رود یا نه، و زمان حرکت را بپرس. مقصد یا زمان را حدس نزن.",
+    "speaking": "همراهت مسئول ایستگاه باشد. سه اطلاعات بلیت، مقصد و زمان را بگیر و در پایان زمان گفته‌شده را برای تأیید تکرار کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "درخواست بلیت برای town centre روشن است.",
+      "دربارهٔ مقصد همین اتوبوس سؤال کرده‌ام، نه اینکه شماره را معادل مقصد بگیرم.",
+      "زمان حرکت را پرسیده‌ام؛ زمانِ تأییدی در گفت‌وگو با پاسخ همراه سازگار است."
     ],
     "minWords": 6
   },
   "survival-appointments-and-time": {
-    "writing": "یک درخواست قرار و یک پیام تأیید روز و ساعت با اطلاعات خیالی بنویس.",
-    "speaking": "یک زمان پیشنهاد کن؛ اگر مخاطب آن زمان را ندارد، زمان دوم را تأیید کن.",
+    "writing": "قرار خیالی قبلی دوشنبه ساعت ۱۰ است. پیام تازه می‌گوید سه‌شنبه ساعت ۱۱ وقت آزاد هست. یک درخواست تغییر قرار و یک پیام تأیید برای زمان تازه بنویس؛ روز و ساعت هر دو روشن باشند.",
+    "speaking": "همراهت زمان تازه را پیشنهاد کند؛ تو روز و ساعت را یک‌جا تکرار و تأیید کن. در تمرین انفرادی هر دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "درخواست تغییر قرار را از تأییدِ قرار تازه جدا کرده‌ام.",
+      "زمان نهایی Tuesday at eleven است، نه ترکیب روز تازه با ساعت قبلی.",
+      "در تأیید، روز و ساعت هر دو آمده‌اند."
     ],
     "minWords": 6
   },
   "survival-school-and-learning": {
-    "writing": "پیام کوتاهی به معلم خیالی بنویس: زمان کلاس را بپرس و دربارهٔ معنی city سؤال کن.",
-    "speaking": "درخواست اجازهٔ سؤال کن، معنی واژهٔ داده‌شده را بپرس و درخواست تکرار کن.",
+    "writing": "اعلان خیالی کلاس: تکلیف صفحهٔ ۸ است، اما واژهٔ city را نمی‌فهمی. پیام کوتاهی به معلم بنویس: صفحهٔ تکلیف را برای تأیید بپرس و معنی city را هم بخواه.",
+    "speaking": "همراهت معلم باشد؛ دو سؤال بپرس و پس از توضیح معنی، تشکر کن. تنها هستی؟ هر دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "تأیید صفحهٔ eight را خواسته‌ام.",
+      "پرسش معنی city را با پرسش زمان یا صفحه اشتباه نگرفته‌ام.",
+      "دو درخواست مشخص و لحن مؤدبانه دارم."
     ],
     "minWords": 6
   },
   "survival-invitations-and-plans": {
-    "writing": "دعوت کوتاه با زمان و مکان خیالی بنویس و برای رد آن یک پاسخ مؤدبانهٔ جایگزین هم بده.",
-    "speaking": "دعوت کن، پاسخ مخاطب را در نظر بگیر و فقط زمان پذیرفته‌شده را در پایان تأیید کن.",
+    "writing": "دوست خیالی تو برای سه‌شنبه دعوتت کرده است ولی وقت نداری. دعوت را مؤدبانه رد کن، چهارشنبه ساعت ۵ در کافه را پیشنهاد بده و تأیید بخواه. از طرف دوستت قبول‌کردن را فرض نکن.",
+    "speaking": "همراهت پیشنهاد تازه را قبول یا رد کند؛ اگر قبول کرد، زمان و مکان را تأیید کن. تنها هستی؟ دو پاسخ ممکن را جدا تمرین کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "رد دعوت با تشکر یا عذرخواهی کوتاه همراه است.",
+      "پیشنهاد جایگزین Wednesday at five در کافه روشن است.",
+      "پیشنهاد را توافق قطعی ننامیده‌ام مگر مخاطب آن را پذیرفته باشد."
     ],
     "minWords": 6
   },
   "survival-past-and-future-plans": {
-    "writing": "دو جمله با yesterday و دو جمله با tomorrow بنویس؛ گذشتهٔ افعال تازه لازم نیست.",
-    "speaking": "دربارهٔ دیروز دو جمله و دربارهٔ برنامهٔ فردا دو جمله بگو؛ از اطلاعات خیالی استفاده کن.",
+    "writing": "کارت خیالی: دیروز در خانه بودی و انگلیسی خواندی؛ فردا قصد داری آنا را ببینی. ابتدا دو جمله دربارهٔ دیروز بنویس و مکث کن؛ سپس یک جمله با going to دربارهٔ فردا بنویس. استفاده از فعل گذشتهٔ تازه لازم نیست.",
+    "speaking": "همراهت یک‌بار دربارهٔ دیروز و یک‌بار دربارهٔ فردا بپرسد. کوتاه پاسخ بده؛ سپس بپرس آیا او دیروز کار کرده است. در تمرین انفرادی دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "دو جملهٔ دیروز شامل was at home و studied هستند.",
+      "برای برنامهٔ فردا از am going to + فعل ساده استفاده کرده‌ام، نه گذشته.",
+      "yesterday و tomorrow را روشن آورده‌ام؛ پس از did در پرسش شفاهی، فعل ساده آمده است."
     ],
     "minWords": 6
   },
   "survival-job-interview": {
-    "writing": "برای یک شخصیت خیالی شغل، یک توانایی و یک زمان آزاد را در سه جمله بنویس.",
-    "speaking": "خودت را برای یک آشنایی کاری ساده معرفی کن؛ یک توانایی و یک روز آزاد بگو.",
+    "writing": "برای یک آشنایی کاری خیالی سه جمله بنویس: آشپزی بلدی، دوشنبه صبح می‌توانی کار کنی، یکشنبه نمی‌توانی. لازم نیست سابقهٔ کاری یا پاسخ مصاحبهٔ تخصصی بسازی.",
+    "speaking": "همراهت فقط دربارهٔ توانایی و روز کار بپرسد؛ جواب کوتاه بده و زمان شروع را از او بپرس. در تمرین انفرادی دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "توانایی را با can cook نوشته‌ام، نه can cooks.",
+      "دوشنبه صبح را زمانِ امکان کار گفته‌ام.",
+      "منفیِ یکشنبه با برنامهٔ دوشنبه تناقض ندارد؛ اطلاعات شغلی خصوصی لازم نیست."
     ],
     "minWords": 6
   },
   "survival-personal-information": {
-    "writing": "فرم خیالی چهارخانه‌ای را کامل کن: First name، Last name، Address، Email. از example.com استفاده کن.",
-    "speaking": "در نقش شخصیت خیالی نام و نشانی را بگو و یکی از آن‌ها را برای اطمینان هجی یا تکرار کن.",
+    "writing": "اطلاعات کاملاً خیالی: نام Anna، نام خانوادگی Green، نشانی پلاک ۱۴ خیابان Park، ایمیل anna@example.com. فرم چهارخانه‌ای First name / Last name / Address / Email را کامل کن؛ جملهٔ کامل لازم نیست.",
+    "speaking": "همراهت مسئول فرم باشد؛ نام و نشانی خیالی را از تو بپرسد و تو یک مورد را برای روشن‌کردن هجی کن. در تمرین انفرادی دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "Anna و Green را در فیلدهای درست گذاشته‌ام.",
+      "نشانی شامل شمارهٔ 14 و Park Street است.",
+      "ایمیل anna@example.com بدون فاصله است؛ از هویت یا ایمیل واقعی استفاده نکرده‌ام."
     ],
     "minWords": 3
   },
   "survival-renting-a-home": {
-    "writing": "برای آگهی داده‌شده دو سؤال دربارهٔ اتاق و یک درخواست زمان بازدید بنویس.",
-    "speaking": "قیمت و یک امکان را بپرس و زمانی برای دیدن اتاق پیشنهاد کن.",
+    "writing": "آگهی خیالی: یک اتاق نزدیک ایستگاه؛ آشپزخانه دارد؛ حمام مشترک است. اجاره و ساعت بازدید نوشته نشده‌اند. یک پیام کوتاه بنویس: اجارهٔ ماهانه و زمان بازدید را بپرس؛ دوباره دربارهٔ داشتن آشپزخانه سؤال نکن.",
+    "speaking": "همراهت صاحب آگهی باشد. دو اطلاعاتِ گمشده را بپرس و پاسخ‌ها را کوتاه تکرار کن؛ در تمرین انفرادی از پاسخ خیالی استفاده کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "اجاره را برای هر ماه پرسیده‌ام، نه اینکه عددی حدس بزنم.",
+      "زمان بازدید را پرسیده‌ام.",
+      "اطلاعات روشنِ آگهی مانند داشتن آشپزخانه را نادیده نگرفته‌ام؛ موضوع قرارداد تخصصی نیست."
     ],
     "minWords": 6
   },
   "survival-travel-and-tickets": {
-    "writing": "درخواست بلیت با مقصد، روز رفت و روز برگشت خیالی بنویس.",
-    "speaking": "بلیت رفت‌وبرگشت بخواه و زمان رسیدن را از حرکت جداگانه بپرس.",
+    "writing": "سفر خیالی: رفت از لندن به Leeds روز Monday؛ برگشت روز Tuesday. درخواست بلیت رفت‌وبرگشت با مقصد و هر دو روز بنویس؛ سپس ساعت حرکت قطار رفت را بپرس چون روی کارت نیست.",
+    "speaking": "همراهت مسئول بلیت باشد؛ مقصد، رفت‌وبرگشت و روزها را روشن کن و زمان حرکت را بگیر. تنها هستی؟ دو نقش را تمرین کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "از return ticket برای رفت‌وبرگشت استفاده کرده‌ام.",
+      "مقصد Leeds و روزهای Monday و Tuesday را جابه‌جا نکرده‌ام.",
+      "ساعت حرکت نامعلوم را پرسیده‌ام؛ عددِ نداده را حدس نزده‌ام."
     ],
     "minWords": 6
   },
   "survival-hotel-and-stay": {
-    "writing": "برای پذیرش یک پیام کوتاه بنویس: شمارهٔ اتاق خیالی و درخواست حوله.",
-    "speaking": "رزرو خیالی را معرفی کن و دربارهٔ ساعت صبحانه یا یک وسیلهٔ لازم سؤال کن.",
+    "writing": "رزرو خیالی تو به نام Ben Lee، اتاق ۱۲ است. در اتاق حوله نیست. پیام کوتاهی برای پذیرش بنویس: خودت و اتاق را مشخص کن، مشکل حوله را بگو و مؤدبانه حوله بخواه.",
+    "speaking": "همراهت پذیرش هتل باشد؛ شمارهٔ اتاق را بپرسد، تو بگو و درخواست حوله کن. تنها هستی؟ هر دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "نام Ben Lee و room twelve برای پذیرش روشن است.",
+      "نبودن حوله را با There is no towel بیان کرده‌ام.",
+      "درخواست حوله مؤدبانه است و شمارهٔ اتاق در نوبت‌های بعدی عوض نشده است."
     ],
     "minWords": 6
   },
   "survival-phone-and-messages": {
-    "writing": "پیام خیالی سه‌جمله‌ای بنویس: نام، جای فعلی و زمان تماس؛ شمارهٔ واقعی لازم نیست.",
-    "speaking": "برای تماس خودت را معرفی کن؛ اگر فرد حاضر نیست، یک پیغام کوتاه با زمان بگذار.",
+    "writing": "در تماس خیالی Sara حاضر نیست. تو Tim هستی، الان در ایستگاه هستی و می‌خواهی Sara بعد از ساعت ۶ با تو تماس بگیرد. یک پیام کوتاه برای منتقل‌شدن به Sara بنویس؛ شمارهٔ واقعی لازم نیست.",
+    "speaking": "همراهت پاسخ‌گوی تلفن باشد؛ پیام را برای Sara بگذار. او نام یا زمان را دوباره بپرسد و تو روشن کن؛ تنها هستی؟ هر دو نقش را بگو.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "گیرنده Sara و فرستنده Tim مشخص‌اند.",
+      "مکان فعلی station را گفته‌ام.",
+      "درخواست تماس after six روشن است؛ این زمان را به before six تبدیل نکرده‌ام."
     ],
     "minWords": 6
   },
   "survival-services-and-post-office": {
-    "writing": "برای نامهٔ خیالی نام و نشانی گیرنده را بنویس و یک پرسش دربارهٔ هزینه اضافه کن.",
-    "speaking": "در ادارهٔ پست بخواه یک نامه بفرستی؛ مقصد را بگو و قیمت تمبر را بپرس.",
+    "writing": "نامهٔ خیالی برای Anna Green در ۱۲ Park Street در شهر York است. نشانی گیرنده را بنویس و در ادارهٔ پست هزینهٔ فرستادن همین نامه را بپرس؛ نشانی واقعی لازم نیست.",
+    "speaking": "همراهت مسئول پست باشد. مقصد نامه را بگو و دربارهٔ هزینه و نیاز به تمبر سؤال کن؛ تنها هستی؟ دو نقش را تمرین کن.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "نام Anna Green و نشانی 12 Park Street, York در بخش گیرنده آمده‌اند.",
+      "پرسش هزینه دربارهٔ فرستادن همین نامه است، نه قیمت یک کالای دیگر.",
+      "در گفت‌وگو دربارهٔ نیاز به stamp سؤال کرده‌ام؛ اطلاعات گیرنده خیالی است."
     ],
     "minWords": 6
   },
   "survival-health-and-pharmacy": {
-    "writing": "برای یک شخصیت خیالی دو جمله دربارهٔ حال او و یک درخواست کمک بنویس؛ نام دارو لازم نیست.",
-    "speaking": "در نقش شخصیت خیالی یک علامت ساده را بگو و درخواست صحبت با فرد مناسب کن.",
+    "writing": "موقعیت کاملاً خیالی: سردرد داری و توضیح مخاطب را خوب نمی‌فهمی. سه عبارت کوتاه بنویس: علامت را بگو، بگو متوجه نمی‌شوی و درخواست آهسته‌گویی کن. تشخیص، نام دارو یا مقدار مصرف ننویس.",
+    "speaking": "همراهت نقش مسئول داروخانه را بازی کند. علامت خیالی را بگو و از او بخواه آهسته‌تر صحبت کند؛ تنها هستی؟ دو نقش را بگو. این تمرین توصیهٔ درمانی نیست.",
     "checklist": [
-      "هدف همین تمرین را با اطلاعات واقعی یا کاملاً خیالی انجام داده‌ام؛ افشای اطلاعات خصوصی لازم نیست.",
-      "واژه‌ها و الگوی هدف همین درس را به کار برده‌ام؛ لازم نیست از همهٔ قواعد قبلی استفاده کنم.",
-      "معنی جمله‌ها با هم سازگار است؛ اگر زمان، قیمت، شخص یا مکان را تغییر داده‌ام، نوبت‌های بعدی هم سازگارند."
+      "فقط علامت خیالی headache را بیان کرده‌ام، نه تشخیص بیماری.",
+      "نفهمیدن توضیح را روشن گفته‌ام.",
+      "درخواست آهسته‌گویی مؤدبانه دارم؛ دارو یا مقدار مصرف پیشنهاد نکرده‌ام."
     ],
     "minWords": 6
   }

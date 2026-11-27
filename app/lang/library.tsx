@@ -21,7 +21,7 @@ import {
   Sparkles,
   Volume2,
 } from 'lucide-react-native';
-import { COURSE_LEVELS, SENTENCE_LESSONS, type CourseLevelId, type SentenceLesson } from '@/lib/courseContent';
+import { COURSE_LEVELS, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS, type CourseLevelId, type SentenceLesson } from '@/lib/courseContent';
 import type { CourseProgress } from '@/lib/courseProgress';
 import type { StudyState } from '@/lib/englishStudyState';
 import { ENGLISH_ENGINE_BLUEPRINT, getAdvancedContentComposition, getEnglishLevelMetrics } from '@/lib/englishLearningEngine';
@@ -193,6 +193,7 @@ export default function EnglishLessonList() {
                     <Text style={styles.levelHeroBand}>{selected.cefr}</Text>
                   </View>
                   <Text style={styles.selectedTitle}>{selected.title}</Text>
+                  {selected.id === 1 && <Text style={styles.pageIntro}>مسیر اصلی A1 شامل ۲۹ درس است. ۸ آزمایشگاه قدیمی برای بازبینی آموزشی از دسترس خارج شده‌اند؛ سابقهٔ آن‌ها حذف نشده است. پایان درس نشان‌دهندهٔ طی‌کردن مسیر است، نه تأیید تسلط.</Text>}
                   <Text style={styles.selectedDescription}>{selected.description}</Text>
                   <View style={styles.selectedProgressHeading}>
                     <Text style={styles.selectedProgressLabel}>پیشرفت این سطح</Text>

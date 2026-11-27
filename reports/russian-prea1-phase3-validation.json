@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-26",
+  "scope": "Russian Pre-A1 only",
+  "lessons": 31,
+  "coreRows": 252,
+  "rewrittenCoreTargets": 0,
+  "explicitContexts": 5,
+  "revisedCheckPrompts": 4,
+  "everydayPanels": 6,
+  "everydayExamplesRendered": 12,
+  "transferPanels": 6,
+  "transferCasesRendered": 12,
+  "webNativeSessionRestores": 186,
+  "historicalOutcomeArchives": 8,
+  "completionGatesAdded": 0,
+  "limitations": "React rendering with native views/storage/audio boundaries mocked; no real-device audio/ASR or learner trial. Optional examples are not mastery evidence."
+}

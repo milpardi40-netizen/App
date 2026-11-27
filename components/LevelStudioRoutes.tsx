@@ -10,7 +10,7 @@ import { playRussianSpeech, stopRussianSpeech } from '@/lib/russianSpeech';
 import { playTurkishSpeech, stopTurkishSpeech } from '@/lib/turkishSpeech';
 import { playStarterSpeech, stopStarterSpeech } from '@/lib/starterSpeech';
 import { AppBottomNav } from '@/components/AppBottomNav';
-import { COURSE_LEVELS, SENTENCE_LESSONS } from '@/lib/courseContent';
+import { COURSE_LEVELS, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import { getCourseProgress, setCurrentLesson as setEnglishCurrentLesson } from '@/lib/courseProgress';
 import PlacementTest, { type PlacementConfig } from '@/components/PlacementTest';
 import { playResponsiveSpeech, stopResponsiveSpeech } from '@/lib/responsiveSpeech';

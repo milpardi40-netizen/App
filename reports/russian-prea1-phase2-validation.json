@@ -1,0 +1,55 @@
+{
+  "scope": "Russian Pre-A1 phase 2 only",
+  "date": "2026-11-26",
+  "lesson12": {
+    "beforeTokens": 55,
+    "afterTokens": 23,
+    "beforeNewSurfaceForms": [
+      "знаю",
+      "знаешь",
+      "хочу",
+      "хочешь",
+      "хотите",
+      "люблю",
+      "любишь",
+      "читаю",
+      "читаем",
+      "пишу",
+      "пишем",
+      "живу",
+      "живёт",
+      "говорю",
+      "понимаю",
+      "могу",
+      "иду",
+      "идёшь",
+      "есть",
+      "стоит"
+    ],
+    "afterNewSurfaceForms": [
+      "хочу",
+      "хочешь",
+      "читаю",
+      "пишу",
+      "знаешь",
+      "понимаю"
+    ],
+    "targets": 8,
+    "microsteps": 3
+  },
+  "reading": {
+    "cards": 31,
+    "introducedLettersAndSigns": 32,
+    "persianAidInitiallyShown": 6,
+    "persianAidInitiallyHidden": 25,
+    "deferred": "ъ"
+  },
+  "webNativeSessionRestores": 186,
+  "wordLab": {
+    "ruCore": 116,
+    "ruCards": 1460,
+    "idsAndOrderPreserved": true
+  },
+  "otherLessonsUnchanged": true,
+  "limitations": "Native views, speech and storage boundaries are simulated. No real device audio, learner trial or CEFR certification."
+}

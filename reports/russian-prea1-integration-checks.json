@@ -1,0 +1,92 @@
+[
+  {
+    "command": "npm run validate:russian-prea1-integration",
+    "exit": 0,
+    "durationMs": 5977
+  },
+  {
+    "command": "npm run validate:russian-prea1-phase3",
+    "exit": 0,
+    "durationMs": 2522
+  },
+  {
+    "command": "npm run validate:russian-prea1-phase2",
+    "exit": 0,
+    "durationMs": 4105
+  },
+  {
+    "command": "npm run validate:russian-prea1-phase1",
+    "exit": 0,
+    "durationMs": 6461
+  },
+  {
+    "command": "npm run validate:russian-practical",
+    "exit": 0,
+    "durationMs": 341
+  },
+  {
+    "command": "npm run validate:russian-pre-a1-masculine",
+    "exit": 0,
+    "durationMs": 2300
+  },
+  {
+    "command": "npm run validate:six-prea1-practical",
+    "exit": 0,
+    "durationMs": 2746
+  },
+  {
+    "command": "npm run validate:prea1-balance",
+    "exit": 0,
+    "durationMs": 3069
+  },
+  {
+    "command": "npm run validate:russian",
+    "exit": 0,
+    "durationMs": 1499
+  },
+  {
+    "command": "node scripts/verify-russian-recycling.cjs",
+    "exit": 0,
+    "durationMs": 300
+  },
+  {
+    "command": "npm run validate:russian-a1",
+    "exit": 0,
+    "durationMs": 7427
+  },
+  {
+    "command": "npm run validate:word-lab",
+    "exit": 0,
+    "durationMs": 6554
+  },
+  {
+    "command": "npm run validate:lesson-assessment",
+    "exit": 0,
+    "durationMs": 6450
+  },
+  {
+    "command": "npm run validate:dialogue-room",
+    "exit": 0,
+    "durationMs": 632
+  },
+  {
+    "command": "npm run validate:learner-controls",
+    "exit": 0,
+    "durationMs": 17831
+  },
+  {
+    "command": "npm run validate:level-resume",
+    "exit": 0,
+    "durationMs": 12921
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "durationMs": 24870
+  },
+  {
+    "command": "node scripts/verify-english-a1-phase3.cjs",
+    "exit": 0,
+    "durationMs": 587
+  }
+]

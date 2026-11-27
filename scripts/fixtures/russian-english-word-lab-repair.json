@@ -1,0 +1,91 @@
+{
+  "description": "Separately authorized Russian/English word-lab repair, after German repair and English A1 phase 3, 2026-11-26.",
+  "inventories": {
+    "en": "906495546f6bd8cadf47b3311c05a600a533c35bd635d37f9c2990be4cdff7f0",
+    "ru": "da93a1d5a375d73dd30aca1ab72d6263440f2ec91f0dc68ef519d81d9d92e14b",
+    "tr": "4d482ff299ed13193e368ef9fc1941969f875a3e70310c3a105208e0e1c671c7",
+    "ar": "bfd67afd5d27dd5d95193006d129def34f512512affec8ce5fca30ac88e3a400",
+    "de": "7cfeb9805fded6ea460be8caaa113a88835380f5eb6334ef7e60ca6ed9dd38b4",
+    "fr": "cc0aa384c879a25007ca9b2b2b8d47b70c258ff533ccec4a1b44a47d94fb2367",
+    "es": "7f5878bc47e6afae876e74767c6af01fc2fa054049b0ead40a7f3559afb34a48"
+  },
+  "german": {
+    "core": "4a1eed4ba64f70953cf362169439a1022505eb5e17398fee1816c75cb11284b3",
+    "cards": "dbb34c72ae3531018004a072bde8730c62cab99e2888cef08354e3242f7504d5",
+    "unresolved": "e3694583647bd187f73a2459e488fdda16b0efe93133c8c1430df1904adc42d5"
+  },
+  "languages": {
+    "ru": {
+      "before": {
+        "coreCount": 105,
+        "cardCount": 1453,
+        "coreIdsHash": "6189d0372b0051f76baa24b4ad6ad5ecaa84ff25e794db94c11cf6bb2d98ad78",
+        "cardIdsHash": "24b38a5f6348d9ea324131af0dbe7677f44eed163d5d747568a7139be5ff2568",
+        "core": "6bedf6c25949ef9115fab3526fc367c94acba60ff12e7f065850d1afea38543a",
+        "cards": "3934798caf2ade83522c6f02df6e55ae7fce33e1a50aca6de24e2e66fd5e0360",
+        "unresolved": "05e73ee1435a7ebde479b1ab2b9ba1e37bffef77f12d80611fc7ab6a8ae84f0c"
+      },
+      "after": {
+        "core": "7516918fc85cb90e8ef11bdae0c367f82558a6ce4dfc6cdab69c1bcb37b321fd",
+        "cards": "235193b576327d070ea98b53f1f13b8d702ec263cb5b3ef8524d22e9bdd0eaf2",
+        "unresolved": "63f4d6e412d550506b7b88ccd5e67a20a6558b6d994ac1f6f1317b1875dcbeba"
+      },
+      "addedCoreTargets": [
+        "два",
+        "четы́ре",
+        "шесть",
+        "во́семь",
+        "мя́со",
+        "сын",
+        "воскресе́нье",
+        "час",
+        "по́езд",
+        "до́рого",
+        "о́чень"
+      ],
+      "addedCardIds": [
+        "ru-word-мясо",
+        "ru-word-сын",
+        "ru-word-воскресенье",
+        "ru-word-час",
+        "ru-word-поезд",
+        "ru-word-дорого",
+        "ru-word-очень"
+      ]
+    },
+    "en": {
+      "before": {
+        "coreCount": 119,
+        "cardCount": 4279,
+        "coreIdsHash": "d96a8ed62d6bee79436323700d3008786471ac6be57c82e9237ec319bd2fb336",
+        "cardIdsHash": "5e29411d1ca837f3e1e86f53f32e29621e6f51bebe2ef2858e3fff586402bd6c",
+        "core": "11b7910c6fe845db65a82562360431bff1f51ed2f9a6a2ea573fa67d84435400",
+        "cards": "8dea6fb2dfcbaacc0834fcce2d2fb09de551c788ee350f9cd8fb12e20844b41d",
+        "unresolved": "3976d41c53d7ff7d2674ae91fdd1b42c1fc7131fba1111bfa1c4db014ae01f37"
+      },
+      "after": {
+        "core": "3e5a88b050b1fc608682cbb71ff6af0477efebfdae13e3660d2fd0b08fe4d690",
+        "cards": "54639cfb09923a0260fcb468a62d83e877f36e78823b310b1df9331df26dba2b",
+        "unresolved": "6504d95c4a3a2d7b97fa08dae45ad28ebba21562bf62969d2038d56d45ed4145"
+      },
+      "addedCoreTargets": [
+        "first name",
+        "last name",
+        "spell",
+        "address",
+        "eleven",
+        "twelve",
+        "sandwich",
+        "sugar",
+        "month",
+        "turn left",
+        "turn right",
+        "card"
+      ],
+      "addedCardIds": [
+        "en-word-month",
+        "en-word-card"
+      ]
+    }
+  }
+}

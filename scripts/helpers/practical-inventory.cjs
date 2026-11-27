@@ -48,7 +48,7 @@ function verifyScope(inventory) {
     }
     if (language === 'ru') {
       const a1Before = require('../fixtures/russian-a1-before.json');
-      assert.equal(digest(lessons.filter(l => l.levelId !== 1)), a1Before.protected.ru, 'Russian Pre-A1 and A2–C1 stay byte-identical');
+      assert.equal(digest(require('./approved-russian-prea1.cjs').historicalPre(lessons).filter(l => l.levelId !== 1)), a1Before.protected.ru, 'Russian A2–C1 unchanged; Pre-A1 matches separately approved phase-1 corrections');
       const current = lessons.filter(l => l.levelId === 1).map(l => ({ id: l.id, sentenceIds: l.sentences.map(s => s.id), dialogueCount: l.dialogue.length, checksCount: l.checks.length }));
       assert.deepEqual(current.sort((a,b) => a.id.localeCompare(b.id)), [...a1Before.a1Structure].sort((a,b) => a.id.localeCompare(b.id)), 'A1 keeps every lesson, sentence ID and assessment/dialogue shape');
       continue;

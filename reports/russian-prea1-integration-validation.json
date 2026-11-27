@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-26",
+  "scope": "Russian Pre-A1 integration, no curriculum edits",
+  "boundaries": "Full RussianLesson + real scaffold, transfer, builder, assessment and session storage logic. Native views, speech/ASR, room renderer, progress/rewards services and other peripheral platform services are simulated. No real device visual/audio/ASR test.",
+  "platforms": [
+    "web",
+    "android"
+  ],
+  "lessonsWalked": 62,
+  "coreTargetsRendered": 504,
+  "transferCases": 24,
+  "everydayExamples": 24,
+  "sessionRoundTrips": 62,
+  "assessmentQuestionsRendered": 312,
+  "completionInvocations": 62,
+  "lessonSwitches": 2,
+  "audioFallbacks": 2,
+  "storageFailureRecoveries": 4,
+  "higherBandRenders": 30
+}

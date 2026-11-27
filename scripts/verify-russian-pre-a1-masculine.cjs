@@ -5,6 +5,9 @@ const esbuild = require('esbuild');
 const fold = text => text.toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е');
 // Explicit inventory from the retired Pre-A1 content, including inflected forms.
 // Not an ending-based gender classifier: па́па, де́душка and ко́фе remain valid masculine nouns.
+// This protects the historical core inventory. The separately scoped optional
+// everyday/identity alternatives are rendered and checked by verify-russian-prea1-phase3.cjs;
+// they do not grant permission to insert retired forms into arbitrary core lessons.
 const forbiddenStems = /^(?:мам|комнат|двер|окн|вод(?:а|у|ы|е|ой)|книг|ручк|ноч|имя|имен|слов|семь[яюие]|семе|сестр|подруг|учительниц|студентк|девоч|сумк|яблок|молок|кошк|собак|птиц|рыб|сред(?:а|у|ы|е|ой)|пятниц|суббот|воскресен|школ|кафе|улиц|утр|иранк|тетрад|кухн|чаш|евро|свидан|дела|сар(?:а|у|ы)|анн(?:а|у|ы)|мин(?:а|у|ы))/;
 const feminineLessons = /ru-pre-0[35]-/;
 const restoredForms = new Set(['мама','сестра','моя','она']);
@@ -104,8 +107,8 @@ const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)
   for (const verb of app.VERBS) audit(app.studyExamples(verb, 0), `preVerb.${verb.lemma}`);
 
   // Snapshots of the base commit's shipped content, not source-format hashes.
-  assert.equal(digest(app.RUSSIAN_LESSONS.filter(lesson => lesson.levelId !== 1)), require('./fixtures/russian-a1-before.json').protected.ru, 'all non-A1 Russian content stays byte-identical');
-  assert.equal(digest(Object.fromEntries(Object.entries(app.genderCards).filter(([id]) => !id.startsWith('ru-a1-')))), require('./fixtures/russian-a1-before.json').protectedGender, 'all non-A1 gender cards unchanged');
+  assert.equal(digest(require('./helpers/approved-russian-prea1.cjs').historicalPre(app.RUSSIAN_LESSONS).filter(lesson => lesson.levelId !== 1)), require('./fixtures/russian-a1-before.json').protected.ru, 'all non-A1 Russian content stays byte-identical');
+  assert.equal(digest(Object.fromEntries(Object.entries(require('./helpers/approved-russian-prea1.cjs').historicalGender(app.genderCards)).filter(([id]) => !id.startsWith('ru-a1-')))), require('./fixtures/russian-a1-before.json').protectedGender, 'all non-A1 gender cards unchanged');
   assert.equal(digest(app.GRAMMAR_UNITS.filter(unit => unit.level > 0)), 'bba9124c2105b0a983d63566e89456a4716fdb6f7cf2e5c0da36bb915c5318ce', 'higher-level grammar units unchanged');
 
   const memory = new Map();

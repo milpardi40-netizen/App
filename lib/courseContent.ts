@@ -1,3 +1,4 @@
+import { isEnglishLessonAvailable } from './englishLessonAvailability';
 import {arrangeEnglishA1} from './englishA1Practice';
 import { enrichEnglishPreA1 } from './languages/preA1Practical/english';
 import { EXPANDED_SENTENCE_LESSONS } from './courseContentExpansion';
@@ -736,4 +737,6 @@ export const SENTENCE_LESSONS: SentenceLesson[] = arrangeEnglishA1(insertLabLess
   dialogue: lesson.dialogue.map(line => ({ ...line, role: line.speaker })),
 }));
 
-export const getSentenceLesson = (id: string) => SENTENCE_LESSONS.find((lesson) => lesson.id === id);
+/** Learner-facing projection. Keep SENTENCE_LESSONS intact for legacy storage/backup validation. */
+export const ENGLISH_LEARNER_LESSONS = SENTENCE_LESSONS.filter(isEnglishLessonAvailable);
+export const getSentenceLesson = (id: string) => ENGLISH_LEARNER_LESSONS.find((lesson) => lesson.id === id);

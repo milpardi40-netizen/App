@@ -1,3 +1,4 @@
+import { isEnglishA1Core } from '@/lib/englishA1Scope';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
@@ -83,7 +84,9 @@ export function EnglishLessonEvidence({ lesson, onPassed, attemptEvidence, onAtt
     if (tasks.every(item => next[item.id])) onPassedRef.current();
   }
 
-  const description = `برای پایان این درس، به هر ${tasks.length} سنجشِ مرتبط با هدف‌هایش درست پاسخ دهید. پاسخ نادرست را می‌توانید دوباره امتحان کنید؛ شنیداری پس از پخش کامل ثبت می‌شود. گفتار خودکار نمره‌گذاری نمی‌شود.`;
+  const description = isEnglishA1Core(lesson.id)
+    ? `برای ثبت موفقیت در این سنجش، به هر ${tasks.length} سؤال درست پاسخ دهید؛ شنیداری پس از پخش کامل ثبت می‌شود. نوشتن این بخش بازنویسی کنترل‌شده است، نه تولید آزاد. دکمهٔ ادامه بدون قبولی هم کار می‌کند؛ پایان درس به معنی تسلط نیست.`
+    : `برای پایان این درس، به هر ${tasks.length} سنجشِ مرتبط با هدف‌هایش درست پاسخ دهید. پاسخ نادرست را می‌توانید دوباره امتحان کنید؛ شنیداری پس از پخش کامل ثبت می‌شود. گفتار خودکار نمره‌گذاری نمی‌شود.`;
 
   // Centred like the assessment page of every other language: one narrow column, centred copy, then
   // equally sized task cards from the shared English supplement component.

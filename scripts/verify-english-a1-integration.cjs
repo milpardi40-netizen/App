@@ -59,6 +59,7 @@ function propExpression(tag, name) {
   const productionRevisionFor = feed('ProductionTask', 'contentRevision');
   const examplesFor = feed('ProductionTask', 'examples');
   const labelFor = feed('ProductionTask', 'levelLabel');
+  const titleFor = feed('ProductionTask', 'titleFa');
   const evaluate = (fn, lesson) => fn(lesson, ...Object.values(api));
   const inventory = await loadInventory();
   const a1 = inventory.en.filter(l => api.isEnglishA1Core(l.id));
@@ -67,6 +68,8 @@ function propExpression(tag, name) {
     assert.deepEqual(evaluate(pairsFor, lesson), api.lessonDialoguePairs(lesson.sentences, lesson.dialogue));
     assert.deepEqual(evaluate(productionFor, lesson), api.B2_PRODUCTION[lesson.id]);
     assert.equal(evaluate(labelFor, lesson), undefined);
+    assert.equal(evaluate(titleFor, lesson), undefined, 'other English levels keep their production title');
+    assert.equal(evaluate(productionRevisionFor, lesson), undefined, 'other English levels keep their draft keys');
     assert.equal(evaluate(revisionFor, lesson), lesson.levelId === 0 ? api.practicalRoomRevision(lesson.id) : undefined);
   }
   let room;
@@ -81,23 +84,28 @@ function propExpression(tag, name) {
       const revision = evaluate(revisionFor, lesson);
       const explicit = evaluate(productionFor, lesson);
       const levelLabel = evaluate(labelFor, lesson);
+      const titleFa = evaluate(titleFor, lesson);
+      assert.equal(titleFa, 'کاربرد و تولید کوتاه');
       assert.equal(revision, api.ENGLISH_A1_ROOM_REVISION);
       assert.equal(levelLabel, 'A1');
       const writing = api.englishA1Production(lesson.id).writing;
       assert.equal(explicit.writing, writing, 'actual production instruction equals authored task');
       assert.ok(!explicit.writing.includes('هر جمله فعل') && !explicit.checklist.some(s => s.startsWith('هر جمله فعل')));
       const productionRevision = evaluate(productionRevisionFor, lesson);
-      assert.equal(productionRevision, api.ENGLISH_A1_CONTENT_REVISION);
+      assert.equal(productionRevision, api.ENGLISH_A1_PRODUCTION_REVISION);
       const legacyDraftKey = `lesson_production_v1:${lesson.id}`;
       const legacyDraft = JSON.stringify({text: 'OLD ANSWER TO OLD TASK', checks: [0,1,2]});
       globalThis.__a1Disk.set(legacyDraftKey, legacyDraft);
+      const previousTaskKey = `${legacyDraftKey}:${api.ENGLISH_A1_CONTENT_REVISION}`;
+      globalThis.__a1Disk.set(previousTaskKey, legacyDraft);
       assert.deepEqual(pairs.filter(p => p.section === 'review').map(p => p.sentenceId), lesson.sentences.map(s => s.id));
-      await act(async () => { production = create(React.createElement(api.Production, { source: lesson, explicit, levelLabel, contentRevision: productionRevision, examples: evaluate(examplesFor, lesson), onSpeak() {} })); });
+      await act(async () => { production = create(React.createElement(api.Production, { source: lesson, explicit, levelLabel, titleFa, contentRevision: productionRevision, examples: evaluate(examplesFor, lesson), onSpeak() {} })); });
       const productionText = renderedText(production);
-      assert.ok(productionText.includes('تولید آزاد · A1') && !productionText.includes('تولید آزاد · B1'));
+      assert.ok(productionText.includes('کاربرد و تولید کوتاه · A1') && !productionText.includes('تولید آزاد · B1'));
       assert.ok(productionText.includes(writing));
       assert.equal(production.root.findByType('TextInput').props.value, '', 'old draft never pre-populates a changed task');
       assert.equal(globalThis.__a1Disk.get(legacyDraftKey), legacyDraft, 'raw old draft retained');
+      assert.equal(globalThis.__a1Disk.get(previousTaskKey), legacyDraft, 'phase-1 task draft/checklist retained in its namespace');
       await act(async () => { production.unmount(); }); production = null;
       for (const starter of ['operator', 'me']) {
         const expected = api.dialoguePairLines(pairs, starter);
@@ -140,8 +148,8 @@ function propExpression(tag, name) {
       }
     }
     assert.equal(covered, 2900);
-    // Real optional-skill renderer: the listening transcript is hidden until a correct answer.
-    for (const lesson of a1) for (const task of api.englishA1Skills(lesson.id)) {
+    // Actual reading renderer. Phase 3 tests the replacement listening renderer separately.
+    for (const lesson of a1) for (const task of api.englishA1Skills(lesson.id).filter(task => task.kind === 'reading')) {
       let skill;
       try {
         await act(async () => {skill = create(React.createElement(api.Skill, {task, onSpeak() {}}));});
@@ -154,7 +162,7 @@ function propExpression(tag, name) {
         assert.ok(renderedText(skill).includes(task.passage));
       } finally {if (skill) await act(async () => {skill.unmount();});}
     }
-    console.log(`English A1 integration passed: ${executions} complete rendered room runs, 1450/1450 educational sentences for EACH starter (2900 checked learner targets), contiguous scenes, 29 rendered A1 writing tasks, 58 optional comprehension tasks, isolated old/new drafts and room histories; unchanged non-core wiring including all eight A1 labs.`);
+    console.log(`English A1 integration passed: ${executions} complete rendered room runs, 1450/1450 educational sentences for EACH starter (2900 checked learner targets), contiguous scenes, 29 rendered A1 writing tasks, 29 optional reading tasks (phase 3 separately tests 29 listening tasks), isolated old/new drafts and room histories; unchanged non-core wiring including all eight A1 labs.`);
 
   } finally {
     if (room) await act(async () => { room.unmount(); });

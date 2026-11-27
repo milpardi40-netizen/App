@@ -6,7 +6,7 @@ ENDINGS = [
 ('Are you ready?','آماده هستید؟','Yes, I am.','بله، هستم.'),
 ('Thank you, Tim.','ممنون، تیم.','You are welcome.','خواهش می‌کنم.'),
 ('What is her name?','اسم او چیست؟','Her name is Anna.','اسم او آنا است.'),
-('Is it your bag?','آیا کیف شماست؟','Yes, it is. Thank you.','بله، هست. ممنون.'),
+('My bag is under the chair. Thank you.','کیف من زیر صندلی است. ممنون.','You are welcome.','خواهش می‌کنم.'),
 ('See you on Monday.','دوشنبه می‌بینمتان.','See you then.','آن موقع می‌بینمتان.'),
 ('Do you study English?','آیا انگلیسی می‌خوانی؟','Yes, I do.','بله.'),
 ('What are you reading?','چه می‌خوانی؟','I am reading a book.','دارم کتاب می‌خوانم.'),

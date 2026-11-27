@@ -1,3 +1,4 @@
+import { RUSSIAN_PRE_A1_LIGHT_VERBS_ID, RUSSIAN_PRE_A1_LIGHT_SENTENCE_REVISION } from '../russianPreA1Phase2';
 import {arabicA1SentenceRevision} from '../../arabic/a1Scope';
 import {turkishA1SentenceRevision} from '../turkishA1Scope';
 import {spanishA1SentenceRevision} from '../spanishA1Scope';
@@ -28,6 +29,7 @@ export function revisePracticalEvidence<T extends { evidencePassed: boolean; att
 
 /** Sentence-level scores change only where the taught sentences changed. */
 export function practicalSentenceRevision(language: string, lessonId: string): string | undefined {
+  if (language === 'ru' && lessonId === RUSSIAN_PRE_A1_LIGHT_VERBS_ID) return RUSSIAN_PRE_A1_LIGHT_SENTENCE_REVISION;
   // Preserve raw history, but never attach an old utterance's score to a rewritten A1 slot.
   if (language === 'ar' && arabicA1SentenceRevision(lessonId)) return arabicA1SentenceRevision(lessonId);
   if (language === 'en' && englishA1SentenceRevision(lessonId)) return englishA1SentenceRevision(lessonId);

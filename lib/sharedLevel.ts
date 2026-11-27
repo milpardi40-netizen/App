@@ -1,6 +1,6 @@
 import {
   COURSE_LEVELS,
-  SENTENCE_LESSONS,
+  ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS,
   getSentenceLesson,
   type CourseLevelId,
   type SentenceLesson,

@@ -60,8 +60,8 @@ function propExpression(tag, name) {
   const evaluate = (fn, lesson) => fn(lesson, ...Object.values(api));
   const inventory = await loadInventory();
   const a1 = inventory.ru.filter(l => l.levelId === 1);
-  // Every other Russian band still receives the exact original pairs, prompt and history revision.
-  for (const lesson of inventory.ru.filter(l => l.levelId !== 1)) {
+  // Every higher Russian band (Pre-A1 now has its separately tested scene/review path) still receives the exact original pairs, prompt and history revision.
+  for (const lesson of inventory.ru.filter(l => l.levelId > 1)) {
     assert.deepEqual(evaluate(pairsFor, lesson), api.lessonDialoguePairs(lesson.sentences, lesson.dialogue));
     assert.equal(evaluate(productionFor, lesson), undefined);
     assert.equal(evaluate(labelFor, lesson), undefined);

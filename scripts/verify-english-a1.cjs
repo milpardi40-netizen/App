@@ -27,7 +27,10 @@ async function main() {
       assert.equal(hash(bank.filter(l=>l.levelId!==1)),german.protected.de,'German outside its separately approved A1 scope');
     } else assert.equal(hash(lang === 'en' ? bank.filter(l => !ids.has(l.id)) : bank), before.protected[lang], `${lang}: every non-target assembled lesson stays byte-identical`);
   }
-  for (const [path,expected] of Object.entries(before.protectedSources)) assert.equal(createHash('sha256').update(fs.readFileSync(path)).digest('hex'),expected,`${path}: protected source`);
+  // The English-A1-only audit now corrects these sources. Their Foundation/Pre-A1 runtime
+  // boundaries and legacy histories are checked by verify-english-a1-audit-fixes.cjs.
+  const auditSources = new Set(['lib/englishSupplement/a1Content.ts', 'lib/englishSupplement/content.ts', 'lib/englishSupplement/assessments.ts', 'lib/englishSupplement/progress.ts']);
+  for (const [path,expected] of Object.entries(before.protectedSources).filter(([path]) => !auditSources.has(path))) assert.equal(createHash('sha256').update(fs.readFileSync(path)).digest('hex'),expected,`${path}: protected source`);
   const memory = new Map();
   globalThis.__englishA1Memory = memory;
   globalThis.__englishA1OS = 'web';
@@ -84,7 +87,7 @@ async function main() {
     assert.deepEqual(migration[l.id].changedSentenceIds,actualChanged);changed+=actualChanged.length;
     const tasks=api.englishEvidenceFor(l);
     assert.equal(tasks.length,8);assert.deepEqual(tasks,api.CORE_LESSON_EVIDENCE[l.id]);
-    assert.ok(tasks.every(t=>t.id.startsWith(`en-a1-sequenced-v1:${l.id}:`)));
+    assert.ok(tasks.every(t=>t.id.startsWith(`en-a1-sequenced-v2:${l.id}:`)));
     assert.equal(new Set(tasks.map(t=>t.id)).size,8);
     for(const t of tasks){
       assert.ok(t.prompt&&t.explanation&&t.answers.length);
@@ -165,7 +168,7 @@ async function main() {
       assert.deepEqual(api.reviseEnglishA1ReviewCard(oldCard),oldCard);
     }
   }
-  console.log(`English A1 data/progress passed: 29/29 approved lessons, 1450 stable slots (${changed} changed meanings/texts), 232 versioned tasks, 58 web/native session+outcome+chunk+review migrations; preserved IDs/completions/resume/history, protected all six other languages and English non-core/labs/evidence/supplement.`);
+  console.log(`English A1 data/progress passed: 29/29 approved lessons, 1450 stable slots (${changed} changed meanings/texts), 232 versioned tasks, 58 web/native session+outcome+chunk+review migrations; preserved IDs/completions/resume/history, protected all six other languages and English non-core/lab payloads/evidence; supplement audit boundaries checked separately.`);
 }
 if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1;});
 module.exports={main};

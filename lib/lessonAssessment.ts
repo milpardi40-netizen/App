@@ -1,3 +1,5 @@
+import { russianPreA1ContextChecksRevisionFor } from './languages/russianPreA1Phase3';
+import { RUSSIAN_PRE_A1_LIGHT_VERBS_ID, RUSSIAN_PRE_A1_LIGHT_CHECKS_REVISION } from './languages/russianPreA1Phase2';
 import {isArabicA1Core, ARABIC_A1_ASSESSMENT_REVISION} from './arabic/a1Scope';
 import {isTurkishA1Core, TURKISH_A1_ASSESSMENT_REVISION} from './languages/turkishA1Scope';
 import {isSpanishA1Core, SPANISH_A1_ASSESSMENT_REVISION} from './languages/spanishA1Scope';
@@ -10,9 +12,13 @@ import { normalizeArabic } from './arabic/text';
 export const LESSON_ASSESSMENT_REVISION = 'adaptive-lesson-assessment-v1';
 export interface AssessmentSample { id: string; text?: string; en?: string; ar?: string; fa: string }
 export interface LessonChoiceCheck { promptFa: string; choices: string[]; correctIndex: number; explanationFa: string }
-// Only Russian A1 questions changed; all other courses keep their existing answers.
+// Revisions are scoped to the courses or individual lessons whose questions changed.
 export const RUSSIAN_A1_ASSESSMENT_REVISION = 'ru-a1-sequenced-assessment-v1';
 export function assessmentRevisionFor(language: string, lessonId: string): string {
+  const contextRevision = language === 'ru' ? russianPreA1ContextChecksRevisionFor(lessonId) : undefined;
+  if (contextRevision) return contextRevision;
+  if (language === 'ru' && lessonId === RUSSIAN_PRE_A1_LIGHT_VERBS_ID) return RUSSIAN_PRE_A1_LIGHT_CHECKS_REVISION;
+  if (language === 'ru' && lessonId === 'ru-pre-29-numbers-teens') return 'ru-pre-a1-teens-stress-v1';
   if (language === 'ar' && isArabicA1Core(lessonId)) return ARABIC_A1_ASSESSMENT_REVISION;
   if (language === 'tr' && isTurkishA1Core(lessonId)) return TURKISH_A1_ASSESSMENT_REVISION;
   if (language === 'es' && isSpanishA1Core(lessonId)) return SPANISH_A1_ASSESSMENT_REVISION;

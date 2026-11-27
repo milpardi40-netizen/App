@@ -1,16 +1,20 @@
+import { RUSSIAN_PRE_A1_LIGHT_VERBS_ID, RUSSIAN_PRE_A1_LIGHT_ROOM_REVISION } from './russianPreA1Phase2';
 import { lessonDialoguePairs, type LessonDialogueLine, type LessonDialoguePair } from '../lessonDialoguePairs';
 import { productionPrompt, type ProductionPrompt, type ProductionSource } from '../productionPrompt';
 import type { LearningLesson } from './types';
 
-/** Separate room history from release-179's different scripts without deleting any raw runs. */
+/** New Pre-A1 scenes must not inherit scores from the old echo-only room. Raw runs survive. */
+export const RUSSIAN_PRE_A1_ROOM_REVISION = 'ru-pre-a1-scene-and-review-v1';
+/** Separate A1 history from release-179's different scripts; unchanged by the Pre-A1 repair. */
 export const RUSSIAN_A1_ROOM_REVISION = 'ru-a1-dialogue-and-coverage-v1';
+export const russianPreA1RoomRevisionFor = (id:string) => id === RUSSIAN_PRE_A1_LIGHT_VERBS_ID ? RUSSIAN_PRE_A1_LIGHT_ROOM_REVISION : RUSSIAN_PRE_A1_ROOM_REVISION;
 export const isRussianA1 = (lesson: { id: string }) => lesson.id.startsWith('ru-a1-');
 
 type RoomLesson = Pick<LearningLesson, 'id' | 'sentences' | 'dialogue'>;
 
-/** The actual scene first; explicit whole-lesson rehearsal second. Other bands keep their path. */
+/** The actual scene first; explicit whole-lesson rehearsal second. Pre-A1 shares the scene/review presentation; higher bands keep their path. */
 export function russianLessonRoomPairs(lesson: RoomLesson): LessonDialoguePair[] {
-  if (!isRussianA1(lesson)) return lessonDialoguePairs(lesson.sentences, lesson.dialogue);
+  if (!isRussianA1(lesson) && !lesson.id.startsWith('ru-pre-')) return lessonDialoguePairs(lesson.sentences, lesson.dialogue);
   const scene: LessonDialoguePair[] = [];
   for (let i = 0; i + 1 < lesson.dialogue.length; i += 2) {
     const operator = lesson.dialogue[i];

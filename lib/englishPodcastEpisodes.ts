@@ -1,3 +1,4 @@
+import { isEnglishLessonAvailable } from './englishLessonAvailability';
 import { COURSE_LEVELS, SENTENCE_LESSONS, type CourseLevelId, type SentenceLesson } from './courseContent';
 
 /**
@@ -76,7 +77,7 @@ function buildEpisode(lesson: SentenceLesson, number: number): PodcastEpisode {
   };
 }
 
-export const PODCAST_EPISODES: PodcastEpisode[] = SENTENCE_LESSONS.map((lesson, index) => buildEpisode(lesson, index + 1));
+export const PODCAST_EPISODES: PodcastEpisode[] = SENTENCE_LESSONS.map((lesson, index) => buildEpisode(lesson, index + 1)).filter(episode => isEnglishLessonAvailable({ id: episode.lessonId }));
 
 export const getPodcastEpisode = (id: string) => PODCAST_EPISODES.find(episode => episode.id === id);
 

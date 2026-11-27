@@ -1,4 +1,4 @@
-import { SENTENCE_LESSONS } from './courseContent';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from './courseContent';
 
 /**
  * Internal rollout catalog for the 504-word layer.

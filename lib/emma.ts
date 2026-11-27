@@ -1,5 +1,5 @@
 import { requirePaidAI } from './paidAI';
-import { COURSE_LEVELS, SENTENCE_LESSONS } from './courseContent';
+import { COURSE_LEVELS, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from './courseContent';
 import { ensureChatIdentity } from './conversations';
 import { requireSupabaseConfigured, readableFunctionError, readableAIError } from './errors';
 import { getCourseProgress } from './courseProgress';
