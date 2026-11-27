@@ -16,7 +16,8 @@ const esbuild = require('esbuild');
         export { TURKISH_LESSONS } from './lib/languages/turkish';
         export { RUSSIAN_LESSONS } from './lib/languages/russian';
         export * from './lib/languages/turkishStudyState';
-        export * from './lib/languages/russianStudyState';`,
+        export * from './lib/languages/russianStudyState';
+        export {assessmentRevisionFor} from './lib/lessonAssessment';`,
       resolveDir: root,
     },
     outfile: output, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent',
@@ -60,7 +61,9 @@ const esbuild = require('esbuild');
   ];
   const fresh = { stageVersion: 2, stage: 0, sentenceIndex: 0, revealed: false, answers: {}, showCheckAnswers: false };
   function savedPosition(value) {
-    const { updatedAt, ...position } = value;
+    const { updatedAt, checksRevision, sampleRevision, ...position } = value;
+    if(checksRevision!==undefined) assert.ok(typeof checksRevision==='string'&&checksRevision.length>0,'stored assessment revision is explicit');
+    if(sampleRevision!==undefined) assert.ok(typeof sampleRevision==='string'&&sampleRevision.length>0,'stored content revision is explicit');
     assert.ok(Number.isFinite(Date.parse(updatedAt)), 'durable position has a resume timestamp');
     return position;
   }
@@ -132,9 +135,10 @@ const esbuild = require('esbuild');
     check(handler.includes(`reset${lang}LessonSession(lesson.id)`) && handler.includes(`stop${lang}Speech()`), `${lang}: header immediately queues same-lesson reset and stops speech`);
     check(lesson.includes(`? (restartPromise.current ??= reset${lang}LessonSession(lesson.id))`) && lesson.includes('replayingLevel && result.hasSavedSession') && !lesson.includes('lesson.id === lessons[0].id'), `${lang}: fromStart resets any lesson rather than using the separate level-replay mode`);
     check((lesson.includes('setStage(saved.stage)') || lesson.includes('setStage(Math.min(saved.stage')) && lesson.includes('setAnswers(saved.answers)') && lesson.includes('شروع مجدد ذخیره نشد'), `${lang}: successful reset hydrates fresh state and failure is visible`);
-    check((home.includes("id: heroLesson.id, fromStart: '1'") || home.includes("heroLesson.id)}&fromStart=1")) && home.includes('onPress={replayBeginnerLevel}') && (home.includes("levelReplay: '1'") || home.includes('&levelReplay=1')), `${lang}: current-lesson reset differs from non-destructive level replay`);
+    const actions=fs.readFileSync(path.join(root,'components/LessonRestartActions.tsx'),'utf8');
+    check(home.includes('LessonRestartActions') && home.includes('lessonId={heroLesson.id}') && home.includes('firstLessonId=') && actions.includes('prepareLevelRestart(lessonPath, id) : prepareLessonRestart(lessonPath, id)'), `${lang}: home passes distinct lesson/level targets to the shared restart actions`);
     check(library.includes('snapshot?.sessions ?? {}') && library.includes('openLesson(item.id)'), `${lang}: library distinguishes absent sessions and resumes selected lesson`);
-    check(library.includes("fromStart ? '&fromStart=1' : ''") && library.includes('openLesson(selectedLessons[0].id, true)') && library.includes('openLesson(levelStartLesson.id)'), `${lang}: start-from-beginning resets the first lesson while normal start resumes saved progress`);
+    check(library.includes("fromStart ? '&fromStart=1' : ''") && library.includes('firstLessonId={selectedLessons[0]?.id}') && library.includes('lessonId={levelStartLesson?.id}') && library.includes('openLesson(levelStartLesson.id)'), `${lang}: start-from-beginning resets the first lesson while normal start resumes saved progress`);
   }
   // The language screens moved into their own modules, so the reset signal is checked where it is read.
   const newCourseScreen = fs.readFileSync(path.join(root, 'components/routes/NewCourseLessonScreen.tsx'), 'utf8');

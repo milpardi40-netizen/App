@@ -1,3 +1,15 @@
+import EnglishA1ListeningTransfer from './EnglishA1ListeningTransfer';
+import EnglishA1Interaction from './EnglishA1Interaction';
+import { EnglishA1SupportLinks } from './EnglishA1Support';
+import EnglishA1ScaffoldCard from './EnglishA1Scaffold';
+import { englishA1Scaffold } from '@/lib/englishA1Scaffolding';
+import {englishLessonRoomPairs, englishA1Production, englishA1ProductionLabel, englishA1Skills} from '@/lib/englishA1Practice';
+import {isEnglishA1Core, ENGLISH_A1_ROOM_REVISION, englishA1SentenceRevision, englishA1ProductionRevision} from '@/lib/englishA1Scope';
+import StarterA1Skill from './StarterA1Skill';
+import { speakOperator } from '@/lib/operatorSpeech';
+import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
+import { resetLessonChunks } from '@/lib/lessonChunks';
+import { prepareLessonRestart } from '@/lib/lessonRestart';
 import {LessonGenderCard, SentenceGenderLabel} from './LessonGenderCard';
 import { addPracticeActivity } from '@/lib/practiceActivity';
 import { localDay } from '@/lib/reviewHistory';
@@ -31,7 +43,7 @@ import { Check, ChevronLeft, Headphones, MessageCircle, Mic2, RefreshCw, RotateC
 import ReadingFirstBlock from '@/components/ReadingFirstBlock';
 import ProductionTask from '@/components/ProductionTask';
 import RevealText from '@/components/RevealText';
-import { COURSE_LEVELS, getSentenceLesson, SENTENCE_LESSONS } from '@/lib/courseContent';
+import { COURSE_LEVELS, getSentenceLesson, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import { auditLessonsFromEnglish, auditLessonsFromLearning, courseReadiness, } from '@/lib/content/courseAudit';
 import { bandReadinessForLevel } from '@/lib/content/readiness';
 
@@ -58,7 +70,7 @@ import { PageNavigation } from '@/components/PageNavigation';
 
 import { loadStudy, saveLessonSession, resetLessonSession, freshSession, withStudyStorageLock, type LessonAttempt } from '@/lib/englishStudyState';
 import { loadSupplement } from '@/lib/englishSupplement/progress';
-import { CORE_LESSON_EVIDENCE, isCoreLessonEvidenceComplete } from '@/lib/englishFoundationEvidence';
+import { englishEvidenceFor, currentEnglishEvidenceComplete } from '@/lib/lessonEvidenceBank';
 import { useEnglishStudyTimer } from '@/components/useEnglishStudyTimer';
 import { PAID_AI_ENABLED, PAID_AI_DISABLED_MESSAGE } from '@/lib/paidAI';
 import { ENGLISH_NATURAL_SPEECH_RATE, ENGLISH_NORMAL_SPEECH_RATE, ENGLISH_SLOW_SPEECH_RATE, playResponsiveSpeech, stopResponsiveSpeech, warmSpeech } from '@/lib/responsiveSpeech';
@@ -178,15 +190,9 @@ export default function SentenceLessonScreen() {
       if (saved.attempt) {
         // A new attempt does not inherit completion flags from historical evidence.
         passed = saved.evidencePassed;
-      } else if (CORE_LESSON_EVIDENCE[lesson.id]) {
-        passed = isCoreLessonEvidenceComplete(lesson.id, state.lessonEvidence[lesson.id] ?? {});
       } else {
-        const proof = await loadSupplement();
-        if (!alive) return;
-        passed = saved.evidencePassed
-          && !!proof.evidence[`legacy-${lesson.id}-listening`]?.correct
-          && !!proof.evidence[`legacy-${lesson.id}-listening`]?.heard
-          && !!proof.evidence[`legacy-${lesson.id}-writing`]?.correct;
+        const supplement = await loadSupplement();
+        passed = currentEnglishEvidenceComplete(lesson, { ...supplement.evidence, ...state.lessonEvidence[lesson.id] });
       }
       if (!alive || screenRun.current !== run) return;
       attempt.current = saved.attempt;
@@ -268,9 +274,7 @@ export default function SentenceLessonScreen() {
       clearNarratorFallback();
       if (targetKey) setMicReadyKey(targetKey);
     };
-    if (targetKey) {
-      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-    }
+    // Recognition starts only on playback completion/error, never on an estimated duration.
     playResponsiveSpeech({
       text,
       locale: 'en-US',
@@ -332,6 +336,8 @@ export default function SentenceLessonScreen() {
         await recorder.stop();
         await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
       }
+      await resetLessonChunks(lesson.id);
+      setDoneChunks([]);
       const state = await resetLessonSession(lesson.id);
       if (screenRun.current !== run) return;
       const saved = state.sessions[lesson.id];
@@ -421,7 +427,14 @@ export default function SentenceLessonScreen() {
     const targetY = Math.max(0, lessonScrollOffset(contentOffsetRef.current + contentY - 16, Dimensions.get('window').width));
     lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
   }, []);
-  const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+  const { scheduleOnPass, cancel: cancelSpeakingAdvance } = useSpeakAutoAdvance(`${lesson.id}:${stage}:${sentenceIndex}`);
+  const skipSpeakingSentence = () => {
+    cancelSpeakingAdvance();
+    setMicReadyKey('');
+    const last = stage === 1 ? chunkLastIndex : lesson.sentences.length - 1;
+    if (sentenceIndex < last) { setSentenceIndex(sentenceIndex + 1); setRevealed(false); }
+    else { void next(); }
+  };
 
   // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
@@ -492,7 +505,7 @@ export default function SentenceLessonScreen() {
     await completeSentenceLesson(lesson.id, nextLesson?.id);
       const weak = weakSpokenSentences(speakResult.current ? { ...speakResult.current, at: '' } : null);
       for (const sentenceId of weak) await addSentenceToReview(sentenceId, lesson.id).catch(() => undefined);
-      const fallbackAssessmentTotal = CORE_LESSON_EVIDENCE[lesson.id]?.length ?? 2;
+      const fallbackAssessmentTotal = englishEvidenceFor(lesson).length;
       const assessmentTotal = assessmentResult.current?.total ?? (evidencePassed ? fallbackAssessmentTotal : 0);
       const assessmentCorrect = assessmentResult.current?.correct ?? (evidencePassed ? fallbackAssessmentTotal : 0);
       if (assessmentTotal) {
@@ -515,6 +528,18 @@ export default function SentenceLessonScreen() {
     });
     } catch { setCompletionError('پایان درس ذخیره نشد؛ دوباره تلاش کنید.'); }
     finally { completing.current=false; setSaving(false); }
+  };
+
+  const goToPreviousStage = () => {
+    if (!sessionReady || saving || sessionError || completing.current || resettingRef.current || stage < 2) return;
+    cancelSpeakingAdvance();
+    setMicReadyKey(null);
+    void stopResponsiveSpeech();
+    setStage(stage - 1);
+    setSentenceIndex(0);
+    setRevealed(false);
+    setSpeechResult(null);
+    setSpeechError(null);
   };
 
   const goToPreviousSentence = () => {
@@ -546,14 +571,7 @@ export default function SentenceLessonScreen() {
         </View>
       </LinearGradient>
       <View style={styles.stepperCard}>
-        <View style={styles.stepperHeading}>
-          <View>
-          </View>
-          <View style={styles.stepperNow}>
-            
-            <Text style={styles.stepperNowFa}>{stages[stage].labelFa}</Text>
-          </View>
-        </View>
+
         <View style={styles.stepSegments}>
           {stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}
         </View>
@@ -569,10 +587,10 @@ export default function SentenceLessonScreen() {
         {stage === 0 && (
           <View style={styles.centerStage}>
             <View style={styles.bigIcon}><Sparkles size={34} color={Colors.accent[400]} /></View>
-            <Text style={styles.stageTitle}>{lesson.title}</Text>
+
             <Text style={styles.situation}>{lesson.situation}</Text>
             {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={lesson.sentences.map((sentence, index) => ({ speaker: index % 2 ? 'You' : 'Partner', text: sentence.en, fa: sentence.fa }))} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Colors.primary[500]} /> : null}
-            {lesson.teachingFa ? <View style={styles.teachingCard}>
+            {englishA1Scaffold(lesson.id) ? <EnglishA1ScaffoldCard key={lesson.id} lessonId={lesson.id} overviewFa={lesson.teachingFa ?? ''} onSpeak={text => speak(text)} /> : lesson.teachingFa ? <View style={styles.teachingCard}>
               <Text style={styles.teachingTitle}>چطور این درس را یاد بگیریم</Text>
               {lesson.teachingFa.split('\n').map(line => <Text key={line} style={styles.teachingLine}>{line}</Text>)}
             </View> : null}
@@ -599,18 +617,17 @@ export default function SentenceLessonScreen() {
               {lesson.levelId >= 3 ? <RevealText text={current.fa} style={styles.persian} resetKey={current.id} /> : <Text keepColor style={styles.persian}>{current.fa}</Text>}
               {current.pattern ? <View style={styles.pattern}><Text style={styles.patternLabel}>الگو</Text><Text style={styles.patternEnglish}>{current.pattern}</Text></View> : null}
             </View>
-            <EnglishSpeechRateControls onPlay={rate => speak(current.en, rate)} />
+            <EnglishSpeechRateControls showNormal={false} onPlay={rate => speak(current.en, rate)} />
             {!!audioNotice && <Text accessibilityLiveRegion="polite" style={styles.speechError}>{audioNotice}</Text>}
             <SpeakCheck
               key={current.id}
+              onSkip={skipSpeakingSentence}
               text={current.en}
               locale="en-US"
               accent={Colors.success[400]}
               autoStart={micReadyKey === `1:${current.id}`}
               onResult={result => {
-                if (sentenceIndex < chunkLastIndex) {
-                  scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
-                }
+                scheduleOnPass(result, () => { void next(); });
               }}
             />
           </View>
@@ -620,7 +637,7 @@ export default function SentenceLessonScreen() {
           <View style={styles.centerStage}>
             <View style={styles.bigIcon}><Headphones size={34} color={Colors.primary[400]} /></View>
             <Text style={styles.stageTitle}>شنیدن جمله‌ها</Text>
-            {showHint && <Text style={styles.stageDesc}>هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.</Text>}
+
             <View style={{ width: '100%' }} onLayout={event => { listenListOffsetRef.current = event.nativeEvent.layout.y; }}>
               <BlindListeningList
                 items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))}
@@ -651,9 +668,10 @@ export default function SentenceLessonScreen() {
               <Text style={styles.speechSentence}>{current.en}</Text>
               <EnglishSpeechRateControls onPlay={rate => speak(current.en, rate)} disabled={recorderState.isRecording || evaluatingSpeech} />
               {!!audioNotice && <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.speechError}>{audioNotice}</Text>}
-              <Text style={styles.speechHint}>پس از شنیدن، جمله را با صدای بلند تکرار کنید.</Text>
+
               <SpeakCheck
                 key={current.id}
+                onSkip={skipSpeakingSentence}
                 text={current.en}
                 locale="en-US"
                 accent={Colors.success[400]}
@@ -727,6 +745,15 @@ export default function SentenceLessonScreen() {
                     locale="en-US"
                     accent={Colors.success[400]}
                     autoStart={micReadyKey === `5:${vocabIndex}:${item.word}`}
+                    onSkip={() => {
+                      cancelSpeakingAdvance();
+                      setMicReadyKey('');
+                      if (vocabIndex < vocabulary.length - 1) {
+                        const nextVocab = vocabulary[vocabIndex + 1];
+                        scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0));
+                        speakForTarget(nextVocab.word, ENGLISH_NORMAL_SPEECH_RATE, `5:${vocabIndex + 1}:${nextVocab.word}`);
+                      } else { void next(); }
+                    }}
                     onResult={result => {
                       if (vocabIndex < vocabulary.length - 1) {
                         const nextVocab = vocabulary[vocabIndex + 1];
@@ -749,7 +776,7 @@ export default function SentenceLessonScreen() {
             <LessonGenderCard language="en" lesson={lesson} speak={speak} />
             {B2_GUIDANCE[lesson.id]?.map((note, index) => <GrammarNoteCard key={`${lesson.id}-guide-${index}`} title={lessonTopics?.[index] ?? ''} text={note} />)}
             {c1Unit?.topics.map((topic, index) => <GrammarNoteCard key={`${lesson.id}-c1-guide-${index}`} title={topic[0]} text={topic[5]} />)}
-            {grammarPatterns.length ? grammarPatterns.map((item, index) => (
+            {englishA1Scaffold(lesson.id) ? <EnglishA1ScaffoldCard key={`${lesson.id}-grammar`} lessonId={lesson.id} overviewFa={lesson.teachingFa ?? ''} onSpeak={text => speak(text)} /> : grammarPatterns.length ? grammarPatterns.map((item, index) => (
               <GrammarPatternCard key={item.sentenceId} index={index + 1} pattern={item.pattern} example={item.exampleEn} translation={item.exampleFa} onSpeak={() => speak(item.exampleEn)} />
             )) : null}
             {lesson.c1Section && lessonTopics && <EnglishB2TopicPractice key={lesson.id} lessonId={lesson.id} topics={lessonTopics} practice={C1_TOPIC_PRACTICE[lesson.id]} />}
@@ -765,18 +792,23 @@ export default function SentenceLessonScreen() {
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
               { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
             {evidencePassed
-              ? CORE_LESSON_EVIDENCE[lesson.id]
-                ? <Text style={styles.stageDesc}>همهٔ {toPersianDigits(CORE_LESSON_EVIDENCE[lesson.id].length)} سنجشِ این درس با پاسخ درست ثبت شد ✓</Text>
-                : <View><Text style={styles.stageDesc}>شنیداری: ثبت شد ✓</Text><Text style={styles.stageDesc}>نوشتاری: ثبت شد ✓</Text></View>
+              ? <Text style={styles.stageDesc}>همهٔ {toPersianDigits(englishEvidenceFor(lesson).length)} سنجشِ این درس با پاسخ درست ثبت شد ✓</Text>
               : <EnglishLessonEvidence key={`${lesson.id}-${attempt.current?.id ?? 'legacy'}`} lesson={lesson} attemptEvidence={attemptEvidence} onAttemptResult={(taskId, correct) => { if (!resettingRef.current) setAttemptEvidence(previous => previous ? { ...previous, [taskId]: correct } : previous); }} onProgress={(correct, total) => { if (!resettingRef.current) assessmentResult.current = { correct, total }; }} onPassed={() => { if (!resettingRef.current) setEvidencePassed(true); }} />}
               </> },
             ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
           </View>
         )}
+        {(stage === 2 || stage === 8) ? englishA1Skills(lesson.id).filter(task => task.kind === (stage === 2 ? 'listening' : 'reading')).map(task => task.kind === 'listening' && isEnglishA1Core(lesson.id)
+          ? <EnglishA1ListeningTransfer key={`${lesson.id}-${task.kind}`} lessonId={lesson.id} task={task} />
+          : <StarterA1Skill key={`${lesson.id}-${task.kind}`} task={task} headingFa={task.kind === 'reading' ? 'تمرین اختیاری · کاربرد در اطلاعات تازه' : undefined} onSpeak={(text, rate) => speak(text, rate)} />) : null}
+        {stage === 8 && isEnglishA1Core(lesson.id) && <Text style={styles.stageDesc}>این تکلیف با اطلاعات تازه تمرین می‌شود؛ پیش‌نویس تکلیف قبلی جدا حفظ شده است. معیارهای زیر برای خودسنجی‌اند؛ رسیدن به تعداد واژه، درست‌بودن پاسخ را ثابت نمی‌کند.</Text>}
         {stage === 8 && lesson.levelId >= 1 ? <ProductionTask
           key={`${lesson.id}-production`}
           source={lesson}
-          explicit={B2_PRODUCTION[lesson.id]}
+          explicit={englishA1Production(lesson.id) ?? B2_PRODUCTION[lesson.id]}
+          levelLabel={englishA1ProductionLabel(lesson.id)}
+          titleFa={isEnglishA1Core(lesson.id) ? 'کاربرد و تولید کوتاه' : undefined}
+          contentRevision={englishA1ProductionRevision(lesson.id)}
           examples={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
           onSpeak={text => speak(text)}
           foreignStyle={styles.practiceForeign}
@@ -784,6 +816,8 @@ export default function SentenceLessonScreen() {
         /> : null}
         {stage === 8 && lesson.levelId >= 4 ? <EnglishB2Scenario key={`${lesson.id}-scenario`} lessonId={lesson.id} speak={speak} scenario={C1_SCENARIOS[lesson.id]} /> : null}
         {stage === 8 && lesson.levelId >= 5 ? <EnglishC1ExtendedModel key={`${lesson.id}-extended-model`} lessonId={lesson.id} speak={speak} /> : null}
+        {stage === 9 && isEnglishA1Core(lesson.id) && <EnglishA1Interaction key={`${lesson.id}-interaction`} lessonId={lesson.id} onSpeak={(text, rate) => speak(text, rate)} />}
+        {stage === 0 && isEnglishA1Core(lesson.id) && <EnglishA1SupportLinks lessonId={lesson.id} onOpen={unit => router.push({ pathname: '/lang/a1-support', params: { unit } } as never)} />}
         {stage === 9 && <LessonDialogueRoom
           key={lesson.id}
           language="en"
@@ -791,10 +825,12 @@ export default function SentenceLessonScreen() {
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          lines={lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
+          contentRevision={isEnglishA1Core(lesson.id) ? ENGLISH_A1_ROOM_REVISION : lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          pairs={englishLessonRoomPairs(lesson)}
           locale="en-US"
           onSpeak={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone })}
-          onSpeakOperator={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', pitch: 0.82, onDone, onError: onDone })}
+          onSpeakOperator={(text, onDone) => speakOperator(text, 'en-US', 'en', onDone)}
+          onSpeakSlow={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', rate: ENGLISH_SLOW_SPEECH_RATE, onDone, onError: onDone })}
         />}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}
       </View>
@@ -802,7 +838,11 @@ export default function SentenceLessonScreen() {
       </FitScrollView>
 
       <View pointerEvents={resetting ? 'none' : 'auto'} style={styles.footer}>
+        {isEnglishA1Core(lesson.id) && stage === stages.length - 1 && <Text style={styles.stageDesc}>پایان درس، ثبت طی‌کردن مسیر است؛ قبولی سنجش و خودسنجیِ تولید، جدا از آن هستند و گواهی تسلط A1 نیستند.</Text>}
         <View style={styles.footerButtons}>
+          {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
+            <Text style={styles.secondaryControlText}>مرحلهٔ قبل</Text>
+          </Pressable>}
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel="جملهٔ قبلی" accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && { opacity: .45 }]}>
             <Text style={styles.secondaryControlText}>جمله قبلی</Text>
           </Pressable>}
@@ -826,22 +866,22 @@ export default function SentenceLessonScreen() {
           </View>
         </View>
       ) : null}
-      <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(SENTENCE_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
+      <LessonCelebration onRestart={async () => { const target = await prepareLessonRestart('/course/lesson', lesson.id); router.replace(target as never); }} visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(SENTENCE_LESSONS, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
       levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );
 }
 
 /** Replay the current sentence at an explicit speed on every tap. */
-function EnglishSpeechRateControls({ onPlay, disabled = false }: { onPlay: (rate: number) => void; disabled?: boolean }) {
+function EnglishSpeechRateControls({ onPlay, disabled = false, showNormal = true }: { onPlay: (rate: number) => void; disabled?: boolean; showNormal?: boolean }) {
   return (
     <View style={styles.replayRow}>
       <Pressable accessibilityRole="button" accessibilityLabel="پخش آهستهٔ جملهٔ انگلیسی" accessibilityHint="جملهٔ فعلی را با سرعت آهسته پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={[styles.replayButton, disabled && styles.replayDisabled]} onPress={() => onPlay(ENGLISH_SLOW_SPEECH_RATE)}>
         <Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text>
       </Pressable>
-      <Pressable accessibilityRole="button" accessibilityLabel="پخش معمولی جملهٔ انگلیسی" accessibilityHint="جملهٔ فعلی را با سرعت معمولی پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={[styles.replayButton, disabled && styles.replayDisabled]} onPress={() => onPlay(ENGLISH_NORMAL_SPEECH_RATE)}>
+      {showNormal ? <Pressable accessibilityRole="button" accessibilityLabel="پخش معمولی جملهٔ انگلیسی" accessibilityHint="جملهٔ فعلی را با سرعت معمولی پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={[styles.replayButton, disabled && styles.replayDisabled]} onPress={() => onPlay(ENGLISH_NORMAL_SPEECH_RATE)}>
         <Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text>
-      </Pressable>
+      </Pressable> : null}
       <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" accessibilityHint="جملهٔ فعلی را با سرعت گفتار طبیعی پخش می‌کند." accessibilityState={{ disabled }} disabled={disabled} style={styles.replayButton} onPress={() => onPlay(ENGLISH_NATURAL_SPEECH_RATE)}>
         <Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text>
       </Pressable>

@@ -1,14 +1,14 @@
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import { useCallback, useEffect, useState } from 'react';
-import { ImageBackground, Linking, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { AppState, ImageBackground, Linking, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { createAudioPlayer } from 'expo-audio';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { ArrowLeft, BookOpen, Globe, Headphones, LifeBuoy, MessageCircle, Play, SlidersHorizontal } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, CircleHelp, Globe, Headphones, LifeBuoy, MessageCircle, Play } from 'lucide-react-native';
 import { MiloLanguageBrand } from '@/components/MiloLanguageBrand';
 import { ProfileIcon } from '@/components/ProfileIcon';
-import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { ensureOpenLearnerRegistered } from '@/lib/openLearnerAccount';
+import { supabase } from '@/lib/supabase';
 import { isLearnerRegistered } from '@/lib/registrationStatus';
 import { LANGUAGES, findLanguage } from '@/lib/languages/catalog';
 import { FEATURES, LANGUAGE_SCOPE, RUSSIAN_ONLY_BUILD } from '@/lib/features';
@@ -65,7 +65,7 @@ export default function LanguagesHome() {
   const tiny = width < 370;
 
   useEffect(() => { void ensureOpenLearnerRegistered(); }, []);
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     const stops = [
       prefetchLater([() => import('@/components/routes/NewCourseHomeScreen')], 900),
       prefetchLater([() => import('@/components/RussianHome')], 2600),
@@ -73,12 +73,11 @@ export default function LanguagesHome() {
       prefetchLater([() => import('@/components/arabic/ArabicHomeScreen')], 5600),
     ];
     return () => stops.forEach(stop => stop());
-  }, []);
+  }, []));
 
   const [registered, setRegistered] = useState(false);
   const [resumeBanner, setResumeBanner] = useState<ResumeBannerState | null>(null);
   const [dueReviewCount, setDueReviewCount] = useState(0);
-  const [quickSettingsOpen, setQuickSettingsOpen] = useState(false);
 
   useFocusEffect(useCallback(() => {
     let active = true;
@@ -150,14 +149,39 @@ export default function LanguagesHome() {
     };
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    let revision = 0;
+    const refresh = () => {
+      const request = ++revision;
+      void isLearnerRegistered().then(value => {
+        if (!active || request !== revision) return;
+        setRegistered(value);
+      });
+    };
+    // Defer session reads until after Supabase's auth callback releases its lock.
+    let authTimer: ReturnType<typeof setTimeout> | undefined;
+    const { data } = supabase.auth.onAuthStateChange(() => {
+      clearTimeout(authTimer);
+      authTimer = setTimeout(refresh, 0);
+    });
+    const app = AppState.addEventListener('change', state => { if (state === 'active') refresh(); });
+    if (Platform.OS === 'web' && typeof window !== 'undefined') window.addEventListener('storage', refresh);
+    return () => {
+      active = false; clearTimeout(authTimer); data.subscription.unsubscribe(); app.remove();
+      if (Platform.OS === 'web' && typeof window !== 'undefined') window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
   const openSupport = () => {
-    if (openingSupport) return;
+    if (!registered || openingSupport) return;
     setOpeningSupport(true);
     router.push('/feedback' as never);
     setOpeningSupport(false);
   };
 
   const openSite = () => {
+    if (!registered) return;
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const base = (process.env.EXPO_BASE_URL || '').replace(/\/$/, '');
       const target = base.endsWith('/app') ? `${base.slice(0, -4) || ''}/` : '/';
@@ -241,7 +265,7 @@ export default function LanguagesHome() {
             <View style={styles.headerActions}>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={registered ? 'پروفایل من (ثبت‌نام شده)' : 'پروفایل من'}
+                accessibilityLabel={registered ? 'پروفایل و تنظیمات (ثبت‌نام شده)' : 'پروفایل و تنظیمات'}
                 style={({ pressed }) => [styles.headerButton, styles.profileButton, registered && styles.profileButtonRegistered, pressed && styles.pressed]}
                 onPress={() => router.push('/profile' as never)}
               >
@@ -250,25 +274,22 @@ export default function LanguagesHome() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="انتقادات و پیشنهادات"
-                accessibilityState={{ disabled: openingSupport }}
-                disabled={openingSupport}
-                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
+                accessibilityState={{ disabled: !registered || openingSupport }}
+                accessibilityHint={!registered ? 'پس از ورود فعال می‌شود' : undefined}
+                disabled={!registered || openingSupport}
+                style={({ pressed }) => [styles.headerButton, !registered && styles.headerButtonDisabled, pressed && styles.pressed]}
                 onPress={openSupport}
               >
                 <LifeBuoy size={16} color={palette.forest} strokeWidth={1.9} />
               </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="تنظیمات و قفل برنامه"
-                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
-                onPress={() => setQuickSettingsOpen(true)}
-              >
-                <SlidersHorizontal size={16} color={palette.forest} strokeWidth={1.9} />
-              </Pressable>
+
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="سایت و دانلود نسخهٔ اندروید"
-                style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
+                accessibilityState={{ disabled: !registered }}
+                accessibilityHint={!registered ? 'پس از ورود فعال می‌شود' : undefined}
+                disabled={!registered}
+                style={({ pressed }) => [styles.headerButton, !registered && styles.headerButtonDisabled, pressed && styles.pressed]}
                 onPress={openSite}
               >
                 <Globe size={16} color={palette.forest} strokeWidth={1.9} />
@@ -295,7 +316,7 @@ export default function LanguagesHome() {
                 زبان را از زندگی یاد بگیر
               </Text>
               <Text style={styles.subtitle}>
-                کوتاه، شنیدنی، ماندگار
+                کوتاه، شنیدنی، ماندگار{'\n'}با تمرین و تکرار یک زبان به صورت حرفه ای یادبگیر
               </Text>
             </View>
           </ImageBackground>
@@ -371,9 +392,20 @@ export default function LanguagesHome() {
             })}
           </View>
 
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="راهنمای استفاده از اپ"
+            accessibilityHint="شروع سریع و آموزش امکانات؛ بدون نیاز به ورود"
+            onPress={() => router.push('/help' as never)}
+            style={({ pressed }) => [styles.guideLink, pressed && styles.pressed]}
+          >
+            <CircleHelp size={18} color={palette.forest} strokeWidth={1.9} />
+            <Text style={styles.guideLinkText}>راهنمای استفاده از اپ</Text>
+            <ArrowLeft size={15} color={palette.forest} />
+          </Pressable>
+
         </View>
       </ScrollView>
-      <QuickSettingsModal visible={quickSettingsOpen} onClose={() => setQuickSettingsOpen(false)} />
       <OpeningOverlay visible={opening} />
     </View>
   );
@@ -390,6 +422,8 @@ const styles = StyleSheet.create({
   pageCompact: { paddingHorizontal: 16, paddingTop: 12, gap: 14 },
   header: { minHeight: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   headerRtl: { flexDirection: 'row-reverse' },
+  guideLink: { alignSelf: 'flex-end', maxWidth: '100%', minHeight: 44, flexDirection: 'row-reverse', alignItems: 'center', gap: 8, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 13, borderWidth: 1, borderColor: palette.sageLine, backgroundColor: palette.sage },
+  guideLinkText: { flexShrink: 1, fontFamily: 'Beiruti', fontSize: 13, lineHeight: 22, color: palette.forest, textAlign: 'right' },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   profileButton: { borderColor: '#D7DECE', backgroundColor: '#F3F6EE' },
   profileButtonRegistered: { borderColor: '#EAD0C1', backgroundColor: '#FBEFE6' },
@@ -439,5 +473,6 @@ const styles = StyleSheet.create({
   stepBadge: { width: 26, height: 26, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.sage },
   stepBadgeAccent: { backgroundColor: palette.terracottaSoft },
   stepTitle: { fontFamily: 'Beiruti', color: palette.ink, fontSize: 12.5, lineHeight: 19, textAlign: 'right', writingDirection: 'rtl' },
+  headerButtonDisabled: { opacity: 0.3 },
   pressed: { opacity: 0.84, transform: [{ scale: 0.985 }] },
 });

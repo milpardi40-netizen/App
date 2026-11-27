@@ -1,0 +1,681 @@
+{
+  "prea1-07-i-have": {
+    "language": "en",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "prea1-07-i-have-balance-01",
+      "prea1-07-i-have-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "prea1-09-this-is": {
+    "language": "en",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "prea1-09-this-is-balance-01",
+      "prea1-09-this-is-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "prea1-12-people": {
+    "language": "en",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "prea1-12-people-balance-01",
+      "prea1-12-people-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "prea1-13-every-day": {
+    "language": "en",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "prea1-13-every-day-balance-01",
+      "prea1-13-every-day-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "prea1-05-numbers": {
+    "language": "en",
+    "count": 12,
+    "oldCount": 8,
+    "newIds": [
+      "prea1-05-s4-part-2",
+      "prea1-05-s5-part-2",
+      "prea1-05-s6-part-2",
+      "prea1-05-s6-part-3"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      7,
+      10,
+      11
+    ],
+    "split": true
+  },
+  "de-foundation-words-2": {
+    "language": "de",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "de-foundation-words-2-balance-01",
+      "de-foundation-words-2-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6,
+      7,
+      9
+    ],
+    "split": false
+  },
+  "de-pre-5": {
+    "language": "de",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "de-pre-5-balance-01",
+      "de-pre-5-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "de-pre-6": {
+    "language": "de",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "de-pre-6-balance-01",
+      "de-pre-6-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "de-pre-11": {
+    "language": "de",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "de-pre-11-balance-01",
+      "de-pre-11-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "de-pre-20": {
+    "language": "de",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "de-pre-20-balance-01",
+      "de-pre-20-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "de-pre-21": {
+    "language": "de",
+    "count": 12,
+    "oldCount": 8,
+    "newIds": [
+      "de-pre-21-balance-01",
+      "de-pre-21-balance-02",
+      "de-pre-21-balance-03",
+      "de-pre-21-balance-04"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "fr-pre-5": {
+    "language": "fr",
+    "count": 13,
+    "oldCount": 8,
+    "newIds": [
+      "fr-pre-5-balance-01",
+      "fr-pre-5-balance-02",
+      "fr-pre-5-balance-03",
+      "fr-pre-5-balance-04",
+      "fr-pre-5-balance-05"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "fr-pre-11": {
+    "language": "fr",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "fr-pre-11-balance-01",
+      "fr-pre-11-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "fr-pre-12": {
+    "language": "fr",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "fr-pre-12-balance-01",
+      "fr-pre-12-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "fr-pre-13": {
+    "language": "fr",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "fr-pre-13-balance-01",
+      "fr-pre-13-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "fr-pre-20": {
+    "language": "fr",
+    "count": 12,
+    "oldCount": 8,
+    "newIds": [
+      "fr-pre-20-balance-01",
+      "fr-pre-20-balance-02",
+      "fr-pre-20-balance-03",
+      "fr-pre-20-balance-04"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "fr-pre-21": {
+    "language": "fr",
+    "count": 12,
+    "oldCount": 8,
+    "newIds": [
+      "fr-pre-21-balance-01",
+      "fr-pre-21-balance-02",
+      "fr-pre-21-balance-03",
+      "fr-pre-21-balance-04"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "es-pre-5": {
+    "language": "es",
+    "count": 13,
+    "oldCount": 8,
+    "newIds": [
+      "es-pre-5-balance-01",
+      "es-pre-5-balance-02",
+      "es-pre-5-balance-03",
+      "es-pre-5-balance-04",
+      "es-pre-5-balance-05"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "es-pre-8": {
+    "language": "es",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "es-pre-8-balance-01",
+      "es-pre-8-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "es-pre-11": {
+    "language": "es",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "es-pre-11-balance-01",
+      "es-pre-11-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "es-pre-12": {
+    "language": "es",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "es-pre-12-balance-01",
+      "es-pre-12-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "es-pre-13": {
+    "language": "es",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "es-pre-13-balance-01",
+      "es-pre-13-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "es-pre-20": {
+    "language": "es",
+    "count": 12,
+    "oldCount": 8,
+    "newIds": [
+      "es-pre-20-balance-01",
+      "es-pre-20-balance-02",
+      "es-pre-20-balance-03",
+      "es-pre-20-balance-04"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "es-pre-21": {
+    "language": "es",
+    "count": 12,
+    "oldCount": 8,
+    "newIds": [
+      "es-pre-21-balance-01",
+      "es-pre-21-balance-02",
+      "es-pre-21-balance-03",
+      "es-pre-21-balance-04"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "tr-prea1-descriptions-and-family": {
+    "language": "tr",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "tr-prea1-descriptions-and-family-balance-01",
+      "tr-prea1-descriptions-and-family-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "tr-prea1-08-simple-questions": {
+    "language": "tr",
+    "count": 12,
+    "oldCount": 8,
+    "newIds": [
+      "tr-prea1-08-simple-questions-balance-01",
+      "tr-prea1-08-simple-questions-balance-02",
+      "tr-prea1-08-simple-questions-balance-03",
+      "tr-prea1-08-simple-questions-balance-04"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "tr-prea1-time-and-calendar-sentences": {
+    "language": "tr",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "tr-prea1-time-and-calendar-sentences-balance-01",
+      "tr-prea1-time-and-calendar-sentences-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "tr-prea1-10-first-conversation": {
+    "language": "tr",
+    "count": 10,
+    "oldCount": 8,
+    "newIds": [
+      "tr-prea1-10-first-conversation-balance-01",
+      "tr-prea1-10-first-conversation-balance-02"
+    ],
+    "indexMap": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "split": false
+  },
+  "ar-prea1-02-first-words-core-nouns": {
+    "language": "ar",
+    "count": 17,
+    "oldCount": 8,
+    "newIds": [
+      "ar-p1-02-s1-part-2",
+      "ar-p1-02-s1-part-3",
+      "ar-p1-02-s2-part-2",
+      "ar-p1-02-s3-part-2",
+      "ar-p1-02-s4-part-2",
+      "ar-p1-02-s5-part-2",
+      "ar-p1-02-s6-part-2",
+      "ar-p1-02-s7-part-2",
+      "ar-p1-02-s8-part-2"
+    ],
+    "indexMap": [
+      0,
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15
+    ],
+    "split": true
+  },
+  "ar-prea1-03-basic-family-home-objects": {
+    "language": "ar",
+    "count": 14,
+    "oldCount": 8,
+    "newIds": [
+      "ar-p1-03-s1-part-2",
+      "ar-p1-03-s2-part-2",
+      "ar-p1-03-s3-part-2",
+      "ar-p1-03-s4-part-2",
+      "ar-p1-03-s5-part-2",
+      "ar-p1-03-s6-part-2"
+    ],
+    "indexMap": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      13
+    ],
+    "split": true
+  },
+  "ar-prea1-04-food-colors-numbers-places": {
+    "language": "ar",
+    "count": 16,
+    "oldCount": 8,
+    "newIds": [
+      "ar-p1-04-s1-part-2",
+      "ar-p1-04-s2-part-2",
+      "ar-p1-04-s3-part-2",
+      "ar-p1-04-s4-part-2",
+      "ar-p1-04-s5-part-2",
+      "ar-p1-04-s6-part-2",
+      "ar-p1-04-s7-part-2",
+      "ar-p1-04-s8-part-2"
+    ],
+    "indexMap": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "split": true
+  },
+  "ar-prea1-05-adjectives-verbs-time-feelings": {
+    "language": "ar",
+    "count": 12,
+    "oldCount": 9,
+    "newIds": [
+      "ar-p1-05-s1-part-2",
+      "ar-p1-05-s2-part-2",
+      "ar-p1-05-s7-part-2"
+    ],
+    "indexMap": [
+      0,
+      2,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      11
+    ],
+    "split": true
+  }
+}

@@ -1,3 +1,10 @@
+import {arabicLessonRoomPairs, arabicA1RoomScene, arabicA1Production, arabicA1Skills} from '@/lib/arabic/a1Practice';
+import {isArabicA1Core, arabicA1SentenceRevision, ARABIC_A1_ASSESSMENT_REVISION, ARABIC_A1_ROOM_REVISION} from '@/lib/arabic/a1Scope';
+import StarterA1Skill from '@/components/StarterA1Skill';
+import ProductionTask from '@/components/ProductionTask';
+import { speakOperator } from '@/lib/operatorSpeech';
+import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
+import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -218,7 +225,7 @@ export default function ArabicLessonScreen() {
     void (startFromBeginning ? resetArabicLessonSession(lesson.id) : loadArabicStudy())
       .then(state => {
         if (!alive || screenRun.current !== run) return;
-        const saved = state.sessions[lesson.id] ?? freshArabicSession();
+        const saved = state.sessions[lesson.id] ?? freshArabicSession(lesson.id);
         attempt.current = saved.attempt;
         setAttemptEvidence(saved.attempt ? (saved.attemptEvidence ?? {}) : undefined);
         setStage(Math.min(saved.stage, stages.length - 1));
@@ -259,6 +266,7 @@ export default function ArabicLessonScreen() {
       !sessionError
     ) {
       void saveArabicLessonSession(lesson.id, {
+        ...(isArabicA1Core(lesson.id) ? {sampleRevision:arabicA1SentenceRevision(lesson.id),checksRevision:ARABIC_A1_ASSESSMENT_REVISION} : {}),
         stageVersion: LESSON_STAGE_VERSION,
         stage,
         sentenceIndex,
@@ -295,7 +303,7 @@ export default function ArabicLessonScreen() {
     setBuiltSentences(prev => (prev[sentenceId] ? prev : { ...prev, [sentenceId]: true }));
   }, []);
 
-  const chunks = lessonChunks(lesson?.id ?? '', lesson?.sentences.length ?? 0, doneChunks);
+  const chunks = lessonChunks(lesson?.id ?? '', lesson?.sentences.length ?? 0, doneChunks, lesson?.levelId === 0);
   useEffect(() => {
     if (chunks.chunked && sentenceIndex < chunks.start) setSentenceIndex(chunks.start);
   }, [chunks.chunked, chunks.start, lesson?.id, sentenceIndex]);
@@ -320,9 +328,7 @@ export default function ArabicLessonScreen() {
         clearNarratorFallback();
         if (targetKey) setMicReadyKey(targetKey);
       };
-      if (targetKey) {
-        narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-      }
+      // Recognition starts only on playback completion/error, never on an estimated duration.
       playArabicSpeech(text, {
         rate,
         onDone: armMic,
@@ -394,7 +400,15 @@ export default function ArabicLessonScreen() {
     );
     lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
   }, []);
-  const { scheduleOnPass } = useSpeakAutoAdvance(`${lesson?.id ?? 'none'}:${stage}:${sentenceIndex}`);
+  const { scheduleOnPass, cancel: cancelSpeakingAdvance } = useSpeakAutoAdvance(`${lesson?.id ?? 'none'}:${stage}:${sentenceIndex}`);
+  const skipSpeakingSentence = () => {
+    cancelSpeakingAdvance();
+    setMicReadyKey('');
+    const last = stage === 1 ? chunkLastIndex : lesson.sentences.length - 1;
+    if (sentenceIndex < last) { setSentenceIndex(sentenceIndex + 1); setRevealed(false); }
+    else { void next(); }
+  };
+
 
   useEffect(() => {
     if (stage !== 2 || !lesson) return;
@@ -474,6 +488,7 @@ export default function ArabicLessonScreen() {
       for (const sId of weak) await addArabicSentenceToReview(sId, lesson.id).catch(() => undefined);
 
       await saveArabicLessonSession(lesson.id, {
+        ...(isArabicA1Core(lesson.id) ? {sampleRevision:arabicA1SentenceRevision(lesson.id),checksRevision:ARABIC_A1_ASSESSMENT_REVISION} : {}),
         stageVersion: LESSON_STAGE_VERSION,
         stage,
         sentenceIndex,
@@ -517,6 +532,16 @@ export default function ArabicLessonScreen() {
       completing.current = false;
       setSaving(false);
     }
+  };
+
+  const goToPreviousStage = () => {
+    if (!sessionReady || saving || sessionError || completing.current || resettingRef.current || stage < 2) return;
+    cancelSpeakingAdvance();
+    setMicReadyKey(null);
+    void stopArabicSpeech();
+    setStage(stage - 1);
+    setSentenceIndex(0);
+    setRevealed(false);
   };
 
   const goToPreviousSentence = () => {
@@ -601,12 +626,7 @@ export default function ArabicLessonScreen() {
             </View>
           </LinearGradient>
           <View style={styles.stepperCard}>
-            <View style={styles.stepperHeading}>
-              <View />
-              <View style={styles.stepperNow}>
-                <Text style={styles.stepperNowFa}>{stages[stage].title}</Text>
-              </View>
-            </View>
+
             <View style={styles.stepSegments}>
               {stages.map((item, index) => (
                 <View
@@ -655,7 +675,7 @@ export default function ArabicLessonScreen() {
               <View style={styles.bigIcon}>
                 <Sparkles size={34} color={Colors.accent[400]} />
               </View>
-              <Text style={styles.stageTitle}>{lesson.title}</Text>
+
               <Text style={styles.situation}>{lesson.situation}</Text>
               {lesson.levelId >= 3 ? (
                 <ReadingFirstBlock
@@ -720,7 +740,7 @@ export default function ArabicLessonScreen() {
                   </View>
                 ) : null}
               </View>
-              <ArabicSpeechRateControls onPlay={rate => speak(current.ar, rate)} />
+              <ArabicSpeechRateControls showNormal={false} onPlay={rate => speak(current.ar, rate)} />
               {!!audioNotice && (
                 <Text accessibilityLiveRegion="polite" style={styles.speechError}>
                   {audioNotice}
@@ -728,17 +748,13 @@ export default function ArabicLessonScreen() {
               )}
               <SpeakCheck
                 key={current.id}
+                onSkip={skipSpeakingSentence}
                 text={current.ar}
                 locale="ar-SA"
                 accent={Colors.success[400]}
                 autoStart={micReadyKey === `1:${current.id}`}
                 onResult={result => {
-                  if (sentenceIndex < chunkLastIndex) {
-                    scheduleOnPass(result, () => {
-                      setSentenceIndex(sentenceIndex + 1);
-                      setRevealed(false);
-                    });
-                  }
+                  scheduleOnPass(result, () => { void next(); });
                 }}
               />
             </View>
@@ -750,9 +766,8 @@ export default function ArabicLessonScreen() {
                 <Headphones size={34} color={Colors.primary[400]} />
               </View>
               <Text style={styles.stageTitle}>شنیدن جمله‌ها</Text>
-              {showHint && (
-                <Text style={styles.stageDesc}>هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.</Text>
-              )}
+              {arabicA1Skills(lesson.id)?.filter(t=>t.kind==='listening').map(t=><StarterA1Skill key={`${lesson.id}-listening`} task={t} onSpeak={speak} foreignStyle={styles.listenArabic} />)}
+
               <View
                 style={{ width: '100%' }}
                 onLayout={event => {
@@ -801,9 +816,10 @@ export default function ArabicLessonScreen() {
                     {audioNotice}
                   </Text>
                 )}
-                <Text style={styles.speechHint}>پس از شنیدن، جمله را با صدای بلند تکرار کنید.</Text>
+
                 <SpeakCheck
                   key={`shadow-${current.id}`}
+                  onSkip={skipSpeakingSentence}
                   text={current.ar}
                   locale="ar-SA"
                   accent={Colors.success[400]}
@@ -911,6 +927,21 @@ export default function ArabicLessonScreen() {
                       locale="ar-SA"
                       accent={Colors.success[400]}
                       autoStart={micReadyKey === `5:${vocabIndex}:${item.word}`}
+                      onSkip={() => {
+                        cancelSpeakingAdvance();
+                        setMicReadyKey('');
+                        if (vocabIndex < vocabulary.length - 1) {
+                          const nextVocab = vocabulary[vocabIndex + 1];
+                          scrollToContentY(
+                          vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0),
+                          );
+                          speakForTarget(
+                          nextVocab.word,
+                          ARABIC_NORMAL_SPEECH_RATE,
+                          `5:${vocabIndex + 1}:${nextVocab.word}`,
+                          );
+                        } else { void next(); }
+                      }}
                       onResult={result => {
                         if (vocabIndex < vocabulary.length - 1) {
                           const nextVocab = vocabulary[vocabIndex + 1];
@@ -942,6 +973,7 @@ export default function ArabicLessonScreen() {
                 }
               />
               {lesson.teachingFa ? <GrammarNoteCard title="نکتهٔ آموزشی درس" text={lesson.teachingFa} /> : null}
+              {arabicA1Skills(lesson.id)?.filter(t=>t.kind==='reading').map(t=><StarterA1Skill key={`${lesson.id}-reading`} task={t} onSpeak={speak} foreignStyle={styles.listenArabic} />)}
               {patterns.map((p, idx) => (
                 <GrammarPatternCard
                   key={`${p.pattern}-${idx}`}
@@ -1014,6 +1046,8 @@ export default function ArabicLessonScreen() {
           )}
 
 
+          {stage === 8 && isArabicA1Core(lesson.id) ? <ProductionTask key={`${lesson.id}-production`} source={lesson} explicit={arabicA1Production(lesson.id)} contentRevision={arabicA1SentenceRevision(lesson.id)} levelLabel={isArabicA1Core(lesson.id) ? 'A1' : undefined} examples={lesson.sentences.map(s=>({text:s.ar,fa:s.fa}))} onSpeak={text=>speak(text)} foreignStyle={styles.listenArabic} /> : null}
+
           {stage === 9 && (
             <LessonDialogueRoom
               key={lesson.id}
@@ -1022,10 +1056,13 @@ export default function ArabicLessonScreen() {
               lessonTitle={lesson.title}
               levelId={lesson.levelId}
               situation={lesson.situation}
-              lines={lesson.sentences.map(sentence => ({ text: sentence.ar, fa: sentence.fa }))}
+              contentRevision={isArabicA1Core(lesson.id) ? ARABIC_A1_ROOM_REVISION : lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+              scene={arabicA1RoomScene(lesson)}
+          pairs={arabicLessonRoomPairs(lesson)}
               locale="ar-SA"
               onSpeak={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone })}
-              onSpeakOperator={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, pitch: 0.82, onDone, onError: onDone })}
+              onSpeakOperator={(text, onDone) => speakOperator(text, 'ar-SA', 'ar', onDone)}
+              onSpeakSlow={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_SLOW_SPEECH_RATE, onDone, onError: onDone })}
             />
           )}
           {!!completionError && <Text style={styles.speechError}>{completionError}</Text>}
@@ -1036,6 +1073,9 @@ export default function ArabicLessonScreen() {
 
       <View pointerEvents={resetting ? 'none' : 'auto'} style={styles.footer}>
         <View style={styles.footerButtons}>
+          {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
+            <Text style={styles.secondaryControlText}>مرحلهٔ قبل</Text>
+          </Pressable>}
           {stage === 1 && (
             <Pressable
               accessibilityRole="button"
@@ -1110,7 +1150,7 @@ export default function ArabicLessonScreen() {
         </View>
       ) : null}
 
-      <LessonCelebration
+      <LessonCelebration onRestart={async () => { const target = await prepareLessonRestart('/learn/ar/lesson', lesson.id); router.replace(target as never); }}
         visible={!!celebration}
         lessonTitle={lesson.title}
         stats={
@@ -1158,9 +1198,11 @@ export default function ArabicLessonScreen() {
 function ArabicSpeechRateControls({
   onPlay,
   disabled = false,
+  showNormal = true,
 }: {
   onPlay: (rate: number) => void;
   disabled?: boolean;
+  showNormal?: boolean;
 }) {
   return (
     <View style={styles.replayRow}>
@@ -1175,7 +1217,7 @@ function ArabicSpeechRateControls({
         <Volume2 size={18} color={Palette.primary} />
         <Text style={styles.replayText}>آهسته</Text>
       </Pressable>
-      <Pressable
+      {showNormal ? <Pressable
         accessibilityRole="button"
         accessibilityLabel="پخش معمولی جملهٔ عربی"
         accessibilityState={{ disabled }}
@@ -1185,7 +1227,7 @@ function ArabicSpeechRateControls({
       >
         <Volume2 size={18} color={Palette.primary} />
         <Text style={styles.replayText}>معمولی</Text>
-      </Pressable>
+      </Pressable> : null}
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="پخش با سرعت طبیعی"

@@ -1,4 +1,4 @@
-import { SENTENCE_LESSONS, type CourseSentence } from './courseContent';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS, type CourseSentence } from './courseContent';
 import { addSentenceToReview } from './courseProgress';
 import { type PodcastEpisode } from './englishPodcast';
 

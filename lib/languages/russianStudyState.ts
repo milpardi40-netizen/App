@@ -1,8 +1,12 @@
+import { russianPreA1ContextChecksRevisionFor } from './russianPreA1Phase3';
+import { RUSSIAN_PRE_A1_LIGHT_VERBS_ID } from './russianPreA1Phase2';
 import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
-import { STARTER_CHECKS_REVISION } from './russianPreA1';
+import { assessmentRevisionFor, expandedChoiceChecks } from '../lessonAssessment';
+import { russianChecksRevisionFor as previousChecksRevisionFor } from './russianPreA1';
+const russianChecksRevisionFor = (id: string) => assessmentRevisionFor('ru', id);
 import { RUSSIAN_LESSONS, RUSSIAN_LESSON_STAGES } from './russian';
 
 export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
@@ -63,24 +67,27 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     throw new Error('وضعیت ذخیره‌شدهٔ درس روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   // Validate the stored shape even for retired questions, but never grade a previous meaning.
-  const retiredChecks = lesson.levelId <= 1 && session.checksRevision !== STARTER_CHECKS_REVISION;
+  const expanded = session.checksRevision !== russianChecksRevisionFor(lessonId);
+  const retiredChecks = expanded && (!!russianPreA1ContextChecksRevisionFor(lesson.id) || lesson.id === 'ru-pre-29-numbers-teens' || lesson.id === RUSSIAN_PRE_A1_LIGHT_VERBS_ID || lesson.levelId === 1 || (session.checksRevision !== previousChecksRevisionFor(lessonId) && !(lesson.levelId > 1 && !session.checksRevision)));
   const answers: Record<string, number> = {};
+  let checks: ReturnType<typeof expandedChoiceChecks> | undefined;
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
-    const check = lesson.checks?.[checkIndex];
+    const check = (checks ??= expandedChoiceChecks(lesson))[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= (retiredChecks ? 4 : check.choices.length)) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
-    if (!retiredChecks) answers[key] = answer!;
+    if (!retiredChecks && (!expanded || checkIndex < (lesson.checks?.length ?? 0))) answers[key] = answer!;
   }
   return {
+    checksRevision: russianChecksRevisionFor(lessonId),
     stage,
     ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,
     sentenceIndex: session.sentenceIndex!,
     revealed: session.revealed,
     answers,
-    showCheckAnswers: !retiredChecks && session.showCheckAnswers,
+    showCheckAnswers: !expanded && session.showCheckAnswers,
   };
 }
 
@@ -120,9 +127,23 @@ function serial<T>(job: () => Promise<T>): Promise<T> {
 export function saveRussianLessonSession(lessonId: string, value: RussianLessonSession): Promise<void> {
   return serial(async () => {
     // New writes come from the current UI. Migration applies on read of old persisted attempts.
-    const safe = validateSession(lessonId, { ...value, checksRevision: STARTER_CHECKS_REVISION });
+    const checksRevision = russianChecksRevisionFor(lessonId);
+    const safe = validateSession(lessonId, { ...value, checksRevision });
     const state = parseState(await readRaw());
-    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, checksRevision: STARTER_CHECKS_REVISION, updatedAt: positionTimestamp() } } }));
+    await writeRaw(JSON.stringify({ ...state, sessions: { ...state.sessions, [lessonId]: { ...safe, checksRevision, updatedAt: positionTimestamp() } } }));
+    notifyLearningChange();
+  });
+}
+
+/** One serialized state write for the selected band; no other session changes. */
+export function resetRussianLessonSessions(ids: readonly string[]): Promise<void> {
+  return serial(async () => {
+    const state = parseState(await readRaw()), sessions = {...state.sessions};
+    for(const id of new Set(ids)) {
+      const checksRevision=russianChecksRevisionFor(id);
+      sessions[id]={...validateSession(id,{...freshRussianLessonSession(),checksRevision}),checksRevision,updatedAt:positionTimestamp()};
+    }
+    await writeRaw(JSON.stringify({...state,sessions}));
     notifyLearningChange();
   });
 }

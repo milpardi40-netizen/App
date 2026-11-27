@@ -16,6 +16,7 @@ export const ADMIN_NAV: NavItem[] = [
   { href: '/admin/chats', label: 'گفتگوها', short: 'گفتگوها', icon: MessagesSquare },
   { href: '/admin/learners', label: 'زبان‌آموزان و دعوت‌ها', short: 'زبان‌آموزان', icon: GraduationCap },
   { href: '/admin/updates', label: 'به‌روزرسانی اپ‌ها', short: 'آپدیت', icon: UploadCloud },
+  { href: '/admin/update-reports', label: 'گزارش استفاده از آپدیت‌ها', short: 'گزارش آپدیت', icon: History },
   { href: '/admin/popups', label: 'پاپ‌آپ‌ها', short: 'پاپ‌آپ', icon: Megaphone },
   { href: '/admin/subscriptions', label: 'اشتراک', short: 'اشتراک', icon: CreditCard },
   { href: '/admin/content', label: 'محتوای آموزشی', short: 'محتوا', icon: BookOpen },

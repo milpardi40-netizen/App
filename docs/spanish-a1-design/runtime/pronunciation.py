@@ -1,0 +1,290 @@
+"""Approximate Persian reading aids for Spain Spanish; not IPA or audio verification.
+Ordered Spanish graphemes (h, ñ, ll, qu, gu, c/z, j, r/rr); stress and regional variation
+still require actual audio. Numeric fallback is digit-by-digit only for short practice labels.
+"""
+import re
+P={}
+for line in '''hola|اُلا
+adiós|اَدیوس
+gracias|گراثیاس
+buenos|بوئنوس
+buenas|بوئناس
+días|دیاس
+tardes|تاردِس
+noches|نوچِس
+qué|کِه
+tal|تال
+cómo|کُمو
+estás|اِستاس
+está|اِستا
+están|اِستان
+estáis|اِستایس
+estoy|اِستوی
+estamos|اِستاموس
+bien|بی‌یِن
+muy|موی
+hasta|اَستا
+luego|لوئگو
+mañana|مانیانا
+aquí|اَکی
+allí|اَیی
+yo|یو
+tú|تو
+él|اِل
+ella|اِیا
+ellos|اِیوس
+ellas|اِیاس
+usted|اوستِد
+ustedes|اوستِدِس
+nosotros|نوسوتروس
+nosotras|نوسوتراس
+vosotros|بوسوتروس
+vosotras|بوسوتراس
+soy|سوی
+eres|اِرِس
+es|اِس
+somos|سوموس
+sois|سویس
+son|سون
+sí|سی
+no|نو
+me|مِه
+te|تِه
+se|سِه
+llamo|یامو
+llamas|یاماس
+llama|یاما
+vivo|بیبو
+vives|بیبِس
+vive|بیبِه
+vivimos|بیبیموس
+vivís|بیبیس
+viven|بیبِن
+nombre|نومبرِه
+apellido|اَپِییدو
+escribe|اِسکریبِه
+puede|پوئدِه
+puedo|پوئدو
+puedes|پوئدِس
+podemos|پودِموس
+podéis|پودِیس
+pueden|پوئدِن
+podría|پودریا
+repetir|رِپِتیر
+despacio|دِسپاثیو
+palabra|پالابرا
+entiendo|اِنتیِندو
+deletrearlo|دِلِترِآرلو
+ahora|اَئورا
+por|پور
+favor|فابور
+de|دِه
+del|دِل
+al|اَل
+a|آ
+en|اِن
+el|اِل
+la|لا
+los|لوس
+las|لاس
+un|اون
+una|اونا
+unos|اونوس
+unas|اوناس
+su|سو
+sus|سوس
+mi|می
+mis|میس
+tu|تو
+tus|توس
+mío|میو
+míos|میوس
+tuyo|تویو
+nuestro|نوئسترو
+nuestra|نوئسترا
+este|اِستِه
+esta|اِستا
+estos|اِستوس
+estas|اِستاس
+ese|اِسِه
+esa|اِسا
+esos|اِسوس
+esas|اِساس
+esto|اِستو
+tengo|تِنگو
+tienes|تیِنِس
+tiene|تیِنِه
+tenemos|تِنِموس
+tenéis|تِنِیس
+tienen|تیِنِن
+años|آنیوس
+cuántos|کوانتوس
+cuánto|کوانتو
+cuál|کوال
+número|نومِرو
+cero|ثِرو
+uno|اونو
+dos|دوس
+tres|ترِس
+cuatro|کواترو
+cinco|ثینکو
+seis|سِیس
+siete|سیِتِه
+ocho|اُچو
+nueve|نوئبِه
+diez|دیِث
+once|اُنثِه
+doce|دوثِه
+trece|ترِثِه
+catorce|کاتورثِه
+quince|کینثِه
+dieciséis|دیِثیسِیس
+diecisiete|دیِثی‌سیِتِه
+dieciocho|دیِثی‌اُچو
+diecinueve|دیِثی‌نوئبِه
+veinte|بِینتِه
+veintiuno|بِینتی‌اونو
+veintidós|بِینتی‌دوس
+veintitrés|بِینتی‌ترِس
+veinticuatro|بِینتی‌کواترو
+treinta|ترِینتا
+cuarenta|کوارِنتا
+cincuenta|ثینکوئِنتا
+sesenta|سِسِنتا
+setenta|سِتِنتا
+ochenta|اُچِنتا
+noventa|نوبِنتا
+cien|ثیِن
+hay|آی
+hoy|اُی
+hace|آثِه
+hago|آگو
+haces|آثِس
+hacen|آثِن
+hambre|آمبرِه
+huevos|اوئبوس
+quiero|کیِرو
+quieres|کیِرِس
+quiere|کیِرِه
+quisiera|کیسیِرا
+quién|کی‌یِن
+dónde|دوندِه
+cuándo|کواندو
+vamos|باموس
+voy|بوی
+vas|باس
+va|با
+vais|بایس
+van|بان
+calle|کایِه
+llave|یابِه
+llueve|یوئبِه
+lluvia|یوبیا
+llegar|یِگار
+llego|یِگو
+llamar|یامار
+llamarme|یامارمِه
+llámeme|یامِمِه
+llevo|یِبو
+puerta|پوئرتا
+fiebre|فیِبرِه
+duele|دوئلِه
+cuenta|کوئِنتا
+agua|آگوا
+frío|فریو
+fría|فریا
+leche|لِچِه
+azúcar|اَثوکار
+café|کافِه
+té|تِه
+arroz|اَرّوث
+bolígrafo|بولیگرافو
+habitación|اَبیتاثیون
+lámpara|لامپارا
+estación|اِستاثیون
+semáforo|سِمافورو
+andén|اَندِن
+salida|سالیدا
+próxima|پروکسیما
+pregunta|پرِگونتا
+pregunte|پرِگونتِه
+gire|خیرِه
+siga|سیگا
+izquierda|ایثکیِردا
+derecha|دِرِچا
+recto|رِکتو
+juntos|خونتوس
+junto|خونتو
+siempre|سیِمپرِه
+después|دِسپوئِس
+también|تامبی‌یِن
+leer|لِئِر
+leo|لِئو
+le|لِه
+gusta|گوستا
+gustan|گوستان
+prefiero|پرِفیِرو
+prefieres|پرِفیِرِس
+galletas|گایِتاس
+silla|سییا
+sillas|سییاس
+pequeña|پِکِنیا
+pequeño|پِکِنیو
+nueva|نوئبا
+nuevo|نوئبو
+buena|بوئنا
+bueno|بوئنو
+buen|بوئِن
+España|اِسپانیا
+españa|اِسپانیا
+español|اِسپانیول
+española|اِسپانیولا
+irán|ایران
+madrid|مادرید
+toledo|تولِدو
+sevilla|سِبییا
+lucía|لوثیا
+sara|سارا
+ana|آنا
+amir|امیر
+ali|علی
+ben|بِن
+lee|لی
+mina|مینا
+martín|مارتین
+garcía|گارثیا
+mayor|مایور
+probármela|پروبارمِلا
+sentarme|سِنتارمِه
+ayudarme|اَیودارمِه
+ayúdeme|اَیودِمِه
+abrirla|اَبریرلا
+quedarnos|کِدارنوس
+encuentro|اِنکوئنترو
+encantada|اِنکانتادا
+encantado|اِنکانتادو
+'''.strip().splitlines():
+    word,pron=line.split('|');P[word.lower()]=pron
+LETTERS=dict(zip('ABCDEFGHIJKLMNOPQRSTUVWXYZ','آ|بِه|ثِه|دِه|اِ|اِفِه|خِه|آچِه|ای|خوتا|کا|اِلِه|اِمِه|اِنِه|اُ|پِه|کو|اِرِه|اِسِه|تِه|او|اوبِه|اوبِه‌دوبلِه|اِکیس|یِه|ثِتا'.split('|')))
+def fallback(word):
+    w=word.lower()
+    w=w.replace('gü','گو')
+    w=re.sub(r'qu(?=[eéií])','ک',w)
+    w=re.sub(r'gu(?=[eéií])','گ',w)
+    w=re.sub(r'c(?=[eéií])','ث',w)
+    w=re.sub(r'g(?=[eéií])','خ',w)
+    for a,b in [('ch','چ'),('ll','ی'),('rr','رّ')]:w=w.replace(a,b)
+    w=w.replace('h','')
+    chars={'a':'ا','á':'ا','b':'ب','c':'ک','d':'د','e':'ِ','é':'ِ','f':'ف','g':'گ','i':'ی','í':'ی','j':'خ','k':'ک','l':'ل','m':'م','n':'ن','ñ':'نی','o':'و','ó':'و','p':'پ','q':'ک','r':'ر','s':'س','t':'ت','u':'و','ú':'و','ü':'و','v':'ب','w':'و','x':'کس','y':'ی','z':'ث'}
+    return ''.join(chars.get(c,c) for c in w)
+def pronounce(text):
+    s=re.sub(r'\b(?:[A-Z][–-])+[A-Z]\b',lambda m:' '.join(LETTERS[c] for c in m[0] if c in LETTERS),text)
+    out=[]
+    for t in re.findall(r'[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+|[\u0600-\u06ff]+|\d+',s):
+        if re.search('[\u0600-\u06ff]',t):out.append(t)
+        elif t.isdigit():out.append(' '.join(P[['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'][int(c)]] for c in t))
+        elif t in LETTERS:out.append(LETTERS[t])
+        else:out.append(P.get(t.lower()) or fallback(t))
+    value=' '.join(out)
+    assert value and not re.search('[a-záéíóúüñ]',value,re.I),(text,value)
+    return value

@@ -1,3 +1,6 @@
+import { isEnglishLessonAvailable } from './englishLessonAvailability';
+import {arrangeEnglishA1} from './englishA1Practice';
+import { enrichEnglishPreA1 } from './languages/preA1Practical/english';
 import { EXPANDED_SENTENCE_LESSONS } from './courseContentExpansion';
 import { ADVANCED_SENTENCE_LESSONS } from './courseContentExpansion2';
 import { ADVANCED_SENTENCE_LESSONS_2 } from './courseContentExpansion3';
@@ -715,7 +718,7 @@ function englishLabLesson(lab: LabLesson): SentenceLesson {
 }
 
 const baseSentenceLessons: SentenceLesson[] = [
-  ...PRE_A1_LESSONS,
+  ...PRE_A1_LESSONS.map(enrichEnglishPreA1),
   ...arrangedBeforeB1.slice(0, advancedStart),
   ...B1_INDEPENDENT_LESSONS,
   ...B2_UPPER_INTERMEDIATE_LESSONS,
@@ -723,15 +726,17 @@ const baseSentenceLessons: SentenceLesson[] = [
   ...C1_ADVANCED_LESSONS,
 ];
 
-export const SENTENCE_LESSONS: SentenceLesson[] = insertLabLessons(
+export const SENTENCE_LESSONS: SentenceLesson[] = arrangeEnglishA1(insertLabLessons(
   baseSentenceLessons,
   labLessonsOf('en').map(englishLabLesson),
   'en',
-).map((lesson, index) => ({
+)).map((lesson, index) => ({
   ...lesson,
   order: index + 1,
   // Keep the role explicit at the runtime boundary, even for legacy lesson sources.
   dialogue: lesson.dialogue.map(line => ({ ...line, role: line.speaker })),
 }));
 
-export const getSentenceLesson = (id: string) => SENTENCE_LESSONS.find((lesson) => lesson.id === id);
+/** Learner-facing projection. Keep SENTENCE_LESSONS intact for legacy storage/backup validation. */
+export const ENGLISH_LEARNER_LESSONS = SENTENCE_LESSONS.filter(isEnglishLessonAvailable);
+export const getSentenceLesson = (id: string) => ENGLISH_LEARNER_LESSONS.find((lesson) => lesson.id === id);

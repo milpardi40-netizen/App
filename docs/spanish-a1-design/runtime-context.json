@@ -1,0 +1,2691 @@
+{
+  "date": "2026-11-26",
+  "purpose": "Read-only Spanish design baseline after approved Russian/English/German/French implementations. Do not regenerate after Spanish implementation.",
+  "inventoryHashes": {
+    "en": "eb215209074a93b819c0eba010cc4b26e8fa37ed0cd8a343d481d410896f235d",
+    "ru": "da93a1d5a375d73dd30aca1ab72d6263440f2ec91f0dc68ef519d81d9d92e14b",
+    "tr": "d9e9307c9a8bd7f3cba739bd4384d71443e4d3b84097ecff38cb56ae0e2c3f9e",
+    "ar": "2aba3bbea24df5d31b0927fc9b7c5524badfb9fbe288d964391dc0955a3ac487",
+    "de": "7cfeb9805fded6ea460be8caaa113a88835380f5eb6334ef7e60ca6ed9dd38b4",
+    "fr": "cc0aa384c879a25007ca9b2b2b8d47b70c258ff533ccec4a1b44a47d94fb2367",
+    "es": "4c95ef207df8d3792be99c320e1fb50f21478c325810ac0f75d02ac4558d4596"
+  },
+  "sourceHashes": {
+    "components/StarterLesson.tsx": "4114e4234b54f172ad2fd5b2ba15de31f0293994d37c3da98c3d81d2d304d637",
+    "lib/languages/newCourses.ts": "e553218982c6140e92ccc2335ad4017af04f99d9858ac2d62b576bcfb1053ca2",
+    "lib/languages/starterSessions.ts": "0235307036e7ea58f61c4e69c4915783e51bb09bf96422117fa6e9d4012ada5c",
+    "lib/languages/starterEditorial.ts": "4a284c4eed0fbe5de6f7fab3a52c2fbe2d3fa1dbad1cbdecb6837b6dd707e529",
+    "lib/languages/a1Skills.ts": "96d37a0a909f3177921327b6c92ce5f0c60957aefb606ca25dadbf8d6027c03c",
+    "lib/languages/a1Curriculum.ts": "90feb4998877882b26e8bcfaea51f6027fb3e0806ee1fc9500729983bdc78bf0",
+    "lib/createCourseProgressStore.ts": "d63b1c1971f935a3fb2e2879f4a7eff744f9f5f4bae8c25e32853acae478d06b",
+    "lib/lessonAssessment.ts": "4c40b9de39fd056deca75964eaaa873caba27ba1e0687926089365d5f3a60455",
+    "lib/lessonOutcomes.ts": "2af0f4dc2aef9aa7bd5081c9151b13e32477f5d9a2bfeb3827c990dd4c9b30e6",
+    "lib/languages/sequencedStarterA1.ts": "05c88bce73ee8fa524e74f72e6e9bebbcca39bd290804af5a926ced17d075dae",
+    "lib/languages/frenchA1.generated.ts": "742e48a5d9288c89ea36e852c80f8d17313719b17498b6671183f98c7e274abf",
+    "lib/languages/germanA1.generated.ts": "cbf6605e6da6be22acdb81de1e7200e3f997410130c1f2c4a7f283d3eecd6108"
+  },
+  "protectedSpanishOutsideA1": "2dca088c4a26f1fedcac2f7aef4766b4d10bad26362278ba14f73e3b8f9a4999",
+  "spanishA1": [
+    {
+      "id": "es-a1-greetings",
+      "title": "سلام و احوال‌پرسی",
+      "order": 28,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-greetings-s1",
+        "es-a1-greetings-s2",
+        "es-a1-greetings-s3",
+        "es-a1-greetings-s4",
+        "es-a1-greetings-s5",
+        "es-a1-greetings-s6",
+        "es-a1-greetings-s7",
+        "es-a1-greetings-s8",
+        "es-a1-greetings-s9",
+        "es-a1-greetings-s10",
+        "es-a1-greetings-s11",
+        "es-a1-greetings-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "47c72bd10f98bbc9f26ee169d11500f941997092b6089d216fbd4dfc539a5d5b"
+    },
+    {
+      "id": "es-a1-profile",
+      "title": "آشنایی و اطلاعات شخصی",
+      "order": 29,
+      "rows": 20,
+      "sentenceIds": [
+        "es-a1-profile-s1",
+        "es-a1-profile-s2",
+        "es-a1-profile-s3",
+        "es-a1-profile-s4",
+        "es-a1-profile-s5",
+        "es-a1-profile-s6",
+        "es-a1-profile-s7",
+        "es-a1-profile-s8",
+        "es-a1-profile-s9",
+        "es-a1-profile-s10",
+        "es-a1-profile-s11",
+        "es-a1-profile-s12",
+        "es-a1-profile-s13",
+        "es-a1-profile-s14",
+        "es-a1-profile-s15",
+        "es-a1-profile-s16",
+        "es-a1-profile-s17",
+        "es-a1-profile-s18",
+        "es-a1-profile-s19",
+        "es-a1-profile-s20"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "31b7e721a2563e6e4a7af4f4f0281c0f8719a70197d3983f17b8609fcd1de647"
+    },
+    {
+      "id": "es-a1-subject-pronouns",
+      "title": "ضمایر فاعلی",
+      "order": 30,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-subject-pronouns-s1",
+        "es-a1-subject-pronouns-s2",
+        "es-a1-subject-pronouns-s3",
+        "es-a1-subject-pronouns-s4",
+        "es-a1-subject-pronouns-s5",
+        "es-a1-subject-pronouns-s6",
+        "es-a1-subject-pronouns-s7",
+        "es-a1-subject-pronouns-s8",
+        "es-a1-subject-pronouns-s9",
+        "es-a1-subject-pronouns-s10",
+        "es-a1-subject-pronouns-s11",
+        "es-a1-subject-pronouns-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "87bd6a358580756959f20f1deadd45aea3a81a1beb5139f386a4a6db2126a522"
+    },
+    {
+      "id": "es-a1-verb-to-be",
+      "title": "جمله‌های ساده با ser",
+      "order": 31,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-verb-to-be-s1",
+        "es-a1-verb-to-be-s2",
+        "es-a1-verb-to-be-s3",
+        "es-a1-verb-to-be-s4",
+        "es-a1-verb-to-be-s5",
+        "es-a1-verb-to-be-s6",
+        "es-a1-verb-to-be-s7",
+        "es-a1-verb-to-be-s8",
+        "es-a1-verb-to-be-s9",
+        "es-a1-verb-to-be-s10",
+        "es-a1-verb-to-be-s11",
+        "es-a1-verb-to-be-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "3a9a1903acf61a77a39133312846f67e4a63258092a81f5b579e18c1467ae102"
+    },
+    {
+      "id": "es-a1-nationalities",
+      "title": "ملیت، زبان و محل زندگی",
+      "order": 32,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-nationalities-s1",
+        "es-a1-nationalities-s2",
+        "es-a1-nationalities-s3",
+        "es-a1-nationalities-s4",
+        "es-a1-nationalities-s5",
+        "es-a1-nationalities-s6",
+        "es-a1-nationalities-s7",
+        "es-a1-nationalities-s8",
+        "es-a1-nationalities-s9",
+        "es-a1-nationalities-s10",
+        "es-a1-nationalities-s11",
+        "es-a1-nationalities-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "a21dd0156897f6887f1f589b20f02d98e405c30cce1c9ed56edb15418f870427"
+    },
+    {
+      "id": "es-a1-numbers-age",
+      "title": "اعداد، سن و اطلاعات شخصی",
+      "order": 33,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-numbers-age-s1",
+        "es-a1-numbers-age-s2",
+        "es-a1-numbers-age-s3",
+        "es-a1-numbers-age-s4",
+        "es-a1-numbers-age-s5",
+        "es-a1-numbers-age-s6",
+        "es-a1-numbers-age-s7",
+        "es-a1-numbers-age-s8",
+        "es-a1-numbers-age-s9",
+        "es-a1-numbers-age-s10",
+        "es-a1-numbers-age-s11",
+        "es-a1-numbers-age-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "3e32d9645e4d955f87fe572e3336d8f79dfcb1ef158a52e5357ea3c8c9c8fa8c"
+    },
+    {
+      "id": "es-a1-family",
+      "title": "خانواده و روابط خانوادگی",
+      "order": 34,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-family-s1",
+        "es-a1-family-s2",
+        "es-a1-family-s3",
+        "es-a1-family-s4",
+        "es-a1-family-s5",
+        "es-a1-family-s6",
+        "es-a1-family-s7",
+        "es-a1-family-s8",
+        "es-a1-family-s9",
+        "es-a1-family-s10",
+        "es-a1-family-s11",
+        "es-a1-family-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "e4d249a5162e38fec8bd97800e589e20cf2ec904c09ac2467bb5fae80d779c58"
+    },
+    {
+      "id": "es-a1-possessives",
+      "title": "مالکیت و صفات ملکی",
+      "order": 35,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-possessives-s1",
+        "es-a1-possessives-s2",
+        "es-a1-possessives-s3",
+        "es-a1-possessives-s4",
+        "es-a1-possessives-s5",
+        "es-a1-possessives-s6",
+        "es-a1-possessives-s7",
+        "es-a1-possessives-s8",
+        "es-a1-possessives-s9",
+        "es-a1-possessives-s10",
+        "es-a1-possessives-s11",
+        "es-a1-possessives-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "cf49556f4c3270624588df58cf82da4ea3be4bfb6d748c6c14181478d90148f8"
+    },
+    {
+      "id": "es-a1-nouns-gender-plural",
+      "title": "اسم‌ها، جنسیت و جمع",
+      "order": 36,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-nouns-gender-plural-s1",
+        "es-a1-nouns-gender-plural-s2",
+        "es-a1-nouns-gender-plural-s3",
+        "es-a1-nouns-gender-plural-s4",
+        "es-a1-nouns-gender-plural-s5",
+        "es-a1-nouns-gender-plural-s6",
+        "es-a1-nouns-gender-plural-s7",
+        "es-a1-nouns-gender-plural-s8",
+        "es-a1-nouns-gender-plural-s9",
+        "es-a1-nouns-gender-plural-s10",
+        "es-a1-nouns-gender-plural-s11",
+        "es-a1-nouns-gender-plural-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "a0403d3707591ec21d69ac9eb7d6359b8ad0ce3006a6404c30dc97f820c0dbb5"
+    },
+    {
+      "id": "es-a1-demonstratives",
+      "title": "اشاره به اشخاص و اشیا",
+      "order": 37,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-demonstratives-s1",
+        "es-a1-demonstratives-s2",
+        "es-a1-demonstratives-s3",
+        "es-a1-demonstratives-s4",
+        "es-a1-demonstratives-s5",
+        "es-a1-demonstratives-s6",
+        "es-a1-demonstratives-s7",
+        "es-a1-demonstratives-s8",
+        "es-a1-demonstratives-s9",
+        "es-a1-demonstratives-s10",
+        "es-a1-demonstratives-s11",
+        "es-a1-demonstratives-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "d609ecfce46d46b0580455a99c86a7357d18530f2a4c4f989127ba453d43d325"
+    },
+    {
+      "id": "es-a1-descriptions",
+      "title": "توصیف اشخاص، اشیا و مکان‌ها",
+      "order": 38,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-descriptions-s1",
+        "es-a1-descriptions-s2",
+        "es-a1-descriptions-s3",
+        "es-a1-descriptions-s4",
+        "es-a1-descriptions-s5",
+        "es-a1-descriptions-s6",
+        "es-a1-descriptions-s7",
+        "es-a1-descriptions-s8",
+        "es-a1-descriptions-s9",
+        "es-a1-descriptions-s10",
+        "es-a1-descriptions-s11",
+        "es-a1-descriptions-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "95dafacfa10ff9942cfeb88cb18a132162da5cec7c8eae0a1d4bcef96fb889bd"
+    },
+    {
+      "id": "es-a1-colors",
+      "title": "رنگ‌ها و ویژگی‌های ظاهری",
+      "order": 39,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-colors-s1",
+        "es-a1-colors-s2",
+        "es-a1-colors-s3",
+        "es-a1-colors-s4",
+        "es-a1-colors-s5",
+        "es-a1-colors-s6",
+        "es-a1-colors-s7",
+        "es-a1-colors-s8",
+        "es-a1-colors-s9",
+        "es-a1-colors-s10",
+        "es-a1-colors-s11",
+        "es-a1-colors-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "185fb0f4230f28ffd9f652c7439d511b8b321c384f651a9d058511df2d951255"
+    },
+    {
+      "id": "es-a1-articles",
+      "title": "حروف تعریف معین و نامعین",
+      "order": 40,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-articles-s1",
+        "es-a1-articles-s2",
+        "es-a1-articles-s3",
+        "es-a1-articles-s4",
+        "es-a1-articles-s5",
+        "es-a1-articles-s6",
+        "es-a1-articles-s7",
+        "es-a1-articles-s8",
+        "es-a1-articles-s9",
+        "es-a1-articles-s10",
+        "es-a1-articles-s11",
+        "es-a1-articles-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "261f3230f56160e07854d2aa5533cfca51f276b7fa7a21177e84c300618e22cf"
+    },
+    {
+      "id": "es-a1-simple-verbs",
+      "title": "جمله‌های فعلی ساده",
+      "order": 41,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-simple-verbs-s1",
+        "es-a1-simple-verbs-s2",
+        "es-a1-simple-verbs-s3",
+        "es-a1-simple-verbs-s4",
+        "es-a1-simple-verbs-s5",
+        "es-a1-simple-verbs-s6",
+        "es-a1-simple-verbs-s7",
+        "es-a1-simple-verbs-s8",
+        "es-a1-simple-verbs-s9",
+        "es-a1-simple-verbs-s10",
+        "es-a1-simple-verbs-s11",
+        "es-a1-simple-verbs-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "f7a4e61ba6eac58b20ccebd149e9710d6944a2f52ce607b09bf7a250c4044f69"
+    },
+    {
+      "id": "es-a1-present-tense",
+      "title": "زمان حال ساده",
+      "order": 42,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-present-tense-s1",
+        "es-a1-present-tense-s2",
+        "es-a1-present-tense-s3",
+        "es-a1-present-tense-s4",
+        "es-a1-present-tense-s5",
+        "es-a1-present-tense-s6",
+        "es-a1-present-tense-s7",
+        "es-a1-present-tense-s8",
+        "es-a1-present-tense-s9",
+        "es-a1-present-tense-s10",
+        "es-a1-present-tense-s11",
+        "es-a1-present-tense-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "d00bd4ff2b2d957bb1c9d07729580aa3f8d53c2338b745e02bab09b903fadf01"
+    },
+    {
+      "id": "es-a1-verb-conjugation",
+      "title": "صرف افعال در زمان حال",
+      "order": 43,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-verb-conjugation-s1",
+        "es-a1-verb-conjugation-s2",
+        "es-a1-verb-conjugation-s3",
+        "es-a1-verb-conjugation-s4",
+        "es-a1-verb-conjugation-s5",
+        "es-a1-verb-conjugation-s6",
+        "es-a1-verb-conjugation-s7",
+        "es-a1-verb-conjugation-s8",
+        "es-a1-verb-conjugation-s9",
+        "es-a1-verb-conjugation-s10",
+        "es-a1-verb-conjugation-s11",
+        "es-a1-verb-conjugation-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "3c410a4a346eb7caf8274e3e525e6082a74dbe7852f89363629fa9fbb0d7be59"
+    },
+    {
+      "id": "es-a1-positive-negative-questions",
+      "title": "جمله‌های مثبت، منفی و پرسشی",
+      "order": 44,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-positive-negative-questions-s1",
+        "es-a1-positive-negative-questions-s2",
+        "es-a1-positive-negative-questions-s3",
+        "es-a1-positive-negative-questions-s4",
+        "es-a1-positive-negative-questions-s5",
+        "es-a1-positive-negative-questions-s6",
+        "es-a1-positive-negative-questions-s7",
+        "es-a1-positive-negative-questions-s8",
+        "es-a1-positive-negative-questions-s9",
+        "es-a1-positive-negative-questions-s10",
+        "es-a1-positive-negative-questions-s11",
+        "es-a1-positive-negative-questions-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "52470a7ea1e93602317d555725ecf51864b74d0e6afb9c94994d0e6f2ed9317c"
+    },
+    {
+      "id": "es-a1-question-words",
+      "title": "پرسش‌سازی با کلمات پرسشی",
+      "order": 45,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-question-words-s1",
+        "es-a1-question-words-s2",
+        "es-a1-question-words-s3",
+        "es-a1-question-words-s4",
+        "es-a1-question-words-s5",
+        "es-a1-question-words-s6",
+        "es-a1-question-words-s7",
+        "es-a1-question-words-s8",
+        "es-a1-question-words-s9",
+        "es-a1-question-words-s10",
+        "es-a1-question-words-s11",
+        "es-a1-question-words-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "140f037ae44a0edfbdf8cfb3d834b9279ecfa61fa0127966ec773abf85654ad2"
+    },
+    {
+      "id": "es-a1-dates-and-time",
+      "title": "اعداد ترتیبی، ساعت و تاریخ",
+      "order": 46,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-dates-and-time-s1",
+        "es-a1-dates-and-time-s2",
+        "es-a1-dates-and-time-s3",
+        "es-a1-dates-and-time-s4",
+        "es-a1-dates-and-time-s5",
+        "es-a1-dates-and-time-s6",
+        "es-a1-dates-and-time-s7",
+        "es-a1-dates-and-time-s8",
+        "es-a1-dates-and-time-s9",
+        "es-a1-dates-and-time-s10",
+        "es-a1-dates-and-time-s11",
+        "es-a1-dates-and-time-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "a5802955da35669ad5754ce6af62a04232f327a2381af73a09f833164f1ff9d8"
+    },
+    {
+      "id": "es-a1-location",
+      "title": "مکان و موقعیت مکانی",
+      "order": 47,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-location-s1",
+        "es-a1-location-s2",
+        "es-a1-location-s3",
+        "es-a1-location-s4",
+        "es-a1-location-s5",
+        "es-a1-location-s6",
+        "es-a1-location-s7",
+        "es-a1-location-s8",
+        "es-a1-location-s9",
+        "es-a1-location-s10",
+        "es-a1-location-s11",
+        "es-a1-location-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "48e7ede48339cc1e1ab43e7f1b71724464cb56b0031df68e8b871a9d63f83a3b"
+    },
+    {
+      "id": "es-a1-wants-needs",
+      "title": "علایق، خواسته‌ها و نیازها",
+      "order": 48,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-wants-needs-s1",
+        "es-a1-wants-needs-s2",
+        "es-a1-wants-needs-s3",
+        "es-a1-wants-needs-s4",
+        "es-a1-wants-needs-s5",
+        "es-a1-wants-needs-s6",
+        "es-a1-wants-needs-s7",
+        "es-a1-wants-needs-s8",
+        "es-a1-wants-needs-s9",
+        "es-a1-wants-needs-s10",
+        "es-a1-wants-needs-s11",
+        "es-a1-wants-needs-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "4cdf263b6c9f13231451d81c8ca2af17052e4c48e600b7add3921287b40f91e1"
+    },
+    {
+      "id": "es-a1-ability",
+      "title": "توانایی و ناتوانی",
+      "order": 49,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-ability-s1",
+        "es-a1-ability-s2",
+        "es-a1-ability-s3",
+        "es-a1-ability-s4",
+        "es-a1-ability-s5",
+        "es-a1-ability-s6",
+        "es-a1-ability-s7",
+        "es-a1-ability-s8",
+        "es-a1-ability-s9",
+        "es-a1-ability-s10",
+        "es-a1-ability-s11",
+        "es-a1-ability-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "413e890bb81bcbc1c19cc27b948b67d3b8efc07dc6a2a684762223908bd6575f"
+    },
+    {
+      "id": "es-a1-prepositions",
+      "title": "حروف اضافه پایه",
+      "order": 50,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-prepositions-s1",
+        "es-a1-prepositions-s2",
+        "es-a1-prepositions-s3",
+        "es-a1-prepositions-s4",
+        "es-a1-prepositions-s5",
+        "es-a1-prepositions-s6",
+        "es-a1-prepositions-s7",
+        "es-a1-prepositions-s8",
+        "es-a1-prepositions-s9",
+        "es-a1-prepositions-s10",
+        "es-a1-prepositions-s11",
+        "es-a1-prepositions-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "2bcaea6553149e15cc213bc435003d4d410e61619c3af88e60ded05ccfaaedd8"
+    },
+    {
+      "id": "es-a1-daily-routine",
+      "title": "برنامه روزانه و عادت‌ها",
+      "order": 51,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-daily-routine-s1",
+        "es-a1-daily-routine-s2",
+        "es-a1-daily-routine-s3",
+        "es-a1-daily-routine-s4",
+        "es-a1-daily-routine-s5",
+        "es-a1-daily-routine-s6",
+        "es-a1-daily-routine-s7",
+        "es-a1-daily-routine-s8",
+        "es-a1-daily-routine-s9",
+        "es-a1-daily-routine-s10",
+        "es-a1-daily-routine-s11",
+        "es-a1-daily-routine-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "ce258f02e448616f2ed9eb0f5ec1ab221f1a1b474a0218e7a45c9b6e2dc8e2a9"
+    },
+    {
+      "id": "es-a1-connectors",
+      "title": "اتصال جمله‌های ساده",
+      "order": 52,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-connectors-s1",
+        "es-a1-connectors-s2",
+        "es-a1-connectors-s3",
+        "es-a1-connectors-s4",
+        "es-a1-connectors-s5",
+        "es-a1-connectors-s6",
+        "es-a1-connectors-s7",
+        "es-a1-connectors-s8",
+        "es-a1-connectors-s9",
+        "es-a1-connectors-s10",
+        "es-a1-connectors-s11",
+        "es-a1-connectors-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "06038bf36d1001cdc96400776e86a8a9efb6c4792d7ba2dca02eddae7965b7c5"
+    },
+    {
+      "id": "es-a1-social-chat",
+      "title": "مکالمه در موقعیت‌های اجتماعی",
+      "order": 53,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-social-chat-s1",
+        "es-a1-social-chat-s2",
+        "es-a1-social-chat-s3",
+        "es-a1-social-chat-s4",
+        "es-a1-social-chat-s5",
+        "es-a1-social-chat-s6",
+        "es-a1-social-chat-s7",
+        "es-a1-social-chat-s8",
+        "es-a1-social-chat-s9",
+        "es-a1-social-chat-s10",
+        "es-a1-social-chat-s11",
+        "es-a1-social-chat-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "5b22787bb6b41c7a7170875592335f6cfcc504d5d93736b0eee7288a6bdab538"
+    },
+    {
+      "id": "es-a1-shopping-payment",
+      "title": "خرید، قیمت و پرداخت",
+      "order": 54,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-shopping-payment-s1",
+        "es-a1-shopping-payment-s2",
+        "es-a1-shopping-payment-s3",
+        "es-a1-shopping-payment-s4",
+        "es-a1-shopping-payment-s5",
+        "es-a1-shopping-payment-s6",
+        "es-a1-shopping-payment-s7",
+        "es-a1-shopping-payment-s8",
+        "es-a1-shopping-payment-s9",
+        "es-a1-shopping-payment-s10",
+        "es-a1-shopping-payment-s11",
+        "es-a1-shopping-payment-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "c3ecfd16a9687e9a72a15563f6fc609a432e352e0591c6c85e39a680fbc5ec2b"
+    },
+    {
+      "id": "es-a1-ordering-food",
+      "title": "سفارش غذا و نوشیدنی",
+      "order": 55,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-ordering-food-s1",
+        "es-a1-ordering-food-s2",
+        "es-a1-ordering-food-s3",
+        "es-a1-ordering-food-s4",
+        "es-a1-ordering-food-s5",
+        "es-a1-ordering-food-s6",
+        "es-a1-ordering-food-s7",
+        "es-a1-ordering-food-s8",
+        "es-a1-ordering-food-s9",
+        "es-a1-ordering-food-s10",
+        "es-a1-ordering-food-s11",
+        "es-a1-ordering-food-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "0c01f20b624ff19d65a310fa737457bfab48642ad4ef6dc8ac136593d69fbb1a"
+    },
+    {
+      "id": "es-a1-cafe",
+      "title": "در کافه و پرداخت",
+      "order": 56,
+      "rows": 20,
+      "sentenceIds": [
+        "es-a1-cafe-s1",
+        "es-a1-cafe-s2",
+        "es-a1-cafe-s3",
+        "es-a1-cafe-s4",
+        "es-a1-cafe-s5",
+        "es-a1-cafe-s6",
+        "es-a1-cafe-s7",
+        "es-a1-cafe-s8",
+        "es-a1-cafe-s9",
+        "es-a1-cafe-s10",
+        "es-a1-cafe-s11",
+        "es-a1-cafe-s12",
+        "es-a1-cafe-s13",
+        "es-a1-cafe-s14",
+        "es-a1-cafe-s15",
+        "es-a1-cafe-s16",
+        "es-a1-cafe-s17",
+        "es-a1-cafe-s18",
+        "es-a1-cafe-s19",
+        "es-a1-cafe-s20"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "1d98318f53d48446015e356f60587c7979496ac609538fc12b4283295255eece"
+    },
+    {
+      "id": "es-a1-directions",
+      "title": "پرسیدن آدرس و مسیریابی",
+      "order": 57,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-directions-s1",
+        "es-a1-directions-s2",
+        "es-a1-directions-s3",
+        "es-a1-directions-s4",
+        "es-a1-directions-s5",
+        "es-a1-directions-s6",
+        "es-a1-directions-s7",
+        "es-a1-directions-s8",
+        "es-a1-directions-s9",
+        "es-a1-directions-s10",
+        "es-a1-directions-s11",
+        "es-a1-directions-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "c468ab9fc98571351977586ca5c0353b0d43cfa924e56f335b81f24afe8211cb"
+    },
+    {
+      "id": "es-a1-metro-directions",
+      "title": "راه تا مترو",
+      "order": 58,
+      "rows": 20,
+      "sentenceIds": [
+        "es-a1-metro-directions-s1",
+        "es-a1-metro-directions-s2",
+        "es-a1-metro-directions-s3",
+        "es-a1-metro-directions-s4",
+        "es-a1-metro-directions-s5",
+        "es-a1-metro-directions-s6",
+        "es-a1-metro-directions-s7",
+        "es-a1-metro-directions-s8",
+        "es-a1-metro-directions-s9",
+        "es-a1-metro-directions-s10",
+        "es-a1-metro-directions-s11",
+        "es-a1-metro-directions-s12",
+        "es-a1-metro-directions-s13",
+        "es-a1-metro-directions-s14",
+        "es-a1-metro-directions-s15",
+        "es-a1-metro-directions-s16",
+        "es-a1-metro-directions-s17",
+        "es-a1-metro-directions-s18",
+        "es-a1-metro-directions-s19",
+        "es-a1-metro-directions-s20"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "0d78bc7cbb8e5634b355e8768292a119f43f4870456115b3c6422e9e6f4b7f4e"
+    },
+    {
+      "id": "es-a1-public-transport",
+      "title": "حمل‌ونقل عمومی و تاکسی",
+      "order": 59,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-public-transport-s1",
+        "es-a1-public-transport-s2",
+        "es-a1-public-transport-s3",
+        "es-a1-public-transport-s4",
+        "es-a1-public-transport-s5",
+        "es-a1-public-transport-s6",
+        "es-a1-public-transport-s7",
+        "es-a1-public-transport-s8",
+        "es-a1-public-transport-s9",
+        "es-a1-public-transport-s10",
+        "es-a1-public-transport-s11",
+        "es-a1-public-transport-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "f9aaba6b28ef399fa7ce50441d650fb05bd868512a98ca15020058a8398827fc"
+    },
+    {
+      "id": "es-a1-travel-tickets",
+      "title": "سفر و خرید بلیت",
+      "order": 60,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-travel-tickets-s1",
+        "es-a1-travel-tickets-s2",
+        "es-a1-travel-tickets-s3",
+        "es-a1-travel-tickets-s4",
+        "es-a1-travel-tickets-s5",
+        "es-a1-travel-tickets-s6",
+        "es-a1-travel-tickets-s7",
+        "es-a1-travel-tickets-s8",
+        "es-a1-travel-tickets-s9",
+        "es-a1-travel-tickets-s10",
+        "es-a1-travel-tickets-s11",
+        "es-a1-travel-tickets-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "4ef9a9d239b0d8059828698fc7c77dcb0565f2814a2bb2fdcebadb55f1479f48"
+    },
+    {
+      "id": "es-a1-hotel-stay",
+      "title": "رزرو هتل و اقامت",
+      "order": 61,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-hotel-stay-s1",
+        "es-a1-hotel-stay-s2",
+        "es-a1-hotel-stay-s3",
+        "es-a1-hotel-stay-s4",
+        "es-a1-hotel-stay-s5",
+        "es-a1-hotel-stay-s6",
+        "es-a1-hotel-stay-s7",
+        "es-a1-hotel-stay-s8",
+        "es-a1-hotel-stay-s9",
+        "es-a1-hotel-stay-s10",
+        "es-a1-hotel-stay-s11",
+        "es-a1-hotel-stay-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "cbf994348e702ad0c4a6457af82e8a68a538b197eae6bf776caea89864b8758a"
+    },
+    {
+      "id": "es-a1-asking-help",
+      "title": "درخواست کمک و بیان مشکلات",
+      "order": 62,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-asking-help-s1",
+        "es-a1-asking-help-s2",
+        "es-a1-asking-help-s3",
+        "es-a1-asking-help-s4",
+        "es-a1-asking-help-s5",
+        "es-a1-asking-help-s6",
+        "es-a1-asking-help-s7",
+        "es-a1-asking-help-s8",
+        "es-a1-asking-help-s9",
+        "es-a1-asking-help-s10",
+        "es-a1-asking-help-s11",
+        "es-a1-asking-help-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 6,
+      "hash": "761495ee4414a07c5652ca0bd46e3f6ba6d960f8ba2e4737e42317a1e82d3e66"
+    },
+    {
+      "id": "es-a1-doctor-symptoms",
+      "title": "مراجعه به پزشک و بیان علائم ساده",
+      "order": 63,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-doctor-symptoms-s1",
+        "es-a1-doctor-symptoms-s2",
+        "es-a1-doctor-symptoms-s3",
+        "es-a1-doctor-symptoms-s4",
+        "es-a1-doctor-symptoms-s5",
+        "es-a1-doctor-symptoms-s6",
+        "es-a1-doctor-symptoms-s7",
+        "es-a1-doctor-symptoms-s8",
+        "es-a1-doctor-symptoms-s9",
+        "es-a1-doctor-symptoms-s10",
+        "es-a1-doctor-symptoms-s11",
+        "es-a1-doctor-symptoms-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "efff1a13416e0fb3cafccc541015a8b373c02a645ac64b1e552cd32b5d9e4a6c"
+    },
+    {
+      "id": "es-a1-work-study",
+      "title": "مکالمات ساده در محل کار و تحصیل",
+      "order": 64,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-work-study-s1",
+        "es-a1-work-study-s2",
+        "es-a1-work-study-s3",
+        "es-a1-work-study-s4",
+        "es-a1-work-study-s5",
+        "es-a1-work-study-s6",
+        "es-a1-work-study-s7",
+        "es-a1-work-study-s8",
+        "es-a1-work-study-s9",
+        "es-a1-work-study-s10",
+        "es-a1-work-study-s11",
+        "es-a1-work-study-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "d04432fb6f6a82f5bb3fe4c69c82eadff2d3302f8848489530528b1ada5b9a6b"
+    },
+    {
+      "id": "es-a1-weather",
+      "title": "صحبت درباره آب‌وهوا",
+      "order": 65,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-weather-s1",
+        "es-a1-weather-s2",
+        "es-a1-weather-s3",
+        "es-a1-weather-s4",
+        "es-a1-weather-s5",
+        "es-a1-weather-s6",
+        "es-a1-weather-s7",
+        "es-a1-weather-s8",
+        "es-a1-weather-s9",
+        "es-a1-weather-s10",
+        "es-a1-weather-s11",
+        "es-a1-weather-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "b06a0f5af172c5d23b9a7a849fc0a13bbf65014fb0a507592ff12dea6b2fc5db"
+    },
+    {
+      "id": "es-a1-phone-messages",
+      "title": "تماس تلفنی و پیام‌های کوتاه",
+      "order": 66,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-phone-messages-s1",
+        "es-a1-phone-messages-s2",
+        "es-a1-phone-messages-s3",
+        "es-a1-phone-messages-s4",
+        "es-a1-phone-messages-s5",
+        "es-a1-phone-messages-s6",
+        "es-a1-phone-messages-s7",
+        "es-a1-phone-messages-s8",
+        "es-a1-phone-messages-s9",
+        "es-a1-phone-messages-s10",
+        "es-a1-phone-messages-s11",
+        "es-a1-phone-messages-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "5a70a8c9a2a7a5987b1a6e3622f4147cfe75570a1ef59b6cc7eb5d54306bbdc4"
+    },
+    {
+      "id": "es-a1-invitations",
+      "title": "دعوت، پذیرش و رد دعوت",
+      "order": 67,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-invitations-s1",
+        "es-a1-invitations-s2",
+        "es-a1-invitations-s3",
+        "es-a1-invitations-s4",
+        "es-a1-invitations-s5",
+        "es-a1-invitations-s6",
+        "es-a1-invitations-s7",
+        "es-a1-invitations-s8",
+        "es-a1-invitations-s9",
+        "es-a1-invitations-s10",
+        "es-a1-invitations-s11",
+        "es-a1-invitations-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "918bc6997cc6b109122dae189ef5c6229fda32c2cf1f747eb20c51c0ff0448d6"
+    },
+    {
+      "id": "es-a1-polite-requests",
+      "title": "درخواست مؤدبانه و اجازه‌گرفتن",
+      "order": 68,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-polite-requests-s1",
+        "es-a1-polite-requests-s2",
+        "es-a1-polite-requests-s3",
+        "es-a1-polite-requests-s4",
+        "es-a1-polite-requests-s5",
+        "es-a1-polite-requests-s6",
+        "es-a1-polite-requests-s7",
+        "es-a1-polite-requests-s8",
+        "es-a1-polite-requests-s9",
+        "es-a1-polite-requests-s10",
+        "es-a1-polite-requests-s11",
+        "es-a1-polite-requests-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "f0e859e610b7e145b0dc306e8cccacebdc05364dc29d672e5b0bad0489258f28"
+    },
+    {
+      "id": "es-a1-instructions",
+      "title": "دستورها و راهنمایی‌های ساده",
+      "order": 69,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-instructions-s1",
+        "es-a1-instructions-s2",
+        "es-a1-instructions-s3",
+        "es-a1-instructions-s4",
+        "es-a1-instructions-s5",
+        "es-a1-instructions-s6",
+        "es-a1-instructions-s7",
+        "es-a1-instructions-s8",
+        "es-a1-instructions-s9",
+        "es-a1-instructions-s10",
+        "es-a1-instructions-s11",
+        "es-a1-instructions-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "33e7c1ca221cbdbdeb67f49baa179ab935fc7633fb609d0334b71c25575f82ff"
+    },
+    {
+      "id": "es-a1-suggestions",
+      "title": "پیشنهاد و توصیه ساده",
+      "order": 70,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-suggestions-s1",
+        "es-a1-suggestions-s2",
+        "es-a1-suggestions-s3",
+        "es-a1-suggestions-s4",
+        "es-a1-suggestions-s5",
+        "es-a1-suggestions-s6",
+        "es-a1-suggestions-s7",
+        "es-a1-suggestions-s8",
+        "es-a1-suggestions-s9",
+        "es-a1-suggestions-s10",
+        "es-a1-suggestions-s11",
+        "es-a1-suggestions-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "770fee9b4147ac5ec1c8c832d1f90e3792d6a15f7168fd8f293f373197e800a8"
+    },
+    {
+      "id": "es-a1-past-events",
+      "title": "صحبت دربارهٔ کارهای امروز",
+      "order": 71,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-past-events-s1",
+        "es-a1-past-events-s2",
+        "es-a1-past-events-s3",
+        "es-a1-past-events-s4",
+        "es-a1-past-events-s5",
+        "es-a1-past-events-s6",
+        "es-a1-past-events-s7",
+        "es-a1-past-events-s8",
+        "es-a1-past-events-s9",
+        "es-a1-past-events-s10",
+        "es-a1-past-events-s11",
+        "es-a1-past-events-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "782be29a43c2b5e537f05c87e55e880eb0bca8992e325cb0350641c41ecb85ef"
+    },
+    {
+      "id": "es-a1-future-plans",
+      "title": "برنامه‌های آینده نزدیک",
+      "order": 72,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-future-plans-s1",
+        "es-a1-future-plans-s2",
+        "es-a1-future-plans-s3",
+        "es-a1-future-plans-s4",
+        "es-a1-future-plans-s5",
+        "es-a1-future-plans-s6",
+        "es-a1-future-plans-s7",
+        "es-a1-future-plans-s8",
+        "es-a1-future-plans-s9",
+        "es-a1-future-plans-s10",
+        "es-a1-future-plans-s11",
+        "es-a1-future-plans-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "69a1a89fbf8627d55297c19027b344d52c1dd12e3ed547fea8b065d0123fb7c6"
+    },
+    {
+      "id": "es-a1-feelings",
+      "title": "احساسات و وضعیت‌های روزمره",
+      "order": 73,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-feelings-s1",
+        "es-a1-feelings-s2",
+        "es-a1-feelings-s3",
+        "es-a1-feelings-s4",
+        "es-a1-feelings-s5",
+        "es-a1-feelings-s6",
+        "es-a1-feelings-s7",
+        "es-a1-feelings-s8",
+        "es-a1-feelings-s9",
+        "es-a1-feelings-s10",
+        "es-a1-feelings-s11",
+        "es-a1-feelings-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "13666ab15d3c05730e1599d9bd4e88740c44ba1c405fd210c46a62cfe8a7d170"
+    },
+    {
+      "id": "es-a1-forms-information",
+      "title": "پرسیدن اطلاعات و تکمیل فرم",
+      "order": 74,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-forms-information-s1",
+        "es-a1-forms-information-s2",
+        "es-a1-forms-information-s3",
+        "es-a1-forms-information-s4",
+        "es-a1-forms-information-s5",
+        "es-a1-forms-information-s6",
+        "es-a1-forms-information-s7",
+        "es-a1-forms-information-s8",
+        "es-a1-forms-information-s9",
+        "es-a1-forms-information-s10",
+        "es-a1-forms-information-s11",
+        "es-a1-forms-information-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "e7f9d351480758056b2ddf57077e0ed5ddf28db1c3fe8823cd00c6b11ae20f61"
+    },
+    {
+      "id": "es-a1-supermarket",
+      "title": "مکالمه در فروشگاه و سوپرمارکت",
+      "order": 75,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-supermarket-s1",
+        "es-a1-supermarket-s2",
+        "es-a1-supermarket-s3",
+        "es-a1-supermarket-s4",
+        "es-a1-supermarket-s5",
+        "es-a1-supermarket-s6",
+        "es-a1-supermarket-s7",
+        "es-a1-supermarket-s8",
+        "es-a1-supermarket-s9",
+        "es-a1-supermarket-s10",
+        "es-a1-supermarket-s11",
+        "es-a1-supermarket-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "046d60aee84bdd138192c046b0a589c52e629ee6d195201d351daf4405fe8d11"
+    },
+    {
+      "id": "es-a1-clothes-shopping",
+      "title": "لباس و خرید پوشاک",
+      "order": 76,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-clothes-shopping-s1",
+        "es-a1-clothes-shopping-s2",
+        "es-a1-clothes-shopping-s3",
+        "es-a1-clothes-shopping-s4",
+        "es-a1-clothes-shopping-s5",
+        "es-a1-clothes-shopping-s6",
+        "es-a1-clothes-shopping-s7",
+        "es-a1-clothes-shopping-s8",
+        "es-a1-clothes-shopping-s9",
+        "es-a1-clothes-shopping-s10",
+        "es-a1-clothes-shopping-s11",
+        "es-a1-clothes-shopping-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "ba33b848edbbf94aa0568a42ec225ae02f8e66baa8eadf946d0effb784887768"
+    },
+    {
+      "id": "es-a1-home-furniture",
+      "title": "توصیف خانه و وسایل آن",
+      "order": 77,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-home-furniture-s1",
+        "es-a1-home-furniture-s2",
+        "es-a1-home-furniture-s3",
+        "es-a1-home-furniture-s4",
+        "es-a1-home-furniture-s5",
+        "es-a1-home-furniture-s6",
+        "es-a1-home-furniture-s7",
+        "es-a1-home-furniture-s8",
+        "es-a1-home-furniture-s9",
+        "es-a1-home-furniture-s10",
+        "es-a1-home-furniture-s11",
+        "es-a1-home-furniture-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "4e96cb995602d88d22e8324fdf18e3eae33fb912e5da22e0f29fd2815add2f4b"
+    },
+    {
+      "id": "es-a1-leisure",
+      "title": "تفریح، سرگرمی و اوقات فراغت",
+      "order": 78,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-leisure-s1",
+        "es-a1-leisure-s2",
+        "es-a1-leisure-s3",
+        "es-a1-leisure-s4",
+        "es-a1-leisure-s5",
+        "es-a1-leisure-s6",
+        "es-a1-leisure-s7",
+        "es-a1-leisure-s8",
+        "es-a1-leisure-s9",
+        "es-a1-leisure-s10",
+        "es-a1-leisure-s11",
+        "es-a1-leisure-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "884cea5e8e38b0f8607d26eca337ac04d7c6219099fe65acb66e83bc77a615a8"
+    },
+    {
+      "id": "es-a1-weekly-schedule",
+      "title": "کارهای روزمره و برنامه هفتگی",
+      "order": 79,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-weekly-schedule-s1",
+        "es-a1-weekly-schedule-s2",
+        "es-a1-weekly-schedule-s3",
+        "es-a1-weekly-schedule-s4",
+        "es-a1-weekly-schedule-s5",
+        "es-a1-weekly-schedule-s6",
+        "es-a1-weekly-schedule-s7",
+        "es-a1-weekly-schedule-s8",
+        "es-a1-weekly-schedule-s9",
+        "es-a1-weekly-schedule-s10",
+        "es-a1-weekly-schedule-s11",
+        "es-a1-weekly-schedule-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "b0064a39e5f7a9968076178719ce9823084b58d18df0a75a99e45688738027aa"
+    },
+    {
+      "id": "es-a1-preferences",
+      "title": "ترجیحات و انتخاب بین گزینه‌ها",
+      "order": 80,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-preferences-s1",
+        "es-a1-preferences-s2",
+        "es-a1-preferences-s3",
+        "es-a1-preferences-s4",
+        "es-a1-preferences-s5",
+        "es-a1-preferences-s6",
+        "es-a1-preferences-s7",
+        "es-a1-preferences-s8",
+        "es-a1-preferences-s9",
+        "es-a1-preferences-s10",
+        "es-a1-preferences-s11",
+        "es-a1-preferences-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "e8562f141b2085822190a0e124d1bdf82204cd10e241740857f08bc5c1c71238"
+    },
+    {
+      "id": "es-a1-comparisons",
+      "title": "مقایسه‌های ساده",
+      "order": 81,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-comparisons-s1",
+        "es-a1-comparisons-s2",
+        "es-a1-comparisons-s3",
+        "es-a1-comparisons-s4",
+        "es-a1-comparisons-s5",
+        "es-a1-comparisons-s6",
+        "es-a1-comparisons-s7",
+        "es-a1-comparisons-s8",
+        "es-a1-comparisons-s9",
+        "es-a1-comparisons-s10",
+        "es-a1-comparisons-s11",
+        "es-a1-comparisons-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "fd15a63f3429c3ce3041eeed40566b9549d920d5024d6a4297cfa6c8eeeeee65"
+    },
+    {
+      "id": "es-a1-reasons",
+      "title": "بیان دلیل و نتیجه ساده",
+      "order": 82,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-reasons-s1",
+        "es-a1-reasons-s2",
+        "es-a1-reasons-s3",
+        "es-a1-reasons-s4",
+        "es-a1-reasons-s5",
+        "es-a1-reasons-s6",
+        "es-a1-reasons-s7",
+        "es-a1-reasons-s8",
+        "es-a1-reasons-s9",
+        "es-a1-reasons-s10",
+        "es-a1-reasons-s11",
+        "es-a1-reasons-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 4,
+      "hash": "d17b079cbe2e7dc8ecdaae284d7be536445e88d6843a0488ba22d70b17682e93"
+    },
+    {
+      "id": "es-a1-connected-conversation",
+      "title": "مکالمه روزمره با چند جمله مرتبط",
+      "order": 83,
+      "rows": 12,
+      "sentenceIds": [
+        "es-a1-connected-conversation-s1",
+        "es-a1-connected-conversation-s2",
+        "es-a1-connected-conversation-s3",
+        "es-a1-connected-conversation-s4",
+        "es-a1-connected-conversation-s5",
+        "es-a1-connected-conversation-s6",
+        "es-a1-connected-conversation-s7",
+        "es-a1-connected-conversation-s8",
+        "es-a1-connected-conversation-s9",
+        "es-a1-connected-conversation-s10",
+        "es-a1-connected-conversation-s11",
+        "es-a1-connected-conversation-s12"
+      ],
+      "checks": 4,
+      "dialogueTurns": 8,
+      "hash": "f60f0d04cf6a4170ad9404f7ac601eb194dc478f654ddbd8a951a9787a674787"
+    }
+  ],
+  "preA1": [
+    {
+      "id": "es-foundation-sounds-1",
+      "title": "اولین صداهای اسپانیایی",
+      "sentences": [
+        {
+          "id": "es-foundation-sounds-1-s1",
+          "text": "hola",
+          "fa": "سلام"
+        },
+        {
+          "id": "es-foundation-sounds-1-s2",
+          "text": "sí",
+          "fa": "بله"
+        },
+        {
+          "id": "es-foundation-sounds-1-s3",
+          "text": "no",
+          "fa": "نه"
+        },
+        {
+          "id": "es-foundation-sounds-1-s4",
+          "text": "gracias",
+          "fa": "ممنون"
+        },
+        {
+          "id": "es-foundation-sounds-1-s5",
+          "text": "casa",
+          "fa": "خانه"
+        },
+        {
+          "id": "es-foundation-sounds-1-s6",
+          "text": "agua",
+          "fa": "آب"
+        },
+        {
+          "id": "es-foundation-sounds-1-s7",
+          "text": "café",
+          "fa": "قهوه"
+        },
+        {
+          "id": "es-foundation-sounds-1-s8",
+          "text": "té",
+          "fa": "چای"
+        }
+      ]
+    },
+    {
+      "id": "es-foundation-sounds-2",
+      "title": "صداهای ناآشناتر",
+      "sentences": [
+        {
+          "id": "es-foundation-sounds-2-s1",
+          "text": "cinco",
+          "fa": "پنج"
+        },
+        {
+          "id": "es-foundation-sounds-2-s2",
+          "text": "cero",
+          "fa": "صفر"
+        },
+        {
+          "id": "es-foundation-sounds-2-s3",
+          "text": "mañana",
+          "fa": "فردا"
+        },
+        {
+          "id": "es-foundation-sounds-2-s4",
+          "text": "niño",
+          "fa": "پسر / کودک پسر"
+        },
+        {
+          "id": "es-foundation-sounds-2-s5",
+          "text": "rojo",
+          "fa": "قرمز"
+        },
+        {
+          "id": "es-foundation-sounds-2-s6",
+          "text": "leche",
+          "fa": "شیر"
+        },
+        {
+          "id": "es-foundation-sounds-2-s7",
+          "text": "libro",
+          "fa": "کتاب"
+        },
+        {
+          "id": "es-foundation-sounds-2-s8",
+          "text": "sol",
+          "fa": "خورشید"
+        }
+      ]
+    },
+    {
+      "id": "es-foundation-words-1",
+      "title": "واژه‌های نخستین",
+      "sentences": [
+        {
+          "id": "es-foundation-words-1-s1",
+          "text": "Adiós",
+          "fa": "خداحافظ"
+        },
+        {
+          "id": "es-foundation-words-1-s2",
+          "text": "Perdón",
+          "fa": "ببخشید"
+        },
+        {
+          "id": "es-foundation-words-1-s3",
+          "text": "Ayuda",
+          "fa": "کمک"
+        },
+        {
+          "id": "es-foundation-words-1-s4",
+          "text": "Mujer",
+          "fa": "زن"
+        },
+        {
+          "id": "es-foundation-words-1-s5",
+          "text": "Hombre",
+          "fa": "مرد"
+        },
+        {
+          "id": "es-foundation-words-1-s6",
+          "text": "Amigo",
+          "fa": "دوست (مرد)"
+        },
+        {
+          "id": "es-foundation-words-1-s7",
+          "text": "Amiga",
+          "fa": "دوست (زن)"
+        },
+        {
+          "id": "es-foundation-words-1-s8",
+          "text": "Señor",
+          "fa": "آقا"
+        }
+      ]
+    },
+    {
+      "id": "es-foundation-words-2",
+      "title": "من، تو و چیزهای اطراف",
+      "sentences": [
+        {
+          "id": "es-foundation-words-2-s1",
+          "text": "yo",
+          "fa": "من"
+        },
+        {
+          "id": "es-foundation-words-2-s2",
+          "text": "tú",
+          "fa": "تو"
+        },
+        {
+          "id": "es-foundation-words-2-s3",
+          "text": "nosotros",
+          "fa": "ما"
+        },
+        {
+          "id": "es-foundation-words-2-s4",
+          "text": "bolígrafo",
+          "fa": "خودکار"
+        },
+        {
+          "id": "es-foundation-words-2-s5",
+          "text": "escuela",
+          "fa": "مدرسه"
+        },
+        {
+          "id": "es-foundation-words-2-s6",
+          "text": "mesa",
+          "fa": "میز"
+        },
+        {
+          "id": "es-foundation-words-2-s7",
+          "text": "silla",
+          "fa": "صندلی"
+        },
+        {
+          "id": "es-foundation-words-2-s8",
+          "text": "puerta",
+          "fa": "در"
+        }
+      ]
+    },
+    {
+      "id": "es-foundation-chunks-1",
+      "title": "عبارت‌های کوتاه روزمره",
+      "sentences": [
+        {
+          "id": "es-foundation-chunks-1-s1",
+          "text": "Buenas tardes",
+          "fa": "بعدازظهر بخیر"
+        },
+        {
+          "id": "es-foundation-chunks-1-s2",
+          "text": "Buenas noches",
+          "fa": "شب بخیر"
+        },
+        {
+          "id": "es-foundation-chunks-1-s3",
+          "text": "Hasta luego",
+          "fa": "تا بعد"
+        },
+        {
+          "id": "es-foundation-chunks-1-s4",
+          "text": "Hasta el lunes",
+          "fa": "تا دوشنبه"
+        },
+        {
+          "id": "es-foundation-chunks-1-s5",
+          "text": "No, gracias",
+          "fa": "نه، ممنون"
+        },
+        {
+          "id": "es-foundation-chunks-1-s6",
+          "text": "Por favor",
+          "fa": "لطفاً"
+        },
+        {
+          "id": "es-foundation-chunks-1-s7",
+          "text": "Muchas gracias",
+          "fa": "خیلی ممنون"
+        },
+        {
+          "id": "es-foundation-chunks-1-s8",
+          "text": "Bienvenido",
+          "fa": "خوش آمدید"
+        }
+      ]
+    },
+    {
+      "id": "es-foundation-chunks-2",
+      "title": "چند ترکیب پایه",
+      "sentences": [
+        {
+          "id": "es-foundation-chunks-2-s1",
+          "text": "un libro",
+          "fa": "یک کتاب"
+        },
+        {
+          "id": "es-foundation-chunks-2-s2",
+          "text": "un bolígrafo",
+          "fa": "یک خودکار"
+        },
+        {
+          "id": "es-foundation-chunks-2-s3",
+          "text": "mi nombre",
+          "fa": "نام من"
+        },
+        {
+          "id": "es-foundation-chunks-2-s4",
+          "text": "mi madre",
+          "fa": "مادر من"
+        },
+        {
+          "id": "es-foundation-chunks-2-s5",
+          "text": "mi padre",
+          "fa": "پدر من"
+        },
+        {
+          "id": "es-foundation-chunks-2-s6",
+          "text": "más o menos",
+          "fa": "نه خوب نه بد"
+        },
+        {
+          "id": "es-foundation-chunks-2-s7",
+          "text": "hasta mañana",
+          "fa": "تا فردا"
+        },
+        {
+          "id": "es-foundation-chunks-2-s8",
+          "text": "otra vez",
+          "fa": "یک بار دیگر"
+        }
+      ]
+    },
+    {
+      "id": "es-pre-1",
+      "title": "سلام، احوال و خداحافظی",
+      "sentences": [
+        {
+          "id": "es-pre1-s1",
+          "text": "Buenos días, Ali.",
+          "fa": "صبح بخیر، علی."
+        },
+        {
+          "id": "es-pre1-s2",
+          "text": "Buenos días, Mina.",
+          "fa": "صبح بخیر، مینا."
+        },
+        {
+          "id": "es-pre1-s3",
+          "text": "Hasta mañana, Ali.",
+          "fa": "تا فردا، علی."
+        },
+        {
+          "id": "es-pre1-s4",
+          "text": "Hasta mañana, Mina.",
+          "fa": "تا فردا، مینا."
+        },
+        {
+          "id": "es-pre1-s5",
+          "text": "Hola, Ali.",
+          "fa": "سلام، علی."
+        },
+        {
+          "id": "es-pre1-s6",
+          "text": "Hola, Mina.",
+          "fa": "سلام، مینا."
+        },
+        {
+          "id": "es-pre1-s7",
+          "text": "Buenas tardes, Ali.",
+          "fa": "عصر بخیر، علی."
+        },
+        {
+          "id": "es-pre1-s8",
+          "text": "Adiós, Mina.",
+          "fa": "خداحافظ، مینا."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-2",
+      "title": "نام و املای آن",
+      "sentences": [
+        {
+          "id": "es-pre2-s1",
+          "text": "¿Cómo te llamas tú?",
+          "fa": "نام تو چیست؟"
+        },
+        {
+          "id": "es-pre2-s2",
+          "text": "Yo me llamo Darya.",
+          "fa": "نام من دریا است."
+        },
+        {
+          "id": "es-pre2-s3",
+          "text": "Y yo me llamo Amir.",
+          "fa": "و نام من امیر است."
+        },
+        {
+          "id": "es-pre2-s4",
+          "text": "Hola, Amir.",
+          "fa": "سلام، امیر."
+        },
+        {
+          "id": "es-pre2-s5",
+          "text": "Me llamo Sara.",
+          "fa": "نامم سارا است."
+        },
+        {
+          "id": "es-pre2-s6",
+          "text": "¿Y tú, tu nombre?",
+          "fa": "و تو، نامت چیست؟"
+        },
+        {
+          "id": "es-pre2-s7",
+          "text": "Mi nombre es Ali.",
+          "fa": "نام من علی است."
+        },
+        {
+          "id": "es-pre2-s8",
+          "text": "¿Puedes repetir, Ali?",
+          "fa": "علی، می‌توانی تکرار کنی؟"
+        }
+      ]
+    },
+    {
+      "id": "es-pre-3",
+      "title": "پاسخ کوتاه",
+      "sentences": [
+        {
+          "id": "es-pre3-s1",
+          "text": "¿Quieres té?",
+          "fa": "چای می‌خواهی؟"
+        },
+        {
+          "id": "es-pre3-s2",
+          "text": "Sí, por favor.",
+          "fa": "بله، لطفاً."
+        },
+        {
+          "id": "es-pre3-s3",
+          "text": "¿Y café?",
+          "fa": "و قهوه؟"
+        },
+        {
+          "id": "es-pre3-s4",
+          "text": "No, gracias.",
+          "fa": "نه، ممنون."
+        },
+        {
+          "id": "es-pre3-s5",
+          "text": "Sí, gracias.",
+          "fa": "بله، ممنون."
+        },
+        {
+          "id": "es-pre3-s6",
+          "text": "No quiero café.",
+          "fa": "قهوه نمی‌خواهم."
+        },
+        {
+          "id": "es-pre3-s7",
+          "text": "Té, por favor.",
+          "fa": "چای، لطفاً."
+        },
+        {
+          "id": "es-pre3-s8",
+          "text": "Vale, un té.",
+          "fa": "باشد، یک چای."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-4",
+      "title": "ادب و درخواست",
+      "sentences": [
+        {
+          "id": "es-pre4-s1",
+          "text": "Un bolígrafo, por favor.",
+          "fa": "یک خودکار، لطفاً."
+        },
+        {
+          "id": "es-pre4-s2",
+          "text": "Aquí tienes el bolígrafo.",
+          "fa": "بفرما خودکار."
+        },
+        {
+          "id": "es-pre4-s3",
+          "text": "Gracias por el bolígrafo.",
+          "fa": "برای خودکار ممنون."
+        },
+        {
+          "id": "es-pre4-s4",
+          "text": "De nada.",
+          "fa": "خواهش می‌کنم."
+        },
+        {
+          "id": "es-pre4-s5",
+          "text": "Perdón.",
+          "fa": "ببخشید."
+        },
+        {
+          "id": "es-pre4-s6",
+          "text": "No pasa nada.",
+          "fa": "اشکالی ندارد."
+        },
+        {
+          "id": "es-pre4-s7",
+          "text": "Un cuaderno, por favor.",
+          "fa": "یک دفتر، لطفاً."
+        },
+        {
+          "id": "es-pre4-s8",
+          "text": "Muchas gracias por el cuaderno.",
+          "fa": "برای دفتر خیلی ممنون."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-5",
+      "title": "عددها",
+      "sentences": [
+        {
+          "id": "es-pre5-s1",
+          "text": "¿Cuántos libros hay?",
+          "fa": "چند کتاب هست؟"
+        },
+        {
+          "id": "es-pre5-s2",
+          "text": "Hay tres libros.",
+          "fa": "سه کتاب هست."
+        },
+        {
+          "id": "es-pre5-s3",
+          "text": "¿Y cuántos bolígrafos?",
+          "fa": "و چند خودکار؟"
+        },
+        {
+          "id": "es-pre5-s4",
+          "text": "Dos bolígrafos.",
+          "fa": "دو خودکار."
+        },
+        {
+          "id": "es-pre5-s5",
+          "text": "Un libro.",
+          "fa": "یک کتاب."
+        },
+        {
+          "id": "es-pre5-s6",
+          "text": "Dos libros.",
+          "fa": "دو کتاب."
+        },
+        {
+          "id": "es-pre5-s7",
+          "text": "Hay cuatro cuadernos.",
+          "fa": "چهار دفتر هست."
+        },
+        {
+          "id": "es-pre5-s8",
+          "text": "Y cinco bolígrafos.",
+          "fa": "و پنج خودکار."
+        },
+        {
+          "id": "es-pre-5-balance-01",
+          "text": "Seis.",
+          "fa": "شش."
+        },
+        {
+          "id": "es-pre-5-balance-02",
+          "text": "Siete.",
+          "fa": "هفت."
+        },
+        {
+          "id": "es-pre-5-balance-03",
+          "text": "Ocho.",
+          "fa": "هشت."
+        },
+        {
+          "id": "es-pre-5-balance-04",
+          "text": "Nueve.",
+          "fa": "نه."
+        },
+        {
+          "id": "es-pre-5-balance-05",
+          "text": "Diez.",
+          "fa": "ده."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-6",
+      "title": "اشیا و اشاره",
+      "sentences": [
+        {
+          "id": "es-pre6-s1",
+          "text": "¿Qué es esto de aquí?",
+          "fa": "این چیست؟"
+        },
+        {
+          "id": "es-pre6-s2",
+          "text": "Es un cuaderno.",
+          "fa": "این یک دفتر است."
+        },
+        {
+          "id": "es-pre6-s3",
+          "text": "¿Y eso de ahí?",
+          "fa": "و آن چیست؟"
+        },
+        {
+          "id": "es-pre6-s4",
+          "text": "Es una mesa.",
+          "fa": "آن یک میز است."
+        },
+        {
+          "id": "es-pre6-s5",
+          "text": "Es un libro.",
+          "fa": "این یک کتاب است."
+        },
+        {
+          "id": "es-pre6-s6",
+          "text": "Es una silla.",
+          "fa": "این یک صندلی است."
+        },
+        {
+          "id": "es-pre6-s7",
+          "text": "Un libro y un cuaderno.",
+          "fa": "یک کتاب و یک دفتر."
+        },
+        {
+          "id": "es-pre6-s8",
+          "text": "Una mesa y una silla.",
+          "fa": "یک میز و یک صندلی."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-7",
+      "title": "حال و احساس",
+      "sentences": [
+        {
+          "id": "es-pre7-s1",
+          "text": "¿Cómo estás hoy, Amir?",
+          "fa": "امیر، امروز حالت چطور است؟"
+        },
+        {
+          "id": "es-pre7-s2",
+          "text": "Bien, gracias. ¿Y tú?",
+          "fa": "خوبم، ممنون. و تو؟"
+        },
+        {
+          "id": "es-pre7-s3",
+          "text": "Estoy un poco cansada.",
+          "fa": "کمی خسته‌ام. (گوینده زن)"
+        },
+        {
+          "id": "es-pre7-s4",
+          "text": "¿Hacemos una pausa?",
+          "fa": "کمی استراحت کنیم؟"
+        },
+        {
+          "id": "es-pre7-s5",
+          "text": "Estoy bien.",
+          "fa": "حالم خوب است."
+        },
+        {
+          "id": "es-pre7-s6",
+          "text": "Estoy contenta.",
+          "fa": "خوشحالم. (گوینده زن)"
+        },
+        {
+          "id": "es-pre7-s7",
+          "text": "Estoy contento.",
+          "fa": "خوشحالم. (گوینده مرد)"
+        },
+        {
+          "id": "es-pre7-s8",
+          "text": "Estoy cansado hoy.",
+          "fa": "امروز خسته‌ام. (گوینده مرد)"
+        }
+      ]
+    },
+    {
+      "id": "es-pre-8",
+      "title": "داشتن و نداشتن",
+      "sentences": [
+        {
+          "id": "es-pre8-s1",
+          "text": "¿Tienes un lápiz?",
+          "fa": "مداد داری؟"
+        },
+        {
+          "id": "es-pre8-s2",
+          "text": "Sí, tengo un lápiz.",
+          "fa": "بله، مداد دارم."
+        },
+        {
+          "id": "es-pre8-s3",
+          "text": "¿Y un cuaderno?",
+          "fa": "و دفتر؟"
+        },
+        {
+          "id": "es-pre8-s4",
+          "text": "No, no tengo cuaderno.",
+          "fa": "نه، دفتر ندارم."
+        },
+        {
+          "id": "es-pre8-s5",
+          "text": "Tengo un libro.",
+          "fa": "کتاب دارم."
+        },
+        {
+          "id": "es-pre8-s6",
+          "text": "No tengo lápiz.",
+          "fa": "مداد ندارم."
+        },
+        {
+          "id": "es-pre8-s7",
+          "text": "¿Tienes un libro?",
+          "fa": "کتاب داری؟"
+        },
+        {
+          "id": "es-pre8-s8",
+          "text": "Sí, tengo dos libros.",
+          "fa": "بله، دو کتاب دارم."
+        },
+        {
+          "id": "es-pre-8-balance-01",
+          "text": "¿Tienes un cuaderno?",
+          "fa": "دفتر داری؟"
+        },
+        {
+          "id": "es-pre-8-balance-02",
+          "text": "Sí, tengo un cuaderno.",
+          "fa": "بله، دفتر دارم."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-9",
+      "title": "نیاز و خواستن",
+      "sentences": [
+        {
+          "id": "es-pre9-s1",
+          "text": "¿Qué necesitas?",
+          "fa": "چه لازم داری؟"
+        },
+        {
+          "id": "es-pre9-s2",
+          "text": "Necesito agua.",
+          "fa": "آب لازم دارم."
+        },
+        {
+          "id": "es-pre9-s3",
+          "text": "¿Quieres también pan?",
+          "fa": "نان هم می‌خواهی؟"
+        },
+        {
+          "id": "es-pre9-s4",
+          "text": "Sí, un poco de pan.",
+          "fa": "بله، کمی نان."
+        },
+        {
+          "id": "es-pre9-s5",
+          "text": "Necesito pan.",
+          "fa": "نان لازم دارم."
+        },
+        {
+          "id": "es-pre9-s6",
+          "text": "¿Necesitas agua?",
+          "fa": "آب لازم داری؟"
+        },
+        {
+          "id": "es-pre9-s7",
+          "text": "Un poco de agua, por favor.",
+          "fa": "کمی آب، لطفاً."
+        },
+        {
+          "id": "es-pre9-s8",
+          "text": "Aquí tienes el agua.",
+          "fa": "بفرما آبت."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-10",
+      "title": "خانواده و افراد نزدیک",
+      "sentences": [
+        {
+          "id": "es-pre10-s1",
+          "text": "¿Quién está en la foto?",
+          "fa": "چه کسی در عکس است؟"
+        },
+        {
+          "id": "es-pre10-s2",
+          "text": "Esta es mi madre.",
+          "fa": "این مادر من است."
+        },
+        {
+          "id": "es-pre10-s3",
+          "text": "¿Y esta persona?",
+          "fa": "و این شخص؟"
+        },
+        {
+          "id": "es-pre10-s4",
+          "text": "Este es mi padre.",
+          "fa": "این پدر من است."
+        },
+        {
+          "id": "es-pre10-s5",
+          "text": "Esta es mi hermana.",
+          "fa": "این خواهر من است."
+        },
+        {
+          "id": "es-pre10-s6",
+          "text": "Este es mi hermano.",
+          "fa": "این برادر من است."
+        },
+        {
+          "id": "es-pre10-s7",
+          "text": "Mi madre se llama Mina.",
+          "fa": "نام مادرم مینا است."
+        },
+        {
+          "id": "es-pre10-s8",
+          "text": "Mi padre se llama Ali.",
+          "fa": "نام پدرم علی است."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-11",
+      "title": "ضمیرهای ملکی",
+      "sentences": [
+        {
+          "id": "es-pre11-s1",
+          "text": "¿Es tu teléfono?",
+          "fa": "این تلفن تو است؟"
+        },
+        {
+          "id": "es-pre11-s2",
+          "text": "Sí, es mi teléfono.",
+          "fa": "بله، این تلفن من است."
+        },
+        {
+          "id": "es-pre11-s3",
+          "text": "¿Y esta bolsa es tuya?",
+          "fa": "و این کیف مال تو است؟"
+        },
+        {
+          "id": "es-pre11-s4",
+          "text": "No, es tu bolsa.",
+          "fa": "نه، این کیف تو است."
+        },
+        {
+          "id": "es-pre11-s5",
+          "text": "Es mi libro.",
+          "fa": "این کتاب من است."
+        },
+        {
+          "id": "es-pre11-s6",
+          "text": "Es tu libro.",
+          "fa": "این کتاب تو است."
+        },
+        {
+          "id": "es-pre11-s7",
+          "text": "Esta es mi silla.",
+          "fa": "این صندلی من است."
+        },
+        {
+          "id": "es-pre11-s8",
+          "text": "Esta es tu silla.",
+          "fa": "این صندلی تو است."
+        },
+        {
+          "id": "es-pre-11-balance-01",
+          "text": "Es su libro.",
+          "fa": "این کتاب او است."
+        },
+        {
+          "id": "es-pre-11-balance-02",
+          "text": "Es su silla.",
+          "fa": "این صندلی او است."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-12",
+      "title": "توصیف آدم و چیز",
+      "sentences": [
+        {
+          "id": "es-pre12-s1",
+          "text": "¿Tu bolsa es pequeña?",
+          "fa": "کیفت کوچک است؟"
+        },
+        {
+          "id": "es-pre12-s2",
+          "text": "Sí, mi bolsa es pequeña.",
+          "fa": "بله، کیفم کوچک است."
+        },
+        {
+          "id": "es-pre12-s3",
+          "text": "¿Y tu maleta es grande?",
+          "fa": "و چمدانت بزرگ است؟"
+        },
+        {
+          "id": "es-pre12-s4",
+          "text": "Sí, mi maleta es grande.",
+          "fa": "بله، چمدانم بزرگ است."
+        },
+        {
+          "id": "es-pre12-s5",
+          "text": "Mi bolsa es grande.",
+          "fa": "کیفم بزرگ است."
+        },
+        {
+          "id": "es-pre12-s6",
+          "text": "Mi maleta es pequeña.",
+          "fa": "چمدانم کوچک است."
+        },
+        {
+          "id": "es-pre12-s7",
+          "text": "El cuaderno es pequeño.",
+          "fa": "دفتر کوچک است."
+        },
+        {
+          "id": "es-pre12-s8",
+          "text": "La mesa es grande.",
+          "fa": "میز بزرگ است."
+        },
+        {
+          "id": "es-pre-12-balance-01",
+          "text": "El libro es nuevo.",
+          "fa": "کتاب نو است."
+        },
+        {
+          "id": "es-pre-12-balance-02",
+          "text": "La mesa es nueva.",
+          "fa": "میز نو است."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-13",
+      "title": "رنگ‌ها",
+      "sentences": [
+        {
+          "id": "es-pre13-s1",
+          "text": "¿De qué color es tu bolsa?",
+          "fa": "کیفت چه رنگی است؟"
+        },
+        {
+          "id": "es-pre13-s2",
+          "text": "Mi bolsa es azul.",
+          "fa": "کیفم آبی است."
+        },
+        {
+          "id": "es-pre13-s3",
+          "text": "¿Esta bolsa roja es tuya?",
+          "fa": "این کیف قرمز مال تو است؟"
+        },
+        {
+          "id": "es-pre13-s4",
+          "text": "No, mi bolsa es azul.",
+          "fa": "نه، کیفم آبی است."
+        },
+        {
+          "id": "es-pre13-s5",
+          "text": "El bolígrafo es azul.",
+          "fa": "خودکار آبی است."
+        },
+        {
+          "id": "es-pre13-s6",
+          "text": "El bolígrafo es rojo.",
+          "fa": "خودکار قرمز است."
+        },
+        {
+          "id": "es-pre13-s7",
+          "text": "La mesa es azul.",
+          "fa": "میز آبی است."
+        },
+        {
+          "id": "es-pre13-s8",
+          "text": "La silla es roja.",
+          "fa": "صندلی قرمز است."
+        },
+        {
+          "id": "es-pre-13-balance-01",
+          "text": "El libro es blanco.",
+          "fa": "کتاب سفید است."
+        },
+        {
+          "id": "es-pre-13-balance-02",
+          "text": "La mesa es blanca.",
+          "fa": "میز سفید است."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-14",
+      "title": "در کلاس درس",
+      "sentences": [
+        {
+          "id": "es-pre14-s1",
+          "text": "Otra vez, por favor.",
+          "fa": "یک بار دیگر، لطفاً."
+        },
+        {
+          "id": "es-pre14-s2",
+          "text": "Sí, hablo despacio.",
+          "fa": "بله، آهسته صحبت می‌کنم."
+        },
+        {
+          "id": "es-pre14-s3",
+          "text": "¿Lo entiendes ahora?",
+          "fa": "حالا آن را می‌فهمی؟"
+        },
+        {
+          "id": "es-pre14-s4",
+          "text": "Sí, ahora lo entiendo.",
+          "fa": "بله، حالا آن را می‌فهمم."
+        },
+        {
+          "id": "es-pre14-s5",
+          "text": "No entiendo.",
+          "fa": "نمی‌فهمم."
+        },
+        {
+          "id": "es-pre14-s6",
+          "text": "Más despacio, por favor.",
+          "fa": "آهسته‌تر، لطفاً."
+        },
+        {
+          "id": "es-pre14-s7",
+          "text": "¿Qué significa esta palabra?",
+          "fa": "این واژه چه معنی می‌دهد؟"
+        },
+        {
+          "id": "es-pre14-s8",
+          "text": "Gracias, lo entiendo.",
+          "fa": "ممنون، آن را می‌فهمم."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-15",
+      "title": "اصل و ملیت",
+      "sentences": [
+        {
+          "id": "es-pre15-s1",
+          "text": "¿De dónde eres, Darya?",
+          "fa": "دریا، اهل کجایی؟"
+        },
+        {
+          "id": "es-pre15-s2",
+          "text": "Soy de Irán.",
+          "fa": "اهل ایران هستم."
+        },
+        {
+          "id": "es-pre15-s3",
+          "text": "¿Hablas persa?",
+          "fa": "فارسی صحبت می‌کنی؟"
+        },
+        {
+          "id": "es-pre15-s4",
+          "text": "Sí, y un poco de español.",
+          "fa": "بله، و کمی اسپانیایی."
+        },
+        {
+          "id": "es-pre15-s5",
+          "text": "Soy de España.",
+          "fa": "اهل اسپانیا هستم."
+        },
+        {
+          "id": "es-pre15-s6",
+          "text": "¿Hablas español?",
+          "fa": "اسپانیایی صحبت می‌کنی؟"
+        },
+        {
+          "id": "es-pre15-s7",
+          "text": "Hablo persa.",
+          "fa": "فارسی صحبت می‌کنم."
+        },
+        {
+          "id": "es-pre15-s8",
+          "text": "Un poco de español.",
+          "fa": "کمی اسپانیایی."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-16",
+      "title": "خانه و اتاق‌ها",
+      "sentences": [
+        {
+          "id": "es-pre16-s1",
+          "text": "¿Dónde vives, Amir?",
+          "fa": "امیر، کجا زندگی می‌کنی؟"
+        },
+        {
+          "id": "es-pre16-s2",
+          "text": "Vivo en Toledo.",
+          "fa": "در تولدو زندگی می‌کنم."
+        },
+        {
+          "id": "es-pre16-s3",
+          "text": "¿Vives solo?",
+          "fa": "تنها زندگی می‌کنی؟"
+        },
+        {
+          "id": "es-pre16-s4",
+          "text": "No, con mi familia.",
+          "fa": "نه، با خانواده‌ام."
+        },
+        {
+          "id": "es-pre16-s5",
+          "text": "Vivo en Madrid.",
+          "fa": "در مادرید زندگی می‌کنم."
+        },
+        {
+          "id": "es-pre16-s6",
+          "text": "Vivo con mi madre.",
+          "fa": "با مادرم زندگی می‌کنم."
+        },
+        {
+          "id": "es-pre16-s7",
+          "text": "Mi casa es pequeña.",
+          "fa": "خانه‌ام کوچک است."
+        },
+        {
+          "id": "es-pre16-s8",
+          "text": "Mi familia vive en Toledo.",
+          "fa": "خانواده‌ام در تولدو زندگی می‌کنند."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-17",
+      "title": "پرسیدن مکان",
+      "sentences": [
+        {
+          "id": "es-pre17-s1",
+          "text": "¿Dónde está mi cuaderno?",
+          "fa": "دفترم کجاست؟"
+        },
+        {
+          "id": "es-pre17-s2",
+          "text": "Tu cuaderno está en la mesa.",
+          "fa": "دفترت روی میز است."
+        },
+        {
+          "id": "es-pre17-s3",
+          "text": "¿Y mi bolígrafo?",
+          "fa": "و خودکارم؟"
+        },
+        {
+          "id": "es-pre17-s4",
+          "text": "Está en tu bolsa.",
+          "fa": "داخل کیفت است."
+        },
+        {
+          "id": "es-pre17-s5",
+          "text": "El cuaderno está en la bolsa.",
+          "fa": "دفتر داخل کیف است."
+        },
+        {
+          "id": "es-pre17-s6",
+          "text": "El libro está en la mesa.",
+          "fa": "کتاب روی میز است."
+        },
+        {
+          "id": "es-pre17-s7",
+          "text": "¿Dónde está la silla?",
+          "fa": "صندلی کجاست؟"
+        },
+        {
+          "id": "es-pre17-s8",
+          "text": "La silla está aquí.",
+          "fa": "صندلی اینجاست."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-18",
+      "title": "در کافه",
+      "sentences": [
+        {
+          "id": "es-pre18-s1",
+          "text": "¿Qué desea tomar?",
+          "fa": "چه میل دارید بنوشید؟"
+        },
+        {
+          "id": "es-pre18-s2",
+          "text": "Un té, por favor.",
+          "fa": "یک چای، لطفاً."
+        },
+        {
+          "id": "es-pre18-s3",
+          "text": "¿Con azúcar?",
+          "fa": "با شکر؟"
+        },
+        {
+          "id": "es-pre18-s4",
+          "text": "No, sin azúcar, gracias.",
+          "fa": "نه، بدون شکر، ممنون."
+        },
+        {
+          "id": "es-pre18-s5",
+          "text": "Un café, por favor.",
+          "fa": "یک قهوه، لطفاً."
+        },
+        {
+          "id": "es-pre18-s6",
+          "text": "Un té sin azúcar.",
+          "fa": "یک چای بدون شکر."
+        },
+        {
+          "id": "es-pre18-s7",
+          "text": "Aquí tiene su té.",
+          "fa": "بفرمایید چای شما."
+        },
+        {
+          "id": "es-pre18-s8",
+          "text": "Gracias por el té.",
+          "fa": "برای چای ممنون."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-19",
+      "title": "ساعت و زمان",
+      "sentences": [
+        {
+          "id": "es-pre19-s1",
+          "text": "¿Qué hora es ahora?",
+          "fa": "الان ساعت چند است؟"
+        },
+        {
+          "id": "es-pre19-s2",
+          "text": "Son las dos.",
+          "fa": "ساعت دو است."
+        },
+        {
+          "id": "es-pre19-s3",
+          "text": "¿Empezamos a las tres?",
+          "fa": "ساعت سه شروع کنیم؟"
+        },
+        {
+          "id": "es-pre19-s4",
+          "text": "Sí, a las tres.",
+          "fa": "بله، ساعت سه."
+        },
+        {
+          "id": "es-pre19-s5",
+          "text": "Es la una.",
+          "fa": "ساعت یک است."
+        },
+        {
+          "id": "es-pre19-s6",
+          "text": "Son las tres.",
+          "fa": "ساعت سه است."
+        },
+        {
+          "id": "es-pre19-s7",
+          "text": "Empezamos a las dos.",
+          "fa": "ساعت دو شروع می‌کنیم."
+        },
+        {
+          "id": "es-pre19-s8",
+          "text": "A las tres, vale.",
+          "fa": "ساعت سه، باشد."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-20",
+      "title": "روزهای هفته",
+      "sentences": [
+        {
+          "id": "es-pre20-s1",
+          "text": "¿Nos vemos el lunes?",
+          "fa": "دوشنبه همدیگر را ببینیم؟"
+        },
+        {
+          "id": "es-pre20-s2",
+          "text": "Sí, el lunes.",
+          "fa": "بله، دوشنبه."
+        },
+        {
+          "id": "es-pre20-s3",
+          "text": "¿Por la mañana?",
+          "fa": "صبح؟"
+        },
+        {
+          "id": "es-pre20-s4",
+          "text": "Sí, ¡hasta el lunes por la mañana!",
+          "fa": "بله، تا صبح دوشنبه!"
+        },
+        {
+          "id": "es-pre20-s5",
+          "text": "¿Nos vemos el martes?",
+          "fa": "سه‌شنبه همدیگر را ببینیم؟"
+        },
+        {
+          "id": "es-pre20-s6",
+          "text": "Sí, el martes por la mañana.",
+          "fa": "بله، سه‌شنبه صبح."
+        },
+        {
+          "id": "es-pre20-s7",
+          "text": "¡Hasta el viernes!",
+          "fa": "تا جمعه!"
+        },
+        {
+          "id": "es-pre20-s8",
+          "text": "¡Hasta el lunes!",
+          "fa": "تا دوشنبه!"
+        },
+        {
+          "id": "es-pre-20-balance-01",
+          "text": "Miércoles.",
+          "fa": "چهارشنبه."
+        },
+        {
+          "id": "es-pre-20-balance-02",
+          "text": "Jueves.",
+          "fa": "پنجشنبه."
+        },
+        {
+          "id": "es-pre-20-balance-03",
+          "text": "Sábado.",
+          "fa": "شنبه."
+        },
+        {
+          "id": "es-pre-20-balance-04",
+          "text": "Domingo.",
+          "fa": "یکشنبه."
+        }
+      ]
+    },
+    {
+      "id": "es-pre-21",
+      "title": "مرور پایانی",
+      "sentences": [
+        {
+          "id": "es-pre21-s1",
+          "text": "Hola, yo me llamo Darya.",
+          "fa": "سلام، نامم دریا است."
+        },
+        {
+          "id": "es-pre21-s2",
+          "text": "Hola, yo me llamo Amir.",
+          "fa": "سلام، نامم امیر است."
+        },
+        {
+          "id": "es-pre21-s3",
+          "text": "Otra vez: ¿Amir?",
+          "fa": "یک بار دیگر: امیر؟"
+        },
+        {
+          "id": "es-pre21-s4",
+          "text": "Sí, Amir. Y tú, Darya.",
+          "fa": "بله، امیر. و تو، دریا."
+        },
+        {
+          "id": "es-pre21-s5",
+          "text": "¿Eres de Irán?",
+          "fa": "اهل ایران هستی؟"
+        },
+        {
+          "id": "es-pre21-s6",
+          "text": "Sí, soy de Irán.",
+          "fa": "بله، اهل ایران هستم."
+        },
+        {
+          "id": "es-pre21-s7",
+          "text": "Hablas un poco de español.",
+          "fa": "کمی اسپانیایی صحبت می‌کنی."
+        },
+        {
+          "id": "es-pre21-s8",
+          "text": "Sí, un poco. ¡Hasta mañana!",
+          "fa": "بله، کمی. تا فردا!"
+        },
+        {
+          "id": "es-pre-21-balance-01",
+          "text": "¿Cómo estás hoy, Amir?",
+          "fa": "امیر، امروز حالت چطور است؟"
+        },
+        {
+          "id": "es-pre-21-balance-02",
+          "text": "Bien, gracias.",
+          "fa": "خوبم، ممنون."
+        },
+        {
+          "id": "es-pre-21-balance-03",
+          "text": "¿Quieres té?",
+          "fa": "چای می‌خواهی؟"
+        },
+        {
+          "id": "es-pre-21-balance-04",
+          "text": "Sí, por favor.",
+          "fa": "بله، لطفاً."
+        }
+      ]
+    }
+  ]
+}

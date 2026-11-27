@@ -1,0 +1,48 @@
+{
+  "description": "Before the narrowly authorized German word-lab repair, 2026-11-26; after English A1 phase 3.",
+  "coreCount": 138,
+  "coreIdsHash": "1228bf49fbe54f59769afcf8c8457edbae3c3306ce6b6f08479165e157ac1fcd",
+  "cardCount": 795,
+  "cardIdsHash": "40e63a4f28350673f103d0f75a7bf28d3485740c058faaca716d6855c98b1dfd",
+  "germanCourseHash": "d4371f63d0cda399dfc67eb7176d28e63047b0060697b9075e4bdfea98d611a7",
+  "protected": {
+    "ru": {
+      "core": "6bedf6c25949ef9115fab3526fc367c94acba60ff12e7f065850d1afea38543a",
+      "cards": "3934798caf2ade83522c6f02df6e55ae7fce33e1a50aca6de24e2e66fd5e0360",
+      "unresolved": "05e73ee1435a7ebde479b1ab2b9ba1e37bffef77f12d80611fc7ab6a8ae84f0c"
+    },
+    "en": {
+      "core": "11b7910c6fe845db65a82562360431bff1f51ed2f9a6a2ea573fa67d84435400",
+      "cards": "8dea6fb2dfcbaacc0834fcce2d2fb09de551c788ee350f9cd8fb12e20844b41d",
+      "unresolved": "3976d41c53d7ff7d2674ae91fdd1b42c1fc7131fba1111bfa1c4db014ae01f37"
+    }
+  },
+  "addedCoreTargets": [
+    "bin",
+    "neun",
+    "elf",
+    "Kuchen",
+    "Tochter",
+    "Bruder",
+    "Telefon",
+    "Abend",
+    "Wochenende",
+    "nah",
+    "links",
+    "rechts",
+    "Platz",
+    "Zug",
+    "lernen",
+    "heiß"
+  ],
+  "addedCardIds": [
+    "de-word-bin",
+    "de-word-kuchen",
+    "de-word-telefon",
+    "de-word-abend",
+    "de-word-wochenende",
+    "de-word-nah",
+    "de-word-platz",
+    "de-word-zug"
+  ]
+}

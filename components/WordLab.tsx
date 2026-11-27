@@ -392,6 +392,7 @@ export default function WordLab({ language }: { language: WordLabLanguage }) {
               accent={C.primary}
               title={hasSpokenSentence(word) ? `جملهٔ ${languageName} را بگو` : `واژهٔ ${languageName} را بگو`}
               autoStart={recallMicReady}
+              onSkip={() => { if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current); autoAdvanceTimer.current = null; goNext(); }}
               onResult={result => {
                 setError('');
                 setSpokenScore(result.score);

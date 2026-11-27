@@ -38,12 +38,12 @@ const clean = (text: string) => text.replace(/\s+/g, ' ').replace(/[.。]+$/, ''
 
 export function productionPrompt(
   source: ProductionSource,
-  explicit?: { speaking?: string; writing?: string; checklist?: readonly string[] } | string,
+  explicit?: Partial<ProductionPrompt> | string,
 ): ProductionPrompt {
   const level = Math.min(5, Math.max(1, source.levelId));
   const minWords = MIN_WORDS[level];
   const situation = clean(source.situation || source.title);
-  const custom = typeof explicit === 'string' ? { writing: explicit } : explicit ?? {};
+  const custom: Partial<ProductionPrompt> = typeof explicit === 'string' ? { writing: explicit } : explicit ?? {};
   const generic = level === 1
     ? {
       writing: `با واژه‌های همین درس دربارهٔ «${situation}» سه تا پنج جمله بنویس. لازم نیست قشنگ باشد؛ فقط هر جمله فعل داشته باشد و خودت آن را ساخته باشی.`,
@@ -72,7 +72,7 @@ export function productionPrompt(
     writing: custom.writing ?? generic.writing,
     speaking: custom.speaking ?? generic.speaking,
     checklist: custom.checklist ?? CHECKLIST[level],
-    minWords,
+    minWords: custom.minWords ?? minWords,
   };
 }
 

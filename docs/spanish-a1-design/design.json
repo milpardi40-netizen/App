@@ -1,0 +1,3124 @@
+{
+  "language": "es",
+  "date": "2026-11-26",
+  "status": "proposal-not-runtime-content",
+  "dialect": "es-ES; regional alternatives are not errors",
+  "modules": {
+    "1": "ورود و ابزار یادگیری",
+    "2": "شخص، اسم و توصیف",
+    "3": "فعل و ساخت پیام",
+    "4": "زمان و سازمان‌دهی روز",
+    "5": "مکان و خانه",
+    "6": "خوراک، خرید و انتخاب",
+    "7": "تفریح و ارتباط اجتماعی",
+    "8": "مسیر و سفر",
+    "9": "درخواست، تماس و سلامت",
+    "10": "دلیل و گفت‌وگوی مرتبط"
+  },
+  "lessons": [
+    {
+      "id": "es-a1-greetings",
+      "proposedIndex": 1,
+      "module": 1,
+      "preA1Ids": [
+        "es-pre-1",
+        "es-pre-3",
+        "es-foundation-chunks-1"
+      ],
+      "prerequisiteIds": [],
+      "outcomeFa": "سلام و احوال‌پرسی کنم و مناسب موقعیت خداحافظی کنم.",
+      "grammarFa": "Hola، ¿Qué tal? و ¿Cómo estás? برای دوست؛ Buenos días و خطاب رسمی جدا؛ پاسخ و خداحافظی کوتاه.",
+      "vocabularyFa": "hola=سلام؛ bien=خوب؛ hasta mañana=تا فردا؛ hasta luego=تا بعد",
+      "outOfScopeAndErrorFa": "Pre-A1 قبلاً سلام دارد؛ هدف انتخاب پاسخ بدون تقلید است. tú و usted در یک صحنه بی‌دلیل عوض نشوند.",
+      "pronunciationFa": "پنج واکهٔ روشن؛ h خاموش، ñ، و تفاوت r/rr با صوت واقعی. نشانه‌های ¿ ? و ¡ ! حفظ شوند؛ آوانویسی فارسی تقریبی است.",
+      "productionFa": "یک احوال‌پرسی دوستانهٔ چهارنوبتی و یک سلام/خداحافظی رسمی جدا بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¡Hola, Sara! ¿Qué tal?",
+          "fa": "سلام، سارا! چطوری؟"
+        },
+        {
+          "role": "learner",
+          "es": "Bien, gracias. ¿Y tú?",
+          "fa": "خوبم، ممنون. تو چطوری؟"
+        },
+        {
+          "role": "partner",
+          "es": "Muy bien. ¡Hasta mañana!",
+          "fa": "خیلی خوبم. تا فردا!"
+        },
+        {
+          "role": "learner",
+          "es": "¡Hasta mañana, Lucía!",
+          "fa": "تا فردا، لوسیا!"
+        }
+      ],
+      "listening": {
+        "passage": "Buenos días, Amir. Estoy bien, gracias. ¡Hasta esta tarde!",
+        "questionFa": "گوینده تا چه زمانی خداحافظی می‌کند؟",
+        "answer": "esta tarde"
+      },
+      "reading": {
+        "passage": "Buenos días, señor Martín. Adiós, señor Martín.",
+        "questionFa": "مخاطب چگونه خطاب شده است؟",
+        "answer": "señor Martín"
+      },
+      "transferToIds": [
+        "es-a1-profile"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از سلام و پاسخ کوتاه Pre-A1 بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-profile",
+      "proposedIndex": 2,
+      "module": 1,
+      "preA1Ids": [
+        "es-pre-2",
+        "es-pre-16"
+      ],
+      "prerequisiteIds": [
+        "es-a1-greetings"
+      ],
+      "outcomeFa": "نام و شهر محل زندگی را بگویم و بپرسم.",
+      "grammarFa": "Me llamo / ¿Cómo te llamas? و Vivo en؛ فاعل ضمیری را می‌توان حذف کرد؛ me/te در llamarse جزئی از الگوست.",
+      "vocabularyFa": "nombre=نام؛ vivir=زندگی کردن؛ ciudad=شهر؛ en Madrid=در مادرید",
+      "outOfScopeAndErrorFa": "Me llamo را به Yo llamo تبدیل نکن. سن و شغل را به این درس انباشته نکن.",
+      "pronunciationFa": "پنج واکهٔ روشن؛ h خاموش، ñ، و تفاوت r/rr با صوت واقعی. نشانه‌های ¿ ? و ¡ ! حفظ شوند؛ آوانویسی فارسی تقریبی است.",
+      "productionFa": "با نام و شهر خیالی خودت معرفی کوتاه و دو سؤال بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Hola, me llamo Lucía. ¿Y tú?",
+          "fa": "سلام، اسم من لوسیا است. تو چطور؟"
+        },
+        {
+          "role": "learner",
+          "es": "Me llamo Sara.",
+          "fa": "اسم من سارا است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Dónde vives, Sara?",
+          "fa": "سارا، کجا زندگی می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Vivo en Madrid. ¿Y tú?",
+          "fa": "در مادرید زندگی می‌کنم. تو چطور؟"
+        }
+      ],
+      "listening": {
+        "passage": "Me llamo Amir y vivo en Toledo.",
+        "questionFa": "امیر در کدام شهر زندگی می‌کند؟",
+        "answer": "Toledo"
+      },
+      "reading": {
+        "passage": "Hola, soy Ana. Vivo en Sevilla.",
+        "questionFa": "نام نویسنده چیست؟",
+        "answer": "Ana"
+      },
+      "transferToIds": [
+        "es-a1-asking-help",
+        "es-a1-nationalities",
+        "es-a1-numbers-age",
+        "es-a1-social-chat"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-greetings بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-asking-help",
+      "proposedIndex": 3,
+      "module": 1,
+      "preA1Ids": [
+        "es-pre-14",
+        "es-pre-4",
+        "es-pre-2"
+      ],
+      "prerequisiteIds": [
+        "es-a1-profile"
+      ],
+      "outcomeFa": "درخواست تکرار، آهسته‌گویی و هجی نام کنم.",
+      "grammarFa": "¿Puede repetir? / Más despacio, por favor قالب‌های رسمی؛ No entiendo؛ ¿Cómo se escribe?؛ تحلیل poder بعداً.",
+      "vocabularyFa": "repetir=تکرار؛ despacio=آهسته؛ deletrear=هجی کردن؛ apellido=نام خانوادگی",
+      "outOfScopeAndErrorFa": "نام حروف و ñ جدا با صوت معرفی شوند. usted با puede می‌آید، نه puedes؛ شکل دوستانه جدا تمرین شود.",
+      "pronunciationFa": "پنج واکهٔ روشن؛ h خاموش، ñ، و تفاوت r/rr با صوت واقعی. نشانه‌های ¿ ? و ¡ ! حفظ شوند؛ آوانویسی فارسی تقریبی است.",
+      "productionFa": "نامی خیالی هجی کن و دو درخواست تکرار/آهسته‌گویی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Buenos días. ¿Cómo se llama?",
+          "fa": "صبح بخیر. نام شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Me llamo Ali.",
+          "fa": "اسم من علی است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Cómo se escribe?",
+          "fa": "چطور نوشته می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "es": "A–L–I.",
+          "fa": "آ، اِلِه، ای."
+        }
+      ],
+      "listening": {
+        "passage": "Mi apellido es Lee. Se escribe L–E–E.",
+        "questionFa": "نام خانوادگی چگونه هجی شد؟",
+        "answer": "L–E–E"
+      },
+      "reading": {
+        "passage": "No entiendo esta palabra. Más despacio, por favor.",
+        "questionFa": "نویسنده چه درخواستی دارد؟",
+        "answer": "آهسته‌تر صحبت‌کردن"
+      },
+      "transferToIds": [
+        "es-a1-nationalities",
+        "es-a1-forms-information",
+        "es-a1-instructions"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-profile بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-nationalities",
+      "proposedIndex": 4,
+      "module": 1,
+      "preA1Ids": [
+        "es-pre-15",
+        "es-pre-16"
+      ],
+      "prerequisiteIds": [
+        "es-a1-profile",
+        "es-a1-asking-help"
+      ],
+      "outcomeFa": "مبدأ، شهر زندگی و زبان را از هم جدا بیان کنم.",
+      "grammarFa": "Soy de Irán؛ Vivo en Madrid؛ Hablo español بدون حرف تعریف؛ español/española صفت ملیت با حرف کوچک.",
+      "vocabularyFa": "país=کشور؛ lengua=زبان؛ español=اسپانیایی؛ persa=فارسی",
+      "outOfScopeAndErrorFa": "همهٔ ملیت‌ها و استثناهای جنس یکجا لازم نیست؛ فارسی‌زبان بودن با تابعیت یکی نیست.",
+      "pronunciationFa": "پنج واکهٔ روشن؛ h خاموش، ñ، و تفاوت r/rr با صوت واقعی. نشانه‌های ¿ ? و ¡ ! حفظ شوند؛ آوانویسی فارسی تقریبی است.",
+      "productionFa": "یک شخصیت خیالی را با نام، کشور، شهر و زبان در چهار جمله معرفی کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿De dónde eres?",
+          "fa": "اهل کجا هستی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Soy de Irán.",
+          "fa": "اهل ایران هستم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Hablas español?",
+          "fa": "اسپانیایی صحبت می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, un poco. También hablo persa.",
+          "fa": "بله، کمی. فارسی هم صحبت می‌کنم."
+        }
+      ],
+      "listening": {
+        "passage": "Soy de España. Hablo español y un poco de persa.",
+        "questionFa": "گوینده کدام زبان را کمی صحبت می‌کند؟",
+        "answer": "persa"
+      },
+      "reading": {
+        "passage": "Lucía es española. Vive en Madrid.",
+        "questionFa": "لوسیا کجا زندگی می‌کند؟",
+        "answer": "Madrid"
+      },
+      "transferToIds": [
+        "es-a1-subject-pronouns"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-profile، es-a1-asking-help بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-numbers-age",
+      "proposedIndex": 5,
+      "module": 1,
+      "preA1Ids": [
+        "es-pre-5"
+      ],
+      "prerequisiteIds": [
+        "es-a1-profile"
+      ],
+      "outcomeFa": "سن و یک شمارهٔ تماس کوتاه خیالی را بگویم و بفهمم.",
+      "grammarFa": "Tener برای سن: Tengo veintitrés años؛ صفر تا صد گروه‌بندی‌شده؛ dieciséis و veintidós؛ treinta y dos؛ cien برای ۱۰۰ مستقل.",
+      "vocabularyFa": "edad=سن؛ años=سال در سن؛ número=شماره؛ cero=صفر",
+      "outOfScopeAndErrorFa": "Soy veinte años غلط است. شمارهٔ تمرین رقم‌به‌رقم خوانده شود؛ اطلاعات تماس واقعی لازم نیست.",
+      "pronunciationFa": "پنج واکهٔ روشن؛ h خاموش، ñ، و تفاوت r/rr با صوت واقعی. نشانه‌های ¿ ? و ¡ ! حفظ شوند؛ آوانویسی فارسی تقریبی است.",
+      "productionFa": "سن و شمارهٔ چهاررقمی خیالی بنویس؛ یک سؤال سن هم اضافه کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Cuántos años tienes?",
+          "fa": "چند سال داری؟"
+        },
+        {
+          "role": "learner",
+          "es": "Tengo veintitrés años.",
+          "fa": "بیست‌وسه سال دارم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Cuál es tu número?",
+          "fa": "شماره‌ات چیست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Cero, uno, dos, tres.",
+          "fa": "صفر، یک، دو، سه."
+        }
+      ],
+      "listening": {
+        "passage": "Me llamo Ben. Tengo treinta y dos años.",
+        "questionFa": "بن چند سال دارد؟",
+        "answer": "32"
+      },
+      "reading": {
+        "passage": "Nombre: Sara. Edad: 24 años. Teléfono: 0312.",
+        "questionFa": "سن سارا چقدر است؟",
+        "answer": "24"
+      },
+      "transferToIds": [
+        "es-a1-nouns-gender-plural",
+        "es-a1-family",
+        "es-a1-feelings",
+        "es-a1-dates-and-time",
+        "es-a1-shopping-payment"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-profile بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-nouns-gender-plural",
+      "proposedIndex": 6,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-6",
+        "es-pre-5",
+        "es-foundation-chunks-2"
+      ],
+      "prerequisiteIds": [
+        "es-a1-numbers-age"
+      ],
+      "outcomeFa": "اسم آشنا را با جنس و جمع معرفی کنم.",
+      "grammarFa": "un/una؛ unos/unas در جمع نامعین؛ -s و -es در libros/papeles؛ جنس دستوری با جنس صاحب فرق دارد.",
+      "vocabularyFa": "libro=کتاب؛ mesa=میز؛ silla=صندلی؛ papel=کاغذ",
+      "outOfScopeAndErrorFa": "پایان -o/-a راهنماست نه قانون بدون استثنا؛ el problema و la mano فقط در صورت نیاز معرفی شوند، نه بار اضافی اجباری.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "چهار چیز اطراف را با یک نمونهٔ مفرد و جمع معرفی کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué es esto?",
+          "fa": "این چیست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Es un libro.",
+          "fa": "یک کتاب است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y estas cosas?",
+          "fa": "و این چیزها؟"
+        },
+        {
+          "role": "learner",
+          "es": "Son dos mesas y tres sillas.",
+          "fa": "دو میز و سه صندلی هستند."
+        }
+      ],
+      "listening": {
+        "passage": "Aquí hay tres libros y una mesa.",
+        "questionFa": "چند کتاب وجود دارد؟",
+        "answer": "tres"
+      },
+      "reading": {
+        "passage": "un papel → dos papeles; una silla → dos sillas",
+        "questionFa": "جمع papel در متن چیست؟",
+        "answer": "papeles"
+      },
+      "transferToIds": [
+        "es-a1-articles"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-numbers-age بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-articles",
+      "proposedIndex": 7,
+      "module": 2,
+      "preA1Ids": [
+        "es-foundation-chunks-2",
+        "es-pre-6"
+      ],
+      "prerequisiteIds": [
+        "es-a1-nouns-gender-plural"
+      ],
+      "outcomeFa": "چیزی را نخست معرفی و سپس به همان چیز ارجاع بدهم.",
+      "grammarFa": "un/una/unos/unas در برابر el/la/los/las؛ un libro → el libro؛ حرف تعریف با اسم هماهنگ است.",
+      "vocabularyFa": "el libro=آن کتاب؛ la mesa=آن میز؛ los libros=کتاب‌های معین؛ las sillas=صندلی‌های معین",
+      "outOfScopeAndErrorFa": "اسپانیایی حرف تعریف خنثای اسم مانند das ندارد؛ el agua استثنای آوایی است و در خوراک جدا معرفی می‌شود.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "دو شیء را با نامعین معرفی و در جملهٔ دوم با معین به آن‌ها اشاره کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Aquí hay un libro.",
+          "fa": "اینجا یک کتاب هست."
+        },
+        {
+          "role": "learner",
+          "es": "El libro es nuevo.",
+          "fa": "آن کتاب نو است."
+        },
+        {
+          "role": "partner",
+          "es": "También hay una mesa.",
+          "fa": "یک میز هم هست."
+        },
+        {
+          "role": "learner",
+          "es": "La mesa es pequeña.",
+          "fa": "آن میز کوچک است."
+        }
+      ],
+      "listening": {
+        "passage": "Hay una silla. La silla está aquí.",
+        "questionFa": "کدام شیء معرفی شده است؟",
+        "answer": "una silla"
+      },
+      "reading": {
+        "passage": "Hay unos libros. Los libros son nuevos.",
+        "questionFa": "در ارجاع دوم پیش از libros چه آمده؟",
+        "answer": "los"
+      },
+      "transferToIds": [
+        "es-a1-subject-pronouns",
+        "es-a1-possessives"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-nouns-gender-plural بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-subject-pronouns",
+      "proposedIndex": 8,
+      "module": 2,
+      "preA1Ids": [
+        "es-foundation-words-2",
+        "es-pre-2"
+      ],
+      "prerequisiteIds": [
+        "es-a1-articles",
+        "es-a1-nationalities"
+      ],
+      "outcomeFa": "مرجع شخص و خطاب را تشخیص بدهم و ضمیر را در جای لازم به کار ببرم.",
+      "grammarFa": "yo/tú/él/ella/nosotros/nosotras/vosotros/vosotras/ellos/ellas؛ usted/ustedes با صرف سوم‌شخص؛ حذف ضمیر وقتی مرجع روشن است.",
+      "vocabularyFa": "nosotros=ما؛ vosotros=شما دوستانه در اسپانیا؛ ustedes=شما با صرف سوم‌شخص جمع؛ ella=او زن",
+      "outOfScopeAndErrorFa": "قاعدهٔ فاعل اجباری فرانسوی به اسپانیایی منتقل نشود. usted الزاماً فاصلهٔ اجتماعی ثابت در همهٔ کشورها ندارد.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "سه شخص یا گروه خیالی را معرفی کن و برای هرکدام ضمیر مناسب انتخاب کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Esta es Ana. Ella habla español.",
+          "fa": "این آنا است. او اسپانیایی صحبت می‌کند."
+        },
+        {
+          "role": "learner",
+          "es": "Yo también hablo español.",
+          "fa": "من هم اسپانیایی صحبت می‌کنم."
+        },
+        {
+          "role": "partner",
+          "es": "Sara y yo somos estudiantes.",
+          "fa": "سارا و من دانشجو هستیم."
+        },
+        {
+          "role": "learner",
+          "es": "Vosotras también sois estudiantes.",
+          "fa": "شما هم دانشجو هستید. (دوستانه، زنان، اسپانیا)"
+        }
+      ],
+      "listening": {
+        "passage": "Sara y yo vivimos en Madrid. Ben vive en Toledo.",
+        "questionFa": "چه کسانی در مادرید زندگی می‌کنند؟",
+        "answer": "Sara y el hablante"
+      },
+      "reading": {
+        "passage": "Ana y Lucía están aquí. Ellas hablan español.",
+        "questionFa": "Ellas به چه کسانی برمی‌گردد؟",
+        "answer": "Ana y Lucía"
+      },
+      "transferToIds": [
+        "es-a1-verb-to-be",
+        "es-a1-simple-verbs"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-articles، es-a1-nationalities بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-verb-to-be",
+      "proposedIndex": 9,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-2",
+        "es-pre-15"
+      ],
+      "prerequisiteIds": [
+        "es-a1-subject-pronouns"
+      ],
+      "outcomeFa": "هویت، ملیت و شغل را با ser بیان کنم.",
+      "grammarFa": "soy/eres/es/somos/sois/son؛ Soy estudiante بدون حرف تعریف در معرفی سادهٔ شغل؛ estar برای حالت/مکان جدا است.",
+      "vocabularyFa": "estudiante=دانشجو؛ profesor/profesora=معلم؛ compañero=هم‌کلاسی مرد",
+      "outOfScopeAndErrorFa": "قاعدهٔ گمراه‌کنندهٔ «ser همیشه دائمی، estar همیشه موقتی» آموزش داده نشود. در یک صحنه tú و usted مخلوط نشوند.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "دو معرفی کوتاه و دو سؤال دربارهٔ هویت/شغل شخصیت‌های خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Eres estudiante?",
+          "fa": "دانشجو هستی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, soy estudiante. ¿Y tú?",
+          "fa": "بله، دانشجو هستم. تو چطور؟"
+        },
+        {
+          "role": "partner",
+          "es": "Soy profesora.",
+          "fa": "من معلم هستم. (زن)"
+        },
+        {
+          "role": "learner",
+          "es": "Ana también es profesora.",
+          "fa": "آنا هم معلم است. (زن)"
+        }
+      ],
+      "listening": {
+        "passage": "Soy profesor. Lucía es estudiante.",
+        "questionFa": "لوسیا چه‌کاره است؟",
+        "answer": "estudiante"
+      },
+      "reading": {
+        "passage": "Nosotros somos estudiantes. Vosotros sois profesores.",
+        "questionFa": "فعل همراه nosotros در متن چیست؟",
+        "answer": "somos"
+      },
+      "transferToIds": [
+        "es-a1-family",
+        "es-a1-descriptions"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-subject-pronouns بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-family",
+      "proposedIndex": 10,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-10"
+      ],
+      "prerequisiteIds": [
+        "es-a1-verb-to-be",
+        "es-a1-numbers-age"
+      ],
+      "outcomeFa": "اعضای خانواده و سن یک نفر را معرفی کنم.",
+      "grammarFa": "Este es mi padre / Esta es mi madre در قالب آشنا؛ se llama و tiene؛ بازیابی ser/tener.",
+      "vocabularyFa": "madre=مادر؛ padre=پدر؛ hermana=خواهر؛ hermano=برادر",
+      "outOfScopeAndErrorFa": "نوع خانواده یا داشتن خواهر/برادر فرض نشود؛ شخصیت خیالی مجاز است. esta در این معرفی با está فعلی فرق دارد.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "یک خانوادهٔ خیالی سه‌نفره را با نام و یک سن معرفی کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Quién está en la foto?",
+          "fa": "چه کسی در عکس است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Es mi hermana.",
+          "fa": "خواهرم است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Cómo se llama?",
+          "fa": "اسم او چیست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Se llama Ana. Tiene veinte años.",
+          "fa": "اسمش آنا است. بیست سال دارد."
+        }
+      ],
+      "listening": {
+        "passage": "Mi hermano se llama Ben. Tiene doce años.",
+        "questionFa": "برادر گوینده چند سال دارد؟",
+        "answer": "doce"
+      },
+      "reading": {
+        "passage": "Esta es mi madre. Se llama Mina.",
+        "questionFa": "نام مادر چیست؟",
+        "answer": "Mina"
+      },
+      "transferToIds": [
+        "es-a1-possessives"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-verb-to-be، es-a1-numbers-age بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-possessives",
+      "proposedIndex": 11,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-11"
+      ],
+      "prerequisiteIds": [
+        "es-a1-family",
+        "es-a1-articles"
+      ],
+      "outcomeFa": "مالکیت و صاحب شیء را روشن کنم.",
+      "grammarFa": "mi/tu/su و mis/tus/sus با شمار شیء؛ nuestro/nuestra با جنس/شمار؛ de Ana برای رفع ابهام su؛ tu بدون اَکسان.",
+      "vocabularyFa": "mi=مال من؛ tus=مال تو، جمع؛ nuestro=مال ما، مذکر؛ de Sara=مال سارا",
+      "outOfScopeAndErrorFa": "su می‌تواند مال او/شما/آن‌ها باشد؛ بدون زمینه صاحب را حدس نزن. فعلاً همهٔ ضمایر ملکیِ مستقل لازم نیست.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "سه وسیله را به دو شخصیت نسبت بده و یک ابهام su را با de رفع کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Es tu libro?",
+          "fa": "این کتاب تو است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, es mi libro.",
+          "fa": "بله، کتاب من است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y estos cuadernos?",
+          "fa": "و این دفترها؟"
+        },
+        {
+          "role": "learner",
+          "es": "Son los cuadernos de Ana.",
+          "fa": "دفترهای آنا هستند."
+        }
+      ],
+      "listening": {
+        "passage": "Ben tiene una hermana. Su hermana se llama Ana.",
+        "questionFa": "نام خواهر بن چیست؟",
+        "answer": "Ana"
+      },
+      "reading": {
+        "passage": "Es la bolsa de Sara. Su bolsa es azul.",
+        "questionFa": "صاحب کیف چه کسی است؟",
+        "answer": "Sara"
+      },
+      "transferToIds": [
+        "es-a1-demonstratives"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-family، es-a1-articles بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-demonstratives",
+      "proposedIndex": 12,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-6",
+        "es-pre-10"
+      ],
+      "prerequisiteIds": [
+        "es-a1-possessives"
+      ],
+      "outcomeFa": "به اشخاص و اشیای نزدیک و دورتر اشاره کنم.",
+      "grammarFa": "este/esta/estos/estas و ese/esa/esos/esas؛ esto برای پرسش دربارهٔ چیز ناشناس بدون اسم؛ esta با está یکی نیست.",
+      "vocabularyFa": "este libro=این کتاب؛ esa mesa=آن میز؛ estos libros=این کتاب‌ها؛ esto=این چیز",
+      "outOfScopeAndErrorFa": "فاصله‌ها با تصویر روشن شوند؛ aquel فعلاً هدف اجباری نیست. برای esta فقط به جنس اسم نگاه کن.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "چهار اشارهٔ کوتاه با اشیای خیالی نزدیک و دورتر بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Este libro es tuyo?",
+          "fa": "این کتاب مال تو است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, este libro es mío.",
+          "fa": "بله، این کتاب مال من است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y esa mesa?",
+          "fa": "و آن میز؟"
+        },
+        {
+          "role": "learner",
+          "es": "Esa mesa es de Ana.",
+          "fa": "آن میز مال آنا است."
+        }
+      ],
+      "listening": {
+        "passage": "Este libro es nuevo. Esa mesa es vieja.",
+        "questionFa": "کدام شیء نو است؟",
+        "answer": "este libro"
+      },
+      "reading": {
+        "passage": "Esta silla es pequeña. Estas mesas son grandes.",
+        "questionFa": "کدام عبارت به چند میز اشاره دارد؟",
+        "answer": "estas mesas"
+      },
+      "transferToIds": [
+        "es-a1-descriptions"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-possessives بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-descriptions",
+      "proposedIndex": 13,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-12"
+      ],
+      "prerequisiteIds": [
+        "es-a1-demonstratives",
+        "es-a1-verb-to-be"
+      ],
+      "outcomeFa": "شیء یا اتاق را با صفت هماهنگ توصیف کنم.",
+      "grammarFa": "pequeño/pequeña/pequeños/pequeñas؛ grande/grandes؛ ser برای توصیف این نمونه‌ها؛ صفت معمولاً پس از اسم.",
+      "vocabularyFa": "pequeño=کوچک؛ grande=بزرگ؛ nuevo=نو؛ tranquilo=آرام",
+      "outOfScopeAndErrorFa": "جنس دستوری اسم از صاحب نمی‌آید؛ grande در مفرد هر دو جنس یک شکل دارد. مکان با estar بعداً بازیابی می‌شود.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "دو وسیله و یک اتاق را با سه صفت توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Tu habitación es grande?",
+          "fa": "اتاقت بزرگ است؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, es pequeña y tranquila.",
+          "fa": "نه، کوچک و آرام است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y tu mesa?",
+          "fa": "و میزت؟"
+        },
+        {
+          "role": "learner",
+          "es": "Mi mesa es grande y nueva.",
+          "fa": "میزم بزرگ و نو است."
+        }
+      ],
+      "listening": {
+        "passage": "Mi bolsa es pequeña. Mi mesa es grande.",
+        "questionFa": "میز چه اندازه‌ای است؟",
+        "answer": "grande"
+      },
+      "reading": {
+        "passage": "El libro es nuevo. La habitación es pequeña.",
+        "questionFa": "چه چیزی کوچک است؟",
+        "answer": "la habitación"
+      },
+      "transferToIds": [
+        "es-a1-colors",
+        "es-a1-comparisons"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-demonstratives، es-a1-verb-to-be بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-colors",
+      "proposedIndex": 14,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-13"
+      ],
+      "prerequisiteIds": [
+        "es-a1-descriptions"
+      ],
+      "outcomeFa": "رنگ را بپرسم و با اسم هماهنگ بیان کنم.",
+      "grammarFa": "rojo/roja و blanco/blanca؛ azul/azules بدون تغییر جنس؛ ¿De qué color es …?؛ صفت رنگ پس از اسم.",
+      "vocabularyFa": "rojo=قرمز؛ azul=آبی؛ verde=سبز؛ blanco=سفید؛ negro=سیاه",
+      "outOfScopeAndErrorFa": "azula نساز؛ جمع azules و verdes معرفی شود. رنگ و جنس صاحب کیف را یکی نگیر.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "چهار وسیله را با رنگ و یک پرسش رنگ توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿De qué color es tu bolsa?",
+          "fa": "کیفت چه رنگی است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Es azul.",
+          "fa": "آبی است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Esta silla roja es tuya?",
+          "fa": "این صندلی قرمز مال تو است؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, mi silla es blanca.",
+          "fa": "نه، صندلی من سفید است."
+        }
+      ],
+      "listening": {
+        "passage": "Mi cuaderno es verde. Mi bolígrafo es negro.",
+        "questionFa": "دفتر چه رنگی است؟",
+        "answer": "verde"
+      },
+      "reading": {
+        "passage": "La mesa es negra. El libro es rojo.",
+        "questionFa": "کتاب چه رنگی است؟",
+        "answer": "rojo"
+      },
+      "transferToIds": [
+        "es-a1-feelings",
+        "es-a1-clothes-shopping"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-descriptions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-feelings",
+      "proposedIndex": 15,
+      "module": 2,
+      "preA1Ids": [
+        "es-pre-7",
+        "es-pre-9"
+      ],
+      "prerequisiteIds": [
+        "es-a1-colors",
+        "es-a1-numbers-age"
+      ],
+      "outcomeFa": "حالت، گرسنگی و تشنگی را بیان کنم.",
+      "grammarFa": "estoy/estás/está و جمع‌های لازم estamos/estáis/están برای حالت؛ tener hambre/sed؛ cansado/cansada.",
+      "vocabularyFa": "cansado=خسته؛ contenta=خوشحال، زن؛ hambre=گرسنگی؛ sed=تشنگی",
+      "outOfScopeAndErrorFa": "Estoy hambre غلط است؛ tengo hambre. ser/estar به دائمی/موقتی فروکاسته نشود. جنس گوینده در مثال مشخص باشد.",
+      "pronunciationFa": "تکیه و اَکسان، tú در برابر tu؛ جنس/شمار در حرف تعریف و صفت شنیده و خوانده شود. تلفظ رایج اسپانیا مبناست؛ seseo در گونه‌های دیگر خطا نیست.",
+      "productionFa": "حالت دو شخصیت و نیاز سادهٔ هرکدام را در سه یا چهار جمله بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Cómo estás, Sara?",
+          "fa": "سارا، حالت چطور است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Estoy cansada y tengo sed.",
+          "fa": "خسته‌ام و تشنه‌ام. (زن)"
+        },
+        {
+          "role": "partner",
+          "es": "¿Quieres agua?",
+          "fa": "آب می‌خواهی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, gracias.",
+          "fa": "بله، ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Ana está contenta. Ben tiene hambre.",
+        "questionFa": "چه کسی گرسنه است؟",
+        "answer": "Ben"
+      },
+      "reading": {
+        "passage": "Sara tiene sed. Está cansada.",
+        "questionFa": "سارا چه نیازی دارد؟",
+        "answer": "agua"
+      },
+      "transferToIds": [
+        "es-a1-simple-verbs",
+        "es-a1-location",
+        "es-a1-weather",
+        "es-a1-doctor-symptoms"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-colors، es-a1-numbers-age بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-simple-verbs",
+      "proposedIndex": 16,
+      "module": 3,
+      "preA1Ids": [
+        "es-pre-8",
+        "es-pre-9"
+      ],
+      "prerequisiteIds": [
+        "es-a1-feelings",
+        "es-a1-subject-pronouns"
+      ],
+      "outcomeFa": "با داشتن و جست‌وجو یک پیام کوتاه بسازم.",
+      "grammarFa": "tener: tengo/tienes/tiene/tenemos/tenéis/tienen؛ tengo un libro و busco un cuaderno؛ حذف فاعل ضمیریِ روشن.",
+      "vocabularyFa": "tener=داشتن؛ buscar=دنبال چیزی گشتن؛ llevar=حمل کردن؛ cuaderno=دفتر",
+      "outOfScopeAndErrorFa": "این درس ساخت پیام و tener است، نه صرف تمام فعل‌ها. buscar چیزی معمولاً حرف اضافهٔ فارسی «دنبالِ» را کپی نمی‌کند.",
+      "pronunciationFa": "تکیهٔ فعل‌ها و تمایز hablo/habla/hablamos؛ پایان فعل حامل شخص است. vosotros در اسپانیا، ustedes با صرف سوم‌شخص جمع؛ صدا با مثال معتبر بررسی شود.",
+      "productionFa": "بگو چه داری و دنبال چه می‌گردی؛ دو سؤال از هم‌کلاسی خیالی اضافه کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Tienes un bolígrafo?",
+          "fa": "خودکار داری؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, tengo dos.",
+          "fa": "بله، دو تا دارم."
+        },
+        {
+          "role": "partner",
+          "es": "Yo busco un cuaderno.",
+          "fa": "من دنبال یک دفتر می‌گردم."
+        },
+        {
+          "role": "learner",
+          "es": "Tengo un cuaderno aquí.",
+          "fa": "اینجا یک دفتر دارم."
+        }
+      ],
+      "listening": {
+        "passage": "Tengo un libro. Busco un cuaderno.",
+        "questionFa": "گوینده دنبال چه می‌گردد؟",
+        "answer": "un cuaderno"
+      },
+      "reading": {
+        "passage": "Ben lleva una bolsa. Sara tiene un libro.",
+        "questionFa": "چه کسی کیف حمل می‌کند؟",
+        "answer": "Ben"
+      },
+      "transferToIds": [
+        "es-a1-verb-conjugation"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-feelings، es-a1-subject-pronouns بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-verb-conjugation",
+      "proposedIndex": 17,
+      "module": 3,
+      "preA1Ids": [
+        "es-pre-15",
+        "es-pre-16"
+      ],
+      "prerequisiteIds": [
+        "es-a1-simple-verbs"
+      ],
+      "outcomeFa": "چند فعل باقاعده را با شخص درست صرف کنم.",
+      "grammarFa": "hablar: hablo/hablas/habla/hablamos/habláis/hablan؛ comer و vivir با پایان‌های پایهٔ -er/-ir؛ فعل بی‌قاعده را از این الگو نساز.",
+      "vocabularyFa": "hablar=صحبت کردن؛ comer=خوردن؛ vivir=زندگی کردن؛ aprender=یاد گرفتن",
+      "outOfScopeAndErrorFa": "تمام صورت‌ها در یک گفت‌وگوی مصنوعی چپانده نشوند؛ الگو، جایگزینی و بازیابی جدا باشند. اَکسان habláis/vivís حفظ شود.",
+      "pronunciationFa": "تکیهٔ فعل‌ها و تمایز hablo/habla/hablamos؛ پایان فعل حامل شخص است. vosotros در اسپانیا، ustedes با صرف سوم‌شخص جمع؛ صدا با مثال معتبر بررسی شود.",
+      "productionFa": "سه جمله با سه شخص و دو سؤال بساز؛ دست‌کم دو گروه فعل به کار ببر.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Hablas español?",
+          "fa": "اسپانیایی صحبت می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, hablo un poco.",
+          "fa": "بله، کمی صحبت می‌کنم."
+        },
+        {
+          "role": "partner",
+          "es": "Nosotros también hablamos español.",
+          "fa": "ما هم اسپانیایی صحبت می‌کنیم."
+        },
+        {
+          "role": "learner",
+          "es": "¿Vivís en Madrid?",
+          "fa": "در مادرید زندگی می‌کنید؟ (دوستانه، اسپانیا)"
+        }
+      ],
+      "listening": {
+        "passage": "Vivimos en Madrid. Ben vive en Toledo.",
+        "questionFa": "گوینده و همراهانش کجا زندگی می‌کنند؟",
+        "answer": "Madrid"
+      },
+      "reading": {
+        "passage": "Yo hablo persa. Vosotros habláis español.",
+        "questionFa": "فعل همراه vosotros در متن چیست؟",
+        "answer": "habláis"
+      },
+      "transferToIds": [
+        "es-a1-present-tense"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-simple-verbs بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-present-tense",
+      "proposedIndex": 18,
+      "module": 3,
+      "preA1Ids": [
+        "es-pre-16",
+        "es-pre-19"
+      ],
+      "prerequisiteIds": [
+        "es-a1-verb-conjugation"
+      ],
+      "outcomeFa": "از زمان حال برای کار امروز و عادت استفاده کنم.",
+      "grammarFa": "trabajo/estudio؛ ir: voy/vas/va/vamos/vais/van برای رفتن؛ hacer در hago/haces؛ voy al curso و al= a+el.",
+      "vocabularyFa": "trabajar=کار کردن؛ estudiar=درس خواندن؛ ir=رفتن؛ hacer la compra=خرید روزمره کردن",
+      "outOfScopeAndErrorFa": "voy al curso رفتن به مکان است؛ آیندهٔ voy a estudiar بعداً معرفی می‌شود. زمان حال را به «در حال انجام» محدود نکن.",
+      "pronunciationFa": "تکیهٔ فعل‌ها و تمایز hablo/habla/hablamos؛ پایان فعل حامل شخص است. vosotros در اسپانیا، ustedes با صرف سوم‌شخص جمع؛ صدا با مثال معتبر بررسی شود.",
+      "productionFa": "سه کار عادی و یک کار امروز را با یک نشانهٔ زمان بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué haces hoy?",
+          "fa": "امروز چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Hoy estudio español.",
+          "fa": "امروز اسپانیایی درس می‌خوانم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Vas al curso?",
+          "fa": "به کلاس می‌روی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, voy al curso por la tarde.",
+          "fa": "بله، عصر به کلاس می‌روم."
+        }
+      ],
+      "listening": {
+        "passage": "Hoy trabajo. Ben estudia español.",
+        "questionFa": "چه کسی اسپانیایی درس می‌خواند؟",
+        "answer": "Ben"
+      },
+      "reading": {
+        "passage": "Voy al curso en autobús.",
+        "questionFa": "گوینده چگونه به کلاس می‌رود؟",
+        "answer": "en autobús"
+      },
+      "transferToIds": [
+        "es-a1-positive-negative-questions",
+        "es-a1-daily-routine",
+        "es-a1-future-plans"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-verb-conjugation بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-positive-negative-questions",
+      "proposedIndex": 19,
+      "module": 3,
+      "preA1Ids": [
+        "es-pre-3",
+        "es-pre-8"
+      ],
+      "prerequisiteIds": [
+        "es-a1-present-tense"
+      ],
+      "outcomeFa": "پیام مثبت را منفی و پرسشی کنم.",
+      "grammarFa": "no پیش از فعل؛ no tengo libro / no tengo un libro طبق زمینه؛ آیا با آهنگ و ¿ ?؛ ¿Estudias hoy?؛ ضمیر فاعلی الزام ندارد.",
+      "vocabularyFa": "sí=بله؛ no=نه؛ hoy=امروز؛ nada در این درس اجباری نیست",
+      "outOfScopeAndErrorFa": "قاعدهٔ فرانسویِ تبدیل همهٔ حرف تعریف‌ها به de در نفی وارد اسپانیایی نشود. si با sí فرق دارد.",
+      "pronunciationFa": "تکیهٔ فعل‌ها و تمایز hablo/habla/hablamos؛ پایان فعل حامل شخص است. vosotros در اسپانیا، ustedes با صرف سوم‌شخص جمع؛ صدا با مثال معتبر بررسی شود.",
+      "productionFa": "دو پیام را در سه صورت مثبت، منفی و پرسشی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Trabajas hoy?",
+          "fa": "امروز کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, hoy no trabajo.",
+          "fa": "نه، امروز کار نمی‌کنم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Estudias español?",
+          "fa": "اسپانیایی درس می‌خوانی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, estudio español.",
+          "fa": "بله، اسپانیایی درس می‌خوانم."
+        }
+      ],
+      "listening": {
+        "passage": "No tengo cuaderno. Tengo un libro.",
+        "questionFa": "گوینده چه چیزی ندارد؟",
+        "answer": "cuaderno"
+      },
+      "reading": {
+        "passage": "Hoy no trabajo. Estudio en casa.",
+        "questionFa": "نویسنده امروز کجا درس می‌خواند؟",
+        "answer": "en casa"
+      },
+      "transferToIds": [
+        "es-a1-question-words",
+        "es-a1-past-events",
+        "es-a1-connectors"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-present-tense بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-question-words",
+      "proposedIndex": 20,
+      "module": 3,
+      "preA1Ids": [
+        "es-pre-14",
+        "es-pre-17"
+      ],
+      "prerequisiteIds": [
+        "es-a1-positive-negative-questions"
+      ],
+      "outcomeFa": "برای شخص، مکان، زمان و چیز موردنیاز سؤال مناسب بسازم.",
+      "grammarFa": "quién/dónde/cuándo/cómo/qué/cuánto با اَکسان پرسشی؛ ¿A qué hora …?؛ چرا برای دلیل در درس پایانی بازیابی می‌شود.",
+      "vocabularyFa": "quién=چه کسی؛ dónde=کجا؛ cuándo=چه وقت؛ cuánto=چقدر",
+      "outOfScopeAndErrorFa": "qué و cuál همیشه به یک الگوی فارسی قابل تقلیل نیستند؛ فقط نمونه‌های روشن. Qué بدون نشانه‌های پرسش در جملهٔ مستقیم ناقص است.",
+      "pronunciationFa": "تکیهٔ فعل‌ها و تمایز hablo/habla/hablamos؛ پایان فعل حامل شخص است. vosotros در اسپانیا، ustedes با صرف سوم‌شخص جمع؛ صدا با مثال معتبر بررسی شود.",
+      "productionFa": "چهار سؤال با چهار واژهٔ پرسشی و پاسخ کوتاه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Quién es ella?",
+          "fa": "او کیست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Es Ana.",
+          "fa": "آنا است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Dónde vive?",
+          "fa": "کجا زندگی می‌کند؟"
+        },
+        {
+          "role": "learner",
+          "es": "Vive en Sevilla.",
+          "fa": "در سویا زندگی می‌کند."
+        }
+      ],
+      "listening": {
+        "passage": "El curso empieza a las diez, en Madrid.",
+        "questionFa": "کلاس چه ساعتی شروع می‌شود؟",
+        "answer": "a las diez"
+      },
+      "reading": {
+        "passage": "¿Quién viene? Lucía. ¿Dónde vive? En Toledo.",
+        "questionFa": "چه کسی می‌آید؟",
+        "answer": "Lucía"
+      },
+      "transferToIds": [
+        "es-a1-wants-needs"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-positive-negative-questions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-wants-needs",
+      "proposedIndex": 21,
+      "module": 3,
+      "preA1Ids": [
+        "es-pre-9",
+        "es-pre-3"
+      ],
+      "prerequisiteIds": [
+        "es-a1-question-words"
+      ],
+      "outcomeFa": "خواستن، نیاز و علاقه را از هم جدا بیان کنم.",
+      "grammarFa": "quiero/quieres؛ necesito/necesitas؛ me gusta + اسم مفرد یا مصدر در قالب؛ اسم ماده بدون حرف تعریف: quiero agua؛ quisiera قالب مؤدبانهٔ اختیاری.",
+      "vocabularyFa": "querer=خواستن؛ necesitar=نیاز داشتن؛ me gusta=دوست دارم؛ agua=آب",
+      "outOfScopeAndErrorFa": "نه du فرانسوی و نه «yo gusto el té». صرف کامل gustar و همهٔ ضمایرش اینجا لازم نیست؛ علاقه الزاماً سفارش نیست.",
+      "pronunciationFa": "تکیهٔ فعل‌ها و تمایز hablo/habla/hablamos؛ پایان فعل حامل شخص است. vosotros در اسپانیا، ustedes با صرف سوم‌شخص جمع؛ صدا با مثال معتبر بررسی شود.",
+      "productionFa": "یک علاقه، یک نیاز و یک درخواست مؤدبانه دربارهٔ یک موقعیت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué necesitas?",
+          "fa": "چه لازم داری؟"
+        },
+        {
+          "role": "learner",
+          "es": "Necesito agua.",
+          "fa": "آب لازم دارم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Quieres también un café?",
+          "fa": "قهوه هم می‌خواهی؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, gracias. Quiero un té.",
+          "fa": "نه، ممنون. یک چای می‌خواهم."
+        }
+      ],
+      "listening": {
+        "passage": "Me gusta el café, pero ahora quiero un té.",
+        "questionFa": "گوینده اکنون چه می‌خواهد؟",
+        "answer": "un té"
+      },
+      "reading": {
+        "passage": "Ben necesita un bolígrafo. Ya tiene un cuaderno.",
+        "questionFa": "بن چه چیزی لازم دارد؟",
+        "answer": "un bolígrafo"
+      },
+      "transferToIds": [
+        "es-a1-ability",
+        "es-a1-ordering-food",
+        "es-a1-preferences"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-question-words بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-ability",
+      "proposedIndex": 22,
+      "module": 3,
+      "preA1Ids": [
+        "es-pre-14"
+      ],
+      "prerequisiteIds": [
+        "es-a1-wants-needs"
+      ],
+      "outcomeFa": "توانایی، امکان و ناتوانی را با مصدر بیان کنم.",
+      "grammarFa": "poder: puedo/puedes/puede/podemos/podéis/pueden + مصدر؛ no puedo venir؛ برای مهارت آموخته‌شده saber هم هست اما هدف صرف کامل آن نیست.",
+      "vocabularyFa": "poder=توانستن؛ leer=خواندن؛ venir=آمدن؛ nadar=شنا کردن",
+      "outOfScopeAndErrorFa": "Puedo nadar در موقعیت امکان معتبر است؛ آن را تنها ترجمهٔ همهٔ «بلدم»ها ندان. فعل پس از poder دوباره صرف نمی‌شود.",
+      "pronunciationFa": "تکیهٔ فعل‌ها و تمایز hablo/habla/hablamos؛ پایان فعل حامل شخص است. vosotros در اسپانیا، ustedes با صرف سوم‌شخص جمع؛ صدا با مثال معتبر بررسی شود.",
+      "productionFa": "دو کار ممکن و یک کار ناممکن امروز و یک درخواست کمک بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Puedes venir hoy?",
+          "fa": "امروز می‌توانی بیایی؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, hoy no puedo.",
+          "fa": "نه، امروز نمی‌توانم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Puedes venir mañana?",
+          "fa": "فردا می‌توانی بیایی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, mañana puedo.",
+          "fa": "بله، فردا می‌توانم."
+        }
+      ],
+      "listening": {
+        "passage": "Ben puede venir. Ana no puede venir hoy.",
+        "questionFa": "چه کسی امروز نمی‌تواند بیاید؟",
+        "answer": "Ana"
+      },
+      "reading": {
+        "passage": "Podemos estudiar juntos. Puedes venir a las diez.",
+        "questionFa": "چه ساعتی می‌توانی بیایی؟",
+        "answer": "a las diez"
+      },
+      "transferToIds": [
+        "es-a1-dates-and-time",
+        "es-a1-suggestions",
+        "es-a1-polite-requests"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-wants-needs بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-dates-and-time",
+      "proposedIndex": 23,
+      "module": 4,
+      "preA1Ids": [
+        "es-pre-19",
+        "es-pre-20"
+      ],
+      "prerequisiteIds": [
+        "es-a1-numbers-age",
+        "es-a1-ability"
+      ],
+      "outcomeFa": "ساعت، روز و تاریخ ساده را برای قرار بفهمم و بگویم.",
+      "grammarFa": "Es la una / Son las dos؛ a la una / a las dos؛ y media؛ el dos de mayo؛ روزهای ماه معمولاً عدد اصلی؛ primero برای روز اول در گونه‌ها پذیرفته است.",
+      "vocabularyFa": "hora=ساعت؛ día=روز؛ mayo=مه؛ mediodía=ظهر",
+      "outOfScopeAndErrorFa": "قواعد premier فرانسوی کپی نشوند؛ ساعت گفتن با ساعت قرار فرق دارد. صورت 02/05 در این تمرین دوم مه است.",
+      "pronunciationFa": "تشخیص روز، ساعت و عدد؛ es la una در برابر son las dos؛ ریتم de … a … و ساعت ۲۴ساعته در تابلو.",
+      "productionFa": "دو ساعت را بخوان و یک قرار با روز، تاریخ و ساعت خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué hora es?",
+          "fa": "ساعت چند است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Son las nueve y media.",
+          "fa": "ساعت نه‌ونیم است."
+        },
+        {
+          "role": "partner",
+          "es": "¿A qué hora empieza el curso?",
+          "fa": "کلاس چه ساعتی شروع می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "es": "A las diez.",
+          "fa": "ساعت ده."
+        }
+      ],
+      "listening": {
+        "passage": "Es la una. El curso empieza a las dos.",
+        "questionFa": "کلاس چه ساعتی شروع می‌شود؟",
+        "answer": "a las dos"
+      },
+      "reading": {
+        "passage": "Curso: lunes 02/05, 09:30.",
+        "questionFa": "ساعت شروع کلاس در تابلو چیست؟",
+        "answer": "09:30"
+      },
+      "transferToIds": [
+        "es-a1-forms-information",
+        "es-a1-metro-directions",
+        "es-a1-doctor-symptoms"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-numbers-age، es-a1-ability بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-forms-information",
+      "proposedIndex": 24,
+      "module": 4,
+      "preA1Ids": [
+        "es-pre-2",
+        "es-pre-16"
+      ],
+      "prerequisiteIds": [
+        "es-a1-dates-and-time",
+        "es-a1-asking-help"
+      ],
+      "outcomeFa": "نام، نام خانوادگی و اطلاعات سادهٔ یک فرم را تشخیص بدهم.",
+      "grammarFa": "nombre در برابر apellido/apellidos؛ dirección، ciudad، fecha de nacimiento؛ ¿Cuál es su …? در فرم رسمی.",
+      "vocabularyFa": "nombre=نام؛ apellidos=نام‌های خانوادگی؛ dirección=نشانی؛ fecha de nacimiento=تاریخ تولد",
+      "outOfScopeAndErrorFa": "همه الزاماً یک یا دو نام خانوادگی ندارند؛ فرم تمرینی اطلاعات حساس نمی‌خواهد. tú و su رسمی در یک فرم قاطی نشوند.",
+      "pronunciationFa": "تشخیص روز، ساعت و عدد؛ es la una در برابر son las dos؛ ریتم de … a … و ساعت ۲۴ساعته در تابلو.",
+      "productionFa": "فرمی خیالی با نام، نام خانوادگی، شهر و یک تاریخ پر کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Cuál es su nombre?",
+          "fa": "نام شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Mi nombre es Ana.",
+          "fa": "نام من آنا است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y su apellido?",
+          "fa": "و نام خانوادگی شما؟"
+        },
+        {
+          "role": "learner",
+          "es": "Martín.",
+          "fa": "مارتین."
+        }
+      ],
+      "listening": {
+        "passage": "Mi nombre es Ben. Mi apellido es García.",
+        "questionFa": "نام خانوادگی چیست؟",
+        "answer": "García"
+      },
+      "reading": {
+        "passage": "Nombre: Sara. Apellido: Martín. Ciudad: Toledo.",
+        "questionFa": "شهر نوشته‌شده چیست؟",
+        "answer": "Toledo"
+      },
+      "transferToIds": [
+        "es-a1-daily-routine",
+        "es-a1-hotel-stay"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-dates-and-time، es-a1-asking-help بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-daily-routine",
+      "proposedIndex": 25,
+      "module": 4,
+      "preA1Ids": [
+        "es-pre-19",
+        "es-pre-20"
+      ],
+      "prerequisiteIds": [
+        "es-a1-forms-information",
+        "es-a1-present-tense"
+      ],
+      "outcomeFa": "چند کار روزانه را با ساعت در ترتیب روشن بیان کنم.",
+      "grammarFa": "me levanto / te levantas و me acuesto به‌صورت محدود؛ desayuno؛ por la mañana / por la tarde / por la noche؛ después.",
+      "vocabularyFa": "levantarse=بلند شدن؛ desayunar=صبحانه خوردن؛ acostarse=خوابیدن؛ después=بعد",
+      "outOfScopeAndErrorFa": "ضمایر بازتابی me/te حذف نشوند؛ صرف همهٔ افعال بازتابی/تغییرریشه‌ای لازم نیست. ساعت الگو، عادت همگانی نیست.",
+      "pronunciationFa": "تشخیص روز، ساعت و عدد؛ es la una در برابر son las dos؛ ریتم de … a … و ساعت ۲۴ساعته در تابلو.",
+      "productionFa": "روزی خیالی را با چهار کار و دو ساعت توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿A qué hora te levantas?",
+          "fa": "چه ساعتی بلند می‌شوی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Me levanto a las siete.",
+          "fa": "ساعت هفت بلند می‌شوم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y después?",
+          "fa": "و بعد؟"
+        },
+        {
+          "role": "learner",
+          "es": "Desayuno y voy al curso.",
+          "fa": "صبحانه می‌خورم و به کلاس می‌روم."
+        }
+      ],
+      "listening": {
+        "passage": "Me levanto a las seis. Desayuno a las seis y media.",
+        "questionFa": "صبحانه چه ساعتی است؟",
+        "answer": "06:30"
+      },
+      "reading": {
+        "passage": "Por la mañana trabajo. Por la noche estudio.",
+        "questionFa": "نویسنده چه زمانی درس می‌خواند؟",
+        "answer": "por la noche"
+      },
+      "transferToIds": [
+        "es-a1-weekly-schedule"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-forms-information، es-a1-present-tense بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-weekly-schedule",
+      "proposedIndex": 26,
+      "module": 4,
+      "preA1Ids": [
+        "es-pre-20"
+      ],
+      "prerequisiteIds": [
+        "es-a1-daily-routine"
+      ],
+      "outcomeFa": "برنامهٔ هفتگی و بازهٔ زمانی را بیان کنم.",
+      "grammarFa": "el lunes یک دوشنبه؛ los lunes دوشنبه‌ها؛ de nueve a once؛ روزهای هفته با حرف کوچک؛ estoy libre.",
+      "vocabularyFa": "lunes=دوشنبه؛ miércoles=چهارشنبه؛ viernes=جمعه؛ libre=آزاد",
+      "outOfScopeAndErrorFa": "el/los در روزها معنی می‌سازند؛ ساعتِ شروع را به‌جای پایان نخوان. برنامه‌ها خیالی و قابل تغییرند.",
+      "pronunciationFa": "تشخیص روز، ساعت و عدد؛ es la una در برابر son las dos؛ ریتم de … a … و ساعت ۲۴ساعته در تابلو.",
+      "productionFa": "سه روز هفته و یک بازهٔ کار/کلاس بنویس؛ یک زمان آزاد مشخص کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Trabajas los lunes?",
+          "fa": "دوشنبه‌ها کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, de nueve a una.",
+          "fa": "بله، از نه تا یک."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y el martes?",
+          "fa": "و سه‌شنبه؟"
+        },
+        {
+          "role": "learner",
+          "es": "El martes estoy libre.",
+          "fa": "سه‌شنبه آزاد هستم."
+        }
+      ],
+      "listening": {
+        "passage": "Trabajo los martes. Este viernes estoy libre.",
+        "questionFa": "این هفته کدام روز وقت آزاد دارد؟",
+        "answer": "viernes"
+      },
+      "reading": {
+        "passage": "Curso de español: miércoles, de 9:00 a 11:00.",
+        "questionFa": "کلاس چه ساعتی تمام می‌شود؟",
+        "answer": "11:00"
+      },
+      "transferToIds": [
+        "es-a1-work-study"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-daily-routine بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-work-study",
+      "proposedIndex": 27,
+      "module": 4,
+      "preA1Ids": [
+        "es-pre-14",
+        "es-pre-19"
+      ],
+      "prerequisiteIds": [
+        "es-a1-weekly-schedule"
+      ],
+      "outcomeFa": "دربارهٔ کلاس، کار و شروع/پایان فعالیت سؤال کنم.",
+      "grammarFa": "empieza/termina در پیام کوتاه؛ tengo que + مصدر برای الزام؛ tenemos una pausa؛ سؤال ساعت بازیابی شود.",
+      "vocabularyFa": "curso=کلاس؛ reunión=جلسه؛ pausa=استراحت؛ terminar=تمام شدن",
+      "outOfScopeAndErrorFa": "tengo que با tengo un libro فرق دارد؛ مصدر را صرف نکن. هدف اینجا محیط کلاس/کار است، نه همهٔ شغل‌ها.",
+      "pronunciationFa": "تشخیص روز، ساعت و عدد؛ es la una در برابر son las dos؛ ریتم de … a … و ساعت ۲۴ساعته در تابلو.",
+      "productionFa": "دو جمله دربارهٔ کار/کلاس و یک سؤال زمان جلسه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿A qué hora empieza el curso?",
+          "fa": "کلاس چه ساعتی شروع می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "es": "A las nueve.",
+          "fa": "ساعت نه."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y a qué hora termina?",
+          "fa": "و چه ساعتی تمام می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "es": "A las once. Después tengo que trabajar.",
+          "fa": "ساعت یازده. بعد باید کار کنم."
+        }
+      ],
+      "listening": {
+        "passage": "Hoy tengo que estudiar. El curso termina a las doce.",
+        "questionFa": "کلاس چه ساعتی تمام می‌شود؟",
+        "answer": "a las doce"
+      },
+      "reading": {
+        "passage": "Reunión: 10:00. Pausa: 11:00.",
+        "questionFa": "استراحت چه ساعتی است؟",
+        "answer": "11:00"
+      },
+      "transferToIds": [
+        "es-a1-past-events"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-weekly-schedule بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-past-events",
+      "proposedIndex": 28,
+      "module": 4,
+      "preA1Ids": [
+        "es-pre-19",
+        "es-pre-20"
+      ],
+      "prerequisiteIds": [
+        "es-a1-work-study",
+        "es-a1-positive-negative-questions"
+      ],
+      "outcomeFa": "کارهای همین امروز و تغییر یک برنامه را با زمان حال روشن کنم.",
+      "grammarFa": "شناسهٔ قدیمی past-events حفظ می‌شود، اما محتوای واقعی این درس حال است: hoy trabajo / hoy no estudio؛ en cambio در این سطح اجباری نیست.",
+      "vocabularyFa": "hoy=امروز؛ ahora=اکنون؛ en casa=در خانه؛ por la tarde=عصر",
+      "outOfScopeAndErrorFa": "از نام فنی درس، زمان گذشته استنباط نشود. pretérito perfecto/indefinido و contraste زمان‌ها در این درس هدف نیستند؛ عنوان فعلی «کارهای امروز» حفظ شود.",
+      "pronunciationFa": "تشخیص روز، ساعت و عدد؛ es la una در برابر son las dos؛ ریتم de … a … و ساعت ۲۴ساعته در تابلو.",
+      "productionFa": "سه کار امروز را بنویس؛ یک کار را منفی و یک زمان آزاد برای امروز مشخص کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Trabajas hoy, Ben?",
+          "fa": "بن، امروز کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, trabajo por la mañana.",
+          "fa": "بله، صبح کار می‌کنم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Estudias por la tarde?",
+          "fa": "عصر درس می‌خوانی؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, hoy estoy libre por la tarde.",
+          "fa": "نه، امروز عصر آزاد هستم."
+        }
+      ],
+      "listening": {
+        "passage": "Hoy trabajo en casa. Por la tarde estudio español.",
+        "questionFa": "گوینده امروز کجا کار می‌کند؟",
+        "answer": "en casa"
+      },
+      "reading": {
+        "passage": "Hoy: curso a las diez. No trabajo. Estoy libre a las cinco.",
+        "questionFa": "چه ساعتی وقت آزاد دارد؟",
+        "answer": "a las cinco"
+      },
+      "transferToIds": [
+        "es-a1-instructions",
+        "es-a1-reasons"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-work-study، es-a1-positive-negative-questions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-instructions",
+      "proposedIndex": 29,
+      "module": 4,
+      "preA1Ids": [
+        "es-pre-14",
+        "es-pre-4"
+      ],
+      "prerequisiteIds": [
+        "es-a1-past-events",
+        "es-a1-asking-help"
+      ],
+      "outcomeFa": "دستور سادهٔ کلاسی را بفهمم و اجرای آن را تأیید کنم.",
+      "grammarFa": "فرمول‌های رسمی usted: abra/cierre/lea/escriba/escuche/repita؛ مصدر پس از puede؛ تفسیر امر در موقعیت.",
+      "vocabularyFa": "abrir=بازکردن؛ cerrar=بستن؛ leer=خواندن؛ escribir=نوشتن",
+      "outOfScopeAndErrorFa": "این قالب‌ها مجوز تدریس کامل subjuntivo نیستند. دستورهای tú مانند abre با usted در یک صحنه مخلوط نشوند.",
+      "pronunciationFa": "تشخیص روز، ساعت و عدد؛ es la una در برابر son las dos؛ ریتم de … a … و ساعت ۲۴ساعته در تابلو.",
+      "productionFa": "سه دستور کلاسی مؤدبانه و یک درخواست روشن‌سازی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Abra el libro, por favor.",
+          "fa": "لطفاً کتاب را باز کنید."
+        },
+        {
+          "role": "learner",
+          "es": "¿En qué página?",
+          "fa": "در کدام صفحه؟"
+        },
+        {
+          "role": "partner",
+          "es": "En la página dos. Lea el texto.",
+          "fa": "در صفحهٔ دو. متن را بخوانید."
+        },
+        {
+          "role": "learner",
+          "es": "De acuerdo.",
+          "fa": "بسیار خوب."
+        }
+      ],
+      "listening": {
+        "passage": "Escriba su nombre. Después lea el texto.",
+        "questionFa": "اولین کار چیست؟",
+        "answer": "نوشتن نام"
+      },
+      "reading": {
+        "passage": "Ejercicio 2: escuche y repita.",
+        "questionFa": "دو کار خواسته‌شده کدام‌اند؟",
+        "answer": "گوش‌کردن و تکرارکردن"
+      },
+      "transferToIds": [
+        "es-a1-location",
+        "es-a1-directions"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-past-events، es-a1-asking-help بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-location",
+      "proposedIndex": 30,
+      "module": 5,
+      "preA1Ids": [
+        "es-pre-17",
+        "es-pre-16"
+      ],
+      "prerequisiteIds": [
+        "es-a1-instructions",
+        "es-a1-feelings"
+      ],
+      "outcomeFa": "جای شخص یا شیء مشخص را بپرسم و بگویم.",
+      "grammarFa": "está/están برای مکان مشخص؛ ¿Dónde está el libro?؛ aquí/allí؛ مکان اشیا با ser معرفی نشود.",
+      "vocabularyFa": "habitación=اتاق؛ cocina=آشپزخانه؛ baño=حمام/دستشویی؛ aquí=اینجا",
+      "outOfScopeAndErrorFa": "برای مکان رخدادها استثنای ser وجود دارد، اما هدف این درس مکان اشخاص و اشیاست؛ قاعدهٔ «مکان همیشه estar» مطلق نشود.",
+      "pronunciationFa": "estar، hay و نشانه‌های مکان در عبارت کامل شنیده شوند؛ نقشه باید با گفته هماهنگ باشد.",
+      "productionFa": "جای سه چیز مشخص را بنویس و دو سؤال مکان بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Dónde está el libro?",
+          "fa": "کتاب کجاست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Está en la habitación.",
+          "fa": "در اتاق است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y la bolsa?",
+          "fa": "و کیف؟"
+        },
+        {
+          "role": "learner",
+          "es": "Está en la cocina.",
+          "fa": "در آشپزخانه است."
+        }
+      ],
+      "listening": {
+        "passage": "La bolsa está en la cocina. El libro está en la habitación.",
+        "questionFa": "کیف کجاست؟",
+        "answer": "en la cocina"
+      },
+      "reading": {
+        "passage": "El baño está aquí. La cocina está allí.",
+        "questionFa": "چه مکانی اینجا است؟",
+        "answer": "el baño"
+      },
+      "transferToIds": [
+        "es-a1-prepositions"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-instructions، es-a1-feelings بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-prepositions",
+      "proposedIndex": 31,
+      "module": 5,
+      "preA1Ids": [
+        "es-pre-17"
+      ],
+      "prerequisiteIds": [
+        "es-a1-location"
+      ],
+      "outcomeFa": "رابطهٔ مکانی دو وسیله را دقیق بیان کنم.",
+      "grammarFa": "encima de/debajo de/dentro de/delante de/detrás de/al lado de؛ de+el=del؛ a+el=al در عبارت‌های لازم.",
+      "vocabularyFa": "encima=روی؛ debajo=زیر؛ detrás=پشت؛ al lado=کنار",
+      "outOfScopeAndErrorFa": "de la به del تبدیل نمی‌شود. جای وسیله با نقشه/تصویر یکی باشد؛ اینجا مقصد حرکت هدف نیست.",
+      "pronunciationFa": "estar، hay و نشانه‌های مکان در عبارت کامل شنیده شوند؛ نقشه باید با گفته هماهنگ باشد.",
+      "productionFa": "چهار رابطهٔ مکانی برای یک میز، کیف، کتاب و صندلی فرضی بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Dónde está el bolígrafo?",
+          "fa": "خودکار کجاست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Está encima del libro.",
+          "fa": "روی کتاب است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y la bolsa?",
+          "fa": "و کیف؟"
+        },
+        {
+          "role": "learner",
+          "es": "Está debajo de la mesa.",
+          "fa": "زیر میز است."
+        }
+      ],
+      "listening": {
+        "passage": "El bolígrafo está al lado del libro. La bolsa está detrás de la silla.",
+        "questionFa": "کیف کجای صندلی است؟",
+        "answer": "detrás de la silla"
+      },
+      "reading": {
+        "passage": "El cuaderno está dentro de la bolsa. La lámpara está encima de la mesa.",
+        "questionFa": "دفتر کجاست؟",
+        "answer": "dentro de la bolsa"
+      },
+      "transferToIds": [
+        "es-a1-home-furniture",
+        "es-a1-supermarket",
+        "es-a1-directions"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-location بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-home-furniture",
+      "proposedIndex": 32,
+      "module": 5,
+      "preA1Ids": [
+        "es-pre-16",
+        "es-pre-17"
+      ],
+      "prerequisiteIds": [
+        "es-a1-prepositions"
+      ],
+      "outcomeFa": "وجود وسایل و جای وسیلهٔ مشخص را متمایز توصیف کنم.",
+      "grammarFa": "hay برای وجود: hay una cama؛ no hay mesa؛ la cama está … برای شیء مشخص؛ hay در این کاربرد مفرد/جمع تغییر نمی‌کند.",
+      "vocabularyFa": "cama=تخت؛ lámpara=چراغ؛ ventana=پنجره؛ salón=نشیمن",
+      "outOfScopeAndErrorFa": "Hay la cama در معرفی معمولِ این درس به‌جای la cama está ننشیند؛ hay با tenerِ مالکیت یکی نیست.",
+      "pronunciationFa": "estar، hay و نشانه‌های مکان در عبارت کامل شنیده شوند؛ نقشه باید با گفته هماهنگ باشد.",
+      "productionFa": "اتاقی خیالی را با دو hay، یک no hay و دو مکانِ مشخص توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué hay en tu habitación?",
+          "fa": "در اتاقت چه هست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Hay una cama y una mesa.",
+          "fa": "یک تخت و یک میز هست."
+        },
+        {
+          "role": "partner",
+          "es": "¿Dónde está la cama?",
+          "fa": "تخت کجاست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Está al lado de la ventana.",
+          "fa": "کنار پنجره است."
+        }
+      ],
+      "listening": {
+        "passage": "En el salón hay dos sillas, pero no hay mesa.",
+        "questionFa": "چه چیزی در نشیمن نیست؟",
+        "answer": "mesa"
+      },
+      "reading": {
+        "passage": "La habitación es pequeña. La cama está al lado de la puerta.",
+        "questionFa": "تخت کنار چیست؟",
+        "answer": "la puerta"
+      },
+      "transferToIds": [
+        "es-a1-ordering-food"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-prepositions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-ordering-food",
+      "proposedIndex": 33,
+      "module": 6,
+      "preA1Ids": [
+        "es-pre-18",
+        "es-pre-9"
+      ],
+      "prerequisiteIds": [
+        "es-a1-home-furniture",
+        "es-a1-wants-needs"
+      ],
+      "outcomeFa": "خوراک یا نوشیدنی ساده با مقدار و درخواست روشن سفارش بدهم.",
+      "grammarFa": "Quiero / Quisiera / Para mí در قالب مؤدبانه؛ pan/agua بدون partitif فرانسوی؛ un vaso de agua؛ el agua fría، اسم هنوز مؤنث است.",
+      "vocabularyFa": "pan=نان؛ sopa=سوپ؛ azúcar=شکر؛ leche=شیر؛ vaso=لیوان",
+      "outOfScopeAndErrorFa": "دستور ایمنی آلرژی یا تضمین گیاه‌خواری صادر نشود؛ con/sin را روشن بگو. el agua را نشانهٔ مذکر بودن آب ندان.",
+      "pronunciationFa": "عدد قیمت، مقدار و کالا جدا تشخیص داده شوند؛ b/v معمولاً دو واج متمایز نیستند. /θ/ رایج اسپانیا در برابر /s/ دیگر مناطق برتری‌گذاری نشود.",
+      "productionFa": "یک سفارش شامل خوراک، نوشیدنی و یک درخواست con/sin بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué desea tomar?",
+          "fa": "چه میل دارید؟"
+        },
+        {
+          "role": "learner",
+          "es": "Una sopa y un té, por favor.",
+          "fa": "یک سوپ و یک چای، لطفاً."
+        },
+        {
+          "role": "partner",
+          "es": "¿El té con azúcar?",
+          "fa": "چای با شکر؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, sin azúcar, gracias.",
+          "fa": "نه، بدون شکر، ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Quisiera pan y un té sin azúcar.",
+        "questionFa": "چه چیزی در چای نمی‌خواهد؟",
+        "answer": "azúcar"
+      },
+      "reading": {
+        "passage": "Menú: sopa 5 €, pan 2 €, agua 1 €.",
+        "questionFa": "سوپ چقدر قیمت دارد؟",
+        "answer": "5 €"
+      },
+      "transferToIds": [
+        "es-a1-cafe"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-home-furniture، es-a1-wants-needs بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-cafe",
+      "proposedIndex": 34,
+      "module": 6,
+      "preA1Ids": [
+        "es-pre-18",
+        "es-pre-4"
+      ],
+      "prerequisiteIds": [
+        "es-a1-ordering-food"
+      ],
+      "outcomeFa": "سفارش، درخواست صورت‌حساب و پرداخت را به نتیجه برسانم.",
+      "grammarFa": "La cuenta, por favor؛ ¿Puedo pagar?؛ juntos/por separado؛ son cinco euros؛ usted در نقش مشتری/کارمند ثابت.",
+      "vocabularyFa": "cuenta=صورت‌حساب؛ pagar=پرداخت؛ juntos=با هم؛ por separado=جدا",
+      "outOfScopeAndErrorFa": "تحویل سفارش پس از رد همان سفارش رخ ندهد؛ صحنه بسته شود. قیمت‌ها خیالی‌اند و انعام هدف اجباری نیست.",
+      "pronunciationFa": "عدد قیمت، مقدار و کالا جدا تشخیص داده شوند؛ b/v معمولاً دو واج متمایز نیستند. /θ/ رایج اسپانیا در برابر /s/ دیگر مناطق برتری‌گذاری نشود.",
+      "productionFa": "یک سفارش کوتاه و دو نوبت درخواست صورت‌حساب/پرداخت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Buenos días. ¿Qué desea?",
+          "fa": "صبح بخیر. چه میل دارید؟"
+        },
+        {
+          "role": "learner",
+          "es": "Un café, por favor.",
+          "fa": "یک قهوه، لطفاً."
+        },
+        {
+          "role": "partner",
+          "es": "Aquí tiene su café.",
+          "fa": "بفرمایید قهوهٔ شما."
+        },
+        {
+          "role": "learner",
+          "es": "Gracias. La cuenta, por favor.",
+          "fa": "ممنون. صورت‌حساب، لطفاً."
+        }
+      ],
+      "listening": {
+        "passage": "Un té, por favor. Quiero pagar ahora.",
+        "questionFa": "مشتری چه سفارش داده است؟",
+        "answer": "un té"
+      },
+      "reading": {
+        "passage": "Café: 3 €. Té: 2 €. Agua: 1 €.",
+        "questionFa": "ارزان‌ترین نوشیدنی کدام است؟",
+        "answer": "agua"
+      },
+      "transferToIds": [
+        "es-a1-shopping-payment"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-ordering-food بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-shopping-payment",
+      "proposedIndex": 35,
+      "module": 6,
+      "preA1Ids": [
+        "es-pre-4",
+        "es-pre-5"
+      ],
+      "prerequisiteIds": [
+        "es-a1-cafe",
+        "es-a1-numbers-age"
+      ],
+      "outcomeFa": "قیمت را بپرسم، کالا انتخاب و روش پرداخت را تأیید کنم.",
+      "grammarFa": "¿Cuánto cuesta? / cuesta؛ me llevo در قالب خرید؛ en efectivo / con tarjeta؛ ¿Puedo pagar …?؛ usted در صحنه.",
+      "vocabularyFa": "precio=قیمت؛ euro=یورو؛ efectivo=نقد؛ tarjeta=کارت",
+      "outOfScopeAndErrorFa": "نقد و کارت از یک تابلو هم‌زمان برداشت نشوند؛ قیمت عددی با پاسخ درست هماهنگ باشد. خرید واقعی انجام نمی‌شود.",
+      "pronunciationFa": "عدد قیمت، مقدار و کالا جدا تشخیص داده شوند؛ b/v معمولاً دو واج متمایز نیستند. /θ/ رایج اسپانیا در برابر /s/ دیگر مناطق برتری‌گذاری نشود.",
+      "productionFa": "گفت‌وگوی قیمت، انتخاب کالا و یک روش پرداخت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Cuánto cuesta este cuaderno?",
+          "fa": "این دفتر چقدر قیمت دارد؟"
+        },
+        {
+          "role": "learner",
+          "es": "Tres euros.",
+          "fa": "سه یورو."
+        },
+        {
+          "role": "partner",
+          "es": "¿Puedo pagar con tarjeta?",
+          "fa": "می‌توانم با کارت پرداخت کنم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, claro.",
+          "fa": "بله، حتماً."
+        }
+      ],
+      "listening": {
+        "passage": "El libro cuesta cinco euros. Puede pagar con tarjeta.",
+        "questionFa": "قیمت کتاب چقدر است؟",
+        "answer": "5 €"
+      },
+      "reading": {
+        "passage": "Bolígrafo: 2 €. Solo pago en efectivo.",
+        "questionFa": "کدام روش پرداخت پذیرفته است؟",
+        "answer": "en efectivo"
+      },
+      "transferToIds": [
+        "es-a1-supermarket",
+        "es-a1-travel-tickets"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-cafe، es-a1-numbers-age بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-supermarket",
+      "proposedIndex": 36,
+      "module": 6,
+      "preA1Ids": [
+        "es-pre-9",
+        "es-pre-5"
+      ],
+      "prerequisiteIds": [
+        "es-a1-shopping-payment",
+        "es-a1-prepositions"
+      ],
+      "outcomeFa": "فهرست خرید، مقدار و جای کالا را بفهمم.",
+      "grammarFa": "un kilo de manzanas؛ una botella de agua؛ ¿Tiene …? خطاب رسمی؛ no tenemos؛ شمار و مقدار از هم جدا.",
+      "vocabularyFa": "manzana=سیب؛ botella=بطری؛ kilo=کیلو؛ huevos=تخم‌مرغ‌ها",
+      "outOfScopeAndErrorFa": "اسپانیایی بعد از مقدار de دارد، اما قاعدهٔ نفی فرانسوی de اینجا وارد نمی‌شود. سبد تمرین قیمت واقعی نیست.",
+      "pronunciationFa": "عدد قیمت، مقدار و کالا جدا تشخیص داده شوند؛ b/v معمولاً دو واج متمایز نیستند. /θ/ رایج اسپانیا در برابر /s/ دیگر مناطق برتری‌گذاری نشود.",
+      "productionFa": "فهرست چهار قلم خرید با دو مقدار و یک پرسش مکان بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Dónde está la leche?",
+          "fa": "شیر کجاست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Al lado del pan.",
+          "fa": "کنار نان."
+        },
+        {
+          "role": "partner",
+          "es": "¿Tiene huevos?",
+          "fa": "تخم‌مرغ دارید؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, hoy no tenemos.",
+          "fa": "نه، امروز نداریم."
+        }
+      ],
+      "listening": {
+        "passage": "Un kilo de manzanas cuesta tres euros. La leche está al lado del pan.",
+        "questionFa": "یک کیلو سیب چند یورو است؟",
+        "answer": "3 €"
+      },
+      "reading": {
+        "passage": "Lista: tres manzanas, una botella de agua y pan.",
+        "questionFa": "چند سیب در فهرست است؟",
+        "answer": "tres"
+      },
+      "transferToIds": [
+        "es-a1-clothes-shopping"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-shopping-payment، es-a1-prepositions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-clothes-shopping",
+      "proposedIndex": 37,
+      "module": 6,
+      "preA1Ids": [
+        "es-pre-13",
+        "es-pre-12"
+      ],
+      "prerequisiteIds": [
+        "es-a1-supermarket",
+        "es-a1-colors"
+      ],
+      "outcomeFa": "لباس را با رنگ و سایز بخواهم و دربارهٔ پرو سؤال کنم.",
+      "grammarFa": "¿Tiene esta camisa en azul?؛ talla؛ ¿Puedo probármela? در قالب با مرجع camisa؛ me queda pequeña؛ صفت مؤنث.",
+      "vocabularyFa": "camisa=پیراهن؛ chaqueta=کاپشن؛ talla=سایز؛ probador=اتاق پرو",
+      "outOfScopeAndErrorFa": "تحلیل کامل ضمایر پی‌بستی اینجا لازم نیست؛ مرجع la روشن باشد. مقایسهٔ بزرگ‌تر در درس مقایسه می‌آید.",
+      "pronunciationFa": "عدد قیمت، مقدار و کالا جدا تشخیص داده شوند؛ b/v معمولاً دو واج متمایز نیستند. /θ/ رایج اسپانیا در برابر /s/ دیگر مناطق برتری‌گذاری نشود.",
+      "productionFa": "یک درخواست رنگ/سایز، اجازهٔ پرو و نتیجهٔ اندازه را بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Busco una camisa azul.",
+          "fa": "دنبال یک پیراهن آبی می‌گردم."
+        },
+        {
+          "role": "learner",
+          "es": "¿Qué talla necesita?",
+          "fa": "چه سایزی لازم دارید؟"
+        },
+        {
+          "role": "partner",
+          "es": "La M. ¿Puedo probármela?",
+          "fa": "مدیوم. می‌توانم آن را پرو کنم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, el probador está allí.",
+          "fa": "بله، اتاق پرو آنجا است."
+        }
+      ],
+      "listening": {
+        "passage": "Busco una chaqueta en talla L, en azul.",
+        "questionFa": "سایز موردنیاز چیست؟",
+        "answer": "L"
+      },
+      "reading": {
+        "passage": "Camisa: roja, talla S, 20 €.",
+        "questionFa": "رنگ پیراهن چیست؟",
+        "answer": "roja"
+      },
+      "transferToIds": [
+        "es-a1-preferences"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-supermarket، es-a1-colors بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-preferences",
+      "proposedIndex": 38,
+      "module": 6,
+      "preA1Ids": [
+        "es-pre-3",
+        "es-pre-9"
+      ],
+      "prerequisiteIds": [
+        "es-a1-clothes-shopping",
+        "es-a1-wants-needs"
+      ],
+      "outcomeFa": "علاقه و ترجیح خود را با دو گزینه بیان کنم.",
+      "grammarFa": "me gusta + مفرد/مصدر؛ me gustan + جمع؛ te gusta در سؤال؛ prefiero/prefieres برای ترجیح؛ اسم کلی معمولاً با حرف تعریف.",
+      "vocabularyFa": "preferir=ترجیح دادن؛ arroz=برنج؛ galleta=بیسکویت؛ café=قهوه",
+      "outOfScopeAndErrorFa": "me gustan los libros نه me gusta los libros. شمار با چیز موردعلاقه هماهنگ است، نه با yo؛ صرف همهٔ ضمایر gustar لازم نیست.",
+      "pronunciationFa": "عدد قیمت، مقدار و کالا جدا تشخیص داده شوند؛ b/v معمولاً دو واج متمایز نیستند. /θ/ رایج اسپانیا در برابر /s/ دیگر مناطق برتری‌گذاری نشود.",
+      "productionFa": "دو علاقه با مفرد/جمع و دو ترجیح میان گزینه‌ها بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Prefieres té o café?",
+          "fa": "چای را ترجیح می‌دهی یا قهوه؟"
+        },
+        {
+          "role": "learner",
+          "es": "Prefiero té. ¿Y tú?",
+          "fa": "چای را ترجیح می‌دهم. تو چطور؟"
+        },
+        {
+          "role": "partner",
+          "es": "A mí me gusta el café. ¿Te gustan las galletas?",
+          "fa": "من قهوه دوست دارم. بیسکویت‌ها را دوست داری؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, me gustan mucho.",
+          "fa": "بله، خیلی دوستشان دارم."
+        }
+      ],
+      "listening": {
+        "passage": "Prefiero café. No me gusta mucho el té.",
+        "questionFa": "گوینده چه چیزی را ترجیح می‌دهد؟",
+        "answer": "café"
+      },
+      "reading": {
+        "passage": "Ben: Me gusta el pan. Sara: Prefiero arroz.",
+        "questionFa": "سارا چه چیزی را ترجیح می‌دهد؟",
+        "answer": "arroz"
+      },
+      "transferToIds": [
+        "es-a1-comparisons",
+        "es-a1-leisure"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-clothes-shopping، es-a1-wants-needs بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-comparisons",
+      "proposedIndex": 39,
+      "module": 6,
+      "preA1Ids": [
+        "es-pre-12"
+      ],
+      "prerequisiteIds": [
+        "es-a1-preferences",
+        "es-a1-descriptions"
+      ],
+      "outcomeFa": "دو گزینهٔ آشنا را با صفت مقایسه کنم.",
+      "grammarFa": "más/menos + صفت + que؛ más barato que؛ صفت با اسم هماهنگ؛ mejor/peor و عالی فعلاً اجباری نیستند.",
+      "vocabularyFa": "barato=ارزان؛ caro=گران؛ más=بیشتر؛ menos=کمتر",
+      "outOfScopeAndErrorFa": "más با اَکسان است. grande را مکانیکی به más grande در هر کاربرد تعمیم نده؛ فقط اندازهٔ اشیای این بانک.",
+      "pronunciationFa": "عدد قیمت، مقدار و کالا جدا تشخیص داده شوند؛ b/v معمولاً دو واج متمایز نیستند. /θ/ رایج اسپانیا در برابر /s/ دیگر مناطق برتری‌گذاری نشود.",
+      "productionFa": "دو کالا و دو اتاق فرضی را با قیمت یا اندازه مقایسه کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué libro es más barato?",
+          "fa": "کدام کتاب ارزان‌تر است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Este es más barato que ese.",
+          "fa": "این از آن ارزان‌تر است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y esta bolsa?",
+          "fa": "و این کیف؟"
+        },
+        {
+          "role": "learner",
+          "es": "Es más pequeña que mi bolsa.",
+          "fa": "از کیف من کوچک‌تر است."
+        }
+      ],
+      "listening": {
+        "passage": "El libro cuesta diez euros. El cuaderno cuesta dos euros. El cuaderno es más barato.",
+        "questionFa": "کدام ارزان‌تر است؟",
+        "answer": "el cuaderno"
+      },
+      "reading": {
+        "passage": "La habitación de Toledo es más pequeña que la habitación de Madrid.",
+        "questionFa": "کدام اتاق کوچک‌تر است؟",
+        "answer": "la habitación de Toledo"
+      },
+      "transferToIds": [
+        "es-a1-leisure"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-preferences، es-a1-descriptions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-leisure",
+      "proposedIndex": 40,
+      "module": 7,
+      "preA1Ids": [
+        "es-pre-3"
+      ],
+      "prerequisiteIds": [
+        "es-a1-comparisons",
+        "es-a1-preferences"
+      ],
+      "outcomeFa": "از فعالیت موردعلاقه و اوقات فراغت بگویم.",
+      "grammarFa": "me gusta + مصدر؛ برای شخص سوم A Ben le gusta leer در قالب؛ los fines de semana؛ escuchar música بدون de partitif فرانسوی؛ me gusta pasear.",
+      "vocabularyFa": "música=موسیقی؛ pasear=قدم‌زدن؛ nadar=شنا؛ dibujar=نقاشی‌کشیدن",
+      "outOfScopeAndErrorFa": "علاقه را با توانایی یکسان ندان؛ متن فهم شکل‌های تازهٔ فعالیت‌ها را اول آموزش بدهد.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌های کوتاه؛ que بدون اَکسان در پیوندها با qué پرسشی فرق نوشتاری دارد.",
+      "productionFa": "سه علاقه و یک سؤال دربارهٔ آخر هفته بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué te gusta hacer?",
+          "fa": "دوست داری چه کار کنی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Me gusta leer y escuchar música.",
+          "fa": "مطالعه و گوش‌دادن به موسیقی را دوست دارم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Te gusta pasear?",
+          "fa": "قدم‌زدن را دوست داری؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, paseo los domingos.",
+          "fa": "بله، یکشنبه‌ها قدم می‌زنم."
+        }
+      ],
+      "listening": {
+        "passage": "Me gusta escuchar música. A Ben le gusta leer.",
+        "questionFa": "بن چه کاری را دوست دارد؟",
+        "answer": "leer"
+      },
+      "reading": {
+        "passage": "Ana pasea. Sara dibuja los domingos.",
+        "questionFa": "چه کسی یکشنبه‌ها نقاشی می‌کند؟",
+        "answer": "Sara"
+      },
+      "transferToIds": [
+        "es-a1-weather",
+        "es-a1-social-chat"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-comparisons، es-a1-preferences بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-weather",
+      "proposedIndex": 41,
+      "module": 7,
+      "preA1Ids": [
+        "es-pre-7"
+      ],
+      "prerequisiteIds": [
+        "es-a1-leisure",
+        "es-a1-feelings"
+      ],
+      "outcomeFa": "هوای امروز و فصل را ساده توصیف کنم.",
+      "grammarFa": "hace calor/frío؛ hace sol؛ llueve؛ está nublado در قالب؛ اینجا آیندهٔ هوا هدف نیست.",
+      "vocabularyFa": "calor=گرما؛ frío=سرما؛ lluvia=باران؛ verano=تابستان؛ invierno=زمستان",
+      "outOfScopeAndErrorFa": "Tengo calor احساس شخص است و hace calor هوا؛ estoy frío را به‌جای هوا به کار نبر. پیش‌بینی واقعی ارائه نمی‌شود.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌های کوتاه؛ que بدون اَکسان در پیوندها با qué پرسشی فرق نوشتاری دارد.",
+      "productionFa": "هوای دو روز فرضی و یک فصل را در سه جمله توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué tiempo hace hoy?",
+          "fa": "امروز هوا چطور است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Hace frío.",
+          "fa": "هوا سرد است."
+        },
+        {
+          "role": "partner",
+          "es": "¿Llueve?",
+          "fa": "باران می‌بارد؟"
+        },
+        {
+          "role": "learner",
+          "es": "No, hace sol.",
+          "fa": "نه، آفتابی است."
+        }
+      ],
+      "listening": {
+        "passage": "Hoy hace calor. No llueve.",
+        "questionFa": "دمای هوا چگونه توصیف شده است؟",
+        "answer": "calor"
+      },
+      "reading": {
+        "passage": "Lunes: lluvia. Martes: sol.",
+        "questionFa": "کدام روز بارانی است؟",
+        "answer": "lunes"
+      },
+      "transferToIds": [
+        "es-a1-connectors"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-leisure، es-a1-feelings بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-connectors",
+      "proposedIndex": 42,
+      "module": 7,
+      "preA1Ids": [
+        "es-pre-21"
+      ],
+      "prerequisiteIds": [
+        "es-a1-weather",
+        "es-a1-positive-negative-questions"
+      ],
+      "outcomeFa": "دو پیام کوتاه را با افزودن، تضاد یا انتخاب وصل کنم.",
+      "grammarFa": "y/pero/o؛ e قبل از صدای /i/ و u قبل از /o/ فقط در صورت نیاز نمونه، نه بار اجباری این بانک؛ tengo tiempo.",
+      "vocabularyFa": "y=و؛ pero=ولی؛ o=یا؛ tiempo=وقت/هوا طبق متن",
+      "outOfScopeAndErrorFa": "پیوندها جای معنی را نمی‌گیرند؛ گزینهٔ o با پرسش مکان dónde یکی نیست. porque در درس دلیل تحلیل می‌شود.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌های کوتاه؛ que بدون اَکسان در پیوندها با qué پرسشی فرق نوشتاری دارد.",
+      "productionFa": "سه جفت جمله با y، pero و o بساز؛ اطلاعاتشان سازگار باشد.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Quieres té o café?",
+          "fa": "چای می‌خواهی یا قهوه؟"
+        },
+        {
+          "role": "learner",
+          "es": "Quiero té, pero no tengo tiempo.",
+          "fa": "چای می‌خواهم، ولی وقت ندارم."
+        },
+        {
+          "role": "partner",
+          "es": "Yo tengo tiempo y estoy libre.",
+          "fa": "من وقت دارم و آزاد هستم."
+        },
+        {
+          "role": "learner",
+          "es": "Podemos tomar té mañana.",
+          "fa": "می‌توانیم فردا چای بنوشیم."
+        }
+      ],
+      "listening": {
+        "passage": "Tengo tiempo, pero Ben trabaja. Estudiamos juntos mañana.",
+        "questionFa": "چه زمانی با هم درس می‌خوانند؟",
+        "answer": "mañana"
+      },
+      "reading": {
+        "passage": "Me gusta leer, pero hoy no tengo tiempo.",
+        "questionFa": "نویسنده امروز چه چیزی ندارد؟",
+        "answer": "tiempo"
+      },
+      "transferToIds": [
+        "es-a1-future-plans",
+        "es-a1-reasons"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-weather، es-a1-positive-negative-questions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-future-plans",
+      "proposedIndex": 43,
+      "module": 7,
+      "preA1Ids": [
+        "es-pre-20"
+      ],
+      "prerequisiteIds": [
+        "es-a1-connectors",
+        "es-a1-present-tense"
+      ],
+      "outcomeFa": "برنامهٔ آیندهٔ نزدیک را با زمان روشن بگویم.",
+      "grammarFa": "ir a + مصدر: voy a estudiar / vamos a tomar؛ a حذف نشود؛ voy al curso رفتن به مکان است و voy a estudiar برنامهٔ فعالیت.",
+      "vocabularyFa": "mañana=فردا؛ esta noche=امشب؛ el sábado=شنبه؛ plan=برنامه",
+      "outOfScopeAndErrorFa": "صورت آیندهٔ ساده و همهٔ ارزش‌های ir a اجباری نیستند. voy a estudio غلط است؛ مصدر را نگه دار.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌های کوتاه؛ que بدون اَکسان در پیوندها با qué پرسشی فرق نوشتاری دارد.",
+      "productionFa": "سه برنامهٔ فردا/آخر هفته و یک سؤال برنامه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Qué vas a hacer mañana?",
+          "fa": "فردا چه کار خواهی کرد؟"
+        },
+        {
+          "role": "learner",
+          "es": "Voy a estudiar español.",
+          "fa": "قرار است اسپانیایی درس بخوانم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Vamos a estudiar juntos?",
+          "fa": "قرار است با هم درس بخوانیم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, a las diez.",
+          "fa": "بله، ساعت ده."
+        }
+      ],
+      "listening": {
+        "passage": "Mañana voy a trabajar. Esta noche voy a leer.",
+        "questionFa": "امشب چه کاری خواهد کرد؟",
+        "answer": "leer"
+      },
+      "reading": {
+        "passage": "El sábado vamos a tomar un café. El domingo voy a estudiar.",
+        "questionFa": "کدام روز قهوه می‌نوشند؟",
+        "answer": "sábado"
+      },
+      "transferToIds": [
+        "es-a1-invitations",
+        "es-a1-phone-messages"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-connectors، es-a1-present-tense بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-invitations",
+      "proposedIndex": 44,
+      "module": 7,
+      "preA1Ids": [
+        "es-pre-20",
+        "es-pre-3"
+      ],
+      "prerequisiteIds": [
+        "es-a1-future-plans"
+      ],
+      "outcomeFa": "دعوت را بپذیرم یا مؤدبانه رد و زمان جایگزین تعیین کنم.",
+      "grammarFa": "¿Quieres tomar …? / ¿Te apetece …? در قالب؛ lo siento، no puedo؛ ¿Te viene bien …?؛ تأیید روز و ساعت.",
+      "vocabularyFa": "invitar=دعوت کردن؛ lo siento=متأسفم؛ de acuerdo=موافقم؛ juntos=با هم",
+      "outOfScopeAndErrorFa": "نه گفتن مجاز است؛ دلیل خصوصی لازم نیست. زمان ردشده نباید در پایان زمان نهایی محسوب شود.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌های کوتاه؛ que بدون اَکسان در پیوندها با qué پرسشی فرق نوشتاری دارد.",
+      "productionFa": "یک دعوت، یک رد و یک توافق تازه با روز و ساعت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Quieres tomar un café mañana?",
+          "fa": "می‌خواهی فردا قهوه بنوشیم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Lo siento, mañana no puedo.",
+          "fa": "متأسفم، فردا نمی‌توانم."
+        },
+        {
+          "role": "partner",
+          "es": "¿Te viene bien el sábado?",
+          "fa": "شنبه برایت مناسب است؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, el sábado a las diez.",
+          "fa": "بله، شنبه ساعت ده."
+        }
+      ],
+      "listening": {
+        "passage": "El viernes no puedo. El domingo estoy libre para un café.",
+        "questionFa": "کدام روز برای قهوه آزاد است؟",
+        "answer": "domingo"
+      },
+      "reading": {
+        "passage": "Hola, Ben. ¿Nos vemos el lunes a las quince? Ana",
+        "questionFa": "ملاقات چه ساعتی پیشنهاد شده؟",
+        "answer": "15:00"
+      },
+      "transferToIds": [
+        "es-a1-suggestions",
+        "es-a1-connected-conversation"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-future-plans بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-suggestions",
+      "proposedIndex": 45,
+      "module": 7,
+      "preA1Ids": [
+        "es-pre-7"
+      ],
+      "prerequisiteIds": [
+        "es-a1-invitations",
+        "es-a1-ability"
+      ],
+      "outcomeFa": "پیشنهاد کار مشترک بدهم و پاسخ بدهم.",
+      "grammarFa": "Podemos + مصدر؛ ¿Vamos a …? در پیشنهاد؛ ¿Por qué no …? قالب؛ buena idea / hoy no puedo.",
+      "vocabularyFa": "parque=پارک؛ biblioteca=کتابخانه؛ cine=سینما؛ idea=فکر",
+      "outOfScopeAndErrorFa": "این درس subjuntivo پیشنهاد نیست؛ vamos در پیشنهاد با توافق و زمینه روشن شود، نه ترجمهٔ همیشه یکسان.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌های کوتاه؛ que بدون اَکسان در پیوندها با qué پرسشی فرق نوشتاری دارد.",
+      "productionFa": "دو پیشنهاد و پاسخ پذیرش و رد مؤدبانه برای آن‌ها بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Vamos a la biblioteca?",
+          "fa": "به کتابخانه برویم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Buena idea. Podemos estudiar juntos.",
+          "fa": "فکر خوبی است. می‌توانیم با هم درس بخوانیم."
+        },
+        {
+          "role": "partner",
+          "es": "¿A las cuatro?",
+          "fa": "ساعت چهار؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, de acuerdo.",
+          "fa": "بله، موافقم."
+        }
+      ],
+      "listening": {
+        "passage": "Hace buen tiempo. Podemos ir al parque juntos.",
+        "questionFa": "پیشنهاد رفتن به کجاست؟",
+        "answer": "al parque"
+      },
+      "reading": {
+        "passage": "Podemos estudiar juntos en la biblioteca a las cuatro.",
+        "questionFa": "کار پیشنهادی چیست؟",
+        "answer": "estudiar juntos"
+      },
+      "transferToIds": [
+        "es-a1-social-chat"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-invitations، es-a1-ability بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-social-chat",
+      "proposedIndex": 46,
+      "module": 7,
+      "preA1Ids": [
+        "es-pre-21"
+      ],
+      "prerequisiteIds": [
+        "es-a1-suggestions",
+        "es-a1-profile",
+        "es-a1-leisure"
+      ],
+      "outcomeFa": "آشنایی کوتاه را با موضوع مشترک و دعوت ادامه بدهم.",
+      "grammarFa": "بازیابی نام/شهر/علاقه؛ nuevo/nueva در اشاره به شخص؛ también برای نقطهٔ مشترک؛ دعوت با زمان روشن.",
+      "vocabularyFa": "compañero=هم‌کلاسی؛ nuevo=تازه‌وارد مرد؛ nueva=تازه‌وارد زن؛ también=همچنین",
+      "outOfScopeAndErrorFa": "اطلاعات یک شخصیت در صحنه ثابت بماند؛ گفت‌وگو فهرست سؤال‌های نامرتبط نباشد. صفت گوینده با جنس معرفی‌شده سازگار باشد.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌های کوتاه؛ que بدون اَکسان در پیوندها با qué پرسشی فرق نوشتاری دارد.",
+      "productionFa": "آشنایی چهارنوبتی از شهر یا کلاس به یک علاقهٔ مشترک و دعوت بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Hola, soy Lucía. ¿Eres nueva en el curso?",
+          "fa": "سلام، من لوسیا هستم. در کلاس تازه‌وارد هستی؟ (خطاب به زن)"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, me llamo Sara. Me gusta el español.",
+          "fa": "بله، اسمم سارا است. اسپانیایی را دوست دارم."
+        },
+        {
+          "role": "partner",
+          "es": "A mí también. ¿Tomamos un café mañana?",
+          "fa": "من هم همین‌طور. فردا قهوه بنوشیم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, a las diez estoy libre.",
+          "fa": "بله، ساعت ده آزاد هستم."
+        }
+      ],
+      "listening": {
+        "passage": "Hola, soy Sara. Vivo en Toledo y me gusta leer.",
+        "questionFa": "سارا کجا زندگی می‌کند؟",
+        "answer": "Toledo"
+      },
+      "reading": {
+        "passage": "Amir y Ben estudian juntos el martes a las diez.",
+        "questionFa": "زمان درس‌خواندن مشترک چیست؟",
+        "answer": "martes a las diez"
+      },
+      "transferToIds": [
+        "es-a1-directions",
+        "es-a1-connected-conversation"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-suggestions، es-a1-profile، es-a1-leisure بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-directions",
+      "proposedIndex": 47,
+      "module": 8,
+      "preA1Ids": [
+        "es-pre-17"
+      ],
+      "prerequisiteIds": [
+        "es-a1-social-chat",
+        "es-a1-prepositions",
+        "es-a1-instructions"
+      ],
+      "outcomeFa": "مسیر کوتاه تا یک مکان را با راست/چپ بفهمم و بدهم.",
+      "grammarFa": "¿Dónde está …?؛ Siga recto / gire a la derecha/izquierda در خطاب usted؛ cerca/lejos؛ کنترل یک مسیر ساده.",
+      "vocabularyFa": "derecha=راست؛ izquierda=چپ؛ recto=مستقیم؛ estación=ایستگاه",
+      "outOfScopeAndErrorFa": "دستور رسمی siga با tú sigues یکی نیست. به نقشهٔ فرضی وفادار بمان؛ جای ثابت و جهت حرکت فرق دارند.",
+      "pronunciationFa": "مقصد، ساعت و andén در اعلان آهسته؛ recto و derecha یک معنی ندارند. نام خیابان و مسیر تمرینی‌اند.",
+      "productionFa": "مسیر سه‌گامی از کلاس تا کتابخانهٔ خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Perdone, ¿dónde está la estación?",
+          "fa": "ببخشید، ایستگاه کجاست؟"
+        },
+        {
+          "role": "learner",
+          "es": "Siga recto.",
+          "fa": "مستقیم بروید."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y después?",
+          "fa": "و بعد؟"
+        },
+        {
+          "role": "learner",
+          "es": "Gire a la izquierda.",
+          "fa": "به چپ بپیچید."
+        }
+      ],
+      "listening": {
+        "passage": "Siga recto y después gire a la derecha. Allí está Correos.",
+        "questionFa": "پس از مستقیم رفتن به کدام سمت می‌پیچد؟",
+        "answer": "a la derecha"
+      },
+      "reading": {
+        "passage": "El banco está a la izquierda de Correos.",
+        "questionFa": "بانک نسبت به ادارهٔ پست کجاست؟",
+        "answer": "a la izquierda"
+      },
+      "transferToIds": [
+        "es-a1-metro-directions"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-social-chat، es-a1-prepositions، es-a1-instructions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-metro-directions",
+      "proposedIndex": 48,
+      "module": 8,
+      "preA1Ids": [
+        "es-pre-17",
+        "es-pre-19"
+      ],
+      "prerequisiteIds": [
+        "es-a1-directions",
+        "es-a1-dates-and-time"
+      ],
+      "outcomeFa": "مسیر پیاده تا ورودی مترو را با نشانهٔ راه و تأیید مقصد کامل کنم.",
+      "grammarFa": "¿Cómo llego a …?؛ hasta برای حد مسیر؛ delante de و junto a به معنی کنار؛ Siga/Gire قالب رسمی؛ این درس مسیر تا ورودی است، نه همهٔ شبکهٔ مترو.",
+      "vocabularyFa": "metro=مترو؛ entrada=ورودی؛ semáforo=چراغ راهنمایی؛ plaza=میدان",
+      "outOfScopeAndErrorFa": "این درس ۲۰ردیفی صرفاً تکرار جهت‌ها نیست؛ نشانه، ترتیب و تأیید ورودی افزوده شود. نقشهٔ واقعی شهر ادعا نمی‌شود.",
+      "pronunciationFa": "مقصد، ساعت و andén در اعلان آهسته؛ recto و derecha یک معنی ندارند. نام خیابان و مسیر تمرینی‌اند.",
+      "productionFa": "مسیر تا متروی خیالی را با دو نشانه و یک تأیید پایانی در شش نوبت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Perdone, ¿cómo llego al metro?",
+          "fa": "ببخشید، چطور به مترو برسم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Siga recto hasta el semáforo.",
+          "fa": "تا چراغ راهنمایی مستقیم بروید."
+        },
+        {
+          "role": "partner",
+          "es": "¿Y después?",
+          "fa": "و بعد؟"
+        },
+        {
+          "role": "learner",
+          "es": "Gire a la derecha. La entrada está delante de la plaza.",
+          "fa": "به راست بپیچید. ورودی جلوی میدان است."
+        }
+      ],
+      "listening": {
+        "passage": "Siga recto hasta el semáforo. La entrada del metro está a la izquierda.",
+        "questionFa": "ورودی مترو کدام سمت است؟",
+        "answer": "a la izquierda"
+      },
+      "reading": {
+        "passage": "Metro: entrada junto a la biblioteca. No está junto al banco.",
+        "questionFa": "ورودی کنار کدام مکان است؟",
+        "answer": "la biblioteca"
+      },
+      "transferToIds": [
+        "es-a1-public-transport",
+        "es-a1-connected-conversation"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-directions، es-a1-dates-and-time بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-public-transport",
+      "proposedIndex": 49,
+      "module": 8,
+      "preA1Ids": [
+        "es-pre-17",
+        "es-pre-19"
+      ],
+      "prerequisiteIds": [
+        "es-a1-metro-directions"
+      ],
+      "outcomeFa": "مقصد، زمان حرکت و محل پیاده‌شدن را بفهمم.",
+      "grammarFa": "¿Este autobús va a …?؛ bajo aquí / baje en la próxima parada قالب رسمی؛ en autobús/en taxi؛ salida در تابلو.",
+      "vocabularyFa": "autobús=اتوبوس؛ parada=ایستگاه اتوبوس؛ próxima=بعدی؛ centro=مرکز",
+      "outOfScopeAndErrorFa": "estación و parada بسته به وسیله فرق کاربرد دارند؛ آدرس واقعی داده نمی‌شود. baje با فعل سادهٔ خبری قاطی نشود.",
+      "pronunciationFa": "مقصد، ساعت و andén در اعلان آهسته؛ recto و derecha یک معنی ندارند. نام خیابان و مسیر تمرینی‌اند.",
+      "productionFa": "یک پرسش مقصد، یک ساعت حرکت و یک دستور پیاده‌شدن بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Este autobús va al centro?",
+          "fa": "این اتوبوس به مرکز شهر می‌رود؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, va al centro.",
+          "fa": "بله، به مرکز شهر می‌رود."
+        },
+        {
+          "role": "partner",
+          "es": "¿Dónde bajo?",
+          "fa": "کجا پیاده شوم؟"
+        },
+        {
+          "role": "learner",
+          "es": "En la próxima parada.",
+          "fa": "در ایستگاه بعدی."
+        }
+      ],
+      "listening": {
+        "passage": "Este autobús va a la estación. Baje en la próxima parada.",
+        "questionFa": "کجا باید پیاده شود؟",
+        "answer": "en la próxima parada"
+      },
+      "reading": {
+        "passage": "Autobús 5: estación–centro. Salida: 08:10.",
+        "questionFa": "اتوبوس چه ساعتی حرکت می‌کند؟",
+        "answer": "08:10"
+      },
+      "transferToIds": [
+        "es-a1-travel-tickets"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-metro-directions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-travel-tickets",
+      "proposedIndex": 50,
+      "module": 8,
+      "preA1Ids": [
+        "es-pre-19",
+        "es-pre-5"
+      ],
+      "prerequisiteIds": [
+        "es-a1-public-transport",
+        "es-a1-shopping-payment"
+      ],
+      "outcomeFa": "بلیت ساده بخواهم و مقصد، ساعت و سکو را جدا تشخیص بدهم.",
+      "grammarFa": "un billete a/para Madrid؛ solo ida / ida y vuelta؛ sale a las … del andén …؛ es-ES با billete.",
+      "vocabularyFa": "billete=بلیت؛ ida=رفت؛ vuelta=برگشت؛ andén=سکو",
+      "outOfScopeAndErrorFa": "boleto در مناطق دیگر غلط نیست؛ این بانک اسپانیا را یکدست نگه می‌دارد. ساعت و سکو اطلاعات جدا هستند.",
+      "pronunciationFa": "مقصد، ساعت و andén در اعلان آهسته؛ recto و derecha یک معنی ندارند. نام خیابان و مسیر تمرینی‌اند.",
+      "productionFa": "یک درخواست بلیت و دو سؤال ساعت/سکو با اطلاعات خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Un billete a Toledo, por favor.",
+          "fa": "یک بلیت به تولدو، لطفاً."
+        },
+        {
+          "role": "learner",
+          "es": "¿Solo ida o ida y vuelta?",
+          "fa": "یک‌طرفه یا رفت‌وبرگشت؟"
+        },
+        {
+          "role": "partner",
+          "es": "Solo ida. ¿De qué andén sale?",
+          "fa": "یک‌طرفه. از کدام سکو حرکت می‌کند؟"
+        },
+        {
+          "role": "learner",
+          "es": "Del andén dos.",
+          "fa": "از سکوی دو."
+        }
+      ],
+      "listening": {
+        "passage": "El tren a Madrid sale a las once, del andén tres.",
+        "questionFa": "سکوی حرکت کدام است؟",
+        "answer": "andén tres"
+      },
+      "reading": {
+        "passage": "Tren a Sevilla: 14:30, andén 4.",
+        "questionFa": "مقصد قطار چیست؟",
+        "answer": "Sevilla"
+      },
+      "transferToIds": [
+        "es-a1-hotel-stay"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-public-transport، es-a1-shopping-payment بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-hotel-stay",
+      "proposedIndex": 51,
+      "module": 8,
+      "preA1Ids": [
+        "es-pre-19",
+        "es-pre-2"
+      ],
+      "prerequisiteIds": [
+        "es-a1-travel-tickets",
+        "es-a1-forms-information"
+      ],
+      "outcomeFa": "رزرو خیالی را معرفی و دربارهٔ اتاق و صبحانه سؤال کنم.",
+      "grammarFa": "Tengo una reserva a nombre de …؛ para dos noches؛ ¿Está incluido el desayuno? در قالب؛ ساعت de … a ….",
+      "vocabularyFa": "reserva=رزرو؛ noche=شب؛ llave=کلید؛ desayuno=صبحانه",
+      "outOfScopeAndErrorFa": "در این الگو estar incluido یک قالب است، نه تدریس مجهول کامل. اطلاعات کارت بانکی/گذرنامهٔ واقعی لازم نیست.",
+      "pronunciationFa": "مقصد، ساعت و andén در اعلان آهسته؛ recto و derecha یک معنی ندارند. نام خیابان و مسیر تمرینی‌اند.",
+      "productionFa": "نام رزرو، مدت اقامت و دو سؤال دربارهٔ اتاق/صبحانه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Buenos días. Tengo una reserva.",
+          "fa": "صبح بخیر. رزرو دارم."
+        },
+        {
+          "role": "learner",
+          "es": "¿A qué nombre?",
+          "fa": "به چه نامی؟"
+        },
+        {
+          "role": "partner",
+          "es": "A nombre de Sara Martín.",
+          "fa": "به نام سارا مارتین."
+        },
+        {
+          "role": "learner",
+          "es": "Aquí tiene la llave de la habitación doce.",
+          "fa": "بفرمایید کلید اتاق دوازده."
+        }
+      ],
+      "listening": {
+        "passage": "Tengo una reserva a nombre de Martín para tres noches.",
+        "questionFa": "رزرو برای چند شب است؟",
+        "answer": "tres noches"
+      },
+      "reading": {
+        "passage": "Desayuno: de 7:00 a 10:00. Habitación 12.",
+        "questionFa": "صبحانه چه ساعتی شروع می‌شود؟",
+        "answer": "07:00"
+      },
+      "transferToIds": [
+        "es-a1-polite-requests"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-travel-tickets، es-a1-forms-information بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-polite-requests",
+      "proposedIndex": 52,
+      "module": 9,
+      "preA1Ids": [
+        "es-pre-4"
+      ],
+      "prerequisiteIds": [
+        "es-a1-hotel-stay",
+        "es-a1-ability"
+      ],
+      "outcomeFa": "برای اجازه یا کمک درخواست مؤدبانه کنم.",
+      "grammarFa": "¿Puedo + مصدر? برای اجازه؛ ¿Puede …? درخواست رسمی؛ ¿Podría …? قالب مؤدبانه بدون صرف کامل شرطی؛ me در ayudarme.",
+      "vocabularyFa": "ayudar=کمک؛ sentarse=نشستن؛ preguntar=پرسیدن؛ despacio=آهسته",
+      "outOfScopeAndErrorFa": "محترمانه بودن فقط با ضمیر نیست؛ لحن و por favor مهم‌اند. ضمایر بازتابی در ¿Puedo sentarme? در قالب معرفی شوند.",
+      "pronunciationFa": "تلفن و عددها با تکرار تأییدی؛ duele و fiebre با صوت واقعی بررسی شوند. این طرح آزمون میکروفن یا کیفیت صدای دستگاه نیست.",
+      "productionFa": "دو درخواست رسمی و دو سؤال اجازه در موقعیت کلاس/هتل بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Podría ayudarme, por favor?",
+          "fa": "می‌شود لطفاً کمکم کنید؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, claro.",
+          "fa": "بله، حتماً."
+        },
+        {
+          "role": "partner",
+          "es": "¿Puedo sentarme aquí?",
+          "fa": "می‌توانم اینجا بنشینم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, esta silla está libre.",
+          "fa": "بله، این صندلی خالی است."
+        }
+      ],
+      "listening": {
+        "passage": "¿Puedo sentarme aquí? Sí, esta silla está libre.",
+        "questionFa": "اجازهٔ چه کاری خواسته شده؟",
+        "answer": "sentarse aquí"
+      },
+      "reading": {
+        "passage": "¿Podría hablar más despacio, por favor?",
+        "questionFa": "درخواست از مخاطب چیست؟",
+        "answer": "آهسته‌تر صحبت‌کردن"
+      },
+      "transferToIds": [
+        "es-a1-phone-messages"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-hotel-stay، es-a1-ability بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-phone-messages",
+      "proposedIndex": 53,
+      "module": 9,
+      "preA1Ids": [
+        "es-pre-2",
+        "es-pre-5"
+      ],
+      "prerequisiteIds": [
+        "es-a1-polite-requests",
+        "es-a1-future-plans"
+      ],
+      "outcomeFa": "خودم را پشت تلفن معرفی و زمان تماس بعدی را روشن کنم.",
+      "grammarFa": "¿Dígame? برای پاسخ تماس در اسپانیا؛ Soy … / ¿Puedo dejar un mensaje?؛ voy a llamar؛ llámeme قالب رسمی محدود.",
+      "vocabularyFa": "llamar=تماس گرفتن؛ mensaje=پیام؛ dejar=گذاشتن؛ móvil=تلفن همراه",
+      "outOfScopeAndErrorFa": "Buenas را با همهٔ مناطق یکسان فرض نکن؛ شماره و زمان با تکرار تأیید شوند. اطلاعات تماس واقعی لازم نیست.",
+      "pronunciationFa": "تلفن و عددها با تکرار تأییدی؛ duele و fiebre با صوت واقعی بررسی شوند. این طرح آزمون میکروفن یا کیفیت صدای دستگاه نیست.",
+      "productionFa": "پیامی سه‌جمله‌ای با نام خیالی، موضوع و ساعت تماس بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Dígame?",
+          "fa": "بفرمایید؟ (پاسخ تلفن، اسپانیا)"
+        },
+        {
+          "role": "learner",
+          "es": "Hola, soy Ana. ¿Puedo dejar un mensaje?",
+          "fa": "سلام، من آنا هستم. می‌توانم پیام بگذارم؟"
+        },
+        {
+          "role": "partner",
+          "es": "Sí, claro.",
+          "fa": "بله، حتماً."
+        },
+        {
+          "role": "learner",
+          "es": "Voy a llamar mañana a las diez.",
+          "fa": "فردا ساعت ده تماس خواهم گرفت."
+        }
+      ],
+      "listening": {
+        "passage": "Hola, soy Ben Martín. Voy a llamar mañana a las diez.",
+        "questionFa": "تماس فردا چه ساعتی است؟",
+        "answer": "a las diez"
+      },
+      "reading": {
+        "passage": "Hola, Ben. Soy Ana. ¿Puedes llamarme a las diecisiete?",
+        "questionFa": "درخواست تماس برای چه ساعتی است؟",
+        "answer": "17:00"
+      },
+      "transferToIds": [
+        "es-a1-doctor-symptoms"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-polite-requests، es-a1-future-plans بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-doctor-symptoms",
+      "proposedIndex": 54,
+      "module": 9,
+      "preA1Ids": [
+        "es-pre-7",
+        "es-pre-9"
+      ],
+      "prerequisiteIds": [
+        "es-a1-phone-messages",
+        "es-a1-feelings",
+        "es-a1-dates-and-time"
+      ],
+      "outcomeFa": "علامت ساده و نیاز به نوبت پزشکی را بیان کنم.",
+      "grammarFa": "me duele la cabeza / la garganta؛ tengo fiebre؛ desde ayer / desde esta mañana؛ necesito una cita؛ no me encuentro bien در قالب.",
+      "vocabularyFa": "cabeza=سر؛ garganta=گلو؛ fiebre=تب؛ cita=نوبت",
+      "outOfScopeAndErrorFa": "me duele سر/گلو با tener fiebre یکی نیست؛ جمع me duelen فقط در صورت آموزش جدا. این درس تشخیص، دارو یا توصیهٔ درمانی نمی‌دهد.",
+      "pronunciationFa": "تلفن و عددها با تکرار تأییدی؛ duele و fiebre با صوت واقعی بررسی شوند. این طرح آزمون میکروفن یا کیفیت صدای دستگاه نیست.",
+      "productionFa": "برای شخصیتی خیالی دو علامت، زمان شروع و درخواست نوبت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Buenos días. Necesito una cita.",
+          "fa": "صبح بخیر. نوبت لازم دارم."
+        },
+        {
+          "role": "learner",
+          "es": "¿Qué le pasa?",
+          "fa": "چه مشکلی دارید؟"
+        },
+        {
+          "role": "partner",
+          "es": "Me duele la cabeza.",
+          "fa": "سردرد دارم."
+        },
+        {
+          "role": "learner",
+          "es": "Tenemos una cita libre a las diez.",
+          "fa": "ساعت ده نوبت خالی داریم."
+        }
+      ],
+      "listening": {
+        "passage": "Me duele la garganta desde esta mañana. Necesito una cita.",
+        "questionFa": "کدام عضو درد می‌کند؟",
+        "answer": "la garganta"
+      },
+      "reading": {
+        "passage": "Tengo fiebre. No me encuentro bien.",
+        "questionFa": "چه علامتی صریحاً ذکر شده؟",
+        "answer": "fiebre"
+      },
+      "transferToIds": [
+        "es-a1-reasons"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-phone-messages، es-a1-feelings، es-a1-dates-and-time بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-reasons",
+      "proposedIndex": 55,
+      "module": 10,
+      "preA1Ids": [
+        "es-pre-21"
+      ],
+      "prerequisiteIds": [
+        "es-a1-doctor-symptoms",
+        "es-a1-connectors",
+        "es-a1-past-events"
+      ],
+      "outcomeFa": "دلیل و نتیجهٔ ساده را با جملهٔ کوتاه مرتبط بیان کنم.",
+      "grammarFa": "¿Por qué …? در سؤال؛ porque در پاسخ؛ por eso برای نتیجه؛ ترتیب جملهٔ معمول حفظ می‌شود؛ مصدر پس از tener que.",
+      "vocabularyFa": "por qué=چرا؛ porque=چون؛ por eso=به همین دلیل؛ quedarse=ماندن",
+      "outOfScopeAndErrorFa": "por qué و porque املای یکسان ندارند؛ فعل مانند weil آلمانی به آخر جمله نمی‌رود. دلیل می‌تواند غیرشخصی و خیالی باشد.",
+      "pronunciationFa": "مکث میان دلیل و نتیجه و تأیید زمان نهایی؛ بازگویی قابل‌فهم، نه تقلید اجباری سرعت بومی.",
+      "productionFa": "دو دلیل و یک نتیجه برای انتخاب یا رد دعوت خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "¿Por qué no puedes venir hoy?",
+          "fa": "چرا امروز نمی‌توانی بیایی؟"
+        },
+        {
+          "role": "learner",
+          "es": "Porque tengo que trabajar.",
+          "fa": "چون باید کار کنم."
+        },
+        {
+          "role": "partner",
+          "es": "Entonces, ¿nos vemos mañana?",
+          "fa": "پس، فردا همدیگر را ببینیم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, mañana estoy libre.",
+          "fa": "بله، فردا آزاد هستم."
+        }
+      ],
+      "listening": {
+        "passage": "Me quedo en casa porque tengo fiebre.",
+        "questionFa": "چرا در خانه می‌ماند؟",
+        "answer": "porque tiene fiebre"
+      },
+      "reading": {
+        "passage": "Llueve. Por eso nos quedamos aquí.",
+        "questionFa": "نتیجهٔ باران چیست؟",
+        "answer": "nos quedamos aquí"
+      },
+      "transferToIds": [
+        "es-a1-connected-conversation"
+      ],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-doctor-symptoms، es-a1-connectors، es-a1-past-events بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "es-a1-connected-conversation",
+      "proposedIndex": 56,
+      "module": 10,
+      "preA1Ids": [
+        "es-pre-21"
+      ],
+      "prerequisiteIds": [
+        "es-a1-reasons",
+        "es-a1-social-chat",
+        "es-a1-invitations",
+        "es-a1-metro-directions"
+      ],
+      "outcomeFa": "از آشنایی به دعوت، رفع مانع و توافق روشن برسم.",
+      "grammarFa": "بازیابی نام، شهر، علاقه، دعوت، مکان و ساعت؛ ساخت تازهٔ اجباری ندارد؛ جنس و خطاب ثابت.",
+      "vocabularyFa": "نام، شهر، café، día و hora؛ بازیابی واژگان پیشین بدون فهرست تازهٔ سنگین",
+      "outOfScopeAndErrorFa": "گفت‌وگوی فعلی اسپانیایی از ابتدا منسجم بود؛ اصلاح طرح به معنی ادعای خرابی آن نیست. شرح نامربوط siéntese از توضیح پایانی حذف/جدا شود.",
+      "pronunciationFa": "مکث میان دلیل و نتیجه و تأیید زمان نهایی؛ بازگویی قابل‌فهم، نه تقلید اجباری سرعت بومی.",
+      "productionFa": "گفت‌وگوی شش تا هشت‌نوبتی با اطلاعات خیالی بنویس؛ زمان ردشده و توافق نهایی روشن باشند.",
+      "scene": [
+        {
+          "role": "partner",
+          "es": "Hola, soy Lucía. ¿Eres nueva en el curso?",
+          "fa": "سلام، من لوسیا هستم. در کلاس تازه‌وارد هستی؟ (خطاب به زن)"
+        },
+        {
+          "role": "learner",
+          "es": "Sí, me llamo Sara. Vivo en Madrid.",
+          "fa": "بله، اسمم سارا است. در مادرید زندگی می‌کنم."
+        },
+        {
+          "role": "partner",
+          "es": "Yo también. ¿Tomamos un café mañana?",
+          "fa": "من هم همین‌طور. فردا قهوه بنوشیم؟"
+        },
+        {
+          "role": "learner",
+          "es": "Mañana no puedo. ¿Y el sábado?",
+          "fa": "فردا نمی‌توانم. شنبه چطور؟"
+        },
+        {
+          "role": "partner",
+          "es": "Sí, el sábado a las diez en el café.",
+          "fa": "بله، شنبه ساعت ده در کافه."
+        },
+        {
+          "role": "learner",
+          "es": "De acuerdo. ¿Dónde está el café?",
+          "fa": "موافقم. کافه کجاست؟"
+        },
+        {
+          "role": "partner",
+          "es": "Al lado de la biblioteca. ¡Hasta el sábado!",
+          "fa": "کنار کتابخانه. تا شنبه!"
+        },
+        {
+          "role": "learner",
+          "es": "Muy bien, ¡hasta el sábado!",
+          "fa": "بسیار خوب، تا شنبه!"
+        }
+      ],
+      "listening": {
+        "passage": "Lucía y Sara no pueden el viernes. Van a tomar un café el sábado a las once.",
+        "questionFa": "زمان نهایی قهوه چه ساعتی است؟",
+        "answer": "a las once"
+      },
+      "reading": {
+        "passage": "Lucía: ¿El sábado a las diez en el café? Sara: Sí, de acuerdo. ¡Hasta el sábado!",
+        "questionFa": "روز نهایی ملاقات چیست؟",
+        "answer": "sábado"
+      },
+      "transferToIds": [],
+      "retrievalFa": "پیش از مطلب تازه، یک پاسخ کوتاه بدون متن از es-a1-reasons، es-a1-social-chat، es-a1-invitations، es-a1-metro-directions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    }
+  ]
+}

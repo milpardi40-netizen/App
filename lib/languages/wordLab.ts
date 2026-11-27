@@ -1,4 +1,4 @@
-import { SENTENCE_LESSONS } from '../courseContent';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '../courseContent';
 import { RUSSIAN_LESSONS } from './russian';
 import { NEW_COURSES } from './newCourses';
 import { CORE_WORDS } from './wordLabCore';

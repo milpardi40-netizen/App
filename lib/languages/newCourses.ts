@@ -1,3 +1,7 @@
+import {arrangeSpanishA1} from './spanishA1Practice';
+import {arrangeFrenchA1} from './frenchA1Practice';
+import {arrangeGermanA1} from './germanA1Practice';
+import { enrichEuropeanPreA1 } from './preA1Practical/european';
 import type { LearningLesson } from './types';
 import type { CourseLevelId } from '../courseContent';
 import { createCourseProgressStore } from '../createCourseProgressStore';
@@ -162,6 +166,8 @@ function buildA1(id: NewLanguageId, seed: A1Seed, level: 1 | 2 | 3 | 4 = 1): Sta
  * no single-word row inside a lesson the engine plays as a sentence lesson. The seed batches below
  * still build French and Spanish, and German's own A1 band is untouched.
  */
+function arrangeSequencedA1IfNeeded(id: NewLanguageId, lessons: StarterLesson[]) { return id === 'de' ? arrangeGermanA1(lessons) : id === 'fr' ? arrangeFrenchA1(lessons) : id === 'es' ? arrangeSpanishA1(lessons) : lessons; }
+
 function buildCourse(id: NewLanguageId) {
   const allSeeds = [...seeds[id], ...(PRE_A1_EXPANSION[id] ?? []), ...(PRE_A1_MORE[id] ?? [])];
   const legacy: StarterLesson[] = allSeeds.map((seed, n) => {
@@ -229,14 +235,14 @@ function buildCourse(id: NewLanguageId) {
   // Navigation follows the requested topic order; saved state remains keyed by ID.
   const a1Order = getA1Curriculum(id).flatMap(section => section.topics.flatMap(topic => [...topic.relatedLessonIds]));
   const a1Rank = new Map(a1Order.map((lessonId, index) => [lessonId, index]));
-  const orderedLessons = [
+  const orderedLessons = arrangeSequencedA1IfNeeded(id, [
     ...lessons.filter(lesson => lesson.levelId === 0),
     ...lessons.filter(lesson => lesson.levelId === 1).sort((a,b) => (a1Rank.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (a1Rank.get(b.id) ?? Number.MAX_SAFE_INTEGER)),
     ...lessons.filter(lesson => lesson.levelId === 2),
     ...lessons.filter(lesson => lesson.levelId === 3),
     ...lessons.filter(lesson => lesson.levelId === 4),
     ...lessons.filter(lesson => lesson.levelId === 5),
-  ].map((lesson, index) => ({...lesson, order: index + 1}));
+  ].map((lesson, index) => ({...enrichEuropeanPreA1(lesson), order: index + 1})));
   const b1Title: Record<NewLanguageId, string> = {fr:'B1 · Communication autonome', de:'B1 · Selbstständige Kommunikation', es:'B1 · Comunicación independiente'};
   const b2Title: Record<NewLanguageId, string> = {fr:'B2 · Communication avancée', de:'B2 · Selbstständige und differenzierte Kommunikation', es:'B2 · Comunicación avanzada'};
   const c1Title: Record<NewLanguageId, string> = {fr:'C1 · Communication avancée', de:'C1 · Fortgeschrittene Kommunikation', es:'C1 · Comunicación avanzada'};

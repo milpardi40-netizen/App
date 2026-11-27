@@ -1,0 +1,3169 @@
+{
+  "language": "de",
+  "date": "2026-11-26",
+  "status": "proposal-not-runtime-content",
+  "modules": {
+    "1": "ورود به A1 و اطلاعات پایه",
+    "2": "شخص، اسم و توصیف",
+    "3": "ساخت جمله و فعل‌های پایه",
+    "4": "زمان، کار و برنامهٔ روزانه",
+    "5": "خانه و مکان",
+    "6": "خوراک، خرید و انتخاب",
+    "7": "تفریح و ارتباط اجتماعی",
+    "8": "رفت‌وآمد و سفر",
+    "9": "درخواست، ارتباط و تجربهٔ اخیر",
+    "10": "دلیل ساده و جمع‌بندی مرتبط"
+  },
+  "lessons": [
+    {
+      "id": "de-a1-greetings",
+      "proposedIndex": 1,
+      "module": 1,
+      "preA1Ids": [
+        "de-pre-1",
+        "de-pre-3",
+        "de-pre-7"
+      ],
+      "prerequisiteIds": [],
+      "outcomeFa": "احوال‌پرسی دوستانه را آغاز و با خداحافظی متناسب تمام کنم.",
+      "grammarFa": "Hallo/Tschüss و Wie geht es dir? به‌صورت قالب؛ سلام رسمی در مقایسهٔ موقعیتی، نه تعویض خطاب وسط صحنه.",
+      "vocabularyFa": "Hallo=سلام؛ gut=خوب؛ danke=ممنون؛ bis morgen=تا فردا",
+      "outOfScopeAndErrorFa": "تفاوت dir/Ihnen تشخیص داده شود؛ آموزش کامل داتیو لازم نیست. تکرار Pre-A1 با انتخاب موقعیت و پاسخ مستقل پیش می‌رود.",
+      "productionFa": "یک احوال‌پرسی چهارنوبتی دوستانه بساز و فقط نام یا حال را عوض کن.",
+      "pronunciationFa": "تکیهٔ واژه و آهنگ پرسش؛ تفاوت du و Sie را همراه با موقعیت بشنو، نه با تبدیل مکانیکی ضمیر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Hallo, Sara! Wie geht es dir?",
+          "fa": "سلام، سارا! حالت چطور است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Gut, danke. Und dir?",
+          "fa": "خوبم، ممنون. تو چطوری؟"
+        },
+        {
+          "role": "partner",
+          "de": "Auch gut. Bis morgen!",
+          "fa": "من هم خوبم. تا فردا!"
+        },
+        {
+          "role": "learner",
+          "de": "Tschüss, Lena!",
+          "fa": "خداحافظ، لنا!"
+        }
+      ],
+      "listening": {
+        "passage": "Hallo Ben! Mir geht es heute gut. Bis heute Abend!",
+        "questionFa": "گوینده تا چه زمانی خداحافظی می‌کند؟",
+        "answer": "heute Abend"
+      },
+      "reading": {
+        "passage": "Guten Tag, Frau Weber. Auf Wiedersehen!",
+        "questionFa": "این دو عبارت برای برخورد رسمی‌اند یا دوستانه؟",
+        "answer": "رسمی"
+      },
+      "transferToIds": [
+        "de-a1-profile"
+      ],
+      "retrievalFa": "بازیابی کوتاه از Pre-A1؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-profile",
+      "proposedIndex": 2,
+      "module": 1,
+      "preA1Ids": [
+        "de-pre-2",
+        "de-pre-15",
+        "de-pre-16"
+      ],
+      "prerequisiteIds": [
+        "de-a1-greetings"
+      ],
+      "outcomeFa": "نام و شهر محل زندگی را در آشنایی کوتاه بگویم و از مخاطب بپرسم.",
+      "grammarFa": "ich heiße / ich wohne؛ Wie heißt du? و Wo wohnst du? قالب معرفی؛ تحلیل صرف در درس فعل.",
+      "vocabularyFa": "heißen=نام داشتن؛ wohnen=سکونت داشتن؛ Name=نام؛ Bonn=بن",
+      "outOfScopeAndErrorFa": "ثبت‌نام و هجی همهٔ حروف اینجا یکجا آموزش داده نشود؛ ملیت و سن در درس‌های بعد گسترش می‌یابند.",
+      "productionFa": "با نام و شهر خیالی چهار نوبت آشنایی بنویس.",
+      "pronunciationFa": "تکیهٔ واژه و آهنگ پرسش؛ تفاوت du و Sie را همراه با موقعیت بشنو، نه با تبدیل مکانیکی ضمیر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Hallo, ich heiße Lena. Wie heißt du?",
+          "fa": "سلام، اسم من لنا است. اسم تو چیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich heiße Sara.",
+          "fa": "اسم من سارا است."
+        },
+        {
+          "role": "partner",
+          "de": "Wo wohnst du, Sara?",
+          "fa": "سارا، کجا زندگی می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich wohne in Bonn. Und du?",
+          "fa": "در بن زندگی می‌کنم. تو چطور؟"
+        }
+      ],
+      "listening": {
+        "passage": "Ich heiße Anna. Ich wohne in Köln.",
+        "questionFa": "آنا در کدام شهر زندگی می‌کند؟",
+        "answer": "Köln"
+      },
+      "reading": {
+        "passage": "Ich heiße Amir. Ich wohne in Berlin.",
+        "questionFa": "نام این شخص چیست؟",
+        "answer": "Amir"
+      },
+      "transferToIds": [
+        "de-a1-asking-help",
+        "de-a1-nationalities",
+        "de-a1-numbers-age",
+        "de-a1-subject-pronouns"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-greetings؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-asking-help",
+      "proposedIndex": 3,
+      "module": 1,
+      "preA1Ids": [
+        "de-pre-14",
+        "de-pre-4"
+      ],
+      "prerequisiteIds": [
+        "de-a1-profile"
+      ],
+      "outcomeFa": "وقتی نامی را نمی‌فهمم، مؤدبانه درخواست تکرار و هجی کنم.",
+      "grammarFa": "Bitte … و Können Sie …? قالب آمادهٔ کمک؛ Sie رسمی و پیوسته؛ تحلیل können در درس توانایی.",
+      "vocabularyFa": "langsam=آهسته؛ buchstabieren=هجی کردن؛ noch einmal=یک بار دیگر؛ verstehen=فهمیدن",
+      "outOfScopeAndErrorFa": "کوتاه‌بودن درخواست‌ها مهم است. حرف V، W، J، ß و نام حروف جداگانه با صوت تمرین شود؛ نبودن این‌ها در Pre-A1 به‌معنی تسلط نیست.",
+      "productionFa": "نام خیالی خود را بنویس، هجی کن و یک درخواست تکرار اضافه کن.",
+      "pronunciationFa": "تکیهٔ واژه و آهنگ پرسش؛ تفاوت du و Sie را همراه با موقعیت بشنو، نه با تبدیل مکانیکی ضمیر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Guten Tag. Wie heißen Sie?",
+          "fa": "روز بخیر. نام شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich heiße Sara Ali.",
+          "fa": "نام من سارا علی است."
+        },
+        {
+          "role": "partner",
+          "de": "Können Sie Ihren Nachnamen bitte buchstabieren?",
+          "fa": "می‌توانید لطفاً نام خانوادگی‌تان را هجی کنید؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja. A–L–I.",
+          "fa": "بله. اِی، اِل، ای."
+        }
+      ],
+      "listening": {
+        "passage": "Mein Nachname ist Lee. Ich buchstabiere: L–E–E.",
+        "questionFa": "نام خانوادگی چگونه هجی شد؟",
+        "answer": "L–E–E"
+      },
+      "reading": {
+        "passage": "Bitte sprechen Sie langsam. Ich verstehe das Wort nicht.",
+        "questionFa": "نویسنده از مخاطب می‌خواهد چگونه صحبت کند؟",
+        "answer": "langsam"
+      },
+      "transferToIds": [
+        "de-a1-nationalities",
+        "de-a1-forms-information",
+        "de-a1-hotel-stay",
+        "de-a1-phone-messages"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-profile؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-nationalities",
+      "proposedIndex": 4,
+      "module": 1,
+      "preA1Ids": [
+        "de-pre-15",
+        "de-pre-16"
+      ],
+      "prerequisiteIds": [
+        "de-a1-profile",
+        "de-a1-asking-help"
+      ],
+      "outcomeFa": "کشور مبدأ، شهر زندگی و زبان را از هم متمایز کنم.",
+      "grammarFa": "kommen aus / wohnen in / sprechen؛ نام زبان با حرف بزرگ؛ aus dem Iran به‌عنوان ترکیب کامل.",
+      "vocabularyFa": "Land=کشور؛ Stadt=شهر؛ Deutsch=آلمانی؛ Persisch=فارسی",
+      "outOfScopeAndErrorFa": "جدول پسوند ملیت و صفت ملیتی اجباری نشود؛ aus Iran جای ترکیب استانداردِ این بانک aus dem Iran ننشیند.",
+      "productionFa": "سه جمله دربارهٔ کشور، شهر و زبانِ یک شخصیت خیالی بنویس.",
+      "pronunciationFa": "تکیهٔ واژه و آهنگ پرسش؛ تفاوت du و Sie را همراه با موقعیت بشنو، نه با تبدیل مکانیکی ضمیر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Woher kommst du?",
+          "fa": "اهل کجا هستی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich komme aus dem Iran.",
+          "fa": "من اهل ایران هستم."
+        },
+        {
+          "role": "partner",
+          "de": "Welche Sprachen sprichst du?",
+          "fa": "به چه زبان‌هایی صحبت می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich spreche Persisch und ein bisschen Deutsch.",
+          "fa": "فارسی و کمی آلمانی صحبت می‌کنم."
+        }
+      ],
+      "listening": {
+        "passage": "Ich komme aus Deutschland. Ich spreche Deutsch und ein bisschen Persisch.",
+        "questionFa": "گوینده کدام زبان را کمی صحبت می‌کند؟",
+        "answer": "Persisch"
+      },
+      "reading": {
+        "passage": "Lena kommt aus Deutschland. Sie wohnt in Bonn.",
+        "questionFa": "لنا در کدام شهر زندگی می‌کند؟",
+        "answer": "Bonn"
+      },
+      "transferToIds": [
+        "de-a1-present-tense",
+        "de-a1-forms-information",
+        "de-a1-social-chat"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-profile، de-a1-asking-help؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-numbers-age",
+      "proposedIndex": 5,
+      "module": 1,
+      "preA1Ids": [
+        "de-foundation-words-2",
+        "de-pre-5"
+      ],
+      "prerequisiteIds": [
+        "de-a1-profile"
+      ],
+      "outcomeFa": "سن و شمارهٔ تماس تمرینی را بفهمم و بگویم.",
+      "grammarFa": "اعداد ۰ تا ۱۰۰ با دسته‌بندی؛ sein + Jahre alt؛ شمارهٔ تلفن رقم‌به‌رقم. دهگان/یکان آلمانی صریح آموزش داده شود.",
+      "vocabularyFa": "null=صفر؛ zwanzig=بیست؛ dreißig=سی؛ Telefonnummer=شمارهٔ تلفن",
+      "outOfScopeAndErrorFa": "فهرست عدد بدون کاربرد نباشد؛ برای سن haben به جای sein به کار نرود؛ عدد قیمت بعداً می‌آید.",
+      "productionFa": "سن و یک شمارهٔ خیالی کوتاه بنویس و عددها را بلند بخوان؛ اطلاعات واقعی لازم نیست.",
+      "pronunciationFa": "تکیهٔ واژه و آهنگ پرسش؛ تفاوت du و Sie را همراه با موقعیت بشنو، نه با تبدیل مکانیکی ضمیر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wie alt bist du?",
+          "fa": "چند سال داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich bin dreiundzwanzig Jahre alt.",
+          "fa": "بیست‌وسه سال دارم."
+        },
+        {
+          "role": "partner",
+          "de": "Wie ist deine Telefonnummer?",
+          "fa": "شمارهٔ تلفنت چیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Null, eins, zwei, drei.",
+          "fa": "صفر، یک، دو، سه."
+        }
+      ],
+      "listening": {
+        "passage": "Ich heiße Tim. Ich bin vierundzwanzig Jahre alt.",
+        "questionFa": "تیم چند سال دارد؟",
+        "answer": "24"
+      },
+      "reading": {
+        "passage": "Name: Ben. Alter: 32 Jahre. Telefon: 0412.",
+        "questionFa": "سن بن چند سال است؟",
+        "answer": "32"
+      },
+      "transferToIds": [
+        "de-a1-nouns-gender-plural",
+        "de-a1-family",
+        "de-a1-question-words",
+        "de-a1-dates-and-time",
+        "de-a1-forms-information",
+        "de-a1-room-search",
+        "de-a1-cafe"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-profile؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-nouns-gender-plural",
+      "proposedIndex": 6,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-6",
+        "de-pre-5",
+        "de-foundation-chunks-2"
+      ],
+      "prerequisiteIds": [
+        "de-a1-numbers-age"
+      ],
+      "outcomeFa": "چند اسم پربسامد را با جنس دستوری و جمعشان معرفی کنم.",
+      "grammarFa": "der/die/das در مدخل واژه؛ جمع die؛ شمارش ein Buch / zwei Bücher بدون تعمیم ساخت جمع.",
+      "vocabularyFa": "der Stift=خودکار؛ die Tasche=کیف؛ das Buch=کتاب؛ die Bücher=کتاب‌ها",
+      "outOfScopeAndErrorFa": "جنس دستوری با جنسیت صاحب یا ظاهر شیء یکی نیست؛ جمع را تنها با افزودن -s نساز.",
+      "productionFa": "چهار شیء اطرافت را با حرف تعریف و جمع دو مورد ثبت کن.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was ist das?",
+          "fa": "این چیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Das ist ein Buch.",
+          "fa": "این یک کتاب است."
+        },
+        {
+          "role": "partner",
+          "de": "Und was sind das?",
+          "fa": "و این‌ها چه هستند؟"
+        },
+        {
+          "role": "learner",
+          "de": "Das sind zwei Bücher.",
+          "fa": "این‌ها دو کتاب هستند."
+        }
+      ],
+      "listening": {
+        "passage": "Das ist eine Tasche. Das sind drei Bücher.",
+        "questionFa": "چند کتاب معرفی شد؟",
+        "answer": "drei"
+      },
+      "reading": {
+        "passage": "der Stift – die Stifte; die Tasche – die Taschen",
+        "questionFa": "جمع Tasche چیست؟",
+        "answer": "die Taschen"
+      },
+      "transferToIds": [
+        "de-a1-articles",
+        "de-a1-subject-pronouns"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-numbers-age؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-articles",
+      "proposedIndex": 7,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-6"
+      ],
+      "prerequisiteIds": [
+        "de-a1-nouns-gender-plural"
+      ],
+      "outcomeFa": "یک شیء نامشخص را معرفی و سپس به همان شیء مشخص اشاره کنم.",
+      "grammarFa": "ein/eine در برابر der/die/das فقط فاعلی؛ جمع بدون ein؛ مفعولی پس از پایهٔ فعل خواهد آمد.",
+      "vocabularyFa": "der Tisch=میز؛ die Lampe=چراغ؛ das Heft=دفتر؛ hier=اینجا",
+      "outOfScopeAndErrorFa": "جدول چهار حالت دستوری ممنوع؛ einen فقط وقتی نقش مفعولی معرفی شده باشد، جداگانه تحلیل می‌شود.",
+      "productionFa": "دو جفت جمله بساز: معرفی یک شیء، سپس توصیف همان شیء.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was ist das?",
+          "fa": "این چیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Das ist eine Lampe.",
+          "fa": "این یک چراغ است."
+        },
+        {
+          "role": "partner",
+          "de": "Ist die Lampe neu?",
+          "fa": "آیا آن چراغ نو است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, die Lampe ist neu.",
+          "fa": "بله، آن چراغ نو است."
+        }
+      ],
+      "listening": {
+        "passage": "Das ist ein Tisch. Der Tisch ist alt.",
+        "questionFa": "شیء معرفی‌شده نو است یا قدیمی؟",
+        "answer": "alt"
+      },
+      "reading": {
+        "passage": "Das ist ein Heft. Das Heft ist blau.",
+        "questionFa": "در جملهٔ دوم پیش از Heft کدام حرف تعریف آمده؟",
+        "answer": "das"
+      },
+      "transferToIds": [
+        "de-a1-verb-to-be",
+        "de-a1-possessives",
+        "de-a1-demonstratives",
+        "de-a1-colors",
+        "de-a1-simple-verbs",
+        "de-a1-location"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-nouns-gender-plural؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-subject-pronouns",
+      "proposedIndex": 8,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-7"
+      ],
+      "prerequisiteIds": [
+        "de-a1-profile",
+        "de-a1-nouns-gender-plural"
+      ],
+      "outcomeFa": "در معرفی افراد، اسم را با ضمیر درست جایگزین کنم.",
+      "grammarFa": "ich/du/er/sie/es/wir/ihr/sie/Sie به‌صورت مرحله‌ای؛ ابتدا مفرد و wir؛ تفاوت sie و Sie در موقعیت.",
+      "vocabularyFa": "ich=من؛ wir=ما؛ sie=او یا آن‌ها؛ Sie=شما رسمی",
+      "outOfScopeAndErrorFa": "همهٔ صرف افعال هم‌زمان سنجیده نشود؛ es برای اسم خنثی، نه صرفاً اشیای بی‌جان.",
+      "productionFa": "خودت، یک فرد دیگر و یک گروه دونفره را با ضمیر معرفی کن.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wer ist das?",
+          "fa": "او کیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Das ist Anna. Sie ist hier.",
+          "fa": "او آنا است. او اینجا است."
+        },
+        {
+          "role": "partner",
+          "de": "Und wo ist Ben?",
+          "fa": "و بن کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Er ist auch hier.",
+          "fa": "او هم اینجا است."
+        }
+      ],
+      "listening": {
+        "passage": "Das ist Lena. Sie wohnt in Köln. Ben wohnt in Bonn.",
+        "questionFa": "Sie به چه کسی اشاره می‌کند؟",
+        "answer": "Lena"
+      },
+      "reading": {
+        "passage": "Sara und ich sind hier. Wir lernen Deutsch.",
+        "questionFa": "Wir به چه کسانی اشاره دارد؟",
+        "answer": "Sara und ich"
+      },
+      "transferToIds": [
+        "de-a1-verb-to-be",
+        "de-a1-possessives",
+        "de-a1-simple-verbs",
+        "de-a1-verb-conjugation"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-profile، de-a1-nouns-gender-plural؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-verb-to-be",
+      "proposedIndex": 9,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-7"
+      ],
+      "prerequisiteIds": [
+        "de-a1-subject-pronouns",
+        "de-a1-articles"
+      ],
+      "outcomeFa": "با sein خودم و دیگران را معرفی و یک پرسش بله/خیر بسازم.",
+      "grammarFa": "bin/bist/ist/sind/seid؛ پرسش با جابه‌جایی فعل؛ شغل پس از sein معمولاً بدون حرف تعریف.",
+      "vocabularyFa": "Student=دانشجوی مرد؛ Studentin=دانشجوی زن؛ Lehrer=معلم مرد؛ hier=اینجا",
+      "outOfScopeAndErrorFa": "Ich sein و du bin اصلاح شود؛ همهٔ شغل‌ها یا صرف زمان گذشته در این درس نیاید.",
+      "productionFa": "دو جملهٔ معرفی و یک پرسش با sein دربارهٔ شخصیت‌های خیالی بساز.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Bist du Studentin?",
+          "fa": "آیا دانشجو هستی؟ (خطاب به زن)"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich bin Studentin.",
+          "fa": "بله، دانشجو هستم."
+        },
+        {
+          "role": "partner",
+          "de": "Ist Ben auch Student?",
+          "fa": "آیا بن هم دانشجو است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, er ist Lehrer.",
+          "fa": "نه، او معلم است."
+        }
+      ],
+      "listening": {
+        "passage": "Ich bin Lehrer. Anna ist Studentin.",
+        "questionFa": "آنا دانشجو است یا معلم؟",
+        "answer": "Studentin"
+      },
+      "reading": {
+        "passage": "Wir sind müde. Seid ihr auch müde?",
+        "questionFa": "شکل sein برای wir در متن چیست؟",
+        "answer": "sind"
+      },
+      "transferToIds": [
+        "de-a1-family",
+        "de-a1-descriptions",
+        "de-a1-feelings",
+        "de-a1-positive-negative-questions"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-subject-pronouns، de-a1-articles؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-family",
+      "proposedIndex": 10,
+      "module": 2,
+      "preA1Ids": [
+        "de-foundation-words-1",
+        "de-pre-10"
+      ],
+      "prerequisiteIds": [
+        "de-a1-verb-to-be",
+        "de-a1-numbers-age"
+      ],
+      "outcomeFa": "عضو خانواده را با نسبت و یک اطلاعات کوتاه معرفی کنم.",
+      "grammarFa": "mein Vater / meine Mutter به‌عنوان ترکیب بازیابی؛ sein برای سن؛ haben + einen Bruder ابتدا قالب آشنا، تحلیل بعدی.",
+      "vocabularyFa": "Mutter=مادر؛ Vater=پدر؛ Bruder=برادر؛ Schwester=خواهر",
+      "outOfScopeAndErrorFa": "شجرهٔ گسترده و واژگان کم‌کاربرد اجباری نشود؛ شکل مذکر و مؤنث واژهٔ نسبت روشن بماند.",
+      "productionFa": "دربارهٔ دو عضو یک خانوادهٔ خیالی سه جمله بنویس.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wer ist das auf dem Foto?",
+          "fa": "این شخص در عکس کیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Das ist meine Schwester.",
+          "fa": "این خواهر من است."
+        },
+        {
+          "role": "partner",
+          "de": "Wie alt ist sie?",
+          "fa": "او چند سال دارد؟"
+        },
+        {
+          "role": "learner",
+          "de": "Sie ist zwanzig Jahre alt.",
+          "fa": "او بیست سال دارد."
+        }
+      ],
+      "listening": {
+        "passage": "Das ist mein Bruder. Er heißt Ben und ist zwölf Jahre alt.",
+        "questionFa": "برادر گوینده چند سال دارد؟",
+        "answer": "zwölf"
+      },
+      "reading": {
+        "passage": "Das ist mein Vater. Er heißt Ali.",
+        "questionFa": "نام پدر چیست؟",
+        "answer": "Ali"
+      },
+      "transferToIds": [
+        "de-a1-possessives"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-verb-to-be، de-a1-numbers-age؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-possessives",
+      "proposedIndex": 11,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-11",
+        "de-pre-10"
+      ],
+      "prerequisiteIds": [
+        "de-a1-family",
+        "de-a1-articles",
+        "de-a1-subject-pronouns"
+      ],
+      "outcomeFa": "مالک یک وسیله را بپرسم و با mein/dein/sein/ihr پاسخ دهم.",
+      "grammarFa": "تطابق ملکی در حالت فاعلی با اسم: mein Buch / meine Tasche؛ sein/ihr به مالک برمی‌گردد.",
+      "vocabularyFa": "mein=مال من؛ dein=مال تو؛ sein=مال او مذکر؛ ihr=مال او مؤنث",
+      "outOfScopeAndErrorFa": "پایان ملکی به جنسیت مالک وابسته نیست؛ صرف همهٔ حالت‌ها اینجا لازم نیست.",
+      "productionFa": "چهار وسیله را به خودت و دو شخصیت خیالی نسبت بده.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Ist das deine Tasche?",
+          "fa": "آیا این کیف تو است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, das ist Annas Tasche.",
+          "fa": "نه، این کیف آنا است."
+        },
+        {
+          "role": "partner",
+          "de": "Und ist das dein Buch?",
+          "fa": "و آیا این کتاب تو است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, das ist mein Buch.",
+          "fa": "بله، این کتاب من است."
+        }
+      ],
+      "listening": {
+        "passage": "Das ist mein Buch. Die Tasche ist Annas Tasche.",
+        "questionFa": "کیف متعلق به چه کسی است؟",
+        "answer": "Anna"
+      },
+      "reading": {
+        "passage": "Ben hat eine Tasche. Seine Tasche ist blau.",
+        "questionFa": "Seine Tasche به کیف چه کسی اشاره دارد؟",
+        "answer": "Ben"
+      },
+      "transferToIds": [
+        "de-a1-demonstratives"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-family، de-a1-articles، de-a1-subject-pronouns؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-demonstratives",
+      "proposedIndex": 12,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-6"
+      ],
+      "prerequisiteIds": [
+        "de-a1-articles",
+        "de-a1-possessives"
+      ],
+      "outcomeFa": "میان دو شیء، مورد نزدیک و مشخص را نشان بدهم.",
+      "grammarFa": "dieser/diese/dieses در حالت فاعلی؛ das hier به‌عنوان جایگزین ساده؛ پرسش با این شیء مشخص.",
+      "vocabularyFa": "dieser=این مذکر؛ diese=این مؤنث؛ dieses=این خنثی؛ neu=نو",
+      "outOfScopeAndErrorFa": "پایان‌های اشاره در همهٔ حالت‌ها و صفت صرف‌شده آموزش داده نشود؛ قالب Dieses Buch ist neu ترجیح دارد.",
+      "productionFa": "با اسم‌های معلوم سه شیء را نشان بده و یک ویژگی بگو.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Ist dieses Buch neu?",
+          "fa": "آیا این کتاب نو است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, dieses Buch ist neu.",
+          "fa": "بله، این کتاب نو است."
+        },
+        {
+          "role": "partner",
+          "de": "Ist diese Tasche auch neu?",
+          "fa": "آیا این کیف هم نو است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, diese Tasche ist alt.",
+          "fa": "نه، این کیف قدیمی است."
+        }
+      ],
+      "listening": {
+        "passage": "Dieses Buch ist neu. Diese Tasche ist auch neu.",
+        "questionFa": "کدام دو شیء نو هستند؟",
+        "answer": "Buch und Tasche"
+      },
+      "reading": {
+        "passage": "Dieser Stift ist hier. Dieses Heft ist dort.",
+        "questionFa": "کدام شیء آنجا است؟",
+        "answer": "dieses Heft"
+      },
+      "transferToIds": [
+        "de-a1-descriptions"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-articles، de-a1-possessives؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-descriptions",
+      "proposedIndex": 13,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-12"
+      ],
+      "prerequisiteIds": [
+        "de-a1-verb-to-be",
+        "de-a1-demonstratives"
+      ],
+      "outcomeFa": "شخص، شیء یا مکان را با یک صفت ساده توصیف کنم.",
+      "grammarFa": "sein + صفت بدون پسوند؛ nicht + صفت برای تضاد محدود؛ صفت پیش از اسم هدف نیست.",
+      "vocabularyFa": "groß=بزرگ؛ klein=کوچک؛ neu=نو؛ alt=قدیمی",
+      "outOfScopeAndErrorFa": "ein großes Zimmer به‌عنوان قاعدهٔ صرف صفت امتحان نشود؛ صفت پس از ist پایان نمی‌گیرد.",
+      "productionFa": "دو وسیله و یک اتاق را با جمله‌های کوتاه توصیف کن.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Ist dein Zimmer groß?",
+          "fa": "آیا اتاقت بزرگ است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, mein Zimmer ist klein.",
+          "fa": "نه، اتاقم کوچک است."
+        },
+        {
+          "role": "partner",
+          "de": "Ist es ruhig?",
+          "fa": "آیا ساکت است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, es ist ruhig.",
+          "fa": "بله، ساکت است."
+        }
+      ],
+      "listening": {
+        "passage": "Mein Zimmer ist groß. Es ist ruhig.",
+        "questionFa": "اتاق بزرگ است یا کوچک؟",
+        "answer": "groß"
+      },
+      "reading": {
+        "passage": "Die Tasche ist alt. Der Stift ist neu.",
+        "questionFa": "کدام شیء نو است؟",
+        "answer": "der Stift"
+      },
+      "transferToIds": [
+        "de-a1-colors",
+        "de-a1-feelings",
+        "de-a1-home-furniture",
+        "de-a1-comparisons",
+        "de-a1-weather"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-verb-to-be، de-a1-demonstratives؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-colors",
+      "proposedIndex": 14,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-13"
+      ],
+      "prerequisiteIds": [
+        "de-a1-descriptions",
+        "de-a1-articles"
+      ],
+      "outcomeFa": "رنگ یک شیء را بپرسم و با رنگ از میان دو شیء انتخاب کنم.",
+      "grammarFa": "Welche Farbe hat …? قالب پرسش؛ رنگ پس از sein بدون پسوند.",
+      "vocabularyFa": "rot=قرمز؛ blau=آبی؛ grün=سبز؛ schwarz=مشکی",
+      "outOfScopeAndErrorFa": "صرف صفت رنگی پیش از اسم به این درس تحمیل نشود؛ تفاوت grün و grau شنیده شود.",
+      "productionFa": "سه شیء را با رنگ معرفی کن؛ جمله‌ها با ist باشند.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Welche Farbe hat deine Tasche?",
+          "fa": "کیفت چه رنگی است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Meine Tasche ist blau.",
+          "fa": "کیفم آبی است."
+        },
+        {
+          "role": "partner",
+          "de": "Ist dein Buch auch blau?",
+          "fa": "آیا کتابت هم آبی است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, mein Buch ist grün.",
+          "fa": "نه، کتابم سبز است."
+        }
+      ],
+      "listening": {
+        "passage": "Mein Heft ist grün. Mein Stift ist blau.",
+        "questionFa": "دفتر چه رنگی است؟",
+        "answer": "grün"
+      },
+      "reading": {
+        "passage": "Der Stift ist rot. Das Heft ist schwarz.",
+        "questionFa": "دفتر چه رنگی است؟",
+        "answer": "schwarz"
+      },
+      "transferToIds": [
+        "de-a1-shopping-payment",
+        "de-a1-clothes-shopping"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-descriptions، de-a1-articles؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-feelings",
+      "proposedIndex": 15,
+      "module": 2,
+      "preA1Ids": [
+        "de-pre-7"
+      ],
+      "prerequisiteIds": [
+        "de-a1-verb-to-be",
+        "de-a1-descriptions"
+      ],
+      "outcomeFa": "حال خود را بگویم و نیاز سادهٔ مرتبط را بیان کنم.",
+      "grammarFa": "ich bin müde / ich habe Hunger/Durst؛ haben فقط با این ترکیب‌ها، نه آموزش همهٔ افعال.",
+      "vocabularyFa": "müde=خسته؛ froh=خوشحال؛ Hunger=گرسنگی؛ Durst=تشنگی",
+      "outOfScopeAndErrorFa": "Ich bin Hunger به جای Ich habe Hunger اصلاح شود؛ واژگان روان‌شناختی پیچیده لازم نیست.",
+      "productionFa": "دو حالت متفاوت خود یا شخصیت خیالی را با sein/haben بنویس.",
+      "pronunciationFa": "اسم را با حرف تعریف و صورت جمع بشنو؛ پایان کم‌تکیهٔ -e و تفاوت صدای ü با u تمرین شود.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wie geht es dir?",
+          "fa": "حالت چطور است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich bin müde.",
+          "fa": "خسته‌ام."
+        },
+        {
+          "role": "partner",
+          "de": "Hast du auch Durst?",
+          "fa": "آیا تشنه هم هستی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich habe Durst.",
+          "fa": "بله، تشنه‌ام."
+        }
+      ],
+      "listening": {
+        "passage": "Heute bin ich froh. Ich habe aber Hunger.",
+        "questionFa": "گوینده چه نیازی دارد؟",
+        "answer": "Hunger"
+      },
+      "reading": {
+        "passage": "Lena ist froh. Ben hat Hunger.",
+        "questionFa": "چه کسی گرسنه است؟",
+        "answer": "Ben"
+      },
+      "transferToIds": [
+        "de-a1-simple-verbs",
+        "de-a1-doctor-symptoms",
+        "de-a1-reasons"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-verb-to-be، de-a1-descriptions؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-simple-verbs",
+      "proposedIndex": 16,
+      "module": 3,
+      "preA1Ids": [
+        "de-pre-8",
+        "de-pre-9"
+      ],
+      "prerequisiteIds": [
+        "de-a1-subject-pronouns",
+        "de-a1-articles",
+        "de-a1-feelings"
+      ],
+      "outcomeFa": "با haben، brauchen و kaufen یک جملهٔ کوتاه دربارهٔ وسیله بسازم.",
+      "grammarFa": "فاعل + فعل صرف‌شده + مفعول؛ ich habe / du hast؛ حالت مفعولی مذکر ein→einen، der→den؛ خنثی/مؤنث ثابت.",
+      "vocabularyFa": "haben=داشتن؛ brauchen=نیاز داشتن؛ kaufen=خریدن؛ einen Stift=یک خودکار در نقش مفعول",
+      "outOfScopeAndErrorFa": "نقش مفعول با ترجمهٔ فارسی تنها توضیح داده نشود؛ قاعدهٔ همهٔ حروف اضافه یا داتیو اضافه نشود.",
+      "productionFa": "یک نیاز، یک داشته و یک پرسش دربارهٔ وسیلهٔ کلاس بنویس.",
+      "pronunciationFa": "پایان فعل و ضمیر با هم شنیده شوند؛ شکل نوشتاری صرف، جای شنیدن را نگیرد.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was brauchst du?",
+          "fa": "چه لازم داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich brauche einen Stift.",
+          "fa": "یک خودکار لازم دارم."
+        },
+        {
+          "role": "partner",
+          "de": "Hast du ein Heft?",
+          "fa": "آیا دفتر داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich habe ein Heft.",
+          "fa": "بله، دفتر دارم."
+        }
+      ],
+      "listening": {
+        "passage": "Ich brauche eine Tasche. Ein Buch habe ich.",
+        "questionFa": "گوینده چه چیزی لازم دارد؟",
+        "answer": "eine Tasche"
+      },
+      "reading": {
+        "passage": "Ich kaufe eine Tasche. Ich habe ein Buch.",
+        "questionFa": "گوینده چه چیزی می‌خرد؟",
+        "answer": "eine Tasche"
+      },
+      "transferToIds": [
+        "de-a1-verb-conjugation",
+        "de-a1-positive-negative-questions",
+        "de-a1-wants-needs",
+        "de-a1-prepositions",
+        "de-a1-ordering-food"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-subject-pronouns، de-a1-articles، de-a1-feelings؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-verb-conjugation",
+      "proposedIndex": 17,
+      "module": 3,
+      "preA1Ids": [
+        "de-pre-14"
+      ],
+      "prerequisiteIds": [
+        "de-a1-simple-verbs",
+        "de-a1-subject-pronouns"
+      ],
+      "outcomeFa": "یک فعل باقاعدهٔ آشنا را برای شخص‌های مختلف تغییر بدهم.",
+      "grammarFa": "lernen و wohnen در حال: -e/-st/-t/-en؛ wir/sie/Sie؛ ihr با تمرین محدود؛ صرف با معنا و مخاطب.",
+      "vocabularyFa": "lernen=یاد گرفتن؛ wohnen=ساکن بودن؛ zusammen=با هم؛ hier=اینجا",
+      "outOfScopeAndErrorFa": "جدول افعال کم‌کاربرد و استثناهای زیاد لازم نیست؛ du lernst نه du lernen.",
+      "productionFa": "چهار جمله با lernen برای ich، du، wir و Sie بساز.",
+      "pronunciationFa": "پایان فعل و ضمیر با هم شنیده شوند؛ شکل نوشتاری صرف، جای شنیدن را نگیرد.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Lernst du Deutsch?",
+          "fa": "آیا آلمانی یاد می‌گیری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich lerne Deutsch.",
+          "fa": "بله، آلمانی یاد می‌گیرم."
+        },
+        {
+          "role": "partner",
+          "de": "Lernt Anna auch Deutsch?",
+          "fa": "آیا آنا هم آلمانی یاد می‌گیرد؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, wir lernen zusammen.",
+          "fa": "بله، ما با هم یاد می‌گیریم."
+        }
+      ],
+      "listening": {
+        "passage": "Anna lernt Deutsch. Ben und ich lernen auch Deutsch.",
+        "questionFa": "گوینده همراه چه کسی آلمانی یاد می‌گیرد؟",
+        "answer": "Ben"
+      },
+      "reading": {
+        "passage": "Ich wohne in Bonn. Ihr wohnt in Berlin.",
+        "questionFa": "شکل فعل برای ihr چیست؟",
+        "answer": "wohnt"
+      },
+      "transferToIds": [
+        "de-a1-present-tense"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-simple-verbs، de-a1-subject-pronouns؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-present-tense",
+      "proposedIndex": 18,
+      "module": 3,
+      "preA1Ids": [
+        "de-pre-16"
+      ],
+      "prerequisiteIds": [
+        "de-a1-verb-conjugation",
+        "de-a1-nationalities"
+      ],
+      "outcomeFa": "دربارهٔ کار و یادگیری در زمان حال دو جملهٔ مرتبط بگویم.",
+      "grammarFa": "حال برای فعالیت فعلی/عادت؛ arbeiten با -est/-et؛ صورت‌های پربسامد lesen/sprechen با تغییر واکه، محدود و صریح.",
+      "vocabularyFa": "arbeiten=کار کردن؛ lesen=خواندن؛ sprechen=صحبت کردن؛ heute=امروز",
+      "outOfScopeAndErrorFa": "حال استمراری جداگانه ساخته نشود؛ تفاوت liest/lese و sprichst/spreche با نمونه یاد داده شود، نه حفظ همهٔ بی‌قاعده‌ها.",
+      "productionFa": "دربارهٔ کار و یادگیری یک نفر، سه جملهٔ حال بنویس.",
+      "pronunciationFa": "پایان فعل و ضمیر با هم شنیده شوند؛ شکل نوشتاری صرف، جای شنیدن را نگیرد.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Arbeitest du heute?",
+          "fa": "آیا امروز کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, ich lerne heute Deutsch.",
+          "fa": "نه، امروز آلمانی یاد می‌گیرم."
+        },
+        {
+          "role": "partner",
+          "de": "Liest du auch ein Buch?",
+          "fa": "آیا کتاب هم می‌خوانی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich lese ein Buch.",
+          "fa": "بله، کتاب می‌خوانم."
+        }
+      ],
+      "listening": {
+        "passage": "Heute arbeite ich. Anna liest heute ein Buch.",
+        "questionFa": "چه کسی امروز کتاب می‌خواند؟",
+        "answer": "Anna"
+      },
+      "reading": {
+        "passage": "Sara arbeitet heute. Ben liest ein Buch.",
+        "questionFa": "چه کسی کتاب می‌خواند؟",
+        "answer": "Ben"
+      },
+      "transferToIds": [
+        "de-a1-positive-negative-questions",
+        "de-a1-ability",
+        "de-a1-daily-routine",
+        "de-a1-leisure",
+        "de-a1-past-events"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-verb-conjugation، de-a1-nationalities؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-positive-negative-questions",
+      "proposedIndex": 19,
+      "module": 3,
+      "preA1Ids": [
+        "de-pre-8"
+      ],
+      "prerequisiteIds": [
+        "de-a1-simple-verbs",
+        "de-a1-verb-to-be",
+        "de-a1-present-tense"
+      ],
+      "outcomeFa": "یک جملهٔ مثبت را منفی کنم و دربارهٔ آن بله/خیر بپرسم.",
+      "grammarFa": "فعل در آغاز پرسش؛ kein برای اسم نامعین، nicht برای صفت/منفی‌کردن ساده؛ kein/e/keinen در واژگان آشنا.",
+      "vocabularyFa": "kein=هیچ/نه یک؛ nicht=نه؛ ja=بله؛ nein=نه",
+      "outOfScopeAndErrorFa": "جایگاه nicht در همهٔ ساختارهای ممکن هدف نیست؛ du hast→Hast du را با کمک تصویری نشان بده.",
+      "productionFa": "یک پرسش و پاسخ مثبت و منفی برای دو شیء یا فعالیت بساز.",
+      "pronunciationFa": "پایان فعل و ضمیر با هم شنیده شوند؛ شکل نوشتاری صرف، جای شنیدن را نگیرد.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Hast du einen Stift?",
+          "fa": "آیا خودکار داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, ich habe keinen Stift.",
+          "fa": "نه، خودکار ندارم."
+        },
+        {
+          "role": "partner",
+          "de": "Ist dein Buch neu?",
+          "fa": "آیا کتابت نو است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, es ist nicht neu.",
+          "fa": "نه، نو نیست."
+        }
+      ],
+      "listening": {
+        "passage": "Ich habe ein Buch, aber keinen Stift.",
+        "questionFa": "گوینده چه چیزی ندارد؟",
+        "answer": "einen Stift"
+      },
+      "reading": {
+        "passage": "Ich lerne heute nicht. Ich habe keine Zeit.",
+        "questionFa": "نویسنده امروز چه چیزی ندارد؟",
+        "answer": "Zeit"
+      },
+      "transferToIds": [
+        "de-a1-question-words",
+        "de-a1-wants-needs",
+        "de-a1-connectors"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-simple-verbs، de-a1-verb-to-be، de-a1-present-tense؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-question-words",
+      "proposedIndex": 20,
+      "module": 3,
+      "preA1Ids": [
+        "de-pre-15",
+        "de-pre-16",
+        "de-pre-19"
+      ],
+      "prerequisiteIds": [
+        "de-a1-positive-negative-questions",
+        "de-a1-numbers-age"
+      ],
+      "outcomeFa": "برای شخص، شیء، مکان و زمان پرسش مناسب انتخاب کنم.",
+      "grammarFa": "wer/was/wo/woher/wann/wie/wie viel؛ واژهٔ پرسشی + فعل + فاعل؛ فقط پرسش‌های کوتاه.",
+      "vocabularyFa": "wer=چه کسی؛ wo=کجا؛ wann=چه وقت؛ was=چه",
+      "outOfScopeAndErrorFa": "wo با woher یکی نیست؛ پرسش غیرمستقیم و جملهٔ وابسته لازم نیست.",
+      "productionFa": "چهار پرسش دربارهٔ نام، شهر، زمان و نیاز یک هم‌کلاسی بنویس.",
+      "pronunciationFa": "پایان فعل و ضمیر با هم شنیده شوند؛ شکل نوشتاری صرف، جای شنیدن را نگیرد.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wo ist der Kurs?",
+          "fa": "کلاس کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Der Kurs ist hier.",
+          "fa": "کلاس اینجا است."
+        },
+        {
+          "role": "partner",
+          "de": "Wann beginnt der Kurs?",
+          "fa": "کلاس چه زمانی شروع می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "de": "Um neun Uhr.",
+          "fa": "ساعت نه."
+        }
+      ],
+      "listening": {
+        "passage": "Der Kurs ist in Bonn. Er beginnt um zehn Uhr.",
+        "questionFa": "کلاس چه ساعتی شروع می‌شود؟",
+        "answer": "zehn Uhr"
+      },
+      "reading": {
+        "passage": "Wer kommt? Anna kommt. Wo wohnt sie? In Bonn.",
+        "questionFa": "پاسخ پرسش Wer چیست؟",
+        "answer": "Anna"
+      },
+      "transferToIds": [
+        "de-a1-dates-and-time",
+        "de-a1-location"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-positive-negative-questions، de-a1-numbers-age؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-wants-needs",
+      "proposedIndex": 21,
+      "module": 3,
+      "preA1Ids": [
+        "de-pre-9",
+        "de-pre-18"
+      ],
+      "prerequisiteIds": [
+        "de-a1-simple-verbs",
+        "de-a1-positive-negative-questions"
+      ],
+      "outcomeFa": "نیاز، خواستن مؤدبانه و دوست‌داشتن یک نوشیدنی را متمایز کنم.",
+      "grammarFa": "brauchen + اسم؛ möchten + اسم؛ mögen با ich mag؛ آموزش نظام کامل Konjunktiv II لازم نیست.",
+      "vocabularyFa": "Wasser=آب؛ Tee=چای؛ Kaffee=قهوه؛ möchten=خواستن مؤدبانه",
+      "outOfScopeAndErrorFa": "خواستن و دوست‌داشتن یکی فرض نشوند؛ möchte در این درس قالب پربسامد است.",
+      "productionFa": "یک نیاز و یک خواستهٔ مؤدبانه بنویس و یک گزینه را رد کن.",
+      "pronunciationFa": "پایان فعل و ضمیر با هم شنیده شوند؛ شکل نوشتاری صرف، جای شنیدن را نگیرد.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was möchtest du trinken?",
+          "fa": "چه می‌خواهی بنوشی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich möchte Wasser, bitte.",
+          "fa": "لطفاً آب می‌خواهم."
+        },
+        {
+          "role": "partner",
+          "de": "Magst du auch Tee?",
+          "fa": "آیا چای هم دوست داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, aber jetzt brauche ich Wasser.",
+          "fa": "بله، ولی الان آب لازم دارم."
+        }
+      ],
+      "listening": {
+        "passage": "Ich mag Tee, aber jetzt möchte ich Kaffee.",
+        "questionFa": "گوینده الان چه می‌خواهد؟",
+        "answer": "Kaffee"
+      },
+      "reading": {
+        "passage": "Ben mag Kaffee. Heute möchte er Tee.",
+        "questionFa": "بن امروز چه می‌خواهد؟",
+        "answer": "Tee"
+      },
+      "transferToIds": [
+        "de-a1-ability",
+        "de-a1-room-search",
+        "de-a1-ordering-food",
+        "de-a1-preferences",
+        "de-a1-invitations"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-simple-verbs، de-a1-positive-negative-questions؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-ability",
+      "proposedIndex": 22,
+      "module": 3,
+      "preA1Ids": [
+        "de-pre-14"
+      ],
+      "prerequisiteIds": [
+        "de-a1-present-tense",
+        "de-a1-wants-needs"
+      ],
+      "outcomeFa": "یک توانایی را بیان و درخواست کمک ساده کنم.",
+      "grammarFa": "können صرف‌شده + مصدر آخر؛ ich kann / du kannst / Sie können؛ جای nicht در قالب محدود.",
+      "vocabularyFa": "helfen=کمک کردن؛ schwimmen=شنا کردن؛ lesen=خواندن؛ können=توانستن",
+      "outOfScopeAndErrorFa": "Können Sie mir helfen? به‌صورت قالب پیشین بازیابی و اینجا ساختارش روشن شود؛ صرف چند فعل وجهی هم‌زمان نه.",
+      "productionFa": "دو توانایی و یک درخواست با können بنویس.",
+      "pronunciationFa": "پایان فعل و ضمیر با هم شنیده شوند؛ شکل نوشتاری صرف، جای شنیدن را نگیرد.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Kannst du Deutsch lesen?",
+          "fa": "آیا می‌توانی آلمانی بخوانی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ein bisschen.",
+          "fa": "بله، کمی."
+        },
+        {
+          "role": "partner",
+          "de": "Kannst du mir bitte helfen?",
+          "fa": "می‌توانی لطفاً به من کمک کنی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, gern.",
+          "fa": "بله، با کمال میل."
+        }
+      ],
+      "listening": {
+        "passage": "Ben kann gut schwimmen. Ich kann nicht schwimmen.",
+        "questionFa": "چه کسی خوب شنا می‌کند؟",
+        "answer": "Ben"
+      },
+      "reading": {
+        "passage": "Anna kann schwimmen. Ben kann nicht schwimmen.",
+        "questionFa": "چه کسی نمی‌تواند شنا کند؟",
+        "answer": "Ben"
+      },
+      "transferToIds": [
+        "de-a1-work-study",
+        "de-a1-instructions",
+        "de-a1-clothes-shopping",
+        "de-a1-leisure",
+        "de-a1-suggestions",
+        "de-a1-directions",
+        "de-a1-polite-requests"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-present-tense، de-a1-wants-needs؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-dates-and-time",
+      "proposedIndex": 23,
+      "module": 4,
+      "preA1Ids": [
+        "de-pre-19",
+        "de-pre-20"
+      ],
+      "prerequisiteIds": [
+        "de-a1-numbers-age",
+        "de-a1-question-words"
+      ],
+      "outcomeFa": "ساعت و روز یک قرار را بپرسم و یک تاریخ کوتاه را بفهمم.",
+      "grammarFa": "um برای ساعت، am برای روز؛ ساعت دیجیتال ابتدا؛ halb zehn یعنی ۹:۳۰؛ تاریخ عددی و am ersten Mai محدود.",
+      "vocabularyFa": "Uhr=ساعت؛ Montag=دوشنبه؛ Mai=ماه مه؛ halb=نیم",
+      "outOfScopeAndErrorFa": "همهٔ اعداد ترتیبی با صرف کامل یکجا نیایند؛ halb zehn با ۱۰:۳۰ اشتباه نشود.",
+      "productionFa": "یک روز و ساعت قرار خیالی بنویس و آن را به زبان ساده بخوان.",
+      "pronunciationFa": "تفاوت Uhr و um؛ تکیهٔ جزء جداشوندهٔ فعل و شنیدن عدد ساعت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wann ist der Termin?",
+          "fa": "قرار چه زمانی است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Am Montag.",
+          "fa": "دوشنبه."
+        },
+        {
+          "role": "partner",
+          "de": "Um wie viel Uhr?",
+          "fa": "ساعت چند؟"
+        },
+        {
+          "role": "learner",
+          "de": "Um neun Uhr dreißig.",
+          "fa": "ساعت نه و سی دقیقه."
+        }
+      ],
+      "listening": {
+        "passage": "Der Termin ist am Dienstag um elf Uhr.",
+        "questionFa": "قرار چه روزی است؟",
+        "answer": "Dienstag"
+      },
+      "reading": {
+        "passage": "Kursbeginn: 01.05., 10:00 Uhr.",
+        "questionFa": "کلاس چه ساعتی شروع می‌شود؟",
+        "answer": "10:00"
+      },
+      "transferToIds": [
+        "de-a1-forms-information",
+        "de-a1-daily-routine",
+        "de-a1-weekly-schedule",
+        "de-a1-weather",
+        "de-a1-invitations",
+        "de-a1-public-transport",
+        "de-a1-doctor-symptoms"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-numbers-age، de-a1-question-words؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-forms-information",
+      "proposedIndex": 24,
+      "module": 4,
+      "preA1Ids": [
+        "de-pre-2",
+        "de-pre-15"
+      ],
+      "prerequisiteIds": [
+        "de-a1-numbers-age",
+        "de-a1-nationalities",
+        "de-a1-asking-help",
+        "de-a1-dates-and-time"
+      ],
+      "outcomeFa": "یک فرم کوتاهِ نام، نشانی و تاریخ را بفهمم و تکمیل کنم.",
+      "grammarFa": "Vorname/Nachname؛ Ihr/Ihre خطاب رسمی؛ Geburtsdatum و آدرس در قالب، بدون الزام بیان تاریخ‌های پیچیده.",
+      "vocabularyFa": "Vorname=نام کوچک؛ Nachname=نام خانوادگی؛ Adresse=نشانی؛ Geburtsdatum=تاریخ تولد",
+      "outOfScopeAndErrorFa": "فقط اطلاعات خیالی؛ ایمیل/حروف با صوت و متن متناظر باشد؛ نام و نام خانوادگی جابه‌جا نشوند.",
+      "productionFa": "چهار خانهٔ یک فرم را با اطلاعات خیالی پر کن و یک درخواست هجی بنویس.",
+      "pronunciationFa": "تفاوت Uhr و um؛ تکیهٔ جزء جداشوندهٔ فعل و شنیدن عدد ساعت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wie ist Ihr Vorname?",
+          "fa": "نام کوچک شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Mein Vorname ist Sara.",
+          "fa": "نام کوچک من سارا است."
+        },
+        {
+          "role": "partner",
+          "de": "Und Ihr Nachname?",
+          "fa": "و نام خانوادگی شما؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ali. Ich buchstabiere: A–L–I.",
+          "fa": "علی. هجی می‌کنم: اِی، اِل، ای."
+        }
+      ],
+      "listening": {
+        "passage": "Mein Vorname ist Anna. Mein Nachname ist Lee.",
+        "questionFa": "نام خانوادگی چیست؟",
+        "answer": "Lee"
+      },
+      "reading": {
+        "passage": "Vorname: Ben. Nachname: Weber. Wohnort: Bonn.",
+        "questionFa": "نام خانوادگی چیست؟",
+        "answer": "Weber"
+      },
+      "transferToIds": [
+        "de-a1-connected-conversation"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-numbers-age، de-a1-nationalities، de-a1-asking-help، de-a1-dates-and-time؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-daily-routine",
+      "proposedIndex": 25,
+      "module": 4,
+      "preA1Ids": [
+        "de-pre-19"
+      ],
+      "prerequisiteIds": [
+        "de-a1-present-tense",
+        "de-a1-dates-and-time"
+      ],
+      "outcomeFa": "سه کار روزانه را با زمان بگویم.",
+      "grammarFa": "قید زمان اول + فعل دوم؛ aufstehen و einkaufen جداشدنی؛ جزء دوم پایان جمله.",
+      "vocabularyFa": "aufstehen=بلند شدن؛ frühstücken=صبحانه خوردن؛ morgens=صبح‌ها؛ abends=عصرها",
+      "outOfScopeAndErrorFa": "همهٔ افعال جداشدنی لازم نیست؛ Ich stehe um sieben Uhr auf با مصدر aufstehen پیوند بخورد.",
+      "productionFa": "سه کار روزانهٔ خیالی را به ترتیب زمانی بنویس.",
+      "pronunciationFa": "تفاوت Uhr و um؛ تکیهٔ جزء جداشوندهٔ فعل و شنیدن عدد ساعت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wann stehst du auf?",
+          "fa": "چه زمانی از خواب بلند می‌شوی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich stehe um sieben Uhr auf.",
+          "fa": "ساعت هفت بلند می‌شوم."
+        },
+        {
+          "role": "partner",
+          "de": "Und wann frühstückst du?",
+          "fa": "و چه زمانی صبحانه می‌خوری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Um halb acht.",
+          "fa": "ساعت هفت و نیم."
+        }
+      ],
+      "listening": {
+        "passage": "Ich stehe um sechs Uhr auf. Um halb sieben frühstücke ich.",
+        "questionFa": "گوینده چه ساعتی صبحانه می‌خورد؟",
+        "answer": "06:30"
+      },
+      "reading": {
+        "passage": "Morgens lerne ich. Abends kaufe ich ein.",
+        "questionFa": "نویسنده چه زمانی خرید می‌کند؟",
+        "answer": "abends"
+      },
+      "transferToIds": [
+        "de-a1-weekly-schedule",
+        "de-a1-past-events"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-present-tense، de-a1-dates-and-time؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-weekly-schedule",
+      "proposedIndex": 26,
+      "module": 4,
+      "preA1Ids": [
+        "de-pre-20"
+      ],
+      "prerequisiteIds": [
+        "de-a1-daily-routine",
+        "de-a1-dates-and-time"
+      ],
+      "outcomeFa": "تکرار هفتگی را از یک قرار مشخص متمایز کنم.",
+      "grammarFa": "montags در برابر am Montag؛ von … bis … برای بازهٔ ساعت؛ جای فعل دوم.",
+      "vocabularyFa": "Woche=هفته؛ Wochenende=آخر هفته؛ montags=دوشنبه‌ها؛ frei=آزاد",
+      "outOfScopeAndErrorFa": "روزهای اسمی با حرف بزرگ، قید تکراری با حرف کوچک؛ برنامهٔ هفتگی فهرست بی‌ربط نشود.",
+      "productionFa": "برنامهٔ دو روز هفته و یک وقت آزاد را بنویس.",
+      "pronunciationFa": "تفاوت Uhr و um؛ تکیهٔ جزء جداشوندهٔ فعل و شنیدن عدد ساعت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wann arbeitest du?",
+          "fa": "چه زمانی کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich arbeite montags und dienstags.",
+          "fa": "دوشنبه‌ها و سه‌شنبه‌ها کار می‌کنم."
+        },
+        {
+          "role": "partner",
+          "de": "Hast du am Samstag Zeit?",
+          "fa": "شنبه وقت داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, am Samstag habe ich frei.",
+          "fa": "بله، شنبه آزاد هستم."
+        }
+      ],
+      "listening": {
+        "passage": "Ich arbeite montags. Am Freitag habe ich frei.",
+        "questionFa": "گوینده چه روزی آزاد است؟",
+        "answer": "Freitag"
+      },
+      "reading": {
+        "passage": "Deutschkurs: Mittwoch, 09:00–11:00 Uhr.",
+        "questionFa": "کلاس چه ساعتی تمام می‌شود؟",
+        "answer": "11:00"
+      },
+      "transferToIds": [
+        "de-a1-work-study",
+        "de-a1-future-plans"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-daily-routine، de-a1-dates-and-time؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-work-study",
+      "proposedIndex": 27,
+      "module": 4,
+      "preA1Ids": [
+        "de-pre-14"
+      ],
+      "prerequisiteIds": [
+        "de-a1-weekly-schedule",
+        "de-a1-ability"
+      ],
+      "outcomeFa": "در کلاس یا محل کار دربارهٔ وظیفه و زمان سؤال ساده بپرسم.",
+      "grammarFa": "arbeiten/lernen؛ wann و wo در کاربرد؛ ich muss … به‌عنوان ورودی محدودِ نیاز/وظیفه با مصدر، نه همهٔ وجهی‌ها.",
+      "vocabularyFa": "Kurs=کلاس؛ Pause=استراحت؛ Aufgabe=تکلیف؛ Büro=دفتر کار",
+      "outOfScopeAndErrorFa": "مصاحبهٔ کاری یا شرح سابقهٔ تخصصی هدف نیست؛ müssen پیش از استفاده یک‌بار صریح معرفی شود.",
+      "productionFa": "دربارهٔ زمان کار یا کلاس خیالی سه جمله و یک سؤال بنویس.",
+      "pronunciationFa": "تفاوت Uhr و um؛ تکیهٔ جزء جداشوندهٔ فعل و شنیدن عدد ساعت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wann beginnt die Arbeit?",
+          "fa": "کار چه زمانی شروع می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "de": "Um acht Uhr.",
+          "fa": "ساعت هشت."
+        },
+        {
+          "role": "partner",
+          "de": "Wann ist die Pause?",
+          "fa": "زمان استراحت چه موقع است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Um zehn Uhr.",
+          "fa": "ساعت ده."
+        }
+      ],
+      "listening": {
+        "passage": "Die Arbeit beginnt um neun Uhr. Die Pause ist um elf.",
+        "questionFa": "زمان استراحت چه ساعتی است؟",
+        "answer": "elf Uhr"
+      },
+      "reading": {
+        "passage": "Ich muss heute lernen. Der Kurs beginnt um neun.",
+        "questionFa": "نویسنده امروز باید چه کاری انجام دهد؟",
+        "answer": "lernen"
+      },
+      "transferToIds": [
+        "de-a1-instructions"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-weekly-schedule، de-a1-ability؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-instructions",
+      "proposedIndex": 28,
+      "module": 4,
+      "preA1Ids": [
+        "de-pre-14"
+      ],
+      "prerequisiteIds": [
+        "de-a1-work-study",
+        "de-a1-ability"
+      ],
+      "outcomeFa": "یک دستور کوتاه کلاس را بفهمم و درخواست توضیح کنم.",
+      "grammarFa": "امر رسمی: فعل + Sie؛ öffnen/lesen/schreiben؛ du فقط تشخیص نمونهٔ پربسامد، نه جدول کامل امر.",
+      "vocabularyFa": "öffnen=باز کردن؛ schreiben=نوشتن؛ Seite=صفحه؛ Aufgabe=تمرین",
+      "outOfScopeAndErrorFa": "Sie در امر رسمی حذف نشود؛ ضمایر مفعولی پیچیده و همهٔ افعال جداشدنی اضافه نشوند.",
+      "productionFa": "دو دستور رسمی برای یک فعالیت کلاسی و یک درخواست تکرار بنویس.",
+      "pronunciationFa": "تفاوت Uhr و um؛ تکیهٔ جزء جداشوندهٔ فعل و شنیدن عدد ساعت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Öffnen Sie bitte Ihr Buch.",
+          "fa": "لطفاً کتابتان را باز کنید."
+        },
+        {
+          "role": "learner",
+          "de": "Welche Seite, bitte?",
+          "fa": "کدام صفحه، لطفاً؟"
+        },
+        {
+          "role": "partner",
+          "de": "Seite zwölf. Lesen Sie bitte den Text.",
+          "fa": "صفحهٔ دوازده. لطفاً متن را بخوانید."
+        },
+        {
+          "role": "learner",
+          "de": "Danke. Ich lese den Text.",
+          "fa": "ممنون. متن را می‌خوانم."
+        }
+      ],
+      "listening": {
+        "passage": "Öffnen Sie bitte Ihr Buch auf Seite zehn. Lesen Sie den Text.",
+        "questionFa": "کدام صفحه باید باز شود؟",
+        "answer": "zehn"
+      },
+      "reading": {
+        "passage": "Bitte schreiben Sie Ihren Namen.",
+        "questionFa": "چه چیزی باید نوشته شود؟",
+        "answer": "نام"
+      },
+      "transferToIds": [
+        "de-a1-directions",
+        "de-a1-polite-requests"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-work-study، de-a1-ability؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-location",
+      "proposedIndex": 29,
+      "module": 5,
+      "preA1Ids": [
+        "de-pre-17"
+      ],
+      "prerequisiteIds": [
+        "de-a1-question-words",
+        "de-a1-articles"
+      ],
+      "outcomeFa": "محل یک اتاق یا وسیله را بپرسم و بگویم.",
+      "grammarFa": "wo + sein؛ hier/dort؛ im Zimmer و in der Küche به‌صورت ترکیب مکانی؛ توضیح im=in dem.",
+      "vocabularyFa": "Küche=آشپزخانه؛ Bad=حمام؛ Zimmer=اتاق؛ dort=آنجا",
+      "outOfScopeAndErrorFa": "Wo و Wohin و دو حالتِ همهٔ حروف اضافه با هم تدریس نشوند؛ حرکت هدف این درس نیست.",
+      "productionFa": "جای سه اتاق یا وسیله را در یک نقشهٔ خیالی بنویس.",
+      "pronunciationFa": "ترکیب مکانی را یک واحد بشنو؛ dem/der و im را در متن تشخیص بده.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wo ist die Küche?",
+          "fa": "آشپزخانه کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Die Küche ist dort.",
+          "fa": "آشپزخانه آنجا است."
+        },
+        {
+          "role": "partner",
+          "de": "Und wo ist mein Buch?",
+          "fa": "و کتاب من کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Es ist im Zimmer.",
+          "fa": "در اتاق است."
+        }
+      ],
+      "listening": {
+        "passage": "Die Tasche ist im Zimmer. Das Buch ist in der Küche.",
+        "questionFa": "کتاب کجاست؟",
+        "answer": "in der Küche"
+      },
+      "reading": {
+        "passage": "Das Bad ist hier. Die Tasche ist in der Küche.",
+        "questionFa": "کیف کجاست؟",
+        "answer": "in der Küche"
+      },
+      "transferToIds": [
+        "de-a1-prepositions"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-question-words، de-a1-articles؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-prepositions",
+      "proposedIndex": 30,
+      "module": 5,
+      "preA1Ids": [
+        "de-pre-17"
+      ],
+      "prerequisiteIds": [
+        "de-a1-location",
+        "de-a1-simple-verbs"
+      ],
+      "outcomeFa": "موقعیت ثابت وسیله را با روی، زیر و کنار بیان کنم.",
+      "grammarFa": "مکان ثابت با auf/unter/neben + dem/der در عبارت‌های منتخب؛ تفاوت نقش با مفعول فعل را در دو نمونه ببینم.",
+      "vocabularyFa": "auf=روی؛ unter=زیر؛ neben=کنار؛ Tisch=میز",
+      "outOfScopeAndErrorFa": "داتیو اینجا محدود به مکان ثابت است؛ همهٔ Wechselpräpositionen و حرکت با آکوزاتیو اجباری نشود.",
+      "productionFa": "روی نقشهٔ اتاق، سه جای ثابت با اسم و حرف تعریف درست بنویس.",
+      "pronunciationFa": "ترکیب مکانی را یک واحد بشنو؛ dem/der و im را در متن تشخیص بده.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wo ist das Buch?",
+          "fa": "کتاب کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Es liegt auf dem Tisch.",
+          "fa": "روی میز است."
+        },
+        {
+          "role": "partner",
+          "de": "Und wo ist die Tasche?",
+          "fa": "و کیف کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Sie ist unter dem Tisch.",
+          "fa": "زیر میز است."
+        }
+      ],
+      "listening": {
+        "passage": "Das Buch liegt unter dem Tisch. Die Tasche steht neben dem Tisch.",
+        "questionFa": "کتاب نسبت به میز کجاست؟",
+        "answer": "unter dem Tisch"
+      },
+      "reading": {
+        "passage": "Der Stift liegt neben dem Buch.",
+        "questionFa": "خودکار کنار چه چیزی است؟",
+        "answer": "dem Buch"
+      },
+      "transferToIds": [
+        "de-a1-home-furniture",
+        "de-a1-directions"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-location، de-a1-simple-verbs؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-home-furniture",
+      "proposedIndex": 31,
+      "module": 5,
+      "preA1Ids": [
+        "de-pre-12",
+        "de-pre-17"
+      ],
+      "prerequisiteIds": [
+        "de-a1-prepositions",
+        "de-a1-descriptions"
+      ],
+      "outcomeFa": "یک اتاق را با وسایل و جای آن‌ها توصیف کنم.",
+      "grammarFa": "es gibt + آکوزاتیو؛ es gibt einen Tisch؛ جملهٔ مکانی جدا با dem؛ keine برای نبودن.",
+      "vocabularyFa": "Bett=تخت؛ Stuhl=صندلی؛ Tisch=میز؛ Fenster=پنجره",
+      "outOfScopeAndErrorFa": "es gibt dem Tisch غلط است؛ صرف صفت و توصیف معماری مفصل هدف نیست.",
+      "productionFa": "سه جمله دربارهٔ وسایل و جای آن‌ها در اتاق خیالی بنویس.",
+      "pronunciationFa": "ترکیب مکانی را یک واحد بشنو؛ dem/der و im را در متن تشخیص بده.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was gibt es im Zimmer?",
+          "fa": "در اتاق چه چیزهایی هست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Es gibt ein Bett und einen Tisch.",
+          "fa": "یک تخت و یک میز هست."
+        },
+        {
+          "role": "partner",
+          "de": "Wo steht der Tisch?",
+          "fa": "میز کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Er steht neben dem Fenster.",
+          "fa": "کنار پنجره است."
+        }
+      ],
+      "listening": {
+        "passage": "Im Zimmer gibt es ein Bett und zwei Stühle. Der Tisch steht neben dem Bett.",
+        "questionFa": "چند صندلی در اتاق هست؟",
+        "answer": "zwei"
+      },
+      "reading": {
+        "passage": "Im Zimmer gibt es zwei Stühle, aber kein Bett.",
+        "questionFa": "کدام وسیله وجود ندارد؟",
+        "answer": "Bett"
+      },
+      "transferToIds": [
+        "de-a1-room-search"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-prepositions، de-a1-descriptions؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-room-search",
+      "proposedIndex": 32,
+      "module": 5,
+      "preA1Ids": [
+        "de-pre-9"
+      ],
+      "prerequisiteIds": [
+        "de-a1-home-furniture",
+        "de-a1-wants-needs",
+        "de-a1-numbers-age"
+      ],
+      "outcomeFa": "دربارهٔ اتاق قابل اجاره، قیمت و امکانات ساده بپرسم.",
+      "grammarFa": "ich suche؛ Wie viel kostet … pro Monat?؛ gibt es …?؛ für eine Person به‌صورت عبارت.",
+      "vocabularyFa": "Miete=اجاره؛ Monat=ماه؛ Zimmer=اتاق؛ ruhig=ساکت",
+      "outOfScopeAndErrorFa": "قرارداد حقوقی، بندهای اجاره و چانه‌زنی پیچیده هدف A1 نیست؛ اعداد قیمت ساده و روشن باشند.",
+      "productionFa": "برای یک آگهی خیالی، سه سؤال دربارهٔ قیمت، آشپزخانه و سکوت اتاق بنویس.",
+      "pronunciationFa": "ترکیب مکانی را یک واحد بشنو؛ dem/der و im را در متن تشخیص بده.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Guten Tag. Ich suche ein Zimmer.",
+          "fa": "روز بخیر. دنبال یک اتاق هستم."
+        },
+        {
+          "role": "learner",
+          "de": "Das Zimmer ist frei.",
+          "fa": "اتاق خالی است."
+        },
+        {
+          "role": "partner",
+          "de": "Wie viel kostet es pro Monat?",
+          "fa": "ماهی چقدر هزینه دارد؟"
+        },
+        {
+          "role": "learner",
+          "de": "Vierhundert Euro.",
+          "fa": "چهارصد یورو."
+        }
+      ],
+      "listening": {
+        "passage": "Das Zimmer kostet fünfhundert Euro pro Monat. Es ist ruhig.",
+        "questionFa": "اجارهٔ ماهانه چقدر است؟",
+        "answer": "500 Euro"
+      },
+      "reading": {
+        "passage": "Zimmer frei: 300 Euro pro Monat. Küche und Bad zusammen.",
+        "questionFa": "اجارهٔ این آگهی چقدر است؟",
+        "answer": "300 Euro"
+      },
+      "transferToIds": [
+        "de-a1-hotel-stay"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-home-furniture، de-a1-wants-needs، de-a1-numbers-age؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-ordering-food",
+      "proposedIndex": 33,
+      "module": 6,
+      "preA1Ids": [
+        "de-pre-18"
+      ],
+      "prerequisiteIds": [
+        "de-a1-wants-needs",
+        "de-a1-simple-verbs"
+      ],
+      "outcomeFa": "یک خوراک و نوشیدنی ساده سفارش بدهم و گزینه‌ای را حذف کنم.",
+      "grammarFa": "ich möchte + آکوزاتیو؛ mit/ohne در عبارت آماده؛ بدون تدریس همهٔ داتیو بعد از mit.",
+      "vocabularyFa": "Wasser=آب؛ Suppe=سوپ؛ Brot=نان؛ ohne=بدون",
+      "outOfScopeAndErrorFa": "Ich hätte gern فقط گزینهٔ تشخیصی، نه الزام هم‌زمان چند ساخت مؤدبانه؛ واژگان آلرژی ادعای تضمین ایمنی ندارد.",
+      "productionFa": "یک سفارش دو قلمی با یک درخواست بدونِ چیزی بنویس.",
+      "pronunciationFa": "تمایز عدد قیمت و مقدار؛ تفاوت ie/ei و نام کالا همراه حرف تعریف.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was möchten Sie essen?",
+          "fa": "چه میل دارید بخورید؟"
+        },
+        {
+          "role": "learner",
+          "de": "Eine Suppe, bitte.",
+          "fa": "یک سوپ، لطفاً."
+        },
+        {
+          "role": "partner",
+          "de": "Und was möchten Sie trinken?",
+          "fa": "و چه میل دارید بنوشید؟"
+        },
+        {
+          "role": "learner",
+          "de": "Wasser ohne Eis, bitte.",
+          "fa": "آب بدون یخ، لطفاً."
+        }
+      ],
+      "listening": {
+        "passage": "Ich möchte ein Brot und einen Tee ohne Milch, bitte.",
+        "questionFa": "چای بدون چه چیزی سفارش داده شده؟",
+        "answer": "Milch"
+      },
+      "reading": {
+        "passage": "Heute: Suppe 5 Euro. Brot 2 Euro.",
+        "questionFa": "قیمت سوپ چقدر است؟",
+        "answer": "5 Euro"
+      },
+      "transferToIds": [
+        "de-a1-cafe",
+        "de-a1-supermarket",
+        "de-a1-preferences"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-wants-needs، de-a1-simple-verbs؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-cafe",
+      "proposedIndex": 34,
+      "module": 6,
+      "preA1Ids": [
+        "de-pre-18"
+      ],
+      "prerequisiteIds": [
+        "de-a1-ordering-food",
+        "de-a1-numbers-age"
+      ],
+      "outcomeFa": "سفارش کافه را تا درخواست صورت‌حساب و پرداخت پیش ببرم.",
+      "grammarFa": "einen Kaffee / einen Tee؛ die Rechnung, bitte؛ zusammen/getrennt؛ قیمت ساده با Euro و Cent.",
+      "vocabularyFa": "Rechnung=صورت‌حساب؛ zahlen=پرداخت کردن؛ zusammen=با هم؛ getrennt=جدا",
+      "outOfScopeAndErrorFa": "تفاوت این درس با سفارش غذا: نوبت‌گیری، صورت‌حساب و پایان تراکنش؛ فقط واژهٔ غذا عوض نشود.",
+      "productionFa": "یک گفت‌وگوی کافه با سفارش و پرداخت، با خطاب رسمی ثابت بنویس.",
+      "pronunciationFa": "تمایز عدد قیمت و مقدار؛ تفاوت ie/ei و نام کالا همراه حرف تعریف.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was möchten Sie trinken?",
+          "fa": "چه میل دارید بنوشید؟"
+        },
+        {
+          "role": "learner",
+          "de": "Einen Kaffee, bitte.",
+          "fa": "یک قهوه، لطفاً."
+        },
+        {
+          "role": "partner",
+          "de": "Möchten Sie jetzt zahlen?",
+          "fa": "آیا الان می‌خواهید پرداخت کنید؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja. Die Rechnung, bitte.",
+          "fa": "بله. صورت‌حساب، لطفاً."
+        }
+      ],
+      "listening": {
+        "passage": "Einen Tee, bitte. Ich möchte jetzt zahlen.",
+        "questionFa": "مشتری چه نوشیدنی‌ای سفارش می‌دهد؟",
+        "answer": "einen Tee"
+      },
+      "reading": {
+        "passage": "Kaffee 3 Euro. Tee 2 Euro. Wasser 1 Euro.",
+        "questionFa": "ارزان‌ترین نوشیدنی کدام است؟",
+        "answer": "Wasser"
+      },
+      "transferToIds": [
+        "de-a1-shopping-payment"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-ordering-food، de-a1-numbers-age؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-shopping-payment",
+      "proposedIndex": 35,
+      "module": 6,
+      "preA1Ids": [
+        "de-pre-5"
+      ],
+      "prerequisiteIds": [
+        "de-a1-cafe",
+        "de-a1-colors"
+      ],
+      "outcomeFa": "قیمت یک کالا را بپرسم و روش پرداخت را روشن کنم.",
+      "grammarFa": "Wie viel kostet …?؛ ich nehme …؛ bar / mit Karte به‌صورت عبارت؛ آکوزاتیوِ کالای منتخب.",
+      "vocabularyFa": "kosten=قیمت داشتن؛ bar=نقد؛ Karte=کارت؛ Euro=یورو",
+      "outOfScopeAndErrorFa": "قیمت واقعی بازار ادعا نشود؛ متن‌ها خیالی‌اند. درس با تحویل کالا و پرداخت پایان یابد.",
+      "productionFa": "یک خرید خودکار یا دفتر با سؤال قیمت و روش پرداخت بنویس.",
+      "pronunciationFa": "تمایز عدد قیمت و مقدار؛ تفاوت ie/ei و نام کالا همراه حرف تعریف.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wie viel kostet das Heft?",
+          "fa": "دفتر چقدر قیمت دارد؟"
+        },
+        {
+          "role": "learner",
+          "de": "Drei Euro.",
+          "fa": "سه یورو."
+        },
+        {
+          "role": "partner",
+          "de": "Kann ich mit Karte zahlen?",
+          "fa": "می‌توانم با کارت پرداخت کنم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, natürlich.",
+          "fa": "بله، حتماً."
+        }
+      ],
+      "listening": {
+        "passage": "Das Buch kostet fünf Euro. Sie können mit Karte zahlen.",
+        "questionFa": "کتاب چند یورو است؟",
+        "answer": "5 Euro"
+      },
+      "reading": {
+        "passage": "Ein Stift kostet 2 Euro. Nur Barzahlung.",
+        "questionFa": "در این فروشگاه چه روش پرداختی پذیرفته می‌شود؟",
+        "answer": "bar"
+      },
+      "transferToIds": [
+        "de-a1-supermarket",
+        "de-a1-clothes-shopping",
+        "de-a1-travel-tickets"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-cafe، de-a1-colors؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-supermarket",
+      "proposedIndex": 36,
+      "module": 6,
+      "preA1Ids": [
+        "de-pre-5"
+      ],
+      "prerequisiteIds": [
+        "de-a1-shopping-payment",
+        "de-a1-ordering-food"
+      ],
+      "outcomeFa": "جای یک کالا را بپرسم و مقدار ساده‌ای از آن بخواهم.",
+      "grammarFa": "Wo finde ich …?؛ ein Kilo / eine Flasche؛ جمع بعد از عدد؛ keinen/keine در نبودن کالا.",
+      "vocabularyFa": "Brot=نان؛ Apfel=سیب؛ Milch=شیر؛ Kilo=کیلو",
+      "outOfScopeAndErrorFa": "تفاوت با خرید عمومی: یافتن قفسه و مقدار؛ جنس و جمعِ Lebensmittel واقعی بررسی شود.",
+      "productionFa": "یک فهرست خرید سه‌قلمی و یک سؤال دربارهٔ جای کالا بنویس.",
+      "pronunciationFa": "تمایز عدد قیمت و مقدار؛ تفاوت ie/ei و نام کالا همراه حرف تعریف.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Entschuldigung, wo finde ich die Milch?",
+          "fa": "ببخشید، شیر را کجا پیدا می‌کنم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Dort, neben dem Brot.",
+          "fa": "آنجا، کنار نان."
+        },
+        {
+          "role": "partner",
+          "de": "Gibt es auch Äpfel?",
+          "fa": "سیب هم هست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ein Kilo kostet zwei Euro.",
+          "fa": "بله، یک کیلو دو یورو است."
+        }
+      ],
+      "listening": {
+        "passage": "Ein Kilo Äpfel kostet drei Euro. Die Milch steht neben dem Brot.",
+        "questionFa": "یک کیلو سیب چقدر است؟",
+        "answer": "3 Euro"
+      },
+      "reading": {
+        "passage": "Einkaufsliste: drei Äpfel, eine Flasche Wasser, ein Brot.",
+        "questionFa": "در فهرست چند سیب آمده؟",
+        "answer": "drei"
+      },
+      "transferToIds": [],
+      "retrievalFa": "بازیابی کوتاه از de-a1-shopping-payment، de-a1-ordering-food؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-clothes-shopping",
+      "proposedIndex": 37,
+      "module": 6,
+      "preA1Ids": [
+        "de-pre-13"
+      ],
+      "prerequisiteIds": [
+        "de-a1-shopping-payment",
+        "de-a1-ability",
+        "de-a1-colors"
+      ],
+      "outcomeFa": "سایز و رنگ یک لباس را بخواهم و اجازهٔ پرو بگیرم.",
+      "grammarFa": "kann ich … anprobieren?؛ Größe M؛ این مرحله بدون صرف صفت مقایسه‌ای، passt/zu klein قالب ساده.",
+      "vocabularyFa": "Hemd=پیراهن؛ Jacke=کاپشن؛ Größe=سایز؛ anprobieren=پرو کردن",
+      "outOfScopeAndErrorFa": "dieses Hemd قبل از نقش مفعولی خنثی بازیابی شود؛ größere Größe پیش از درس مقایسه اجباری نشود.",
+      "productionFa": "رنگ، سایز و یک درخواست پرو برای لباس خیالی بنویس.",
+      "pronunciationFa": "تمایز عدد قیمت و مقدار؛ تفاوت ie/ei و نام کالا همراه حرف تعریف.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Haben Sie dieses Hemd in Größe M?",
+          "fa": "این پیراهن را در سایز مدیوم دارید؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, hier bitte.",
+          "fa": "بله، بفرمایید."
+        },
+        {
+          "role": "partner",
+          "de": "Kann ich es anprobieren?",
+          "fa": "می‌توانم آن را پرو کنم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, die Umkleide ist dort.",
+          "fa": "بله، اتاق پرو آنجا است."
+        }
+      ],
+      "listening": {
+        "passage": "Ich suche eine Jacke in Größe L. Haben Sie die Jacke in Blau?",
+        "questionFa": "مشتری چه سایزی می‌خواهد؟",
+        "answer": "L"
+      },
+      "reading": {
+        "passage": "Jacke: blau, Größe S, 30 Euro.",
+        "questionFa": "کاپشن چه رنگی است؟",
+        "answer": "blau"
+      },
+      "transferToIds": [
+        "de-a1-comparisons"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-shopping-payment، de-a1-ability، de-a1-colors؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-preferences",
+      "proposedIndex": 38,
+      "module": 6,
+      "preA1Ids": [
+        "de-pre-3"
+      ],
+      "prerequisiteIds": [
+        "de-a1-wants-needs",
+        "de-a1-ordering-food"
+      ],
+      "outcomeFa": "بین دو گزینهٔ آشنا انتخاب کنم و ترجیح را بگویم.",
+      "grammarFa": "lieber … oder …?؛ ich trinke lieber …؛ nicht gern؛ تفاوت mögen و gern با فعل.",
+      "vocabularyFa": "lieber=ترجیحاً؛ oder=یا؛ gern=با علاقه؛ lieber Tee=ترجیح چای",
+      "outOfScopeAndErrorFa": "Ich gern Tee جملهٔ کامل نیست؛ lieber als محدود به انتخاب ساده بماند.",
+      "productionFa": "دو ترجیح دربارهٔ نوشیدنی و فعالیت بنویس و از مخاطب انتخاب بخواه.",
+      "pronunciationFa": "تمایز عدد قیمت و مقدار؛ تفاوت ie/ei و نام کالا همراه حرف تعریف.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Trinkst du lieber Tee oder Kaffee?",
+          "fa": "ترجیح می‌دهی چای بنوشی یا قهوه؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich trinke lieber Tee.",
+          "fa": "ترجیح می‌دهم چای بنوشم."
+        },
+        {
+          "role": "partner",
+          "de": "Mit Milch?",
+          "fa": "با شیر؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, ohne Milch, bitte.",
+          "fa": "نه، بدون شیر، لطفاً."
+        }
+      ],
+      "listening": {
+        "passage": "Ich trinke lieber Kaffee. Tee mag ich nicht so gern.",
+        "questionFa": "گوینده کدام نوشیدنی را ترجیح می‌دهد؟",
+        "answer": "Kaffee"
+      },
+      "reading": {
+        "passage": "Ben isst gern Brot. Sara isst lieber Reis.",
+        "questionFa": "سارا کدام غذا را ترجیح می‌دهد؟",
+        "answer": "Reis"
+      },
+      "transferToIds": [
+        "de-a1-comparisons",
+        "de-a1-leisure"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-wants-needs، de-a1-ordering-food؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-comparisons",
+      "proposedIndex": 39,
+      "module": 6,
+      "preA1Ids": [
+        "de-pre-12"
+      ],
+      "prerequisiteIds": [
+        "de-a1-descriptions",
+        "de-a1-clothes-shopping",
+        "de-a1-preferences"
+      ],
+      "outcomeFa": "دو کالای آشنا را با صفت مقایسه‌ای پربسامد مقایسه کنم.",
+      "grammarFa": "kleiner/größer/billiger + als؛ صفت پس از sein؛ هیچ صرف صفت پیش از اسم لازم نیست.",
+      "vocabularyFa": "größer=بزرگ‌تر؛ kleiner=کوچک‌تر؛ billiger=ارزان‌تر؛ als=از در مقایسه",
+      "outOfScopeAndErrorFa": "این یک آشنایی محدود در مرز A1 است، نه تسلط به همهٔ مقایسه‌ها یا عالی؛ پیش‌نیاز خرید پایه نیست.",
+      "productionFa": "دو شیء خیالی را در دو جمله از نظر قیمت یا اندازه مقایسه کن.",
+      "pronunciationFa": "تمایز عدد قیمت و مقدار؛ تفاوت ie/ei و نام کالا همراه حرف تعریف.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Dieses Hemd kostet zwanzig Euro.",
+          "fa": "این پیراهن بیست یورو قیمت دارد."
+        },
+        {
+          "role": "learner",
+          "de": "Das andere kostet zehn Euro.",
+          "fa": "آن یکی ده یورو قیمت دارد."
+        },
+        {
+          "role": "partner",
+          "de": "Ist das andere billiger?",
+          "fa": "آیا آن یکی ارزان‌تر است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, es ist billiger.",
+          "fa": "بله، ارزان‌تر است."
+        }
+      ],
+      "listening": {
+        "passage": "Das Hemd kostet zehn Euro. Die Jacke kostet dreißig Euro. Das Hemd ist billiger.",
+        "questionFa": "کدام لباس ارزان‌تر است؟",
+        "answer": "das Hemd"
+      },
+      "reading": {
+        "passage": "Das Zimmer in Bonn ist kleiner als das Zimmer in Berlin.",
+        "questionFa": "کدام اتاق کوچک‌تر است؟",
+        "answer": "das Zimmer in Bonn"
+      },
+      "transferToIds": [],
+      "retrievalFa": "بازیابی کوتاه از de-a1-descriptions، de-a1-clothes-shopping، de-a1-preferences؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-leisure",
+      "proposedIndex": 40,
+      "module": 7,
+      "preA1Ids": [
+        "de-pre-3"
+      ],
+      "prerequisiteIds": [
+        "de-a1-present-tense",
+        "de-a1-preferences",
+        "de-a1-ability"
+      ],
+      "outcomeFa": "دربارهٔ دو سرگرمی و علاقهٔ خود پرسش و پاسخ کنم.",
+      "grammarFa": "gern + فعل؛ lesen و fahren به‌صورت‌های پربسامد؛ فعل وجهی با مصدر آشنا بازیابی شود.",
+      "vocabularyFa": "lesen=خواندن؛ schwimmen=شنا کردن؛ Musik=موسیقی؛ spazieren gehen=قدم زدن",
+      "outOfScopeAndErrorFa": "فهرست ورزش‌های کم‌کاربرد لازم نیست؛ gern و gut از نظر علاقه و توانایی جدا شوند.",
+      "productionFa": "سه جمله دربارهٔ علاقه و یک سؤال دربارهٔ سرگرمی مخاطب بنویس.",
+      "pronunciationFa": "آهنگ پذیرش، رد مؤدبانه و پیشنهاد؛ گفتار کوتاه و آهسته بدون نیاز به سرعت بومی.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was machst du gern?",
+          "fa": "دوست داری چه کار کنی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich lese gern.",
+          "fa": "دوست دارم مطالعه کنم."
+        },
+        {
+          "role": "partner",
+          "de": "Schwimmst du auch gern?",
+          "fa": "آیا شنا کردن را هم دوست داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, aber ich schwimme nicht gut.",
+          "fa": "بله، ولی خوب شنا نمی‌کنم."
+        }
+      ],
+      "listening": {
+        "passage": "Ich höre gern Musik. Ben liest gern Bücher.",
+        "questionFa": "بن چه کاری را دوست دارد؟",
+        "answer": "Bücher lesen"
+      },
+      "reading": {
+        "passage": "Lena hört gern Musik. Ben geht gern spazieren.",
+        "questionFa": "چه کسی قدم‌زدن را دوست دارد؟",
+        "answer": "Ben"
+      },
+      "transferToIds": [
+        "de-a1-connectors",
+        "de-a1-social-chat"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-present-tense، de-a1-preferences، de-a1-ability؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-weather",
+      "proposedIndex": 41,
+      "module": 7,
+      "preA1Ids": [
+        "de-pre-7"
+      ],
+      "prerequisiteIds": [
+        "de-a1-descriptions",
+        "de-a1-dates-and-time"
+      ],
+      "outcomeFa": "وضعیت هوا را بفهمم و یک برنامهٔ کوتاه متناسب بگویم.",
+      "grammarFa": "es ist warm/kalt؛ es regnet؛ heute/morgen + فعل دوم؛ بدون پیش‌بینی پیچیده یا werden اجباری.",
+      "vocabularyFa": "Wetter=آب‌وهوا؛ warm=گرم؛ kalt=سرد؛ regnen=باریدن باران",
+      "outOfScopeAndErrorFa": "es در هواشناسی به شخص اشاره ندارد؛ امر بی‌قاعدهٔ Nimm قبل از آموزش لازم نیست.",
+      "productionFa": "هوای امروز و یک برنامهٔ کوتاه با واژگان آشنا بنویس.",
+      "pronunciationFa": "آهنگ پذیرش، رد مؤدبانه و پیشنهاد؛ گفتار کوتاه و آهسته بدون نیاز به سرعت بومی.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wie ist das Wetter heute?",
+          "fa": "امروز هوا چطور است؟"
+        },
+        {
+          "role": "learner",
+          "de": "Es ist kalt.",
+          "fa": "هوا سرد است."
+        },
+        {
+          "role": "partner",
+          "de": "Regnet es auch?",
+          "fa": "باران هم می‌بارد؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, es regnet.",
+          "fa": "بله، باران می‌بارد."
+        }
+      ],
+      "listening": {
+        "passage": "Heute ist es warm. Es regnet nicht.",
+        "questionFa": "هوا گرم است یا سرد؟",
+        "answer": "warm"
+      },
+      "reading": {
+        "passage": "Montag: warm. Dienstag: Regen.",
+        "questionFa": "کدام روز هوا گرم است؟",
+        "answer": "Montag"
+      },
+      "transferToIds": [
+        "de-a1-connectors",
+        "de-a1-suggestions"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-descriptions، de-a1-dates-and-time؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-connectors",
+      "proposedIndex": 42,
+      "module": 7,
+      "preA1Ids": [
+        "de-pre-3"
+      ],
+      "prerequisiteIds": [
+        "de-a1-positive-negative-questions",
+        "de-a1-leisure",
+        "de-a1-weather"
+      ],
+      "outcomeFa": "دو جملهٔ کوتاه را با پیوند روشن به هم وصل کنم.",
+      "grammarFa": "und/aber/oder؛ جای فعل جملهٔ دوم معمولاً مانند جملهٔ مستقل؛ ابتدا فاعل تکرارشده برای وضوح.",
+      "vocabularyFa": "und=و؛ aber=اما؛ oder=یا؛ auch=هم",
+      "outOfScopeAndErrorFa": "weil و deshalb هنوز معیار اجباری نیستند؛ دو واقعیت نامرتبط صرفاً با und زنجیر نشوند.",
+      "productionFa": "دربارهٔ یک برنامه سه جمله با und و aber بنویس.",
+      "pronunciationFa": "آهنگ پذیرش، رد مؤدبانه و پیشنهاد؛ گفتار کوتاه و آهسته بدون نیاز به سرعت بومی.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Möchtest du spazieren gehen?",
+          "fa": "می‌خواهی قدم بزنیم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, aber es regnet.",
+          "fa": "بله، ولی باران می‌بارد."
+        },
+        {
+          "role": "partner",
+          "de": "Dann bleiben wir hier und trinken Tee.",
+          "fa": "پس اینجا می‌مانیم و چای می‌نوشیم."
+        },
+        {
+          "role": "learner",
+          "de": "Ja, gern.",
+          "fa": "بله، با کمال میل."
+        }
+      ],
+      "listening": {
+        "passage": "Ich habe heute Zeit, aber Anna arbeitet. Wir lernen morgen zusammen.",
+        "questionFa": "چه زمانی با هم درس می‌خوانند؟",
+        "answer": "morgen"
+      },
+      "reading": {
+        "passage": "Ich lese gern, aber heute habe ich keine Zeit.",
+        "questionFa": "نویسنده امروز چه چیزی ندارد؟",
+        "answer": "Zeit"
+      },
+      "transferToIds": [
+        "de-a1-future-plans",
+        "de-a1-social-chat",
+        "de-a1-reasons"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-positive-negative-questions، de-a1-leisure، de-a1-weather؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-future-plans",
+      "proposedIndex": 43,
+      "module": 7,
+      "preA1Ids": [
+        "de-pre-20"
+      ],
+      "prerequisiteIds": [
+        "de-a1-weekly-schedule",
+        "de-a1-connectors"
+      ],
+      "outcomeFa": "با زمان حال و قید آینده از برنامهٔ نزدیک بگویم.",
+      "grammarFa": "morgen / am Samstag + Präsens؛ زمان در جای اول و فعل دوم؛ werden اجباری نیست.",
+      "vocabularyFa": "morgen=فردا؛ heute Abend=امشب؛ besuchen=دیدن کسی رفتن؛ frei=آزاد",
+      "outOfScopeAndErrorFa": "آیندهٔ نزدیک با شکل حال کافی است؛ وعده و شرط پیچیده اضافه نشود.",
+      "productionFa": "دو برنامهٔ فردا و یک وقت آزاد بنویس.",
+      "pronunciationFa": "آهنگ پذیرش، رد مؤدبانه و پیشنهاد؛ گفتار کوتاه و آهسته بدون نیاز به سرعت بومی.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Was machst du morgen?",
+          "fa": "فردا چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Morgen besuche ich Anna.",
+          "fa": "فردا به دیدن آنا می‌روم."
+        },
+        {
+          "role": "partner",
+          "de": "Hast du am Abend Zeit?",
+          "fa": "عصر وقت داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, am Abend habe ich Zeit.",
+          "fa": "بله، عصر وقت دارم."
+        }
+      ],
+      "listening": {
+        "passage": "Morgen arbeite ich. Am Abend besuche ich Ben.",
+        "questionFa": "گوینده عصر به دیدن چه کسی می‌رود؟",
+        "answer": "Ben"
+      },
+      "reading": {
+        "passage": "Am Samstag arbeite ich. Am Sonntag lerne ich Deutsch.",
+        "questionFa": "نویسنده چه روزی کار می‌کند؟",
+        "answer": "Samstag"
+      },
+      "transferToIds": [
+        "de-a1-invitations",
+        "de-a1-phone-messages",
+        "de-a1-past-events"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-weekly-schedule، de-a1-connectors؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-invitations",
+      "proposedIndex": 44,
+      "module": 7,
+      "preA1Ids": [
+        "de-pre-20"
+      ],
+      "prerequisiteIds": [
+        "de-a1-future-plans",
+        "de-a1-dates-and-time",
+        "de-a1-wants-needs"
+      ],
+      "outcomeFa": "دعوتی را بپذیرم یا رد کنم و زمان جایگزین پیشنهاد بدهم.",
+      "grammarFa": "möchtest du …?؛ ich kann … nicht؛ passt dir …? قالب؛ پایان صحنه با زمان نهایی سازگار.",
+      "vocabularyFa": "gern=با میل؛ leider=متأسفانه؛ Zeit=وقت؛ passen=مناسب بودن",
+      "outOfScopeAndErrorFa": "دعوت فردا رد شود ولی پایان Bis morgen بیاید، خطای معنایی است؛ خطاب du در سراسر صحنه ثابت.",
+      "productionFa": "یک دعوت با رد زمان اول و توافق بر روز دیگر بنویس.",
+      "pronunciationFa": "آهنگ پذیرش، رد مؤدبانه و پیشنهاد؛ گفتار کوتاه و آهسته بدون نیاز به سرعت بومی.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Möchtest du morgen einen Kaffee trinken?",
+          "fa": "می‌خواهی فردا قهوه بنوشیم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Morgen kann ich leider nicht.",
+          "fa": "متأسفانه فردا نمی‌توانم."
+        },
+        {
+          "role": "partner",
+          "de": "Hast du am Samstag Zeit?",
+          "fa": "شنبه وقت داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, gern. Bis Samstag!",
+          "fa": "بله، با کمال میل. تا شنبه!"
+        }
+      ],
+      "listening": {
+        "passage": "Am Freitag habe ich leider keine Zeit. Am Sonntag können wir Kaffee trinken.",
+        "questionFa": "کدام روز برای قهوه پیشنهاد می‌شود؟",
+        "answer": "Sonntag"
+      },
+      "reading": {
+        "passage": "Hallo Ben, hast du am Sonntag um drei Zeit? Grüße, Anna",
+        "questionFa": "چه ساعتی پیشنهاد شده؟",
+        "answer": "15:00 / drei Uhr"
+      },
+      "transferToIds": [
+        "de-a1-suggestions",
+        "de-a1-social-chat",
+        "de-a1-reasons"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-future-plans، de-a1-dates-and-time، de-a1-wants-needs؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-suggestions",
+      "proposedIndex": 45,
+      "module": 7,
+      "preA1Ids": [
+        "de-pre-3"
+      ],
+      "prerequisiteIds": [
+        "de-a1-invitations",
+        "de-a1-ability",
+        "de-a1-weather"
+      ],
+      "outcomeFa": "پیشنهاد مشترک بدهم و دربارهٔ جایگزین توافق کنم.",
+      "grammarFa": "wollen wir …? و wir können …؛ مصدر آخر؛ پیشنهاد عملی بدون توصیهٔ تخصصی.",
+      "vocabularyFa": "Park=پارک؛ Kino=سینما؛ Idee=ایده؛ zusammen=با هم",
+      "outOfScopeAndErrorFa": "sollten و شرطی پیشرفته برای توصیه اجباری نشود؛ دلیل رد با aber ساده کافی است.",
+      "productionFa": "برای هوای بارانی دو پیشنهاد و یک انتخاب مشترک بنویس.",
+      "pronunciationFa": "آهنگ پذیرش، رد مؤدبانه و پیشنهاد؛ گفتار کوتاه و آهسته بدون نیاز به سرعت بومی.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Wollen wir in den Park gehen?",
+          "fa": "برویم پارک؟"
+        },
+        {
+          "role": "learner",
+          "de": "Heute regnet es.",
+          "fa": "امروز باران می‌بارد."
+        },
+        {
+          "role": "partner",
+          "de": "Wir können ins Kino gehen.",
+          "fa": "می‌توانیم به سینما برویم."
+        },
+        {
+          "role": "learner",
+          "de": "Ja, gute Idee!",
+          "fa": "بله، فکر خوبی است!"
+        }
+      ],
+      "listening": {
+        "passage": "Heute ist es warm. Wir können zusammen in den Park gehen.",
+        "questionFa": "رفتن به کجا پیشنهاد می‌شود؟",
+        "answer": "in den Park"
+      },
+      "reading": {
+        "passage": "Wir können heute zusammen lernen. Um vier in der Bibliothek?",
+        "questionFa": "چه فعالیتی پیشنهاد شده؟",
+        "answer": "zusammen lernen"
+      },
+      "transferToIds": [
+        "de-a1-connected-conversation"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-invitations، de-a1-ability، de-a1-weather؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-social-chat",
+      "proposedIndex": 46,
+      "module": 7,
+      "preA1Ids": [
+        "de-pre-21"
+      ],
+      "prerequisiteIds": [
+        "de-a1-nationalities",
+        "de-a1-leisure",
+        "de-a1-invitations",
+        "de-a1-connectors"
+      ],
+      "outcomeFa": "آشنایی کوتاه را با یک موضوع مشترک ادامه بدهم و طبیعی تمام کنم.",
+      "grammarFa": "بازیابی نام، شهر و سرگرمی؛ und du?؛ یک دعوت با زمان روشن، بدون دستور تازه.",
+      "vocabularyFa": "neu=جدید؛ zusammen=با هم؛ hier=اینجا؛ gern=با علاقه",
+      "outOfScopeAndErrorFa": "گفت‌وگو از معرفی به اجاره و علائم بیماری نپرد؛ du از ابتدا با هم‌کلاسی توافق‌شده ثابت باشد.",
+      "productionFa": "شش جمله برای آشنایی با هم‌کلاسی و پیشنهاد یک فعالیت مشترک بساز.",
+      "pronunciationFa": "آهنگ پذیرش، رد مؤدبانه و پیشنهاد؛ گفتار کوتاه و آهسته بدون نیاز به سرعت بومی.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Hallo, bist du neu im Kurs?",
+          "fa": "سلام، در کلاس تازه‌وارد هستی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich heiße Amir. Und du?",
+          "fa": "بله، اسم من امیر است. تو چطور؟"
+        },
+        {
+          "role": "partner",
+          "de": "Ich heiße Ben. Lernen wir morgen zusammen?",
+          "fa": "اسم من بن است. فردا با هم درس بخوانیم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, gern. Bis morgen!",
+          "fa": "بله، با کمال میل. تا فردا!"
+        }
+      ],
+      "listening": {
+        "passage": "Hallo, ich bin Sara. Ich bin neu im Kurs und wohne in Köln.",
+        "questionFa": "سارا در کدام شهر زندگی می‌کند؟",
+        "answer": "Köln"
+      },
+      "reading": {
+        "passage": "Hallo, ich bin Lena. Ich wohne in Bonn und lese gern.",
+        "questionFa": "لنا به چه کاری علاقه دارد؟",
+        "answer": "lesen"
+      },
+      "transferToIds": [
+        "de-a1-connected-conversation"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-nationalities، de-a1-leisure، de-a1-invitations، de-a1-connectors؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-directions",
+      "proposedIndex": 47,
+      "module": 8,
+      "preA1Ids": [
+        "de-pre-17"
+      ],
+      "prerequisiteIds": [
+        "de-a1-prepositions",
+        "de-a1-instructions",
+        "de-a1-ability"
+      ],
+      "outcomeFa": "آدرس کوتاه بپرسم و دو جهت ساده را بفهمم.",
+      "grammarFa": "wo ist …?؛ gehen Sie …؛ links/rechts/geradeaus؛ zur Bank به‌عنوان عبارت مقصد نه جدول داتیو تازه.",
+      "vocabularyFa": "links=چپ؛ rechts=راست؛ geradeaus=مستقیم؛ Bahnhof=ایستگاه قطار",
+      "outOfScopeAndErrorFa": "نقشه و جمله با هم سازگار باشند؛ فعل stehen برای مکان با gehen برای حرکت تفکیک شود.",
+      "productionFa": "روی نقشهٔ خیالی، مسیر دو مرحله‌ای به ایستگاه بنویس.",
+      "pronunciationFa": "شنیدن مقصد، سکو و ساعت؛ تشخیص nach، um و Gleis در اطلاعات سفر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Entschuldigung, wo ist der Bahnhof?",
+          "fa": "ببخشید، ایستگاه قطار کجاست؟"
+        },
+        {
+          "role": "learner",
+          "de": "Gehen Sie geradeaus.",
+          "fa": "مستقیم بروید."
+        },
+        {
+          "role": "partner",
+          "de": "Und dann?",
+          "fa": "و بعد؟"
+        },
+        {
+          "role": "learner",
+          "de": "Dann gehen Sie nach links.",
+          "fa": "سپس به چپ بروید."
+        }
+      ],
+      "listening": {
+        "passage": "Gehen Sie geradeaus und dann nach rechts. Dort ist die Post.",
+        "questionFa": "پس از مستقیم رفتن باید به کدام سمت بروند؟",
+        "answer": "rechts"
+      },
+      "reading": {
+        "passage": "Die Bank ist rechts neben der Post.",
+        "questionFa": "بانک نسبت به ادارهٔ پست کجاست؟",
+        "answer": "rechts neben der Post"
+      },
+      "transferToIds": [
+        "de-a1-public-transport"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-prepositions، de-a1-instructions، de-a1-ability؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-public-transport",
+      "proposedIndex": 48,
+      "module": 8,
+      "preA1Ids": [
+        "de-pre-19"
+      ],
+      "prerequisiteIds": [
+        "de-a1-directions",
+        "de-a1-dates-and-time"
+      ],
+      "outcomeFa": "مقصد اتوبوس و محل پیاده‌شدن را بپرسم.",
+      "grammarFa": "fährt dieser Bus …?؛ fahren با du fährst محدود؛ aussteigen جداشدنی؛ mit dem Bus عبارت.",
+      "vocabularyFa": "Bus=اتوبوس؛ Haltestelle=ایستگاه؛ Zentrum=مرکز؛ aussteigen=پیاده شدن",
+      "outOfScopeAndErrorFa": "ضمیر dieser با جنس Bus منطبق بماند؛ برنامهٔ واقعی شهر یا خط واقعی ادعا نشود.",
+      "productionFa": "برای مسیر خیالی، سؤال مقصد و سؤال ایستگاه پیاده‌شدن بنویس.",
+      "pronunciationFa": "شنیدن مقصد، سکو و ساعت؛ تشخیص nach، um و Gleis در اطلاعات سفر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Fährt dieser Bus ins Zentrum?",
+          "fa": "آیا این اتوبوس به مرکز شهر می‌رود؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, er fährt ins Zentrum.",
+          "fa": "بله، به مرکز شهر می‌رود."
+        },
+        {
+          "role": "partner",
+          "de": "Wo muss ich aussteigen?",
+          "fa": "کجا باید پیاده شوم؟"
+        },
+        {
+          "role": "learner",
+          "de": "An der nächsten Haltestelle.",
+          "fa": "در ایستگاه بعدی."
+        }
+      ],
+      "listening": {
+        "passage": "Dieser Bus fährt zum Bahnhof. Steigen Sie an der nächsten Haltestelle aus.",
+        "questionFa": "کجا باید پیاده شوند؟",
+        "answer": "an der nächsten Haltestelle"
+      },
+      "reading": {
+        "passage": "Bus 5: Bahnhof – Zentrum. Abfahrt: 08:10.",
+        "questionFa": "اتوبوس چه ساعتی حرکت می‌کند؟",
+        "answer": "08:10"
+      },
+      "transferToIds": [
+        "de-a1-travel-tickets"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-directions، de-a1-dates-and-time؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-travel-tickets",
+      "proposedIndex": 49,
+      "module": 8,
+      "preA1Ids": [
+        "de-pre-19"
+      ],
+      "prerequisiteIds": [
+        "de-a1-public-transport",
+        "de-a1-shopping-payment"
+      ],
+      "outcomeFa": "بلیت ساده بخواهم و ساعت و سکوی حرکت را بفهمم.",
+      "grammarFa": "nach + شهر؛ einfache Fahrt / hin und zurück؛ von Gleis …؛ سؤال Wann fährt …?",
+      "vocabularyFa": "Fahrkarte=بلیت؛ Gleis=سکو/خط؛ Abfahrt=حرکت؛ zurück=برگشت",
+      "outOfScopeAndErrorFa": "مقررات بلیت واقعی نیستند؛ بلیت قطار با پرواز و هتل در یک درس مخلوط نشود.",
+      "productionFa": "درخواست بلیت با مقصد، یک‌طرفه یا رفت‌وبرگشت و یک سؤال زمان بنویس.",
+      "pronunciationFa": "شنیدن مقصد، سکو و ساعت؛ تشخیص nach، um و Gleis در اطلاعات سفر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Eine Fahrkarte nach Köln, bitte.",
+          "fa": "یک بلیت به کلن، لطفاً."
+        },
+        {
+          "role": "learner",
+          "de": "Einfache Fahrt?",
+          "fa": "یک‌طرفه؟"
+        },
+        {
+          "role": "partner",
+          "de": "Ja. Wann fährt der Zug?",
+          "fa": "بله. قطار چه زمانی حرکت می‌کند؟"
+        },
+        {
+          "role": "learner",
+          "de": "Um zehn Uhr von Gleis zwei.",
+          "fa": "ساعت ده از سکوی دو."
+        }
+      ],
+      "listening": {
+        "passage": "Der Zug nach Köln fährt um elf Uhr von Gleis drei.",
+        "questionFa": "قطار از کدام سکو حرکت می‌کند؟",
+        "answer": "Gleis drei"
+      },
+      "reading": {
+        "passage": "Zug nach Bonn: 14:30, Gleis 4.",
+        "questionFa": "قطار به کدام شهر می‌رود؟",
+        "answer": "Bonn"
+      },
+      "transferToIds": [
+        "de-a1-hotel-stay"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-public-transport، de-a1-shopping-payment؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-hotel-stay",
+      "proposedIndex": 50,
+      "module": 8,
+      "preA1Ids": [
+        "de-pre-18"
+      ],
+      "prerequisiteIds": [
+        "de-a1-room-search",
+        "de-a1-travel-tickets",
+        "de-a1-asking-help"
+      ],
+      "outcomeFa": "در پذیرش هتل نام رزرو و تعداد شب را بگویم و یک اطلاعات اقامت بپرسم.",
+      "grammarFa": "ich habe eine Reservierung؛ auf den Namen … عبارت؛ für zwei Nächte؛ wann gibt es Frühstück?",
+      "vocabularyFa": "Reservierung=رزرو؛ Nacht=شب؛ Schlüssel=کلید؛ Frühstück=صبحانه",
+      "outOfScopeAndErrorFa": "این نمونه رزرو واقعی انجام نمی‌دهد؛ مشکل اتاق و فرم طولانی یکجا روی درس سوار نشود.",
+      "productionFa": "یک ورود کوتاه به هتل با نام خیالی، تعداد شب و سؤال صبحانه بنویس.",
+      "pronunciationFa": "شنیدن مقصد، سکو و ساعت؛ تشخیص nach، um و Gleis در اطلاعات سفر.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Guten Tag. Ich habe eine Reservierung.",
+          "fa": "روز بخیر. رزرو دارم."
+        },
+        {
+          "role": "learner",
+          "de": "Auf welchen Namen, bitte?",
+          "fa": "به چه نامی، لطفاً؟"
+        },
+        {
+          "role": "partner",
+          "de": "Auf den Namen Ali. Für zwei Nächte.",
+          "fa": "به نام علی. برای دو شب."
+        },
+        {
+          "role": "learner",
+          "de": "Ja, hier ist Ihr Schlüssel.",
+          "fa": "بله، این کلید شما است."
+        }
+      ],
+      "listening": {
+        "passage": "Guten Abend. Ich habe eine Reservierung auf den Namen Weber für drei Nächte.",
+        "questionFa": "رزرو برای چند شب است؟",
+        "answer": "drei Nächte"
+      },
+      "reading": {
+        "passage": "Frühstück: 07:00–10:00 Uhr. Zimmer 12.",
+        "questionFa": "صبحانه چه ساعتی شروع می‌شود؟",
+        "answer": "07:00"
+      },
+      "transferToIds": [
+        "de-a1-polite-requests"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-room-search، de-a1-travel-tickets، de-a1-asking-help؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-polite-requests",
+      "proposedIndex": 51,
+      "module": 9,
+      "preA1Ids": [
+        "de-pre-4",
+        "de-pre-14"
+      ],
+      "prerequisiteIds": [
+        "de-a1-ability",
+        "de-a1-instructions",
+        "de-a1-hotel-stay"
+      ],
+      "outcomeFa": "در خدمات عمومی یک درخواست مؤدبانه یا اجازهٔ ساده مطرح کنم.",
+      "grammarFa": "Können Sie …?؛ Könnten Sie …? فقط قالب جایگزین مؤدبانه؛ Darf ich …? برای اجازه.",
+      "vocabularyFa": "helfen=کمک کردن؛ Fenster=پنجره؛ öffnen=باز کردن؛ bitte=لطفاً",
+      "outOfScopeAndErrorFa": "صرف کامل Konjunktiv II لازم نیست؛ اجازه و توانایی یکی ترجمه نشوند؛ امر رسمی با du جابه‌جا نشود.",
+      "productionFa": "یک درخواست رسمی و یک اجازه‌خواستن بنویس.",
+      "pronunciationFa": "هجی نام و شنیدن پیام کوتاه؛ واج‌های ch و sch در واژه‌های همان موقعیت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Darf ich das Fenster öffnen?",
+          "fa": "اجازه دارم پنجره را باز کنم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, natürlich.",
+          "fa": "بله، حتماً."
+        },
+        {
+          "role": "partner",
+          "de": "Können Sie mir bitte helfen?",
+          "fa": "می‌توانید لطفاً به من کمک کنید؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, gern.",
+          "fa": "بله، با کمال میل."
+        }
+      ],
+      "listening": {
+        "passage": "Darf ich hier sitzen? Ja, natürlich. Der Stuhl ist frei.",
+        "questionFa": "گوینده برای چه کاری اجازه می‌خواهد؟",
+        "answer": "hier sitzen"
+      },
+      "reading": {
+        "passage": "Könnten Sie bitte langsam sprechen?",
+        "questionFa": "نویسنده چه درخواستی دارد؟",
+        "answer": "آهسته صحبت کردن"
+      },
+      "transferToIds": [
+        "de-a1-phone-messages",
+        "de-a1-doctor-symptoms"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-ability، de-a1-instructions، de-a1-hotel-stay؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-phone-messages",
+      "proposedIndex": 52,
+      "module": 9,
+      "preA1Ids": [
+        "de-pre-2"
+      ],
+      "prerequisiteIds": [
+        "de-a1-polite-requests",
+        "de-a1-asking-help",
+        "de-a1-future-plans"
+      ],
+      "outcomeFa": "خود را در تماس معرفی کنم و یک پیام یا زمان تماس بعدی را بفهمم.",
+      "grammarFa": "hier ist …؛ kann ich … sprechen?؛ anrufen با جزء جدا؛ zurückrufen در قالب محدود.",
+      "vocabularyFa": "Nachricht=پیام؛ anrufen=زنگ زدن؛ später=بعداً؛ morgen=فردا",
+      "outOfScopeAndErrorFa": "پیام صوتی طولانی و ضمایر مفعولی متعدد اجباری نشود؛ شماره‌ها خیالی باشند.",
+      "productionFa": "پیام دو یا سه‌جمله‌ای با نام و زمان تماس بعدی بنویس.",
+      "pronunciationFa": "هجی نام و شنیدن پیام کوتاه؛ واج‌های ch و sch در واژه‌های همان موقعیت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Guten Tag, hier ist Sara Ali. Kann ich Frau Weber sprechen?",
+          "fa": "روز بخیر، سارا علی هستم. می‌توانم با خانم وبر صحبت کنم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Frau Weber ist heute nicht da.",
+          "fa": "خانم وبر امروز اینجا نیست."
+        },
+        {
+          "role": "partner",
+          "de": "Dann rufe ich morgen wieder an.",
+          "fa": "پس فردا دوباره تماس می‌گیرم."
+        },
+        {
+          "role": "learner",
+          "de": "Gut, auf Wiederhören!",
+          "fa": "بسیار خوب، خداحافظ!"
+        }
+      ],
+      "listening": {
+        "passage": "Guten Tag, hier ist Ben Weber. Ich rufe morgen um zehn wieder an.",
+        "questionFa": "بن فردا چه ساعتی دوباره تماس می‌گیرد؟",
+        "answer": "zehn Uhr"
+      },
+      "reading": {
+        "passage": "Hallo Ben, hier ist Anna. Bitte ruf mich um fünf an.",
+        "questionFa": "آنا درخواست تماس در چه ساعتی دارد؟",
+        "answer": "fünf Uhr"
+      },
+      "transferToIds": [
+        "de-a1-connected-conversation"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-polite-requests، de-a1-asking-help، de-a1-future-plans؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-doctor-symptoms",
+      "proposedIndex": 53,
+      "module": 9,
+      "preA1Ids": [
+        "de-pre-7"
+      ],
+      "prerequisiteIds": [
+        "de-a1-feelings",
+        "de-a1-dates-and-time",
+        "de-a1-polite-requests"
+      ],
+      "outcomeFa": "یک علامت ساده و زمان شروع را بگویم و برای نوبت کمک بخواهم.",
+      "grammarFa": "ich habe …؛ seit gestern فقط عبارت زمان؛ mir tut … weh به‌صورت گزینهٔ محدود؛ بدون تشخیص و درمان.",
+      "vocabularyFa": "Kopfschmerzen=سردرد؛ Fieber=تب؛ Termin=نوبت؛ seit gestern=از دیروز",
+      "outOfScopeAndErrorFa": "این درس مشاورهٔ پزشکی نیست؛ در وضعیت خطر به خدمات محلی مراجعه شود؛ Seit با همهٔ صورت‌ها تدریس نشود.",
+      "productionFa": "دو جملهٔ فرضی دربارهٔ علامت و یک درخواست نوبت بنویس؛ اطلاعات واقعی پزشکی لازم نیست.",
+      "pronunciationFa": "هجی نام و شنیدن پیام کوتاه؛ واج‌های ch و sch در واژه‌های همان موقعیت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Guten Tag. Ich habe Kopfschmerzen.",
+          "fa": "روز بخیر. سردرد دارم."
+        },
+        {
+          "role": "learner",
+          "de": "Seit wann?",
+          "fa": "از چه زمانی؟"
+        },
+        {
+          "role": "partner",
+          "de": "Seit gestern.",
+          "fa": "از دیروز."
+        },
+        {
+          "role": "learner",
+          "de": "Haben Sie auch Fieber?",
+          "fa": "آیا تب هم دارید؟"
+        }
+      ],
+      "listening": {
+        "passage": "Ich habe seit heute Morgen Halsschmerzen. Ich brauche einen Termin.",
+        "questionFa": "گوینده چه دردی دارد؟",
+        "answer": "Halsschmerzen"
+      },
+      "reading": {
+        "passage": "Ich brauche einen Termin. Ich habe Halsschmerzen.",
+        "questionFa": "نویسنده چه دردی دارد؟",
+        "answer": "Halsschmerzen"
+      },
+      "transferToIds": [],
+      "retrievalFa": "بازیابی کوتاه از de-a1-feelings، de-a1-dates-and-time، de-a1-polite-requests؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-past-events",
+      "proposedIndex": 54,
+      "module": 9,
+      "preA1Ids": [
+        "de-pre-20"
+      ],
+      "prerequisiteIds": [
+        "de-a1-present-tense",
+        "de-a1-daily-routine",
+        "de-a1-future-plans"
+      ],
+      "outcomeFa": "با دو یا سه قالب آشنا از دیروز بگویم.",
+      "grammarFa": "gestern؛ war / hatte پربسامد؛ haben + gelernt/gearbeitet برای شروع Perfekt؛ کاربرد محدود نه نظام همهٔ گذشته‌ها.",
+      "vocabularyFa": "gestern=دیروز؛ gelernt=یاد گرفته؛ gearbeitet=کار کرده؛ war=بودم/بود",
+      "outOfScopeAndErrorFa": "جدول Präteritum، همهٔ افعال قوی و همهٔ افعال با sein هدف این درس نیست؛ Partizip در آخر جمله شنیده شود.",
+      "productionFa": "دو جملهٔ واقعی یا خیالی دربارهٔ دیروز با الگوهای همین درس بنویس.",
+      "pronunciationFa": "هجی نام و شنیدن پیام کوتاه؛ واج‌های ch و sch در واژه‌های همان موقعیت.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Hast du gestern gearbeitet?",
+          "fa": "آیا دیروز کار کردی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Nein, ich habe Deutsch gelernt.",
+          "fa": "نه، آلمانی یاد گرفتم."
+        },
+        {
+          "role": "partner",
+          "de": "Warst du zu Hause?",
+          "fa": "در خانه بودی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich war zu Hause.",
+          "fa": "بله، در خانه بودم."
+        }
+      ],
+      "listening": {
+        "passage": "Gestern habe ich gearbeitet. Am Abend habe ich Deutsch gelernt.",
+        "questionFa": "گوینده دیروز عصر چه کرده؟",
+        "answer": "Deutsch gelernt"
+      },
+      "reading": {
+        "passage": "Gestern hatte Ben frei. Er hat gelernt.",
+        "questionFa": "آیا بن دیروز وقت آزاد داشت؟",
+        "answer": "Ja"
+      },
+      "transferToIds": [
+        "de-a1-reasons"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-present-tense، de-a1-daily-routine، de-a1-future-plans؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-reasons",
+      "proposedIndex": 55,
+      "module": 10,
+      "preA1Ids": [
+        "de-pre-7"
+      ],
+      "prerequisiteIds": [
+        "de-a1-connectors",
+        "de-a1-feelings",
+        "de-a1-invitations",
+        "de-a1-past-events"
+      ],
+      "outcomeFa": "برای یک تصمیم روزمره دلیل کوتاه و قابل فهم بدهم.",
+      "grammarFa": "Warum? پاسخ با دو جمله یا denn + ترتیب جملهٔ اصلی؛ weil فقط تشخیص اختیاری، بدون شرط اتمام درس.",
+      "vocabularyFa": "warum=چرا؛ denn=چون؛ deshalb=به همین دلیل (شناخت اختیاری)؛ müde=خسته",
+      "outOfScopeAndErrorFa": "weil و Deshalb با قواعد جملهٔ وابسته و وارونگی هم‌زمان اجباری نشوند؛ برچسب موضوع حفظ می‌شود اما هدف محدود A1 است.",
+      "productionFa": "یک دعوت را با یک دلیل روشن رد کن و زمانی جایگزین پیشنهاد بده.",
+      "pronunciationFa": "مکث بین جمله‌های مرتبط؛ پیوند روشن با und، aber و denn، بدون جمله‌های تودرتو.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Kommst du heute mit?",
+          "fa": "امروز همراه ما می‌آیی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Heute kann ich leider nicht.",
+          "fa": "متأسفانه امروز نمی‌توانم."
+        },
+        {
+          "role": "partner",
+          "de": "Warum nicht?",
+          "fa": "چرا نه؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ich bin müde, denn ich habe heute gearbeitet.",
+          "fa": "خسته‌ام، چون امروز کار کرده‌ام."
+        }
+      ],
+      "listening": {
+        "passage": "Heute bleibe ich zu Hause, denn ich habe Fieber.",
+        "questionFa": "دلیل ماندن در خانه چیست؟",
+        "answer": "Fieber"
+      },
+      "reading": {
+        "passage": "Ich bleibe zu Hause. Ich habe Fieber.",
+        "questionFa": "دلیل در خانه ماندن چیست؟",
+        "answer": "Fieber"
+      },
+      "transferToIds": [
+        "de-a1-connected-conversation"
+      ],
+      "retrievalFa": "بازیابی کوتاه از de-a1-connectors، de-a1-feelings، de-a1-invitations، de-a1-past-events؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    },
+    {
+      "id": "de-a1-connected-conversation",
+      "proposedIndex": 56,
+      "module": 10,
+      "preA1Ids": [
+        "de-pre-21"
+      ],
+      "prerequisiteIds": [
+        "de-a1-social-chat",
+        "de-a1-reasons",
+        "de-a1-forms-information",
+        "de-a1-phone-messages",
+        "de-a1-suggestions"
+      ],
+      "outcomeFa": "آشنایی، محل زندگی و یک قرار را در یک گفت‌وگوی مرتبط مدیریت کنم.",
+      "grammarFa": "فقط بازیابی ساخت‌های آشنا؛ خطاب du ثابت برای دو هم‌کلاسی؛ رد زمان اول، پیشنهاد و توافق زمان دوم.",
+      "vocabularyFa": "بازیابی واژگان نام، شهر، کلاس، روز و ساعت؛ واژگان تازهٔ اجباری ندارد.",
+      "outOfScopeAndErrorFa": "خطای Frau/Herr، تغییر بی‌دلیل Sie/du و خداحافظی برای روز ردشده ممنوع؛ شاخهٔ رسمی باید صحنهٔ جدا باشد.",
+      "productionFa": "یک مکالمهٔ شش تا هشت‌نوبتی دربارهٔ آشنایی و توافق زمان بنویس؛ نام، شهر و روز را خودت انتخاب کن.",
+      "pronunciationFa": "مکث بین جمله‌های مرتبط؛ پیوند روشن با und، aber و denn، بدون جمله‌های تودرتو.",
+      "scene": [
+        {
+          "role": "partner",
+          "de": "Hallo, ich bin Lena. Bist du neu im Kurs?",
+          "fa": "سلام، من لنا هستم. در کلاس تازه‌وارد هستی؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, ich heiße Amir. Ich wohne in Bonn.",
+          "fa": "بله، اسم من امیر است. در بن زندگی می‌کنم."
+        },
+        {
+          "role": "partner",
+          "de": "Ich wohne auch in Bonn. Hast du morgen Zeit?",
+          "fa": "من هم در بن زندگی می‌کنم. فردا وقت داری؟"
+        },
+        {
+          "role": "learner",
+          "de": "Morgen leider nicht. Hast du am Samstag Zeit?",
+          "fa": "متأسفانه فردا نه. شنبه وقت داری؟"
+        },
+        {
+          "role": "partner",
+          "de": "Ja. Treffen wir uns um zehn im Café?",
+          "fa": "بله. ساعت ده در کافه همدیگر را ببینیم؟"
+        },
+        {
+          "role": "learner",
+          "de": "Ja, gern. Wo ist das Café?",
+          "fa": "بله، با کمال میل. کافه کجاست؟"
+        },
+        {
+          "role": "partner",
+          "de": "Neben dem Bahnhof. Bis Samstag!",
+          "fa": "کنار ایستگاه قطار. تا شنبه!"
+        },
+        {
+          "role": "learner",
+          "de": "Gut, bis Samstag!",
+          "fa": "بسیار خوب، تا شنبه!"
+        }
+      ],
+      "listening": {
+        "passage": "Amir hat am Freitag keine Zeit. Lena und Amir treffen sich am Samstag um elf im Café.",
+        "questionFa": "زمان نهایی ملاقات چه ساعتی است؟",
+        "answer": "elf Uhr"
+      },
+      "reading": {
+        "passage": "Lena: Samstag passt. Treffen wir uns um zehn im Café? Amir: Ja, gern. Bis Samstag!",
+        "questionFa": "زمان نهایی ملاقات چه ساعتی است؟",
+        "answer": "zehn Uhr"
+      },
+      "transferToIds": [],
+      "retrievalFa": "بازیابی کوتاه از de-a1-social-chat، de-a1-reasons، de-a1-forms-information، de-a1-phone-messages، de-a1-suggestions؛ اگر پاسخ مستقل ممکن نبود، همان الگوی لازم پیش از مطلب تازه بازیابی شود."
+    }
+  ]
+}

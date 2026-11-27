@@ -6,7 +6,7 @@ import { Typography } from '@/lib/theme';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
-import { Mic2, RefreshCw, Square, Volume2 } from 'lucide-react-native';
+import { ChevronLeft, Mic2, RefreshCw, Square, Volume2 } from 'lucide-react-native';
 import * as Speech from '@/lib/courseSpeech';
 import { toPersianDigits as fa } from '@/lib/format';
 import { scoreSpeech, tokens, type SpeakCheckResult, type SpeakWordState } from '@/lib/speechScore';
@@ -25,8 +25,11 @@ type Props = {
   locale: string;
   accent?: string;
   compact?: boolean;
+  /** Large microphone control for the immersive conversation room. */
+  roomMode?: boolean;
   title?: string;
   onResult?: (result: SpeakCheckResult) => void;
+  onSkip?: () => void;
   /** Opens the microphone by itself once (used right after the app pronounced the word). */
   autoStart?: boolean;
   /** Conversation mode: report even an empty attempt instead of forcing another recording. */
@@ -47,7 +50,9 @@ let micOwner: symbol | null = null;
  * each expected word is shown green (heard) or red (missed) together with a percentage.
  * Works on Android/iOS through the native recogniser and on web through the browser's Web Speech API.
  */
-export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, title, onResult, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false, blindExam = false }: Props) {
+export default function SpeakCheck({ text, locale, accent = '#2563EB', compact = false, roomMode = false, title, onResult, onSkip, autoStart = false, singleAttempt = false, level, levelId, adaptiveTiming = false, blindExam = false }: Props) {
+  const skipped = useRef(false);
+  const autoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const owner = useRef(Symbol('practice'));
   const generation = useRef(0);
   const [listening, setListening] = useState(false);
@@ -86,6 +91,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   }, []);
 
   useEffect(() => {
+    skipped.current = false;
     setResult(null);
     setPartial('');
     setError('');
@@ -107,6 +113,27 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       if (listeningRef.current) void ExpoSpeechRecognitionModule.abort?.();
     }
   }, [text, clearListenTimers]);
+  const skip = () => {
+    if (skipped.current || !onSkip) return;
+    skipped.current = true;
+    generation.current++;
+    settledRef.current = true;
+    clearListenTimers();
+    if (autoTimer.current) clearTimeout(autoTimer.current);
+    if (retryTimer.current) clearTimeout(retryTimer.current);
+    autoTimer.current = retryTimer.current = null;
+    if (micOwner === owner.current) {
+      micOwner = null;
+      try { void ExpoSpeechRecognitionModule.abort?.(); } catch { /* no active capture */ }
+    }
+    listeningRef.current = false;
+    setListening(false);
+    setPartial('');
+    setResult(null);
+    setError('');
+    try { void Speech.stop(); } catch { /* no audio */ }
+    onSkip(); // No score, practice activity or result is invented for a skipped item.
+  };
   /** One-tap flow: the word was just spoken, so the mic may open by itself (still cancellable). */
   const autoStartedFor = useRef('');
   const prevAutoStart = useRef(false);
@@ -135,9 +162,10 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
       }
       return;
     }
-    if (!text || autoStartedFor.current === text) return;
+    if (skipped.current || !text || autoStartedFor.current === text) return;
     autoStartedFor.current = text;
-    const handle = setTimeout(() => { void startRef.current?.(); }, 420);
+    const handle = setTimeout(() => { autoTimer.current = null; void startRef.current?.(); }, 420);
+    autoTimer.current = handle;
     return () => clearTimeout(handle);
   }, [autoStart, text, clearListenTimers]);
 
@@ -287,6 +315,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   });
 
   const start = useCallback(async () => {
+    if (skipped.current) return;
     if (micOwner === owner.current && listeningRef.current) return;
     clearListenTimers();
     if (retryTimer.current) clearTimeout(retryTimer.current);
@@ -334,8 +363,8 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
   const sayMissed = useCallback(() => { if (!missed.length) return; try { Speech.stop(); Speech.speak(missed.map(w => w.word).join(', '), { language: locale, rate: 0.6 }); } catch { /* no tts */ } }, [missed, locale]);
 
   return (
-    <View style={[styles.wrap, compact && styles.wrapCompact]}>
-      {!compact && <Text style={styles.title}>{title ?? 'بگو · Speak'}</Text>}
+    <View style={[styles.wrap, compact && styles.wrapCompact, roomMode && styles.roomWrap]}>
+      {!compact && !roomMode && <Text style={styles.title}>{title ?? 'بگو · Speak'}</Text>}
       {(listening || (result && !blindExam)) ? <Text style={styles.hint}>{listening ? (adaptiveTiming ? `در حال شنیدن… (تا حدود ${fa(timing.maxWindowSeconds)} ثانیه فرصت دارید)` : 'در حال شنیدن…') : result ? feedbackFor(result.score, result.words.filter(w => w.state === 'near').length) : ''}</Text> : null}
       {result && !blindExam ? (
         <View style={styles.wordsRow}>
@@ -343,7 +372,7 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         </View>
       ) : null}
       {listening && partial ? <Text keepColor style={styles.partial}>{partial}</Text> : null}
-      {result?.heard && !blindExam ? <View style={styles.scoreRow}><Text style={styles.scoreLabel}>امتیاز</Text><Text keepColor style={[styles.scoreValue, { color: result.score >= 70 ? '#15803D' : result.score >= 40 ? '#B45309' : '#B91C1C' }]}>{fa(result.score)}٪</Text></View> : null}
+      {result?.heard && !blindExam ? <View style={styles.scoreRow}><Text style={styles.scoreLabel}>{roomMode ? 'شباهت متن به نمونه' : 'امتیاز'}</Text><Text keepColor style={[styles.scoreValue, { color: result.score >= 70 ? '#15803D' : result.score >= 40 ? '#B45309' : '#B91C1C' }]}>{fa(result.score)}٪</Text></View> : null}
       {/* When the recogniser heard nothing, a percentage would be a fake zero. Say it plainly instead. */}
       {result && !result.heard ? <Text style={styles.hint}>چیزی شنیده نشد. ابتدا نمونه را گوش بده و یک بار دیگر بگو.</Text> : null}
       {result && result.heard ? <Text style={styles.heard}>شنیده شد: <Text keepColor style={styles.heardText}>{result.heard}</Text></Text> : null}
@@ -357,21 +386,28 @@ export default function SpeakCheck({ text, locale, accent = '#2563EB', compact =
         accessibilityLabel={listening ? 'پایان گفتن' : result ? 'دوباره بگو' : 'شروع گفتن'}
         onPress={() => {
           if (listening) { stop(); return; }
+          skipped.current = false;
           emptyRetries.current = 0;
           busyRetries.current = 0;
           clientRetries.current = 0;
           void start();
         }}
-        style={({ pressed }) => [styles.button, compact && styles.buttonCompact, { backgroundColor: listening ? '#B91C1C' : accent }, pressed && styles.buttonPressed]}
+        style={({ pressed }) => [styles.button, compact && styles.buttonCompact, roomMode && styles.roomMic, { backgroundColor: listening ? '#B91C1C' : accent }, pressed && styles.buttonPressed]}
       >
-        {listening ? <Square size={compact ? 13 : 16} color="#FFFFFF" fill="#FFFFFF" /> : result ? <RefreshCw size={compact ? 15 : 18} color="#FFFFFF" /> : <Mic2 size={compact ? 16 : 19} color="#FFFFFF" />}
-        <Text keepColor style={[styles.buttonText, compact && styles.buttonTextCompact]}>{listening ? 'تمام شد' : result ? 'دوباره بگو' : 'بگو'}</Text>
+        {listening ? <Square size={roomMode ? 23 : compact ? 13 : 16} color="#FFFFFF" fill="#FFFFFF" /> : result ? <RefreshCw size={roomMode ? 26 : compact ? 15 : 18} color="#FFFFFF" /> : <Mic2 size={roomMode ? 28 : compact ? 16 : 19} color="#FFFFFF" />}
+        {!roomMode ? <Text keepColor style={[styles.buttonText, compact && styles.buttonTextCompact]}>{listening ? 'تمام شد' : result ? 'دوباره بگو' : 'بگو'}</Text> : null}
       </Pressable>
+      {onSkip ? <Pressable accessibilityRole="button" accessibilityLabel="رد شو" onPress={skip} style={({ pressed }) => [styles.skipButton, pressed && styles.buttonPressed]}><Text keepColor style={styles.skipText}>رد شو</Text><ChevronLeft size={17} color="#FFFFFF" /></Pressable> : null}
+      {roomMode ? <Text style={styles.hint}>{listening ? 'در حال شنیدن · برای پایان لمس کن' : error ? 'برای تلاش دوباره، میکروفن را لمس کن' : result ? 'برای تکرار، میکروفن را لمس کن' : 'برای صحبت، میکروفن را لمس کن'}</Text> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  skipButton: { minHeight: 48, flexDirection: 'row-reverse', justifyContent: 'center', alignItems: 'center', gap: 7, paddingHorizontal: 22, borderRadius: 999, backgroundColor: '#D97706', marginTop: 2 },
+  skipText: { fontSize: 13, color: '#FFFFFF', fontFamily: Typography.fontFamily, writingDirection: 'rtl' },
+  roomWrap: { backgroundColor: 'transparent', borderWidth: 0, padding: 4, marginTop: 2, gap: 12 },
+  roomMic: { width: 80, height: 80, borderRadius: 40, paddingHorizontal: 0, paddingVertical: 0, alignItems: 'center', justifyContent: 'center' },
   wrap: { width: '100%', marginTop: 10, padding: 12, borderRadius: 16, backgroundColor: '#F8FAFC', borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center', gap: 6 },
   wrapCompact: { marginTop: 8, padding: 8, gap: 4, backgroundColor: 'transparent', borderStyle: 'dashed' },
   buttonCompact: { paddingHorizontal: 14, paddingVertical: 7, marginTop: 0 },

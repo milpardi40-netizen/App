@@ -1,0 +1,1528 @@
+{
+  "scope": "Russian Pre-A1 only; read-only audit, not a proficiency test",
+  "date": "2026-11-26",
+  "method": "Cyrillic tokens; acute stress removed and ё folded to е. Unique forms are NOT lemmas or independently taught vocabulary items. Renderer uses simulated native views, speech callbacks and isolated no-op history; no device audio evaluated.",
+  "totals": {
+    "lessons": 31,
+    "expressions": 252,
+    "authoredSceneTurns": 124,
+    "authoredChecks": 93,
+    "renderedChecks": 156,
+    "estimatedMinutes": 182,
+    "tokens": 870,
+    "distinctSurfaceForms": 205,
+    "formsPresentInOnlyOneLesson": 83,
+    "roomEchoPairs": 245,
+    "roomExchangePairs": 7,
+    "authoredSceneTurnsFoundVerbatim": 15,
+    "lessonsWithFullSceneVerbatim": 0,
+    "partnerLinesAssignedToLearner": 2,
+    "guidedBuilderTargets": 250,
+    "roomRunsRendered": 62,
+    "learnerTargetsRendered": 504
+  },
+  "observations": {
+    "firstNameIntroductionAt": 13,
+    "repetitionRequestAt": 14,
+    "pictureOrMapContexts": [
+      {
+        "id": "ru-pre-03-family-home",
+        "context": "هدف: بتوانم خانه و اعضای خانواده‌ام را با یک معرفی کوتاه نشان بدهم.\nموقعیت: عکس خانه و افراد خانواده را به دوستت نشان می‌دهی."
+      },
+      {
+        "id": "ru-pre-05-pronouns-family",
+        "context": "هدف: بتوانم اعضای خانواده‌ام را نشان بدهم و به جای تکرار نام از «او» استفاده کنم.\nموقعیت: در عکس خانواده، دوستت دربارهٔ خانواده می‌پرسد."
+      },
+      {
+        "id": "ru-pre-08-animals-colors",
+        "context": "هدف: بتوانم گربهٔ نر و سگ نر را با رنگشان تشخیص بدهم.\nموقعیت: در دو عکس، رنگ گربه و سگ را برای دوستت مشخص می‌کنی."
+      },
+      {
+        "id": "ru-pre-10-days-places",
+        "context": "هدف: بتوانم کلاس را از فروشگاه تشخیص بدهم و بگویم اینجاست یا آنجا.\nموقعیت: روی نقشهٔ ساده، جای کلاس و فروشگاه را نشان می‌دهی؛ نام چند روز هم مرور می‌شود."
+      },
+      {
+        "id": "ru-pre-11-adjectives",
+        "context": "هدف: بتوانم اندازه و نو یا قدیمی بودن یک خانه را توصیف کنم.\nموقعیت: دو خانه را در عکس مقایسه می‌کنی؛ هر بار فقط یک ویژگی عوض می‌شود."
+      }
+    ],
+    "guidedExceptions": [
+      "ru-pre-01-hello-09",
+      "ru-pre-01-hello-10"
+    ],
+    "twelveThirteenVariants": [
+      "две́надцать",
+      "три́надцать",
+      "двена́дцать"
+    ],
+    "listeningAllowsRevealWithoutCompletedPlayback": true,
+    "courseInventoriesUnchanged": true
+  },
+  "inventoryHashes": {
+    "en": "906495546f6bd8cadf47b3311c05a600a533c35bd635d37f9c2990be4cdff7f0",
+    "ru": "da93a1d5a375d73dd30aca1ab72d6263440f2ec91f0dc68ef519d81d9d92e14b",
+    "tr": "4d482ff299ed13193e368ef9fc1941969f875a3e70310c3a105208e0e1c671c7",
+    "ar": "bfd67afd5d27dd5d95193006d129def34f512512affec8ce5fca30ac88e3a400",
+    "de": "7cfeb9805fded6ea460be8caaa113a88835380f5eb6334ef7e60ca6ed9dd38b4",
+    "fr": "cc0aa384c879a25007ca9b2b2b8d47b70c258ff533ccec4a1b44a47d94fb2367",
+    "es": "7f5878bc47e6afae876e74767c6af01fc2fa054049b0ead40a7f3559afb34a48"
+  },
+  "lessons": [
+    {
+      "order": 1,
+      "id": "ru-pre-01-hello",
+      "title": "بله، خیر، سلام و خداحافظ",
+      "durationMinutes": 10,
+      "expressions": 12,
+      "tokens": 19,
+      "meanTokensPerExpression": 1.5833333333333333,
+      "firstSeenSurfaceForms": [
+        "да",
+        "нет",
+        "привет",
+        "здравствуйте",
+        "пока",
+        "увидимся",
+        "спасибо",
+        "пожалуйста",
+        "извините",
+        "как",
+        "ты",
+        "хорошо",
+        "а"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 6,
+      "room": {
+        "echo": 12
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Приве́т! Как ты?",
+        "Приве́т! Хорошо́, спаси́бо. А ты?",
+        "Хорошо́, спаси́бо. Уви́димся!",
+        "Пока́!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 10,
+      "bridges": [
+        {
+          "id": "pozhaluysta",
+          "title": "یک کلمه، سه معنی",
+          "note": "«пожалуйста» در روسی سه کار می‌کند: «لطفاً» (در خواهش)، «خواهش می‌کنم» (در جواب تشکر) و «بفرمایید» (وقتی چیزی می‌دهی). فارسی برای هر سه کلمهٔ جدا دارد؛ روسی یکی."
+        },
+        {
+          "id": "izvinite",
+          "title": "عین فارسی",
+          "note": "«Извините / Простите» مثل «ببخشید» فارسی هم برای عذرخواهی است هم برای صدا زدن غریبه. «извините» کمی رسمی‌تر و «прости» خودمانی است."
+        },
+        {
+          "id": "spasibo",
+          "title": "تشکر",
+          "note": "«Спаси́бо» یعنی ممنون. پاسخ آن «Пожа́луйста» یعنی خواهش می‌کنم است."
+        },
+        {
+          "id": "kak-dela",
+          "title": "عین فارسی",
+          "note": "«Как ты?» خودمانی و «Как вы?» محترمانه است. برای پاسخ می‌توانی بگویی «Хорошо́, спаси́бо»؛ خوبم، ممنون."
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "id": "ru-pre-02-i-you-this-that",
+      "title": "من، تو، این و آن",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 20,
+      "meanTokensPerExpression": 2.5,
+      "firstSeenSurfaceForms": [
+        "я",
+        "и",
+        "этот",
+        "тот",
+        "здесь",
+        "там",
+        "или"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 7,
+        "exchange": 1
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 2,
+      "missingSceneTurns": [
+        "Здесь и́ли там?",
+        "Здесь, спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "pozhaluysta",
+          "title": "یک کلمه، سه معنی",
+          "note": "«пожалуйста» در روسی سه کار می‌کند: «لطفاً» (در خواهش)، «خواهش می‌کنم» (در جواب تشکر) و «بفرمایید» (وقتی چیزی می‌دهی). فارسی برای هر سه کلمهٔ جدا دارد؛ روسی یکی."
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "id": "ru-pre-03-family-home",
+      "title": "خانواده، خانه و میز",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 20,
+      "meanTokensPerExpression": 2.5,
+      "firstSeenSurfaceForms": [
+        "это",
+        "моя",
+        "мама",
+        "папа",
+        "брат",
+        "дом",
+        "сестра",
+        "стул",
+        "ключ",
+        "стол"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Э́то дом?",
+        "Да, э́то дом.",
+        "А э́то па́па и брат?",
+        "Да, па́па и брат."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "id": "ru-pre-04-food-study-daily",
+      "title": "چای، نان، متن و مداد",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 17,
+      "meanTokensPerExpression": 2.125,
+      "firstSeenSurfaceForms": [
+        "чай",
+        "хлеб",
+        "текст",
+        "карандаш",
+        "день",
+        "вечер",
+        "номер",
+        "урок"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 6,
+        "exchange": 2
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 3,
+      "missingSceneTurns": [
+        "Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [
+        "Хорошо́!"
+      ],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "pozhaluysta",
+          "title": "یک کلمه، سه معنی",
+          "note": "«пожалуйста» در روسی سه کار می‌کند: «لطفاً» (در خواهش)، «خواهش می‌کنم» (در جواب تشکر) و «بفرمایید» (وقتی چیزی می‌دهی). فارسی برای هر سه کلمهٔ جدا دارد؛ روسی یکی."
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "id": "ru-pre-05-pronouns-family",
+      "title": "ضمایر شخصی و خانواده",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 16,
+      "meanTokensPerExpression": 2,
+      "firstSeenSurfaceForms": [
+        "он",
+        "она",
+        "мы",
+        "вы",
+        "они",
+        "дедушка"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Э́то брат?",
+        "Да, он брат.",
+        "А э́то па́па?",
+        "Да, э́то па́па."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "copula",
+          "title": "«هستم / هستی» حذف می‌شود",
+          "note": "«Я студент» یعنی «من دانشجو [هستم]». روسی در زمان حال «هستم، هستی، است» ندارد؛ هرجا جمله فعل ندارد، این همان جای «است» فارسی است."
+        },
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "id": "ru-pre-06-people-objects",
+      "title": "افراد مذکر و اشیای ساده",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 17,
+      "meanTokensPerExpression": 2.125,
+      "firstSeenSurfaceForms": [
+        "человек",
+        "друг",
+        "учитель",
+        "студент",
+        "мальчик",
+        "телефон",
+        "рюкзак"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Он друг и́ли брат?",
+        "Он друг. Он студе́нт.",
+        "А э́то телефо́н?",
+        "Нет, э́то ключ."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "copula",
+          "title": "«هستم / هستی» حذف می‌شود",
+          "note": "«Я студент» یعنی «من دانشجو [هستم]». روسی در زمان حال «هستم، هستی، است» ندارد؛ هرجا جمله فعل ندارد، این همان جای «است» فارسی است."
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "id": "ru-pre-07-food-drinks",
+      "title": "خوراکی‌ها و نوشیدنی‌های مذکر",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 16,
+      "meanTokensPerExpression": 2,
+      "firstSeenSurfaceForms": [
+        "суп",
+        "сыр",
+        "сахар",
+        "кофе",
+        "мед",
+        "сок"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 7,
+        "exchange": 1
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 2,
+      "missingSceneTurns": [
+        "Сыр и́ли хлеб?",
+        "Хлеб, спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "pozhaluysta",
+          "title": "یک کلمه، سه معنی",
+          "note": "«пожалуйста» در روسی سه کار می‌کند: «لطفاً» (در خواهش)، «خواهش می‌کنم» (در جواب تشکر) و «بفرمایید» (وقتی چیزی می‌دهی). فارسی برای هر سه کلمهٔ جدا دارد؛ روسی یکی."
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "id": "ru-pre-08-animals-colors",
+      "title": "حیوانات و رنگ‌ها؛ صورت مذکر",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 20,
+      "meanTokensPerExpression": 2.5,
+      "firstSeenSurfaceForms": [
+        "кот",
+        "пес",
+        "лев",
+        "тигр",
+        "белый",
+        "черный",
+        "красный",
+        "зеленый"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Э́то кот и́ли пёс?",
+        "Э́то чёрный кот.",
+        "А пёс чёрный и́ли бе́лый?",
+        "Пёс бе́лый."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "id": "ru-pre-09-numbers",
+      "title": "اعداد پایه با اسم مذکر",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 28,
+      "meanTokensPerExpression": 3.5,
+      "firstSeenSurfaceForms": [
+        "ноль",
+        "один",
+        "два",
+        "три",
+        "четыре",
+        "пять",
+        "шесть",
+        "семь",
+        "восемь",
+        "девять",
+        "десять",
+        "двадцать"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Уро́к три и́ли четы́ре?",
+        "Уро́к три.",
+        "Три?",
+        "Да, три. Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": []
+    },
+    {
+      "order": 10,
+      "id": "ru-pre-10-days-places",
+      "title": "دوشنبه، سه‌شنبه، پنجشنبه و مکان‌ها",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 20,
+      "meanTokensPerExpression": 2.5,
+      "firstSeenSurfaceForms": [
+        "понедельник",
+        "вторник",
+        "четверг",
+        "класс",
+        "магазин",
+        "парк",
+        "город"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Э́то класс и́ли магази́н?",
+        "Э́то класс.",
+        "А магази́н здесь?",
+        "Нет, магази́н там."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        }
+      ]
+    },
+    {
+      "order": 11,
+      "id": "ru-pre-11-adjectives",
+      "title": "صفات ساده؛ فقط صورت مذکر",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 25,
+      "meanTokensPerExpression": 3.125,
+      "firstSeenSurfaceForms": [
+        "большой",
+        "маленький",
+        "хороший",
+        "новый",
+        "старый",
+        "плохой",
+        "красивый",
+        "добрый",
+        "умный",
+        "вкусный",
+        "свежий",
+        "тихий",
+        "светлый"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Э́то большо́й дом?",
+        "Нет, ма́ленький дом.",
+        "Но́вый и́ли ста́рый?",
+        "Но́вый и краси́вый."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": []
+    },
+    {
+      "order": 12,
+      "id": "ru-pre-12-verbs",
+      "title": "افعال ساده؛ زمان حال و فاعل‌ها",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 55,
+      "meanTokensPerExpression": 6.875,
+      "firstSeenSurfaceForms": [
+        "знаю",
+        "знаешь",
+        "хочу",
+        "хочешь",
+        "хотите",
+        "люблю",
+        "любишь",
+        "читаю",
+        "читаем",
+        "пишу",
+        "пишем",
+        "живу",
+        "живет",
+        "говорю",
+        "понимаю",
+        "могу",
+        "иду",
+        "идешь",
+        "есть",
+        "стоит"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Ты хо́чешь чай?",
+        "Да, я хочу́ чай. А ты?",
+        "Я хочу́ ко́фе.",
+        "Хорошо́!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "vy",
+          "title": "«شما»ی احترام",
+          "note": "«Вы» دقیقاً مثل «شما» فارسی هم جمع است هم محترمانه. با غریبه و بزرگ‌تر «Вы» و با دوست و بچه «ты». در نامه با حرف بزرگ می‌نویسند."
+        },
+        {
+          "id": "motion",
+          "title": "«رفتن» پیاده یا با وسیله؟",
+          "note": "فارسی برای هر دو «می‌روم» می‌گوید؛ روسی اگر پیاده باشد «идти / ходить» و اگر با ماشین و قطار باشد «ехать / ездить» می‌گوید. تا این فرق را نگویی، جمله از نظر روس‌ها ناقص است."
+        }
+      ]
+    },
+    {
+      "order": 13,
+      "id": "ru-pre-13-greeting-name-phrases",
+      "title": "عبارت‌های سلام، احوال‌پرسی و معرفی",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 27,
+      "meanTokensPerExpression": 3.375,
+      "firstSeenSurfaceForms": [
+        "у",
+        "вас",
+        "зовут",
+        "меня",
+        "али",
+        "амир",
+        "очень",
+        "приятно"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 1,
+      "missingSceneTurns": [
+        "Меня́ зову́т Али́. А вас?",
+        "Меня́ зову́т Ами́р.",
+        "О́чень прия́тно!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "kak-dela",
+          "title": "عین فارسی",
+          "note": "«Как ты?» خودمانی و «Как вы?» محترمانه است. برای پاسخ می‌توانی بگویی «Хорошо́, спаси́бо»؛ خوبم، ممنون."
+        },
+        {
+          "id": "have-short",
+          "title": "روسی «داشتن» ندارد",
+          "note": "«у меня» یعنی «نزد من / پیش من». وقتی «есть» حذف شده، یعنی داشتنِ چیزی بدیهی است و فقط کیفیتش را می‌گویند؛ باز هم فعل «داشتن» در کار نیست."
+        },
+        {
+          "id": "zovut",
+          "title": "اسم من…",
+          "note": "روسی نمی‌گوید «اسم من … است». می‌گوید «مرا … صدا می‌زنند». پس «меня» همان «مرا» است و فعل جمعِ بی‌فاعل آمده؛ دنبال «است» نگرد."
+        }
+      ]
+    },
+    {
+      "order": 14,
+      "id": "ru-pre-14-polite-phrases",
+      "title": "عبارت‌های ادب، کمک و تکرار",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 23,
+      "meanTokensPerExpression": 2.875,
+      "firstSeenSurfaceForms": [
+        "помогите",
+        "не",
+        "повторите",
+        "конечно",
+        "мне",
+        "нравится"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Чай и́ли ко́фе?",
+        "Извини́те, я не понима́ю. Повтори́те, пожа́луйста.",
+        "Чай? Ко́фе?",
+        "Чай, пожа́луйста. Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "pozhaluysta",
+          "title": "یک کلمه، سه معنی",
+          "note": "«пожалуйста» در روسی سه کار می‌کند: «لطفاً» (در خواهش)، «خواهش می‌کنم» (در جواب تشکر) و «بفرمایید» (وقتی چیزی می‌دهی). فارسی برای هر سه کلمهٔ جدا دارد؛ روسی یکی."
+        },
+        {
+          "id": "izvinite",
+          "title": "عین فارسی",
+          "note": "«Извините / Простите» مثل «ببخشید» فارسی هم برای عذرخواهی است هم برای صدا زدن غریبه. «извините» کمی رسمی‌تر و «прости» خودمانی است."
+        },
+        {
+          "id": "spasibo",
+          "title": "تشکر",
+          "note": "«Спаси́бо» یعنی ممنون. پاسخ آن «Пожа́луйста» یعنی خواهش می‌کنم است."
+        },
+        {
+          "id": "dative-feel",
+          "title": "فاعل «به من»ی",
+          "note": "احساس، نیاز و اجازه در روسی فاعل ندارد: «мне холодно» = «به من سرد است»، «мне нравится» = «به من خوش می‌آید»، «мне надо» = «مرا باید». الگویش همان «به من خوش می‌آید» و «سردم است» فارسی است، فقط همیشه با همین ساخت."
+        }
+      ]
+    },
+    {
+      "order": 15,
+      "id": "ru-pre-15-combos-pronoun-demo",
+      "title": "ترکیب ضمیر، ملکی و عدد با اسم مذکر",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 21,
+      "meanTokensPerExpression": 2.625,
+      "firstSeenSurfaceForms": [
+        "рад",
+        "мой",
+        "твой",
+        "наш",
+        "стола",
+        "новых"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 7,
+        "exchange": 1
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 2,
+      "missingSceneTurns": [
+        "Э́то твой дом?",
+        "Да, э́то мой дом."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "copula",
+          "title": "«هستم / هستی» حذف می‌شود",
+          "note": "«Я студент» یعنی «من دانشجو [هستم]». روسی در زمان حال «هستم، هستی، است» ندارد؛ هرجا جمله فعل ندارد، این همان جای «است» فارسی است."
+        },
+        {
+          "id": "count",
+          "title": "بعد از عدد، اسم تغییر می‌کند",
+          "note": "بعد از عدد، شکل اسم روسی تغییر می‌کند: «оди́н текст»، «три те́кста»، «пять те́кстов». اسم پایهٔ همهٔ این نمونه‌ها «текст» و مذکر است."
+        }
+      ]
+    },
+    {
+      "order": 16,
+      "id": "ru-pre-16-combos-adj-verb",
+      "title": "ترکیب اسم، صفت، فعل و قید",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 24,
+      "meanTokensPerExpression": 3,
+      "firstSeenSurfaceForms": [
+        "слушаю",
+        "днем",
+        "в",
+        "классе"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Э́то но́вый текст?",
+        "Да, э́то но́вый текст. Я чита́ю.",
+        "Хорошо́. Я слу́шаю вас.",
+        "Я чита́ю текст хорошо́."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "vy",
+          "title": "«شما»ی احترام",
+          "note": "«Вы» دقیقاً مثل «شما» فارسی هم جمع است هم محترمانه. با غریبه و بزرگ‌تر «Вы» و با دوست و بچه «ты». در نامه با حرف بزرگ می‌نویسند."
+        },
+        {
+          "id": "prep-place",
+          "title": "«در» اسم را تغییر می‌دهد",
+          "note": "بعد از «в / на» برای بیان مکان، شکل اسم عوض می‌شود: «класс → в кла́ссе» و «стол → на столе́». هر دو اسم پایه مذکرند."
+        }
+      ]
+    },
+    {
+      "order": 17,
+      "id": "ru-pre-17-sentences-be-have",
+      "title": "جمله‌های بودن، مکان و مالکیت",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 38,
+      "meanTokensPerExpression": 4.75,
+      "firstSeenSurfaceForms": [
+        "из",
+        "ирана",
+        "городе",
+        "на",
+        "столе",
+        "тебя"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Здесь твой класс?",
+        "Да, здесь мой класс.",
+        "У тебя́ есть текст?",
+        "Да, у меня́ есть текст. Текст на столе́."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "zovut",
+          "title": "اسم من…",
+          "note": "روسی نمی‌گوید «اسم من … است». می‌گوید «مرا … صدا می‌زنند». پس «меня» همان «مرا» است و فعل جمعِ بی‌فاعل آمده؛ دنبال «است» نگرد."
+        },
+        {
+          "id": "copula",
+          "title": "«هستم / هستی» حذف می‌شود",
+          "note": "«Я студент» یعنی «من دانشجو [هستم]». روسی در زمان حال «هستم، هستی، است» ندارد؛ هرجا جمله فعل ندارد، این همان جای «است» فارسی است."
+        },
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "prep-place",
+          "title": "«در» اسم را تغییر می‌دهد",
+          "note": "بعد از «в / на» برای بیان مکان، شکل اسم عوض می‌شود: «класс → в кла́ссе» و «стол → на столе́». هر دو اسم پایه مذکرند."
+        },
+        {
+          "id": "have",
+          "title": "روسی «داشتن» ندارد",
+          "note": "به جای «من … دارم» می‌گویند «у меня есть» = «نزد من هست». چیزی که داری فاعل جمله است و «من» فقط مکان آن است. برای «ندارم» می‌گویند «у меня нет» و اسم بعدش حالت اضافه می‌گیرد."
+        }
+      ]
+    },
+    {
+      "order": 18,
+      "id": "ru-pre-18-sentences-verbs",
+      "title": "جمله‌های خواستن، توانایی و کار روزمره",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 34,
+      "meanTokensPerExpression": 4.25,
+      "firstSeenSurfaceForms": [
+        "папу",
+        "брата",
+        "читать",
+        "помочь",
+        "работаю",
+        "дома"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Ты хо́чешь чай и́ли ко́фе?",
+        "Нет, спаси́бо. Я хочу́ сок.",
+        "Сок? Хорошо́!",
+        "Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "hochu",
+          "title": "بعد از «می‌خواهم» مصدر می‌آید",
+          "note": "فارسی می‌گوید «می‌خواهم بروم» (دو فعل صرف‌شده)؛ روسی می‌گوید «хочу пойти» = «می‌خواهم رفتن». فعل دوم همیشه مصدر است و صرف نمی‌شود."
+        },
+        {
+          "id": "negation",
+          "title": "نفی مثل فارسی",
+          "note": "«не» درست مثل «ن-» فارسی همیشه چسبیده و قبل از فعل است: «не знаю» = «نمی‌دانم». «нет» جداست و یعنی «نه» یا «نیست/ندارم»."
+        }
+      ]
+    },
+    {
+      "order": 19,
+      "id": "ru-pre-19-questions-basic",
+      "title": "سؤال‌های چی، کی، نام، حال و کجا",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 38,
+      "meanTokensPerExpression": 4.75,
+      "firstSeenSurfaceForms": [
+        "что",
+        "кто",
+        "где"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Приве́т! Где ты?",
+        "Приве́т! Я до́ма. А ты?",
+        "Я до́ма. Как ты?",
+        "Хорошо́, спаси́бо."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "articles",
+          "title": "خبری از a / the نیست",
+          "note": "روسی حرف تعریف ندارد. «текст» می‌تواند یک متن یا متن مشخص باشد؛ معنی دقیق از جمله فهمیده می‌شود."
+        },
+        {
+          "id": "zovut",
+          "title": "اسم من…",
+          "note": "روسی نمی‌گوید «اسم من … است». می‌گوید «مرا … صدا می‌زنند». پس «меня» همان «مرا» است و فعل جمعِ بی‌فاعل آمده؛ دنبال «است» نگرد."
+        },
+        {
+          "id": "kak-dela",
+          "title": "عین فارسی",
+          "note": "«Как ты?» خودمانی و «Как вы?» محترمانه است. برای پاسخ می‌توانی بگویی «Хорошо́, спаси́бо»؛ خوبم، ممنون."
+        }
+      ]
+    },
+    {
+      "order": 20,
+      "id": "ru-pre-20-questions-whose-yesno-count",
+      "title": "سؤال‌های مال کیست، آیا و چند تا",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 37,
+      "meanTokensPerExpression": 4.625,
+      "firstSeenSurfaceForms": [
+        "чей",
+        "сколько",
+        "текстов",
+        "текста"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Чей э́то рюкза́к?",
+        "Э́то мой рюкза́к.",
+        "А э́то твой ключ?",
+        "Да, мой. Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "have",
+          "title": "روسی «داشتن» ندارد",
+          "note": "به جای «من … دارم» می‌گویند «у меня есть» = «نزد من هست». چیزی که داری فاعل جمله است و «من» فقط مکان آن است. برای «ندارم» می‌گویند «у меня нет» و اسم بعدش حالت اضافه می‌گیرد."
+        },
+        {
+          "id": "articles",
+          "title": "خبری از a / the نیست",
+          "note": "روسی حرف تعریف ندارد. «текст» می‌تواند یک متن یا متن مشخص باشد؛ معنی دقیق از جمله فهمیده می‌شود."
+        },
+        {
+          "id": "count",
+          "title": "بعد از عدد، اسم تغییر می‌کند",
+          "note": "بعد از عدد، شکل اسم روسی تغییر می‌کند: «оди́н текст»، «три те́кста»، «пять те́кстов». اسم پایهٔ همهٔ این نمونه‌ها «текст» و مذکر است."
+        },
+        {
+          "id": "skolko-stoit",
+          "title": "عین فارسی",
+          "note": "«Сколько стоит?» = «چقدر می‌ارزد؟» — همان «چنده؟» فارسی با فعل «ارزیدن». برای جمع: «сколько стоят»."
+        }
+      ]
+    },
+    {
+      "order": 21,
+      "id": "ru-pre-21-daily-identity-family-age",
+      "title": "معرفی خود، پدر، برادر، سن و ملیت",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 31,
+      "meanTokensPerExpression": 3.875,
+      "firstSeenSurfaceForms": [
+        "иранец",
+        "лет",
+        "тебе",
+        "ему",
+        "моего"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 7,
+        "exchange": 1
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 2,
+      "missingSceneTurns": [
+        "Как тебя́ зову́т?",
+        "Мне два́дцать лет."
+      ],
+      "partnerLinesAssignedToLearner": [
+        "Мне два́дцать лет. А тебе́?"
+      ],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "zovut",
+          "title": "اسم من…",
+          "note": "روسی نمی‌گوید «اسم من … است». می‌گوید «مرا … صدا می‌زنند». پس «меня» همان «مرا» است و فعل جمعِ بی‌فاعل آمده؛ دنبال «است» نگرد."
+        },
+        {
+          "id": "copula",
+          "title": "«هستم / هستی» حذف می‌شود",
+          "note": "«Я студент» یعنی «من دانشجو [هستم]». روسی در زمان حال «هستم، هستی، است» ندارد؛ هرجا جمله فعل ندارد، این همان جای «است» فارسی است."
+        },
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "have",
+          "title": "روسی «داشتن» ندارد",
+          "note": "به جای «من … دارم» می‌گویند «у меня есть» = «نزد من هست». چیزی که داری فاعل جمله است و «من» فقط مکان آن است. برای «ندارم» می‌گویند «у меня нет» و اسم بعدش حالت اضافه می‌گیرد."
+        }
+      ]
+    },
+    {
+      "order": 22,
+      "id": "ru-pre-22-daily-likes-needs-wants",
+      "title": "علاقه، مالکیت، نیاز و خواسته",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 28,
+      "meanTokensPerExpression": 3.5,
+      "firstSeenSurfaceForms": [
+        "нужен"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Ты хо́чешь ко́фе?",
+        "Нет, спаси́бо. Мне ну́жен чай.",
+        "У меня́ есть чай. Пожа́луйста!",
+        "Спаси́бо! Мне нра́вится чай."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "dative-feel",
+          "title": "فاعل «به من»ی",
+          "note": "احساس، نیاز و اجازه در روسی فاعل ندارد: «мне холодно» = «به من سرد است»، «мне нравится» = «به من خوش می‌آید»، «мне надо» = «مرا باید». الگویش همان «به من خوش می‌آید» و «سردم است» فارسی است، فقط همیشه با همین ساخت."
+        },
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "have",
+          "title": "روسی «داشتن» ندارد",
+          "note": "به جای «من … دارم» می‌گویند «у меня есть» = «نزد من هست». چیزی که داری فاعل جمله است و «من» فقط مکان آن است. برای «ندارم» می‌گویند «у меня нет» و اسم بعدش حالت اضافه می‌گیرد."
+        }
+      ]
+    },
+    {
+      "order": 23,
+      "id": "ru-pre-23-daily-descriptions",
+      "title": "توصیف اشیا و افراد مذکر",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 38,
+      "meanTokensPerExpression": 4.75,
+      "firstSeenSurfaceForms": [
+        "новые",
+        "тексты",
+        "ваш"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Твой класс большо́й?",
+        "Нет, мой класс ма́ленький и краси́вый.",
+        "А ваш учи́тель до́брый?",
+        "Да, наш учи́тель до́брый."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "vy",
+          "title": "«شما»ی احترام",
+          "note": "«Вы» دقیقاً مثل «شما» فارسی هم جمع است هم محترمانه. با غریبه و بزرگ‌تر «Вы» و با دوست و بچه «ты». در نامه با حرف بزرگ می‌نویسند."
+        }
+      ]
+    },
+    {
+      "order": 24,
+      "id": "ru-pre-29-numbers-teens",
+      "title": "عددهای یازده تا بیست",
+      "durationMinutes": 5,
+      "expressions": 8,
+      "tokens": 28,
+      "meanTokensPerExpression": 3.5,
+      "firstSeenSurfaceForms": [
+        "одиннадцать",
+        "двенадцать",
+        "тринадцать",
+        "четырнадцать",
+        "пятнадцать",
+        "шестнадцать",
+        "семнадцать",
+        "восемнадцать",
+        "девятнадцать"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "У тебя́ пятна́дцать те́кстов?",
+        "Нет, у меня́ шестна́дцать те́кстов.",
+        "Шестна́дцать?",
+        "Да, шестна́дцать."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "have-short",
+          "title": "روسی «داشتن» ندارد",
+          "note": "«у меня» یعنی «نزد من / پیش من». وقتی «есть» حذف شده، یعنی داشتنِ چیزی بدیهی است و فقط کیفیتش را می‌گویند؛ باز هم فعل «داشتن» در کار نیست."
+        }
+      ]
+    },
+    {
+      "order": 25,
+      "id": "ru-pre-30-question-words-2",
+      "title": "پرسش‌های کی، چه‌جور و چرا",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 21,
+      "meanTokensPerExpression": 2.625,
+      "firstSeenSurfaceForms": [
+        "когда",
+        "во",
+        "какой",
+        "почему",
+        "зачем"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Когда́ уро́к? Во вто́рник?",
+        "Да, во вто́рник.",
+        "Како́й текст?",
+        "Но́вый текст."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "articles",
+          "title": "خبری از a / the نیست",
+          "note": "روسی حرف تعریف ندارد. «текст» می‌تواند یک متن یا متن مشخص باشد؛ معنی دقیق از جمله فهمیده می‌شود."
+        },
+        {
+          "id": "negation",
+          "title": "نفی مثل فارسی",
+          "note": "«не» درست مثل «ن-» فارسی همیشه چسبیده و قبل از فعل است: «не знаю» = «نمی‌دانم». «нет» جداست و یعنی «نه» یا «نیست/ندارم»."
+        }
+      ]
+    },
+    {
+      "order": 26,
+      "id": "ru-pre-31-more-descriptions",
+      "title": "توصیف‌های بیشتر: رنگ، شغل و ضمیر он",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 28,
+      "meanTokensPerExpression": 3.5,
+      "firstSeenSurfaceForms": [
+        "холодный",
+        "горячий",
+        "интересный",
+        "синий",
+        "желтый",
+        "врач",
+        "учебник"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Чай горя́чий?",
+        "Нет, чай холо́дный.",
+        "Ты хо́чешь горя́чий чай?",
+        "Да, пожа́луйста. Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "prep-place",
+          "title": "«در» اسم را تغییر می‌دهد",
+          "note": "بعد از «в / на» برای بیان مکان، شکل اسم عوض می‌شود: «класс → в кла́ссе» و «стол → на столе́». هر دو اسم پایه مذکرند."
+        }
+      ]
+    },
+    {
+      "order": 27,
+      "id": "ru-pre-24-conv-greeting-intro",
+      "title": "مکالمه: سلام، احوال‌پرسی و آشنایی",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 33,
+      "meanTokensPerExpression": 4.125,
+      "firstSeenSurfaceForms": [
+        "немного",
+        "по",
+        "русски"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 7,
+        "exchange": 1
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 2,
+      "missingSceneTurns": [
+        "Приве́т! Как тебя́ зову́т?",
+        "Меня́ зову́т Али́. Я из Ира́на. А тебя́?"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "kak-dela",
+          "title": "عین فارسی",
+          "note": "«Как ты?» خودمانی و «Как вы?» محترمانه است. برای پاسخ می‌توانی بگویی «Хорошо́, спаси́бо»؛ خوبم، ممنون."
+        },
+        {
+          "id": "have-short",
+          "title": "روسی «داشتن» ندارد",
+          "note": "«у меня» یعنی «نزد من / پیش من». وقتی «есть» حذف شده، یعنی داشتنِ چیزی بدیهی است و فقط کیفیتش را می‌گویند؛ باز هم فعل «داشتن» در کار نیست."
+        },
+        {
+          "id": "zovut",
+          "title": "اسم من…",
+          "note": "روسی نمی‌گوید «اسم من … است». می‌گوید «مرا … صدا می‌زنند». پس «меня» همان «مرا» است و فعل جمعِ بی‌فاعل آمده؛ دنبال «است» نگرد."
+        },
+        {
+          "id": "ochen",
+          "title": "عین فارسی",
+          "note": "«очень» = «خیلی» و درست مثل فارسی قبل از صفت می‌آید: «очень хорошо» = «خیلی خوب». برای اسم «очень» نمی‌گویند؛ می‌گویند «много»."
+        }
+      ]
+    },
+    {
+      "order": 28,
+      "id": "ru-pre-25-conv-family-home",
+      "title": "مکالمه: پدر، برادر و خانه",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 38,
+      "meanTokensPerExpression": 4.75,
+      "firstSeenSurfaceForms": [
+        "живут",
+        "еще"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 1,
+      "missingSceneTurns": [
+        "Да, э́то наш дом. Здесь живу́т мой па́па и брат.",
+        "Твой брат ма́ленький?",
+        "Да, мой брат ещё ма́ленький."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "count",
+          "title": "بعد از عدد، اسم تغییر می‌کند",
+          "note": "بعد از عدد، شکل اسم روسی تغییر می‌کند: «оди́н текст»، «три те́кста»، «пять те́кстов». اسم پایهٔ همهٔ این نمونه‌ها «текст» و مذکر است."
+        },
+        {
+          "id": "have",
+          "title": "روسی «داشتن» ندارد",
+          "note": "به جای «من … دارم» می‌گویند «у меня есть» = «نزد من هست». چیزی که داری فاعل جمله است و «من» فقط مکان آن است. برای «ندارم» می‌گویند «у меня нет» و اسم بعدش حالت اضافه می‌گیرد."
+        },
+        {
+          "id": "uzhe-eshche",
+          "title": "«دیگر» و «هنوز»",
+          "note": "«уже» = «دیگر / حالا دیگر» و «ещё» = «هنوز / باز هم». در جملهٔ منفی: «ещё не» = «هنوز نه»، «уже не» = «دیگر نه». جای این دو را عوض نکن."
+        }
+      ]
+    },
+    {
+      "order": 29,
+      "id": "ru-pre-26-conv-objects",
+      "title": "مکالمه: اشیا، مکان و جهت",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 39,
+      "meanTokensPerExpression": 4.875,
+      "firstSeenSurfaceForms": [
+        "рюкзаке",
+        "куда",
+        "туда",
+        "вот"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Где твой телефо́н?",
+        "Не зна́ю. В рюкзаке́?",
+        "Да, твой телефо́н здесь, в рюкзаке́.",
+        "Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "eto",
+          "title": "«است» وجود ندارد",
+          "note": "روسی در زمان حال فعل «بودن/است» را نمی‌گوید: «Это дом» = «این خانه [است]». «است» را در ذهنت بگذار ولی به زبان نیاور؛ گاهی به جایش خط تیره می‌نویسند."
+        },
+        {
+          "id": "articles",
+          "title": "خبری از a / the نیست",
+          "note": "روسی حرف تعریف ندارد. «текст» می‌تواند یک متن یا متن مشخص باشد؛ معنی دقیق از جمله فهمیده می‌شود."
+        },
+        {
+          "id": "prep-place",
+          "title": "«در» اسم را تغییر می‌دهد",
+          "note": "بعد از «в / на» برای بیان مکان، شکل اسم عوض می‌شود: «класс → в кла́ссе» و «стол → на столе́». هر دو اسم پایه مذکرند."
+        },
+        {
+          "id": "kuda-gde",
+          "title": "دو تا «کجا»",
+          "note": "فارسی برای «کجا می‌روی؟» و «کجا هستی؟» یک کلمه دارد؛ روسی دو تا: «куда» = به کجا (حرکت)، «где» = در کجا (جا). جواب هم همین‌طور: «туда / там»، «сюда / здесь»."
+        },
+        {
+          "id": "have",
+          "title": "روسی «داشتن» ندارد",
+          "note": "به جای «من … دارم» می‌گویند «у меня есть» = «نزد من هست». چیزی که داری فاعل جمله است و «من» فقط مکان آن است. برای «ندارم» می‌گویند «у меня нет» و اسم بعدش حالت اضافه می‌گیرد."
+        }
+      ]
+    },
+    {
+      "order": 30,
+      "id": "ru-pre-27-conv-food-shopping",
+      "title": "مکالمه: غذا و خرید ساده",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 38,
+      "meanTokensPerExpression": 4.75,
+      "firstSeenSurfaceForms": [
+        "с",
+        "медом",
+        "рублей",
+        "возьмите"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Здра́вствуйте! Что вы хоти́те?",
+        "Хлеб и сыр, пожа́луйста. Ско́лько э́то сто́ит?",
+        "Два́дцать рубле́й. Возьми́те, пожа́луйста.",
+        "Спаси́бо!"
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "vy",
+          "title": "«شما»ی احترام",
+          "note": "«Вы» دقیقاً مثل «شما» فارسی هم جمع است هم محترمانه. با غریبه و بزرگ‌تر «Вы» و با دوست و بچه «ты». در نامه با حرف بزرگ می‌نویسند."
+        },
+        {
+          "id": "pozhaluysta",
+          "title": "یک کلمه، سه معنی",
+          "note": "«пожалуйста» در روسی سه کار می‌کند: «لطفاً» (در خواهش)، «خواهش می‌کنم» (در جواب تشکر) و «بفرمایید» (وقتی چیزی می‌دهی). فارسی برای هر سه کلمهٔ جدا دارد؛ روسی یکی."
+        },
+        {
+          "id": "have",
+          "title": "روسی «داشتن» ندارد",
+          "note": "به جای «من … دارم» می‌گویند «у меня есть» = «نزد من هست». چیزی که داری فاعل جمله است و «من» فقط مکان آن است. برای «ندارم» می‌گویند «у меня нет» و اسم بعدش حالت اضافه می‌گیرد."
+        },
+        {
+          "id": "count",
+          "title": "بعد از عدد، اسم تغییر می‌کند",
+          "note": "بعد از عدد، شکل اسم روسی تغییر می‌کند: «оди́н текст»، «три те́кста»، «пять те́кстов». اسم پایهٔ همهٔ این نمونه‌ها «текст» و مذکر است."
+        }
+      ]
+    },
+    {
+      "order": 31,
+      "id": "ru-pre-28-conv-classroom",
+      "title": "مکالمه: گفت‌وگو در کلاس",
+      "durationMinutes": 6,
+      "expressions": 8,
+      "tokens": 33,
+      "meanTokensPerExpression": 4.125,
+      "firstSeenSurfaceForms": [
+        "откройте",
+        "окончен"
+      ],
+      "authoredChecks": 3,
+      "renderedChecks": 5,
+      "room": {
+        "echo": 8
+      },
+      "authoredSceneTurns": 4,
+      "authoredSceneTurnsFoundVerbatim": 0,
+      "missingSceneTurns": [
+        "Откро́йте уче́бник, пожа́луйста. Чита́ем текст.",
+        "Извини́те, я не понима́ю. Повтори́те, пожа́луйста.",
+        "Хорошо́. Чита́ем текст «Мой дом».",
+        "Спаси́бо, я понима́ю."
+      ],
+      "partnerLinesAssignedToLearner": [],
+      "guidedBuilderTargets": 8,
+      "bridges": [
+        {
+          "id": "pozhaluysta",
+          "title": "یک کلمه، سه معنی",
+          "note": "«пожалуйста» در روسی سه کار می‌کند: «لطفاً» (در خواهش)، «خواهش می‌کنم» (در جواب تشکر) و «بفرمایید» (وقتی چیزی می‌دهی). فارسی برای هر سه کلمهٔ جدا دارد؛ روسی یکی."
+        },
+        {
+          "id": "izvinite",
+          "title": "عین فارسی",
+          "note": "«Извините / Простите» مثل «ببخشید» فارسی هم برای عذرخواهی است هم برای صدا زدن غریبه. «извините» کمی رسمی‌تر و «прости» خودمانی است."
+        },
+        {
+          "id": "dative-feel",
+          "title": "فاعل «به من»ی",
+          "note": "احساس، نیاز و اجازه در روسی فاعل ندارد: «мне холодно» = «به من سرد است»، «мне нравится» = «به من خوش می‌آید»، «мне надо» = «مرا باید». الگویش همان «به من خوش می‌آید» و «سردم است» فارسی است، فقط همیشه با همین ساخت."
+        }
+      ]
+    }
+  ]
+}

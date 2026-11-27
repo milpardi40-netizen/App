@@ -1,0 +1,2450 @@
+{
+  "date": "2026-11-26",
+  "purpose": "Read-only Turkish design baseline after the independently approved Russian, English, German, French and Spanish implementations. Do not regenerate after Turkish implementation.",
+  "inventoryHashes": {
+    "en": "eb215209074a93b819c0eba010cc4b26e8fa37ed0cd8a343d481d410896f235d",
+    "ru": "da93a1d5a375d73dd30aca1ab72d6263440f2ec91f0dc68ef519d81d9d92e14b",
+    "tr": "d9e9307c9a8bd7f3cba739bd4384d71443e4d3b84097ecff38cb56ae0e2c3f9e",
+    "ar": "2aba3bbea24df5d31b0927fc9b7c5524badfb9fbe288d964391dc0955a3ac487",
+    "de": "7cfeb9805fded6ea460be8caaa113a88835380f5eb6334ef7e60ca6ed9dd38b4",
+    "fr": "cc0aa384c879a25007ca9b2b2b8d47b70c258ff533ccec4a1b44a47d94fb2367",
+    "es": "7f5878bc47e6afae876e74767c6af01fc2fa054049b0ead40a7f3559afb34a48"
+  },
+  "sourceHashes": {
+    "components/TurkishLesson.tsx": "9587e74ebc173eb2e6642baf656f0dbf756ece6561efa67c1a7b9b6b65387562",
+    "components/LessonDialogueRoom.tsx": "69d85de44f3c4c1acf90712c5fa31d927889825ce076ed004297adca1ff193d0",
+    "components/ProductionTask.tsx": "d41ff70b0ca99bdacb5d3c3391e8481a1f9ed343d9503f132bf0ff2b04d99e5d",
+    "lib/languages/turkish.ts": "564c4280191d9a911043b804868dcb42f723d643fcde3f12e624a0f1b3613c3d",
+    "lib/languages/turkishStudyState.ts": "6982762bb3488f07379fadf67b4a3616aa5f6d36dbf185c98973e4587809cefd",
+    "lib/languages/turkishSeed.ts": "82f2227f2fe83cfa6fc239760323af091a4f52631011b80364f091dfdf8fd6a5",
+    "lib/lessonDialoguePairs.ts": "f5bec7b21abca6a14e84d2573748d3dff594d6f2043d3960bc43ba215b92d796",
+    "lib/lessonAssessment.ts": "f8f1451a0b4620016821ffbda2156401770e41003a0a47572a59573e18091180",
+    "lib/createCourseProgressStore.ts": "47d8e1c53f747b141b7c6283d2a77038d36b4324ac20d4b8645be00dfe259565",
+    "lib/lessonOutcomes.ts": "0691b4ce92ed9535ccef3b82d1cb08139b70af912e464c822378ac8cda6413b6",
+    "lib/learnerProfile.ts": "cc2af5f365dfd7b8783a35f20c2096be0c3fa80b195932e7f02eccd19cfe891e",
+    "lib/languages/spanishA1.generated.ts": "e33a646f6903ef7213f7d64f9e5bc70a874ed20d4ba30447a43a64a6e5bfdb93",
+    "lib/languages/frenchA1.generated.ts": "742e48a5d9288c89ea36e852c80f8d17313719b17498b6671183f98c7e274abf",
+    "lib/languages/germanA1.generated.ts": "cbf6605e6da6be22acdb81de1e7200e3f997410130c1f2c4a7f283d3eecd6108"
+  },
+  "protectedTurkishOutsideA1": "83c07900aaf3b34bce2ecee8fe7856ffb3cf2466495fb038316eb9755fc9f7c2",
+  "turkishA1": [
+    {
+      "id": "tr-l1-alphabet-pronunciation",
+      "title": "الفبای ترکی استانبولی و تلفظ صحیح حروف",
+      "order": 26,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-001",
+        "tr1-002",
+        "tr1-003",
+        "tr1-004",
+        "tr1-005",
+        "tr1-006",
+        "tr1-007",
+        "tr1-008"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "cbc91e813ef4a481e250d9c49995948a681fc60f8bf9e1033f2b94a3ae3f4885"
+    },
+    {
+      "id": "tr-l1-greetings",
+      "title": "سلام و احوال‌پرسی",
+      "order": 27,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-009",
+        "tr1-010",
+        "tr1-011",
+        "tr1-012",
+        "tr1-013",
+        "tr1-014",
+        "tr1-015",
+        "tr1-016"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "4bc9eb768ed685315d039c67d1f067705860c4a4d53af9098e7673e53b9476bf"
+    },
+    {
+      "id": "tr-l1-introductions",
+      "title": "معرفی خود و دیگران",
+      "order": 28,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-017",
+        "tr1-018",
+        "tr1-019",
+        "tr1-020",
+        "tr1-021",
+        "tr1-022",
+        "tr1-023",
+        "tr1-024"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "c35fa94d765e4f0f86df0c6a27d2d9ef97eae44e898393aac272dd3fd98457b5"
+    },
+    {
+      "id": "tr-l1-personal-pronouns",
+      "title": "ضمایر شخصی در جمله",
+      "order": 29,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-025",
+        "tr1-026",
+        "tr1-027",
+        "tr1-028",
+        "tr1-029",
+        "tr1-030",
+        "tr1-031",
+        "tr1-032"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "34b267dfcd3c831e43c4aaf1d0268b4c9973d3d17374530ef6e651235c4e610a"
+    },
+    {
+      "id": "tr-l1-nominal-sentences",
+      "title": "جمله‌های اسمی مثبت، منفی و پرسشی با پسوندهای شخصی",
+      "order": 30,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-033",
+        "tr1-034",
+        "tr1-035",
+        "tr1-036",
+        "tr1-037",
+        "tr1-038",
+        "tr1-039",
+        "tr1-040"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "80bba4f6fc3dce3f06cea9fcc848824f9cf9d4259f4eaff0b7c50de52f56993a"
+    },
+    {
+      "id": "tr-l1-nationality-language-residence",
+      "title": "ملیت، زبان و محل زندگی",
+      "order": 31,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-041",
+        "tr1-042",
+        "tr1-043",
+        "tr1-044",
+        "tr1-045",
+        "tr1-046",
+        "tr1-047",
+        "tr1-048"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "feb8101441a69e49ebf113a53ee2c5878d13e8bd698fa24260176f855bca3e47"
+    },
+    {
+      "id": "tr-l1-numbers-age-info",
+      "title": "اعداد، سن و اطلاعات شخصی",
+      "order": 32,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-049",
+        "tr1-050",
+        "tr1-051",
+        "tr1-052",
+        "tr1-053",
+        "tr1-054",
+        "tr1-055",
+        "tr1-056"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "6d046085860c7b3081659c0f2b277251965d8e2947074925bdba2ad25ae0d8b7"
+    },
+    {
+      "id": "tr-l1-family",
+      "title": "خانواده و روابط خانوادگی",
+      "order": 33,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-057",
+        "tr1-058",
+        "tr1-059",
+        "tr1-060",
+        "tr1-061",
+        "tr1-062",
+        "tr1-063",
+        "tr1-064"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "e8fa45cf0e2d79ffe89b86d5dbb149938a4a8b2859c1f0a4269e9f29f931b747"
+    },
+    {
+      "id": "tr-l1-possession-suffixes",
+      "title": "مالکیت و پسوندهای ملکی",
+      "order": 34,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-065",
+        "tr1-066",
+        "tr1-067",
+        "tr1-068",
+        "tr1-069",
+        "tr1-070",
+        "tr1-071",
+        "tr1-072"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "441e3da98b8aff2269b1e993b3cffa149495ecb2ac20286223d68993b6372cae"
+    },
+    {
+      "id": "tr-l1-singular-plural",
+      "title": "اسم‌ها، مفرد و جمع",
+      "order": 35,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-073",
+        "tr1-074",
+        "tr1-075",
+        "tr1-076",
+        "tr1-077",
+        "tr1-078",
+        "tr1-079",
+        "tr1-080"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "bd98a06790c78170165ccfcc23cc160b858920de002397e9bfabddee65065267"
+    },
+    {
+      "id": "tr-l1-demonstratives",
+      "title": "اشاره به اشخاص و اشیا (Bu / Şu / O)",
+      "order": 36,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-081",
+        "tr1-082",
+        "tr1-083",
+        "tr1-084",
+        "tr1-085",
+        "tr1-086",
+        "tr1-087",
+        "tr1-088"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "f04b52a87b126c6e5038c0cba50b876a32d797f24ffe34972fba6f3d8aeace60"
+    },
+    {
+      "id": "tr-l1-describing-things",
+      "title": "توصیف اشخاص، اشیا و مکان‌ها",
+      "order": 37,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-089",
+        "tr1-090",
+        "tr1-091",
+        "tr1-092",
+        "tr1-093",
+        "tr1-094",
+        "tr1-095",
+        "tr1-096"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "46473280a2d1287c6a6f431d77e0c43ab63f669ad7540b2de63c9cab234d70f0"
+    },
+    {
+      "id": "tr-l1-colors-shapes-appearance",
+      "title": "رنگ‌ها، شکل‌ها و ویژگی‌های ظاهری",
+      "order": 38,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-097",
+        "tr1-098",
+        "tr1-099",
+        "tr1-100",
+        "tr1-101",
+        "tr1-102",
+        "tr1-103",
+        "tr1-104"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "b64c5fcd7c1b87b863183432dcf67066c702d87c8a7d48c00f1345c2fb8ee939"
+    },
+    {
+      "id": "tr-l1-var-yok",
+      "title": "ساختارهای بیان وجود و عدم وجود (Var / Yok)",
+      "order": 39,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-105",
+        "tr1-106",
+        "tr1-107",
+        "tr1-108",
+        "tr1-109",
+        "tr1-110",
+        "tr1-111",
+        "tr1-112"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "e95dcb9a1b33dea00b61ae62bb17db7c47b1d67d9890d9176c55efdbd5c9a201"
+    },
+    {
+      "id": "tr-l1-simple-verbal-sentences",
+      "title": "جمله‌های فعلی ساده",
+      "order": 40,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-113",
+        "tr1-114",
+        "tr1-115",
+        "tr1-116",
+        "tr1-117",
+        "tr1-118",
+        "tr1-119",
+        "tr1-120"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "38f6f35376190d25926935d8eb2348bd1ae9fc8c69a6a3f0640a7421676c960a"
+    },
+    {
+      "id": "tr-l1-infinitive-verb-stem",
+      "title": "مصدر افعال و ریشه فعل",
+      "order": 41,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-121",
+        "tr1-122",
+        "tr1-123",
+        "tr1-124",
+        "tr1-125",
+        "tr1-126",
+        "tr1-127",
+        "tr1-128"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "da6f1ac771bf3cf1cd5b355410634e0ea1f697a3f1657302b2ae1c7ccfba0c3a"
+    },
+    {
+      "id": "tr-l1-present-continuous",
+      "title": "زمان حال استمراری (Şimdiki Zaman)",
+      "order": 42,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-129",
+        "tr1-130",
+        "tr1-131",
+        "tr1-132",
+        "tr1-133",
+        "tr1-134",
+        "tr1-135",
+        "tr1-136"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "60e22ed04ba915dd0a2e13e57b2ae2ecac2cb2fb22b30c837927f5b0e8bd9bb2"
+    },
+    {
+      "id": "tr-l1-common-verbs-present",
+      "title": "صرف افعال پرکاربرد در زمان حال استمراری",
+      "order": 43,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-137",
+        "tr1-138",
+        "tr1-139",
+        "tr1-140",
+        "tr1-141",
+        "tr1-142",
+        "tr1-143",
+        "tr1-144"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "750c68ac8396156bcfba85653f5ac8496ae87450c1b8de23354a0084904e8d7b"
+    },
+    {
+      "id": "tr-l1-affirmative-negative-interrogative",
+      "title": "جمله‌های مثبت، منفی و پرسشی",
+      "order": 44,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-145",
+        "tr1-146",
+        "tr1-147",
+        "tr1-148",
+        "tr1-149",
+        "tr1-150",
+        "tr1-151",
+        "tr1-152"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "209b63ca78ae330195ae230d66400bc1a3ae0418e40ec39fc457e05ec568a79e"
+    },
+    {
+      "id": "tr-l1-question-words",
+      "title": "پرسش‌سازی با کلمات پرسشی (Ne / Nerede / Kim / Ne zaman / Neden / Nasıl / Kaç / Hangi)",
+      "order": 45,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-153",
+        "tr1-154",
+        "tr1-155",
+        "tr1-156",
+        "tr1-157",
+        "tr1-158",
+        "tr1-159",
+        "tr1-160"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "8b134653a31cc5e5929e3a2f3106de6788932c2f9c11b78bed9676cce871e979"
+    },
+    {
+      "id": "tr-l1-ordinals-time-date",
+      "title": "اعداد ترتیبی، ساعت و تاریخ",
+      "order": 46,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-161",
+        "tr1-162",
+        "tr1-163",
+        "tr1-164",
+        "tr1-165",
+        "tr1-166",
+        "tr1-167",
+        "tr1-168"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "c03f56384936eebf7a32c1e5d1ce6b1029775b662e0507f7b7ea98067abbdd52"
+    },
+    {
+      "id": "tr-l1-location-position",
+      "title": "مکان و موقعیت مکانی",
+      "order": 47,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-169",
+        "tr1-170",
+        "tr1-171",
+        "tr1-172",
+        "tr1-173",
+        "tr1-174",
+        "tr1-175",
+        "tr1-176"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "798a79db2f4426d318555fc79bfe8255b0238463d1b056649345a7ae782c9664"
+    },
+    {
+      "id": "tr-l1-locative-case",
+      "title": "حالت مکانی (Bulunma Hâli)",
+      "order": 48,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-177",
+        "tr1-178",
+        "tr1-179",
+        "tr1-180",
+        "tr1-181",
+        "tr1-182",
+        "tr1-183",
+        "tr1-184"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "7b73c0f114864bd121fad68163826eea6ae67ddaa352bce1ed52ee3a60c9094b"
+    },
+    {
+      "id": "tr-l1-dative-case",
+      "title": "حالت جهتی (Yönelme Hâli)",
+      "order": 49,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-185",
+        "tr1-186",
+        "tr1-187",
+        "tr1-188",
+        "tr1-189",
+        "tr1-190",
+        "tr1-191",
+        "tr1-192"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "36bf8474bb3207953df9e11b239ff8e244c0182373c8670936598908a6162274"
+    },
+    {
+      "id": "tr-l1-ablative-case",
+      "title": "حالت مبدأ (Ayrılma Hâli)",
+      "order": 50,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-193",
+        "tr1-194",
+        "tr1-195",
+        "tr1-196",
+        "tr1-197",
+        "tr1-198",
+        "tr1-199",
+        "tr1-200"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "c698ed80ab59a600b9ff0ab86ff686df5f58a4bb7d66bb0a47746323ff53fbc5"
+    },
+    {
+      "id": "tr-l1-accusative-case",
+      "title": "حالت مفعولی (Belirtme Hâli)",
+      "order": 51,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-201",
+        "tr1-202",
+        "tr1-203",
+        "tr1-204",
+        "tr1-205",
+        "tr1-206",
+        "tr1-207",
+        "tr1-208"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "b5e2f4913f43d4523a60eeb1cbed37966735b697af47b67bea69e7c0c1334a6e"
+    },
+    {
+      "id": "tr-l1-likes-wants-needs",
+      "title": "علایق، خواسته‌ها و نیازهای ساده",
+      "order": 52,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-209",
+        "tr1-210",
+        "tr1-211",
+        "tr1-212",
+        "tr1-213",
+        "tr1-214",
+        "tr1-215",
+        "tr1-216"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "f4052db93a2c14f3d8e089422240b0c39544db4e956c7c2de907cfb1e67edd6e"
+    },
+    {
+      "id": "tr-l1-ability-inability",
+      "title": "توانایی و ناتوانی (-abil / -ebil)",
+      "order": 53,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-217",
+        "tr1-218",
+        "tr1-219",
+        "tr1-220",
+        "tr1-221",
+        "tr1-222",
+        "tr1-223",
+        "tr1-224"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "7411c45719ac9086db15c7f97aa9e7e35a6a16a81b5246dd0211c2e31e19cba4"
+    },
+    {
+      "id": "tr-l1-postpositions-spatial",
+      "title": "حروف اضافه و ساختارهای مکانی پایه",
+      "order": 54,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-225",
+        "tr1-226",
+        "tr1-227",
+        "tr1-228",
+        "tr1-229",
+        "tr1-230",
+        "tr1-231",
+        "tr1-232"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "03d753df54f66d25fb29f0b02191065cdcea89fd98f177cc8746506a1d84f8c1"
+    },
+    {
+      "id": "tr-l1-daily-routine-habits",
+      "title": "برنامه روزانه و عادت‌ها",
+      "order": 55,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-233",
+        "tr1-234",
+        "tr1-235",
+        "tr1-236",
+        "tr1-237",
+        "tr1-238",
+        "tr1-239",
+        "tr1-240"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "7057f31b92a46bf62c8fa2e19179f9958841e92b7dafd262621a5c084902ce97"
+    },
+    {
+      "id": "tr-l1-conjunctions",
+      "title": "حروف ربط پایه (Ve / Ama / Çünkü / Veya)",
+      "order": 56,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-241",
+        "tr1-242",
+        "tr1-243",
+        "tr1-244",
+        "tr1-245",
+        "tr1-246",
+        "tr1-247",
+        "tr1-248"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "16c6b1b24eaa4938bed8ae463e3d18820f4f7630665bd3226dae5777960c761c"
+    },
+    {
+      "id": "tr-l1-requests-permission-imperative",
+      "title": "ساختارهای ساده درخواست، اجازه و دستور",
+      "order": 57,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-249",
+        "tr1-250",
+        "tr1-251",
+        "tr1-252",
+        "tr1-253",
+        "tr1-254",
+        "tr1-255",
+        "tr1-256"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "ced72ea985644a1529908a954c2857a7516b3c53a51f2cbd5f45aba0aca6b213"
+    },
+    {
+      "id": "tr-l1-vowel-harmony",
+      "title": "هماهنگی واکه‌ها و قواعد انتخاب پسوندها",
+      "order": 58,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-257",
+        "tr1-258",
+        "tr1-259",
+        "tr1-260",
+        "tr1-261",
+        "tr1-262",
+        "tr1-263",
+        "tr1-264"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "8e92c09cfe845e1554ac25fd2e79f8e9ff4c2b4eca0953b1bf0ac7028a8326aa"
+    },
+    {
+      "id": "tr-l1-word-order",
+      "title": "ترتیب کلمات در جمله ترکی استانبولی",
+      "order": 59,
+      "rows": 8,
+      "sentenceIds": [
+        "tr1-265",
+        "tr1-266",
+        "tr1-267",
+        "tr1-268",
+        "tr1-269",
+        "tr1-270",
+        "tr1-271",
+        "tr1-272"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "42106951f21a51c4d6de843dc3229c6a87b5f1a96f8b54582c111f6c2712a18a"
+    },
+    {
+      "id": "tr-l2-social-situations",
+      "title": "مکالمه در موقعیت‌های اجتماعی",
+      "order": 60,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-001",
+        "tr2-002",
+        "tr2-003",
+        "tr2-004",
+        "tr2-005",
+        "tr2-006",
+        "tr2-007",
+        "tr2-008"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "78a79cec8faf68b7985349533913115d3f9f3f1de26b6d0abe893ca5dd6c8d41"
+    },
+    {
+      "id": "tr-l2-shopping-price-payment",
+      "title": "خرید، قیمت و پرداخت",
+      "order": 61,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-009",
+        "tr2-010",
+        "tr2-011",
+        "tr2-012",
+        "tr2-013",
+        "tr2-014",
+        "tr2-015",
+        "tr2-016"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "902413e44be57a96da014028208328781c3986010d319d3afe2331bc2da49128"
+    },
+    {
+      "id": "tr-l2-ordering-food-drinks",
+      "title": "سفارش غذا و نوشیدنی",
+      "order": 62,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-017",
+        "tr2-018",
+        "tr2-019",
+        "tr2-020",
+        "tr2-021",
+        "tr2-022",
+        "tr2-023",
+        "tr2-024"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "63b74236df807e660c4523b03c611dfa36652c7c4db304337bda1329dffbd8d4"
+    },
+    {
+      "id": "tr-l2-restaurant-cafe",
+      "title": "صحبت در رستوران و کافه",
+      "order": 63,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-025",
+        "tr2-026",
+        "tr2-027",
+        "tr2-028",
+        "tr2-029",
+        "tr2-030",
+        "tr2-031",
+        "tr2-032"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "bf32ff4399b737cfde0bb04b8ac10c639e97ca28d109687328a72724f88b83fa"
+    },
+    {
+      "id": "tr-l2-directions-navigation",
+      "title": "پرسیدن آدرس و مسیریابی",
+      "order": 64,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-033",
+        "tr2-034",
+        "tr2-035",
+        "tr2-036",
+        "tr2-037",
+        "tr2-038",
+        "tr2-039",
+        "tr2-040"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "7fc377a151f0acf8255eac624ae47afa302c5ebda952b91700c5a26e49a3c970"
+    },
+    {
+      "id": "tr-l2-public-transport-taxi",
+      "title": "حمل‌ونقل عمومی و تاکسی",
+      "order": 65,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-041",
+        "tr2-042",
+        "tr2-043",
+        "tr2-044",
+        "tr2-045",
+        "tr2-046",
+        "tr2-047",
+        "tr2-048"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "38656b272271a984ce3238beaa296dfebafd62d34459709a2ea70ec014cf64cf"
+    },
+    {
+      "id": "tr-l2-travel-airport-tickets",
+      "title": "سفر، فرودگاه و خرید بلیت",
+      "order": 66,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-049",
+        "tr2-050",
+        "tr2-051",
+        "tr2-052",
+        "tr2-053",
+        "tr2-054",
+        "tr2-055",
+        "tr2-056"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "3c201a66a70566f1917d4b244e9719c43ea5a3fa28bf6a3cb08790e603aa5344"
+    },
+    {
+      "id": "tr-l2-hotel-accommodation",
+      "title": "رزرو هتل و اقامت",
+      "order": 67,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-057",
+        "tr2-058",
+        "tr2-059",
+        "tr2-060",
+        "tr2-061",
+        "tr2-062",
+        "tr2-063",
+        "tr2-064"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "5ef6d62a58be10c4547e70b11560d0b6edbcef8a9627d394a8179b747a35540a"
+    },
+    {
+      "id": "tr-l2-asking-help-problems",
+      "title": "درخواست کمک و بیان مشکلات",
+      "order": 68,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-065",
+        "tr2-066",
+        "tr2-067",
+        "tr2-068",
+        "tr2-069",
+        "tr2-070",
+        "tr2-071",
+        "tr2-072"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "7220ed9339560ee7360edc235f1fc123ae817204f1c4b2fb86ccde05bb19749a"
+    },
+    {
+      "id": "tr-l2-doctor-symptoms",
+      "title": "مراجعه به پزشک و بیان علائم ساده",
+      "order": 69,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-073",
+        "tr2-074",
+        "tr2-075",
+        "tr2-076",
+        "tr2-077",
+        "tr2-078",
+        "tr2-079",
+        "tr2-080"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "8e849e8df66659ac32766c80b6c9e7aee47ec93fe94c663b0a9505bfe0d4c4bd"
+    },
+    {
+      "id": "tr-l2-work-study-talk",
+      "title": "مکالمات ساده در محل کار و تحصیل",
+      "order": 70,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-081",
+        "tr2-082",
+        "tr2-083",
+        "tr2-084",
+        "tr2-085",
+        "tr2-086",
+        "tr2-087",
+        "tr2-088"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "fe80129f352ccad3b469af5c4cf8c236d689a65dcf8035d2c6f737ed2710d66a"
+    },
+    {
+      "id": "tr-l2-weather",
+      "title": "صحبت درباره آب‌وهوا",
+      "order": 71,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-089",
+        "tr2-090",
+        "tr2-091",
+        "tr2-092",
+        "tr2-093",
+        "tr2-094",
+        "tr2-095",
+        "tr2-096"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "9287b448669a1c484281e7e4e673b0a5e87640a31a4908d8fc74ca793adbbee3"
+    },
+    {
+      "id": "tr-l2-phone-short-messages",
+      "title": "تماس تلفنی و پیام‌های کوتاه",
+      "order": 72,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-097",
+        "tr2-098",
+        "tr2-099",
+        "tr2-100",
+        "tr2-101",
+        "tr2-102",
+        "tr2-103",
+        "tr2-104"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "0adb1cbdcf6ceee3b066530c6a69f59e0003c8d2d9d5f1d956cefab50113c3ea"
+    },
+    {
+      "id": "tr-l2-invitations",
+      "title": "دعوت‌کردن، پذیرفتن و ردکردن دعوت",
+      "order": 73,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-105",
+        "tr2-106",
+        "tr2-107",
+        "tr2-108",
+        "tr2-109",
+        "tr2-110",
+        "tr2-111",
+        "tr2-112"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "611e49cb42b439bb490b8b77c05080c62ea230c8e6466e94aafb5d09ed0f95ff"
+    },
+    {
+      "id": "tr-l2-polite-requests-permission",
+      "title": "درخواست مؤدبانه و اجازه‌گرفتن",
+      "order": 74,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-113",
+        "tr2-114",
+        "tr2-115",
+        "tr2-116",
+        "tr2-117",
+        "tr2-118",
+        "tr2-119",
+        "tr2-120"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "04e59df0abf567e853e33480c07c9b3a30533493af7b291ed612bfb501027afd"
+    },
+    {
+      "id": "tr-l2-simple-instructions",
+      "title": "بیان دستورها و راهنمایی‌های ساده",
+      "order": 75,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-121",
+        "tr2-122",
+        "tr2-123",
+        "tr2-124",
+        "tr2-125",
+        "tr2-126",
+        "tr2-127",
+        "tr2-128"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "ee9c6d0dc9fb9c9af7482316900172ee55d63f9c80a1efef955f76e55a95227b"
+    },
+    {
+      "id": "tr-l2-suggestions-advice",
+      "title": "بیان پیشنهاد و توصیه ساده",
+      "order": 76,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-129",
+        "tr2-130",
+        "tr2-131",
+        "tr2-132",
+        "tr2-133",
+        "tr2-134",
+        "tr2-135",
+        "tr2-136"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "f3296d30b8db05a6cc269ef11900126456808807e7e4d0ca056e78276bd73b34"
+    },
+    {
+      "id": "tr-l2-recent-past-basics",
+      "title": "صحبت درباره گذشته و اتفاق‌های اخیر با عبارت‌های پایه",
+      "order": 77,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-137",
+        "tr2-138",
+        "tr2-139",
+        "tr2-140",
+        "tr2-141",
+        "tr2-142",
+        "tr2-143",
+        "tr2-144"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "91546691f3b340819576952dc998f143493343cd22abe38fbe7e4390ec1b3470"
+    },
+    {
+      "id": "tr-l2-near-future-plans",
+      "title": "صحبت درباره برنامه‌های آینده نزدیک",
+      "order": 78,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-145",
+        "tr2-146",
+        "tr2-147",
+        "tr2-148",
+        "tr2-149",
+        "tr2-150",
+        "tr2-151",
+        "tr2-152"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "22e3c0a163ebd6be7735b587c445e80b2dc288e6f69f2ce4df94f4e041c689cc"
+    },
+    {
+      "id": "tr-l2-feelings-daily-states",
+      "title": "بیان احساسات و وضعیت‌های روزمره",
+      "order": 79,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-153",
+        "tr2-154",
+        "tr2-155",
+        "tr2-156",
+        "tr2-157",
+        "tr2-158",
+        "tr2-159",
+        "tr2-160"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "f28caf47d6b75d378f4bde374b6d8f4627111cc9b2e3f8926001df44757e4f71"
+    },
+    {
+      "id": "tr-l2-asking-info-forms",
+      "title": "پرسیدن اطلاعات و تکمیل فرم‌های ساده",
+      "order": 80,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-161",
+        "tr2-162",
+        "tr2-163",
+        "tr2-164",
+        "tr2-165",
+        "tr2-166",
+        "tr2-167",
+        "tr2-168"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "db9f714ab16c9f465b163851f7b2402c09f56f28183b2ac49785301d77c267a0"
+    },
+    {
+      "id": "tr-l2-store-supermarket",
+      "title": "مکالمه در فروشگاه و سوپرمارکت",
+      "order": 81,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-169",
+        "tr2-170",
+        "tr2-171",
+        "tr2-172",
+        "tr2-173",
+        "tr2-174",
+        "tr2-175",
+        "tr2-176"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "bb41f7489a6364e66dfbd5a12d0983fa5dd0005213cff018b5358b090e068e68"
+    },
+    {
+      "id": "tr-l2-clothes-shopping",
+      "title": "صحبت درباره لباس و خرید پوشاک",
+      "order": 82,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-177",
+        "tr2-178",
+        "tr2-179",
+        "tr2-180",
+        "tr2-181",
+        "tr2-182",
+        "tr2-183",
+        "tr2-184"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "9f075b6eac5944c618328d431157c0db0b8ee4bff17f772ca33d238328eaf928"
+    },
+    {
+      "id": "tr-l2-home-furniture",
+      "title": "توصیف خانه و وسایل آن",
+      "order": 83,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-185",
+        "tr2-186",
+        "tr2-187",
+        "tr2-188",
+        "tr2-189",
+        "tr2-190",
+        "tr2-191",
+        "tr2-192"
+      ],
+      "checks": 2,
+      "dialogueTurns": 4,
+      "hash": "2b33aa6d19741c2d584744d002355de7470159349ec7bc00bedf2e587afecf20"
+    },
+    {
+      "id": "tr-l2-leisure-hobbies",
+      "title": "مکالمه درباره تفریح، سرگرمی و اوقات فراغت",
+      "order": 84,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-193",
+        "tr2-194",
+        "tr2-195",
+        "tr2-196",
+        "tr2-197",
+        "tr2-198",
+        "tr2-199",
+        "tr2-200"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "d63225f2a5c407a9b47b2c3f57dd08fe7f8d21e1d2b3c9b28b0f6caccd21befe"
+    },
+    {
+      "id": "tr-l2-weekly-schedule",
+      "title": "صحبت درباره کارهای روزمره و برنامه هفتگی",
+      "order": 85,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-201",
+        "tr2-202",
+        "tr2-203",
+        "tr2-204",
+        "tr2-205",
+        "tr2-206",
+        "tr2-207",
+        "tr2-208"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "77048dcf3d4496e47bbe691bd2423e7afb58db2cd7fbd7c871e3a2b15c936bed"
+    },
+    {
+      "id": "tr-l2-preferences-choices",
+      "title": "بیان ترجیحات و انتخاب بین گزینه‌ها",
+      "order": 86,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-209",
+        "tr2-210",
+        "tr2-211",
+        "tr2-212",
+        "tr2-213",
+        "tr2-214",
+        "tr2-215",
+        "tr2-216"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "f9879c84a3c7e772a5b99dc736fccdae05347c52177e3fc6160e8d946fae694b"
+    },
+    {
+      "id": "tr-l2-simple-comparisons",
+      "title": "مقایسه‌های ساده",
+      "order": 87,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-217",
+        "tr2-218",
+        "tr2-219",
+        "tr2-220",
+        "tr2-221",
+        "tr2-222",
+        "tr2-223",
+        "tr2-224"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "cf80ad8500875a402e3ce9159d9b8e24e99877a69a6769caf02bc83c713f41f4"
+    },
+    {
+      "id": "tr-l2-simple-reason-result",
+      "title": "بیان دلیل و نتیجه ساده",
+      "order": 88,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-225",
+        "tr2-226",
+        "tr2-227",
+        "tr2-228",
+        "tr2-229",
+        "tr2-230",
+        "tr2-231",
+        "tr2-232"
+      ],
+      "checks": 2,
+      "dialogueTurns": 3,
+      "hash": "0645471b8754a3c4f91dcfd453b2efdb3fd73e97b66ff055f39785fd6fd98989"
+    },
+    {
+      "id": "tr-l2-connected-conversation",
+      "title": "شرکت در مکالمه روزمره با چند جمله مرتبط",
+      "order": 89,
+      "rows": 8,
+      "sentenceIds": [
+        "tr2-233",
+        "tr2-234",
+        "tr2-235",
+        "tr2-236",
+        "tr2-237",
+        "tr2-238",
+        "tr2-239",
+        "tr2-240"
+      ],
+      "checks": 2,
+      "dialogueTurns": 5,
+      "hash": "a86694f81bc1d6cddb1dbfd1ba99e2c52ee0add9912000257d9230ecb103231f"
+    }
+  ],
+  "preA1": [
+    {
+      "id": "tr-prea1-01-greetings",
+      "title": "واژه‌های نخستین و پاسخ‌های کوتاه",
+      "sentences": [
+        {
+          "id": "tr0-001",
+          "text": "Merhaba",
+          "fa": "سلام"
+        },
+        {
+          "id": "tr0-002",
+          "text": "Selam",
+          "fa": "سلام؛ درود دوستانه"
+        },
+        {
+          "id": "tr0-003",
+          "text": "Günaydın",
+          "fa": "صبح‌به‌خیر"
+        },
+        {
+          "id": "tr0-004",
+          "text": "Lütfen",
+          "fa": "لطفاً"
+        },
+        {
+          "id": "tr0-005",
+          "text": "Teşekkürler",
+          "fa": "متشکرم؛ ممنون"
+        },
+        {
+          "id": "tr0-006",
+          "text": "Evet",
+          "fa": "بله"
+        },
+        {
+          "id": "tr0-007",
+          "text": "Hayır",
+          "fa": "نه؛ خیر"
+        },
+        {
+          "id": "tr0-008",
+          "text": "Tamam",
+          "fa": "باشه؛ بسیار خوب"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-02-how-are-you",
+      "title": "ضمیرها و اسم‌های پایه",
+      "sentences": [
+        {
+          "id": "tr0-009",
+          "text": "Ben",
+          "fa": "من"
+        },
+        {
+          "id": "tr0-010",
+          "text": "Sen",
+          "fa": "تو"
+        },
+        {
+          "id": "tr0-011",
+          "text": "O",
+          "fa": "او؛ آن"
+        },
+        {
+          "id": "tr0-012",
+          "text": "Biz",
+          "fa": "ما"
+        },
+        {
+          "id": "tr0-013",
+          "text": "Siz",
+          "fa": "شما"
+        },
+        {
+          "id": "tr0-014",
+          "text": "Onlar",
+          "fa": "آن‌ها"
+        },
+        {
+          "id": "tr0-015",
+          "text": "Arkadaş",
+          "fa": "دوست"
+        },
+        {
+          "id": "tr0-016",
+          "text": "Kişi",
+          "fa": "شخص؛ فرد"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-03-basic-verbs",
+      "title": "فعل‌ها به شکل پایه",
+      "sentences": [
+        {
+          "id": "tr0-017",
+          "text": "Gelmek",
+          "fa": "آمدن"
+        },
+        {
+          "id": "tr0-018",
+          "text": "Gitmek",
+          "fa": "رفتن"
+        },
+        {
+          "id": "tr0-019",
+          "text": "İstemek",
+          "fa": "خواستن"
+        },
+        {
+          "id": "tr0-020",
+          "text": "Almak",
+          "fa": "گرفتن؛ خریدن"
+        },
+        {
+          "id": "tr0-021",
+          "text": "Öğrenmek",
+          "fa": "یادگرفتن؛ آموختن"
+        },
+        {
+          "id": "tr0-022",
+          "text": "Okumak",
+          "fa": "خواندن"
+        },
+        {
+          "id": "tr0-023",
+          "text": "İçmek",
+          "fa": "نوشیدن"
+        },
+        {
+          "id": "tr0-024",
+          "text": "Konuşmak",
+          "fa": "صحبت‌کردن"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-04-adjectives-and-adverbs",
+      "title": "صفت‌ها و رنگ‌های پایه",
+      "sentences": [
+        {
+          "id": "tr0-025",
+          "text": "İyi",
+          "fa": "خوب؛ خوب‌حال"
+        },
+        {
+          "id": "tr0-026",
+          "text": "Güzel",
+          "fa": "زیبا؛ خوب"
+        },
+        {
+          "id": "tr0-027",
+          "text": "Küçük",
+          "fa": "کوچک"
+        },
+        {
+          "id": "tr0-028",
+          "text": "Büyük",
+          "fa": "بزرگ"
+        },
+        {
+          "id": "tr0-029",
+          "text": "Yeni",
+          "fa": "نو؛ جدید"
+        },
+        {
+          "id": "tr0-030",
+          "text": "Kırmızı",
+          "fa": "قرمز"
+        },
+        {
+          "id": "tr0-031",
+          "text": "Mavi",
+          "fa": "آبی"
+        },
+        {
+          "id": "tr0-032",
+          "text": "Çok",
+          "fa": "بسیار؛ خیلی"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-05-numbers-zero-to-seven",
+      "title": "عددهای صفر تا هفت",
+      "sentences": [
+        {
+          "id": "tr0-081",
+          "text": "Sıfır",
+          "fa": "صفر"
+        },
+        {
+          "id": "tr0-082",
+          "text": "Bir",
+          "fa": "یک"
+        },
+        {
+          "id": "tr0-083",
+          "text": "İki",
+          "fa": "دو"
+        },
+        {
+          "id": "tr0-084",
+          "text": "Üç",
+          "fa": "سه"
+        },
+        {
+          "id": "tr0-085",
+          "text": "Dört",
+          "fa": "چهار"
+        },
+        {
+          "id": "tr0-086",
+          "text": "Beş",
+          "fa": "پنج"
+        },
+        {
+          "id": "tr0-087",
+          "text": "Altı",
+          "fa": "شش"
+        },
+        {
+          "id": "tr0-088",
+          "text": "Yedi",
+          "fa": "هفت"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-06-numbers-eight-to-ten-weekdays",
+      "title": "عددهای هشت تا ده و روزهای هفته",
+      "sentences": [
+        {
+          "id": "tr0-089",
+          "text": "Sekiz",
+          "fa": "هشت"
+        },
+        {
+          "id": "tr0-090",
+          "text": "Dokuz",
+          "fa": "نه"
+        },
+        {
+          "id": "tr0-091",
+          "text": "On",
+          "fa": "ده"
+        },
+        {
+          "id": "tr0-092",
+          "text": "Pazartesi",
+          "fa": "دوشنبه"
+        },
+        {
+          "id": "tr0-093",
+          "text": "Salı",
+          "fa": "سه‌شنبه"
+        },
+        {
+          "id": "tr0-094",
+          "text": "Çarşamba",
+          "fa": "چهارشنبه"
+        },
+        {
+          "id": "tr0-095",
+          "text": "Perşembe",
+          "fa": "پنج‌شنبه"
+        },
+        {
+          "id": "tr0-096",
+          "text": "Cuma",
+          "fa": "جمعه"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-07-food-and-drink",
+      "title": "خوراکی‌ها و نوشیدنی‌های پایه",
+      "sentences": [
+        {
+          "id": "tr0-097",
+          "text": "Su",
+          "fa": "آب"
+        },
+        {
+          "id": "tr0-098",
+          "text": "Çay",
+          "fa": "چای"
+        },
+        {
+          "id": "tr0-099",
+          "text": "Kahve",
+          "fa": "قهوه"
+        },
+        {
+          "id": "tr0-100",
+          "text": "Ekmek",
+          "fa": "نان"
+        },
+        {
+          "id": "tr0-101",
+          "text": "Süt",
+          "fa": "شیر"
+        },
+        {
+          "id": "tr0-102",
+          "text": "Elma",
+          "fa": "سیب"
+        },
+        {
+          "id": "tr0-103",
+          "text": "Yemek",
+          "fa": "غذا"
+        },
+        {
+          "id": "tr0-104",
+          "text": "Meyve",
+          "fa": "میوه"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-08-family-and-relations",
+      "title": "خانواده و خویشاوندان نزدیک",
+      "sentences": [
+        {
+          "id": "tr0-105",
+          "text": "Anne",
+          "fa": "مادر"
+        },
+        {
+          "id": "tr0-106",
+          "text": "Baba",
+          "fa": "پدر"
+        },
+        {
+          "id": "tr0-107",
+          "text": "Kardeş",
+          "fa": "خواهر یا برادر"
+        },
+        {
+          "id": "tr0-108",
+          "text": "Çocuk",
+          "fa": "کودک؛ فرزند"
+        },
+        {
+          "id": "tr0-109",
+          "text": "Büyükanne",
+          "fa": "مادربزرگ"
+        },
+        {
+          "id": "tr0-110",
+          "text": "Büyükbaba",
+          "fa": "پدربزرگ"
+        },
+        {
+          "id": "tr0-111",
+          "text": "Teyze",
+          "fa": "خاله"
+        },
+        {
+          "id": "tr0-112",
+          "text": "Amca",
+          "fa": "عمو"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-09-places",
+      "title": "مکان‌های روزمره",
+      "sentences": [
+        {
+          "id": "tr0-113",
+          "text": "Ev",
+          "fa": "خانه"
+        },
+        {
+          "id": "tr0-114",
+          "text": "Okul",
+          "fa": "مدرسه"
+        },
+        {
+          "id": "tr0-115",
+          "text": "Market",
+          "fa": "فروشگاه مواد غذایی"
+        },
+        {
+          "id": "tr0-116",
+          "text": "Metro",
+          "fa": "مترو"
+        },
+        {
+          "id": "tr0-117",
+          "text": "Tuvalet",
+          "fa": "سرویس بهداشتی"
+        },
+        {
+          "id": "tr0-118",
+          "text": "Banka",
+          "fa": "بانک"
+        },
+        {
+          "id": "tr0-119",
+          "text": "Durak",
+          "fa": "ایستگاه اتوبوس"
+        },
+        {
+          "id": "tr0-120",
+          "text": "İstasyon",
+          "fa": "ایستگاه"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-10-home-and-everyday-objects",
+      "title": "وسایل خانه و اشیای روزمره",
+      "sentences": [
+        {
+          "id": "tr0-121",
+          "text": "Kitap",
+          "fa": "کتاب"
+        },
+        {
+          "id": "tr0-122",
+          "text": "Defter",
+          "fa": "دفتر"
+        },
+        {
+          "id": "tr0-123",
+          "text": "Kalem",
+          "fa": "خودکار؛ قلم"
+        },
+        {
+          "id": "tr0-124",
+          "text": "Telefon",
+          "fa": "تلفن"
+        },
+        {
+          "id": "tr0-125",
+          "text": "Çanta",
+          "fa": "کیف"
+        },
+        {
+          "id": "tr0-126",
+          "text": "Masa",
+          "fa": "میز"
+        },
+        {
+          "id": "tr0-127",
+          "text": "Kapı",
+          "fa": "در"
+        },
+        {
+          "id": "tr0-128",
+          "text": "Anahtar",
+          "fa": "کلید"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-11-personal-details-and-languages",
+      "title": "نام، کشور و زبان",
+      "sentences": [
+        {
+          "id": "tr0-129",
+          "text": "Ad",
+          "fa": "نام"
+        },
+        {
+          "id": "tr0-130",
+          "text": "Yaş",
+          "fa": "سن"
+        },
+        {
+          "id": "tr0-131",
+          "text": "İranlı",
+          "fa": "ایرانی"
+        },
+        {
+          "id": "tr0-132",
+          "text": "Dil",
+          "fa": "زبان"
+        },
+        {
+          "id": "tr0-133",
+          "text": "Türkçe",
+          "fa": "زبان ترکی استانبولی"
+        },
+        {
+          "id": "tr0-134",
+          "text": "Farsça",
+          "fa": "زبان فارسی"
+        },
+        {
+          "id": "tr0-135",
+          "text": "İran",
+          "fa": "ایران"
+        },
+        {
+          "id": "tr0-136",
+          "text": "Türkiye",
+          "fa": "ترکیه"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-12-location-and-direction-words",
+      "title": "جایگاه و جهت‌های ساده",
+      "sentences": [
+        {
+          "id": "tr0-137",
+          "text": "Burada",
+          "fa": "اینجا"
+        },
+        {
+          "id": "tr0-138",
+          "text": "Orada",
+          "fa": "آنجا"
+        },
+        {
+          "id": "tr0-139",
+          "text": "Nerede",
+          "fa": "کجا"
+        },
+        {
+          "id": "tr0-140",
+          "text": "Yakın",
+          "fa": "نزدیک"
+        },
+        {
+          "id": "tr0-141",
+          "text": "Uzak",
+          "fa": "دور"
+        },
+        {
+          "id": "tr0-142",
+          "text": "Sağ",
+          "fa": "راست"
+        },
+        {
+          "id": "tr0-143",
+          "text": "Sol",
+          "fa": "چپ"
+        },
+        {
+          "id": "tr0-144",
+          "text": "Düz",
+          "fa": "مستقیم؛ صاف"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-13-calendar-and-time-words",
+      "title": "تقویم و زمان روز",
+      "sentences": [
+        {
+          "id": "tr0-145",
+          "text": "Cumartesi",
+          "fa": "شنبه"
+        },
+        {
+          "id": "tr0-146",
+          "text": "Pazar",
+          "fa": "یکشنبه"
+        },
+        {
+          "id": "tr0-147",
+          "text": "Bugün",
+          "fa": "امروز"
+        },
+        {
+          "id": "tr0-148",
+          "text": "Yarın",
+          "fa": "فردا"
+        },
+        {
+          "id": "tr0-149",
+          "text": "Şimdi",
+          "fa": "اکنون"
+        },
+        {
+          "id": "tr0-150",
+          "text": "Saat",
+          "fa": "ساعت"
+        },
+        {
+          "id": "tr0-151",
+          "text": "Sabah",
+          "fa": "صبح"
+        },
+        {
+          "id": "tr0-152",
+          "text": "Akşam",
+          "fa": "عصر؛ شب"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-14-question-and-connecting-words",
+      "title": "واژه‌های پرسشی و پیونددهنده",
+      "sentences": [
+        {
+          "id": "tr0-153",
+          "text": "Bu",
+          "fa": "این"
+        },
+        {
+          "id": "tr0-154",
+          "text": "Ne",
+          "fa": "چه؛ چی"
+        },
+        {
+          "id": "tr0-155",
+          "text": "Kim",
+          "fa": "چه‌کسی"
+        },
+        {
+          "id": "tr0-156",
+          "text": "Nasıl",
+          "fa": "چطور؛ چگونه"
+        },
+        {
+          "id": "tr0-157",
+          "text": "Kaç",
+          "fa": "چند"
+        },
+        {
+          "id": "tr0-158",
+          "text": "Ve",
+          "fa": "و"
+        },
+        {
+          "id": "tr0-159",
+          "text": "Sonra",
+          "fa": "بعد؛ سپس"
+        },
+        {
+          "id": "tr0-160",
+          "text": "Affedersiniz",
+          "fa": "ببخشید"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-05-first-word-pairs",
+      "title": "دو واژه کنار هم",
+      "sentences": [
+        {
+          "id": "tr0-033",
+          "text": "küçük ev",
+          "fa": "خانهٔ کوچک"
+        },
+        {
+          "id": "tr0-034",
+          "text": "büyük okul",
+          "fa": "مدرسهٔ بزرگ"
+        },
+        {
+          "id": "tr0-035",
+          "text": "yeni kitap",
+          "fa": "کتاب نو"
+        },
+        {
+          "id": "tr0-036",
+          "text": "mavi çanta",
+          "fa": "کیف آبی"
+        },
+        {
+          "id": "tr0-037",
+          "text": "kırmızı elma",
+          "fa": "سیب قرمز"
+        },
+        {
+          "id": "tr0-038",
+          "text": "iki kitap",
+          "fa": "دو کتاب"
+        },
+        {
+          "id": "tr0-039",
+          "text": "üç elma",
+          "fa": "سه سیب"
+        },
+        {
+          "id": "tr0-040",
+          "text": "çok güzel",
+          "fa": "بسیار زیبا"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-06-verb-chunks",
+      "title": "فعل در ترکیب کوتاه",
+      "sentences": [
+        {
+          "id": "tr0-041",
+          "text": "kitap okumak",
+          "fa": "کتاب خواندن"
+        },
+        {
+          "id": "tr0-042",
+          "text": "defter almak",
+          "fa": "دفتر خریدن؛ گرفتن"
+        },
+        {
+          "id": "tr0-043",
+          "text": "çay içmek",
+          "fa": "چای نوشیدن"
+        },
+        {
+          "id": "tr0-044",
+          "text": "kahve içmek",
+          "fa": "قهوه نوشیدن"
+        },
+        {
+          "id": "tr0-045",
+          "text": "Türkçe konuşmak",
+          "fa": "ترکی صحبت‌کردن"
+        },
+        {
+          "id": "tr0-046",
+          "text": "yemek istemek",
+          "fa": "غذا خواستن؛ میل به غذا داشتن"
+        },
+        {
+          "id": "tr0-047",
+          "text": "markete gitmek",
+          "fa": "به فروشگاه رفتن"
+        },
+        {
+          "id": "tr0-048",
+          "text": "eve gelmek",
+          "fa": "به خانه آمدن"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-introduction-chunks",
+      "title": "ترکیب‌های کوتاه برای معرفی خود",
+      "sentences": [
+        {
+          "id": "tr0-161",
+          "text": "Adım Ece",
+          "fa": "اسمم اجه است"
+        },
+        {
+          "id": "tr0-162",
+          "text": "Ben İranlıyım",
+          "fa": "من ایرانی‌ام"
+        },
+        {
+          "id": "tr0-163",
+          "text": "Ben buradayım",
+          "fa": "من اینجا هستم"
+        },
+        {
+          "id": "tr0-164",
+          "text": "Türkçe konuşuyorum",
+          "fa": "ترکی صحبت می‌کنم"
+        },
+        {
+          "id": "tr0-165",
+          "text": "Farsça konuşuyorum",
+          "fa": "فارسی صحبت می‌کنم"
+        },
+        {
+          "id": "tr0-166",
+          "text": "Türkçe öğreniyorum",
+          "fa": "ترکی یاد می‌گیرم"
+        },
+        {
+          "id": "tr0-167",
+          "text": "On yaşındayım",
+          "fa": "ده‌ساله‌ام"
+        },
+        {
+          "id": "tr0-168",
+          "text": "Adın ne?",
+          "fa": "اسمت چیست؟"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-number-and-time-chunks",
+      "title": "ترکیب‌های عددی و زمانی",
+      "sentences": [
+        {
+          "id": "tr0-169",
+          "text": "dört kalem",
+          "fa": "چهار خودکار"
+        },
+        {
+          "id": "tr0-170",
+          "text": "beş kitap",
+          "fa": "پنج کتاب"
+        },
+        {
+          "id": "tr0-171",
+          "text": "on yaş",
+          "fa": "ده سال سن"
+        },
+        {
+          "id": "tr0-172",
+          "text": "bugün pazartesi",
+          "fa": "امروز دوشنبه"
+        },
+        {
+          "id": "tr0-173",
+          "text": "yarın sabah",
+          "fa": "فردا صبح"
+        },
+        {
+          "id": "tr0-174",
+          "text": "bu akşam",
+          "fa": "امشب؛ این عصر"
+        },
+        {
+          "id": "tr0-175",
+          "text": "saat üç",
+          "fa": "ساعت سه"
+        },
+        {
+          "id": "tr0-176",
+          "text": "cumartesi ve pazar",
+          "fa": "شنبه و یکشنبه"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-polite-requests-and-directions",
+      "title": "درخواست مؤدبانه و مسیر کوتاه",
+      "sentences": [
+        {
+          "id": "tr0-177",
+          "text": "Bir çay, lütfen",
+          "fa": "یک چای، لطفاً"
+        },
+        {
+          "id": "tr0-178",
+          "text": "Bir kahve, lütfen",
+          "fa": "یک قهوه، لطفاً"
+        },
+        {
+          "id": "tr0-179",
+          "text": "Su, lütfen",
+          "fa": "آب، لطفاً"
+        },
+        {
+          "id": "tr0-180",
+          "text": "Metro nerede?",
+          "fa": "مترو کجاست؟"
+        },
+        {
+          "id": "tr0-181",
+          "text": "Tuvalet nerede?",
+          "fa": "سرویس بهداشتی کجاست؟"
+        },
+        {
+          "id": "tr0-182",
+          "text": "Düz gidin",
+          "fa": "مستقیم بروید"
+        },
+        {
+          "id": "tr0-183",
+          "text": "Sağa dönün",
+          "fa": "به راست بپیچید"
+        },
+        {
+          "id": "tr0-184",
+          "text": "Sola dönün",
+          "fa": "به چپ بپیچید"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-07-first-short-sentences",
+      "title": "جمله‌های نخست برای آشنایی",
+      "sentences": [
+        {
+          "id": "tr0-049",
+          "text": "Merhaba, ben Ece.",
+          "fa": "سلام، من اجه هستم."
+        },
+        {
+          "id": "tr0-050",
+          "text": "Ben Mert.",
+          "fa": "من مرت هستم."
+        },
+        {
+          "id": "tr0-051",
+          "text": "Adım Ece.",
+          "fa": "اسمم اجه است."
+        },
+        {
+          "id": "tr0-052",
+          "text": "Sen Mert misin?",
+          "fa": "تو مرت هستی؟"
+        },
+        {
+          "id": "tr0-053",
+          "text": "Evet, ben Mert.",
+          "fa": "بله، من مرت هستم."
+        },
+        {
+          "id": "tr0-054",
+          "text": "Ben İranlıyım.",
+          "fa": "من ایرانی‌ام."
+        },
+        {
+          "id": "tr0-055",
+          "text": "Ben Farsça konuşuyorum.",
+          "fa": "من فارسی صحبت می‌کنم."
+        },
+        {
+          "id": "tr0-056",
+          "text": "Türkçe öğreniyorum.",
+          "fa": "ترکی یاد می‌گیرم."
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-descriptions-and-family",
+      "title": "توصیف‌های ساده و خانواده",
+      "sentences": [
+        {
+          "id": "tr0-185",
+          "text": "Ev büyük.",
+          "fa": "خانه بزرگ است."
+        },
+        {
+          "id": "tr0-186",
+          "text": "Okul yakın.",
+          "fa": "مدرسه نزدیک است."
+        },
+        {
+          "id": "tr0-187",
+          "text": "Küçük ev.",
+          "fa": "خانهٔ کوچک."
+        },
+        {
+          "id": "tr0-188",
+          "text": "Çanta mavi.",
+          "fa": "کیف آبی است."
+        },
+        {
+          "id": "tr0-189",
+          "text": "Kitap yeni.",
+          "fa": "کتاب نو است."
+        },
+        {
+          "id": "tr0-190",
+          "text": "Annem burada.",
+          "fa": "مادرم اینجاست."
+        },
+        {
+          "id": "tr0-191",
+          "text": "Babam iyi.",
+          "fa": "پدرم خوب است."
+        },
+        {
+          "id": "tr0-192",
+          "text": "Ben iyiyim.",
+          "fa": "من خوبم."
+        },
+        {
+          "id": "tr-prea1-descriptions-and-family-balance-01",
+          "text": "Annen nasıl?",
+          "fa": "مادرت چطور است؟"
+        },
+        {
+          "id": "tr-prea1-descriptions-and-family-balance-02",
+          "text": "Annem iyi.",
+          "fa": "مادرم خوب است."
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-08-simple-questions",
+      "title": "پرسش و پاسخ دربارهٔ اشیا",
+      "sentences": [
+        {
+          "id": "tr0-057",
+          "text": "Bu ne?",
+          "fa": "این چیست؟"
+        },
+        {
+          "id": "tr0-058",
+          "text": "Bu kitap.",
+          "fa": "این کتاب است."
+        },
+        {
+          "id": "tr0-059",
+          "text": "Bu bir telefon.",
+          "fa": "این یک تلفن است."
+        },
+        {
+          "id": "tr0-060",
+          "text": "Çanta nerede?",
+          "fa": "کیف کجاست؟"
+        },
+        {
+          "id": "tr0-061",
+          "text": "Çanta burada.",
+          "fa": "کیف اینجاست."
+        },
+        {
+          "id": "tr0-062",
+          "text": "Anahtar nerede?",
+          "fa": "کلید کجاست؟"
+        },
+        {
+          "id": "tr0-063",
+          "text": "Masa burada.",
+          "fa": "میز اینجاست."
+        },
+        {
+          "id": "tr0-064",
+          "text": "Kitap küçük mü?",
+          "fa": "آیا کتاب کوچک است؟"
+        },
+        {
+          "id": "tr-prea1-08-simple-questions-balance-01",
+          "text": "Anahtar burada.",
+          "fa": "کلید اینجاست."
+        },
+        {
+          "id": "tr-prea1-08-simple-questions-balance-02",
+          "text": "Evet, kitap küçük.",
+          "fa": "بله، کتاب کوچک است."
+        },
+        {
+          "id": "tr-prea1-08-simple-questions-balance-03",
+          "text": "Hayır, kitap büyük.",
+          "fa": "نه، کتاب بزرگ است."
+        },
+        {
+          "id": "tr-prea1-08-simple-questions-balance-04",
+          "text": "Hayır, bu kitap değil.",
+          "fa": "نه، این کتاب نیست."
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-09-needs-and-places",
+      "title": "درخواست‌های ساده در کافه",
+      "sentences": [
+        {
+          "id": "tr0-065",
+          "text": "Bir çay istiyorum.",
+          "fa": "یک چای می‌خواهم."
+        },
+        {
+          "id": "tr0-066",
+          "text": "Bir kahve, lütfen.",
+          "fa": "یک قهوه، لطفاً."
+        },
+        {
+          "id": "tr0-067",
+          "text": "Su istiyorum.",
+          "fa": "آب می‌خواهم."
+        },
+        {
+          "id": "tr0-068",
+          "text": "Bir ekmek, lütfen.",
+          "fa": "یک نان، لطفاً."
+        },
+        {
+          "id": "tr0-069",
+          "text": "Bir elma istiyorum.",
+          "fa": "یک سیب می‌خواهم."
+        },
+        {
+          "id": "tr0-070",
+          "text": "Çay ve su, lütfen.",
+          "fa": "چای و آب، لطفاً."
+        },
+        {
+          "id": "tr0-071",
+          "text": "Çok teşekkürler.",
+          "fa": "خیلی ممنون."
+        },
+        {
+          "id": "tr0-072",
+          "text": "Çok güzel.",
+          "fa": "خیلی خوب است."
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-time-and-calendar-sentences",
+      "title": "روز، ساعت و زمان نزدیک",
+      "sentences": [
+        {
+          "id": "tr0-193",
+          "text": "Bugün pazartesi.",
+          "fa": "امروز دوشنبه است."
+        },
+        {
+          "id": "tr0-194",
+          "text": "Yarın cumartesi.",
+          "fa": "فردا شنبه است."
+        },
+        {
+          "id": "tr0-195",
+          "text": "Bugün pazar.",
+          "fa": "امروز یکشنبه است."
+        },
+        {
+          "id": "tr0-196",
+          "text": "Saat üç.",
+          "fa": "ساعت سه است."
+        },
+        {
+          "id": "tr0-197",
+          "text": "Saat kaç?",
+          "fa": "ساعت چند است؟"
+        },
+        {
+          "id": "tr0-198",
+          "text": "Yarın sabah.",
+          "fa": "فردا صبح."
+        },
+        {
+          "id": "tr0-199",
+          "text": "Şimdi saat beş.",
+          "fa": "الان ساعت پنج است."
+        },
+        {
+          "id": "tr0-200",
+          "text": "Bu akşam görüşürüz.",
+          "fa": "امشب می‌بینمت."
+        },
+        {
+          "id": "tr-prea1-time-and-calendar-sentences-balance-01",
+          "text": "Bugün hangi gün?",
+          "fa": "امروز چه روزی است؟"
+        },
+        {
+          "id": "tr-prea1-time-and-calendar-sentences-balance-02",
+          "text": "Yarın hangi gün?",
+          "fa": "فردا چه روزی است؟"
+        }
+      ]
+    },
+    {
+      "id": "tr-prea1-10-first-conversation",
+      "title": "گفت‌وگوی نخست؛ واژه تا مسیر",
+      "sentences": [
+        {
+          "id": "tr0-073",
+          "text": "Affedersiniz, metro nerede?",
+          "fa": "ببخشید، مترو کجاست؟"
+        },
+        {
+          "id": "tr0-074",
+          "text": "Metro burada.",
+          "fa": "مترو اینجاست."
+        },
+        {
+          "id": "tr0-075",
+          "text": "Düz gidin.",
+          "fa": "مستقیم بروید."
+        },
+        {
+          "id": "tr0-076",
+          "text": "Sonra sağa dönün.",
+          "fa": "بعد به راست بپیچید."
+        },
+        {
+          "id": "tr0-077",
+          "text": "Çok yakın mı?",
+          "fa": "خیلی نزدیک است؟"
+        },
+        {
+          "id": "tr0-078",
+          "text": "Evet, çok yakın.",
+          "fa": "بله، خیلی نزدیک است."
+        },
+        {
+          "id": "tr0-079",
+          "text": "Bugün görüşürüz.",
+          "fa": "امروز می‌بینمت."
+        },
+        {
+          "id": "tr0-080",
+          "text": "İyi akşamlar.",
+          "fa": "عصر بخیر؛ شب خوش."
+        },
+        {
+          "id": "tr-prea1-10-first-conversation-balance-01",
+          "text": "Çok uzak mı?",
+          "fa": "خیلی دور است؟"
+        },
+        {
+          "id": "tr-prea1-10-first-conversation-balance-02",
+          "text": "Hayır, çok yakın.",
+          "fa": "نه، خیلی نزدیک است."
+        }
+      ]
+    }
+  ]
+}

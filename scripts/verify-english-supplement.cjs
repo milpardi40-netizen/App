@@ -28,8 +28,8 @@ const esbuild = require('esbuild');
   check(app.A1_FINAL_CHECK.length === 32 && app.FOUNDATION_FINAL_CHECK.length === 12);
   check(new Set(app.ENGLISH_SUPPLEMENT.map(unit => unit.id)).size === 24);
   check(app.ENGLISH_SUPPLEMENT.slice(0, 10).map(unit => unit.id).join(',') === Array.from({ length: 10 }, (_, i) => `foundation-${i + 1}`).join(','));
-  for (const [level, expectedPerSkill] of [['Foundation', 3], ['A1', 8]]) {
-    for (const skill of Object.keys(app.SKILLS)) check(app.ASSESSMENTS[level].filter(task => task.skill === skill).length === expectedPerSkill);
+  for (const [level, counts] of [['Foundation', { reading: 3, listening: 3, grammar: 3, writing: 3 }], ['A1', { reading: 8, listening: 8, grammar: 16, writing: 0 }]]) {
+    for (const skill of Object.keys(app.SKILLS)) check(app.ASSESSMENTS[level].filter(task => task.skill === skill).length === counts[skill]);
   }
 
   // The ten pre-expansion lessons retain their original IDs/order and task IDs; all new units are appended.
@@ -133,7 +133,7 @@ const esbuild = require('esbuild');
   p = await app.finishAssessment(a1Attempt.id);
   check(app.assessmentPassed('A1', p));
   check(app.assessmentScore(app.latestAssessment(p, 'A1')).percent === 100);
-  check(app.assessmentBreakdown(app.latestAssessment(p, 'A1')).every(item => item.correct === item.total && item.total === 8));
+  check(app.assessmentBreakdown(app.latestAssessment(p, 'A1')).every(item => item.correct === item.total && item.total === ({ grammar: 16, reading: 8, listening: 8, writing: 0 })[item.skill]));
   check(app.skillReport(p, 'listening').answered === 48); // lesson evidence only; final attempts stay independent
 
   memory.set(app.SUPPLEMENT_KEY, 'broken');

@@ -258,6 +258,14 @@ jobs:
           npm run validate:narration
           npm run validate:assessment
           npm run validate:progress
+          npm run validate:learner-controls
+          npm run validate:level-resume
+          npm run validate:study-reminder
+          npm run validate:app-guide
+          npm run validate:prea1-balance
+          npm run validate:lesson-assessment
+          npm run validate:operator-speech
+          npm run validate:dialogue-room
       - &build
         name: Build the release APK
         shell: bash

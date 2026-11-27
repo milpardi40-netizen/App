@@ -203,6 +203,9 @@ export function latestAssessment(p: SupplementProgress, level: EnglishUnitLevel)
   return [...p.assessmentAttempts].reverse().find(attempt => attempt.level === level && !!attempt.completedAt);
 }
 export function skillReport(p: SupplementProgress, skill: Skill) {
-  const entries = Object.values(p.evidence).filter(e => e.skill === skill);
+  // Classify existing answers by the CURRENT authored activity, not an obsolete stored label.
+  // Retired question IDs remain in p.evidence for history, but do not inflate current skill totals.
+  const tasks = ENGLISH_SUPPLEMENT.flatMap(unit => [...unit.practice, ...unit.checkpoint]);
+  const entries = tasks.filter(task => task.skill === skill).flatMap(task => p.evidence[task.id] ? [p.evidence[task.id]] : []);
   return { answered: entries.length, correct: entries.filter(e => e.correct).length, attempts: entries.reduce((sum, e) => sum + e.attempts, 0) };
 }

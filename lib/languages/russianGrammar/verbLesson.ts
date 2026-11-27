@@ -1,5 +1,5 @@
 import byBand from './examplesByBand.generated.json';
-import { gapFor, lessonExample, normalize, VERBS, type Verb } from './catalog';
+import { gapFor, lessonExample, normalize, preA1VerbExamples, VERBS, type Verb } from './catalog';
 import { GRAMMAR_BANDS } from './units';
 import { trailFor, type Rung } from './trails';
 import type { LearningLesson } from '../types';
@@ -23,6 +23,11 @@ export function studyExamples(
   band: number,
   lesson?: LearningLesson & { levelId: number },
 ): StudyExample[] {
+  if (band === 0) {
+    const local = lesson?.levelId === 0 ? preA1VerbExamples(verb, lesson.id) : [];
+    const source = local.length ? local : preA1VerbExamples(verb);
+    return source.map(example => ({ ...example, source: local.length ? 'از همین درس' : 'از محتوای Pre-A1' }));
+  }
   const examples: StudyExample[] = [];
   const local = lesson && band === lesson.levelId ? lessonExample(verb, lesson) : undefined;
   if (local) examples.push({ ...local, source: 'از همین درس' });

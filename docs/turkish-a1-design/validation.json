@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "phase": "design-only-not-runtime-implementation",
+  "lessons": 64,
+  "rows": 512,
+  "authoredChecks": 128,
+  "adaptiveChecks": 320,
+  "sceneTurns": 228,
+  "oddLengthScenes": 30,
+  "independentSkills": 128,
+  "productionTasks": 64,
+  "preA1Lessons": 25,
+  "preA1Rows": 210,
+  "allSevenInventoriesUnchanged": true,
+  "baselineSourceHashesUnchanged": true,
+  "backwardPrerequisites": true
+}

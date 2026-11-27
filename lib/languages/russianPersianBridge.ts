@@ -175,6 +175,29 @@ export function loanwordsIn(text: string): BridgeLoanword[] {
   return result.slice(0, 3);
 }
 
+/** Pre-A1-only examples; the shared rules and all higher bands stay unchanged. */
+const PRE_A1_RULE_COPY: Record<string, Partial<BridgeRule>> = {
+  have: { title: 'داشتن با «У меня есть»', literal: '«نزد من هست …»', note: 'برای گفتن «دارم» در این الگوی روزمره از «У меня есть» استفاده کن: «У меня есть текст» یعنی متن دارم. این به معنی نبودن فعل «داشتن» در زبان روسی نیست.' },
+  'have-short': { title: 'داشتن با «У меня»', literal: '«نزد من …»', note: '«У меня» در این عبارت‌ها یعنی نزد من / برای من. گاهی در بیان داشتن، «есть» گفته نمی‌شود؛ معنی را از کل جمله بگیر، نه از ترجمهٔ جداگانهٔ هر واژه.' },
+  'dative-feel': { title: 'علاقه و نیاز با «Мне»', literal: '«برای من / به من …»', note: '«Мне нравится чай» یعنی از چای خوشم می‌آید؛ «Мне нужен чай» یعنی چای لازم دارم. فعلاً این دو عبارت را یک‌جا یاد بگیر. در این مثال‌ها «чай» فاعل دستوری است و «мне» به کسی اشاره می‌کند که علاقه یا نیاز دارد؛ همهٔ جمله‌های احساس و نیاز یک ساخت ندارند.' },
+  eto: { title: '«است» در جملهٔ سادهٔ حال', literal: '«این — …»', note: 'در جملهٔ اسمی سادهٔ زمان حال، معمولاً معادل «است» گفته نمی‌شود: «Это дом» یعنی این خانه است. برای همین نمونه، فعل جداگانه اضافه نکن.' },
+  copula: { title: '«هستم / هستی» در معرفی ساده', literal: '«من — دانشجو»', note: '«Я студент» یعنی من دانشجو هستم. در این نوع معرفی در زمان حال، معمولاً فعلِ ربطی گفته نمی‌شود؛ این قاعده به معنی نبودن فعل «بودن» در روسی نیست.' },
+  negation: { title: 'نفی با واژهٔ جداگانهٔ «не»', literal: '«نمی‌دانم» → «не знаю»', note: 'در نمونهٔ «Я не знаю»، «не» واژه‌ای جدا و پیش از فعل است؛ برخلاف پیشوند «نـ» فارسی به فعل نمی‌چسبد. «Нет» یعنی نه و در بعضی الگوها معنی نیست / ندارم می‌دهد.' },
+  motion: { title: 'رفتن در نمونهٔ این درس', note: '«Я иду» معمولاً یعنی پیاده می‌روم و در بافت مناسب جملهٔ کاملی است. برای رفتن با وسیله از فعل دیگری مثل «ехать» استفاده می‌شود. فعلاً همان عبارتِ درس را در موقعیتش یاد بگیر؛ لازم نیست همهٔ افعال حرکت را یک‌جا حفظ کنی.' },
+  'gender-past': { title: 'صورتِ همین نمونه', note: '«Я рад» یعنی خوشحالم، برای گویندهٔ مرد. برای معرفی خودت، از بخش عبارت‌های متناسب با گوینده در همین سطح صورت مناسب را انتخاب کن؛ مثالِ مذکر محدودیتِ همهٔ زبان‌آموزان نیست.' },
+  count: { literal: '«پنج متن»', note: 'بعد از عدد، شکل اسم روسی تغییر می‌کند: «оди́н текст»، «три те́кста»، «пять те́кстов». اسم پایهٔ همهٔ این نمونه‌ها «текст» و مذکر است.' },
+  'kak-dela': { literal: '«حالت چطور است؟»', note: '«Как ты?» خودمانی و «Как вы?» محترمانه است. برای پاسخ می‌توانی بگویی «Хорошо́, спаси́бо»؛ خوبم، ممنون.' },
+  spasibo: { note: '«Спаси́бо» یعنی ممنون. پاسخ آن «Пожа́луйста» یعنی خواهش می‌کنم است.' },
+  'prep-place': { literal: '«در کلاس» → «в кла́ссе»', note: 'بعد از «в / на» برای بیان مکان، شکل اسم عوض می‌شود: «класс → в кла́ссе» و «стол → на столе́». هر دو اسم پایه مذکرند.' },
+  articles: { note: 'روسی حرف تعریف ندارد. «текст» می‌تواند یک متن یا متن مشخص باشد؛ معنی دقیق از جمله فهمیده می‌شود.' },
+};
+const preA1RuleCopies = new Map<string, BridgeRule>();
+function scopedBridgeRule(rule: BridgeRule | null, masculineOnly: boolean): BridgeRule | null {
+  if (!rule || !masculineOnly || !PRE_A1_RULE_COPY[rule.id]) return rule;
+  if (!preA1RuleCopies.has(rule.id)) preA1RuleCopies.set(rule.id, { ...rule, ...PRE_A1_RULE_COPY[rule.id] });
+  return preA1RuleCopies.get(rule.id)!;
+}
+
 /** First matching rule by priority (rules are ordered from most specific to most general). */
 export function bridgeRuleFor(text: string, fa = ''): BridgeRule | null {
   const haystack = normalizeRussian(text);
@@ -184,15 +207,15 @@ export function bridgeRuleFor(text: string, fa = ''): BridgeRule | null {
   return null;
 }
 
-export function bridgeFor(sentence: Pick<LearningSentence, 'text' | 'fa'>): SentenceBridge {
-  return { rule: bridgeRuleFor(sentence.text, sentence.fa), loanwords: loanwordsIn(sentence.text) };
+export function bridgeFor(sentence: Pick<LearningSentence, 'text' | 'fa'>, masculineOnly = false): SentenceBridge {
+  return { rule: scopedBridgeRule(bridgeRuleFor(sentence.text, sentence.fa), masculineOnly), loanwords: loanwordsIn(sentence.text) };
 }
 
 /** Rules that appear in a lesson, deduplicated in order of first appearance — for the lesson summary. */
-export function bridgeRulesForLesson(sentences: ReadonlyArray<Pick<LearningSentence, 'text' | 'fa'>>): BridgeRule[] {
+export function bridgeRulesForLesson(sentences: ReadonlyArray<Pick<LearningSentence, 'text' | 'fa'>>, masculineOnly = false): BridgeRule[] {
   const out: BridgeRule[] = [];
   for (const sentence of sentences) {
-    const rule = bridgeRuleFor(sentence.text, sentence.fa);
+    const rule = scopedBridgeRule(bridgeRuleFor(sentence.text, sentence.fa), masculineOnly);
     if (rule && !out.includes(rule)) out.push(rule);
   }
   return out;

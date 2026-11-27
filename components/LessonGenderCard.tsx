@@ -11,11 +11,12 @@ export function LessonGenderCard({language, lesson, speak}:{language:'en'|'ru'; 
   const lessonCard = genderLesson(language,lesson);
   if (!lessonCard) return null;
   const {focus,note} = lessonCard;
-  const rows: [string, Example][] = lessonCard.kind === 'common' ? [['مشترک',lessonCard.shared]] :
+  const masculineOnly = language === 'ru' && lesson.id.startsWith('ru-pre-');
+  const rows: [string, Example][] = lessonCard.kind === 'common' ? [[masculineOnly ? 'نمونهٔ این درس' : 'مشترک',lessonCard.shared]] :
     [['مذکر',lessonCard.masculine],['مؤنث',lessonCard.feminine]];
   if (lessonCard.kind === 'pair' && lessonCard.neuter) rows.push(['خنثی',lessonCard.neuter]);
   return <View style={s.card}>
-    <Text accessibilityRole="header" style={s.heading}>مذکر و مؤنث · {focus}</Text>
+    <Text accessibilityRole="header" style={s.heading}>{masculineOnly ? 'صورت مذکر و عبارت‌های بدون جنسیت' : `مذکر و مؤنث · ${focus}`}</Text>
     <Text style={s.note}>{note}</Text>
     {rows.map(([label,[text,fa]])=><View key={label} style={s.row}>
       <Text style={s.label}>{label}</Text>

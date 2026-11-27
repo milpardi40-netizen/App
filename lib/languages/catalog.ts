@@ -1,5 +1,5 @@
 import type { LanguageDefinition } from './types';
-import { SENTENCE_LESSONS } from '../courseContent';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '../courseContent';
 import { ARABIC_LESSONS } from '../arabic/content';
 import { RUSSIAN_LESSONS, russianProgress } from './russian';
 import { TURKISH_LESSONS, turkishProgress } from './turkish';

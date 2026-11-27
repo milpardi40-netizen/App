@@ -1,3 +1,4 @@
+import { RUSSIAN_PRE_A1_LESSONS } from '../russianPreA1';
 import index from './verbs.generated.json';
 import { GRAMMAR_UNITS, type GrammarUnit } from './units';
 import type { LearningLesson } from '../types';
@@ -5,11 +6,24 @@ export const VERBS = index.verbs;
 export type Verb = typeof VERBS[number];
 export const normalize = (s: string) => s.trim().toLowerCase().replace(/\u0301/g, '').replace(/ё/g, 'е').replace(/ي/g, 'ی').replace(/ك/g, 'ک');
 const tokens = (s: string) => (s.match(/[а-яё\u0301]+(?:-[а-яё\u0301]+)*/gi) ?? []).map(normalize);
-export const lessonVerbs = (id: string) => (index.byLesson as Record<string, string[]>)[id] ?? [];
+export const lessonVerbs = (id: string) => id.startsWith('ru-pre-')
+  ? VERBS.filter(verb => preA1VerbExamples(verb, id).length > 0).map(verb => verb.lemma)
+  : (index.byLesson as Record<string, string[]>)[id] ?? [];
+
+/** Pre-A1 examples come from the current masculine-only lessons, never a stale generated index. */
+export function preA1VerbExamples(verb: Verb, lessonId?: string) {
+  const forms = new Set([verb.lemma, ...verb.forms].map(normalize));
+  return RUSSIAN_PRE_A1_LESSONS.filter(lesson => !lessonId || lesson.id === lessonId).flatMap(lesson =>
+    [...lesson.sentences, ...lesson.dialogue].flatMap(line => {
+      const form = (line.text.match(/[А-Яа-яЁё\u0301]+/g) ?? []).find(word => forms.has(normalize(word)));
+      return form ? [{ text: line.text, fa: line.fa, form }] : [];
+    }),
+  ).filter((line, index, all) => all.findIndex(other => normalize(other.text) === normalize(line.text)) === index);
+}
 export function relatedUnits(lesson: LearningLesson & { levelId: number }) {
   const words = new Set([...lesson.sentences, ...lesson.dialogue].flatMap(l => tokens(l.text)));
   const rank = (u: GrammarUnit) => tokens(u.forms).filter(f => words.has(f)).length + (u.id === 'want' && lessonVerbs(lesson.id).includes('хотеть') ? 5 : 0);
-  return GRAMMAR_UNITS.filter(u => u.level <= Math.max(1, lesson.levelId) && rank(u) > 0).sort((a,b) => rank(b) - rank(a)).slice(0, 4);
+  return GRAMMAR_UNITS.filter(u => u.level <= (lesson.levelId === 0 ? 0 : Math.max(1, lesson.levelId)) && rank(u) > 0).sort((a,b) => rank(b) - rank(a)).slice(0, 4);
 }
 export function lessonExample(verb: Verb, lesson?: LearningLesson) {
   if (!lesson) return;

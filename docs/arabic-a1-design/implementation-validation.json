@@ -1,0 +1,250 @@
+{
+  "date": "2026-11-26",
+  "scope": "Arabic A1 complete implementation; APK on hold; no commit/push/PR",
+  "counts": {
+    "lessons": 14,
+    "rows": 112,
+    "changedRows": 112,
+    "sceneTurns": 61,
+    "oddLengthScenes": 3,
+    "authoredChecks": 43,
+    "expandedChecks": 70,
+    "independentSkills": 28,
+    "production": 14,
+    "storageScenarios": 28,
+    "renderedRooms": 28,
+    "renderedLearnerTargets": 224,
+    "renderedShortAssessments": 14,
+    "renderedAssessmentAnswers": 70
+  },
+  "results": [
+    {
+      "script": "scripts/verify-arabic-a1.cjs",
+      "status": "PASS",
+      "seconds": 1.83,
+      "log": ".cache/arabic-a1-implementation/final-verify-arabic-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-arabic-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 2.62,
+      "log": ".cache/arabic-a1-implementation/final-verify-arabic-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-turkish-a1.cjs",
+      "status": "PASS",
+      "seconds": 2.53,
+      "log": ".cache/arabic-a1-implementation/final-verify-turkish-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-turkish-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 4.09,
+      "log": ".cache/arabic-a1-implementation/final-verify-turkish-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-spanish-a1.cjs",
+      "status": "PASS",
+      "seconds": 3.58,
+      "log": ".cache/arabic-a1-implementation/final-verify-spanish-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-spanish-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 4.44,
+      "log": ".cache/arabic-a1-implementation/final-verify-spanish-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-french-a1.cjs",
+      "status": "PASS",
+      "seconds": 3.17,
+      "log": ".cache/arabic-a1-implementation/final-verify-french-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-french-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 4.4,
+      "log": ".cache/arabic-a1-implementation/final-verify-french-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-german-a1.cjs",
+      "status": "PASS",
+      "seconds": 3.04,
+      "log": ".cache/arabic-a1-implementation/final-verify-german-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-german-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 4.36,
+      "log": ".cache/arabic-a1-implementation/final-verify-german-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-a1.cjs",
+      "status": "PASS",
+      "seconds": 2.13,
+      "log": ".cache/arabic-a1-implementation/final-verify-english-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 6.14,
+      "log": ".cache/arabic-a1-implementation/final-verify-english-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-russian-a1.cjs",
+      "status": "PASS",
+      "seconds": 5.29,
+      "log": ".cache/arabic-a1-implementation/final-verify-russian-a1.cjs.log"
+    },
+    {
+      "script": "scripts/verify-russian-a1-integration.cjs",
+      "status": "PASS",
+      "seconds": 3.57,
+      "log": ".cache/arabic-a1-implementation/final-verify-russian-a1-integration.cjs.log"
+    },
+    {
+      "script": "scripts/verify-six-prea1-practical.cjs",
+      "status": "PASS",
+      "seconds": 2.52,
+      "log": ".cache/arabic-a1-implementation/final-verify-six-prea1-practical.cjs.log"
+    },
+    {
+      "script": "scripts/verify-prea1-balance.cjs",
+      "status": "PASS",
+      "seconds": 2.68,
+      "log": ".cache/arabic-a1-implementation/final-verify-prea1-balance.cjs.log"
+    },
+    {
+      "script": "scripts/verify-lesson-assessment.cjs",
+      "status": "PASS",
+      "seconds": 7.36,
+      "log": ".cache/arabic-a1-implementation/final-verify-lesson-assessment.cjs.log"
+    },
+    {
+      "script": "scripts/verify-level-resume.cjs",
+      "status": "PASS",
+      "seconds": 22.17,
+      "log": ".cache/arabic-a1-implementation/final-verify-level-resume.cjs.log"
+    },
+    {
+      "script": "scripts/verify-personal-sync.mjs",
+      "status": "PASS",
+      "seconds": 3.62,
+      "log": ".cache/arabic-a1-implementation/final-verify-personal-sync.mjs.log"
+    },
+    {
+      "script": "scripts/verify-progress-display.mjs",
+      "status": "PASS",
+      "seconds": 42.35,
+      "log": ".cache/arabic-a1-implementation/final-verify-progress-display.mjs.log"
+    },
+    {
+      "script": "scripts/verify-english-backup.mjs",
+      "status": "PASS",
+      "seconds": 0.52,
+      "log": ".cache/arabic-a1-implementation/final-verify-english-backup.mjs.log"
+    },
+    {
+      "script": "scripts/verify-english-engine.cjs",
+      "status": "PASS",
+      "seconds": 2.69,
+      "log": ".cache/arabic-a1-implementation/final-verify-english-engine.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-four.cjs",
+      "status": "PASS",
+      "seconds": 2.54,
+      "log": ".cache/arabic-a1-implementation/final-verify-english-four.cjs.log"
+    },
+    {
+      "script": "scripts/verify-english-lesson-flow.cjs",
+      "status": "PASS",
+      "seconds": 0.44,
+      "log": ".cache/arabic-a1-implementation/final-verify-english-lesson-flow.cjs.log"
+    },
+    {
+      "script": "scripts/verify-operator-speech.cjs",
+      "status": "PASS",
+      "seconds": 0.05,
+      "log": ".cache/arabic-a1-implementation/final-verify-operator-speech.cjs.log"
+    },
+    {
+      "script": "scripts/verify-seven-language-lesson-ui.cjs",
+      "status": "PASS",
+      "seconds": 1.79,
+      "log": ".cache/arabic-a1-implementation/final-verify-seven-language-lesson-ui.cjs.log"
+    },
+    {
+      "script": "scripts/verify-foreground-restart.cjs",
+      "status": "PASS",
+      "seconds": 0.12,
+      "log": ".cache/arabic-a1-implementation/final-verify-foreground-restart.cjs.log"
+    },
+    {
+      "script": "scripts/verify-level-restart.cjs",
+      "status": "PASS",
+      "seconds": 1.18,
+      "log": ".cache/arabic-a1-implementation/final-verify-level-restart.cjs.log"
+    },
+    {
+      "script": "scripts/verify-speaking-skip.cjs",
+      "status": "PASS",
+      "seconds": 12.91,
+      "log": ".cache/arabic-a1-implementation/final-verify-speaking-skip.cjs.log"
+    },
+    {
+      "script": "scripts/verify-lesson-stage-navigation.cjs",
+      "status": "PASS",
+      "seconds": 1.78,
+      "log": ".cache/arabic-a1-implementation/final-verify-lesson-stage-navigation.cjs.log"
+    },
+    {
+      "script": "scripts/verify-turkish-structure.mjs",
+      "status": "PASS",
+      "seconds": 1.26,
+      "log": ".cache/arabic-a1-implementation/final-verify-turkish-structure.mjs.log"
+    },
+    {
+      "script": "scripts/verify-nonenglish-restart.cjs",
+      "status": "PASS",
+      "seconds": 1.02,
+      "log": ".cache/arabic-a1-implementation/final-verify-nonenglish-restart.cjs.log"
+    },
+    {
+      "script": "scripts/verify-dialogue-room.cjs",
+      "status": "PASS",
+      "seconds": 0.57,
+      "log": ".cache/arabic-a1-implementation/final-verify-dialogue-room.cjs.log"
+    }
+  ],
+  "additionalChecks": [
+    {
+      "check": "typecheck",
+      "status": "PASS",
+      "seconds": 25.43,
+      "log": ".cache/arabic-a1-implementation/typecheck.log"
+    },
+    {
+      "check": "diff-check",
+      "status": "PASS",
+      "seconds": 0.04,
+      "log": ".cache/arabic-a1-implementation/diff-check.log"
+    },
+    {
+      "check": "deterministic-compiler",
+      "status": "PASS"
+    }
+  ],
+  "sha256": {
+    "lib/arabic/a1Sequenced.generated.ts": "82770f7b0d9d896145c298b822255fa3d7166076dffeb3fd1759d200a1d52512",
+    "lib/arabic/a1ChangedSlots.generated.json": "b53d6f1ad1e456a0dbe1dc757169be1390ed39cabeae467688e050eb3b950e91",
+    "docs/arabic-a1-design/design.json": "b51f099bfb998e85498c919fa0971e08eeba3b0b2a3af5eb283ca5afd4618f89",
+    "docs/arabic-a1-design/runtime/introduced-forms.json": "3c15780468d3f2077b9fb0f22335a2fa5dbe13ff22fe1eb0de825f57430697fc",
+    "docs/arabic-a1-design/runtime/migration.json": "b53d6f1ad1e456a0dbe1dc757169be1390ed39cabeae467688e050eb3b950e91"
+  },
+  "limitations": [
+    "Storage/platform/audio are simulated in automated renderer tests.",
+    "No physical device, real microphone, or native audio test; no APK.",
+    "Approximate reading aids; no independent native-speaker or CEFR certification."
+  ]
+}

@@ -99,7 +99,8 @@ export default function EnglishFinalAssessmentScreen() {
     {!level && <View style={s.card}><Text style={s.heading}>سنجش پیدا نشد</Text><Text style={s.text}>Foundation یا A1 را از گزارش دوره انتخاب کنید.</Text></View>}
     {level && <>
       <Text style={s.pageTitle}>سنجش پایانی {level}</Text>
-      <Text style={s.text}>{level === 'Foundation' ? '۱۲ پرسش تازه از خواندن، شنیدن، دستور و نوشتن پایه.' : '۳۲ پرسش تازه از خواندن، شنیدن، دستور و واژگان و نوشتن هدایت‌شده.'}</Text>
+      <Text style={s.text}>{level === 'Foundation' ? '۱۲ پرسش تازه از خواندن، شنیدن، دستور و نوشتن پایه.' : '۳۲ پرسش: ۸ درک مطلب، ۸ درک شنیداری و ۱۶ دستور و واژگان. سؤال‌های تکمیل جمله گزینه‌ای‌اند، نه سنجش نوشتن مستقل.'}</Text>
+      {level === 'A1' && <Text style={s.text}>این سنجش تمرینی، گفتار و نوشتن مستقل را ارزیابی نمی‌کند. نمرهٔ ۸۰٪ فقط معیار داخلی همین سؤال‌هاست، نه گواهی تسلط A1 یا مدرک CEFR.</Text>}
       {!!message && <Text accessibilityLiveRegion="polite" style={s.error}>{message}</Text>}
       {!ready && !message && <Text style={s.text}>در حال خواندن سابقهٔ دوره…</Text>}
       {ready && !active && !score && <View style={s.card}>
@@ -118,7 +119,7 @@ export default function EnglishFinalAssessmentScreen() {
       {score && <View style={s.card}>
         <Text style={score.percent >= ASSESSMENT_PASS_PERCENT ? s.success : s.heading}>{score.percent >= ASSESSMENT_PASS_PERCENT ? 'معیار داخلی سنجش گذرانده شد' : 'این تلاش به معیار داخلی نرسید'}</Text>
         <Text style={s.heading}>{score.correct} از {score.total} پاسخ درست · {score.percent}٪</Text>
-        {breakdown.map(row => <Text key={row.skill} style={s.text}>{row.label}: {row.correct} از {row.total} · {row.percent}٪</Text>)}
+        {breakdown.map(row => <Text key={row.skill} style={s.text}>{row.total ? `${row.label}: ${row.correct} از ${row.total} · ${row.percent}٪` : `${row.label}: در این سنجش ارزیابی نمی‌شود`}</Text>)}
         <Text style={s.text}>{score.percent >= ASSESSMENT_PASS_PERCENT ? 'آفرین؛ می‌توانید گزارش و واحدهای دوره را مرور کنید. این فقط نتیجهٔ آموزشیِ همین سنجش است.' : 'واحدهای مرتبط را مرور کنید و برای تمرین دوباره سنجش را آغاز کنید. تلاش قبلی در سابقه می‌ماند.'}</Text>
         <Pressable accessibilityRole="button" disabled={!canStartAssessment(level, progress) || busy} style={[s.button, (!canStartAssessment(level, progress) || busy) && s.disabled]} onPress={() => void begin(true)}><Text style={s.buttonText}>شروع تلاش تازه</Text></Pressable>
       </View>}

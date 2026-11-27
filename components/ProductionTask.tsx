@@ -9,18 +9,18 @@ import { toPersianDigits as fa } from '@/lib/format';
 import { hapticTap } from '@/lib/haptics';
 import { countWords, productionPrompt, type ProductionPrompt, type ProductionSource } from '@/lib/productionPrompt';
 
-const KEY = (lessonId: string) => `lesson_production_v1:${lessonId}`;
+const KEY = (lessonId: string, revision?: string) => `lesson_production_v1:${lessonId}${revision ? `:${revision}` : ''}`;
 
-async function load(lessonId: string): Promise<{ text: string; checks: number[] } | null> {
+async function load(lessonId: string, revision?: string): Promise<{ text: string; checks: number[] } | null> {
   try {
-    const raw = Platform.OS === 'web' ? (typeof window === 'undefined' ? null : window.localStorage.getItem(KEY(lessonId))) : await AsyncStorage.getItem(KEY(lessonId));
+    const raw = Platform.OS === 'web' ? (typeof window === 'undefined' ? null : window.localStorage.getItem(KEY(lessonId, revision))) : await AsyncStorage.getItem(KEY(lessonId, revision));
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { text?: unknown; checks?: unknown };
     return { text: typeof parsed.text === 'string' ? parsed.text : '', checks: Array.isArray(parsed.checks) ? parsed.checks.filter((n): n is number => typeof n === 'number') : [] };
   } catch { return null; }
 }
-async function save(lessonId: string, value: { text: string; checks: number[] }) {
-  try { const raw = JSON.stringify(value); if (Platform.OS === 'web') window.localStorage.setItem(KEY(lessonId), raw); else await AsyncStorage.setItem(KEY(lessonId), raw); } catch { /* local only */ }
+async function save(lessonId: string, value: { text: string; checks: number[] }, revision?: string) {
+  try { const raw = JSON.stringify(value); if (Platform.OS === 'web') window.localStorage.setItem(KEY(lessonId, revision), raw); else await AsyncStorage.setItem(KEY(lessonId, revision), raw); } catch { /* local only */ }
 }
 
 /**
@@ -28,9 +28,13 @@ async function save(lessonId: string, value: { text: string; checks: number[] })
  * plus a spoken answer to the same situation. Kept on-device, never graded —
  * but visible as a first-class step, not hidden behind a toggle.
  */
-export default function ProductionTask({ source, explicit, examples, onSpeak, foreignStyle, accent = Palette.primary }: {
+export default function ProductionTask({ source, explicit, contentRevision, levelLabel: authoredLevelLabel, titleFa, examples, onSpeak, foreignStyle, accent = Palette.primary }: {
   source: ProductionSource;
+  /** Optional accurate task label for constrained functional production; other courses keep their title. */
+  titleFa?: string;
   explicit?: Parameters<typeof productionPrompt>[1];
+  levelLabel?: string;
+  contentRevision?: string;
   examples?: ReadonlyArray<{ text: string; fa: string }>;
   onSpeak: (text: string) => void;
   foreignStyle?: StyleProp<TextStyle>;
@@ -43,24 +47,24 @@ export default function ProductionTask({ source, explicit, examples, onSpeak, fo
   const [ready, setReady] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => { let alive = true; void load(source.id).then(saved => { if (!alive) return; if (saved) { setText(saved.text); setChecks(saved.checks); } setReady(true); }); return () => { alive = false; }; }, [source.id]);
+  useEffect(() => { let alive = true; if (contentRevision) { setReady(false); setText(''); setChecks([]); } void load(source.id, contentRevision).then(saved => { if (!alive) return; if (saved) { setText(saved.text); setChecks(saved.checks); } setReady(true); }); return () => { alive = false; }; }, [source.id, contentRevision]);
   useEffect(() => {
     if (!ready) return;
     if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => { void save(source.id, { text, checks }); }, 600);
+    timer.current = setTimeout(() => { void save(source.id, { text, checks }, contentRevision); }, 600);
     return () => { if (timer.current) clearTimeout(timer.current); };
-  }, [text, checks, ready, source.id]);
+  }, [text, checks, ready, source.id, contentRevision]);
 
   const words = countWords(text);
   const ratio = Math.min(1, words / prompt.minWords);
   const reached = words >= prompt.minWords;
-  const levelLabel = source.levelId >= 5 ? 'C1' : source.levelId === 4 ? 'B2' : 'B1';
+  const levelLabel = authoredLevelLabel ?? (source.levelId >= 5 ? 'C1' : source.levelId === 4 ? 'B2' : 'B1');
 
   return <View style={styles.root}>
     <View style={styles.header}>
       <View style={[styles.badge, { backgroundColor: accent }]}><PenLine size={16} color="#FFFFFF" /></View>
       <View style={{ flex: 1 }}>
-        <Text style={styles.title}>تولید آزاد · {levelLabel}</Text>
+        <Text style={styles.title}>{titleFa ?? 'تولید آزاد'} · {levelLabel}</Text>
         <Text style={styles.subtitle}>اینجا خودت می‌سازی، نه انتخاب می‌کنی. نمره ندارد؛ روی همین دستگاه می‌ماند.</Text>
       </View>
     </View>

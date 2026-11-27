@@ -52,9 +52,10 @@ export function VerbTutor({
   const samples = useMemo(() => studyExamples(verb, band, lesson), [verb, band, lesson]);
   const s = samples[index],
     guide = trailFor(verb.lemma),
-    check = useMemo(() => drillFor(verb, s, band), [verb, s, band]);
+    check = useMemo(() => s ? drillFor(verb, s, band) : null, [verb, s, band]);
   const spoken = guide?.spoken || verb.lemma,
     meaning = guide?.meaning || verb.fa;
+  if (!s || !check) return <Paper><Text style={ss.copy}>برای این فعل در سطح انتخاب‌شده هنوز نمونه‌ای از درس‌ها وجود ندارد.</Text><StudioButton label="بازگشت به فهرست کارگاه" onPress={finish} /></Paper>;
   const passed = !!chosen && normalize(chosen) === normalize(check.answer);
   const turnPage = (n: number) => {
     setStep(n);

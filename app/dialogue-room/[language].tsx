@@ -1,3 +1,4 @@
+import { PRE_A1_CONTENT_REVISION, russianRoomLines } from '@/lib/languages/russianPreA1';
 import { LocalizedText as Text } from '@/components/LocalizedText';
 import LessonDialogueRoom from '@/components/LessonDialogueRoom';
 import { PageNavigation } from '@/components/PageNavigation';
@@ -5,13 +6,13 @@ import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { ENGLISH_NORMAL_SPEECH_RATE, playResponsiveSpeech } from '@/lib/responsiveSpeech';
+import { ENGLISH_NORMAL_SPEECH_RATE, ENGLISH_SLOW_SPEECH_RATE, playResponsiveSpeech } from '@/lib/responsiveSpeech';
 import { narrationRate } from '@/lib/narration';
 import { playRussianSpeech } from '@/lib/russianSpeech';
 import { playTurkishSpeech } from '@/lib/turkishSpeech';
 import { playStarterSpeech } from '@/lib/starterSpeech';
-import { ARABIC_NORMAL_SPEECH_RATE, playArabicSpeech } from '@/lib/arabic/speech';
-import { SENTENCE_LESSONS } from '@/lib/courseContent';
+import { ARABIC_NORMAL_SPEECH_RATE, ARABIC_SLOW_SPEECH_RATE, playArabicSpeech } from '@/lib/arabic/speech';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import { RUSSIAN_LESSONS, russianProgress } from '@/lib/languages/russian';
 import { TURKISH_LESSONS, turkishProgress } from '@/lib/languages/turkish';
 import { NEW_COURSES } from '@/lib/languages/newCourses';
@@ -68,7 +69,7 @@ async function resolveFor(language: string, lessonIdParam: string): Promise<Room
       const id = pickLessonId(RUSSIAN_LESSONS.map(lesson => lesson.id), completed, lessonIdParam);
       const lesson = RUSSIAN_LESSONS.find(item => item.id === id);
       if (!lesson) return null;
-      return { id: lesson.id, title: lesson.title, levelId: lesson.levelId, situation: lesson.situation, locale: 'ru-RU', lines: lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa })) };
+      return { id: lesson.id, title: lesson.title, levelId: lesson.levelId, situation: lesson.situation, locale: 'ru-RU', lines: russianRoomLines(lesson) };
     }
     case 'tr': {
       const completed = await completedOf(turkishProgress);
@@ -100,25 +101,25 @@ async function resolveFor(language: string, lessonIdParam: string): Promise<Room
   }
 }
 
-function speakFor(language: string, locale: string, pitch?: number): (text: string, onDone: () => void) => void {
+function speakFor(language: string, locale: string, pitch?: number, slow = false): (text: string, onDone: () => void) => void {
   return (text, onDone) => {
     switch (language) {
       case 'en':
-        playResponsiveSpeech({ text, locale: 'en-US', rate: ENGLISH_NORMAL_SPEECH_RATE, pitch, onDone, onError: onDone });
+        playResponsiveSpeech({ text, locale: 'en-US', rate: slow ? ENGLISH_SLOW_SPEECH_RATE : ENGLISH_NORMAL_SPEECH_RATE, pitch, onDone, onError: onDone });
         return;
       case 'ru':
-        void playRussianSpeech(text, narrationRate('ru-RU', 'normal'), onDone, onDone, { pitch });
+        void playRussianSpeech(text, narrationRate('ru-RU', slow ? 'slow' : 'normal'), onDone, onDone, { pitch });
         return;
       case 'tr':
-        void playTurkishSpeech(text, TR_NORMAL_SPEECH_RATE, onDone, onDone, { pitch });
+        void playTurkishSpeech(text, slow ? 0.5 : TR_NORMAL_SPEECH_RATE, onDone, onDone, { pitch });
         return;
       case 'de':
       case 'fr':
       case 'es':
-        void playStarterSpeech(locale, text, narrationRate(locale, 'normal'), onDone, undefined, onDone, { pitch });
+        void playStarterSpeech(locale, text, narrationRate(locale, slow ? 'slow' : 'normal'), onDone, undefined, onDone, { pitch });
         return;
       case 'ar':
-        playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, pitch, onDone, onError: onDone });
+        playArabicSpeech(text, { rate: slow ? ARABIC_SLOW_SPEECH_RATE : ARABIC_NORMAL_SPEECH_RATE, pitch, onDone, onError: onDone });
         return;
       default:
         onDone();
@@ -152,6 +153,7 @@ export default function DialogueRoomScreen() {
   }, [language, lessonIdParam, reload]);
 
   const speak = useCallback((text: string, onDone: () => void) => speakFor(language, lesson?.locale ?? '')(text, onDone), [language, lesson?.locale]);
+  const speakSlow = useCallback((text: string, onDone: () => void) => speakFor(language, lesson?.locale ?? '', undefined, true)(text, onDone), [language, lesson?.locale]);
   const speakOperator = useCallback((text: string, onDone: () => void) => speakFor(language, lesson?.locale ?? '', 0.82)(text, onDone), [language, lesson?.locale]);
 
   return (
@@ -165,6 +167,7 @@ export default function DialogueRoomScreen() {
             key={`${language}-${lesson.id}`}
             language={language}
             lessonId={lesson.id}
+            contentRevision={language === 'ru' && lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}
             lessonTitle={lesson.title}
             levelId={lesson.levelId}
             situation={lesson.situation}
@@ -172,6 +175,7 @@ export default function DialogueRoomScreen() {
             locale={lesson.locale}
             onSpeak={speak}
             onSpeakOperator={speakOperator}
+            onSpeakSlow={speakSlow}
           />
         ) : (
           <View style={styles.emptyCard}>
@@ -190,7 +194,7 @@ export default function DialogueRoomScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Palette.canvas },
-  content: { padding: Spacing.lg, gap: Spacing.md },
+  content: { padding: Spacing.md, paddingBottom: Spacing.xxl, gap: Spacing.md, width: '100%', maxWidth: 720, alignSelf: 'center' },
   loadingWrap: { width: '100%', alignItems: 'center', paddingVertical: Spacing.xxl },
   emptyCard: { width: '100%', borderWidth: 1, borderColor: Palette.border, borderRadius: Radius.lg, backgroundColor: Palette.surface, padding: Spacing.lg },
   emptyText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, color: Palette.text, textAlign: 'right', lineHeight: 24, writingDirection: 'rtl' },

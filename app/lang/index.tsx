@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -25,15 +26,13 @@ import {
   Podcast,
   RefreshCw,
   RotateCcw,
-  SlidersHorizontal,
   Sparkles,
   Volume2,
 } from 'lucide-react-native';
 import { AppBottomNav } from '@/components/AppBottomNav';
 import { ProfileIcon } from '@/components/ProfileIcon';
-import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { PageNavigation } from '@/components/PageNavigation';
-import { COURSE_LEVELS, SENTENCE_LESSONS } from '@/lib/courseContent';
+import { COURSE_LEVELS, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '@/lib/courseContent';
 import LevelReadinessLine from '@/components/LevelReadinessLine';
 import PlacementCard from '@/components/PlacementCard';
 import { auditLessonsFromEnglish, courseReadiness } from '@/lib/content/courseAudit';
@@ -55,7 +54,6 @@ export default function LearningHome() {
   const { width } = useWindowDimensions();
   const compact = width < 640;
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [quickSettingsOpen, setQuickSettingsOpen] = useState(false);
   const { snapshot, progress, hasStartedCourse, plan, streak, error, retry } = useCourseHome('en');
   const measuredMinutes = Math.floor((snapshot?.study?.days[studyDay()] ?? 0) / 6000) / 10;
   const timeError = !!error;
@@ -83,12 +81,6 @@ export default function LearningHome() {
   const openLevel = (levelId: number) => router.push({ pathname: '/lang/library', params: { level: String(levelId) } } as never);
   const openCurrentLesson = () => router.push({ pathname: '/course/lesson', params: { id: currentLesson.id } } as never);
 
-  const restartFromBeginnerLevel = () => {
-    Alert.alert('شروع مجدد از سطح ابتدایی', 'می‌خواهید دوباره از اولین درسِ سطح ابتدایی شروع کنید؟ محتوای درس‌ها دست‌نخورده می‌ماند.', [
-      { text: 'انصراف', style: 'cancel' },
-      { text: 'شروع مجدد', style: 'destructive', onPress: () => { void setCurrentLesson(SENTENCE_LESSONS[0].id).then(() => router.push({ pathname: '/course/lesson', params: { id: SENTENCE_LESSONS[0].id, fromStart: '1' } } as never)).catch(() => undefined); } },
-    ]);
-  };
 
   return (
     <View style={styles.root}>
@@ -286,14 +278,7 @@ export default function LearningHome() {
                 <Text style={styles.lessonCountLabel}>{lessonUnit(currentLesson.id)}</Text>
               </View>
             </View>
-            <Pressable accessibilityRole="button" accessibilityLabel="شروع از ابتدای درس انگلیسی" style={styles.startFromBeginningButton} onPress={() => router.push({ pathname: '/course/lesson', params: { id: currentLesson.id, fromStart: '1' } } as never)}>
-              <Volume2 size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>شروع از ابتدا</Text>
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="شروع مجدد آموزش انگلیسی از سطح ابتدایی" style={styles.startFromBeginningButton} onPress={restartFromBeginnerLevel}>
-              <RotateCcw size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>شروع مجدد از سطح ابتدایی</Text>
-            </Pressable>
+            <LessonRestartActions lessonPath="/course/lesson" firstLessonId={SENTENCE_LESSONS.find(item => item.levelId === currentLevel.id)?.id} lessonId={currentLesson.id} />
           </View>
 
           {plan.length ? <View style={{ marginBottom: 12 }}>
@@ -415,19 +400,12 @@ export default function LearningHome() {
               </View>
               <ChevronLeft size={17} color={HomeColors.muted} />
             </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="تنظیمات فونت، صدا و نسخه" style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]} onPress={() => setQuickSettingsOpen(true)}>
-              <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><SlidersHorizontal size={18} color={HomeColors.accent} /></View>
-              <View style={styles.quickCopy}>
-                <Text style={styles.quickTitle}>تنظیمات قلم و صدا</Text>
-                <Text style={styles.quickDesc}>فونت نمایش، گوینده، قفل و نسخهٔ برنامه</Text>
-              </View>
-              <ChevronLeft size={17} color={HomeColors.muted} />
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="پروفایل و حساب کاربری" style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]} onPress={() => router.push('/profile' as never)}>
+
+            <Pressable accessibilityRole="button" accessibilityLabel="پروفایل و تنظیمات" style={({ pressed }) => [styles.quickCard, pressed && styles.buttonPressed]} onPress={() => router.push('/profile' as never)}>
               <View style={[styles.quickIcon, { backgroundColor: 'transparent' }]}><ProfileIcon size={34} /></View>
               <View style={styles.quickCopy}>
-                <Text style={styles.quickTitle}>پروفایل من</Text>
-                <Text style={styles.quickDesc}>حساب، سطح و پیشرفت</Text>
+                <Text style={styles.quickTitle}>پروفایل و تنظیمات</Text>
+                <Text style={styles.quickDesc}>حساب، پیشرفت و تنظیمات برنامه</Text>
               </View>
               <ChevronLeft size={17} color={HomeColors.muted} />
             </Pressable>
@@ -439,7 +417,6 @@ export default function LearningHome() {
           </View>
         </View>
       </ScrollView>
-      <QuickSettingsModal visible={quickSettingsOpen} onClose={() => setQuickSettingsOpen(false)} />
       <AppBottomNav />
     </View>
   );

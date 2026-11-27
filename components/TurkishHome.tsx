@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel, formatPercent } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -104,8 +105,6 @@ export default function TurkishHome() {
   // The level card answers the tap at once; its library loads on the next frame.
   const openLevel = (levelId: TurkishLevelId) => open(`/learn/tr/library?level=${levelId}`);
 
-  // Level replay is temporary; only the same-lesson reset replaces a saved attempt.
-  const replayBeginnerLevel = () => router.push({ pathname: '/learn/tr/lesson', params: { id: TURKISH_LESSONS[0].id, levelReplay: '1' } } as never);
   const openNextLesson = () => {
     if (resumeLesson) open(`/learn/tr/lesson?id=${encodeURIComponent(resumeLesson.id)}`);
     else openLevel(3);
@@ -314,24 +313,7 @@ export default function TurkishHome() {
                 <Text style={styles.lessonCountLabel}>جمله</Text>
               </View>
             </View>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="شروع از ابتدای این درس"
-              style={({ pressed }) => [styles.startFromBeginningButton, pressed && styles.buttonPressed]}
-              onPress={() => router.push({ pathname: '/learn/tr/lesson', params: { id: heroLesson.id, fromStart: '1' } } as never)}
-            >
-              <Volume2 size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>شروع از ابتدا</Text>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="مرور از ابتدای سطح ترکی استانبولی"
-              style={({ pressed }) => [styles.startFromBeginningButton, pressed && styles.buttonPressed]}
-              onPress={replayBeginnerLevel}
-            >
-              <RotateCcw size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>مرور از ابتدای سطح</Text>
-            </Pressable>
+            <LessonRestartActions lessonPath="/learn/tr/lesson" firstLessonId={levelLessons[0]?.id} lessonId={heroLesson.id} />
           </View>
 
           {plan.length ? <View style={{ marginBottom: 12 }}>

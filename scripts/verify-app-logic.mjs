@@ -169,7 +169,7 @@ export { default as asyncStorage } from '${STUBS}/async-storage.js';
   const orders = lessons.map((l) => l.order).sort((a, b) => a - b);
   check('orders are exactly 1..274', JSON.stringify(orders) === JSON.stringify([...Array(274)].map((_, i) => i + 1)));
   check('every lesson has a title', lessons.every((l) => typeof l.title === 'string' && l.title.length > 1));
-  check('the active course contains 4852 examples', allSentences.length === 4852);
+  check('the active course contains 4864 examples', allSentences.length === 4864);
   check('every lesson has sentences', lessons.every((l) => Array.isArray(l.sentences) && l.sentences.length > 0));
   check('every sentence has id + English + Persian', allSentences.every((s) => s.id && s.en && s.fa));
   check('sentence ids are unique inside each lesson', lessons.every((l) => new Set(l.sentences.map((s) => s.id)).size === l.sentences.length));

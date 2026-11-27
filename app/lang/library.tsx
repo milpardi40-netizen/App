@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
 import { progressLabel } from '@/lib/levelProgress';
 import { syncPersonalLearningData } from '@/lib/personalLearningSync';
@@ -20,7 +21,7 @@ import {
   Sparkles,
   Volume2,
 } from 'lucide-react-native';
-import { COURSE_LEVELS, SENTENCE_LESSONS, type CourseLevelId, type SentenceLesson } from '@/lib/courseContent';
+import { COURSE_LEVELS, ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS, type CourseLevelId, type SentenceLesson } from '@/lib/courseContent';
 import type { CourseProgress } from '@/lib/courseProgress';
 import type { StudyState } from '@/lib/englishStudyState';
 import { ENGLISH_ENGINE_BLUEPRINT, getAdvancedContentComposition, getEnglishLevelMetrics } from '@/lib/englishLearningEngine';
@@ -67,10 +68,7 @@ export default function EnglishLessonList() {
   const lessons = useMemo(() => selected ? SENTENCE_LESSONS.filter(item => item.levelId === selected.id) : [], [selected?.id]);
   const completedIds = progress?.completedLessonIds ?? [];
   const completed = lessons.filter(item => completedIds.includes(item.id)).length;
-  const levelStartLesson = lessons.find(item => item.id === snapshot?.current?.id && !!study?.sessions[item.id])
-    ?? lessons.find(item => !completedIds.includes(item.id) && !!study?.sessions[item.id])
-    ?? lessons.find(item => !completedIds.includes(item.id))
-    ?? lessons[0];
+  const levelStartLesson = lessons.find(item => item.id === (selected ? snapshot?.resumeForLevel(selected.id)?.id : undefined)) ?? lessons[0];
   const levelFullyCompleted = lessons.length > 0 && completed === lessons.length;
   const levelStartLabel = levelFullyCompleted ? 'بازبینی این سطح' : levelStartLesson && study?.sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
   const metrics = selected ? getEnglishLevelMetrics(selected.id, completedIds) : null;
@@ -195,6 +193,7 @@ export default function EnglishLessonList() {
                     <Text style={styles.levelHeroBand}>{selected.cefr}</Text>
                   </View>
                   <Text style={styles.selectedTitle}>{selected.title}</Text>
+                  {selected.id === 1 && <Text style={styles.pageIntro}>مسیر اصلی A1 شامل ۲۹ درس است. ۸ آزمایشگاه قدیمی برای بازبینی آموزشی از دسترس خارج شده‌اند؛ سابقهٔ آن‌ها حذف نشده است. پایان درس نشان‌دهندهٔ طی‌کردن مسیر است، نه تأیید تسلط.</Text>}
                   <Text style={styles.selectedDescription}>{selected.description}</Text>
                   <View style={styles.selectedProgressHeading}>
                     <Text style={styles.selectedProgressLabel}>پیشرفت این سطح</Text>
@@ -213,11 +212,7 @@ export default function EnglishLessonList() {
                     <Text style={styles.levelStartButtonText}>{levelStartLabel}</Text>
                     <ChevronLeft size={18} color={selected.color} />
                   </Pressable>
-                  <Pressable accessibilityRole="button" accessibilityLabel={`شروع از ابتدای سطح: ${selected.title}`} accessibilityState={{ disabled: !lessons[0] }} disabled={!lessons[0]} style={({ pressed }) => [styles.levelStartBeginningButton, pressed && styles.pressed, !lessons[0] && styles.levelStartButtonDisabled]} onPress={() => { if (lessons[0]) router.push({ pathname: '/course/lesson', params: { id: lessons[0].id, fromStart: '1' } } as never); }}>
-                    <Play size={16} color={selected.color} fill={selected.color} />
-                    <Text style={styles.levelStartButtonText}>شروع از ابتدا</Text>
-                    <ChevronLeft size={18} color={selected.color} />
-                  </Pressable>
+                  <LessonRestartActions lessonPath="/course/lesson" firstLessonId={lessons[0]?.id} lessonId={levelStartLesson?.id} color={selected.color} />
                 </LinearGradient>
               )}
 

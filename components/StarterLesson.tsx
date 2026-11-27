@@ -1,3 +1,14 @@
+import {spanishLessonRoomPairs, spanishA1Production, spanishA1Skills} from '@/lib/languages/spanishA1Practice';
+import {isSpanishA1Core, SPANISH_A1_ROOM_REVISION, SPANISH_A1_ASSESSMENT_REVISION, spanishA1SentenceRevision} from '@/lib/languages/spanishA1Scope';
+import {frenchLessonRoomPairs, frenchA1Production, frenchA1Skills} from '@/lib/languages/frenchA1Practice';
+import {isFrenchA1Core, FRENCH_A1_ROOM_REVISION, FRENCH_A1_ASSESSMENT_REVISION, frenchA1SentenceRevision} from '@/lib/languages/frenchA1Scope';
+import {germanLessonRoomPairs, germanA1Production, germanA1Skills} from '@/lib/languages/germanA1Practice';
+import {isGermanA1Core, GERMAN_A1_ROOM_REVISION, GERMAN_A1_ASSESSMENT_REVISION, germanA1SentenceRevision} from '@/lib/languages/germanA1Scope';
+import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import { speakOperator } from '@/lib/operatorSpeech';
+import { expandedChoiceChecks } from '@/lib/lessonAssessment';
+import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
+import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { useStudyTimer } from '@/components/useEnglishStudyTimer';
 import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -150,7 +161,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const current = lesson.sentences[sentenceIndex];
   const bridgeLanguage = isStarterBridgeLanguage(course.id) ? course.id : null;
   const bridgeRules = useMemo(() => bridgeLanguage ? starterBridgeRulesForLesson(bridgeLanguage, lesson.sentences) : [], [bridgeLanguage, lesson.sentences]);
-  const checks = useMemo(() => shuffleChecks(lesson.id, starterDisplayChecks(lesson)), [lesson]);
+  const checks = useMemo(() => shuffleChecks(lesson.id, expandedChoiceChecks({ ...lesson, checks: starterDisplayChecks(lesson) })), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
@@ -164,7 +175,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     }));
     return [...byWord.values()];
   }, [lesson]);
-  const skills = lesson.id === `${course.id}-a2-present` ? A2_FIRST_SKILLS[course.id] : lesson.levelId === 2 ? (a2UnitSkills(course.id)[lesson.id] ?? a2ExpansionSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 3 ? (b1UnitSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 4 ? (b2UnitSkills(course.id)[lesson.id] ?? []) : A1_SKILLS[lesson.id] ?? [];
+  const skills = spanishA1Skills(lesson.id) ?? frenchA1Skills(lesson.id) ?? germanA1Skills(lesson.id) ?? (lesson.id === `${course.id}-a2-present` ? A2_FIRST_SKILLS[course.id] : lesson.levelId === 2 ? (a2UnitSkills(course.id)[lesson.id] ?? a2ExpansionSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 3 ? (b1UnitSkills(course.id)[lesson.id] ?? []) : lesson.levelId === 4 ? (b2UnitSkills(course.id)[lesson.id] ?? []) : A1_SKILLS[lesson.id] ?? []);
   const listeningTask = skills.find(task => task.kind === 'listening');
   const readingTask = skills.find(task => task.kind === 'reading');
   const a2Patterns = lesson.levelId === 2 ? a2GrammarPatterns(course.id, lesson.id) : lesson.levelId === 3 ? b1GrammarPatterns(course.id, lesson.id) : lesson.levelId === 4 ? b2GrammarPatterns(course.id, lesson.id) : [];
@@ -236,7 +247,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   useEffect(() => {
     if (!sessionReady || completing.current || restartPending.current || restartRequested.current || preserveExistingSession.current) return;
     const generation = saveGeneration.current;
-    const nextSession: StarterLessonSession = { stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
+    const nextSession: StarterLessonSession = { ...(isGermanA1Core(lesson.id) ? {sampleRevision:germanA1SentenceRevision(lesson.id),checksRevision:GERMAN_A1_ASSESSMENT_REVISION} : isFrenchA1Core(lesson.id) ? {sampleRevision:frenchA1SentenceRevision(lesson.id),checksRevision:FRENCH_A1_ASSESSMENT_REVISION} : isSpanishA1Core(lesson.id) ? {sampleRevision:spanishA1SentenceRevision(lesson.id),checksRevision:SPANISH_A1_ASSESSMENT_REVISION} : {}), stageVersion: LESSON_STAGE_VERSION, stage, sentenceIndex, revealed, answers, showCheckAnswers };
     void saveStarterLessonSession(lesson.id, nextSession)
       .then(() => { if (generation === saveGeneration.current) setSessionError(''); })
       .catch(() => { if (generation === saveGeneration.current) setSessionError('جلسه ذخیره نشد؛ پیشرفت درس کامل ثبت نشده است. دوباره ذخیره کنید.'); });
@@ -270,9 +281,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       clearNarratorFallback();
       if (targetKey) setMicReadyKey(targetKey);
     };
-    if (targetKey) {
-      narratorFallbackRef.current = setTimeout(armMic, Math.min(7500, Math.max(2400, text.length * 130)));
-    }
+    // Recognition starts only on playback completion/error, never on an estimated duration.
     void playStarterSpeech(
       course.locale,
       text,
@@ -357,7 +366,14 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     const targetY = Math.max(0, lessonScrollOffset(contentOffsetRef.current + contentY - 16, Dimensions.get('window').width));
     lessonScrollRef.current?.scrollTo({ y: targetY, animated: true });
   }, []);
-  const { scheduleOnPass } = useSpeakAutoAdvance(`${course.id}:${lesson.id}:${stage}:${sentenceIndex}`);
+  const { scheduleOnPass, cancel: cancelSpeakingAdvance } = useSpeakAutoAdvance(`${course.id}:${lesson.id}:${stage}:${sentenceIndex}`);
+  const skipSpeakingSentence = () => {
+    cancelSpeakingAdvance();
+    setMicReadyKey('');
+    const last = lesson.sentences.length - 1;
+    if (sentenceIndex < last) { setSentenceIndex(sentenceIndex + 1); setRevealed(false); }
+    else { void next(); }
+  };
 
   // «شنیدن»: read the whole list aloud automatically in sync with card scroll; the Continue button keeps working.
   useEffect(() => {
@@ -392,6 +408,17 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
     setRevealed(false);
     setSpeechError('');
     setListenRun(n => n + 1);
+  };
+
+  const goToPreviousStage = () => {
+    if (!sessionReady || saving || sessionError || completing.current || stage < 2) return;
+    cancelSpeakingAdvance();
+    setMicReadyKey(null);
+    void stopStarterSpeech();
+    setStage(stage - 1);
+    setSentenceIndex(0);
+    setRevealed(false);
+    setSpeechError('');
   };
 
   const goToPreviousSentence = () => {
@@ -476,18 +503,16 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
       </LinearGradient>
 
       <View style={styles.stepperCard}>
-        <View style={styles.stepperHeading}>
-                    <View style={styles.stepperNow}><Text style={styles.stepperNowFa}>{stages[stage].labelFa}</Text></View>
-        </View>
+
         <View style={styles.stepSegments}>{stages.map((item, index) => <View key={item.id} accessibilityLabel={`${item.labelEn} ${index + 1} از ${stages.length}`} style={[styles.stepSegment, index <= stage && styles.stepSegmentDone, index === stage && styles.stepSegmentCurrent]} />)}</View>
       </View>
 
-      {!!(sessionError || speechError || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || speechError || timer.error}</Text>}
+      {!!(speechError || timer.error) && <Text accessibilityRole="alert" style={styles.error}>{speechError || timer.error}</Text>}
       </View>
       <View style={styles.content} onLayout={event => setStageHeight(Math.round(event.nativeEvent.layout.height))}>
         {stage === 0 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Sparkles size={34} color={Palette.warning} /></View>
-          <Text style={styles.stageTitle}>{lesson.title}</Text>
+
           <Text style={styles.situation}>{lesson.situation}</Text>
           {lesson.levelId >= 3 ? <ReadingFirstBlock lessonId={lesson.id} lines={starterDisplayDialogue(lesson)} onSpeak={text => speak(text)} foreignStyle={styles.practiceForeign} accent={Palette.primary} /> : null}
           {teachingNote ? <View style={styles.noteCard}><Text style={styles.noteTitle}>نکتهٔ این زبان به فارسی</Text><Text style={styles.noteText}>{teachingNote}</Text></View> : null}
@@ -506,19 +531,18 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           {bridgeLanguage ? <PersianBridgeCard sentence={current} language={bridgeLanguage} /> : null}
           <View style={styles.replayRow}>
             <Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable>
+
             <Pressable accessibilityRole="button" accessibilityLabel="پخش با سرعت طبیعی" style={styles.replayButton} onPress={() => speak(current.text, pace('natural'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>طبیعی</Text></Pressable>
           </View>
           <SpeakCheck
             key={current.id}
+            onSkip={skipSpeakingSentence}
             text={current.text}
             locale={course.locale}
             accent={Palette.success}
             autoStart={micReadyKey === `1:${current.id}`}
             onResult={result => {
-              if (sentenceIndex < lesson.sentences.length - 1) {
-                scheduleOnPass(result, () => { setSentenceIndex(sentenceIndex + 1); setRevealed(false); });
-              }
+              scheduleOnPass(result, () => { void next(); });
             }}
           />
         </View>}
@@ -526,7 +550,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
         {stage === 2 && <View style={styles.centerStage}>
           <View style={styles.bigIcon}><Headphones size={34} color={Palette.primary} /></View>
           <Text style={styles.stageTitle}>شنیدن {unitPlural}</Text>
-          {showHint && <Text style={styles.stageDesc}>{foundation ? `هر ${unit} را جداگانه گوش دهید و معنی آن را به یاد بیاورید.` : 'هر جمله را گوش دهید و معنی‌اش را به یاد بیاورید.'}</Text>}
+
           <View style={{ width: '100%' }} onLayout={event => { listenListOffsetRef.current = event.nativeEvent.layout.y; }}>
             <BlindListeningList
               items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.text, fa: sentence.fa }))}
@@ -552,9 +576,10 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
             <Text style={styles.speechTitle}>{unit} انتخاب‌شده</Text>
             <Text style={styles.speechSentence}>{current.text}</Text>
             <View style={styles.replayRow}><Pressable accessibilityRole="button" accessibilityLabel={`پخش آهستهٔ ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('slow'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>آهسته</Text></Pressable><Pressable accessibilityRole="button" accessibilityLabel={`پخش معمولی ${unit}`} style={styles.replayButton} onPress={() => speak(current.text, pace('normal'))}><Volume2 size={18} color={Palette.primary} /><Text style={styles.replayText}>معمولی</Text></Pressable></View>
-            <Text style={styles.speechHint}>پس از شنیدن، {unit} را با صدای بلند تکرار کنید.</Text>
+
             <SpeakCheck
               key={current.id}
+              onSkip={skipSpeakingSentence}
               text={current.text}
               locale={course.locale}
               accent={Palette.success}
@@ -617,6 +642,15 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
               locale={course.locale}
               accent={Palette.success}
               autoStart={micReadyKey === `5:${vocabIndex}:${word.word}`}
+              onSkip={() => {
+                cancelSpeakingAdvance();
+                setMicReadyKey('');
+                if (vocabIndex < vocabulary.length - 1) {
+                  const nextVocab = vocabulary[vocabIndex + 1];
+                  scrollToContentY(vocabListOffsetRef.current + (vocabCardYsRef.current[vocabIndex + 1] ?? 0));
+                  speakForTarget(nextVocab.word.word, pace('normal'), `5:${vocabIndex + 1}:${nextVocab.word.word}`);
+                } else { void next(); }
+              }}
               onResult={result => {
                 if (vocabIndex < vocabulary.length - 1) {
                   const nextVocab = vocabulary[vocabIndex + 1];
@@ -681,10 +715,12 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
         </View>}
 
-        {stage === 8 && !foundation && lesson.levelId >= 3 ? <ProductionTask
+        {stage === 8 && !foundation && (isGermanA1Core(lesson.id) || isFrenchA1Core(lesson.id) || isSpanishA1Core(lesson.id) || lesson.levelId >= 3) ? <ProductionTask
           key={`${lesson.id}-production`}
           source={lesson}
-          explicit={lesson.levelId === 3 ? b1Production(course.id, lesson.id) : lesson.levelId === 4 ? b2Production(course.id, lesson.id) : undefined}
+          levelLabel={isGermanA1Core(lesson.id) || isFrenchA1Core(lesson.id) || isSpanishA1Core(lesson.id) ? 'A1' : undefined}
+          contentRevision={spanishA1SentenceRevision(lesson.id) ?? frenchA1SentenceRevision(lesson.id) ?? germanA1SentenceRevision(lesson.id)}
+          explicit={spanishA1Production(lesson.id) ?? frenchA1Production(lesson.id) ?? germanA1Production(lesson.id) ?? (lesson.levelId === 3 ? b1Production(course.id, lesson.id) : lesson.levelId === 4 ? b2Production(course.id, lesson.id) : undefined)}
           examples={lesson.sentences}
           onSpeak={text => speak(text)}
           foreignStyle={styles.practiceForeign}
@@ -699,10 +735,12 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          lines={lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          contentRevision={isSpanishA1Core(lesson.id) ? SPANISH_A1_ROOM_REVISION : isFrenchA1Core(lesson.id) ? FRENCH_A1_ROOM_REVISION : isGermanA1Core(lesson.id) ? GERMAN_A1_ROOM_REVISION : lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
+          pairs={isSpanishA1Core(lesson.id) ? spanishLessonRoomPairs(lesson) : isFrenchA1Core(lesson.id) ? frenchLessonRoomPairs(lesson) : germanLessonRoomPairs(lesson)}
           locale={course.locale}
           onSpeak={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone)}
-          onSpeakOperator={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone, { pitch: 0.82 })}
+          onSpeakOperator={(text, onDone) => speakOperator(text, course.locale, course.id, onDone)}
+          onSpeakSlow={(text, onDone) => void playStarterSpeech(course.locale, text, pace('slow'), onDone, undefined, onDone)}
         />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}
         {sessionError ? <Pressable accessibilityRole="button" style={styles.retrySaveButton} onPress={() => setSaveRetry(value => value + 1)}><Text style={styles.retrySaveText}>تلاش دوباره برای ذخیرهٔ جلسه</Text></Pressable> : null}
@@ -712,6 +750,9 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
 
       <View style={styles.footer}>
         <View style={styles.footerActions}>
+          {stage >= 2 && <Pressable accessibilityRole="button" accessibilityLabel="مرحلهٔ قبل" accessibilityState={{ disabled: saving || !!sessionError }} disabled={saving || !!sessionError} onPress={goToPreviousStage} style={[styles.previousButton, (saving || !!sessionError) && { opacity: .45 }]}>
+            <Text style={styles.previousButtonText}>مرحلهٔ قبل</Text>
+          </Pressable>}
           {stage === 1 && <Pressable accessibilityRole="button" accessibilityLabel={foundation ? `${unit} قبلی` : "جملهٔ قبلی"} accessibilityState={{ disabled: saving || !!sessionError || sentenceIndex === 0 }} disabled={saving || !!sessionError || sentenceIndex === 0} onPress={goToPreviousSentence} style={[styles.previousButton, (saving || !!sessionError || sentenceIndex === 0) && styles.nextButtonDisabled]}>
             <Text style={styles.previousButtonText}>{unit} قبلی</Text>
           </Pressable>}
@@ -721,7 +762,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           </Pressable>
         </View>
       </View>
-      <LessonCelebration visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(lessons, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
+      <LessonCelebration onRestart={async () => { const target = await prepareLessonRestart(`${course.home}/lesson`, lesson.id); router.replace(target as never); }} visible={!!celebration} lessonTitle={lesson.title} stats={celebration?.stats ?? { sentences: 0, practiceTotal: 0, practiceFirstTry: 0, practiceSeconds: 0, streak: 0, streakExtendedToday: false }} hasNextLesson={!!nextLessonInOrder(lessons, lesson.id)} onContinue={() => { const go = celebration?.next; setCelebration(null); go?.(); }} dueReviews={celebration?.dueReviews ?? 0} onReview={() => { const go = celebration?.review; setCelebration(null); go?.(); }} newAchievements={celebration?.newAchievements}
       levelFinished={celebration?.levelFinished ? { ...celebration.levelFinished, onStart: celebration.levelFinished.onStart ? () => { const go = celebration.levelFinished!.onStart!; setCelebration(null); go(); } : undefined } : undefined} />
     </View>
   );

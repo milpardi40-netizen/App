@@ -1,0 +1,350 @@
+{
+  "foundation-introducing-yourself": {
+    "kind": "listening",
+    "passage": "Hello. I am Anna. I am from Canada. I live in Paris.",
+    "promptFa": "گوینده اهل کدام کشور است؟",
+    "choices": [
+      "Paris",
+      "France",
+      "Canada"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "Canada کشور مبدأ است؛ Paris شهر محل زندگی است."
+  },
+  "foundation-alphabet-and-spelling": {
+    "kind": "listening",
+    "passage": "L. E. E.",
+    "promptFa": "کدام نام خانوادگی هجی شد؟",
+    "choices": [
+      "Tim",
+      "Lee",
+      "Lea"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "حرف‌های L، E، E نام Lee را می‌سازند؛ نام کامل پیش از هجی گفته نشده است."
+  },
+  "foundation-asking-for-help": {
+    "kind": "listening",
+    "passage": "My last name is Green. Sorry, can you spell that, please?",
+    "promptFa": "مخاطب برای روشن‌شدن نام چه درخواستی دارد؟",
+    "choices": [
+      "هجی نام خانوادگی",
+      "گفتن سن",
+      "گفتن شهر"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "درخواست can you spell that دربارهٔ هجی نامِ شنیده‌شده است."
+  },
+  "foundation-pronouns-and-be": {
+    "kind": "listening",
+    "passage": "I am Ben. Sara and I are students. Anna is our teacher.",
+    "promptFa": "آنا چه نقشی دارد؟",
+    "choices": [
+      "دانش‌آموز",
+      "در پیام گفته نشده",
+      "معلم"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "عبارت Anna is our teacher نقش آنا را روشن می‌کند."
+  },
+  "foundation-numbers-and-contact": {
+    "kind": "listening",
+    "passage": "My name is Tim. I am twenty-six. The code is two, zero, four, six.",
+    "promptFa": "کد تمرینی کدام است، نه سن گوینده؟",
+    "choices": [
+      "2064",
+      "2046",
+      "26"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "چهار رقم به ترتیب two, zero, four, six گفته شدند؛ twenty-six سن است."
+  },
+  "foundation-family-and-possessions": {
+    "kind": "listening",
+    "passage": "This is my sister, Anna. The bag is my brother Ben's bag.",
+    "promptFa": "کیف مال چه کسی است؟",
+    "choices": [
+      "Ben",
+      "Anna",
+      "گوینده"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "مالکیت کیف با Ben گفته شده است؛ Anna خواهر معرفی شده است."
+  },
+  "foundation-objects-and-places": {
+    "kind": "listening",
+    "passage": "Your phone is on the chair. Your bag is under the table. The key is in your bag.",
+    "promptFa": "برای پیدا کردن کلید کجا را نگاه می‌کنید؟",
+    "choices": [
+      "روی صندلی",
+      "روی میز",
+      "داخل کیف"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "کلید داخل کیف است؛ گوشی روی صندلی است."
+  },
+  "foundation-time-and-calendar": {
+    "kind": "listening",
+    "passage": "The English class is on Friday at ten in the morning. Not at nine.",
+    "promptFa": "کلاس چه ساعتی است؟",
+    "choices": [
+      "10:00 p.m.",
+      "10:00 a.m.",
+      "9:00 a.m."
+    ],
+    "correctIndex": 1,
+    "explanationFa": "گوینده ten in the morning را تأیید و nine را رد می‌کند."
+  },
+  "foundation-everyday-routine": {
+    "kind": "listening",
+    "passage": "Ben gets up at seven. He starts work at nine. He does not work on Sunday.",
+    "promptFa": "بن یکشنبه چه وضعیتی دارد؟",
+    "choices": [
+      "کار نمی‌کند",
+      "ساعت هفت کار را شروع می‌کند",
+      "ساعت نه درس می‌خواند"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "does not work on Sunday نبودِ کار در یکشنبه را روشن می‌کند."
+  },
+  "survival-current-activities": {
+    "kind": "listening",
+    "passage": "Anna usually goes to work by bus. Today she is at home. She is reading a book now.",
+    "promptFa": "آنا همین الان چه می‌کند؟",
+    "choices": [
+      "با اتوبوس به کار می‌رود",
+      "در محل کار است",
+      "کتاب می‌خواند"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "عادت رفت‌وآمد با وضعیت الان فرق دارد؛ اکنون is reading گفته شده است."
+  },
+  "survival-hobbies-and-free-time": {
+    "kind": "listening",
+    "passage": "I like music, but I do not like football. My brother likes football.",
+    "promptFa": "گوینده خودش چه چیزی را دوست دارد؟",
+    "choices": [
+      "هیچ‌کدام",
+      "موسیقی",
+      "فوتبال"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "I like music دربارهٔ خود گوینده است؛ علاقهٔ برادر را به او نسبت نمی‌دهیم."
+  },
+  "survival-weather-and-seasons": {
+    "kind": "listening",
+    "passage": "It is sunny today, but it is cold. It is not raining today.",
+    "promptFa": "هوای امروز چگونه توصیف شده است؟",
+    "choices": [
+      "آفتابی و سرد",
+      "بارانی و گرم",
+      "بارانی و سرد"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "sunny و cold هر دو برای امروز گفته شده‌اند؛ نبودِ باران نیز صریح است."
+  },
+  "foundation-buying-something": {
+    "kind": "listening",
+    "passage": "How much is this bag? It is eight dollars. Can I pay by card? Yes, you can.",
+    "promptFa": "قیمت کیف چقدر است؟",
+    "choices": [
+      "2 dollars",
+      "18 dollars",
+      "8 dollars"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "پاسخ قیمت eight dollars است؛ پرسش بعدی دربارهٔ کارت است."
+  },
+  "survival-shopping-and-clothing": {
+    "kind": "listening",
+    "passage": "A red shirt in small, please. This one is too small. Do you have medium?",
+    "promptFa": "مشتری در پایان چه اندازه‌ای می‌خواهد؟",
+    "choices": [
+      "large",
+      "medium",
+      "small"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "small اندازهٔ اول بود؛ پس از امتحان medium درخواست می‌شود."
+  },
+  "survival-cafe-and-food": {
+    "kind": "listening",
+    "passage": "A tea without sugar, please. A coffee? No, a tea, please.",
+    "promptFa": "سفارش نهایی نوشیدنی چیست؟",
+    "choices": [
+      "چای بدون شکر",
+      "قهوه بدون شکر",
+      "چای با شکر"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "مشتری اشتباهِ coffee را به tea اصلاح می‌کند و ترجیح بدون شکر تغییر نکرده است."
+  },
+  "survival-directions-and-neighborhood": {
+    "kind": "listening",
+    "passage": "Go straight from the bank. Turn left at the park. The station is next to the café.",
+    "promptFa": "کنار پارک به کدام سمت می‌پیچید؟",
+    "choices": [
+      "راست",
+      "هیچ پیچیدنی گفته نشده",
+      "چپ"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "دستور کنار پارک turn left است."
+  },
+  "survival-public-transport": {
+    "kind": "listening",
+    "passage": "Does bus six go to the town centre? Yes. It leaves at eleven.",
+    "promptFa": "اتوبوس شمارهٔ شش چه ساعتی حرکت می‌کند؟",
+    "choices": [
+      "10:00",
+      "11:00",
+      "6:00"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "six شمارهٔ اتوبوس است؛ eleven ساعت حرکت است."
+  },
+  "survival-appointments-and-time": {
+    "kind": "listening",
+    "passage": "Your appointment is Monday at ten. Please change it to Tuesday at eleven. Tuesday at eleven? Yes, thank you.",
+    "promptFa": "قرار جدید چه زمانی است؟",
+    "choices": [
+      "سه‌شنبه ساعت ۱۱",
+      "دوشنبه ساعت ۱۰",
+      "سه‌شنبه ساعت ۱۰"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "پیام new appointment را Tuesday at eleven مشخص می‌کند؛ زمان قبلی لغو شده است."
+  },
+  "survival-school-and-learning": {
+    "kind": "listening",
+    "passage": "Please read page twelve in class. Your homework is on page fourteen.",
+    "promptFa": "صفحهٔ تکلیف خانه کدام است؟",
+    "choices": [
+      "12",
+      "4",
+      "14"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "page fourteen برای homework گفته شده؛ page twelve برای خواندن در کلاس است."
+  },
+  "survival-invitations-and-plans": {
+    "kind": "listening",
+    "passage": "Would you like to meet on Friday? Sorry, I cannot. How about Saturday at ten? Yes, Saturday at ten is good.",
+    "promptFa": "روی کدام زمان توافق شد؟",
+    "choices": [
+      "فقط پیشنهاد داده شده و پذیرفته نشده",
+      "شنبه ساعت ۱۰",
+      "جمعه ساعت ۱۰"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "پاسخ Yes زمان Saturday at ten را صریحاً پذیرفته است."
+  },
+  "survival-past-and-future-plans": {
+    "kind": "listening",
+    "passage": "Yesterday I was at home. I studied English. Tomorrow I am going to visit Anna.",
+    "promptFa": "کدام کار برنامهٔ فرداست؟",
+    "choices": [
+      "دیدن آنا",
+      "درس‌خواندنِ انجام‌شده",
+      "بودن در خانه در دیروز"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "visit Anna بعد از Tomorrow و going to آمده؛ دو جملهٔ اول دربارهٔ دیروزند."
+  },
+  "survival-job-interview": {
+    "kind": "listening",
+    "passage": "I can cook. I can work on Monday morning, but I cannot work on Sunday.",
+    "promptFa": "چه زمانی برای کار در دسترس است؟",
+    "choices": [
+      "یکشنبه صبح",
+      "هر دو روز",
+      "دوشنبه صبح"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "امکان کار Monday morning گفته شده و Sunday رد شده است."
+  },
+  "survival-personal-information": {
+    "kind": "listening",
+    "passage": "My first name is Anna. My last name is Green. My address is fourteen Park Street.",
+    "promptFa": "پلاک نشانی کدام است؟",
+    "choices": [
+      "4",
+      "14",
+      "40"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "fourteen برابر 14 است؛ نام و نام خانوادگی فیلدهای جدا هستند."
+  },
+  "survival-renting-a-home": {
+    "kind": "listening",
+    "passage": "The room is near the station. The rent is five hundred dollars a month. You can visit on Friday.",
+    "promptFa": "اجارهٔ گفته‌شده برای چه بازه‌ای است؟",
+    "choices": [
+      "هر ماه",
+      "هر هفته",
+      "هر شب"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "a month یعنی هر ماه؛ نباید مبلغ را هفتگی برداشت کرد."
+  },
+  "survival-travel-and-tickets": {
+    "kind": "listening",
+    "passage": "A return ticket to Leeds, please. I am going on Monday and coming back on Tuesday.",
+    "promptFa": "روز برگشت کدام است؟",
+    "choices": [
+      "Monday",
+      "Friday",
+      "Tuesday"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "coming back on Tuesday روز برگشت را مشخص می‌کند؛ Monday روز رفت است."
+  },
+  "survival-hotel-and-stay": {
+    "kind": "listening",
+    "passage": "My name is Ben Lee. I am in room twelve. There is no towel in my room.",
+    "promptFa": "برای رساندن حوله به کدام اتاق می‌روید؟",
+    "choices": [
+      "20",
+      "12",
+      "2"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "شمارهٔ اتاق twelve است؛ این جزئیات برای انجام درخواست لازم است."
+  },
+  "survival-phone-and-messages": {
+    "kind": "listening",
+    "passage": "This is Tim. Please give Sara a message. I am at the station. Please call me after six.",
+    "promptFa": "سارا چه زمانی باید تماس بگیرد؟",
+    "choices": [
+      "بعد از ساعت ۶",
+      "قبل از ساعت ۶",
+      "دقیقاً ساعت ۶"
+    ],
+    "correctIndex": 0,
+    "explanationFa": "after six یعنی بعد از شش، نه قبل یا لزوماً دقیقاً در ساعت شش."
+  },
+  "survival-services-and-post-office": {
+    "kind": "listening",
+    "passage": "I am sending this letter to Anna Green in York. Do I need a stamp? Yes, one stamp.",
+    "promptFa": "نامه به کدام شهر فرستاده می‌شود؟",
+    "choices": [
+      "Leeds",
+      "London",
+      "York"
+    ],
+    "correctIndex": 2,
+    "explanationFa": "York شهر مقصد نامه است؛ پرسش بعدی دربارهٔ تمبر است."
+  },
+  "survival-health-and-pharmacy": {
+    "kind": "listening",
+    "passage": "I have a sore throat. I do not understand. Can you speak slowly, please?",
+    "promptFa": "گوینده برای فهمیدن توضیح چه کمکی می‌خواهد؟",
+    "choices": [
+      "گفتن قیمت بلیت",
+      "آهسته‌تر صحبت‌کردن",
+      "دادن مقدار مصرف دارو"
+    ],
+    "correctIndex": 1,
+    "explanationFa": "درخواست زبانی speak slowly است؛ پیام هیچ دوز یا تشخیص پزشکی نمی‌دهد."
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "date": "2026-11-26",
+  "scope": "Spanish A1 implementation; Node/React renderer and stubbed device boundaries, not physical-device/audio/browser verification",
+  "results": [
+    {
+      "script": "verify-spanish-a1.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-spanish-a1-integration.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-french-a1.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-french-a1-integration.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-german-a1.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-german-a1-integration.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-english-a1.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-english-a1-integration.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-russian-a1.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-russian-a1-integration.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-six-prea1-practical.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-prea1-balance.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-lesson-assessment.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-level-resume.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-personal-sync.mjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-progress-display.mjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-english-backup.mjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-english-engine.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-english-four.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-english-lesson-flow.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-operator-speech.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-seven-language-lesson-ui.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-foreground-restart.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-level-restart.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-speaking-skip.cjs",
+      "status": "passed"
+    },
+    {
+      "script": "verify-lesson-stage-navigation.cjs",
+      "status": "passed"
+    }
+  ],
+  "generatedHashes": {
+    "lib/languages/spanishA1.generated.ts": "e33a646f6903ef7213f7d64f9e5bc70a874ed20d4ba30447a43a64a6e5bfdb93",
+    "lib/languages/spanishA1ChangedSlots.generated.json": "fc6b9bf910db5aabf086cefddf31f840c3f74531076f229158f03992832fe0fc"
+  }
+}

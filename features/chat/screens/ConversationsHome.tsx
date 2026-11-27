@@ -1,8 +1,8 @@
-import { LocalizedText as Text } from '@/components/LocalizedText';
+import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { ChevronLeft, MessageCircle, Mic2, Plus, QrCode, ShieldCheck, Sparkles, Trash2, UserRound } from 'lucide-react-native';
+import { ChevronLeft, MessageCircle, Mic2, Plus, QrCode, Search, ShieldCheck, Sparkles, Trash2, UserRound } from 'lucide-react-native';
 import { AppBottomNav } from '@/components/AppBottomNav';
 import { ArabicBottomNav } from '@/components/arabic/ArabicBottomNav';
 import { RussianBottomNav } from '@/components/RussianBottomNav';
@@ -172,11 +172,15 @@ export default function ConversationsHome() {
   const router = useRouter();
   const { lessonId, lessonTitle, levelId, situation, language } = useLocalSearchParams<{ lessonId?: string; lessonTitle?: string; levelId?: string; situation?: string; language?: string }>();
   const lessonContext = lessonTitle ? { title: String(lessonTitle), level: levelId ? String(levelId) : '', situation: situation ? String(situation) : '', language: language ? String(language) : '' } : null;
+  const [search, setSearch] = useState('');
+  const [showPracticeDetails, setShowPracticeDetails] = useState(false);
+  const normalizeSearch = (value: string) => value.replace(/ي/g, 'ی').replace(/ك/g, 'ک').trim().toLocaleLowerCase();
   const [contacts, setContacts] = useState<RealContact[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [contactsError, setContactsError] = useState<string | null>(null);
   const [deletingConversationId, setDeletingConversationId] = useState<string | null>(null);
 
+  const visibleContacts = contacts.filter(contact => normalizeSearch(contact.displayName).includes(normalizeSearch(search)));
   const configured = isSupabaseConfigured();
   const [openingSupport, setOpeningSupport] = useState(false);
   // The conversation hub is shared by every language; keep the learner's own course navigation under it.
@@ -284,8 +288,9 @@ export default function ConversationsHome() {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View style={styles.headerCopy}>
-            <Text style={styles.title}>{copy.headerTitle}</Text>
+            <Text style={styles.title}>گفت‌وگو</Text>
             <Text style={styles.subtitle}>{copy.headerSubtitle}</Text>
+            <View style={styles.headerBadge}><ShieldCheck size={13} color={Colors.primary[600]} /><Text style={styles.headerBadgeText}>فضای خصوصی تمرین شما</Text></View>
           </View>
           <PageNavigation tone="dark" backFallback={homePath} />
         </View>
@@ -306,7 +311,10 @@ export default function ConversationsHome() {
             <Text style={styles.practiceKicker}>{copy.practiceKicker}</Text>
           </View>
           <Text style={styles.practiceTitle}>{copy.practiceTitle}</Text>
-          <Text style={styles.practiceText}>{copy.practiceText}</Text>
+          <Pressable accessibilityRole="button" accessibilityState={{ expanded: showPracticeDetails }} onPress={() => setShowPracticeDetails(value => !value)} style={styles.detailsButton}>
+            <Text style={styles.detailsText}>{showPracticeDetails ? 'بستن راهنمای تمرین' : 'تمرین چطور انجام می‌شود؟'}</Text>
+          </Pressable>
+          {showPracticeDetails ? <Text style={styles.practiceText}>{copy.practiceText}</Text> : null}
           {!lessonContext ? (
             <View style={styles.langToggleRow}>
               <Text style={styles.langToggleLabel}>زبان مکالمه:</Text>
@@ -340,17 +348,31 @@ export default function ConversationsHome() {
           </Pressable>
         )}
         <View style={styles.sectionRow}>
-          <Text style={styles.sectionLabel}>مخاطبان واقعی</Text>
-          <Text style={styles.sectionHint}>دعوت و تأیید دوطرفه</Text>
+          <View style={styles.sectionTitleRow}>
+            <Text style={styles.sectionLabel}>گفت‌وگوهای من</Text>
+            {!loadingContacts && contacts.length > 0 ? <Text style={styles.countBadge}>{contacts.length.toLocaleString('fa-IR')}</Text> : null}
+          </View>
+          <Pressable accessibilityRole="button" accessibilityLabel="گفت‌وگوی جدید، افزودن مخاطب" style={({ pressed }) => [styles.newChatButton, pressed && styles.pressed]} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}>
+            <Plus size={16} color={Colors.onColor} /><Text keepColor style={styles.newChatText}>گفت‌وگوی جدید</Text>
+          </Pressable>
         </View>
 
+        {contacts.length > 0 ? (
+          <View style={styles.searchBox}>
+            <Search size={18} color={Colors.neutral[400]} />
+            <TextInput accessibilityLabel="جست‌وجوی مخاطب" placeholder="جست‌وجوی نام مخاطب…" placeholderTextColor={Colors.neutral[400]} value={search} onChangeText={setSearch} style={styles.searchInput} />
+            {search ? <Pressable accessibilityRole="button" accessibilityLabel="پاک کردن جست‌وجو" onPress={() => setSearch('')} style={styles.clearSearch}><Text style={styles.detailsText}>پاک کردن</Text></Pressable> : null}
+          </View>
+        ) : null}
+        {contactsError && contacts.length > 0 ? <Text accessibilityRole="alert" style={styles.errorText}>{contactsError}</Text> : null}
         {!configured ? <SupabaseSetupNotice /> : null}
 
         {loadingContacts ? (
           <View style={styles.loadingContacts}><ActivityIndicator color={Colors.primary[400]} /><Text style={styles.loadingText}>در حال دریافت مخاطبان…</Text></View>
         ) : contacts.length ? (
           <View style={styles.contactsList}>
-            {contacts.map((contact) => {
+            {visibleContacts.map((contact) => {
+              const online = !!contact.lastSeen && Date.now() - new Date(contact.lastSeen).getTime() < 5 * 60 * 1000;
               const parsed = parseStoredCourseLevels(contact.englishLevel)[convLanguage];
               const highest = highestLevelOf(parsed.completed);
               const badgeLevelId = highest ?? 0;
@@ -359,18 +381,20 @@ export default function ConversationsHome() {
               return (
                 <Pressable
                   key={contact.id}
-                  style={styles.contactCard}
+                  accessibilityRole="button"
+                  accessibilityLabel={`گفت‌وگو با ${contact.displayName}`}
+                  style={({ pressed }) => [styles.contactCard, pressed && styles.pressed]}
                   onPress={() => router.push({ pathname: '/conversations/human/[conversationId]', params: { conversationId: contact.conversationId, name: contact.displayName, lessonTitle, levelId, situation, language: convLanguage, lessonId, lastSeen: contact.lastSeen ?? '', partnerLevel: contact.englishLevel } } as never)}
                 >
-                  <View style={styles.realAvatar}><Text style={styles.realAvatarText}>{contact.avatarEmoji}</Text></View>
+                  <View style={styles.realAvatar}><Text style={styles.realAvatarText}>{contact.avatarEmoji}</Text>{online ? <View style={styles.onlineDot} /> : null}</View>
                   <View style={styles.realContactText}>
                     <View style={styles.realContactTop}>
-                      <Text style={styles.realContactName}>{contact.displayName}</Text>
+                      <Text numberOfLines={1} style={styles.realContactName}>{contact.displayName}</Text>
                       <View style={[styles.contactLevelPill, { backgroundColor: badgeColor + '26', borderColor: badgeColor + '70' }]}>
                         <Text style={[styles.contactLevelText, { color: badgeColor }]}>{cefrOfLevel(badgeLevelId)}</Text>
                       </View>
                     </View>
-                    <Text style={styles.realContactStatus}>{contact.lastSeen && Date.now() - new Date(contact.lastSeen).getTime() < 5 * 60 * 1000 ? 'آنلاین' : contact.lastSeen ? `آخرین بازدید ${timeAgo(contact.lastSeen)}` : 'مخاطب واقعی'} · {levelSummary}</Text>
+                    <Text style={styles.realContactStatus}>{online ? 'آنلاین' : contact.lastSeen ? `آخرین بازدید ${timeAgo(contact.lastSeen)}` : 'مخاطب واقعی'} · {levelSummary}</Text>
                   </View>
                   <Pressable
                     accessibilityRole="button"
@@ -386,14 +410,15 @@ export default function ConversationsHome() {
                 </Pressable>
               );
             })}
-            <Pressable style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
+            {visibleContacts.length === 0 ? <View style={styles.noResults}><Search size={24} color={Colors.neutral[400]} /><Text style={styles.emptyTitle}>مخاطبی پیدا نشد</Text><Text style={styles.emptyDesc}>نام دیگری را جست‌وجو کنید.</Text></View> : null}
+            <Pressable accessibilityRole="button" style={styles.addAnother} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}><Plus size={17} color={Colors.primary[300]} /><Text style={styles.addAnotherText}>افزودن مخاطب دیگر</Text></Pressable>
           </View>
         ) : (
           <View style={styles.emptyContacts}>
             <View style={styles.peopleIcon}><UserRound size={30} color={Colors.primary[400]} /></View>
             <Text style={styles.emptyTitle}>{contactsError ? 'دریافت مخاطبان انجام نشد' : 'هنوز مخاطبی اضافه نکرده‌اید'}</Text>
             <Text style={styles.emptyDesc}>{contactsError || copy.emptyDesc}</Text>
-            <Pressable style={styles.inviteButton} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}>
+            <Pressable accessibilityRole="button" style={styles.inviteButton} onPress={() => router.push({ pathname: '/conversations/invite', params: { lessonId, lessonTitle, levelId, situation, language: convLanguage } } as never)}>
               <Plus size={19} color={Colors.onColor} />
               <Text style={styles.inviteText}>افزودن مخاطب واقعی</Text>
             </Pressable>
@@ -423,13 +448,27 @@ export default function ConversationsHome() {
 }
 
 const styles = StyleSheet.create({
+  pressed: { opacity: 0.72 },
+  headerBadge: { flexDirection: 'row-reverse', alignItems: 'center', gap: 5, marginTop: 8 },
+  headerBadgeText: { fontFamily: Typography.fontFamily, fontSize: 11, color: Colors.primary[600] },
+  detailsButton: { alignSelf: 'flex-end', minHeight: 44, justifyContent: 'center' },
+  detailsText: { fontFamily: Typography.fontFamily, fontSize: 12, color: Colors.primary[600], textAlign: 'right' },
+  sectionTitleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7, flex: 1 },
+  countBadge: { fontSize: 12, color: Colors.primary[600], backgroundColor: Colors.primary[100], paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.full },
+  newChatButton: { minHeight: 44, paddingHorizontal: 12, borderRadius: Radius.lg, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', gap: 5 },
+  newChatText: { fontFamily: Typography.fontFamily, fontSize: 12, color: Colors.onColor },
+  searchBox: { minHeight: 48, borderRadius: Radius.lg, paddingHorizontal: 12, borderWidth: 1, borderColor: Colors.neutral[800], backgroundColor: Colors.neutral[850], flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
+  searchInput: { flex: 1, minWidth: 0, minHeight: 46, fontFamily: Typography.fontFamily, fontSize: 14, color: Colors.neutral[0], textAlign: 'right' },
+  clearSearch: { minHeight: 44, justifyContent: 'center' },
+  noResults: { alignItems: 'center', paddingVertical: 28, gap: 8 },
+  errorText: { color: Colors.error[300], textAlign: 'right', fontSize: 13 },
   root: { flex: 1, backgroundColor: Colors.neutral[950] },
-  header: { paddingTop: 12, paddingBottom: Spacing.lg, paddingHorizontal: Spacing.lg, backgroundColor: Colors.neutral[900], borderBottomWidth: 1, borderBottomColor: Colors.neutral[800] },
+  header: { paddingTop: 16, paddingBottom: Spacing.lg, paddingHorizontal: Spacing.lg, backgroundColor: Colors.neutral[850], borderBottomWidth: 1, borderBottomColor: Colors.neutral[800] },
   headerTop: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   headerCopy: { flex: 1, alignItems: 'flex-end' },
   title: { fontFamily: Typography.fontFamily, fontSize: 26, fontWeight: Typography.weights.bold, color: Colors.neutral[0], textAlign: 'right' },
   subtitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Colors.neutral[400], textAlign: 'right', marginTop: 3 },
-  content: { padding: Spacing.md, paddingBottom: 28, gap: Spacing.md },
+  content: { padding: Spacing.md, paddingBottom: 32, gap: Spacing.md, width: '100%', maxWidth: 760, alignSelf: 'center' },
   sectionLabel: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[200], textAlign: 'right' },
   sectionRow: { marginTop: Spacing.sm, flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' },
   sectionHint: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[600] },
@@ -472,19 +511,19 @@ const styles = StyleSheet.create({
   realAvatarText: { fontSize: 25 },
   realContactText: { flex: 1 },
   realContactTop: { flexDirection: 'row-reverse', alignItems: 'center', gap: 7 },
-  realContactName: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
+  realContactName: { flex: 1, fontFamily: Typography.fontFamily, fontSize: Typography.sizes.md, fontWeight: Typography.weights.bold, color: Colors.neutral[100], textAlign: 'right' },
   contactLevelPill: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: Radius.full, borderWidth: 1 },
   contactLevelText: { fontFamily: Typography.latinFontFamily, fontSize: 10, fontWeight: '800', writingDirection: 'ltr' },
-  realContactStatus: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.success[400], textAlign: 'right', marginTop: 3 },
-  deleteContact: { width: 36, height: 36, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.error[500] + '10', borderWidth: 1, borderColor: Colors.error[500] + '25' },
+  realContactStatus: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.xs, color: Colors.neutral[400], textAlign: 'right', marginTop: 3 },
+  deleteContact: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.error[500] + '10', borderWidth: 1, borderColor: Colors.error[500] + '25' },
   addAnother: { minHeight: 44, borderRadius: Radius.lg, borderWidth: 1, borderColor: Colors.primary[500] + '35', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 6 },
   addAnotherText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Colors.primary[300] },
-  emptyContacts: { borderRadius: Radius.xl, padding: Spacing.xl, backgroundColor: Colors.neutral[900], borderWidth: 1, borderStyle: 'dashed', borderColor: Colors.neutral[700], alignItems: 'center' },
+  emptyContacts: { borderRadius: Radius.xl, padding: Spacing.xl, backgroundColor: Colors.neutral[900], borderWidth: 1, borderColor: Colors.neutral[800], alignItems: 'center' },
   peopleIcon: { width: 62, height: 62, borderRadius: 31, backgroundColor: Colors.primary[500] + '14', alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.md },
   emptyTitle: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.bold, color: Colors.neutral[200], textAlign: 'center' },
   emptyDesc: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, color: Colors.neutral[500], textAlign: 'center', lineHeight: 22, marginTop: 6 },
   inviteButton: { minHeight: 46, marginTop: Spacing.lg, paddingHorizontal: Spacing.xl, borderRadius: Radius.lg, backgroundColor: Colors.primary[500], flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 7, borderWidth: 2, borderColor: '#FFFFFF', shadowColor: '#1E1B4B', shadowOpacity: 0.28, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 6 },
-  supportButton: { minHeight: 48, marginTop: Spacing.lg, paddingHorizontal: Spacing.xl, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, borderWidth: 1, borderColor: '#E4E7EE', shadowColor: '#1E1B4B', shadowOpacity: 0.22, shadowRadius: 14, shadowOffset: { width: 0, height: 7 }, elevation: 7 },
+  supportButton: { minHeight: 48, marginTop: Spacing.lg, paddingHorizontal: Spacing.xl, borderRadius: Radius.lg, backgroundColor: '#FFFFFF', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'center', gap: 8, borderWidth: 1, borderColor: '#E4E7EE', shadowColor: '#1E1B4B', shadowOpacity: 0.04, shadowRadius: 14, shadowOffset: { width: 0, height: 7 }, elevation: 1 },
   supportText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: '#111111' },
   inviteText: { fontFamily: Typography.fontFamily, fontSize: Typography.sizes.sm, fontWeight: Typography.weights.bold, color: Colors.onColor },
   inviteMethods: { flexDirection: 'row-reverse', gap: Spacing.md, marginTop: Spacing.md },

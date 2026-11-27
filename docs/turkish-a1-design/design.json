@@ -1,0 +1,3439 @@
+{
+  "language": "tr",
+  "date": "2026-11-26",
+  "status": "proposal-not-runtime-content",
+  "variety": "Modern standard Istanbul Turkish; tr-TR",
+  "modules": {
+    "1": "ورود و ابزار یادگیری",
+    "2": "شخص، اسم و توصیف",
+    "3": "خانواده، مالکیت و وجود",
+    "4": "ریشه و فعل در پیام",
+    "5": "مکان، جهت و نقش اسم",
+    "6": "خواستن، توانایی و درخواست",
+    "7": "زمان و سازمان‌دهی روز",
+    "8": "خوراک، خرید و انتخاب",
+    "9": "تفریح و ارتباط اجتماعی",
+    "10": "مسیر و سفر",
+    "11": "درخواست، تماس و سلامت",
+    "12": "دلیل و گفت‌وگوی مرتبط"
+  },
+  "lessons": [
+    {
+      "id": "tr-l1-greetings",
+      "proposedIndex": 1,
+      "module": 1,
+      "preA1Ids": [
+        "tr-prea1-01-greetings",
+        "tr-prea1-10-first-conversation"
+      ],
+      "prerequisiteIds": [],
+      "outcomeFa": "احوال‌پرسی و خداحافظی مناسب را بدون تقلید انتخاب کنم.",
+      "grammarFa": "Merhaba، Nasılsın? و İyiyim؛ خطاب دوستانه در صحنه؛ Nasılsınız? در تمرین رسمی جدا.",
+      "vocabularyFa": "merhaba=سلام؛ iyi=خوب؛ teşekkürler=ممنون؛ görüşürüz=می‌بینمت",
+      "outOfScopeAndErrorFa": "هدف فراتر از تکرار Pre-A1 است؛ sen و siz در یک صحنه بی‌دلیل عوض نشوند.",
+      "pronunciationFa": "ı/i و o/ö و u/ü و نیز c/ç، s/ş با واژهٔ آشنا شنیده شوند؛ ğ را همیشه g نخوان. فارسی‌نویسی جای صوت معتبر نیست.",
+      "productionFa": "یک احوال‌پرسی دوستانهٔ کوتاه و یک سلام رسمی جدا بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Merhaba, Sara. Nasılsın?",
+          "fa": "سلام، سارا. حالت چطور است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "İyiyim, teşekkürler. Sen nasılsın?",
+          "fa": "خوبم، ممنون. تو چطوری؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Ben de iyiyim. Akşam görüşürüz.",
+          "fa": "من هم خوبم. عصر می‌بینمت."
+        },
+        {
+          "role": "learner",
+          "tr": "Görüşürüz, Ece.",
+          "fa": "می‌بینمت، اجه."
+        }
+      ],
+      "listening": {
+        "passage": "Merhaba, Mert. İyiyim, teşekkürler. Yarın görüşürüz.",
+        "questionFa": "خداحافظی تا چه زمانی است؟",
+        "answer": "yarın"
+      },
+      "reading": {
+        "passage": "Günaydın, Ayşe Hanım. İyi akşamlar, Ayşe Hanım.",
+        "questionFa": "مخاطب با کدام نام و خطاب آمده است؟",
+        "answer": "Ayşe Hanım"
+      },
+      "transferToIds": [
+        "tr-l1-alphabet-pronunciation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از سلام و پاسخ کوتاه Pre-A1 بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-alphabet-pronunciation",
+      "proposedIndex": 2,
+      "module": 1,
+      "preA1Ids": [
+        "tr-prea1-01-greetings",
+        "tr-prea1-10-home-and-everyday-objects",
+        "tr-prea1-11-personal-details-and-languages"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-greetings"
+      ],
+      "outcomeFa": "نام را هجی و چند صدای دشوار را در واژهٔ آشنا تشخیص بدهم.",
+      "grammarFa": "الفبای ۲۹حرفی؛ I/ı در برابر İ/i؛ واژه‌های کوتاه su، süt، çay؛ Adım قالب بازیابی است.",
+      "vocabularyFa": "ad=نام؛ harf=حرف؛ su=آب؛ süt=شیر",
+      "outOfScopeAndErrorFa": "جملهٔ سنگین Öğretmen sınıfta konuşuyor لازم نیست؛ نام حروف و واج یکی نیست. هجی بدون صوت تأییدشده کامل نیست.",
+      "pronunciationFa": "ı/i و o/ö و u/ü و نیز c/ç، s/ş با واژهٔ آشنا شنیده شوند؛ ğ را همیشه g نخوان. فارسی‌نویسی جای صوت معتبر نیست.",
+      "productionFa": "نام خیالی را هجی کن و دو جفت حرف/واژهٔ دشوار برای تمرین انتخاب کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Adın ne?",
+          "fa": "نامت چیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Adım Ece. E–C–E.",
+          "fa": "نامم اجه است. اِ، جِه، اِ."
+        },
+        {
+          "role": "partner",
+          "tr": "Teşekkürler, Ece.",
+          "fa": "ممنون، اجه."
+        }
+      ],
+      "listening": {
+        "passage": "Adım Ali. A–L–İ.",
+        "questionFa": "نام چگونه هجی شده است؟",
+        "answer": "A–L–İ"
+      },
+      "reading": {
+        "passage": "su — süt — çay",
+        "questionFa": "کدام واژه به معنی شیر است؟",
+        "answer": "süt"
+      },
+      "transferToIds": [
+        "tr-l2-asking-help-problems"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-greetings بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-asking-help-problems",
+      "proposedIndex": 3,
+      "module": 1,
+      "preA1Ids": [
+        "tr-prea1-polite-requests-and-directions",
+        "tr-prea1-08-simple-questions",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-alphabet-pronunciation"
+      ],
+      "outcomeFa": "برای تکرار، آهسته‌گویی و روشن‌کردن معنی کمک بخواهم.",
+      "grammarFa": "Tekrar eder misiniz? و Yavaş konuşur musunuz? قالب‌های رسمی؛ Anlamıyorum قالب ضروری، تحلیل منفی بعداً.",
+      "vocabularyFa": "yavaş=آهسته؛ tekrar=دوباره؛ kelime=واژه؛ anlamıyorum=نمی‌فهمم",
+      "outOfScopeAndErrorFa": "همهٔ زمان‌ها و وجه‌های داخل قالب ادب در این درس صرف نشوند؛ مشکل و پاسخ کمک با هم مرتبط بمانند.",
+      "pronunciationFa": "ı/i و o/ö و u/ü و نیز c/ç، s/ş با واژهٔ آشنا شنیده شوند؛ ğ را همیشه g نخوان. فارسی‌نویسی جای صوت معتبر نیست.",
+      "productionFa": "دو درخواست رسمی و یک تشکر پس از دریافت کمک بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Affedersiniz, bu kelimeyi anlamıyorum.",
+          "fa": "ببخشید، این واژه را نمی‌فهمم."
+        },
+        {
+          "role": "learner",
+          "tr": "Tekrar ediyorum: merhaba.",
+          "fa": "دوباره می‌گویم: سلام."
+        },
+        {
+          "role": "partner",
+          "tr": "Yavaş konuşur musunuz?",
+          "fa": "می‌شود آهسته صحبت کنید؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Tabii. Merhaba.",
+          "fa": "حتماً. سلام."
+        }
+      ],
+      "listening": {
+        "passage": "Anlamıyorum. Tekrar eder misiniz, lütfen?",
+        "questionFa": "درخواست گوینده چیست؟",
+        "answer": "تکرارکردن"
+      },
+      "reading": {
+        "passage": "Yavaş konuşun, lütfen. Teşekkürler.",
+        "questionFa": "نویسنده چه درخواستی دارد؟",
+        "answer": "آهسته صحبت‌کردن"
+      },
+      "transferToIds": [
+        "tr-l1-introductions",
+        "tr-l2-asking-info-forms"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-alphabet-pronunciation بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-introductions",
+      "proposedIndex": 4,
+      "module": 1,
+      "preA1Ids": [
+        "tr-prea1-introduction-chunks",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-asking-help-problems"
+      ],
+      "outcomeFa": "نام خود و یک هم‌کلاسی را بگویم و بپرسم.",
+      "grammarFa": "Adım/Adın و Ben …؛ Bu … در معرفی؛ جملهٔ اسمی بدون فعل مستقل معتبر است.",
+      "vocabularyFa": "adım=نامم؛ arkadaş=دوست/هم‌کلاسی؛ memnun oldum=خوشوقتم",
+      "outOfScopeAndErrorFa": "پسوند شخصی و ملیت فعلاً در حد قالب آشنا؛ سن، شغل و نشانی با هم انباشته نشوند.",
+      "pronunciationFa": "ı/i و o/ö و u/ü و نیز c/ç، s/ş با واژهٔ آشنا شنیده شوند؛ ğ را همیشه g نخوان. فارسی‌نویسی جای صوت معتبر نیست.",
+      "productionFa": "خودت و یک هم‌کلاسی خیالی را در سه جمله معرفی کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Merhaba, adım Ece. Senin adın ne?",
+          "fa": "سلام، نامم اجه است. نام تو چیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Adım Sara. Memnun oldum.",
+          "fa": "نامم سارا است. از آشنایی خوشوقتم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ben de memnun oldum. Bu Mert.",
+          "fa": "من هم خوشوقتم. این مرت است."
+        },
+        {
+          "role": "learner",
+          "tr": "Merhaba, Mert.",
+          "fa": "سلام، مرت."
+        }
+      ],
+      "listening": {
+        "passage": "Merhaba, adım Deniz. Bu arkadaşım Ece.",
+        "questionFa": "نام گوینده چیست؟",
+        "answer": "Deniz"
+      },
+      "reading": {
+        "passage": "Ben Sara. Bu Mert.",
+        "questionFa": "چه کسی معرفی شده است؟",
+        "answer": "Mert"
+      },
+      "transferToIds": [
+        "tr-l1-vowel-harmony",
+        "tr-l2-social-situations"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-asking-help-problems بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-vowel-harmony",
+      "proposedIndex": 5,
+      "module": 1,
+      "preA1Ids": [
+        "tr-prea1-05-first-word-pairs",
+        "tr-prea1-introduction-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-introductions"
+      ],
+      "outcomeFa": "با آخرین واکه، دو انتخاب پسوند پربسامد را تشخیص بدهم.",
+      "grammarFa": "دوگانه a/ı/o/u→a و e/i/ö/ü→e در -lar/-ler؛ چهارگانه a/ı→ı، e/i→i، o/u→u، ö/ü→ü در نمونه‌های محدود.",
+      "vocabularyFa": "ev/evler=خانه/خانه‌ها؛ kitap/kitaplar=کتاب/کتاب‌ها؛ adım=نامم",
+      "outOfScopeAndErrorFa": "این قواعد پیش‌تر در Pre-A1 اشاره شده‌اند؛ اینجا کاربرد روشن می‌شود، نه نظریهٔ کامل همهٔ پسوندها. وام‌واژه‌ها استثنا دارند.",
+      "pronunciationFa": "ı/i و o/ö و u/ü و نیز c/ç، s/ş با واژهٔ آشنا شنیده شوند؛ ğ را همیشه g نخوان. فارسی‌نویسی جای صوت معتبر نیست.",
+      "productionFa": "چهار واژهٔ آشنا را در دو گروه پسوند و دو مثال نام/نامت دسته‌بندی کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ev, evler. Kitap, kitaplar.",
+          "fa": "خانه، خانه‌ها. کتاب، کتاب‌ها."
+        },
+        {
+          "role": "learner",
+          "tr": "Evler, kitaplar.",
+          "fa": "خانه‌ها، کتاب‌ها."
+        },
+        {
+          "role": "partner",
+          "tr": "Evet. Adım, adın.",
+          "fa": "بله. نامم، نامت."
+        }
+      ],
+      "listening": {
+        "passage": "Bir ev, iki ev. Evler burada.",
+        "questionFa": "جمعِ ev در متن چیست؟",
+        "answer": "evler"
+      },
+      "reading": {
+        "passage": "kitap → kitaplar; gün → günler",
+        "questionFa": "کدام صورت جمعِ gün است؟",
+        "answer": "günler"
+      },
+      "transferToIds": [
+        "tr-l1-word-order",
+        "tr-l1-nominal-sentences",
+        "tr-l1-singular-plural",
+        "tr-l1-possession-suffixes",
+        "tr-l1-infinitive-verb-stem",
+        "tr-l1-locative-case"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-introductions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-word-order",
+      "proposedIndex": 6,
+      "module": 1,
+      "preA1Ids": [
+        "tr-prea1-07-first-short-sentences",
+        "tr-prea1-06-verb-chunks",
+        "tr-prea1-descriptions-and-family"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-vowel-harmony"
+      ],
+      "outcomeFa": "ترتیب خنثای پیام کوتاه را با واژه‌های آشنا بسازم.",
+      "grammarFa": "در الگوی پایه فاعل–مفعول–فعل: Ben çay içiyorum؛ در جملهٔ اسمی Ben Ece؛ ضمیرِ روشن قابل حذف است.",
+      "vocabularyFa": "ben=من؛ çay=چای؛ içiyorum=می‌نوشم؛ burada=اینجا",
+      "outOfScopeAndErrorFa": "SOV تنها ترتیب مجاز ترکی نیست؛ اینجا الگوی خنثای آموزشی است. içiyorum قالب آشناست و صرفش بعداً تحلیل می‌شود.",
+      "pronunciationFa": "ı/i و o/ö و u/ü و نیز c/ç، s/ş با واژهٔ آشنا شنیده شوند؛ ğ را همیشه g نخوان. فارسی‌نویسی جای صوت معتبر نیست.",
+      "productionFa": "دو پیام اسمی و دو پیام فعلی کوتاه را مرتب کن و بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ben çay içiyorum.",
+          "fa": "من چای می‌نوشم."
+        },
+        {
+          "role": "learner",
+          "tr": "Ben de çay içiyorum.",
+          "fa": "من هم چای می‌نوشم."
+        },
+        {
+          "role": "partner",
+          "tr": "Güzel. Birlikte çay içiyoruz.",
+          "fa": "خوب است. با هم چای می‌نوشیم."
+        }
+      ],
+      "listening": {
+        "passage": "Ben kitap okuyorum. Ece çay içiyor.",
+        "questionFa": "چه کسی کتاب می‌خواند؟",
+        "answer": "گوینده"
+      },
+      "reading": {
+        "passage": "Ben Sara. Buradayım.",
+        "questionFa": "نویسنده خود را با چه نامی معرفی می‌کند؟",
+        "answer": "Sara"
+      },
+      "transferToIds": [
+        "tr-l1-personal-pronouns",
+        "tr-l1-simple-verbal-sentences"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-vowel-harmony بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-personal-pronouns",
+      "proposedIndex": 7,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-02-how-are-you",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-word-order"
+      ],
+      "outcomeFa": "مرجع شخص و خطاب sen/siz را تشخیص بدهم.",
+      "grammarFa": "ben/sen/o/biz/siz/onlar؛ o جنسیت نمی‌دهد؛ siz جمع یا ادب؛ ضمیر در مرجع روشن می‌تواند حذف شود.",
+      "vocabularyFa": "biz=ما؛ siz=شما؛ onlar=آن‌ها؛ o=او/آن",
+      "outOfScopeAndErrorFa": "او را به مذکر/مؤنث اروپایی تقسیم نکن؛ حذف ضمیر به معنی حذف شناسهٔ لازم نیست.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "سه شخص و یک گروه خیالی را معرفی کن و مرجع ضمیر را روشن نگه دار.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Siz öğrenci misiniz?",
+          "fa": "شما دانشجو هستید؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, biz öğrenciyiz. Bu Ece.",
+          "fa": "بله، ما دانشجو هستیم. این اجه است."
+        },
+        {
+          "role": "partner",
+          "tr": "Memnun oldum, Ece.",
+          "fa": "از آشنایی خوشوقتم، اجه."
+        }
+      ],
+      "listening": {
+        "passage": "Ece ve ben buradayız. Mert evde.",
+        "questionFa": "چه کسانی اینجا هستند؟",
+        "answer": "Ece و گوینده"
+      },
+      "reading": {
+        "passage": "Bu Ece. O Türkçe öğreniyor.",
+        "questionFa": "o به چه کسی برمی‌گردد؟",
+        "answer": "Ece"
+      },
+      "transferToIds": [
+        "tr-l1-nominal-sentences"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-word-order بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-nominal-sentences",
+      "proposedIndex": 8,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-07-first-short-sentences",
+        "tr-prea1-descriptions-and-family",
+        "tr-prea1-08-simple-questions"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-personal-pronouns",
+        "tr-l1-vowel-harmony"
+      ],
+      "outcomeFa": "هویت را در جملهٔ اسمی مثبت، منفی و پرسشی بیان کنم.",
+      "grammarFa": "öğrenciyim/öğrencisin؛ o öğrenci؛ değilim؛ öğrenci misin?؛ y میانجی در öğrenciyim و جزء پرسشی جدا.",
+      "vocabularyFa": "öğrenci=دانشجو؛ öğretmen=معلم؛ değil=نیست؛ arkadaş=دوست",
+      "outOfScopeAndErrorFa": "-dır اجباری نیست؛ همهٔ شش شخص در هشت ردیف هدف تولیدی هم‌زمان نشوند. nominal negation با فعل منفی فرق دارد.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "دو هویت خیالی را با یک نفی و یک پرسش معرفی کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Öğrenci misin?",
+          "fa": "دانشجو هستی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, öğrenciyim. Sen öğretmen misin?",
+          "fa": "بله، دانشجو هستم. تو معلم هستی؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Hayır, öğretmen değilim. Ben de öğrenciyim.",
+          "fa": "نه، معلم نیستم. من هم دانشجو هستم."
+        },
+        {
+          "role": "learner",
+          "tr": "Güzel, biz arkadaşız.",
+          "fa": "خوب است، ما دوست هستیم."
+        }
+      ],
+      "listening": {
+        "passage": "Ben öğretmenim. Ece öğrenci.",
+        "questionFa": "اجه چه‌کاره است؟",
+        "answer": "öğrenci"
+      },
+      "reading": {
+        "passage": "Mert öğretmen değil. Öğrenci.",
+        "questionFa": "مرت معلم است؟",
+        "answer": "خیر"
+      },
+      "transferToIds": [
+        "tr-l1-nationality-language-residence",
+        "tr-l2-feelings-daily-states"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-personal-pronouns، tr-l1-vowel-harmony بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-nationality-language-residence",
+      "proposedIndex": 9,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-11-personal-details-and-languages",
+        "tr-prea1-introduction-chunks",
+        "tr-prea1-09-places"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-nominal-sentences"
+      ],
+      "outcomeFa": "کشور، زبان و شهر زندگی را متمایز بیان کنم.",
+      "grammarFa": "İranlıyım/Türküm در نمونهٔ محدود؛ Farsça/Türkçe konuşuyorum؛ Ankara’da yaşıyorum در قالب مکانیِ بازیابی‌شونده.",
+      "vocabularyFa": "İran=ایران؛ Türkiye=ترکیه؛ Türkçe=ترکی؛ Farsça=فارسی",
+      "outOfScopeAndErrorFa": "ملیت و زبان یکی نیستند؛ شکل‌های نام کشور و پسوندِ نام خاص با آپاستروف درست نوشته شوند؛ همهٔ ملیت‌ها لازم نیست.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "نام، مبدأ، شهر و زبان یک شخصیت خیالی را در چهار جمله بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Nerelisin?",
+          "fa": "اهل کجایی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "İranlıyım. Ankara’da yaşıyorum.",
+          "fa": "ایرانی هستم. در آنکارا زندگی می‌کنم."
+        },
+        {
+          "role": "partner",
+          "tr": "Türkçe konuşuyor musun?",
+          "fa": "ترکی صحبت می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Biraz. Farsça da konuşuyorum.",
+          "fa": "کمی. فارسی هم صحبت می‌کنم."
+        }
+      ],
+      "listening": {
+        "passage": "Ben Türküm. Türkçe ve biraz Farsça konuşuyorum.",
+        "questionFa": "کدام زبان را کمی صحبت می‌کند؟",
+        "answer": "Farsça"
+      },
+      "reading": {
+        "passage": "Ece Ankara’da yaşıyor. Mert İzmir’de yaşıyor.",
+        "questionFa": "اجه کجا زندگی می‌کند؟",
+        "answer": "Ankara"
+      },
+      "transferToIds": [
+        "tr-l1-numbers-age-info"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-nominal-sentences بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-numbers-age-info",
+      "proposedIndex": 10,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-05-numbers-zero-to-seven",
+        "tr-prea1-06-numbers-eight-to-ten-weekdays",
+        "tr-prea1-introduction-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-nationality-language-residence"
+      ],
+      "outcomeFa": "سن، تعداد و یک شمارهٔ خیالی کوتاه را بفهمم.",
+      "grammarFa": "۰ تا ۱۰۰ در گروه‌ها؛ on bir، yirmi üç؛ Kaç yaşındasın? / yirmi yaşındayım در قالب؛ عدد+اسم مفرد.",
+      "vocabularyFa": "yaş=سن؛ numara=شماره؛ on=ده؛ yirmi=بیست",
+      "outOfScopeAndErrorFa": "همهٔ ۰ تا ۱۰۰ در هشت ردیف، تسلط‌شده فرض نشوند؛ جدول/بازیابی در واژگان با همین ظرفیت، بدون افزودن شناسه لازم است.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "سن و یک شمارهٔ چهاررقمی خیالی بنویس؛ دو عدد ترکیبی هم بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Kaç yaşındasın?",
+          "fa": "چند سال داری؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Yirmi üç yaşındayım.",
+          "fa": "بیست‌وسه سال دارم."
+        },
+        {
+          "role": "partner",
+          "tr": "Teşekkürler.",
+          "fa": "ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Adım Mert. Otuz iki yaşındayım.",
+        "questionFa": "مرت چند سال دارد؟",
+        "answer": "32"
+      },
+      "reading": {
+        "passage": "Ad: Sara. Yaş: 24. Numara: 0312.",
+        "questionFa": "سن سارا چند است؟",
+        "answer": "24"
+      },
+      "transferToIds": [
+        "tr-l1-singular-plural",
+        "tr-l1-family",
+        "tr-l1-ordinals-time-date",
+        "tr-l2-shopping-price-payment"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-nationality-language-residence بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-singular-plural",
+      "proposedIndex": 11,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-05-first-word-pairs",
+        "tr-prea1-05-numbers-zero-to-seven",
+        "tr-prea1-10-home-and-everyday-objects"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-numbers-age-info",
+        "tr-l1-vowel-harmony"
+      ],
+      "outcomeFa": "اسم مفرد، جمع و تعداد مشخص را از هم جدا کنم.",
+      "grammarFa": "-lar/-ler؛ kitaplar/evler؛ بعد از عدد عادی اسم مفرد: iki kitap، نه iki kitaplar.",
+      "vocabularyFa": "kitap=کتاب؛ ev=خانه؛ kalem=خودکار؛ defter=دفتر",
+      "outOfScopeAndErrorFa": "جنس دستوری و حرف تعریف اروپایی به اسم ترکی تحمیل نشود؛ جمع انسان و تطابق فعل در این درس کامل تحلیل نمی‌شود.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "سه جفت مفرد/جمع و دو عبارت عدد+اسم بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bunlar ne?",
+          "fa": "این‌ها چه هستند؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Kitaplar.",
+          "fa": "کتاب‌ها هستند."
+        },
+        {
+          "role": "partner",
+          "tr": "Kaç kitap var?",
+          "fa": "چند کتاب هست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Üç kitap var.",
+          "fa": "سه کتاب هست."
+        }
+      ],
+      "listening": {
+        "passage": "İki kitap ve üç kalem var.",
+        "questionFa": "چند خودکار هست؟",
+        "answer": "üç"
+      },
+      "reading": {
+        "passage": "bir ev — evler; iki kitap",
+        "questionFa": "کدام عبارت به تعداد دو کتاب اشاره می‌کند؟",
+        "answer": "iki kitap"
+      },
+      "transferToIds": [
+        "tr-l1-demonstratives"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-numbers-age-info، tr-l1-vowel-harmony بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-demonstratives",
+      "proposedIndex": 12,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-14-question-and-connecting-words",
+        "tr-prea1-08-simple-questions",
+        "tr-prea1-05-first-word-pairs"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-singular-plural"
+      ],
+      "outcomeFa": "به شیء نزدیک و دور اشاره کنم و نام آن را بپرسم.",
+      "grammarFa": "bu/şu/o و bunlar/şunlar/onlar؛ در bu kitap اسم بی‌جهت جمع نمی‌شود؛ Bu ne? قالب آشنا.",
+      "vocabularyFa": "bu=این؛ şu=آنِ مورد اشاره؛ o=آن؛ bunlar=این‌ها",
+      "outOfScopeAndErrorFa": "نزدیکی/توجه مخاطب با تصویر روشن شود؛ bu کتاب و bu bir kitap هر دو بسته به پیام معتبرند.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "چهار اشاره با یک تصویر خیالی و دو پرسش اسم بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu ne?",
+          "fa": "این چیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Bu bir defter.",
+          "fa": "این یک دفتر است."
+        },
+        {
+          "role": "partner",
+          "tr": "Şu da defter mi?",
+          "fa": "آن هم دفتر است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, o bir kitap.",
+          "fa": "نه، آن یک کتاب است."
+        }
+      ],
+      "listening": {
+        "passage": "Bu kitap yeni. Şu çanta mavi.",
+        "questionFa": "کدام شیء آبی است؟",
+        "answer": "şu çanta"
+      },
+      "reading": {
+        "passage": "Bunlar kitap. Şunlar kalem.",
+        "questionFa": "کدام ضمیر به خودکارها اشاره می‌کند؟",
+        "answer": "şunlar"
+      },
+      "transferToIds": [
+        "tr-l1-describing-things"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-singular-plural بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-describing-things",
+      "proposedIndex": 13,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-04-adjectives-and-adverbs",
+        "tr-prea1-descriptions-and-family"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-demonstratives"
+      ],
+      "outcomeFa": "شیء یا اتاق را با ویژگی ساده توصیف کنم.",
+      "grammarFa": "صفت پیش از اسم: küçük ev؛ در گزاره Ev küçük؛ صفت با جنس یا جمع صرف نمی‌شود.",
+      "vocabularyFa": "küçük=کوچک؛ büyük=بزرگ؛ yeni=نو؛ sessiz=آرام",
+      "outOfScopeAndErrorFa": "قانون صفت مؤنث/جمع اسپانیایی وارد ترکی نشود؛ جملهٔ کوتاه بدون فعل مستقل ناقص نیست.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "دو شیء و یک اتاق خیالی را با سه صفت توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu ev büyük mü?",
+          "fa": "این خانه بزرگ است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, küçük.",
+          "fa": "نه، کوچک است."
+        },
+        {
+          "role": "partner",
+          "tr": "Güzel bir ev mi?",
+          "fa": "خانهٔ زیبایی است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, güzel ve sessiz.",
+          "fa": "بله، زیبا و آرام است."
+        }
+      ],
+      "listening": {
+        "passage": "Çanta küçük. Masa büyük.",
+        "questionFa": "میز چه اندازه‌ای است؟",
+        "answer": "büyük"
+      },
+      "reading": {
+        "passage": "Yeni kitap. Küçük oda.",
+        "questionFa": "چه چیزی کوچک است؟",
+        "answer": "oda"
+      },
+      "transferToIds": [
+        "tr-l1-colors-shapes-appearance"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-demonstratives بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-colors-shapes-appearance",
+      "proposedIndex": 14,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-04-adjectives-and-adverbs",
+        "tr-prea1-05-first-word-pairs"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-describing-things"
+      ],
+      "outcomeFa": "رنگ و یک شکل ساده را بپرسم و توصیف کنم.",
+      "grammarFa": "Ne renk?؛ kırmızı çanta / çanta kırmızı؛ رنگ/صفت بدون تطابق جنس/شمار؛ yuvarlak در یک نمونه.",
+      "vocabularyFa": "mavi=آبی؛ kırmızı=قرمز؛ beyaz=سفید؛ yuvarlak=گرد",
+      "outOfScopeAndErrorFa": "عنوان گستردهٔ ظاهر به معنی تدریس همهٔ شکل‌ها و ویژگی‌های بدن در هشت ردیف نیست؛ دامنه محدود بماند.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "سه وسیله را با رنگ و یکی را با شکل توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Çantan ne renk?",
+          "fa": "کیفت چه رنگی است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Mavi.",
+          "fa": "آبی است."
+        },
+        {
+          "role": "partner",
+          "tr": "Bu kırmızı çanta senin mi?",
+          "fa": "این کیف قرمز مال تو است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, benim çantam mavi.",
+          "fa": "نه، کیف من آبی است."
+        }
+      ],
+      "listening": {
+        "passage": "Defter yeşil. Kalem siyah.",
+        "questionFa": "دفتر چه رنگی است؟",
+        "answer": "yeşil"
+      },
+      "reading": {
+        "passage": "Beyaz kitap ve yuvarlak masa.",
+        "questionFa": "چه چیزی گرد است؟",
+        "answer": "masa"
+      },
+      "transferToIds": [
+        "tr-l2-feelings-daily-states",
+        "tr-l2-clothes-shopping"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-describing-things بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-feelings-daily-states",
+      "proposedIndex": 15,
+      "module": 2,
+      "preA1Ids": [
+        "tr-prea1-descriptions-and-family",
+        "tr-prea1-09-needs-and-places"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-colors-shapes-appearance",
+        "tr-l1-nominal-sentences"
+      ],
+      "outcomeFa": "حالت، گرسنگی و تشنگی را با شناسهٔ شخصی بگویم.",
+      "grammarFa": "iyiyim/yorgunum/açım/susadım در قالب‌های محدود؛ در ترکی جنسیت دستوری در این صفت‌ها پسوند جدا نمی‌گیرد.",
+      "vocabularyFa": "yorgun=خسته؛ aç=گرسنه؛ susadım=تشنه‌ام؛ mutlu=خوشحال",
+      "outOfScopeAndErrorFa": "susadım از نظر صرف گذشته است اما در این پیام حالت تشنگی را می‌رساند؛ از آن جدول گذشته نساز.",
+      "pronunciationFa": "پسوند شخصی و جزء جداگانهٔ mı/mi/mu/mü با واژهٔ کامل شنیده شوند؛ جنس دستوری به فارسی/اروپایی قیاس نشود.",
+      "productionFa": "دو شخصیت خیالی را با حالت و یک نیاز ساده توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Nasılsın, Sara?",
+          "fa": "سارا، حالت چطور است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Yorgunum ve susadım.",
+          "fa": "خسته‌ام و تشنه‌ام."
+        },
+        {
+          "role": "partner",
+          "tr": "Su ister misin?",
+          "fa": "آب می‌خواهی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, lütfen.",
+          "fa": "بله، لطفاً."
+        }
+      ],
+      "listening": {
+        "passage": "Ece mutlu. Mert aç.",
+        "questionFa": "چه کسی گرسنه است؟",
+        "answer": "Mert"
+      },
+      "reading": {
+        "passage": "Sara yorgun. Su istiyor.",
+        "questionFa": "سارا چه می‌خواهد؟",
+        "answer": "su"
+      },
+      "transferToIds": [
+        "tr-l1-family",
+        "tr-l2-weather",
+        "tr-l2-doctor-symptoms"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-colors-shapes-appearance، tr-l1-nominal-sentences بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-family",
+      "proposedIndex": 16,
+      "module": 3,
+      "preA1Ids": [
+        "tr-prea1-08-family-and-relations",
+        "tr-prea1-descriptions-and-family"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-feelings-daily-states",
+        "tr-l1-numbers-age-info"
+      ],
+      "outcomeFa": "اعضای خانواده را با نام و یک سن معرفی کنم.",
+      "grammarFa": "annem/babam در بازیابی Pre-A1؛ kardeşim؛ adı؛ این‌ها مقدمهٔ تحلیل پسوند ملکی در درس بعدند.",
+      "vocabularyFa": "anne=مادر؛ baba=پدر؛ kardeş=خواهر/برادر؛ aile=خانواده",
+      "outOfScopeAndErrorFa": "kardeş جنسیت را مشخص نمی‌کند؛ برای مثال لازم kız kardeş/erkek kardeş روشن شود؛ اطلاعات واقعی اجباری نیست.",
+      "pronunciationFa": "تفاوت adım/adın و kitabım/kitabın؛ نرم‌شدن همخوان فقط در مثال معرفی‌شده، نه قانون بی‌استثنا. var/yok در پیام کوتاه شنیده شوند.",
+      "productionFa": "یک خانوادهٔ خیالی سه‌نفره را با نام و یک سن معرفی کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu kim?",
+          "fa": "این کیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Bu kız kardeşim. Adı Ece.",
+          "fa": "این خواهرم است. نامش اجه است."
+        },
+        {
+          "role": "partner",
+          "tr": "Kaç yaşında?",
+          "fa": "چند سال دارد؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Yirmi yaşında.",
+          "fa": "بیست سال دارد."
+        }
+      ],
+      "listening": {
+        "passage": "Erkek kardeşimin adı Mert. On iki yaşında.",
+        "questionFa": "برادر گوینده چند سال دارد؟",
+        "answer": "12"
+      },
+      "reading": {
+        "passage": "Bu annem. Adı Ayşe.",
+        "questionFa": "نام مادر چیست؟",
+        "answer": "Ayşe"
+      },
+      "transferToIds": [
+        "tr-l1-possession-suffixes"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-feelings-daily-states، tr-l1-numbers-age-info بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-possession-suffixes",
+      "proposedIndex": 17,
+      "module": 3,
+      "preA1Ids": [
+        "tr-prea1-introduction-chunks",
+        "tr-prea1-descriptions-and-family",
+        "tr-prea1-10-home-and-everyday-objects"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-family",
+        "tr-l1-vowel-harmony"
+      ],
+      "outcomeFa": "صاحب وسیله را با پسوند ملکی و یک ترکیب ساده روشن کنم.",
+      "grammarFa": "benim kitabım / senin kitabın؛ onun kitabı؛ p→b فقط در kitap→kitabım/kitabı؛ Ayşe’nin kitabı نمونهٔ محدود.",
+      "vocabularyFa": "benim=مال من؛ senin=مال تو؛ kitabım=کتابم؛ çantam=کیفم",
+      "outOfScopeAndErrorFa": "جدول کامل شش شخص و تمام تغییر همخوان در هشت ردیف جا نمی‌گیرد؛ ریشه و پسوند مرحله‌ای جدا شوند.",
+      "pronunciationFa": "تفاوت adım/adın و kitabım/kitabın؛ نرم‌شدن همخوان فقط در مثال معرفی‌شده، نه قانون بی‌استثنا. var/yok در پیام کوتاه شنیده شوند.",
+      "productionFa": "سه وسیله را به دو شخصیت نسبت بده و یک پرسش مالکیت بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu senin kitabın mı?",
+          "fa": "این کتاب تو است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, benim kitabım.",
+          "fa": "بله، کتاب من است."
+        },
+        {
+          "role": "partner",
+          "tr": "Güzel. Bu da benim defterim.",
+          "fa": "خوب است. این هم دفتر من است."
+        }
+      ],
+      "listening": {
+        "passage": "Bu Ece’nin çantası. Çanta mavi.",
+        "questionFa": "صاحب کیف چه کسی است؟",
+        "answer": "Ece"
+      },
+      "reading": {
+        "passage": "Benim kitabım yeni. Senin kitabın eski.",
+        "questionFa": "کتاب چه کسی نو است؟",
+        "answer": "گوینده"
+      },
+      "transferToIds": [
+        "tr-l1-var-yok",
+        "tr-l1-accusative-case",
+        "tr-l1-postpositions-spatial"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-family، tr-l1-vowel-harmony بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-var-yok",
+      "proposedIndex": 18,
+      "module": 3,
+      "preA1Ids": [
+        "tr-prea1-08-simple-questions",
+        "tr-prea1-10-home-and-everyday-objects"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-possession-suffixes"
+      ],
+      "outcomeFa": "وجود، نبودن و داشتن وسیله را از هم تشخیص بدهم.",
+      "grammarFa": "Masada kitap var / yok؛ Benim kitabım var برای داشتن؛ soru var mı?؛ var با جمع شکل تازه نمی‌گیرد.",
+      "vocabularyFa": "var=هست؛ yok=نیست؛ masa=میز؛ anahtar=کلید",
+      "outOfScopeAndErrorFa": "yok با değil یکی نیست؛ var/yok همیشه معادلِ داشتنِ فارسی نیست، زمینه مهم است.",
+      "pronunciationFa": "تفاوت adım/adın و kitabım/kitabın؛ نرم‌شدن همخوان فقط در مثال معرفی‌شده، نه قانون بی‌استثنا. var/yok در پیام کوتاه شنیده شوند.",
+      "productionFa": "دو پیام وجود و نبودن و دو پیام داشتن/نداشتن بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Kalemin var mı?",
+          "fa": "خودکار داری؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, iki kalemim var.",
+          "fa": "بله، دو خودکار دارم."
+        },
+        {
+          "role": "partner",
+          "tr": "Bende kalem yok.",
+          "fa": "من خودکار ندارم."
+        }
+      ],
+      "listening": {
+        "passage": "Çantada kitap var, defter yok.",
+        "questionFa": "چه چیزی در کیف نیست؟",
+        "answer": "defter"
+      },
+      "reading": {
+        "passage": "Benim telefonum var. Anahtarım yok.",
+        "questionFa": "نویسنده چه چیزی ندارد؟",
+        "answer": "anahtar"
+      },
+      "transferToIds": [
+        "tr-l1-infinitive-verb-stem",
+        "tr-l2-home-furniture"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-possession-suffixes بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-infinitive-verb-stem",
+      "proposedIndex": 19,
+      "module": 4,
+      "preA1Ids": [
+        "tr-prea1-03-basic-verbs",
+        "tr-prea1-06-verb-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-var-yok",
+        "tr-l1-vowel-harmony"
+      ],
+      "outcomeFa": "مصدر آشنا را از ریشه و صورت شخص‌دار جدا تشخیص بدهم.",
+      "grammarFa": "-mak/-mek در gitmek/gelmek/okumak؛ ریشه git-/gel-/oku-؛ صرف در درس‌های بعد؛ حذف -mak همیشه همهٔ تغییرها را توضیح نمی‌دهد.",
+      "vocabularyFa": "gelmek=آمدن؛ gitmek=رفتن؛ okumak=خواندن؛ içmek=نوشیدن",
+      "outOfScopeAndErrorFa": "ساخت‌های سنگین اسم‌مصدر، جملهٔ موصولی و همهٔ نرم‌شدن‌ها هدف نیستند.",
+      "pronunciationFa": "بخش -yor و شناسهٔ شخصی، geliyorum/gelmiyorum و geliyor musun جدا تشخیص داده شوند؛ تکیه را از روی خط فارسی قطعی فرض نکن.",
+      "productionFa": "چهار مصدر آشنا و ریشهٔ آن‌ها را با معنی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Gelmek. Kökü ne?",
+          "fa": "آمدن. ریشه‌اش چیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Gel-.",
+          "fa": "گِل-."
+        },
+        {
+          "role": "partner",
+          "tr": "Evet. Okumak: oku-.",
+          "fa": "بله. خواندن: اوکو-."
+        }
+      ],
+      "listening": {
+        "passage": "Okumak, kitap okumak.",
+        "questionFa": "کدام مصدر به معنی خواندن است؟",
+        "answer": "okumak"
+      },
+      "reading": {
+        "passage": "gelmek → gel-; gitmek → git-",
+        "questionFa": "ریشهٔ gitmek چیست؟",
+        "answer": "git-"
+      },
+      "transferToIds": [
+        "tr-l1-simple-verbal-sentences"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-var-yok، tr-l1-vowel-harmony بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-simple-verbal-sentences",
+      "proposedIndex": 20,
+      "module": 4,
+      "preA1Ids": [
+        "tr-prea1-06-verb-chunks",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-infinitive-verb-stem",
+        "tr-l1-word-order"
+      ],
+      "outcomeFa": "با فاعل، مفعول نامعین و فعل یک پیام کوتاه بسازم.",
+      "grammarFa": "Ben kitap okuyorum / çay içiyorum؛ ضمیر قابل حذف؛ این درس نقش اجزا است، تحلیل صرف -yor درس بعد.",
+      "vocabularyFa": "kitap okumak=کتاب خواندن؛ çay içmek=چای نوشیدن؛ öğrenmek=یادگرفتن",
+      "outOfScopeAndErrorFa": "در جملهٔ خنثی فعل آخر است؛ این تنها ترتیب معتبر همهٔ بافت‌ها نیست. مفعول مشخص در درس حالت مفعولی می‌آید.",
+      "pronunciationFa": "بخش -yor و شناسهٔ شخصی، geliyorum/gelmiyorum و geliyor musun جدا تشخیص داده شوند؛ تکیه را از روی خط فارسی قطعی فرض نکن.",
+      "productionFa": "سه فعالیت با واژه‌های آشنا در سه جملهٔ کوتاه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ben kitap okuyorum.",
+          "fa": "من کتاب می‌خوانم."
+        },
+        {
+          "role": "learner",
+          "tr": "Ben çay içiyorum.",
+          "fa": "من چای می‌نوشم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ece de kitap okuyor.",
+          "fa": "اجه هم کتاب می‌خواند."
+        }
+      ],
+      "listening": {
+        "passage": "Ece kitap okuyor. Mert çay içiyor.",
+        "questionFa": "چه کسی چای می‌نوشد؟",
+        "answer": "Mert"
+      },
+      "reading": {
+        "passage": "Ben Türkçe öğreniyorum.",
+        "questionFa": "نویسنده چه زبانی یاد می‌گیرد؟",
+        "answer": "Türkçe"
+      },
+      "transferToIds": [
+        "tr-l1-present-continuous"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-infinitive-verb-stem، tr-l1-word-order بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-present-continuous",
+      "proposedIndex": 21,
+      "module": 4,
+      "preA1Ids": [
+        "tr-prea1-introduction-chunks",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-simple-verbal-sentences"
+      ],
+      "outcomeFa": "فعالیت اکنون را با -yor و شناسهٔ مناسب بگویم.",
+      "grammarFa": "gel-iyor-um، oku-yor-um؛ ben/sen/o در هدف تولیدی؛ چهار واکه پیش از -yor با چند ریشهٔ آشنا؛ gitmek→gidiyorum استثنای پربسامد.",
+      "vocabularyFa": "şimdi=اکنون؛ geliyorum=می‌آیم؛ okuyorum=می‌خوانم؛ gidiyorum=می‌روم",
+      "outOfScopeAndErrorFa": "-yor فقط برای همین ثانیه نیست؛ جدول همهٔ فعل‌ها/اشخاص در هشت ردیف فشرده نشود؛ yazıyorum با geliyorum فرق واکه دارد.",
+      "pronunciationFa": "بخش -yor و شناسهٔ شخصی، geliyorum/gelmiyorum و geliyor musun جدا تشخیص داده شوند؛ تکیه را از روی خط فارسی قطعی فرض نکن.",
+      "productionFa": "دو فعالیت اکنون و یک سؤال دربارهٔ فعالیت دوست بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Şimdi ne yapıyorsun?",
+          "fa": "الان چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Kitap okuyorum.",
+          "fa": "کتاب می‌خوانم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ben de Türkçe öğreniyorum.",
+          "fa": "من هم ترکی یاد می‌گیرم."
+        }
+      ],
+      "listening": {
+        "passage": "Şimdi çay içiyorum. Ece kitap okuyor.",
+        "questionFa": "گوینده الان چه می‌کند؟",
+        "answer": "çay içiyor"
+      },
+      "reading": {
+        "passage": "Ben geliyorum. Sen geliyorsun.",
+        "questionFa": "صورت فعل برای sen کدام است؟",
+        "answer": "geliyorsun"
+      },
+      "transferToIds": [
+        "tr-l1-common-verbs-present"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-simple-verbal-sentences بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-common-verbs-present",
+      "proposedIndex": 22,
+      "module": 4,
+      "preA1Ids": [
+        "tr-prea1-03-basic-verbs",
+        "tr-prea1-06-verb-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-present-continuous"
+      ],
+      "outcomeFa": "چند فعل پربسامد را با شخص و معنی درست استفاده کنم.",
+      "grammarFa": "yapıyorum/çalışıyorum/alıyorum/veriyorum؛ biz … -yoruz در بازیابی؛ شخص سوم بدون شناسهٔ اضافی در این نمونه‌ها.",
+      "vocabularyFa": "yapmak=انجام دادن؛ çalışmak=کار/مطالعه؛ almak=گرفتن/خریدن؛ vermek=دادن",
+      "outOfScopeAndErrorFa": "çalışmak با زمینه کار یا درس است؛ واژه‌های تازهٔ رزرو و غذاهای تخصصی بی‌دلیل وارد نشوند.",
+      "pronunciationFa": "بخش -yor و شناسهٔ شخصی، geliyorum/gelmiyorum و geliyor musun جدا تشخیص داده شوند؛ تکیه را از روی خط فارسی قطعی فرض نکن.",
+      "productionFa": "سه کار روزمره و یک کار مشترک با biz بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bugün ne yapıyorsun?",
+          "fa": "امروز چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Türkçe çalışıyorum.",
+          "fa": "ترکی درس می‌خوانم."
+        },
+        {
+          "role": "partner",
+          "tr": "Biz de Türkçe çalışıyoruz.",
+          "fa": "ما هم ترکی درس می‌خوانیم."
+        },
+        {
+          "role": "learner",
+          "tr": "Güzel, birlikte çalışıyoruz.",
+          "fa": "خوب است، با هم درس می‌خوانیم."
+        }
+      ],
+      "listening": {
+        "passage": "Ben ekmek alıyorum. Ece su içiyor.",
+        "questionFa": "گوینده چه می‌خرد؟",
+        "answer": "ekmek"
+      },
+      "reading": {
+        "passage": "Biz kitap okuyoruz. Mert çalışıyor.",
+        "questionFa": "چه کسی کار/مطالعه می‌کند؟",
+        "answer": "Mert"
+      },
+      "transferToIds": [
+        "tr-l1-affirmative-negative-interrogative",
+        "tr-l1-dative-case",
+        "tr-l2-work-study-talk",
+        "tr-l2-recent-past-basics"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-present-continuous بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-affirmative-negative-interrogative",
+      "proposedIndex": 23,
+      "module": 4,
+      "preA1Ids": [
+        "tr-prea1-08-simple-questions",
+        "tr-prea1-09-needs-and-places"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-common-verbs-present"
+      ],
+      "outcomeFa": "کار را مثبت، منفی و پرسشی بیان کنم.",
+      "grammarFa": "geliyorum/gelmiyorum/geliyor musun?؛ منفی پیش از -yor؛ gitmiyorum در برابر gidiyorum؛ جزء پرسشی جدا و شناسه پس از آن.",
+      "vocabularyFa": "evet=بله؛ hayır=نه؛ bugün=امروز؛ değil=نفی اسمی در بازیابی",
+      "outOfScopeAndErrorFa": "gelmiyorum یعنی نمی‌آیم، gelemiyorum نمی‌توانم بیایم؛ پرسشِ خنثی Geliyor musun? است، نه تمرکزهای دیگر به‌عنوان قاعدهٔ پایه.",
+      "pronunciationFa": "بخش -yor و شناسهٔ شخصی، geliyorum/gelmiyorum و geliyor musun جدا تشخیص داده شوند؛ تکیه را از روی خط فارسی قطعی فرض نکن.",
+      "productionFa": "دو فعالیت را در صورت مثبت، منفی و پرسشی تمرین کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bugün çalışıyor musun?",
+          "fa": "امروز کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, çalışmıyorum.",
+          "fa": "نه، کار نمی‌کنم."
+        },
+        {
+          "role": "partner",
+          "tr": "Türkçe öğreniyor musun?",
+          "fa": "ترکی یاد می‌گیری؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, öğreniyorum.",
+          "fa": "بله، یاد می‌گیرم."
+        }
+      ],
+      "listening": {
+        "passage": "Bugün çalışmıyorum. Evde kitap okuyorum.",
+        "questionFa": "آیا گوینده امروز کار می‌کند؟",
+        "answer": "خیر"
+      },
+      "reading": {
+        "passage": "Ben gidiyorum. Mert gitmiyor.",
+        "questionFa": "چه کسی نمی‌رود؟",
+        "answer": "Mert"
+      },
+      "transferToIds": [
+        "tr-l1-question-words",
+        "tr-l1-ability-inability",
+        "tr-l1-conjunctions"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-common-verbs-present بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-question-words",
+      "proposedIndex": 24,
+      "module": 4,
+      "preA1Ids": [
+        "tr-prea1-14-question-and-connecting-words",
+        "tr-prea1-12-location-and-direction-words",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-affirmative-negative-interrogative"
+      ],
+      "outcomeFa": "با واژهٔ مناسب دربارهٔ شخص، مکان، چیز و زمان سؤال کنم.",
+      "grammarFa": "ne/kim/nerede/ne zaman/nasıl/kaç/hangi؛ neden برای دلیل بعداً؛ ne sorusu معمولاً بدون mi دوباره‌کاری می‌شود.",
+      "vocabularyFa": "kim=چه کسی؛ nerede=کجا؛ ne zaman=چه وقت؛ hangi=کدام",
+      "outOfScopeAndErrorFa": "همهٔ واژه‌ها در یک مکالمهٔ بازجویی‌وار انباشته نشوند؛ فرق Nerede/Nereye بعداً با حالت‌ها روشن می‌شود.",
+      "pronunciationFa": "بخش -yor و شناسهٔ شخصی، geliyorum/gelmiyorum و geliyor musun جدا تشخیص داده شوند؛ تکیه را از روی خط فارسی قطعی فرض نکن.",
+      "productionFa": "چهار سؤال با چهار واژهٔ پرسشی و پاسخ کوتاه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu kim?",
+          "fa": "این کیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Bu Mert.",
+          "fa": "این مرت است."
+        },
+        {
+          "role": "partner",
+          "tr": "Mert nerede?",
+          "fa": "مرت کجاست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evde.",
+          "fa": "در خانه است."
+        }
+      ],
+      "listening": {
+        "passage": "Ders bugün saat onda başlıyor.",
+        "questionFa": "کلاس چه ساعتی شروع می‌شود؟",
+        "answer": "onda"
+      },
+      "reading": {
+        "passage": "Kim geliyor? Ece. Ne zaman? Yarın.",
+        "questionFa": "چه کسی می‌آید؟",
+        "answer": "Ece"
+      },
+      "transferToIds": [
+        "tr-l1-location-position"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-affirmative-negative-interrogative بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-location-position",
+      "proposedIndex": 25,
+      "module": 5,
+      "preA1Ids": [
+        "tr-prea1-12-location-and-direction-words",
+        "tr-prea1-08-simple-questions"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-question-words"
+      ],
+      "outcomeFa": "جای شخص یا شیء مشخص را بپرسم و بگویم.",
+      "grammarFa": "nerede/burada/orada؛ evde/okulda در قالب مکان؛ تحلیل -DA درس بعد؛ جملهٔ اسمی مکان بدون فعل مستقل.",
+      "vocabularyFa": "burada=اینجا؛ orada=آنجا؛ oda=اتاق؛ mutfak=آشپزخانه",
+      "outOfScopeAndErrorFa": "وجود با var و جای شیء معلوم یکی نیستند؛ قاعدهٔ ser/estar به ترکی منتقل نشود.",
+      "pronunciationFa": "پسوندهای -de/-te، -e/-ye، -den/-ten و -ı/-yı معنی متفاوت دارند؛ تمایز نهایی را در عبارت کامل و نقشه بشنو.",
+      "productionFa": "جای سه چیز مشخص و دو سؤال مکان بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Kitap nerede?",
+          "fa": "کتاب کجاست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Kitap odada.",
+          "fa": "کتاب در اتاق است."
+        },
+        {
+          "role": "partner",
+          "tr": "Çanta nerede?",
+          "fa": "کیف کجاست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Mutfakta.",
+          "fa": "در آشپزخانه است."
+        }
+      ],
+      "listening": {
+        "passage": "Çanta mutfakta. Kitap odada.",
+        "questionFa": "کیف کجاست؟",
+        "answer": "mutfakta"
+      },
+      "reading": {
+        "passage": "Tuvalet burada. Mutfak orada.",
+        "questionFa": "چه مکانی اینجا است؟",
+        "answer": "tuvalet"
+      },
+      "transferToIds": [
+        "tr-l1-locative-case"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-question-words بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-locative-case",
+      "proposedIndex": 26,
+      "module": 5,
+      "preA1Ids": [
+        "tr-prea1-12-location-and-direction-words",
+        "tr-prea1-09-places"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-location-position",
+        "tr-l1-vowel-harmony"
+      ],
+      "outcomeFa": "برای «در/روی» در نمونهٔ ساده پسوند مکانی انتخاب کنم.",
+      "grammarFa": "-da/-de و پس از f/s/t/k/ç/ş/h/p صورت -ta/-te؛ evde، okulda، sınıfta، kitapta؛ نام خاص Ankara’da.",
+      "vocabularyFa": "evde=در خانه؛ okulda=در مدرسه؛ sınıfta=در کلاس؛ durakta=در ایستگاه",
+      "outOfScopeAndErrorFa": "این پسوند چسبیده با de/da مستقلِ «هم» فرق دارد؛ تمام کاربردهای انتزاعی -DA هدف نیست.",
+      "pronunciationFa": "پسوندهای -de/-te، -e/-ye، -den/-ten و -ı/-yı معنی متفاوت دارند؛ تمایز نهایی را در عبارت کامل و نقشه بشنو.",
+      "productionFa": "چهار مکان کوتاه با دو صورت d و t بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ece okulda mı?",
+          "fa": "اجه در مدرسه است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, sınıfta.",
+          "fa": "بله، در کلاس است."
+        },
+        {
+          "role": "partner",
+          "tr": "Mert evde mi?",
+          "fa": "مرت در خانه است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, o da okulda.",
+          "fa": "نه، او هم در مدرسه است."
+        }
+      ],
+      "listening": {
+        "passage": "Ben evdeyim. Ece okulda.",
+        "questionFa": "اجه کجاست؟",
+        "answer": "okulda"
+      },
+      "reading": {
+        "passage": "Kitap çantada. Kalem masada.",
+        "questionFa": "خودکار کجاست؟",
+        "answer": "masada"
+      },
+      "transferToIds": [
+        "tr-l1-dative-case"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-location-position، tr-l1-vowel-harmony بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-dative-case",
+      "proposedIndex": 27,
+      "module": 5,
+      "preA1Ids": [
+        "tr-prea1-06-verb-chunks",
+        "tr-prea1-polite-requests-and-directions"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-locative-case",
+        "tr-l1-common-verbs-present"
+      ],
+      "outcomeFa": "مقصد حرکت را با -A از جای ثابت جدا کنم.",
+      "grammarFa": "-(y)a/-(y)e؛ okula، eve، Ankara’ya؛ nereye?؛ gitmek همراه مقصد؛ y پس از واکه.",
+      "vocabularyFa": "eve=به خانه؛ okula=به مدرسه؛ buraya=به اینجا؛ nereye=به کجا",
+      "outOfScopeAndErrorFa": "هر -A به معنی حرکت فیزیکی نیست؛ این درس مقصد آشنا را هدف می‌گیرد، نه فهرست کامل متمم فعل‌ها.",
+      "pronunciationFa": "پسوندهای -de/-te، -e/-ye، -den/-ten و -ı/-yı معنی متفاوت دارند؛ تمایز نهایی را در عبارت کامل و نقشه بشنو.",
+      "productionFa": "سه مقصد و یک سؤال جهت با فعل آشنا بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Nereye gidiyorsun?",
+          "fa": "به کجا می‌روی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Okula gidiyorum.",
+          "fa": "به مدرسه می‌روم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ece de okula mı gidiyor?",
+          "fa": "اجه هم به مدرسه می‌رود؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, birlikte gidiyoruz.",
+          "fa": "بله، با هم می‌رویم."
+        }
+      ],
+      "listening": {
+        "passage": "Şimdi eve gidiyorum. Mert okula gidiyor.",
+        "questionFa": "مقصد گوینده کجاست؟",
+        "answer": "ev"
+      },
+      "reading": {
+        "passage": "Ece Ankara’ya gidiyor. Sara İzmir’e gidiyor.",
+        "questionFa": "سارا به کجا می‌رود؟",
+        "answer": "İzmir"
+      },
+      "transferToIds": [
+        "tr-l1-ablative-case",
+        "tr-l2-directions-navigation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-locative-case، tr-l1-common-verbs-present بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-ablative-case",
+      "proposedIndex": 28,
+      "module": 5,
+      "preA1Ids": [
+        "tr-prea1-09-places",
+        "tr-prea1-12-location-and-direction-words"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-dative-case"
+      ],
+      "outcomeFa": "مبدأ را با -DAn از مکان و مقصد جدا کنم.",
+      "grammarFa": "-dan/-den/-tan/-ten؛ evden، okuldan، marketten؛ nereden?؛ با geliyorum/çıkıyorum در حد نمونه.",
+      "vocabularyFa": "evden=از خانه؛ okuldan=از مدرسه؛ marketten=از فروشگاه؛ nereden=از کجا",
+      "outOfScopeAndErrorFa": "مقایسه با -den هنوز هدف نیست؛ نقش مبدأ پیش از گسترش آن تثبیت شود.",
+      "pronunciationFa": "پسوندهای -de/-te، -e/-ye، -den/-ten و -ı/-yı معنی متفاوت دارند؛ تمایز نهایی را در عبارت کامل و نقشه بشنو.",
+      "productionFa": "دو حرکت با مبدأ و مقصد روشن و یک سؤال مبدأ بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Nereden geliyorsun?",
+          "fa": "از کجا می‌آیی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Okuldan geliyorum.",
+          "fa": "از مدرسه می‌آیم."
+        },
+        {
+          "role": "partner",
+          "tr": "Şimdi eve mi gidiyorsun?",
+          "fa": "الان به خانه می‌روی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet.",
+          "fa": "بله."
+        }
+      ],
+      "listening": {
+        "passage": "Marketten geliyorum. Ece evden geliyor.",
+        "questionFa": "گوینده از کجا می‌آید؟",
+        "answer": "market"
+      },
+      "reading": {
+        "passage": "Mert okuldan eve gidiyor.",
+        "questionFa": "مقصد مرت کجاست؟",
+        "answer": "ev"
+      },
+      "transferToIds": [
+        "tr-l1-accusative-case",
+        "tr-l2-simple-comparisons"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-dative-case بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-accusative-case",
+      "proposedIndex": 29,
+      "module": 5,
+      "preA1Ids": [
+        "tr-prea1-10-home-and-everyday-objects",
+        "tr-prea1-06-verb-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-ablative-case",
+        "tr-l1-possession-suffixes"
+      ],
+      "outcomeFa": "مفعول مشخص را از مفعول نامعین جدا کنم.",
+      "grammarFa": "kitap okuyorum در برابر bu kitabı okuyorum؛ -(y)ı/i/u/ü؛ defteri، suyu؛ kitap→kitabı در نمونه؛ ضمیر onu محدود.",
+      "vocabularyFa": "kitabı=کتاب را؛ defteri=دفتر را؛ suyu=آب را؛ bunu=این را",
+      "outOfScopeAndErrorFa": "هر مفعول را خودکار پسونددار نکن؛ ترکیب همهٔ ملکی+حالت در یک ردیف اولیه لازم نیست.",
+      "pronunciationFa": "پسوندهای -de/-te، -e/-ye، -den/-ten و -ı/-yı معنی متفاوت دارند؛ تمایز نهایی را در عبارت کامل و نقشه بشنو.",
+      "productionFa": "دو جفت مفعول نامعین/مشخص با فعل آشنا بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Kitap okuyorum.",
+          "fa": "کتاب می‌خوانم."
+        },
+        {
+          "role": "learner",
+          "tr": "Hangi kitabı?",
+          "fa": "کدام کتاب را؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Bu kitabı okuyorum.",
+          "fa": "این کتاب را می‌خوانم."
+        }
+      ],
+      "listening": {
+        "passage": "Bu defteri alıyorum. Kitabı almıyorum.",
+        "questionFa": "کدام شیء را می‌خرد؟",
+        "answer": "bu defter"
+      },
+      "reading": {
+        "passage": "Bir kitap okuyorum. Bu kitabı seviyorum.",
+        "questionFa": "در جملهٔ دوم کدام صورت «کتاب را» آمده؟",
+        "answer": "kitabı"
+      },
+      "transferToIds": [
+        "tr-l1-postpositions-spatial",
+        "tr-l1-likes-wants-needs"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-ablative-case، tr-l1-possession-suffixes بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-postpositions-spatial",
+      "proposedIndex": 30,
+      "module": 5,
+      "preA1Ids": [
+        "tr-prea1-12-location-and-direction-words",
+        "tr-prea1-10-home-and-everyday-objects"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-accusative-case",
+        "tr-l1-possession-suffixes"
+      ],
+      "outcomeFa": "رابطهٔ مکانی دو وسیله را با ترکیب روشن بیان کنم.",
+      "grammarFa": "masanın üstünde/altında؛ kapının yanında؛ اسمِ مکان با ملکی سوم و n میانجی در üstünde؛ فقط ترکیب‌های ثابتِ نمونه.",
+      "vocabularyFa": "üstünde=روی؛ altında=زیر؛ yanında=کنار؛ önünde=جلو",
+      "outOfScopeAndErrorFa": "اسم‌اضافه و چند لایهٔ پسوند در هشت ردیف کامل تدریس نمی‌شود؛ مکان دقیق با تصویر کنترل شود.",
+      "pronunciationFa": "پسوندهای -de/-te، -e/-ye، -den/-ten و -ı/-yı معنی متفاوت دارند؛ تمایز نهایی را در عبارت کامل و نقشه بشنو.",
+      "productionFa": "چهار رابطهٔ مکانی برای میز، کتاب، کیف و در فرضی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Kalem nerede?",
+          "fa": "خودکار کجاست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Masanın üstünde.",
+          "fa": "روی میز است."
+        },
+        {
+          "role": "partner",
+          "tr": "Tamam, çanta da masanın altında.",
+          "fa": "بسیار خوب، کیف هم زیر میز است."
+        }
+      ],
+      "listening": {
+        "passage": "Kitap masanın üstünde. Çanta kapının yanında.",
+        "questionFa": "کیف کجاست؟",
+        "answer": "kapının yanında"
+      },
+      "reading": {
+        "passage": "Kalem kitabın altında.",
+        "questionFa": "خودکار کجای کتاب است؟",
+        "answer": "altında"
+      },
+      "transferToIds": [
+        "tr-l2-home-furniture",
+        "tr-l2-directions-navigation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-accusative-case، tr-l1-possession-suffixes بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-home-furniture",
+      "proposedIndex": 31,
+      "module": 5,
+      "preA1Ids": [
+        "tr-prea1-10-home-and-everyday-objects",
+        "tr-prea1-descriptions-and-family"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-postpositions-spatial",
+        "tr-l1-var-yok"
+      ],
+      "outcomeFa": "اتاقی را با وجود وسایل و جای مشخص توصیف کنم.",
+      "grammarFa": "Odada … var/yok؛ yatak pencerenin yanında؛ بازیابی وصف و مکان، نه ساخت تازهٔ طولانی.",
+      "vocabularyFa": "yatak=تخت؛ pencere=پنجره؛ sandalye=صندلی؛ lamba=چراغ",
+      "outOfScopeAndErrorFa": "داشتن، وجود و جای شیء در ترجمه از هم جدا بمانند؛ همهٔ اتاق‌ها و اجاره در همین درس لازم نیست.",
+      "pronunciationFa": "پسوندهای -de/-te، -e/-ye، -den/-ten و -ı/-yı معنی متفاوت دارند؛ تمایز نهایی را در عبارت کامل و نقشه بشنو.",
+      "productionFa": "اتاقی خیالی را با دو وسیله، یک نبودن و دو رابطهٔ مکانی توصیف کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Odanda ne var?",
+          "fa": "در اتاقت چه هست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Bir yatak ve bir masa var.",
+          "fa": "یک تخت و یک میز هست."
+        },
+        {
+          "role": "partner",
+          "tr": "Yatak nerede?",
+          "fa": "تخت کجاست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Pencerenin yanında.",
+          "fa": "کنار پنجره است."
+        }
+      ],
+      "listening": {
+        "passage": "Odada iki sandalye var, masa yok.",
+        "questionFa": "چه چیزی در اتاق نیست؟",
+        "answer": "masa"
+      },
+      "reading": {
+        "passage": "Yatak kapının yanında. Lamba masada.",
+        "questionFa": "چراغ کجاست؟",
+        "answer": "masada"
+      },
+      "transferToIds": [
+        "tr-l1-likes-wants-needs"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-postpositions-spatial، tr-l1-var-yok بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-likes-wants-needs",
+      "proposedIndex": 32,
+      "module": 6,
+      "preA1Ids": [
+        "tr-prea1-09-needs-and-places",
+        "tr-prea1-07-food-and-drink"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-home-furniture",
+        "tr-l1-accusative-case"
+      ],
+      "outcomeFa": "علاقه، خواستن و نیاز را جدا بیان کنم.",
+      "grammarFa": "çay istiyorum؛ çayı seviyorum؛ suya ihtiyacım var در قالب با -A؛ -mek istiyorum با مصدر آشنا.",
+      "vocabularyFa": "istemek=خواستن؛ sevmek=دوست‌داشتن؛ ihtiyaç=نیاز؛ su=آب",
+      "outOfScopeAndErrorFa": "فارسی «دوست دارم» و سفارش یک معنی ندارند؛ ihtiyacım شکل ملکی است و یکجا با همهٔ شخص‌ها صرف نشود.",
+      "pronunciationFa": "istemiyorum در برابر gelemiyorum؛ درخواست مؤدبانه با لحن مناسب. پرسش بعد از -yor معمولاً mu می‌گیرد؛ صورت کامل شنیده شود.",
+      "productionFa": "یک علاقه، یک نیاز و یک خواستهٔ موقعیتی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ne istiyorsun?",
+          "fa": "چه می‌خواهی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Bir çay istiyorum.",
+          "fa": "یک چای می‌خواهم."
+        },
+        {
+          "role": "partner",
+          "tr": "Suya da ihtiyacın var mı?",
+          "fa": "آب هم لازم داری؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, su da istiyorum.",
+          "fa": "بله، آب هم می‌خواهم."
+        }
+      ],
+      "listening": {
+        "passage": "Kahveyi seviyorum ama şimdi çay istiyorum.",
+        "questionFa": "اکنون چه می‌خواهد؟",
+        "answer": "çay"
+      },
+      "reading": {
+        "passage": "Mert’in kaleme ihtiyacı var. Defteri var.",
+        "questionFa": "مرت چه لازم دارد؟",
+        "answer": "kalem"
+      },
+      "transferToIds": [
+        "tr-l1-ability-inability",
+        "tr-l2-ordering-food-drinks",
+        "tr-l2-preferences-choices",
+        "tr-l2-leisure-hobbies"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-home-furniture، tr-l1-accusative-case بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-ability-inability",
+      "proposedIndex": 33,
+      "module": 6,
+      "preA1Ids": [
+        "tr-prea1-03-basic-verbs",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-likes-wants-needs",
+        "tr-l1-affirmative-negative-interrogative"
+      ],
+      "outcomeFa": "توانایی یا ناممکن‌بودن کار را روشن بیان کنم.",
+      "grammarFa": "-(y)abil/ebil در okuyabiliyorum/gelebiliyorum؛ gelemiyorum برای ناتوانی آمدن؛ okuyabiliyor musun? با صورت کامل.",
+      "vocabularyFa": "yüzmek=شناکردن؛ okuyabilmek=توانستن خواندن؛ gelemiyorum=نمی‌توانم بیایم",
+      "outOfScopeAndErrorFa": "gelmiyorum و gelemiyorum یکی نیستند؛ صورت‌های وسیع احتمال/اجازه و همهٔ زمان‌ها هدف نیستند.",
+      "pronunciationFa": "istemiyorum در برابر gelemiyorum؛ درخواست مؤدبانه با لحن مناسب. پرسش بعد از -yor معمولاً mu می‌گیرد؛ صورت کامل شنیده شود.",
+      "productionFa": "دو توانایی و یک ناتوانی امروز را با یک سؤال بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bugün gelebiliyor musun?",
+          "fa": "امروز می‌توانی بیایی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, bugün gelemiyorum.",
+          "fa": "نه، امروز نمی‌توانم بیایم."
+        },
+        {
+          "role": "partner",
+          "tr": "Yarın gelebiliyor musun?",
+          "fa": "فردا می‌توانی بیایی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, yarın gelebiliyorum.",
+          "fa": "بله، فردا می‌توانم بیایم."
+        }
+      ],
+      "listening": {
+        "passage": "Ece yüzebiliyor. Mert yüzemiyor.",
+        "questionFa": "چه کسی نمی‌تواند شنا کند؟",
+        "answer": "Mert"
+      },
+      "reading": {
+        "passage": "Türkçe okuyabiliyorum ama hızlı okuyamıyorum.",
+        "questionFa": "آیا نویسنده می‌تواند سریع بخواند؟",
+        "answer": "خیر"
+      },
+      "transferToIds": [
+        "tr-l1-requests-permission-imperative",
+        "tr-l2-suggestions-advice"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-likes-wants-needs، tr-l1-affirmative-negative-interrogative بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-requests-permission-imperative",
+      "proposedIndex": 34,
+      "module": 6,
+      "preA1Ids": [
+        "tr-prea1-polite-requests-and-directions",
+        "tr-prea1-10-first-conversation"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-ability-inability"
+      ],
+      "outcomeFa": "دستور ساده و اجازه‌خواستن را در کلاس بفهمم.",
+      "grammarFa": "Açın/okuyun/yazın خطاب siz؛ Açabilir miyim? برای اجازه؛ دستور دوستانه بازشناسی شود ولی در همان صحنه عوض نشود.",
+      "vocabularyFa": "açmak=بازکردن؛ okumak=خواندن؛ yazmak=نوشتن؛ lütfen=لطفاً",
+      "outOfScopeAndErrorFa": "همهٔ وجوه امری و شرطی لازم نیست؛ سکوت به معنی رضایت قطعی تلقی نشود.",
+      "pronunciationFa": "istemiyorum در برابر gelemiyorum؛ درخواست مؤدبانه با لحن مناسب. پرسش بعد از -yor معمولاً mu می‌گیرد؛ صورت کامل شنیده شود.",
+      "productionFa": "دو دستور رسمی کوتاه و یک سؤال اجازه در کلاس بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Kitabı açın, lütfen.",
+          "fa": "لطفاً کتاب را باز کنید."
+        },
+        {
+          "role": "learner",
+          "tr": "Buraya yazabilir miyim?",
+          "fa": "می‌توانم اینجا بنویسم؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Evet, buraya yazın.",
+          "fa": "بله، اینجا بنویسید."
+        }
+      ],
+      "listening": {
+        "passage": "Kitabı açın. Sonra adınızı yazın.",
+        "questionFa": "اولین کار چیست؟",
+        "answer": "بازکردن کتاب"
+      },
+      "reading": {
+        "passage": "Buraya oturabilir miyim?",
+        "questionFa": "اجازهٔ چه کاری خواسته شده؟",
+        "answer": "اینجا نشستن"
+      },
+      "transferToIds": [
+        "tr-l1-ordinals-time-date",
+        "tr-l2-simple-instructions",
+        "tr-l2-polite-requests-permission"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-ability-inability بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-ordinals-time-date",
+      "proposedIndex": 35,
+      "module": 7,
+      "preA1Ids": [
+        "tr-prea1-time-and-calendar-sentences",
+        "tr-prea1-number-and-time-chunks",
+        "tr-prea1-06-numbers-eight-to-ten-weekdays",
+        "tr-prea1-13-calendar-and-time-words"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-requests-permission-imperative",
+        "tr-l1-numbers-age-info"
+      ],
+      "outcomeFa": "ساعت، روز و تاریخ ساده را در قرار مشخص کنم.",
+      "grammarFa": "Saat üç؛ üçte/üç buçukta برای زمان کار؛ birinci/ikinci برای بازشناسی محدود؛ iki Mayıs؛ نیم و ساعت کامل هدف اصلی.",
+      "vocabularyFa": "saat=ساعت؛ buçuk=نیم؛ Mayıs=مه؛ gün=روز",
+      "outOfScopeAndErrorFa": "همهٔ ربع/مانده، ماه‌ها، ترتیبی‌ها و اعداد بالا در هشت ردیف هدف تسلط نمی‌شوند؛ سال/جزئیات تازه بعداً.",
+      "pronunciationFa": "عددِ ساعت، پسوند زمان و روز از هم جدا تشخیص داده شوند؛ پنجاه/پانزده و نیم‌ساعت با صوت روشن تمرین شوند.",
+      "productionFa": "دو ساعت و یک قرار با روز و تاریخ خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Saat kaç?",
+          "fa": "ساعت چند است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Üç buçuk.",
+          "fa": "سه‌ونیم است."
+        },
+        {
+          "role": "partner",
+          "tr": "Ders kaçta başlıyor?",
+          "fa": "کلاس چه ساعتی شروع می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Dörtte.",
+          "fa": "ساعت چهار."
+        }
+      ],
+      "listening": {
+        "passage": "Saat bir. Ders saat ikide başlıyor.",
+        "questionFa": "کلاس چه ساعتی شروع می‌شود؟",
+        "answer": "ikide"
+      },
+      "reading": {
+        "passage": "Ders: 2 Mayıs, pazartesi, 09.30.",
+        "questionFa": "ساعت شروع کلاس چیست؟",
+        "answer": "09.30"
+      },
+      "transferToIds": [
+        "tr-l1-daily-routine-habits"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-requests-permission-imperative، tr-l1-numbers-age-info بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-daily-routine-habits",
+      "proposedIndex": 36,
+      "module": 7,
+      "preA1Ids": [
+        "tr-prea1-time-and-calendar-sentences",
+        "tr-prea1-13-calendar-and-time-words",
+        "tr-prea1-06-verb-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-ordinals-time-date"
+      ],
+      "outcomeFa": "برنامهٔ روزانه را با زمان و ترتیب بیان کنم.",
+      "grammarFa": "her gün + -yor در عادتِ فعلی؛ kalkıyorum/kahvaltı yapıyorum؛ önce/sonra؛ گذشته و aorist جدول جدید نیست.",
+      "vocabularyFa": "kalkmak=بلندشدن؛ kahvaltı=صبحانه؛ önce=اول؛ sonra=بعد",
+      "outOfScopeAndErrorFa": "-yor فقط «الان همین لحظه» ترجمه نشود؛ همهٔ افعال بازتابی و روتین‌های شخصی انباشته نشوند.",
+      "pronunciationFa": "عددِ ساعت، پسوند زمان و روز از هم جدا تشخیص داده شوند؛ پنجاه/پانزده و نیم‌ساعت با صوت روشن تمرین شوند.",
+      "productionFa": "چهار کار روز خیالی با دو ساعت و یک sonra بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Sabah kaçta kalkıyorsun?",
+          "fa": "صبح چه ساعتی بلند می‌شوی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Yedide kalkıyorum. Sonra kahvaltı yapıyorum.",
+          "fa": "ساعت هفت بلند می‌شوم. بعد صبحانه می‌خورم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ben de yedide kalkıyorum.",
+          "fa": "من هم ساعت هفت بلند می‌شوم."
+        }
+      ],
+      "listening": {
+        "passage": "Altıda kalkıyorum. Altı buçukta kahvaltı yapıyorum.",
+        "questionFa": "صبحانه چه ساعتی است؟",
+        "answer": "06.30"
+      },
+      "reading": {
+        "passage": "Sabah çalışıyorum. Akşam kitap okuyorum.",
+        "questionFa": "نویسنده چه زمانی کتاب می‌خواند؟",
+        "answer": "akşam"
+      },
+      "transferToIds": [
+        "tr-l2-weekly-schedule"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-ordinals-time-date بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-weekly-schedule",
+      "proposedIndex": 37,
+      "module": 7,
+      "preA1Ids": [
+        "tr-prea1-06-numbers-eight-to-ten-weekdays",
+        "tr-prea1-13-calendar-and-time-words",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-daily-routine-habits"
+      ],
+      "outcomeFa": "برنامهٔ هفته و زمان آزاد را روشن کنم.",
+      "grammarFa": "pazartesi/pazartesileri در حد یک مثال؛ dokuzdan on bire kadar بازهٔ آماده با مبدأ/مقصد؛ boşum.",
+      "vocabularyFa": "hafta=هفته؛ boş=آزاد؛ cuma=جمعه؛ kadar=تا",
+      "outOfScopeAndErrorFa": "صورت عادت و روز مشخص با زمینه روشن شود؛ برای بازه، ابتدا و پایان جابه‌جا نشوند.",
+      "pronunciationFa": "عددِ ساعت، پسوند زمان و روز از هم جدا تشخیص داده شوند؛ پنجاه/پانزده و نیم‌ساعت با صوت روشن تمرین شوند.",
+      "productionFa": "سه روز هفته و یک بازهٔ کلاس و یک زمان آزاد بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Salı günü çalışıyor musun?",
+          "fa": "سه‌شنبه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet. Cuma günü boşum.",
+          "fa": "بله. جمعه آزاد هستم."
+        },
+        {
+          "role": "partner",
+          "tr": "Tamam, cuma görüşürüz.",
+          "fa": "بسیار خوب، جمعه می‌بینمت."
+        }
+      ],
+      "listening": {
+        "passage": "Pazartesi çalışıyorum. Cuma günü boşum.",
+        "questionFa": "کدام روز آزاد است؟",
+        "answer": "cuma"
+      },
+      "reading": {
+        "passage": "Türkçe dersi: çarşamba, 09.00–11.00.",
+        "questionFa": "کلاس چه ساعتی تمام می‌شود؟",
+        "answer": "11.00"
+      },
+      "transferToIds": [
+        "tr-l2-work-study-talk",
+        "tr-l2-near-future-plans"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-daily-routine-habits بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-work-study-talk",
+      "proposedIndex": 38,
+      "module": 7,
+      "preA1Ids": [
+        "tr-prea1-07-first-short-sentences",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-weekly-schedule",
+        "tr-l1-common-verbs-present"
+      ],
+      "outcomeFa": "دربارهٔ کلاس/کار و شروع و پایان فعالیت صحبت کنم.",
+      "grammarFa": "ders başlıyor/bitiyor؛ toplantı saat onda؛ çalışmak برای کار یا مطالعه با زمینه؛ اینجا -malı اجباری نیست.",
+      "vocabularyFa": "ders=کلاس؛ iş=کار؛ toplantı=جلسه؛ mola=استراحت",
+      "outOfScopeAndErrorFa": "یک ردیف چند بند با متمم‌های سنگین نداشته باشد؛ همهٔ شغل‌ها و واژگان اداره هدف نیستند.",
+      "pronunciationFa": "عددِ ساعت، پسوند زمان و روز از هم جدا تشخیص داده شوند؛ پنجاه/پانزده و نیم‌ساعت با صوت روشن تمرین شوند.",
+      "productionFa": "دو پیام کار/کلاس و یک پرسش ساعت جلسه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ders kaçta başlıyor?",
+          "fa": "کلاس چه ساعتی شروع می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Dokuzda. Saat on birde bitiyor.",
+          "fa": "ساعت نه. ساعت یازده تمام می‌شود."
+        },
+        {
+          "role": "partner",
+          "tr": "Tamam, sonra mola veriyoruz.",
+          "fa": "بسیار خوب، بعد استراحت می‌کنیم."
+        }
+      ],
+      "listening": {
+        "passage": "Bugün Türkçe çalışıyorum. Ders saat on ikide bitiyor.",
+        "questionFa": "کلاس چه ساعتی تمام می‌شود؟",
+        "answer": "on ikide"
+      },
+      "reading": {
+        "passage": "Toplantı: 10.00. Mola: 11.00.",
+        "questionFa": "استراحت چه ساعتی است؟",
+        "answer": "11.00"
+      },
+      "transferToIds": [
+        "tr-l2-asking-info-forms"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-weekly-schedule، tr-l1-common-verbs-present بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-asking-info-forms",
+      "proposedIndex": 39,
+      "module": 7,
+      "preA1Ids": [
+        "tr-prea1-11-personal-details-and-languages",
+        "tr-prea1-introduction-chunks",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-work-study-talk",
+        "tr-l2-asking-help-problems"
+      ],
+      "outcomeFa": "فیلدهای فرم و پرسش محترمانهٔ اطلاعات را بفهمم.",
+      "grammarFa": "Adınız/soyadınız؛ doğum tarihi؛ adresiniz؛ -(I)nIz در خطاب رسمیِ بازیابی‌شده؛ جدول تاریخ کامل لازم نیست.",
+      "vocabularyFa": "ad=نام؛ soyadı=نام خانوادگی؛ adres=نشانی؛ doğum tarihi=تاریخ تولد",
+      "outOfScopeAndErrorFa": "شماره، نشانی و تاریخ واقعی اجباری نیستند؛ بزرگ/کوچک I/İ در فرم و جست‌وجو حفظ شود.",
+      "pronunciationFa": "عددِ ساعت، پسوند زمان و روز از هم جدا تشخیص داده شوند؛ پنجاه/پانزده و نیم‌ساعت با صوت روشن تمرین شوند.",
+      "productionFa": "فرم خیالی نام، نام خانوادگی، شهر و یک تاریخ را پر کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Adınız ne?",
+          "fa": "نام شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Adım Sara.",
+          "fa": "نام من سارا است."
+        },
+        {
+          "role": "partner",
+          "tr": "Soyadınız ne?",
+          "fa": "نام خانوادگی شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Yılmaz.",
+          "fa": "ییلماز."
+        }
+      ],
+      "listening": {
+        "passage": "Adım Mert. Soyadım Yılmaz.",
+        "questionFa": "نام خانوادگی چیست؟",
+        "answer": "Yılmaz"
+      },
+      "reading": {
+        "passage": "Ad: Ece. Soyadı: Kaya. Şehir: Ankara.",
+        "questionFa": "شهر نوشته‌شده چیست؟",
+        "answer": "Ankara"
+      },
+      "transferToIds": [
+        "tr-l2-simple-instructions",
+        "tr-l2-hotel-accommodation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-work-study-talk، tr-l2-asking-help-problems بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-simple-instructions",
+      "proposedIndex": 40,
+      "module": 7,
+      "preA1Ids": [
+        "tr-prea1-polite-requests-and-directions",
+        "tr-prea1-10-first-conversation"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-asking-info-forms",
+        "tr-l1-requests-permission-imperative"
+      ],
+      "outcomeFa": "سه دستور مرتبط را به ترتیب دنبال کنم.",
+      "grammarFa": "önce/sonra/en son؛ kartı koyun/alın در قالب؛ بازیابی مفعول مشخص و دستور siz.",
+      "vocabularyFa": "kart=کارت؛ düğme=دکمه؛ koymak=گذاشتن؛ almak=برداشتن",
+      "outOfScopeAndErrorFa": "چند فرایند نامرتبط مثل چای/فرم/بلیط در یک صحنه مخلوط نشوند؛ دستگاه تمرینی است.",
+      "pronunciationFa": "عددِ ساعت، پسوند زمان و روز از هم جدا تشخیص داده شوند؛ پنجاه/پانزده و نیم‌ساعت با صوت روشن تمرین شوند.",
+      "productionFa": "سه دستور برای کار با دستگاه خیالی با önce/sonra/en son بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bir bilet, lütfen.",
+          "fa": "یک بلیت، لطفاً."
+        },
+        {
+          "role": "learner",
+          "tr": "Önce kartı koyun. Sonra yeşil düğmeye basın.",
+          "fa": "اول کارت را بگذارید. بعد دکمهٔ سبز را فشار دهید."
+        },
+        {
+          "role": "partner",
+          "tr": "Tamam, teşekkürler.",
+          "fa": "بسیار خوب، ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Önce kartı koyun. Sonra düğmeye basın.",
+        "questionFa": "اولین کار چیست؟",
+        "answer": "گذاشتن کارت"
+      },
+      "reading": {
+        "passage": "En son kartınızı alın.",
+        "questionFa": "در پایان چه کاری لازم است؟",
+        "answer": "برداشتن کارت"
+      },
+      "transferToIds": [
+        "tr-l2-ordering-food-drinks"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-asking-info-forms، tr-l1-requests-permission-imperative بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-ordering-food-drinks",
+      "proposedIndex": 41,
+      "module": 8,
+      "preA1Ids": [
+        "tr-prea1-09-needs-and-places",
+        "tr-prea1-07-food-and-drink",
+        "tr-prea1-polite-requests-and-directions"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-simple-instructions",
+        "tr-l1-likes-wants-needs"
+      ],
+      "outcomeFa": "خوراک و نوشیدنی را با خواستهٔ روشن سفارش بدهم.",
+      "grammarFa": "Bir … istiyorum / … alabilir miyim?؛ şekerli/şekersiz در قالب با -li/-siz محدود؛ su با شمار ظرف.",
+      "vocabularyFa": "çorba=سوپ؛ şeker=شکر؛ şekersiz=بدون شکر؛ bardak=لیوان",
+      "outOfScopeAndErrorFa": "واژهٔ آلرژی/درمان یا ایمنی غذا تضمین نمی‌شود؛ سفارش بدون شکر را بعداً با شکر تأیید نکن.",
+      "pronunciationFa": "مقدار، قیمت و کالا جدا شنیده شوند؛ çay و şekersiz را در سفارش کامل بفهم. متن‌ها قیمت واقعی نیستند.",
+      "productionFa": "سفارش خوراک، نوشیدنی و یک درخواست بدون شکر/شیر بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ne istersiniz?",
+          "fa": "چه میل دارید؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Bir çorba ve bir çay, lütfen.",
+          "fa": "یک سوپ و یک چای، لطفاً."
+        },
+        {
+          "role": "partner",
+          "tr": "Çay şekerli mi?",
+          "fa": "چای با شکر؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, şekersiz olsun.",
+          "fa": "نه، بدون شکر باشد."
+        }
+      ],
+      "listening": {
+        "passage": "Bir ekmek ve şekersiz çay istiyorum.",
+        "questionFa": "در چای چه نمی‌خواهد؟",
+        "answer": "şeker"
+      },
+      "reading": {
+        "passage": "Menü: çorba 50 TL, ekmek 10 TL, su 5 TL.",
+        "questionFa": "سوپ چند لیر است؟",
+        "answer": "50 TL"
+      },
+      "transferToIds": [
+        "tr-l2-restaurant-cafe"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-simple-instructions، tr-l1-likes-wants-needs بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-restaurant-cafe",
+      "proposedIndex": 42,
+      "module": 8,
+      "preA1Ids": [
+        "tr-prea1-09-needs-and-places",
+        "tr-prea1-polite-requests-and-directions"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-ordering-food-drinks"
+      ],
+      "outcomeFa": "سفارش، صورت‌حساب و پرداخت را به پایان برسانم.",
+      "grammarFa": "Hesap, lütfen؛ ödeyebilir miyim?؛ toplam؛ با دو مشتری جدا/باهم فقط در بانک جایگزینی؛ خطاب siz ثابت.",
+      "vocabularyFa": "hesap=صورت‌حساب؛ ödemek=پرداخت؛ toplam=جمع؛ lira=لیر",
+      "outOfScopeAndErrorFa": "صحنهٔ سه‌نوبتی می‌تواند تحویل سفارش تا درخواست صورت‌حساب باشد؛ ردیف‌های دیگر پرداخت را کامل کنند، نوبت جعلی به صحنه اضافه نشود.",
+      "pronunciationFa": "مقدار، قیمت و کالا جدا شنیده شوند؛ çay و şekersiz را در سفارش کامل بفهم. متن‌ها قیمت واقعی نیستند.",
+      "productionFa": "یک سفارش و دو پیام درخواست صورت‌حساب و پرداخت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Buyurun, çayınız.",
+          "fa": "بفرمایید چای شما."
+        },
+        {
+          "role": "learner",
+          "tr": "Teşekkürler. Hesap, lütfen.",
+          "fa": "ممنون. صورت‌حساب، لطفاً."
+        },
+        {
+          "role": "partner",
+          "tr": "Tabii, yirmi lira.",
+          "fa": "حتماً، بیست لیر."
+        }
+      ],
+      "listening": {
+        "passage": "Bir kahve, lütfen. Şimdi ödemek istiyorum.",
+        "questionFa": "چه چیزی سفارش داده است؟",
+        "answer": "kahve"
+      },
+      "reading": {
+        "passage": "Çay 20 TL. Kahve 40 TL. Su 10 TL.",
+        "questionFa": "ارزان‌ترین نوشیدنی چیست؟",
+        "answer": "su"
+      },
+      "transferToIds": [
+        "tr-l2-shopping-price-payment"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-ordering-food-drinks بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-shopping-price-payment",
+      "proposedIndex": 43,
+      "module": 8,
+      "preA1Ids": [
+        "tr-prea1-05-numbers-zero-to-seven",
+        "tr-prea1-10-home-and-everyday-objects"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-restaurant-cafe",
+        "tr-l1-numbers-age-info"
+      ],
+      "outcomeFa": "قیمت را بپرسم و روش پرداخت را مشخص کنم.",
+      "grammarFa": "Bu … ne kadar?؛ bunu alıyorum؛ kartla/nakit در پرداخت؛ lira پس از عدد مفرد می‌ماند.",
+      "vocabularyFa": "fiyat=قیمت؛ nakit=نقد؛ kartla=با کارت؛ almak=خریدن",
+      "outOfScopeAndErrorFa": "قیمت‌ها خیالی‌اند؛ پول و تعداد با هم اشتباه نشوند؛ nakit یا کارت از تابلوی همان تمرین تعیین شود.",
+      "pronunciationFa": "مقدار، قیمت و کالا جدا شنیده شوند؛ çay و şekersiz را در سفارش کامل بفهم. متن‌ها قیمت واقعی نیستند.",
+      "productionFa": "گفت‌وگوی چهار نوبتی قیمت و انتخاب و پرداخت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu defter ne kadar?",
+          "fa": "این دفتر چند است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Otuz lira.",
+          "fa": "سی لیر."
+        },
+        {
+          "role": "partner",
+          "tr": "Kartla ödeyebilir miyim?",
+          "fa": "می‌توانم با کارت پرداخت کنم؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, tabii.",
+          "fa": "بله، حتماً."
+        }
+      ],
+      "listening": {
+        "passage": "Kitap elli lira. Kartla ödeyebilirsiniz.",
+        "questionFa": "قیمت کتاب چیست؟",
+        "answer": "50 TL"
+      },
+      "reading": {
+        "passage": "Kalem: 10 TL. Sadece nakit.",
+        "questionFa": "روش پرداخت پذیرفته چیست؟",
+        "answer": "nakit"
+      },
+      "transferToIds": [
+        "tr-l2-store-supermarket",
+        "tr-l2-travel-airport-tickets"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-restaurant-cafe، tr-l1-numbers-age-info بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-store-supermarket",
+      "proposedIndex": 44,
+      "module": 8,
+      "preA1Ids": [
+        "tr-prea1-07-food-and-drink",
+        "tr-prea1-05-numbers-zero-to-seven",
+        "tr-prea1-09-places"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-shopping-price-payment"
+      ],
+      "outcomeFa": "فهرست خرید و مقدار و جای کالا را بفهمم.",
+      "grammarFa": "bir kilo elma؛ iki ekmek؛ Süt nerede?؛ elma var mı? با بازیابی var/yok.",
+      "vocabularyFa": "kilo=کیلو؛ elma=سیب؛ süt=شیر؛ yumurta=تخم‌مرغ",
+      "outOfScopeAndErrorFa": "بعد از عدد اسم خودکار جمع نشود؛ مقدار و شمار ظرف جدا باشند. کل قیمت یا موجودی واقعی نیست.",
+      "pronunciationFa": "مقدار، قیمت و کالا جدا شنیده شوند؛ çay و şekersiz را در سفارش کامل بفهم. متن‌ها قیمت واقعی نیستند.",
+      "productionFa": "فهرست چهار قلم با دو مقدار و یک سؤال مکان بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Süt nerede?",
+          "fa": "شیر کجاست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Ekmeğin yanında.",
+          "fa": "کنار نان است."
+        },
+        {
+          "role": "partner",
+          "tr": "Teşekkürler. Bir kilo elma da alıyorum.",
+          "fa": "ممنون. یک کیلو سیب هم می‌خرم."
+        }
+      ],
+      "listening": {
+        "passage": "Bir kilo elma otuz lira. Süt ekmeğin yanında.",
+        "questionFa": "یک کیلو سیب چند لیر است؟",
+        "answer": "30 TL"
+      },
+      "reading": {
+        "passage": "Liste: üç elma, bir şişe su, iki ekmek.",
+        "questionFa": "چند سیب در فهرست است؟",
+        "answer": "üç"
+      },
+      "transferToIds": [
+        "tr-l2-clothes-shopping"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-shopping-price-payment بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-clothes-shopping",
+      "proposedIndex": 45,
+      "module": 8,
+      "preA1Ids": [
+        "tr-prea1-04-adjectives-and-adverbs",
+        "tr-prea1-05-first-word-pairs"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-store-supermarket",
+        "tr-l1-colors-shapes-appearance"
+      ],
+      "outcomeFa": "لباس را با رنگ و سایز بخواهم و اجازهٔ پرو بگیرم.",
+      "grammarFa": "beden؛ mavi gömlek؛ deneyebilir miyim? در قالب؛ küçük/büyük geldi در حد عبارت نتیجهٔ اندازه.",
+      "vocabularyFa": "gömlek=پیراهن؛ ceket=کاپشن؛ beden=سایز؛ denemek=پروکردن",
+      "outOfScopeAndErrorFa": "پسوند جنس یا صفت مؤنث نداریم؛ جدول گذشته از küçük geldi ساخته نشود؛ مقایسه در درس جدا است.",
+      "pronunciationFa": "مقدار، قیمت و کالا جدا شنیده شوند؛ çay و şekersiz را در سفارش کامل بفهم. متن‌ها قیمت واقعی نیستند.",
+      "productionFa": "یک درخواست سایز/رنگ و یک اجازهٔ پرو و نتیجهٔ اندازه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Mavi bir gömlek arıyorum.",
+          "fa": "دنبال یک پیراهن آبی می‌گردم."
+        },
+        {
+          "role": "learner",
+          "tr": "Hangi beden?",
+          "fa": "چه سایزی؟"
+        },
+        {
+          "role": "partner",
+          "tr": "M beden. Deneyebilir miyim?",
+          "fa": "سایز مدیوم. می‌توانم پرو کنم؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Tabii.",
+          "fa": "حتماً."
+        }
+      ],
+      "listening": {
+        "passage": "L beden, siyah bir ceket istiyorum.",
+        "questionFa": "سایز موردنیاز چیست؟",
+        "answer": "L"
+      },
+      "reading": {
+        "passage": "Gömlek: kırmızı, S beden, 200 TL.",
+        "questionFa": "رنگ پیراهن چیست؟",
+        "answer": "kırmızı"
+      },
+      "transferToIds": [
+        "tr-l2-preferences-choices"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-store-supermarket، tr-l1-colors-shapes-appearance بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-preferences-choices",
+      "proposedIndex": 46,
+      "module": 8,
+      "preA1Ids": [
+        "tr-prea1-07-food-and-drink",
+        "tr-prea1-09-needs-and-places"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-clothes-shopping",
+        "tr-l1-likes-wants-needs"
+      ],
+      "outcomeFa": "میان دو گزینه ترجیح خود را بیان کنم.",
+      "grammarFa": "Çay mı kahve mi?؛ çayı tercih ediyorum؛ kahveyi sevmiyorum؛ tercih etmek فقط صورت‌های لازم.",
+      "vocabularyFa": "tercih=ترجیح؛ çay=چای؛ kahve=قهوه؛ pilav=پلو",
+      "outOfScopeAndErrorFa": "ساخت کامل -maktansa در این سطح لازم نیست؛ موردِ مشخصِ انتخاب با مفعول قبلی پیوند بخورد.",
+      "pronunciationFa": "مقدار، قیمت و کالا جدا شنیده شوند؛ çay و şekersiz را در سفارش کامل بفهم. متن‌ها قیمت واقعی نیستند.",
+      "productionFa": "دو انتخاب و یک علاقه/بی‌علاقگی دربارهٔ همان موقعیت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Çay mı kahve mi?",
+          "fa": "چای یا قهوه؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Çayı tercih ediyorum.",
+          "fa": "چای را ترجیح می‌دهم."
+        },
+        {
+          "role": "partner",
+          "tr": "Tamam, bir çay.",
+          "fa": "بسیار خوب، یک چای."
+        }
+      ],
+      "listening": {
+        "passage": "Kahveyi tercih ediyorum. Çayı çok sevmiyorum.",
+        "questionFa": "چه چیزی را ترجیح می‌دهد؟",
+        "answer": "kahve"
+      },
+      "reading": {
+        "passage": "Mert ekmek istiyor. Sara pilavı tercih ediyor.",
+        "questionFa": "سارا چه چیزی را ترجیح می‌دهد؟",
+        "answer": "pilav"
+      },
+      "transferToIds": [
+        "tr-l2-simple-comparisons"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-clothes-shopping، tr-l1-likes-wants-needs بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-simple-comparisons",
+      "proposedIndex": 47,
+      "module": 8,
+      "preA1Ids": [
+        "tr-prea1-04-adjectives-and-adverbs",
+        "tr-prea1-descriptions-and-family"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-preferences-choices",
+        "tr-l1-ablative-case"
+      ],
+      "outcomeFa": "دو شیء را در قیمت یا اندازه مقایسه کنم.",
+      "grammarFa": "-den daha + صفت؛ bu kitap o kitaptan daha ucuz؛ daha küçük؛ فقط یک محور در هر پیام.",
+      "vocabularyFa": "daha=بیشتر/ـتر؛ ucuz=ارزان؛ pahalı=گران؛ küçük=کوچک",
+      "outOfScopeAndErrorFa": "-den اینجا معیار مقایسه است نه مبدأ حرکت؛ عالی en و تمام مقایسه‌های پیچیده هدف نیستند.",
+      "pronunciationFa": "مقدار، قیمت و کالا جدا شنیده شوند؛ çay و şekersiz را در سفارش کامل بفهم. متن‌ها قیمت واقعی نیستند.",
+      "productionFa": "دو کالا و دو اتاق خیالی را با قیمت یا اندازه مقایسه کن.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu kitap daha ucuz mu?",
+          "fa": "این کتاب ارزان‌تر است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, o kitaptan daha ucuz.",
+          "fa": "بله، از آن کتاب ارزان‌تر است."
+        },
+        {
+          "role": "partner",
+          "tr": "Tamam, bunu alıyorum.",
+          "fa": "بسیار خوب، این را می‌خرم."
+        }
+      ],
+      "listening": {
+        "passage": "Kitap elli lira, defter yirmi lira. Defter daha ucuz.",
+        "questionFa": "کدام ارزان‌تر است؟",
+        "answer": "defter"
+      },
+      "reading": {
+        "passage": "Ankara: küçük oda. İzmir: daha büyük oda.",
+        "questionFa": "کدام شهر اتاق بزرگ‌تر دارد؟",
+        "answer": "İzmir"
+      },
+      "transferToIds": [
+        "tr-l2-leisure-hobbies"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-preferences-choices، tr-l1-ablative-case بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-leisure-hobbies",
+      "proposedIndex": 48,
+      "module": 9,
+      "preA1Ids": [
+        "tr-prea1-06-verb-chunks",
+        "tr-prea1-03-basic-verbs"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-simple-comparisons",
+        "tr-l1-likes-wants-needs"
+      ],
+      "outcomeFa": "از فعالیت موردعلاقه و وقت آزاد بگویم.",
+      "grammarFa": "kitap okumayı seviyorum در قالب با اسم‌مصدر و مفعولی؛ kitap okuyorum نیز برای فعالیت؛ صورت نو محدود و با تجزیهٔ واضح.",
+      "vocabularyFa": "boş zaman=وقت آزاد؛ müzik=موسیقی؛ yürümek=قدم‌زدن؛ yüzmek=شنا",
+      "outOfScopeAndErrorFa": "-mayı/-meyi بعد از sevmek با -mek istiyorum یکی نیست؛ همهٔ مصدرهای صرف‌شده و متمم‌ها در این درس هدف نیستند.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌ها؛ به همین دلیل و چون را با ترتیب معنایی سازگار بشنو.",
+      "productionFa": "دو فعالیت محبوب و یک سؤال دربارهٔ اوقات فراغت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Boş zamanda ne yapıyorsun?",
+          "fa": "در وقت آزاد چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Kitap okuyorum ve müzik dinliyorum.",
+          "fa": "کتاب می‌خوانم و موسیقی گوش می‌کنم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ben de kitap okumayı seviyorum.",
+          "fa": "من هم کتاب‌خواندن را دوست دارم."
+        }
+      ],
+      "listening": {
+        "passage": "Müzik dinlemeyi seviyorum. Ece kitap okumayı seviyor.",
+        "questionFa": "اجه چه کاری را دوست دارد؟",
+        "answer": "kitap okumak"
+      },
+      "reading": {
+        "passage": "Mert pazar günü yürüyor. Sara resim yapıyor.",
+        "questionFa": "چه کسی نقاشی می‌کند؟",
+        "answer": "Sara"
+      },
+      "transferToIds": [
+        "tr-l2-weather",
+        "tr-l2-social-situations"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-simple-comparisons، tr-l1-likes-wants-needs بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-weather",
+      "proposedIndex": 49,
+      "module": 9,
+      "preA1Ids": [
+        "tr-prea1-13-calendar-and-time-words",
+        "tr-prea1-04-adjectives-and-adverbs"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-leisure-hobbies",
+        "tr-l2-feelings-daily-states"
+      ],
+      "outcomeFa": "هوای امروز را با دو ویژگی کوتاه توصیف کنم.",
+      "grammarFa": "Hava sıcak/soğuk؛ yağmur yağıyor؛ güneşli در قالب؛ جملهٔ اسمی و فعلی در همان معنی جدا شناخته شوند.",
+      "vocabularyFa": "hava=هوا؛ sıcak=گرم؛ soğuk=سرد؛ yağmur=باران",
+      "outOfScopeAndErrorFa": "هوا با احساس شخص یکی نیست؛ پیش‌بینی آینده یا همهٔ فصل‌ها در هشت ردیف اجباری نیست.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌ها؛ به همین دلیل و چون را با ترتیب معنایی سازگار بشنو.",
+      "productionFa": "هوای دو روز خیالی و یک واکنش ساده بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bugün hava nasıl?",
+          "fa": "امروز هوا چطور است؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Soğuk.",
+          "fa": "سرد است."
+        },
+        {
+          "role": "partner",
+          "tr": "Yağmur yağıyor mu?",
+          "fa": "باران می‌بارد؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Hayır, güneşli.",
+          "fa": "نه، آفتابی است."
+        }
+      ],
+      "listening": {
+        "passage": "Bugün hava sıcak. Yağmur yağmıyor.",
+        "questionFa": "هوا از نظر گرما چگونه است؟",
+        "answer": "sıcak"
+      },
+      "reading": {
+        "passage": "Pazartesi: yağmur. Salı: güneş.",
+        "questionFa": "کدام روز بارانی است؟",
+        "answer": "pazartesi"
+      },
+      "transferToIds": [
+        "tr-l1-conjunctions"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-leisure-hobbies، tr-l2-feelings-daily-states بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l1-conjunctions",
+      "proposedIndex": 50,
+      "module": 9,
+      "preA1Ids": [
+        "tr-prea1-14-question-and-connecting-words",
+        "tr-prea1-number-and-time-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-weather",
+        "tr-l1-affirmative-negative-interrogative"
+      ],
+      "outcomeFa": "دو پیام کوتاه را با افزودن، تضاد یا انتخاب وصل کنم.",
+      "grammarFa": "ve/ama/veya؛ çünkü در حد پاسخ کوتاهِ نمونه و تحلیل در دلیل؛ de/da جدا برای «هم» در بازیابی.",
+      "vocabularyFa": "ve=و؛ ama=ولی؛ veya=یا؛ çünkü=چون",
+      "outOfScopeAndErrorFa": "پیوستگی معنایی مهم‌تر از زیادکردن تعداد پیوندهاست؛ جملهٔ وابستهٔ سنگین و -dığı için لازم نیست.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌ها؛ به همین دلیل و چون را با ترتیب معنایی سازگار بشنو.",
+      "productionFa": "سه جفت پیام با ve، ama و veya بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Çay veya kahve ister misin?",
+          "fa": "چای یا قهوه می‌خواهی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Çay istiyorum ama şimdi zamanım yok.",
+          "fa": "چای می‌خواهم، ولی الان وقت ندارم."
+        },
+        {
+          "role": "partner",
+          "tr": "Yarın birlikte çay içiyoruz.",
+          "fa": "فردا با هم چای می‌نوشیم."
+        },
+        {
+          "role": "learner",
+          "tr": "Tamam.",
+          "fa": "بسیار خوب."
+        }
+      ],
+      "listening": {
+        "passage": "Bugün çalışıyorum ama yarın boşum.",
+        "questionFa": "کدام روز آزاد است؟",
+        "answer": "yarın"
+      },
+      "reading": {
+        "passage": "Kitap okumayı seviyorum ama bugün zamanım yok.",
+        "questionFa": "نویسنده امروز چه چیزی ندارد؟",
+        "answer": "zaman"
+      },
+      "transferToIds": [
+        "tr-l2-near-future-plans",
+        "tr-l2-simple-reason-result"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-weather، tr-l1-affirmative-negative-interrogative بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-near-future-plans",
+      "proposedIndex": 51,
+      "module": 9,
+      "preA1Ids": [
+        "tr-prea1-13-calendar-and-time-words",
+        "tr-prea1-number-and-time-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l1-conjunctions",
+        "tr-l2-weekly-schedule"
+      ],
+      "outcomeFa": "برنامهٔ نزدیک را با زمان روشن بگویم و بپرسم.",
+      "grammarFa": "yarın/bu akşam/haftaya + -yor برای برنامهٔ توافق‌شده؛ همان دامنهٔ واقعی فعلی؛ آیندهٔ -acak/-ecek برای مرحلهٔ بعد.",
+      "vocabularyFa": "yarın=فردا؛ bu akşam=امشب؛ haftaya=هفتهٔ آینده؛ plan=برنامه",
+      "outOfScopeAndErrorFa": "حال با زمانِ آینده برنامه می‌دهد، نه پیش‌بینی قطعی همهٔ رخدادها؛ این طرح دامنهٔ فعلی درس را بی‌دلیل گسترش نمی‌دهد.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌ها؛ به همین دلیل و چون را با ترتیب معنایی سازگار بشنو.",
+      "productionFa": "سه برنامهٔ فردا/آخر هفته و یک سؤال برنامه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Yarın ne yapıyorsun?",
+          "fa": "فردا چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Türkçe çalışıyorum.",
+          "fa": "ترکی درس می‌خوانم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ben de yarın ders çalışıyorum.",
+          "fa": "من هم فردا درس می‌خوانم."
+        }
+      ],
+      "listening": {
+        "passage": "Yarın çalışıyorum. Bu akşam kitap okuyorum.",
+        "questionFa": "امشب چه کاری می‌کند؟",
+        "answer": "kitap okumak"
+      },
+      "reading": {
+        "passage": "Cumartesi kahve içiyoruz. Pazar evde kalıyorum.",
+        "questionFa": "کدام روز با هم قهوه می‌نوشند؟",
+        "answer": "cumartesi"
+      },
+      "transferToIds": [
+        "tr-l2-invitations",
+        "tr-l2-phone-short-messages"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l1-conjunctions، tr-l2-weekly-schedule بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-invitations",
+      "proposedIndex": 52,
+      "module": 9,
+      "preA1Ids": [
+        "tr-prea1-10-first-conversation",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-near-future-plans"
+      ],
+      "outcomeFa": "دعوت را بپذیرم یا رد و زمان جایگزین پیشنهاد کنم.",
+      "grammarFa": "Birlikte … içelim mi? قالب دعوت؛ üzgünüm/gelemiyorum؛ cumartesi uygun mu?؛ تأیید روز/ساعت.",
+      "vocabularyFa": "birlikte=با هم؛ üzgünüm=متأسفم؛ uygun=مناسب؛ olur=باشه",
+      "outOfScopeAndErrorFa": "-elim در اینجا قالب محدود است، نه صرف همهٔ وجه التزامی؛ دلیل شخصی واقعی اجباری نیست.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌ها؛ به همین دلیل و چون را با ترتیب معنایی سازگار بشنو.",
+      "productionFa": "یک دعوت، یک رد و یک توافق تازه با روز و ساعت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Yarın birlikte kahve içelim mi?",
+          "fa": "فردا با هم قهوه بنوشیم؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Üzgünüm, yarın gelemiyorum. Cumartesi uygun mu?",
+          "fa": "متأسفم، فردا نمی‌توانم بیایم. شنبه مناسب است؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Olur, cumartesi saat onda.",
+          "fa": "باشد، شنبه ساعت ده."
+        }
+      ],
+      "listening": {
+        "passage": "Cuma gelemiyorum. Pazar günü boşum.",
+        "questionFa": "کدام روز برای دیدار آزاد است؟",
+        "answer": "pazar"
+      },
+      "reading": {
+        "passage": "Mert, pazartesi saat üçte görüşelim mi? Ece",
+        "questionFa": "ساعت پیشنهادی دیدار چیست؟",
+        "answer": "15.00"
+      },
+      "transferToIds": [
+        "tr-l2-suggestions-advice",
+        "tr-l2-connected-conversation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-near-future-plans بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-suggestions-advice",
+      "proposedIndex": 53,
+      "module": 9,
+      "preA1Ids": [
+        "tr-prea1-polite-requests-and-directions",
+        "tr-prea1-13-calendar-and-time-words"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-invitations",
+        "tr-l1-ability-inability"
+      ],
+      "outcomeFa": "یک پیشنهاد مشترک و پاسخ مناسب بدهم.",
+      "grammarFa": "Gidelim mi? / … yapabiliriz در قالب محدود؛ İyi fikir / bugün olmaz؛ توصیهٔ پزشکی یا -malı هدف نیست.",
+      "vocabularyFa": "park=پارک؛ kütüphane=کتابخانه؛ fikir=فکر؛ olmaz=نمی‌شود",
+      "outOfScopeAndErrorFa": "تولید صرف کامل -elim و aorist اجباری نیست؛ پیشنهاد باید زمان/مکان قابل‌فهم داشته باشد.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌ها؛ به همین دلیل و چون را با ترتیب معنایی سازگار بشنو.",
+      "productionFa": "دو پیشنهاد کوتاه و پاسخ قبول و رد برای آن‌ها بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Kütüphaneye gidelim mi?",
+          "fa": "به کتابخانه برویم؟"
+        },
+        {
+          "role": "learner",
+          "tr": "İyi fikir. Saat dört uygun mu?",
+          "fa": "فکر خوبی است. ساعت چهار مناسب است؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Evet, uygun.",
+          "fa": "بله، مناسب است."
+        }
+      ],
+      "listening": {
+        "passage": "Hava güzel. Birlikte parka gidelim mi?",
+        "questionFa": "پیشنهاد رفتن به کجاست؟",
+        "answer": "park"
+      },
+      "reading": {
+        "passage": "Kütüphanede birlikte ders çalışabiliriz.",
+        "questionFa": "کار مشترک پیشنهادی چیست؟",
+        "answer": "ders çalışmak"
+      },
+      "transferToIds": [
+        "tr-l2-social-situations"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-invitations، tr-l1-ability-inability بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-social-situations",
+      "proposedIndex": 54,
+      "module": 9,
+      "preA1Ids": [
+        "tr-prea1-10-first-conversation",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-suggestions-advice",
+        "tr-l1-introductions",
+        "tr-l2-leisure-hobbies"
+      ],
+      "outcomeFa": "آشنایی را با موضوع مشترک و دعوت ادامه بدهم.",
+      "grammarFa": "بازیابی نام، کلاس، شهر، علاقه و زمان آزاد؛ ne zamandır و ساخت‌های پیچیده اجباری نیستند.",
+      "vocabularyFa": "kurs=کلاس/دوره؛ yeni=تازه‌وارد؛ arkadaş=دوست؛ tanışmak=آشناشدن",
+      "outOfScopeAndErrorFa": "صحنه به چند پرسش نامرتبط تبدیل نشود؛ شخصیت و خطاب ثابت بمانند.",
+      "pronunciationFa": "آهنگ دعوت، رد و پیشنهاد و مکث بین جمله‌ها؛ به همین دلیل و چون را با ترتیب معنایی سازگار بشنو.",
+      "productionFa": "گفت‌وگویی از آشنایی به یک علاقهٔ مشترک و دعوت بساز.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Merhaba, ben Ece. Kursta yeni misin?",
+          "fa": "سلام، من اجه هستم. در کلاس تازه‌واردی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet, adım Sara. Türkçe öğreniyorum.",
+          "fa": "بله، نامم سارا است. ترکی یاد می‌گیرم."
+        },
+        {
+          "role": "partner",
+          "tr": "Ben de. Yarın birlikte çay içelim mi?",
+          "fa": "من هم همین‌طور. فردا با هم چای بنوشیم؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Olur, saat onda boşum.",
+          "fa": "باشد، ساعت ده آزاد هستم."
+        }
+      ],
+      "listening": {
+        "passage": "Merhaba, adım Sara. Ankara’da yaşıyorum. Kitap okumayı seviyorum.",
+        "questionFa": "سارا کجا زندگی می‌کند؟",
+        "answer": "Ankara"
+      },
+      "reading": {
+        "passage": "Ece ve Mert salı saat onda birlikte çalışıyor.",
+        "questionFa": "روز مطالعهٔ مشترک چیست؟",
+        "answer": "salı"
+      },
+      "transferToIds": [
+        "tr-l2-directions-navigation",
+        "tr-l2-connected-conversation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-suggestions-advice، tr-l1-introductions، tr-l2-leisure-hobbies بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-directions-navigation",
+      "proposedIndex": 55,
+      "module": 10,
+      "preA1Ids": [
+        "tr-prea1-10-first-conversation",
+        "tr-prea1-polite-requests-and-directions",
+        "tr-prea1-12-location-and-direction-words"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-social-situations",
+        "tr-l1-dative-case",
+        "tr-l1-postpositions-spatial"
+      ],
+      "outcomeFa": "مسیر کوتاه را با مستقیم/راست/چپ بفهمم و بدهم.",
+      "grammarFa": "Düz gidin؛ sağa/sola dönün؛ sonra؛ siz در راهنمایی رسمی؛ نقش -A در جهت بازیابی شود.",
+      "vocabularyFa": "sağ=راست؛ sol=چپ؛ düz=مستقیم؛ dönmek=پیچیدن",
+      "outOfScopeAndErrorFa": "نقشه و گفته یکی باشند؛ آدرس واقعی شهر داده نمی‌شود و مسیرهای چندانتقالی هدف نیستند.",
+      "pronunciationFa": "جهت، ایستگاه و ساعت در پیام کوتاه؛ sağ و sol متفاوت‌اند. دادهٔ مسیر فرضی است و باید با نقشهٔ تمرین تطابق داشته باشد.",
+      "productionFa": "مسیر سه‌گامی از کلاس تا بانک خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Affedersiniz, banka nerede?",
+          "fa": "ببخشید، بانک کجاست؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Düz gidin.",
+          "fa": "مستقیم بروید."
+        },
+        {
+          "role": "partner",
+          "tr": "Sonra?",
+          "fa": "بعد؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Sağa dönün. Banka solda.",
+          "fa": "به راست بپیچید. بانک سمت چپ است."
+        }
+      ],
+      "listening": {
+        "passage": "Düz gidin, sonra sola dönün. Market orada.",
+        "questionFa": "بعد از مستقیم رفتن به کدام سمت می‌پیچد؟",
+        "answer": "sola"
+      },
+      "reading": {
+        "passage": "Banka marketin sağında.",
+        "questionFa": "بانک نسبت به فروشگاه کجاست؟",
+        "answer": "sağında"
+      },
+      "transferToIds": [
+        "tr-l2-public-transport-taxi",
+        "tr-l2-connected-conversation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-social-situations، tr-l1-dative-case، tr-l1-postpositions-spatial بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-public-transport-taxi",
+      "proposedIndex": 56,
+      "module": 10,
+      "preA1Ids": [
+        "tr-prea1-09-places",
+        "tr-prea1-time-and-calendar-sentences",
+        "tr-prea1-polite-requests-and-directions"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-directions-navigation"
+      ],
+      "outcomeFa": "مقصد و محل پیاده‌شدن را در حمل‌ونقل بفهمم.",
+      "grammarFa": "Bu otobüs … gidiyor mu?؛ sonraki durakta inin؛ taksiyle/otobüsle در قالب وسیله؛ جدول کامل ile لازم نیست.",
+      "vocabularyFa": "otobüs=اتوبوس؛ durak=ایستگاه؛ inmek=پیاده‌شدن؛ sonraki=بعدی",
+      "outOfScopeAndErrorFa": "مقصد با ایستگاه بعدی یکی فرض نشود؛ مسیرها تمرینی‌اند، نه راهنمای زندهٔ سفر.",
+      "pronunciationFa": "جهت، ایستگاه و ساعت در پیام کوتاه؛ sağ و sol متفاوت‌اند. دادهٔ مسیر فرضی است و باید با نقشهٔ تمرین تطابق داشته باشد.",
+      "productionFa": "یک پرسش مقصد و یک دستور پیاده‌شدن و یک ساعت حرکت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Bu otobüs merkeze gidiyor mu?",
+          "fa": "این اتوبوس به مرکز شهر می‌رود؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Evet. Sonraki durakta inin.",
+          "fa": "بله. در ایستگاه بعدی پیاده شوید."
+        },
+        {
+          "role": "partner",
+          "tr": "Teşekkürler.",
+          "fa": "ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Bu otobüs istasyona gidiyor. Sonraki durakta inin.",
+        "questionFa": "کجا باید پیاده شود؟",
+        "answer": "sonraki durakta"
+      },
+      "reading": {
+        "passage": "Otobüs 5: istasyon–merkez. Kalkış: 08.10.",
+        "questionFa": "ساعت حرکت چیست؟",
+        "answer": "08.10"
+      },
+      "transferToIds": [
+        "tr-l2-travel-airport-tickets"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-directions-navigation بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-travel-airport-tickets",
+      "proposedIndex": 57,
+      "module": 10,
+      "preA1Ids": [
+        "tr-prea1-05-numbers-zero-to-seven",
+        "tr-prea1-09-places",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-public-transport-taxi",
+        "tr-l2-shopping-price-payment"
+      ],
+      "outcomeFa": "بلیت بخواهم و مقصد و ساعت حرکت را تشخیص بدهم.",
+      "grammarFa": "Ankara’ya bir bilet؛ tek yön/gidiş dönüş؛ kaçta kalkıyor?؛ uçak/otobüs واژگان موقعیت، نه همهٔ فرودگاه.",
+      "vocabularyFa": "bilet=بلیت؛ tek yön=یک‌طرفه؛ gidiş dönüş=رفت‌وبرگشت؛ kalkış=حرکت",
+      "outOfScopeAndErrorFa": "عنوان فرودگاه مجوز انباشت واژگان کنترل گذرنامه و پرواز نیست؛ اطلاعات خیالی‌اند.",
+      "pronunciationFa": "جهت، ایستگاه و ساعت در پیام کوتاه؛ sağ و sol متفاوت‌اند. دادهٔ مسیر فرضی است و باید با نقشهٔ تمرین تطابق داشته باشد.",
+      "productionFa": "درخواست بلیت و دو پرسش مقصد/ساعت برای سفری خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Ankara’ya bir bilet, lütfen.",
+          "fa": "یک بلیت به آنکارا، لطفاً."
+        },
+        {
+          "role": "learner",
+          "tr": "Tek yön mü, gidiş dönüş mü?",
+          "fa": "یک‌طرفه یا رفت‌وبرگشت؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Tek yön. Kaçta kalkıyor?",
+          "fa": "یک‌طرفه. چه ساعتی حرکت می‌کند؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Saat on birde.",
+          "fa": "ساعت یازده."
+        }
+      ],
+      "listening": {
+        "passage": "Ankara otobüsü saat onda kalkıyor. Peron üç.",
+        "questionFa": "شمارهٔ سکو چیست؟",
+        "answer": "üç"
+      },
+      "reading": {
+        "passage": "İzmir: 14.30. Ankara: 15.00.",
+        "questionFa": "ساعت حرکت به ازمیر چیست؟",
+        "answer": "14.30"
+      },
+      "transferToIds": [
+        "tr-l2-hotel-accommodation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-public-transport-taxi، tr-l2-shopping-price-payment بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-hotel-accommodation",
+      "proposedIndex": 58,
+      "module": 10,
+      "preA1Ids": [
+        "tr-prea1-introduction-chunks",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-travel-airport-tickets",
+        "tr-l2-asking-info-forms"
+      ],
+      "outcomeFa": "رزرو خیالی را معرفی و دربارهٔ اتاق و صبحانه سؤال کنم.",
+      "grammarFa": "Rezervasyonum var؛ … adına در قالب نام رزرو؛ iki gece؛ kahvaltı dahil mi? در قالب کوتاه.",
+      "vocabularyFa": "rezervasyon=رزرو؛ gece=شب؛ anahtar=کلید؛ kahvaltı=صبحانه",
+      "outOfScopeAndErrorFa": "شمارهٔ کارت/گذرنامه واقعی لازم نیست؛ این مکالمه رزرو واقعی نمی‌سازد.",
+      "pronunciationFa": "جهت، ایستگاه و ساعت در پیام کوتاه؛ sağ و sol متفاوت‌اند. دادهٔ مسیر فرضی است و باید با نقشهٔ تمرین تطابق داشته باشد.",
+      "productionFa": "نام رزرو، مدت اقامت و دو سؤال اتاق/صبحانه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Merhaba, rezervasyonum var.",
+          "fa": "سلام، رزرو دارم."
+        },
+        {
+          "role": "learner",
+          "tr": "Hangi isim adına?",
+          "fa": "به چه نامی؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Sara Yılmaz adına.",
+          "fa": "به نام سارا ییلماز."
+        },
+        {
+          "role": "learner",
+          "tr": "Buyurun, oda anahtarınız.",
+          "fa": "بفرمایید، کلید اتاق شما."
+        }
+      ],
+      "listening": {
+        "passage": "Yılmaz adına üç gece rezervasyonum var.",
+        "questionFa": "رزرو برای چند شب است؟",
+        "answer": "üç gece"
+      },
+      "reading": {
+        "passage": "Kahvaltı: 07.00–10.00. Oda: 12.",
+        "questionFa": "صبحانه چه ساعتی شروع می‌شود؟",
+        "answer": "07.00"
+      },
+      "transferToIds": [
+        "tr-l2-polite-requests-permission"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-travel-airport-tickets، tr-l2-asking-info-forms بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-polite-requests-permission",
+      "proposedIndex": 59,
+      "module": 11,
+      "preA1Ids": [
+        "tr-prea1-polite-requests-and-directions",
+        "tr-prea1-10-first-conversation"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-hotel-accommodation",
+        "tr-l1-requests-permission-imperative"
+      ],
+      "outcomeFa": "درخواست کمک و سؤال اجازه را محترمانه‌تر مطرح کنم.",
+      "grammarFa": "Yardım eder misiniz?؛ Oturabilir miyim?؛ Rica etsem …? فقط بازشناسی اختیاری؛ شخص اول اجازه و شخص دوم درخواست جدا.",
+      "vocabularyFa": "yardım=کمک؛ oturmak=نشستن؛ rica=خواهش؛ müsait=خالی/دارای وقت",
+      "outOfScopeAndErrorFa": "کل شرطی و aorist از قالب ادب استخراج نشود؛ لحن و lütfen هم مهم‌اند.",
+      "pronunciationFa": "زمان تماس و علامت پزشکی، پسوند گذشته و حال با صوت معتبر تشخیص داده شوند؛ این مرحله آزمون واقعی میکروفن نیست.",
+      "productionFa": "دو درخواست از دیگری و دو سؤال اجازه برای خودت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Yardım eder misiniz, lütfen?",
+          "fa": "لطفاً کمک می‌کنید؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Tabii, buyurun.",
+          "fa": "حتماً، بفرمایید."
+        },
+        {
+          "role": "partner",
+          "tr": "Buraya oturabilir miyim?",
+          "fa": "می‌توانم اینجا بنشینم؟"
+        }
+      ],
+      "listening": {
+        "passage": "Buraya oturabilir miyim? Evet, sandalye boş.",
+        "questionFa": "اجازهٔ چه کاری خواسته شده؟",
+        "answer": "اینجا نشستن"
+      },
+      "reading": {
+        "passage": "Daha yavaş konuşur musunuz, lütfen?",
+        "questionFa": "درخواست چیست؟",
+        "answer": "آهسته‌تر صحبت‌کردن"
+      },
+      "transferToIds": [
+        "tr-l2-phone-short-messages"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-hotel-accommodation، tr-l1-requests-permission-imperative بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-phone-short-messages",
+      "proposedIndex": 60,
+      "module": 11,
+      "preA1Ids": [
+        "tr-prea1-05-numbers-zero-to-seven",
+        "tr-prea1-introduction-chunks",
+        "tr-prea1-time-and-calendar-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-polite-requests-permission",
+        "tr-l2-near-future-plans"
+      ],
+      "outcomeFa": "خودم را پشت تلفن معرفی و زمان تماس بعدی را بگویم.",
+      "grammarFa": "Alo؛ Ben …؛ mesaj bırakabilir miyim?؛ beni … arar mısınız? قالب رسمی؛ ساعت با تکرار تأیید شود.",
+      "vocabularyFa": "aramak=تماس‌گرفتن؛ mesaj=پیام؛ bırakmak=گذاشتن؛ alo=الو",
+      "outOfScopeAndErrorFa": "شماره و نام واقعی لازم نیستند؛ خطاب sen و siz در هر صحنه ثابت بماند.",
+      "pronunciationFa": "زمان تماس و علامت پزشکی، پسوند گذشته و حال با صوت معتبر تشخیص داده شوند؛ این مرحله آزمون واقعی میکروفن نیست.",
+      "productionFa": "پیام کوتاه با نام خیالی و زمان تماس بعدی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Alo, buyurun.",
+          "fa": "الو، بفرمایید."
+        },
+        {
+          "role": "learner",
+          "tr": "Merhaba, ben Sara. Mesaj bırakabilir miyim?",
+          "fa": "سلام، من سارا هستم. می‌توانم پیام بگذارم؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Tabii.",
+          "fa": "حتماً."
+        },
+        {
+          "role": "learner",
+          "tr": "Yarın saat onda arıyorum.",
+          "fa": "فردا ساعت ده تماس می‌گیرم."
+        }
+      ],
+      "listening": {
+        "passage": "Merhaba, ben Mert. Yarın saat onda arıyorum.",
+        "questionFa": "تماس فردا چه ساعتی است؟",
+        "answer": "onda"
+      },
+      "reading": {
+        "passage": "Sara, beni saat beşte arar mısın? Ece",
+        "questionFa": "ساعت درخواست تماس چیست؟",
+        "answer": "17.00"
+      },
+      "transferToIds": [
+        "tr-l2-doctor-symptoms"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-polite-requests-permission، tr-l2-near-future-plans بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-doctor-symptoms",
+      "proposedIndex": 61,
+      "module": 11,
+      "preA1Ids": [
+        "tr-prea1-descriptions-and-family",
+        "tr-prea1-09-needs-and-places"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-phone-short-messages",
+        "tr-l2-feelings-daily-states"
+      ],
+      "outcomeFa": "علامت ساده و نیاز به نوبت پزشکی را بیان کنم.",
+      "grammarFa": "Başım/boğazım ağrıyor؛ ateşim var؛ sabahtan beri در قالب زمانی محدود؛ randevu almak istiyorum.",
+      "vocabularyFa": "baş=سر؛ boğaz=گلو؛ ateş=تب؛ randevu=نوبت",
+      "outOfScopeAndErrorFa": "پسوند ملکیِ عضو بدن با جنسیت ربط ندارد؛ این درس تشخیص، دارو یا تضمین کمک اورژانسی نمی‌دهد.",
+      "pronunciationFa": "زمان تماس و علامت پزشکی، پسوند گذشته و حال با صوت معتبر تشخیص داده شوند؛ این مرحله آزمون واقعی میکروفن نیست.",
+      "productionFa": "برای شخصیت خیالی دو علامت، زمان شروع و درخواست نوبت بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Randevu almak istiyorum.",
+          "fa": "می‌خواهم نوبت بگیرم."
+        },
+        {
+          "role": "learner",
+          "tr": "Neyiniz var?",
+          "fa": "چه مشکلی دارید؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Başım ağrıyor.",
+          "fa": "سردرد دارم."
+        },
+        {
+          "role": "learner",
+          "tr": "Saat onda boş yer var.",
+          "fa": "ساعت ده وقت خالی هست."
+        }
+      ],
+      "listening": {
+        "passage": "Boğazım sabahtan beri ağrıyor. Randevu istiyorum.",
+        "questionFa": "کدام عضو درد می‌کند؟",
+        "answer": "boğaz"
+      },
+      "reading": {
+        "passage": "Ateşim var. Kendimi iyi hissetmiyorum.",
+        "questionFa": "کدام علامت صریحاً ذکر شده؟",
+        "answer": "ateş"
+      },
+      "transferToIds": [
+        "tr-l2-recent-past-basics"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-phone-short-messages، tr-l2-feelings-daily-states بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-recent-past-basics",
+      "proposedIndex": 62,
+      "module": 11,
+      "preA1Ids": [
+        "tr-prea1-13-calendar-and-time-words",
+        "tr-prea1-06-verb-chunks"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-doctor-symptoms",
+        "tr-l1-common-verbs-present"
+      ],
+      "outcomeFa": "کار دیروز را با چند صورت گذشتهٔ آشنا بازگو کنم.",
+      "grammarFa": "dün/az önce + geldim/gittim/içtim/çalıştım در قالب محدود؛ -DI و شخص اول در این نمونه‌ها؛ گذشتهٔ نقلی -miş و روایت بلند بعداً.",
+      "vocabularyFa": "dün=دیروز؛ az önce=کمی پیش؛ geldim=آمدم؛ içtim=نوشیدم",
+      "outOfScopeAndErrorFa": "کل جدول گذشته و بودمِ پیچیده در هشت ردیف لازم نیست؛ فرق گفتار امروز و دیروز با نشانهٔ زمان روشن شود.",
+      "pronunciationFa": "زمان تماس و علامت پزشکی، پسوند گذشته و حال با صوت معتبر تشخیص داده شوند؛ این مرحله آزمون واقعی میکروفن نیست.",
+      "productionFa": "سه کار دیروز با دو فعل آشنا و یک قید زمان بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Dün ne yaptın?",
+          "fa": "دیروز چه کار کردی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Türkçe çalıştım. Sonra eve gittim.",
+          "fa": "ترکی درس خواندم. بعد به خانه رفتم."
+        },
+        {
+          "role": "partner",
+          "tr": "Güzel. Ben de evde çalıştım.",
+          "fa": "خوب است. من هم در خانه درس خواندم."
+        }
+      ],
+      "listening": {
+        "passage": "Dün çalıştım. Akşam kitap okudum.",
+        "questionFa": "عصر چه کاری کرد؟",
+        "answer": "kitap okumak"
+      },
+      "reading": {
+        "passage": "Mert dün ekmek aldı. Ece kitap okudu.",
+        "questionFa": "چه کسی نان خرید؟",
+        "answer": "Mert"
+      },
+      "transferToIds": [
+        "tr-l2-simple-reason-result"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-doctor-symptoms، tr-l1-common-verbs-present بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-simple-reason-result",
+      "proposedIndex": 63,
+      "module": 12,
+      "preA1Ids": [
+        "tr-prea1-14-question-and-connecting-words",
+        "tr-prea1-13-calendar-and-time-words"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-recent-past-basics",
+        "tr-l1-conjunctions"
+      ],
+      "outcomeFa": "دلیل و نتیجهٔ ساده را با دو جملهٔ کوتاه مرتبط بیان کنم.",
+      "grammarFa": "Neden?؛ çünkü برای دلیل؛ bu yüzden برای نتیجه؛ زمان حال/اسمیِ آشنا، نه -dığı için.",
+      "vocabularyFa": "neden=چرا؛ çünkü=چون؛ bu yüzden=به همین دلیل؛ kalmak=ماندن",
+      "outOfScopeAndErrorFa": "ترتیب دلیل و نتیجه وارونه نشود؛ علت خصوصی واقعی لازم نیست. weil آلمانی یا صرف وابستهٔ تازه کپی نشود.",
+      "pronunciationFa": "مکث و تأکید برای دلیل، رد پیشنهاد و زمان نهایی؛ هدف قابل‌فهم بودن است نه سرعت بومی.",
+      "productionFa": "دو دلیل و یک نتیجه برای رد دعوت یا انتخاب خیالی بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Neden bugün gelemiyorsun?",
+          "fa": "چرا امروز نمی‌توانی بیایی؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Çünkü çalışıyorum. Yarın boşum.",
+          "fa": "چون کار می‌کنم. فردا آزاد هستم."
+        },
+        {
+          "role": "partner",
+          "tr": "Tamam, yarın görüşürüz.",
+          "fa": "بسیار خوب، فردا می‌بینمت."
+        }
+      ],
+      "listening": {
+        "passage": "Evde kalıyorum çünkü ateşim var.",
+        "questionFa": "چرا در خانه می‌ماند؟",
+        "answer": "ateşi var"
+      },
+      "reading": {
+        "passage": "Yağmur yağıyor. Bu yüzden evde kalıyoruz.",
+        "questionFa": "نتیجهٔ باران چیست؟",
+        "answer": "evde kalıyoruz"
+      },
+      "transferToIds": [
+        "tr-l2-connected-conversation"
+      ],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-recent-past-basics، tr-l1-conjunctions بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    },
+    {
+      "id": "tr-l2-connected-conversation",
+      "proposedIndex": 64,
+      "module": 12,
+      "preA1Ids": [
+        "tr-prea1-10-first-conversation",
+        "tr-prea1-07-first-short-sentences"
+      ],
+      "prerequisiteIds": [
+        "tr-l2-simple-reason-result",
+        "tr-l2-social-situations",
+        "tr-l2-invitations",
+        "tr-l2-directions-navigation"
+      ],
+      "outcomeFa": "از آشنایی به دعوت، رفع مانع و توافق روشن برسم.",
+      "grammarFa": "بازیابی نام، شهر، کلاس، وقت آزاد و مکان؛ ساخت تازهٔ اجباری ندارد؛ صحنهٔ پنج‌نوبتی دقیقاً حفظ می‌شود.",
+      "vocabularyFa": "نام، شهر، روز، ساعت و çay؛ بدون فهرست تازهٔ سنگین",
+      "outOfScopeAndErrorFa": "طول فرد صحنه را با حذف آخرین نوبت یا افزودن نوبت جعلی زوج نکن؛ ردیف‌های آموزشی و صحنه دو بخش جدا باشند.",
+      "pronunciationFa": "مکث و تأکید برای دلیل، رد پیشنهاد و زمان نهایی؛ هدف قابل‌فهم بودن است نه سرعت بومی.",
+      "productionFa": "گفت‌وگویی پنج تا هفت نوبتی با رد یک زمان و توافق زمان تازه بنویس.",
+      "scene": [
+        {
+          "role": "partner",
+          "tr": "Merhaba, ben Ece. Ankara’da yaşıyorum.",
+          "fa": "سلام، من اجه هستم. در آنکارا زندگی می‌کنم."
+        },
+        {
+          "role": "learner",
+          "tr": "Ben Sara. Ben de Ankara’da yaşıyorum.",
+          "fa": "من سارا هستم. من هم در آنکارا زندگی می‌کنم."
+        },
+        {
+          "role": "partner",
+          "tr": "Yarın birlikte çay içelim mi?",
+          "fa": "فردا با هم چای بنوشیم؟"
+        },
+        {
+          "role": "learner",
+          "tr": "Yarın gelemiyorum. Cumartesi saat onda kütüphanede görüşelim mi?",
+          "fa": "فردا نمی‌توانم بیایم. شنبه ساعت ده در کتابخانه همدیگر را ببینیم؟"
+        },
+        {
+          "role": "partner",
+          "tr": "Olur. Cumartesi saat onda. Görüşürüz!",
+          "fa": "باشد. شنبه ساعت ده. می‌بینمت!"
+        }
+      ],
+      "listening": {
+        "passage": "Ece ve Sara cuma günü gelemiyor. Cumartesi saat on birde çay içiyorlar.",
+        "questionFa": "زمان نهایی چای چه ساعتی است؟",
+        "answer": "on birde"
+      },
+      "reading": {
+        "passage": "Ece: Cumartesi saat onda mı? Sara: Evet, kütüphanede. Görüşürüz!",
+        "questionFa": "مکان نهایی دیدار کجاست؟",
+        "answer": "kütüphane"
+      },
+      "transferToIds": [],
+      "retrievalFa": "یک پاسخ کوتاه بدون متن از tr-l2-simple-reason-result، tr-l2-social-situations، tr-l2-invitations، tr-l2-directions-navigation بازیابی شود؛ در صورت نیاز همان الگو کوتاه بازآموزی شود."
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "tr-l1-greetings": {
+    "sara": "سارا؛ نام خیالی"
+  },
+  "tr-l1-alphabet-pronunciation": {},
+  "tr-l2-asking-help-problems": {
+    "ediyorum": "می‌کنم؛ در tekrar ediyorum یعنی تکرار می‌کنم",
+    "tabii": "حتماً/البته",
+    "konuşun": "صحبت کنید"
+  },
+  "tr-l1-introductions": {
+    "deniz": "دنیز؛ نام خیالی"
+  },
+  "tr-l1-vowel-harmony": {},
+  "tr-l1-word-order": {
+    "birlikte": "با هم",
+    "içiyoruz": "می‌نوشیم"
+  },
+  "tr-l1-personal-pronouns": {
+    "buradayız": "اینجا هستیم",
+    "evde": "در خانه",
+    "öğreniyor": "یاد می‌گیرد"
+  },
+  "tr-l1-nominal-sentences": {
+    "öğretmenim": "معلم هستم"
+  },
+  "tr-l1-nationality-language-residence": {
+    "nerelisin": "اهل کجا هستی",
+    "konuşuyor": "صحبت می‌کند؛ پیش از جزء پرسشی نیز همین صورت می‌آید",
+    "musun": "جزء پرسشی و شناسهٔ تو؛ پس از -yor",
+    "yaşıyor": "زندگی می‌کند",
+    "izmir": "ازمیر؛ نام شهر"
+  },
+  "tr-l1-numbers-age-info": {},
+  "tr-l1-singular-plural": {
+    "bunlar": "این‌ها"
+  },
+  "tr-l1-demonstratives": {
+    "mi": "جزء جداگانهٔ پرسش؛ در الگوی واکهٔ مربوط"
+  },
+  "tr-l1-describing-things": {},
+  "tr-l1-colors-shapes-appearance": {},
+  "tr-l2-feelings-daily-states": {
+    "ister": "می‌خواهد؛ در ister misin قالب آیا می‌خواهی",
+    "yorgun": "خسته",
+    "istiyor": "می‌خواهد"
+  },
+  "tr-l1-family": {},
+  "tr-l1-possession-suffixes": {},
+  "tr-l1-var-yok": {
+    "bende": "نزد من؛ در اینجا «من دارم/ندارم»"
+  },
+  "tr-l1-infinitive-verb-stem": {
+    "kökü": "ریشه‌اش"
+  },
+  "tr-l1-simple-verbal-sentences": {},
+  "tr-l1-present-continuous": {},
+  "tr-l1-common-verbs-present": {
+    "çalışıyor": "کار/مطالعه می‌کند"
+  },
+  "tr-l1-affirmative-negative-interrogative": {},
+  "tr-l1-question-words": {
+    "ders": "کلاس/درس",
+    "onda": "ساعت ده؛ در زمینهٔ زمان این درس، نه پیش او",
+    "başlıyor": "شروع می‌شود"
+  },
+  "tr-l1-location-position": {
+    "mutfak": "آشپزخانه"
+  },
+  "tr-l1-locative-case": {},
+  "tr-l1-dative-case": {
+    "gidiyoruz": "می‌رویم"
+  },
+  "tr-l1-ablative-case": {},
+  "tr-l1-accusative-case": {
+    "seviyorum": "دوست دارم"
+  },
+  "tr-l1-postpositions-spatial": {},
+  "tr-l2-home-furniture": {
+    "odanda": "در اتاقت"
+  },
+  "tr-l1-likes-wants-needs": {
+    "istiyorsun": "می‌خواهی",
+    "ihtiyacın": "نیازت؛ در ihtiyacın var نیاز داری"
+  },
+  "tr-l1-ability-inability": {
+    "gelebiliyorum": "می‌توانم بیایم"
+  },
+  "tr-l1-requests-permission-imperative": {},
+  "tr-l1-ordinals-time-date": {
+    "ikide": "ساعت دو"
+  },
+  "tr-l1-daily-routine-habits": {
+    "kalkıyorsun": "بلند می‌شوی",
+    "altıda": "ساعت شش"
+  },
+  "tr-l2-weekly-schedule": {
+    "dersi": "کلاسِ؛ در Türkçe dersi کلاس ترکی"
+  },
+  "tr-l2-work-study-talk": {},
+  "tr-l2-asking-info-forms": {},
+  "tr-l2-simple-instructions": {
+    "bilet": "بلیت"
+  },
+  "tr-l2-ordering-food-drinks": {
+    "istersiniz": "میل دارید/می‌خواهید؛ خطاب محترمانه",
+    "menü": "منو",
+    "tl": "کوتاه‌شدهٔ لیر ترکیه"
+  },
+  "tr-l2-restaurant-cafe": {
+    "buyurun": "بفرمایید",
+    "çayınız": "چای شما"
+  },
+  "tr-l2-shopping-price-payment": {
+    "ödeyebilirsiniz": "می‌توانید پرداخت کنید"
+  },
+  "tr-l2-store-supermarket": {
+    "ekmeğin": "نان؛ در ترکیب کنارِ نان",
+    "liste": "فهرست"
+  },
+  "tr-l2-clothes-shopping": {
+    "m": "علامت سایز مدیوم در لباس"
+  },
+  "tr-l2-preferences-choices": {
+    "ediyor": "می‌کند؛ در tercih ediyor ترجیح می‌دهد"
+  },
+  "tr-l2-simple-comparisons": {
+    "mu": "جزء جداگانهٔ پرسش؛ در الگوی واکهٔ مربوط"
+  },
+  "tr-l2-leisure-hobbies": {
+    "dinlemeyi": "گوش‌کردن را",
+    "yürüyor": "قدم می‌زند"
+  },
+  "tr-l2-weather": {
+    "güneş": "خورشید؛ در جدول هوا نشانهٔ هوای آفتابی"
+  },
+  "tr-l1-conjunctions": {},
+  "tr-l2-near-future-plans": {},
+  "tr-l2-invitations": {
+    "üçte": "ساعت سه"
+  },
+  "tr-l2-suggestions-advice": {},
+  "tr-l2-social-situations": {},
+  "tr-l2-directions-navigation": {},
+  "tr-l2-public-transport-taxi": {
+    "merkez": "مرکز شهر",
+    "kalkış": "حرکت/زمان حرکت"
+  },
+  "tr-l2-travel-airport-tickets": {},
+  "tr-l2-hotel-accommodation": {
+    "isim": "نام"
+  },
+  "tr-l2-polite-requests-permission": {},
+  "tr-l2-phone-short-messages": {
+    "mısın": "جزء پرسشی و شناسهٔ تو؛ در این الگوی هماهنگی واکه"
+  },
+  "tr-l2-doctor-symptoms": {
+    "neyiniz": "چه مشکل/عارضه‌ای دارید؛ در قالب Neyiniz var?",
+    "yer": "جا/وقت خالی در این موقعیت"
+  },
+  "tr-l2-recent-past-basics": {
+    "yaptın": "انجام دادی؛ در ne yaptın چه کار کردی",
+    "okudu": "خواند"
+  },
+  "tr-l2-simple-reason-result": {},
+  "tr-l2-connected-conversation": {
+    "gelemiyor": "نمی‌تواند بیاید؛ صورت سوم شخص",
+    "içiyorlar": "می‌نوشند"
+  }
+}

@@ -1,3 +1,5 @@
+import { ProfileIcon } from '@/components/ProfileIcon';
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel, formatPercent } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -18,13 +20,11 @@ import {
   MessageCircle,
   Play,
   RefreshCw,
-  SlidersHorizontal,
   Sparkles,
   RotateCcw,
   Volume2,
   Award,
 } from 'lucide-react-native';
-import QuickSettingsModal from '@/components/QuickSettingsModal';
 import { PageNavigation } from '@/components/PageNavigation';
 import { StarterBottomNav } from '@/components/StarterBottomNav';
 import { LearningHomeColors as HomeColors, learningHomeStyles as styles } from '@/components/LearningHomeStyles';
@@ -95,7 +95,6 @@ export default function StarterHome({course}: {course: StarterCourse}) {
   const compact = width < 640;
   const { snapshot, progress, dueCount, streak, plan, hasStartedCourse, error, retry } = useCourseHome(course.id);
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [quickSettingsOpen, setQuickSettingsOpen] = useState(false);
   const { opening, open } = useOpeningNavigation();
   const completedIds = progress?.completedLessonIds ?? [];
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
@@ -130,8 +129,6 @@ export default function StarterHome({course}: {course: StarterCourse}) {
 
   const openLevel = (levelId: StarterLevelId) => open(`${course.home}/library?level=${levelId}`);
 
-  // Level replay is temporary; only the same-lesson reset replaces a saved attempt.
-  const replayBeginnerLevel = () => open(`${course.home}/lesson?id=${encodeURIComponent(lessons[0].id)}&levelReplay=1`);
   const openNextLesson = () => {
     if (resumeLesson) open(`${course.home}/lesson?id=${encodeURIComponent(resumeLesson.id)}`);
     else openLevel(0);
@@ -360,24 +357,7 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                 <Text style={styles.lessonCountLabel}>{heroLesson.learningMode === 'chunks' ? 'عبارت' : heroLesson.learningMode ? 'واژه' : 'جمله'}</Text>
               </View>
             </View>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="شروع از ابتدای این درس"
-              style={({ pressed }) => [styles.startFromBeginningButton, pressed && styles.buttonPressed]}
-              onPress={() => open(`${course.home}/lesson?id=${encodeURIComponent(heroLesson.id)}&fromStart=1`)}
-            >
-              <Volume2 size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>شروع از ابتدا</Text>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="مرور از ابتدای سطح این زبان"
-              style={({ pressed }) => [styles.startFromBeginningButton, pressed && styles.buttonPressed]}
-              onPress={replayBeginnerLevel}
-            >
-              <RotateCcw size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>مرور از ابتدای سطح</Text>
-            </Pressable>
+            <LessonRestartActions lessonPath={`${course.home}/lesson`} firstLessonId={levelLessons[0]?.id} lessonId={heroLesson.id} />
           </View>
 
           {plan.length ? <View style={{ marginBottom: 12 }}>
@@ -460,11 +440,11 @@ export default function StarterHome({course}: {course: StarterCourse}) {
                 </View>
                 <ChevronLeft size={17} color={HomeColors.muted} />
               </Pressable>
-              <Pressable accessibilityRole="button" style={styles.quickCard} onPress={() => setQuickSettingsOpen(true)}>
-                <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><SlidersHorizontal size={18} color={HomeColors.accent} /></View>
+              <Pressable accessibilityRole="button" style={styles.quickCard} accessibilityLabel="پروفایل و تنظیمات" onPress={() => open('/profile')}>
+                <View style={[styles.quickIcon, { backgroundColor: HomeColors.accentSoft }]}><ProfileIcon size={34} /></View>
                 <View style={styles.quickCopy}>
-                  <Text style={styles.quickTitle}>تنظیمات قلم، صدا و پشتیبان</Text>
-                  <Text style={styles.quickDesc}>فونت نمایش، گوینده، قفل و نسخهٔ برنامه</Text>
+                  <Text style={styles.quickTitle}>پروفایل و تنظیمات</Text>
+                  <Text style={styles.quickDesc}>حساب، پیشرفت و تنظیمات برنامه</Text>
                 </View>
                 <ChevronLeft size={17} color={HomeColors.muted} />
               </Pressable>
@@ -477,7 +457,6 @@ export default function StarterHome({course}: {course: StarterCourse}) {
           </View>
         </View>
       </ScrollView>
-      <QuickSettingsModal visible={quickSettingsOpen} onClose={() => setQuickSettingsOpen(false)} />
       <StarterBottomNav course={course} />
       <OpeningOverlay visible={opening} />
     </View>

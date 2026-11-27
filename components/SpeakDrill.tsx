@@ -300,6 +300,7 @@ export default function SpeakDrill({ items, locale, accent = Palette.primary, on
   if (!items.length) return null;
 
   const next = () => {
+    streakRef.current = 0; setStreak(0);
     advanceFrom(indexRef.current, scoresRef.current, attemptsRef.current);
   };
 

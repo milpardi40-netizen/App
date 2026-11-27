@@ -15,8 +15,8 @@ const KIND_META: Record<BridgeKind, { label: string; color: string; soft: string
 };
 
 /** «پل فارسی» — the contrastive note + shared words for one Russian sentence. */
-export function PersianBridgeCard({ sentence, language = 'ru' }: { sentence: Pick<LearningSentence, 'text' | 'fa'>; language?: 'ru' | 'tr' | 'de' | 'fr' | 'es' }) {
-  const bridge = language === 'tr' ? turkishBridgeFor(sentence) : language === 'ru' ? bridgeFor(sentence) : starterBridgeFor(language, sentence);
+export function PersianBridgeCard({ sentence, language = 'ru', masculineOnly = false }: { sentence: Pick<LearningSentence, 'text' | 'fa'>; language?: 'ru' | 'tr' | 'de' | 'fr' | 'es'; masculineOnly?: boolean }) {
+  const bridge = language === 'tr' ? turkishBridgeFor(sentence) : language === 'ru' ? bridgeFor(sentence, masculineOnly) : starterBridgeFor(language, sentence);
   const foreignFont = language === 'ru' ? styles.loanRu : styles.loanLatin;
   if (!bridge.rule && bridge.loanwords.length === 0) return null;
   return (

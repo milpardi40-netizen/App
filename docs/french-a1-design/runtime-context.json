@@ -1,0 +1,2704 @@
+{
+  "date": "2026-11-26",
+  "purpose": "Read-only French design baseline after the independently authorized Russian/English/German A1 implementations. Do not regenerate after French implementation.",
+  "inventoryHashes": {
+    "en": "eb215209074a93b819c0eba010cc4b26e8fa37ed0cd8a343d481d410896f235d",
+    "ru": "da93a1d5a375d73dd30aca1ab72d6263440f2ec91f0dc68ef519d81d9d92e14b",
+    "tr": "d9e9307c9a8bd7f3cba739bd4384d71443e4d3b84097ecff38cb56ae0e2c3f9e",
+    "ar": "2aba3bbea24df5d31b0927fc9b7c5524badfb9fbe288d964391dc0955a3ac487",
+    "de": "7cfeb9805fded6ea460be8caaa113a88835380f5eb6334ef7e60ca6ed9dd38b4",
+    "fr": "6c394dfdf5f84d5383d62354d07f21150baf04217f775d87711bfc5a8e74a99c",
+    "es": "4c95ef207df8d3792be99c320e1fb50f21478c325810ac0f75d02ac4558d4596"
+  },
+  "sourceHashes": {
+    "components/StarterLesson.tsx": "643d21d1a70d67484f6d345e089f7f7bc71c688612c1d70a13a687a6973910dd",
+    "lib/languages/newCourses.ts": "d41eb8b38e05c601322529d0e65c0078f73b8a27d47ee494a361252ff0d99128",
+    "lib/languages/starterSessions.ts": "c687b7becb05bed9ed69da97f0e619adb4de2256e295289cad7069d77b0c497e",
+    "lib/languages/starterEditorial.ts": "68239f6b54f3b50df07d1d6996c116c7f3f14d78c3a9b2a258b6fe108a9c27f4",
+    "lib/languages/a1Skills.ts": "96d37a0a909f3177921327b6c92ce5f0c60957aefb606ca25dadbf8d6027c03c",
+    "lib/languages/a1Curriculum.ts": "2e9e667a2db2aba0776e627e27ca433e8d8a27174f624e4d7df27d56573405c0",
+    "lib/createCourseProgressStore.ts": "8d52f869735fe25f95ed685e74424c6ee96938117b3d3f543e49030bbc89c966",
+    "lib/lessonAssessment.ts": "f6c6e22da211169db62aa9a5847a6c42ce51d8b8248c13774076ece2bc8db989"
+  },
+  "protectedFrenchOutsideA1": "d96b5e35f8e7ebb23b615e8d6d249525caeba504db0add2552951948e7fca61f",
+  "frenchA1": [
+    {
+      "id": "fr-a1-greetings",
+      "title": "سلام و احوال‌پرسی",
+      "order": 28,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-greetings-s1",
+        "fr-a1-greetings-s2",
+        "fr-a1-greetings-s3",
+        "fr-a1-greetings-s4",
+        "fr-a1-greetings-s5",
+        "fr-a1-greetings-s6",
+        "fr-a1-greetings-s7",
+        "fr-a1-greetings-s8",
+        "fr-a1-greetings-s9",
+        "fr-a1-greetings-s10",
+        "fr-a1-greetings-s11",
+        "fr-a1-greetings-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "296a31e8aa712a58dae5dcddb12e9e73795b850f73c17d2144a12bbb20d55656"
+    },
+    {
+      "id": "fr-a1-profile",
+      "title": "آشنایی و اطلاعات شخصی",
+      "order": 29,
+      "rows": 20,
+      "sentenceIds": [
+        "fr-a1-profile-s1",
+        "fr-a1-profile-s2",
+        "fr-a1-profile-s3",
+        "fr-a1-profile-s4",
+        "fr-a1-profile-s5",
+        "fr-a1-profile-s6",
+        "fr-a1-profile-s7",
+        "fr-a1-profile-s8",
+        "fr-a1-profile-s9",
+        "fr-a1-profile-s10",
+        "fr-a1-profile-s11",
+        "fr-a1-profile-s12",
+        "fr-a1-profile-s13",
+        "fr-a1-profile-s14",
+        "fr-a1-profile-s15",
+        "fr-a1-profile-s16",
+        "fr-a1-profile-s17",
+        "fr-a1-profile-s18",
+        "fr-a1-profile-s19",
+        "fr-a1-profile-s20"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "ae2fa627decd9a19d25b9e2d8e189240e6bd3ee8cde2cfb1e98d945b608a6317"
+    },
+    {
+      "id": "fr-a1-subject-pronouns",
+      "title": "ضمایر فاعلی",
+      "order": 30,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-subject-pronouns-s1",
+        "fr-a1-subject-pronouns-s2",
+        "fr-a1-subject-pronouns-s3",
+        "fr-a1-subject-pronouns-s4",
+        "fr-a1-subject-pronouns-s5",
+        "fr-a1-subject-pronouns-s6",
+        "fr-a1-subject-pronouns-s7",
+        "fr-a1-subject-pronouns-s8",
+        "fr-a1-subject-pronouns-s9",
+        "fr-a1-subject-pronouns-s10",
+        "fr-a1-subject-pronouns-s11",
+        "fr-a1-subject-pronouns-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "d305133f3b17c83159ec7636c4adf7b3b572b7929822156c9bf56a5b59e354b4"
+    },
+    {
+      "id": "fr-a1-verb-to-be",
+      "title": "جمله‌های ساده با être",
+      "order": 31,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-verb-to-be-s1",
+        "fr-a1-verb-to-be-s2",
+        "fr-a1-verb-to-be-s3",
+        "fr-a1-verb-to-be-s4",
+        "fr-a1-verb-to-be-s5",
+        "fr-a1-verb-to-be-s6",
+        "fr-a1-verb-to-be-s7",
+        "fr-a1-verb-to-be-s8",
+        "fr-a1-verb-to-be-s9",
+        "fr-a1-verb-to-be-s10",
+        "fr-a1-verb-to-be-s11",
+        "fr-a1-verb-to-be-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "e6b53fab9f22b6b0ed73c76d68ff1eb7ec8aae0e3d655922a22b3027a6b6f243"
+    },
+    {
+      "id": "fr-a1-nationalities",
+      "title": "ملیت، زبان و محل زندگی",
+      "order": 32,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-nationalities-s1",
+        "fr-a1-nationalities-s2",
+        "fr-a1-nationalities-s3",
+        "fr-a1-nationalities-s4",
+        "fr-a1-nationalities-s5",
+        "fr-a1-nationalities-s6",
+        "fr-a1-nationalities-s7",
+        "fr-a1-nationalities-s8",
+        "fr-a1-nationalities-s9",
+        "fr-a1-nationalities-s10",
+        "fr-a1-nationalities-s11",
+        "fr-a1-nationalities-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "cb9bfea688eb667c5d69fd1708d0e03ecbb9bf8ffa187759c66c9956b2eb53d1"
+    },
+    {
+      "id": "fr-a1-numbers-age",
+      "title": "اعداد، سن و اطلاعات شخصی",
+      "order": 33,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-numbers-age-s1",
+        "fr-a1-numbers-age-s2",
+        "fr-a1-numbers-age-s3",
+        "fr-a1-numbers-age-s4",
+        "fr-a1-numbers-age-s5",
+        "fr-a1-numbers-age-s6",
+        "fr-a1-numbers-age-s7",
+        "fr-a1-numbers-age-s8",
+        "fr-a1-numbers-age-s9",
+        "fr-a1-numbers-age-s10",
+        "fr-a1-numbers-age-s11",
+        "fr-a1-numbers-age-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "57094f8f87710be506b0c80de6c8025beec16fdd5245e1027ce6b7c32d69aead"
+    },
+    {
+      "id": "fr-a1-family",
+      "title": "خانواده و روابط خانوادگی",
+      "order": 34,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-family-s1",
+        "fr-a1-family-s2",
+        "fr-a1-family-s3",
+        "fr-a1-family-s4",
+        "fr-a1-family-s5",
+        "fr-a1-family-s6",
+        "fr-a1-family-s7",
+        "fr-a1-family-s8",
+        "fr-a1-family-s9",
+        "fr-a1-family-s10",
+        "fr-a1-family-s11",
+        "fr-a1-family-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "91269b2a644e1024384d46c6a401ca2d8424373222ee541a8be8db6aff9f155e"
+    },
+    {
+      "id": "fr-a1-possessives",
+      "title": "مالکیت و صفات ملکی",
+      "order": 35,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-possessives-s1",
+        "fr-a1-possessives-s2",
+        "fr-a1-possessives-s3",
+        "fr-a1-possessives-s4",
+        "fr-a1-possessives-s5",
+        "fr-a1-possessives-s6",
+        "fr-a1-possessives-s7",
+        "fr-a1-possessives-s8",
+        "fr-a1-possessives-s9",
+        "fr-a1-possessives-s10",
+        "fr-a1-possessives-s11",
+        "fr-a1-possessives-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "254a2fc6d058705643c840db0658d3df526f7bc657db7034ed5a66b204f2a285"
+    },
+    {
+      "id": "fr-a1-nouns-gender-plural",
+      "title": "اسم‌ها، جنسیت و جمع",
+      "order": 36,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-nouns-gender-plural-s1",
+        "fr-a1-nouns-gender-plural-s2",
+        "fr-a1-nouns-gender-plural-s3",
+        "fr-a1-nouns-gender-plural-s4",
+        "fr-a1-nouns-gender-plural-s5",
+        "fr-a1-nouns-gender-plural-s6",
+        "fr-a1-nouns-gender-plural-s7",
+        "fr-a1-nouns-gender-plural-s8",
+        "fr-a1-nouns-gender-plural-s9",
+        "fr-a1-nouns-gender-plural-s10",
+        "fr-a1-nouns-gender-plural-s11",
+        "fr-a1-nouns-gender-plural-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "4a1d10b4ffb3cbed1b5db0887f833c50f9621a815a1fd04a390eeea9c8787b1d"
+    },
+    {
+      "id": "fr-a1-demonstratives",
+      "title": "اشاره به اشخاص و اشیا",
+      "order": 37,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-demonstratives-s1",
+        "fr-a1-demonstratives-s2",
+        "fr-a1-demonstratives-s3",
+        "fr-a1-demonstratives-s4",
+        "fr-a1-demonstratives-s5",
+        "fr-a1-demonstratives-s6",
+        "fr-a1-demonstratives-s7",
+        "fr-a1-demonstratives-s8",
+        "fr-a1-demonstratives-s9",
+        "fr-a1-demonstratives-s10",
+        "fr-a1-demonstratives-s11",
+        "fr-a1-demonstratives-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "22a6ad0a69f490fa852c395b1f046687bd1d61617ddbca5b13eb6ccb0c557fca"
+    },
+    {
+      "id": "fr-a1-descriptions",
+      "title": "توصیف اشخاص، اشیا و مکان‌ها",
+      "order": 38,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-descriptions-s1",
+        "fr-a1-descriptions-s2",
+        "fr-a1-descriptions-s3",
+        "fr-a1-descriptions-s4",
+        "fr-a1-descriptions-s5",
+        "fr-a1-descriptions-s6",
+        "fr-a1-descriptions-s7",
+        "fr-a1-descriptions-s8",
+        "fr-a1-descriptions-s9",
+        "fr-a1-descriptions-s10",
+        "fr-a1-descriptions-s11",
+        "fr-a1-descriptions-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "659a991b3bc596dc6971f3182acb4503b59408dbea8af1f5ef1cd159e192495f"
+    },
+    {
+      "id": "fr-a1-colors",
+      "title": "رنگ‌ها و ویژگی‌های ظاهری",
+      "order": 39,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-colors-s1",
+        "fr-a1-colors-s2",
+        "fr-a1-colors-s3",
+        "fr-a1-colors-s4",
+        "fr-a1-colors-s5",
+        "fr-a1-colors-s6",
+        "fr-a1-colors-s7",
+        "fr-a1-colors-s8",
+        "fr-a1-colors-s9",
+        "fr-a1-colors-s10",
+        "fr-a1-colors-s11",
+        "fr-a1-colors-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "0b83b7ca909ff25648f0f5155db7f56c149411b888bcf87477cd9b88d95916aa"
+    },
+    {
+      "id": "fr-a1-articles",
+      "title": "حروف تعریف معین و نامعین",
+      "order": 40,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-articles-s1",
+        "fr-a1-articles-s2",
+        "fr-a1-articles-s3",
+        "fr-a1-articles-s4",
+        "fr-a1-articles-s5",
+        "fr-a1-articles-s6",
+        "fr-a1-articles-s7",
+        "fr-a1-articles-s8",
+        "fr-a1-articles-s9",
+        "fr-a1-articles-s10",
+        "fr-a1-articles-s11",
+        "fr-a1-articles-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "cd84945af274b976d6e97bc7e4001ea95aadab9bf48a7ef1bdf88de480564917"
+    },
+    {
+      "id": "fr-a1-simple-verbs",
+      "title": "جمله‌های فعلی ساده",
+      "order": 41,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-simple-verbs-s1",
+        "fr-a1-simple-verbs-s2",
+        "fr-a1-simple-verbs-s3",
+        "fr-a1-simple-verbs-s4",
+        "fr-a1-simple-verbs-s5",
+        "fr-a1-simple-verbs-s6",
+        "fr-a1-simple-verbs-s7",
+        "fr-a1-simple-verbs-s8",
+        "fr-a1-simple-verbs-s9",
+        "fr-a1-simple-verbs-s10",
+        "fr-a1-simple-verbs-s11",
+        "fr-a1-simple-verbs-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "7d8aa893e1f26ce0c5da67707d3a37e2755919b4fe1aceee3b35a97277100cc1"
+    },
+    {
+      "id": "fr-a1-present-tense",
+      "title": "زمان حال ساده",
+      "order": 42,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-present-tense-s1",
+        "fr-a1-present-tense-s2",
+        "fr-a1-present-tense-s3",
+        "fr-a1-present-tense-s4",
+        "fr-a1-present-tense-s5",
+        "fr-a1-present-tense-s6",
+        "fr-a1-present-tense-s7",
+        "fr-a1-present-tense-s8",
+        "fr-a1-present-tense-s9",
+        "fr-a1-present-tense-s10",
+        "fr-a1-present-tense-s11",
+        "fr-a1-present-tense-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "c964befa7facf6469c2c9a85b6f60a7fb6f1b5d51a73634f2281d2160584433c"
+    },
+    {
+      "id": "fr-a1-verb-conjugation",
+      "title": "صرف افعال در زمان حال",
+      "order": 43,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-verb-conjugation-s1",
+        "fr-a1-verb-conjugation-s2",
+        "fr-a1-verb-conjugation-s3",
+        "fr-a1-verb-conjugation-s4",
+        "fr-a1-verb-conjugation-s5",
+        "fr-a1-verb-conjugation-s6",
+        "fr-a1-verb-conjugation-s7",
+        "fr-a1-verb-conjugation-s8",
+        "fr-a1-verb-conjugation-s9",
+        "fr-a1-verb-conjugation-s10",
+        "fr-a1-verb-conjugation-s11",
+        "fr-a1-verb-conjugation-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "c51cf984a6c000c72397e05ae740765d310171b3a0350ebb2c5566aa37c5fd7b"
+    },
+    {
+      "id": "fr-a1-positive-negative-questions",
+      "title": "جمله‌های مثبت، منفی و پرسشی",
+      "order": 44,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-positive-negative-questions-s1",
+        "fr-a1-positive-negative-questions-s2",
+        "fr-a1-positive-negative-questions-s3",
+        "fr-a1-positive-negative-questions-s4",
+        "fr-a1-positive-negative-questions-s5",
+        "fr-a1-positive-negative-questions-s6",
+        "fr-a1-positive-negative-questions-s7",
+        "fr-a1-positive-negative-questions-s8",
+        "fr-a1-positive-negative-questions-s9",
+        "fr-a1-positive-negative-questions-s10",
+        "fr-a1-positive-negative-questions-s11",
+        "fr-a1-positive-negative-questions-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "193c817a1e51bfab9719222d511925bf7fec8929909638caa51372e7bf8555e8"
+    },
+    {
+      "id": "fr-a1-question-words",
+      "title": "پرسش‌سازی با کلمات پرسشی",
+      "order": 45,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-question-words-s1",
+        "fr-a1-question-words-s2",
+        "fr-a1-question-words-s3",
+        "fr-a1-question-words-s4",
+        "fr-a1-question-words-s5",
+        "fr-a1-question-words-s6",
+        "fr-a1-question-words-s7",
+        "fr-a1-question-words-s8",
+        "fr-a1-question-words-s9",
+        "fr-a1-question-words-s10",
+        "fr-a1-question-words-s11",
+        "fr-a1-question-words-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "3fe7ab1beb0d6fc3a058a0519761d8be70898bff25d08adf363012eadf5d48b4"
+    },
+    {
+      "id": "fr-a1-appointment-time",
+      "title": "قرار و ساعت",
+      "order": 46,
+      "rows": 20,
+      "sentenceIds": [
+        "fr-a1-appointment-time-s1",
+        "fr-a1-appointment-time-s2",
+        "fr-a1-appointment-time-s3",
+        "fr-a1-appointment-time-s4",
+        "fr-a1-appointment-time-s5",
+        "fr-a1-appointment-time-s6",
+        "fr-a1-appointment-time-s7",
+        "fr-a1-appointment-time-s8",
+        "fr-a1-appointment-time-s9",
+        "fr-a1-appointment-time-s10",
+        "fr-a1-appointment-time-s11",
+        "fr-a1-appointment-time-s12",
+        "fr-a1-appointment-time-s13",
+        "fr-a1-appointment-time-s14",
+        "fr-a1-appointment-time-s15",
+        "fr-a1-appointment-time-s16",
+        "fr-a1-appointment-time-s17",
+        "fr-a1-appointment-time-s18",
+        "fr-a1-appointment-time-s19",
+        "fr-a1-appointment-time-s20"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "4c333f1fae01a5fb01263cc7348ba01919b8d8be6a193a8ba4d91f3794032465"
+    },
+    {
+      "id": "fr-a1-dates-and-time",
+      "title": "اعداد ترتیبی، ساعت و تاریخ",
+      "order": 47,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-dates-and-time-s1",
+        "fr-a1-dates-and-time-s2",
+        "fr-a1-dates-and-time-s3",
+        "fr-a1-dates-and-time-s4",
+        "fr-a1-dates-and-time-s5",
+        "fr-a1-dates-and-time-s6",
+        "fr-a1-dates-and-time-s7",
+        "fr-a1-dates-and-time-s8",
+        "fr-a1-dates-and-time-s9",
+        "fr-a1-dates-and-time-s10",
+        "fr-a1-dates-and-time-s11",
+        "fr-a1-dates-and-time-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "5685b019c8e8e87c411da3d9cccc115485690b00d0dca096652892b84ced286a"
+    },
+    {
+      "id": "fr-a1-location",
+      "title": "مکان و موقعیت مکانی",
+      "order": 48,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-location-s1",
+        "fr-a1-location-s2",
+        "fr-a1-location-s3",
+        "fr-a1-location-s4",
+        "fr-a1-location-s5",
+        "fr-a1-location-s6",
+        "fr-a1-location-s7",
+        "fr-a1-location-s8",
+        "fr-a1-location-s9",
+        "fr-a1-location-s10",
+        "fr-a1-location-s11",
+        "fr-a1-location-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "0413ec3d48fea4aca981a0016b7d11db44db9a5841624e9ec9d4ece67bcfd261"
+    },
+    {
+      "id": "fr-a1-wants-needs",
+      "title": "علایق، خواسته‌ها و نیازها",
+      "order": 49,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-wants-needs-s1",
+        "fr-a1-wants-needs-s2",
+        "fr-a1-wants-needs-s3",
+        "fr-a1-wants-needs-s4",
+        "fr-a1-wants-needs-s5",
+        "fr-a1-wants-needs-s6",
+        "fr-a1-wants-needs-s7",
+        "fr-a1-wants-needs-s8",
+        "fr-a1-wants-needs-s9",
+        "fr-a1-wants-needs-s10",
+        "fr-a1-wants-needs-s11",
+        "fr-a1-wants-needs-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "daf8c879a23cb9a8269a1582b045ebd5de5d2656c72f374145abb4b782291c0f"
+    },
+    {
+      "id": "fr-a1-ability",
+      "title": "توانایی و ناتوانی",
+      "order": 50,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-ability-s1",
+        "fr-a1-ability-s2",
+        "fr-a1-ability-s3",
+        "fr-a1-ability-s4",
+        "fr-a1-ability-s5",
+        "fr-a1-ability-s6",
+        "fr-a1-ability-s7",
+        "fr-a1-ability-s8",
+        "fr-a1-ability-s9",
+        "fr-a1-ability-s10",
+        "fr-a1-ability-s11",
+        "fr-a1-ability-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "92533aff0b548e383e88bc8f0d52f41a68d87d8cd54d71de1d14e0cda4482dd9"
+    },
+    {
+      "id": "fr-a1-prepositions",
+      "title": "حروف اضافه پایه",
+      "order": 51,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-prepositions-s1",
+        "fr-a1-prepositions-s2",
+        "fr-a1-prepositions-s3",
+        "fr-a1-prepositions-s4",
+        "fr-a1-prepositions-s5",
+        "fr-a1-prepositions-s6",
+        "fr-a1-prepositions-s7",
+        "fr-a1-prepositions-s8",
+        "fr-a1-prepositions-s9",
+        "fr-a1-prepositions-s10",
+        "fr-a1-prepositions-s11",
+        "fr-a1-prepositions-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "c0d605c9e3c6a00502614b83bd4c09d99dbfee2dab51f191f94549a8a7e8f17e"
+    },
+    {
+      "id": "fr-a1-daily-routine",
+      "title": "برنامه روزانه و عادت‌ها",
+      "order": 52,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-daily-routine-s1",
+        "fr-a1-daily-routine-s2",
+        "fr-a1-daily-routine-s3",
+        "fr-a1-daily-routine-s4",
+        "fr-a1-daily-routine-s5",
+        "fr-a1-daily-routine-s6",
+        "fr-a1-daily-routine-s7",
+        "fr-a1-daily-routine-s8",
+        "fr-a1-daily-routine-s9",
+        "fr-a1-daily-routine-s10",
+        "fr-a1-daily-routine-s11",
+        "fr-a1-daily-routine-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "ba8f03c3d2b73c882c8e6b99bc48cb832191700870a2e68db81c4da00241265e"
+    },
+    {
+      "id": "fr-a1-connectors",
+      "title": "اتصال جمله‌های ساده",
+      "order": 53,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-connectors-s1",
+        "fr-a1-connectors-s2",
+        "fr-a1-connectors-s3",
+        "fr-a1-connectors-s4",
+        "fr-a1-connectors-s5",
+        "fr-a1-connectors-s6",
+        "fr-a1-connectors-s7",
+        "fr-a1-connectors-s8",
+        "fr-a1-connectors-s9",
+        "fr-a1-connectors-s10",
+        "fr-a1-connectors-s11",
+        "fr-a1-connectors-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "31066924340bb14b03296b3ae8415227dec799ff81f1aab0fdc62d5d9f0489ba"
+    },
+    {
+      "id": "fr-a1-social-chat",
+      "title": "مکالمه در موقعیت‌های اجتماعی",
+      "order": 54,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-social-chat-s1",
+        "fr-a1-social-chat-s2",
+        "fr-a1-social-chat-s3",
+        "fr-a1-social-chat-s4",
+        "fr-a1-social-chat-s5",
+        "fr-a1-social-chat-s6",
+        "fr-a1-social-chat-s7",
+        "fr-a1-social-chat-s8",
+        "fr-a1-social-chat-s9",
+        "fr-a1-social-chat-s10",
+        "fr-a1-social-chat-s11",
+        "fr-a1-social-chat-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "36f437bdd7f7ebc09b6266d74721fe30ddba46acc903032038bb57f1a8c43951"
+    },
+    {
+      "id": "fr-a1-shopping-payment",
+      "title": "خرید، قیمت و پرداخت",
+      "order": 55,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-shopping-payment-s1",
+        "fr-a1-shopping-payment-s2",
+        "fr-a1-shopping-payment-s3",
+        "fr-a1-shopping-payment-s4",
+        "fr-a1-shopping-payment-s5",
+        "fr-a1-shopping-payment-s6",
+        "fr-a1-shopping-payment-s7",
+        "fr-a1-shopping-payment-s8",
+        "fr-a1-shopping-payment-s9",
+        "fr-a1-shopping-payment-s10",
+        "fr-a1-shopping-payment-s11",
+        "fr-a1-shopping-payment-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "6b2747fae6cc31fdee3eaf22bf287a5d75efaa1f1425191cb8d307374ea219a0"
+    },
+    {
+      "id": "fr-a1-ordering-food",
+      "title": "سفارش غذا و نوشیدنی",
+      "order": 56,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-ordering-food-s1",
+        "fr-a1-ordering-food-s2",
+        "fr-a1-ordering-food-s3",
+        "fr-a1-ordering-food-s4",
+        "fr-a1-ordering-food-s5",
+        "fr-a1-ordering-food-s6",
+        "fr-a1-ordering-food-s7",
+        "fr-a1-ordering-food-s8",
+        "fr-a1-ordering-food-s9",
+        "fr-a1-ordering-food-s10",
+        "fr-a1-ordering-food-s11",
+        "fr-a1-ordering-food-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "078d09bd225341a03e180cc9361d2cc250c78ee3fc81b16908b5a2974ca8f889"
+    },
+    {
+      "id": "fr-a1-cafe",
+      "title": "در کافه و پرداخت",
+      "order": 57,
+      "rows": 20,
+      "sentenceIds": [
+        "fr-a1-cafe-s1",
+        "fr-a1-cafe-s2",
+        "fr-a1-cafe-s3",
+        "fr-a1-cafe-s4",
+        "fr-a1-cafe-s5",
+        "fr-a1-cafe-s6",
+        "fr-a1-cafe-s7",
+        "fr-a1-cafe-s8",
+        "fr-a1-cafe-s9",
+        "fr-a1-cafe-s10",
+        "fr-a1-cafe-s11",
+        "fr-a1-cafe-s12",
+        "fr-a1-cafe-s13",
+        "fr-a1-cafe-s14",
+        "fr-a1-cafe-s15",
+        "fr-a1-cafe-s16",
+        "fr-a1-cafe-s17",
+        "fr-a1-cafe-s18",
+        "fr-a1-cafe-s19",
+        "fr-a1-cafe-s20"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "b5af1fd667a8e03c74eaa55a01b86f3c347dafc082d15e7c0b119b1499dffd3a"
+    },
+    {
+      "id": "fr-a1-directions",
+      "title": "پرسیدن آدرس و مسیریابی",
+      "order": 58,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-directions-s1",
+        "fr-a1-directions-s2",
+        "fr-a1-directions-s3",
+        "fr-a1-directions-s4",
+        "fr-a1-directions-s5",
+        "fr-a1-directions-s6",
+        "fr-a1-directions-s7",
+        "fr-a1-directions-s8",
+        "fr-a1-directions-s9",
+        "fr-a1-directions-s10",
+        "fr-a1-directions-s11",
+        "fr-a1-directions-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "5a0d7f9f2d04d4005e88430f50cb3739c461651176cc6717604cabaa4e8ab9d6"
+    },
+    {
+      "id": "fr-a1-public-transport",
+      "title": "حمل‌ونقل عمومی و تاکسی",
+      "order": 59,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-public-transport-s1",
+        "fr-a1-public-transport-s2",
+        "fr-a1-public-transport-s3",
+        "fr-a1-public-transport-s4",
+        "fr-a1-public-transport-s5",
+        "fr-a1-public-transport-s6",
+        "fr-a1-public-transport-s7",
+        "fr-a1-public-transport-s8",
+        "fr-a1-public-transport-s9",
+        "fr-a1-public-transport-s10",
+        "fr-a1-public-transport-s11",
+        "fr-a1-public-transport-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "28ab104072347875018748e2fc6feb59eb7a084def1664f39c68007595c65d5f"
+    },
+    {
+      "id": "fr-a1-travel-tickets",
+      "title": "سفر و خرید بلیت",
+      "order": 60,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-travel-tickets-s1",
+        "fr-a1-travel-tickets-s2",
+        "fr-a1-travel-tickets-s3",
+        "fr-a1-travel-tickets-s4",
+        "fr-a1-travel-tickets-s5",
+        "fr-a1-travel-tickets-s6",
+        "fr-a1-travel-tickets-s7",
+        "fr-a1-travel-tickets-s8",
+        "fr-a1-travel-tickets-s9",
+        "fr-a1-travel-tickets-s10",
+        "fr-a1-travel-tickets-s11",
+        "fr-a1-travel-tickets-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "28f050e2e47bb024f80d13bfc4cf682554782f57bd5f42e424f066f516e4e2f1"
+    },
+    {
+      "id": "fr-a1-hotel-stay",
+      "title": "رزرو هتل و اقامت",
+      "order": 61,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-hotel-stay-s1",
+        "fr-a1-hotel-stay-s2",
+        "fr-a1-hotel-stay-s3",
+        "fr-a1-hotel-stay-s4",
+        "fr-a1-hotel-stay-s5",
+        "fr-a1-hotel-stay-s6",
+        "fr-a1-hotel-stay-s7",
+        "fr-a1-hotel-stay-s8",
+        "fr-a1-hotel-stay-s9",
+        "fr-a1-hotel-stay-s10",
+        "fr-a1-hotel-stay-s11",
+        "fr-a1-hotel-stay-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "65f8e1e8fe7c117f4d664271340440b663ac20c6323f366f9b41e794a7eee811"
+    },
+    {
+      "id": "fr-a1-asking-help",
+      "title": "درخواست کمک و بیان مشکلات",
+      "order": 62,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-asking-help-s1",
+        "fr-a1-asking-help-s2",
+        "fr-a1-asking-help-s3",
+        "fr-a1-asking-help-s4",
+        "fr-a1-asking-help-s5",
+        "fr-a1-asking-help-s6",
+        "fr-a1-asking-help-s7",
+        "fr-a1-asking-help-s8",
+        "fr-a1-asking-help-s9",
+        "fr-a1-asking-help-s10",
+        "fr-a1-asking-help-s11",
+        "fr-a1-asking-help-s12"
+      ],
+      "checks": 4,
+      "dialogue": 6,
+      "hash": "d09263538a1a752d981bf6c4e086000e78e0ff304dfdcc92e923b35cb0ed1b7e"
+    },
+    {
+      "id": "fr-a1-doctor-symptoms",
+      "title": "مراجعه به پزشک و بیان علائم ساده",
+      "order": 63,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-doctor-symptoms-s1",
+        "fr-a1-doctor-symptoms-s2",
+        "fr-a1-doctor-symptoms-s3",
+        "fr-a1-doctor-symptoms-s4",
+        "fr-a1-doctor-symptoms-s5",
+        "fr-a1-doctor-symptoms-s6",
+        "fr-a1-doctor-symptoms-s7",
+        "fr-a1-doctor-symptoms-s8",
+        "fr-a1-doctor-symptoms-s9",
+        "fr-a1-doctor-symptoms-s10",
+        "fr-a1-doctor-symptoms-s11",
+        "fr-a1-doctor-symptoms-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "d581957084557fa2ef87fc9be270e13deff45a1e77c6254c235e34f3cbdbf08a"
+    },
+    {
+      "id": "fr-a1-work-study",
+      "title": "مکالمات ساده در محل کار و تحصیل",
+      "order": 64,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-work-study-s1",
+        "fr-a1-work-study-s2",
+        "fr-a1-work-study-s3",
+        "fr-a1-work-study-s4",
+        "fr-a1-work-study-s5",
+        "fr-a1-work-study-s6",
+        "fr-a1-work-study-s7",
+        "fr-a1-work-study-s8",
+        "fr-a1-work-study-s9",
+        "fr-a1-work-study-s10",
+        "fr-a1-work-study-s11",
+        "fr-a1-work-study-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "e92ba9cd0e6939f7091d4f05fb8ddff91478a3c316ebb54e459109c9cb8a684d"
+    },
+    {
+      "id": "fr-a1-weather",
+      "title": "صحبت درباره آب‌وهوا",
+      "order": 65,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-weather-s1",
+        "fr-a1-weather-s2",
+        "fr-a1-weather-s3",
+        "fr-a1-weather-s4",
+        "fr-a1-weather-s5",
+        "fr-a1-weather-s6",
+        "fr-a1-weather-s7",
+        "fr-a1-weather-s8",
+        "fr-a1-weather-s9",
+        "fr-a1-weather-s10",
+        "fr-a1-weather-s11",
+        "fr-a1-weather-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "a472d507878b1a6bc7c54cf63b1d286d9fb2bf098a6f29c290c68a82a4e04aa7"
+    },
+    {
+      "id": "fr-a1-phone-messages",
+      "title": "تماس تلفنی و پیام‌های کوتاه",
+      "order": 66,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-phone-messages-s1",
+        "fr-a1-phone-messages-s2",
+        "fr-a1-phone-messages-s3",
+        "fr-a1-phone-messages-s4",
+        "fr-a1-phone-messages-s5",
+        "fr-a1-phone-messages-s6",
+        "fr-a1-phone-messages-s7",
+        "fr-a1-phone-messages-s8",
+        "fr-a1-phone-messages-s9",
+        "fr-a1-phone-messages-s10",
+        "fr-a1-phone-messages-s11",
+        "fr-a1-phone-messages-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "bc6e29323b19761e9690d3a13b53962698b0a0e37b5ace9ded96e8a69d2cb50e"
+    },
+    {
+      "id": "fr-a1-invitations",
+      "title": "دعوت، پذیرش و رد دعوت",
+      "order": 67,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-invitations-s1",
+        "fr-a1-invitations-s2",
+        "fr-a1-invitations-s3",
+        "fr-a1-invitations-s4",
+        "fr-a1-invitations-s5",
+        "fr-a1-invitations-s6",
+        "fr-a1-invitations-s7",
+        "fr-a1-invitations-s8",
+        "fr-a1-invitations-s9",
+        "fr-a1-invitations-s10",
+        "fr-a1-invitations-s11",
+        "fr-a1-invitations-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "8a182a838bb793545a89f673a39418ad3b4fe4a755dd0e373cc4770b369eb83e"
+    },
+    {
+      "id": "fr-a1-polite-requests",
+      "title": "درخواست مؤدبانه و اجازه‌گرفتن",
+      "order": 68,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-polite-requests-s1",
+        "fr-a1-polite-requests-s2",
+        "fr-a1-polite-requests-s3",
+        "fr-a1-polite-requests-s4",
+        "fr-a1-polite-requests-s5",
+        "fr-a1-polite-requests-s6",
+        "fr-a1-polite-requests-s7",
+        "fr-a1-polite-requests-s8",
+        "fr-a1-polite-requests-s9",
+        "fr-a1-polite-requests-s10",
+        "fr-a1-polite-requests-s11",
+        "fr-a1-polite-requests-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "e46b8fb038a962242b8757ef630f5e02e313d6f8d2e16b77c18869da5e67570c"
+    },
+    {
+      "id": "fr-a1-instructions",
+      "title": "دستورها و راهنمایی‌های ساده",
+      "order": 69,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-instructions-s1",
+        "fr-a1-instructions-s2",
+        "fr-a1-instructions-s3",
+        "fr-a1-instructions-s4",
+        "fr-a1-instructions-s5",
+        "fr-a1-instructions-s6",
+        "fr-a1-instructions-s7",
+        "fr-a1-instructions-s8",
+        "fr-a1-instructions-s9",
+        "fr-a1-instructions-s10",
+        "fr-a1-instructions-s11",
+        "fr-a1-instructions-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "981e4bf2598929fbfd212d4e698ebc39a4fdd438cc2d97d7f341ea78edcbc321"
+    },
+    {
+      "id": "fr-a1-suggestions",
+      "title": "پیشنهاد و توصیه ساده",
+      "order": 70,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-suggestions-s1",
+        "fr-a1-suggestions-s2",
+        "fr-a1-suggestions-s3",
+        "fr-a1-suggestions-s4",
+        "fr-a1-suggestions-s5",
+        "fr-a1-suggestions-s6",
+        "fr-a1-suggestions-s7",
+        "fr-a1-suggestions-s8",
+        "fr-a1-suggestions-s9",
+        "fr-a1-suggestions-s10",
+        "fr-a1-suggestions-s11",
+        "fr-a1-suggestions-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "f909dbfa83a2794883edcc64b9c178d73adbf6d6a7649dc3be7f896b7ef5fbf4"
+    },
+    {
+      "id": "fr-a1-past-events",
+      "title": "گذشته و اتفاق‌های اخیر",
+      "order": 71,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-past-events-s1",
+        "fr-a1-past-events-s2",
+        "fr-a1-past-events-s3",
+        "fr-a1-past-events-s4",
+        "fr-a1-past-events-s5",
+        "fr-a1-past-events-s6",
+        "fr-a1-past-events-s7",
+        "fr-a1-past-events-s8",
+        "fr-a1-past-events-s9",
+        "fr-a1-past-events-s10",
+        "fr-a1-past-events-s11",
+        "fr-a1-past-events-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "30e5df129a3639f41f5ae3db2620e5fb04d194495386d0895fb9ccc4d559fc4e"
+    },
+    {
+      "id": "fr-a1-future-plans",
+      "title": "برنامه‌های آینده نزدیک",
+      "order": 72,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-future-plans-s1",
+        "fr-a1-future-plans-s2",
+        "fr-a1-future-plans-s3",
+        "fr-a1-future-plans-s4",
+        "fr-a1-future-plans-s5",
+        "fr-a1-future-plans-s6",
+        "fr-a1-future-plans-s7",
+        "fr-a1-future-plans-s8",
+        "fr-a1-future-plans-s9",
+        "fr-a1-future-plans-s10",
+        "fr-a1-future-plans-s11",
+        "fr-a1-future-plans-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "fbb5ec3ce15991aaf2bd1c01b4a5b98c28af8ad90c1114bd835bcf8c39cc98ae"
+    },
+    {
+      "id": "fr-a1-feelings",
+      "title": "احساسات و وضعیت‌های روزمره",
+      "order": 73,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-feelings-s1",
+        "fr-a1-feelings-s2",
+        "fr-a1-feelings-s3",
+        "fr-a1-feelings-s4",
+        "fr-a1-feelings-s5",
+        "fr-a1-feelings-s6",
+        "fr-a1-feelings-s7",
+        "fr-a1-feelings-s8",
+        "fr-a1-feelings-s9",
+        "fr-a1-feelings-s10",
+        "fr-a1-feelings-s11",
+        "fr-a1-feelings-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "9d3f1f2be4903b10218d1e8d8bd3bcf79a935245d62c93ac929f3c0ff56a2b4f"
+    },
+    {
+      "id": "fr-a1-forms-information",
+      "title": "پرسیدن اطلاعات و تکمیل فرم",
+      "order": 74,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-forms-information-s1",
+        "fr-a1-forms-information-s2",
+        "fr-a1-forms-information-s3",
+        "fr-a1-forms-information-s4",
+        "fr-a1-forms-information-s5",
+        "fr-a1-forms-information-s6",
+        "fr-a1-forms-information-s7",
+        "fr-a1-forms-information-s8",
+        "fr-a1-forms-information-s9",
+        "fr-a1-forms-information-s10",
+        "fr-a1-forms-information-s11",
+        "fr-a1-forms-information-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "a96e501ddbe2abbc2342b7ca440371084b310e3bae027314abb7f8f184679db4"
+    },
+    {
+      "id": "fr-a1-supermarket",
+      "title": "مکالمه در فروشگاه و سوپرمارکت",
+      "order": 75,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-supermarket-s1",
+        "fr-a1-supermarket-s2",
+        "fr-a1-supermarket-s3",
+        "fr-a1-supermarket-s4",
+        "fr-a1-supermarket-s5",
+        "fr-a1-supermarket-s6",
+        "fr-a1-supermarket-s7",
+        "fr-a1-supermarket-s8",
+        "fr-a1-supermarket-s9",
+        "fr-a1-supermarket-s10",
+        "fr-a1-supermarket-s11",
+        "fr-a1-supermarket-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "0a9297648ee8d75614422514f28ab99e5a5126ac258d95081a4b149cf2c88c21"
+    },
+    {
+      "id": "fr-a1-clothes-shopping",
+      "title": "لباس و خرید پوشاک",
+      "order": 76,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-clothes-shopping-s1",
+        "fr-a1-clothes-shopping-s2",
+        "fr-a1-clothes-shopping-s3",
+        "fr-a1-clothes-shopping-s4",
+        "fr-a1-clothes-shopping-s5",
+        "fr-a1-clothes-shopping-s6",
+        "fr-a1-clothes-shopping-s7",
+        "fr-a1-clothes-shopping-s8",
+        "fr-a1-clothes-shopping-s9",
+        "fr-a1-clothes-shopping-s10",
+        "fr-a1-clothes-shopping-s11",
+        "fr-a1-clothes-shopping-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "1bd0abc9a2f5d8de9e2b08bb0eeea0987acd3bc22c04ce88e73056f85a34a627"
+    },
+    {
+      "id": "fr-a1-home-furniture",
+      "title": "توصیف خانه و وسایل آن",
+      "order": 77,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-home-furniture-s1",
+        "fr-a1-home-furniture-s2",
+        "fr-a1-home-furniture-s3",
+        "fr-a1-home-furniture-s4",
+        "fr-a1-home-furniture-s5",
+        "fr-a1-home-furniture-s6",
+        "fr-a1-home-furniture-s7",
+        "fr-a1-home-furniture-s8",
+        "fr-a1-home-furniture-s9",
+        "fr-a1-home-furniture-s10",
+        "fr-a1-home-furniture-s11",
+        "fr-a1-home-furniture-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "0021b2a2d7548c12c4c76182e3ed521a072e0a901ecddfdeeba08752c077a5bf"
+    },
+    {
+      "id": "fr-a1-leisure",
+      "title": "تفریح، سرگرمی و اوقات فراغت",
+      "order": 78,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-leisure-s1",
+        "fr-a1-leisure-s2",
+        "fr-a1-leisure-s3",
+        "fr-a1-leisure-s4",
+        "fr-a1-leisure-s5",
+        "fr-a1-leisure-s6",
+        "fr-a1-leisure-s7",
+        "fr-a1-leisure-s8",
+        "fr-a1-leisure-s9",
+        "fr-a1-leisure-s10",
+        "fr-a1-leisure-s11",
+        "fr-a1-leisure-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "ad5ef41e515b73adc2dbd6365c3355cd5875a99a12c76ee97bf117f05b80517b"
+    },
+    {
+      "id": "fr-a1-weekly-schedule",
+      "title": "کارهای روزمره و برنامه هفتگی",
+      "order": 79,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-weekly-schedule-s1",
+        "fr-a1-weekly-schedule-s2",
+        "fr-a1-weekly-schedule-s3",
+        "fr-a1-weekly-schedule-s4",
+        "fr-a1-weekly-schedule-s5",
+        "fr-a1-weekly-schedule-s6",
+        "fr-a1-weekly-schedule-s7",
+        "fr-a1-weekly-schedule-s8",
+        "fr-a1-weekly-schedule-s9",
+        "fr-a1-weekly-schedule-s10",
+        "fr-a1-weekly-schedule-s11",
+        "fr-a1-weekly-schedule-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "588ca25818317dc59e3dbb2b8e21cf2c542a00f85503a4555526295a9c7cb094"
+    },
+    {
+      "id": "fr-a1-preferences",
+      "title": "ترجیحات و انتخاب بین گزینه‌ها",
+      "order": 80,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-preferences-s1",
+        "fr-a1-preferences-s2",
+        "fr-a1-preferences-s3",
+        "fr-a1-preferences-s4",
+        "fr-a1-preferences-s5",
+        "fr-a1-preferences-s6",
+        "fr-a1-preferences-s7",
+        "fr-a1-preferences-s8",
+        "fr-a1-preferences-s9",
+        "fr-a1-preferences-s10",
+        "fr-a1-preferences-s11",
+        "fr-a1-preferences-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "63ba5ac8ad953afaa055108feb2f207add6dfade7046c37240d3ace2b304009e"
+    },
+    {
+      "id": "fr-a1-comparisons",
+      "title": "مقایسه‌های ساده",
+      "order": 81,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-comparisons-s1",
+        "fr-a1-comparisons-s2",
+        "fr-a1-comparisons-s3",
+        "fr-a1-comparisons-s4",
+        "fr-a1-comparisons-s5",
+        "fr-a1-comparisons-s6",
+        "fr-a1-comparisons-s7",
+        "fr-a1-comparisons-s8",
+        "fr-a1-comparisons-s9",
+        "fr-a1-comparisons-s10",
+        "fr-a1-comparisons-s11",
+        "fr-a1-comparisons-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "0496772d8e66ab47830e3861071edd26493041eecda6066ccee1a2886821bd51"
+    },
+    {
+      "id": "fr-a1-reasons",
+      "title": "بیان دلیل و نتیجه ساده",
+      "order": 82,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-reasons-s1",
+        "fr-a1-reasons-s2",
+        "fr-a1-reasons-s3",
+        "fr-a1-reasons-s4",
+        "fr-a1-reasons-s5",
+        "fr-a1-reasons-s6",
+        "fr-a1-reasons-s7",
+        "fr-a1-reasons-s8",
+        "fr-a1-reasons-s9",
+        "fr-a1-reasons-s10",
+        "fr-a1-reasons-s11",
+        "fr-a1-reasons-s12"
+      ],
+      "checks": 4,
+      "dialogue": 4,
+      "hash": "03905e1c8e6f44ef01e818fb0216d82d03343e57076543dd3f5d21620c248c51"
+    },
+    {
+      "id": "fr-a1-connected-conversation",
+      "title": "مکالمه روزمره با چند جمله مرتبط",
+      "order": 83,
+      "rows": 12,
+      "sentenceIds": [
+        "fr-a1-connected-conversation-s1",
+        "fr-a1-connected-conversation-s2",
+        "fr-a1-connected-conversation-s3",
+        "fr-a1-connected-conversation-s4",
+        "fr-a1-connected-conversation-s5",
+        "fr-a1-connected-conversation-s6",
+        "fr-a1-connected-conversation-s7",
+        "fr-a1-connected-conversation-s8",
+        "fr-a1-connected-conversation-s9",
+        "fr-a1-connected-conversation-s10",
+        "fr-a1-connected-conversation-s11",
+        "fr-a1-connected-conversation-s12"
+      ],
+      "checks": 4,
+      "dialogue": 8,
+      "hash": "bc5af7d19a32bfbc891c059574c12cbbd4585ab97afc70072e124adc531a63eb"
+    }
+  ],
+  "preA1": [
+    {
+      "id": "fr-foundation-sounds-1",
+      "title": "اولین صداهای فرانسوی",
+      "teachingFa": "در salut صدای u با لب گرد ادا می‌شود و t آخر خوانده نمی‌شود؛ فارسی‌نویسی تقریبی است.\nتمرین اصلی: در papa و maman فقط صدای آغاز را مقایسه کن.",
+      "sentences": [
+        {
+          "id": "fr-foundation-sounds-1-s1",
+          "text": "salut",
+          "fa": "سلام دوستانه"
+        },
+        {
+          "id": "fr-foundation-sounds-1-s2",
+          "text": "oui",
+          "fa": "بله"
+        },
+        {
+          "id": "fr-foundation-sounds-1-s3",
+          "text": "non",
+          "fa": "نه"
+        },
+        {
+          "id": "fr-foundation-sounds-1-s4",
+          "text": "merci",
+          "fa": "ممنون"
+        },
+        {
+          "id": "fr-foundation-sounds-1-s5",
+          "text": "papa",
+          "fa": "بابا"
+        },
+        {
+          "id": "fr-foundation-sounds-1-s6",
+          "text": "maman",
+          "fa": "مامان"
+        },
+        {
+          "id": "fr-foundation-sounds-1-s7",
+          "text": "café",
+          "fa": "قهوه"
+        },
+        {
+          "id": "fr-foundation-sounds-1-s8",
+          "text": "thé",
+          "fa": "چای"
+        }
+      ]
+    },
+    {
+      "id": "fr-foundation-sounds-2",
+      "title": "صداهای ناآشناتر",
+      "teachingFa": "h در hôtel تلفظ نمی‌شود؛ eau یک صدای «او» دارد و bon پایان خیشومی دارد.\nتمرین اصلی: é و è را در été و mère از روی صدا مقایسه کن.",
+      "sentences": [
+        {
+          "id": "fr-foundation-sounds-2-s1",
+          "text": "hôtel",
+          "fa": "هتل"
+        },
+        {
+          "id": "fr-foundation-sounds-2-s2",
+          "text": "été",
+          "fa": "تابستان"
+        },
+        {
+          "id": "fr-foundation-sounds-2-s3",
+          "text": "école",
+          "fa": "مدرسه"
+        },
+        {
+          "id": "fr-foundation-sounds-2-s4",
+          "text": "mère",
+          "fa": "مادر"
+        },
+        {
+          "id": "fr-foundation-sounds-2-s5",
+          "text": "eau",
+          "fa": "آب"
+        },
+        {
+          "id": "fr-foundation-sounds-2-s6",
+          "text": "bon",
+          "fa": "خوب"
+        },
+        {
+          "id": "fr-foundation-sounds-2-s7",
+          "text": "livre",
+          "fa": "کتاب"
+        },
+        {
+          "id": "fr-foundation-sounds-2-s8",
+          "text": "français",
+          "fa": "فرانسوی"
+        }
+      ]
+    },
+    {
+      "id": "fr-foundation-words-1",
+      "title": "واژه‌های نخستین",
+      "teachingFa": "Ami دوست مذکر است؛ برای یادگیری این واژه‌ها هنوز جملهٔ بلند لازم نیست.\nتمرین اصلی: Femme و Homme را برای زن و مرد از هم تشخیص بده.",
+      "sentences": [
+        {
+          "id": "fr-foundation-words-1-s1",
+          "text": "Bonjour",
+          "fa": "سلام / روز بخیر"
+        },
+        {
+          "id": "fr-foundation-words-1-s2",
+          "text": "Pardon",
+          "fa": "ببخشید"
+        },
+        {
+          "id": "fr-foundation-words-1-s3",
+          "text": "Aide",
+          "fa": "کمک"
+        },
+        {
+          "id": "fr-foundation-words-1-s4",
+          "text": "Femme",
+          "fa": "زن"
+        },
+        {
+          "id": "fr-foundation-words-1-s5",
+          "text": "Homme",
+          "fa": "مرد"
+        },
+        {
+          "id": "fr-foundation-words-1-s6",
+          "text": "Enfant",
+          "fa": "کودک"
+        },
+        {
+          "id": "fr-foundation-words-1-s7",
+          "text": "Ami",
+          "fa": "دوست (مرد)"
+        },
+        {
+          "id": "fr-foundation-words-1-s8",
+          "text": "Fille",
+          "fa": "دختر"
+        }
+      ]
+    },
+    {
+      "id": "fr-foundation-words-2",
+      "title": "من، تو و چیزهای اطراف",
+      "teachingFa": "je من و tu توی دوستانه است؛ این درس فقط شناخت واژه است.\nتمرین اصلی: فقط ضمیر je را با tu عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-foundation-words-2-s1",
+          "text": "je",
+          "fa": "من"
+        },
+        {
+          "id": "fr-foundation-words-2-s2",
+          "text": "tu",
+          "fa": "تو"
+        },
+        {
+          "id": "fr-foundation-words-2-s3",
+          "text": "nous",
+          "fa": "ما"
+        },
+        {
+          "id": "fr-foundation-words-2-s4",
+          "text": "stylo",
+          "fa": "خودکار"
+        },
+        {
+          "id": "fr-foundation-words-2-s5",
+          "text": "maison",
+          "fa": "خانه"
+        },
+        {
+          "id": "fr-foundation-words-2-s6",
+          "text": "table",
+          "fa": "میز"
+        },
+        {
+          "id": "fr-foundation-words-2-s7",
+          "text": "chaise",
+          "fa": "صندلی"
+        },
+        {
+          "id": "fr-foundation-words-2-s8",
+          "text": "porte",
+          "fa": "در"
+        }
+      ]
+    },
+    {
+      "id": "fr-foundation-chunks-1",
+      "title": "عبارت‌های کوتاه روزمره",
+      "teachingFa": "S’il vous plaît محترمانه است؛ برای درخواست از غریبه همین ترکیب آماده کافی است.\nتمرین اصلی: Bonne journée و Bonne soirée را برای روز و عصر مقایسه کن.",
+      "sentences": [
+        {
+          "id": "fr-foundation-chunks-1-s1",
+          "text": "Bonne journée",
+          "fa": "روز خوبی داشته باشید"
+        },
+        {
+          "id": "fr-foundation-chunks-1-s2",
+          "text": "Bonne soirée",
+          "fa": "عصر خوبی داشته باشید"
+        },
+        {
+          "id": "fr-foundation-chunks-1-s3",
+          "text": "À tout à l’heure",
+          "fa": "بعداً می‌بینمت"
+        },
+        {
+          "id": "fr-foundation-chunks-1-s4",
+          "text": "Non, merci",
+          "fa": "نه، ممنون"
+        },
+        {
+          "id": "fr-foundation-chunks-1-s5",
+          "text": "S’il vous plaît",
+          "fa": "لطفاً، مؤدبانه"
+        },
+        {
+          "id": "fr-foundation-chunks-1-s6",
+          "text": "Merci beaucoup",
+          "fa": "خیلی ممنون"
+        },
+        {
+          "id": "fr-foundation-chunks-1-s7",
+          "text": "De l’eau",
+          "fa": "کمی آب"
+        },
+        {
+          "id": "fr-foundation-chunks-1-s8",
+          "text": "Excusez-moi",
+          "fa": "ببخشید"
+        }
+      ]
+    },
+    {
+      "id": "fr-foundation-chunks-2",
+      "title": "چند ترکیب پایه",
+      "teachingFa": "un livre مذکر است؛ mon père و ma mère با اسم هماهنگ‌اند، نه با جنسیت صاحب.\nتمرین اصلی: فقط نام عضو خانواده را در mon père و ma mère عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-foundation-chunks-2-s1",
+          "text": "un livre",
+          "fa": "یک کتاب"
+        },
+        {
+          "id": "fr-foundation-chunks-2-s2",
+          "text": "un stylo",
+          "fa": "یک خودکار"
+        },
+        {
+          "id": "fr-foundation-chunks-2-s3",
+          "text": "mon nom",
+          "fa": "نام من"
+        },
+        {
+          "id": "fr-foundation-chunks-2-s4",
+          "text": "ma mère",
+          "fa": "مادر من"
+        },
+        {
+          "id": "fr-foundation-chunks-2-s5",
+          "text": "mon père",
+          "fa": "پدر من"
+        },
+        {
+          "id": "fr-foundation-chunks-2-s6",
+          "text": "pas mal",
+          "fa": "بد نیست"
+        },
+        {
+          "id": "fr-foundation-chunks-2-s7",
+          "text": "à demain",
+          "fa": "تا فردا"
+        },
+        {
+          "id": "fr-foundation-chunks-2-s8",
+          "text": "encore une fois",
+          "fa": "یک بار دیگر"
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-1",
+      "title": "سلام، احوال و خداحافظی",
+      "teachingFa": "Bonjour برای روز و À demain برای دیدار فردا است؛ پایان واژه‌ها را از صدا یاد بگیر.\nتمرین اصلی: فقط زمان سلام را از صبح به عصر عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre1-s1",
+          "text": "Bonjour, Ali !",
+          "fa": "سلام، علی!"
+        },
+        {
+          "id": "fr-pre1-s2",
+          "text": "Bonjour, Mina !",
+          "fa": "سلام، مینا!"
+        },
+        {
+          "id": "fr-pre1-s3",
+          "text": "À demain, Ali !",
+          "fa": "تا فردا، علی!"
+        },
+        {
+          "id": "fr-pre1-s4",
+          "text": "À demain, Mina !",
+          "fa": "تا فردا، مینا!"
+        },
+        {
+          "id": "fr-pre1-s5",
+          "text": "Salut, Ali !",
+          "fa": "سلام، علی! (دوستانه)"
+        },
+        {
+          "id": "fr-pre1-s6",
+          "text": "Salut, Mina !",
+          "fa": "سلام، مینا! (دوستانه)"
+        },
+        {
+          "id": "fr-pre1-s7",
+          "text": "Bonsoir, Ali !",
+          "fa": "عصر بخیر، علی!"
+        },
+        {
+          "id": "fr-pre1-s8",
+          "text": "Au revoir, Mina !",
+          "fa": "خداحافظ، مینا!"
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-2",
+      "title": "نام و املای آن",
+      "teachingFa": "Tu t’appelles comment دوستانه است؛ برای معرفی کوتاه Moi, c’est … طبیعی است.\nتمرین اصلی: در پاسخ معرفی، فقط نام را با نام خودت عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre2-s1",
+          "text": "Tu t’appelles comment ?",
+          "fa": "نامت چیست؟"
+        },
+        {
+          "id": "fr-pre2-s2",
+          "text": "Moi, c’est Darya.",
+          "fa": "من دریا هستم."
+        },
+        {
+          "id": "fr-pre2-s3",
+          "text": "Et moi, c’est Amir.",
+          "fa": "و من امیر هستم."
+        },
+        {
+          "id": "fr-pre2-s4",
+          "text": "Bonjour, Amir !",
+          "fa": "سلام، امیر!"
+        },
+        {
+          "id": "fr-pre2-s5",
+          "text": "Je m’appelle Sara.",
+          "fa": "نامم سارا است."
+        },
+        {
+          "id": "fr-pre2-s6",
+          "text": "Et toi, ton prénom ?",
+          "fa": "و تو، نام کوچکت چیست؟"
+        },
+        {
+          "id": "fr-pre2-s7",
+          "text": "Mon prénom, c’est Ali.",
+          "fa": "نام کوچک من علی است."
+        },
+        {
+          "id": "fr-pre2-s8",
+          "text": "Tu peux répéter, Ali ?",
+          "fa": "علی، می‌توانی تکرار کنی؟"
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-3",
+      "title": "پاسخ کوتاه",
+      "teachingFa": "Oui, s’il te plaît قبول دوستانه و Non, merci رد مؤدبانه است.\nتمرین اصلی: در همان پاسخ فقط قبول را به رد مؤدبانه تبدیل کن.",
+      "sentences": [
+        {
+          "id": "fr-pre3-s1",
+          "text": "Tu veux du thé ?",
+          "fa": "چای می‌خواهی؟"
+        },
+        {
+          "id": "fr-pre3-s2",
+          "text": "Oui, s’il te plaît.",
+          "fa": "بله، لطفاً."
+        },
+        {
+          "id": "fr-pre3-s3",
+          "text": "Et du café ?",
+          "fa": "و قهوه؟"
+        },
+        {
+          "id": "fr-pre3-s4",
+          "text": "Non, merci.",
+          "fa": "نه، ممنون."
+        },
+        {
+          "id": "fr-pre3-s5",
+          "text": "Oui, merci.",
+          "fa": "بله، ممنون."
+        },
+        {
+          "id": "fr-pre3-s6",
+          "text": "Non, pas de café.",
+          "fa": "نه، قهوه نه."
+        },
+        {
+          "id": "fr-pre3-s7",
+          "text": "Du thé, s’il te plaît.",
+          "fa": "چای، لطفاً. (دوستانه)"
+        },
+        {
+          "id": "fr-pre3-s8",
+          "text": "D’accord, du thé.",
+          "fa": "باشد، چای."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-4",
+      "title": "ادب و درخواست",
+      "teachingFa": "در درخواست رسمی s’il vous plaît بگو؛ پس از دریافت وسیله تشکر کن.\nتمرین اصلی: در درخواست، فقط نام وسیله را با واژهٔ آشنای دیگری عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre4-s1",
+          "text": "Un stylo, s’il vous plaît.",
+          "fa": "یک خودکار، لطفاً."
+        },
+        {
+          "id": "fr-pre4-s2",
+          "text": "Voilà votre stylo.",
+          "fa": "بفرمایید خودکارتان."
+        },
+        {
+          "id": "fr-pre4-s3",
+          "text": "Merci pour le stylo.",
+          "fa": "برای خودکار ممنون."
+        },
+        {
+          "id": "fr-pre4-s4",
+          "text": "De rien !",
+          "fa": "خواهش می‌کنم!"
+        },
+        {
+          "id": "fr-pre4-s5",
+          "text": "Pardon.",
+          "fa": "ببخشید."
+        },
+        {
+          "id": "fr-pre4-s6",
+          "text": "Ce n’est pas grave.",
+          "fa": "اشکالی ندارد."
+        },
+        {
+          "id": "fr-pre4-s7",
+          "text": "Un cahier, s’il vous plaît.",
+          "fa": "یک دفتر، لطفاً."
+        },
+        {
+          "id": "fr-pre4-s8",
+          "text": "Merci beaucoup pour le cahier.",
+          "fa": "برای دفتر خیلی ممنون."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-5",
+      "title": "عددها",
+      "teachingFa": "trois livres و deux stylos در نوشتار جمع‌اند؛ s پایانی معمولاً شنیده نمی‌شود.\nتمرین اصلی: در پاسخ شمارش فقط عدد را عوض کن.\nتکمیل درس: عددهای شش تا ده جدا شنیده می‌شوند؛ تلفظ عددِ تنها ممکن است با تلفظ آن پیش از اسم فرق کند.",
+      "sentences": [
+        {
+          "id": "fr-pre5-s1",
+          "text": "Il y a combien de livres ?",
+          "fa": "چند کتاب هست؟"
+        },
+        {
+          "id": "fr-pre5-s2",
+          "text": "Il y a trois livres.",
+          "fa": "سه کتاب هست."
+        },
+        {
+          "id": "fr-pre5-s3",
+          "text": "Et combien de stylos ?",
+          "fa": "و چند خودکار؟"
+        },
+        {
+          "id": "fr-pre5-s4",
+          "text": "Deux stylos.",
+          "fa": "دو خودکار."
+        },
+        {
+          "id": "fr-pre5-s5",
+          "text": "Un livre.",
+          "fa": "یک کتاب."
+        },
+        {
+          "id": "fr-pre5-s6",
+          "text": "Deux livres.",
+          "fa": "دو کتاب."
+        },
+        {
+          "id": "fr-pre5-s7",
+          "text": "Il y a quatre cahiers.",
+          "fa": "چهار دفتر هست."
+        },
+        {
+          "id": "fr-pre5-s8",
+          "text": "Et cinq stylos.",
+          "fa": "و پنج خودکار."
+        },
+        {
+          "id": "fr-pre-5-balance-01",
+          "text": "Six.",
+          "fa": "شش."
+        },
+        {
+          "id": "fr-pre-5-balance-02",
+          "text": "Sept.",
+          "fa": "هفت."
+        },
+        {
+          "id": "fr-pre-5-balance-03",
+          "text": "Huit.",
+          "fa": "هشت."
+        },
+        {
+          "id": "fr-pre-5-balance-04",
+          "text": "Neuf.",
+          "fa": "نه."
+        },
+        {
+          "id": "fr-pre-5-balance-05",
+          "text": "Dix.",
+          "fa": "ده."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-6",
+      "title": "اشیا و اشاره",
+      "teachingFa": "un cahier مذکر و une table مؤنث است؛ اسم را همراه حرف تعریف یاد بگیر.\nتمرین اصلی: در معرفی فقط نام وسیله را عوض کن؛ حرف تعریف را درست نگه دار.",
+      "sentences": [
+        {
+          "id": "fr-pre6-s1",
+          "text": "Qu’est-ce que c’est, ici ?",
+          "fa": "این چیست؟"
+        },
+        {
+          "id": "fr-pre6-s2",
+          "text": "C’est un cahier.",
+          "fa": "این یک دفتر است."
+        },
+        {
+          "id": "fr-pre6-s3",
+          "text": "Et là ?",
+          "fa": "و آنجا؟"
+        },
+        {
+          "id": "fr-pre6-s4",
+          "text": "C’est une table.",
+          "fa": "آن یک میز است."
+        },
+        {
+          "id": "fr-pre6-s5",
+          "text": "C’est un livre.",
+          "fa": "این یک کتاب است."
+        },
+        {
+          "id": "fr-pre6-s6",
+          "text": "C’est une chaise.",
+          "fa": "این یک صندلی است."
+        },
+        {
+          "id": "fr-pre6-s7",
+          "text": "Un livre et un cahier.",
+          "fa": "یک کتاب و یک دفتر."
+        },
+        {
+          "id": "fr-pre6-s8",
+          "text": "Une table et une chaise.",
+          "fa": "یک میز و یک صندلی."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-7",
+      "title": "حال و احساس",
+      "teachingFa": "fatigué و fatiguée در نوشتار به گوینده بستگی دارند؛ تلفظ معمول آن‌ها یکسان است.\nتمرین اصلی: فقط خوب‌بودن را با خسته‌بودن عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre7-s1",
+          "text": "Comment tu vas aujourd’hui ?",
+          "fa": "امروز حالت چطور است؟"
+        },
+        {
+          "id": "fr-pre7-s2",
+          "text": "Bien, merci. Et toi ?",
+          "fa": "خوبم، ممنون. و تو؟"
+        },
+        {
+          "id": "fr-pre7-s3",
+          "text": "Je suis un peu fatigué.",
+          "fa": "کمی خسته‌ام. (گوینده مرد)"
+        },
+        {
+          "id": "fr-pre7-s4",
+          "text": "On fait une pause ?",
+          "fa": "کمی استراحت کنیم؟"
+        },
+        {
+          "id": "fr-pre7-s5",
+          "text": "Je vais bien.",
+          "fa": "حالم خوب است."
+        },
+        {
+          "id": "fr-pre7-s6",
+          "text": "Je suis contente.",
+          "fa": "خوشحالم. (گوینده زن)"
+        },
+        {
+          "id": "fr-pre7-s7",
+          "text": "Je suis content.",
+          "fa": "خوشحالم. (گوینده مرد)"
+        },
+        {
+          "id": "fr-pre7-s8",
+          "text": "Je suis fatiguée aujourd’hui.",
+          "fa": "امروز خسته‌ام. (گوینده زن)"
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-8",
+      "title": "داشتن و نداشتن",
+      "teachingFa": "در نفی داشتن از pas de استفاده کن: pas de cahier.\nتمرین اصلی: پاسخ مثبت را منفی کن؛ وسیله همان بماند.",
+      "sentences": [
+        {
+          "id": "fr-pre8-s1",
+          "text": "Tu as un crayon ?",
+          "fa": "مداد داری؟"
+        },
+        {
+          "id": "fr-pre8-s2",
+          "text": "Oui, j’ai un crayon.",
+          "fa": "بله، مداد دارم."
+        },
+        {
+          "id": "fr-pre8-s3",
+          "text": "Et un cahier ?",
+          "fa": "و دفتر؟"
+        },
+        {
+          "id": "fr-pre8-s4",
+          "text": "Non, je n’ai pas de cahier.",
+          "fa": "نه، دفتر ندارم."
+        },
+        {
+          "id": "fr-pre8-s5",
+          "text": "J’ai un livre.",
+          "fa": "کتاب دارم."
+        },
+        {
+          "id": "fr-pre8-s6",
+          "text": "Je n’ai pas de crayon.",
+          "fa": "مداد ندارم."
+        },
+        {
+          "id": "fr-pre8-s7",
+          "text": "Tu as un livre ?",
+          "fa": "کتاب داری؟"
+        },
+        {
+          "id": "fr-pre8-s8",
+          "text": "Oui, j’ai deux livres.",
+          "fa": "بله، دو کتاب دارم."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-9",
+      "title": "نیاز و خواستن",
+      "teachingFa": "برای نیاز J’ai besoin de … و برای خواستن Je veux … به کار می‌رود.\nتمرین اصلی: فقط نام چیزی را که لازم داری عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre9-s1",
+          "text": "De quoi as-tu besoin ?",
+          "fa": "به چه چیزی نیاز داری؟"
+        },
+        {
+          "id": "fr-pre9-s2",
+          "text": "J’ai besoin d’eau.",
+          "fa": "آب لازم دارم."
+        },
+        {
+          "id": "fr-pre9-s3",
+          "text": "Tu veux aussi du pain ?",
+          "fa": "نان هم می‌خواهی؟"
+        },
+        {
+          "id": "fr-pre9-s4",
+          "text": "Oui, un peu de pain.",
+          "fa": "بله، کمی نان."
+        },
+        {
+          "id": "fr-pre9-s5",
+          "text": "J’ai besoin de pain.",
+          "fa": "نان لازم دارم."
+        },
+        {
+          "id": "fr-pre9-s6",
+          "text": "Tu as besoin d’eau ?",
+          "fa": "آب لازم داری؟"
+        },
+        {
+          "id": "fr-pre9-s7",
+          "text": "Un peu d’eau, s’il te plaît.",
+          "fa": "کمی آب، لطفاً. (دوستانه)"
+        },
+        {
+          "id": "fr-pre9-s8",
+          "text": "Voilà ton eau.",
+          "fa": "بفرما آبت."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-10",
+      "title": "خانواده و افراد نزدیک",
+      "teachingFa": "ma mère و mon père با جنسیت اسم هماهنگ‌اند؛ نه با جنسیت گوینده.\nتمرین اصلی: مادر را به پدر تغییر بده و عبارت معرفی را هماهنگ کن.",
+      "sentences": [
+        {
+          "id": "fr-pre10-s1",
+          "text": "Qui est sur la photo ?",
+          "fa": "چه کسی در عکس است؟"
+        },
+        {
+          "id": "fr-pre10-s2",
+          "text": "Voici ma mère.",
+          "fa": "این مادر من است."
+        },
+        {
+          "id": "fr-pre10-s3",
+          "text": "Et cette personne ?",
+          "fa": "و این شخص؟"
+        },
+        {
+          "id": "fr-pre10-s4",
+          "text": "Voici mon père.",
+          "fa": "این پدر من است."
+        },
+        {
+          "id": "fr-pre10-s5",
+          "text": "Voici ma sœur.",
+          "fa": "این خواهر من است."
+        },
+        {
+          "id": "fr-pre10-s6",
+          "text": "Voici mon frère.",
+          "fa": "این برادر من است."
+        },
+        {
+          "id": "fr-pre10-s7",
+          "text": "Ma mère s’appelle Mina.",
+          "fa": "نام مادرم مینا است."
+        },
+        {
+          "id": "fr-pre10-s8",
+          "text": "Mon père s’appelle Ali.",
+          "fa": "نام پدرم علی است."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-11",
+      "title": "ضمیرهای ملکی",
+      "teachingFa": "ton و mon را همراه اسم بشنو؛ صاحب زن یا مرد، جنسیت اسم را عوض نمی‌کند.\nتمرین اصلی: در پاسخ فقط مالک را از من به تو عوض کن.\nتکمیل درس: son/sa با جنسیت اسمِ وسیله هماهنگ‌اند، نه زن یا مرد بودن صاحب آن؛ son livre و sa chaise.",
+      "sentences": [
+        {
+          "id": "fr-pre11-s1",
+          "text": "C’est ton téléphone ?",
+          "fa": "این تلفن تو است؟"
+        },
+        {
+          "id": "fr-pre11-s2",
+          "text": "Oui, c’est mon téléphone.",
+          "fa": "بله، این تلفن من است."
+        },
+        {
+          "id": "fr-pre11-s3",
+          "text": "Et ce sac, c’est le tien ?",
+          "fa": "و این کیف، مال تو است؟"
+        },
+        {
+          "id": "fr-pre11-s4",
+          "text": "Non, c’est ton sac.",
+          "fa": "نه، این کیف تو است."
+        },
+        {
+          "id": "fr-pre11-s5",
+          "text": "C’est mon livre.",
+          "fa": "این کتاب من است."
+        },
+        {
+          "id": "fr-pre11-s6",
+          "text": "C’est ton livre.",
+          "fa": "این کتاب تو است."
+        },
+        {
+          "id": "fr-pre11-s7",
+          "text": "Voici ma chaise.",
+          "fa": "این صندلی من است."
+        },
+        {
+          "id": "fr-pre11-s8",
+          "text": "Voici ta chaise.",
+          "fa": "این صندلی تو است."
+        },
+        {
+          "id": "fr-pre-11-balance-01",
+          "text": "C’est sa chaise.",
+          "fa": "این صندلی او است."
+        },
+        {
+          "id": "fr-pre-11-balance-02",
+          "text": "C’est son livre.",
+          "fa": "این کتاب او است."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-12",
+      "title": "توصیف آدم و چیز",
+      "teachingFa": "petit برای sac و grande برای valise است؛ صفت با اسم هماهنگ می‌شود.\nتمرین اصلی: فقط صفت کوچک را با بزرگ عوض کن.\nتکمیل درس: در petit پایان t معمولاً شنیده نمی‌شود؛ در petite صدای t شنیده می‌شود. فقط هماهنگی صفت را دنبال کن.",
+      "sentences": [
+        {
+          "id": "fr-pre12-s1",
+          "text": "Ton sac est petit ?",
+          "fa": "کیفت کوچک است؟"
+        },
+        {
+          "id": "fr-pre12-s2",
+          "text": "Oui, mon sac est petit.",
+          "fa": "بله، کیفم کوچک است."
+        },
+        {
+          "id": "fr-pre12-s3",
+          "text": "Et ta valise est grande ?",
+          "fa": "و چمدانت بزرگ است؟"
+        },
+        {
+          "id": "fr-pre12-s4",
+          "text": "Oui, ma valise est grande.",
+          "fa": "بله، چمدانم بزرگ است."
+        },
+        {
+          "id": "fr-pre12-s5",
+          "text": "Mon sac est grand.",
+          "fa": "کیفم بزرگ است."
+        },
+        {
+          "id": "fr-pre12-s6",
+          "text": "Ma valise est petite.",
+          "fa": "چمدانم کوچک است."
+        },
+        {
+          "id": "fr-pre12-s7",
+          "text": "Le cahier est petit.",
+          "fa": "دفتر کوچک است."
+        },
+        {
+          "id": "fr-pre12-s8",
+          "text": "La table est grande.",
+          "fa": "میز بزرگ است."
+        },
+        {
+          "id": "fr-pre-12-balance-01",
+          "text": "Le livre est petit.",
+          "fa": "کتاب کوچک است."
+        },
+        {
+          "id": "fr-pre-12-balance-02",
+          "text": "La maison est petite.",
+          "fa": "خانه کوچک است."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-13",
+      "title": "رنگ‌ها",
+      "teachingFa": "bleu و rouge رنگ‌اند؛ به تغییر شکل بعضی رنگ‌ها با اسم توجه کن.\nتمرین اصلی: فقط رنگ را عوض کن؛ اسم و صفت را هماهنگ نگه دار.\nتکمیل درس: noir و noire تلفظ یکسان دارند، اما نوشتار صفت با جنسیت اسم هماهنگ می‌شود.",
+      "sentences": [
+        {
+          "id": "fr-pre13-s1",
+          "text": "Ton sac est de quelle couleur ?",
+          "fa": "کیفت چه رنگی است؟"
+        },
+        {
+          "id": "fr-pre13-s2",
+          "text": "Mon sac est bleu.",
+          "fa": "کیفم آبی است."
+        },
+        {
+          "id": "fr-pre13-s3",
+          "text": "Ce sac rouge est à toi ?",
+          "fa": "این کیف قرمز مال تو است؟"
+        },
+        {
+          "id": "fr-pre13-s4",
+          "text": "Non, mon sac est bleu.",
+          "fa": "نه، کیفم آبی است."
+        },
+        {
+          "id": "fr-pre13-s5",
+          "text": "Le stylo est bleu.",
+          "fa": "خودکار آبی است."
+        },
+        {
+          "id": "fr-pre13-s6",
+          "text": "Le stylo est rouge.",
+          "fa": "خودکار قرمز است."
+        },
+        {
+          "id": "fr-pre13-s7",
+          "text": "La table est bleue.",
+          "fa": "میز آبی است."
+        },
+        {
+          "id": "fr-pre13-s8",
+          "text": "La chaise est rouge.",
+          "fa": "صندلی قرمز است."
+        },
+        {
+          "id": "fr-pre-13-balance-01",
+          "text": "Le sac est noir.",
+          "fa": "کیف سیاه است."
+        },
+        {
+          "id": "fr-pre-13-balance-02",
+          "text": "La valise est noire.",
+          "fa": "چمدان سیاه است."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-14",
+      "title": "در کلاس درس",
+      "teachingFa": "Encore une fois درخواست تکرار است؛ lentement یعنی آهسته.\nتمرین اصلی: درخواست تکرار را یک بار با لحن آرام و یک بار مؤدبانه‌تر بگو.",
+      "sentences": [
+        {
+          "id": "fr-pre14-s1",
+          "text": "Encore une fois, s’il vous plaît.",
+          "fa": "یک بار دیگر، لطفاً."
+        },
+        {
+          "id": "fr-pre14-s2",
+          "text": "Oui, je parle lentement.",
+          "fa": "بله، آهسته صحبت می‌کنم."
+        },
+        {
+          "id": "fr-pre14-s3",
+          "text": "Vous comprenez maintenant ?",
+          "fa": "حالا متوجه می‌شوید؟"
+        },
+        {
+          "id": "fr-pre14-s4",
+          "text": "Oui, maintenant je comprends.",
+          "fa": "بله، حالا متوجه می‌شوم."
+        },
+        {
+          "id": "fr-pre14-s5",
+          "text": "Je ne comprends pas.",
+          "fa": "نمی‌فهمم."
+        },
+        {
+          "id": "fr-pre14-s6",
+          "text": "Plus lentement, s’il vous plaît.",
+          "fa": "آهسته‌تر، لطفاً."
+        },
+        {
+          "id": "fr-pre14-s7",
+          "text": "Que veut dire ce mot ?",
+          "fa": "این واژه چه معنی می‌دهد؟"
+        },
+        {
+          "id": "fr-pre14-s8",
+          "text": "Merci, je comprends.",
+          "fa": "ممنون، می‌فهمم."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-15",
+      "title": "اصل و ملیت",
+      "teachingFa": "Tu viens d’où دوستانه و Vous venez d’où محترمانه است؛ در یک گفت‌وگو خطاب را بی‌دلیل عوض نکن.\nتمرین اصلی: در معرفی فقط نام کشور را عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre15-s1",
+          "text": "Tu viens d’où, Darya ?",
+          "fa": "دریا، اهل کجایی؟"
+        },
+        {
+          "id": "fr-pre15-s2",
+          "text": "Je viens d’Iran.",
+          "fa": "اهل ایران هستم."
+        },
+        {
+          "id": "fr-pre15-s3",
+          "text": "Tu parles persan ?",
+          "fa": "فارسی صحبت می‌کنی؟"
+        },
+        {
+          "id": "fr-pre15-s4",
+          "text": "Oui, et un peu de français.",
+          "fa": "بله، و کمی فرانسوی."
+        },
+        {
+          "id": "fr-pre15-s5",
+          "text": "Je viens de France.",
+          "fa": "اهل فرانسه هستم."
+        },
+        {
+          "id": "fr-pre15-s6",
+          "text": "Tu parles français ?",
+          "fa": "فرانسوی صحبت می‌کنی؟"
+        },
+        {
+          "id": "fr-pre15-s7",
+          "text": "Je parle persan.",
+          "fa": "فارسی صحبت می‌کنم."
+        },
+        {
+          "id": "fr-pre15-s8",
+          "text": "Un peu de français.",
+          "fa": "کمی فرانسوی."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-16",
+      "title": "خانه و اتاق‌ها",
+      "teachingFa": "با J’habite à … شهر محل زندگی را بگو؛ با avec همراهان را معرفی کن.\nتمرین اصلی: در پاسخ فقط نام شهر را عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre16-s1",
+          "text": "Tu habites où, Amir ?",
+          "fa": "امیر، کجا زندگی می‌کنی؟"
+        },
+        {
+          "id": "fr-pre16-s2",
+          "text": "J’habite à Lyon.",
+          "fa": "در لیون زندگی می‌کنم."
+        },
+        {
+          "id": "fr-pre16-s3",
+          "text": "Tu habites seul ?",
+          "fa": "تنها زندگی می‌کنی؟"
+        },
+        {
+          "id": "fr-pre16-s4",
+          "text": "Non, avec ma famille.",
+          "fa": "نه، با خانواده‌ام."
+        },
+        {
+          "id": "fr-pre16-s5",
+          "text": "J’habite à Paris.",
+          "fa": "در پاریس زندگی می‌کنم."
+        },
+        {
+          "id": "fr-pre16-s6",
+          "text": "J’habite avec ma mère.",
+          "fa": "با مادرم زندگی می‌کنم."
+        },
+        {
+          "id": "fr-pre16-s7",
+          "text": "Ma maison est petite.",
+          "fa": "خانه‌ام کوچک است."
+        },
+        {
+          "id": "fr-pre16-s8",
+          "text": "Ma famille habite à Lyon.",
+          "fa": "خانواده‌ام در لیون زندگی می‌کنند."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-17",
+      "title": "پرسیدن مکان",
+      "teachingFa": "sur روی و dans داخل است؛ فقط جای وسیله را تغییر بده.\nتمرین اصلی: فقط نام وسیله را در همان پرسش مکان عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre17-s1",
+          "text": "Où est mon cahier ?",
+          "fa": "دفترم کجاست؟"
+        },
+        {
+          "id": "fr-pre17-s2",
+          "text": "Ton cahier est sur la table.",
+          "fa": "دفترت روی میز است."
+        },
+        {
+          "id": "fr-pre17-s3",
+          "text": "Et mon stylo ?",
+          "fa": "و خودکارم؟"
+        },
+        {
+          "id": "fr-pre17-s4",
+          "text": "Il est dans ton sac.",
+          "fa": "داخل کیفت است."
+        },
+        {
+          "id": "fr-pre17-s5",
+          "text": "Le cahier est dans le sac.",
+          "fa": "دفتر داخل کیف است."
+        },
+        {
+          "id": "fr-pre17-s6",
+          "text": "Le livre est sur la table.",
+          "fa": "کتاب روی میز است."
+        },
+        {
+          "id": "fr-pre17-s7",
+          "text": "Où est la chaise ?",
+          "fa": "صندلی کجاست؟"
+        },
+        {
+          "id": "fr-pre17-s8",
+          "text": "La chaise est ici.",
+          "fa": "صندلی اینجاست."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-18",
+      "title": "در کافه",
+      "teachingFa": "برای سفارش مؤدبانه s’il vous plaît را نگه دار؛ sans یعنی بدون.\nتمرین اصلی: فقط چای را به قهوه عوض کن؛ ادب درخواست را نگه دار.",
+      "sentences": [
+        {
+          "id": "fr-pre18-s1",
+          "text": "Vous voulez boire quelque chose ?",
+          "fa": "میل دارید چیزی بنوشید؟"
+        },
+        {
+          "id": "fr-pre18-s2",
+          "text": "Un thé, s’il vous plaît.",
+          "fa": "یک چای، لطفاً."
+        },
+        {
+          "id": "fr-pre18-s3",
+          "text": "Avec du sucre ?",
+          "fa": "با شکر؟"
+        },
+        {
+          "id": "fr-pre18-s4",
+          "text": "Non, sans sucre, merci.",
+          "fa": "نه، بدون شکر، ممنون."
+        },
+        {
+          "id": "fr-pre18-s5",
+          "text": "Un café, s’il vous plaît.",
+          "fa": "یک قهوه، لطفاً."
+        },
+        {
+          "id": "fr-pre18-s6",
+          "text": "Un thé sans sucre.",
+          "fa": "یک چای بدون شکر."
+        },
+        {
+          "id": "fr-pre18-s7",
+          "text": "Voilà votre thé.",
+          "fa": "بفرمایید چای شما."
+        },
+        {
+          "id": "fr-pre18-s8",
+          "text": "Merci pour le thé.",
+          "fa": "برای چای ممنون."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-19",
+      "title": "ساعت و زمان",
+      "teachingFa": "Il est deux heures یعنی ساعت دو است؛ à trois heures زمان قرار را بیان می‌کند.\nتمرین اصلی: در پاسخ فقط ساعت را از دو به سه عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre19-s1",
+          "text": "Quelle heure est-il maintenant ?",
+          "fa": "الان ساعت چند است؟"
+        },
+        {
+          "id": "fr-pre19-s2",
+          "text": "Il est deux heures.",
+          "fa": "ساعت دو است."
+        },
+        {
+          "id": "fr-pre19-s3",
+          "text": "On commence à trois heures ?",
+          "fa": "ساعت سه شروع کنیم؟"
+        },
+        {
+          "id": "fr-pre19-s4",
+          "text": "Oui, à trois heures.",
+          "fa": "بله، ساعت سه."
+        },
+        {
+          "id": "fr-pre19-s5",
+          "text": "Il est une heure.",
+          "fa": "ساعت یک است."
+        },
+        {
+          "id": "fr-pre19-s6",
+          "text": "Il est trois heures.",
+          "fa": "ساعت سه است."
+        },
+        {
+          "id": "fr-pre19-s7",
+          "text": "On commence à deux heures.",
+          "fa": "ساعت دو شروع می‌کنیم."
+        },
+        {
+          "id": "fr-pre19-s8",
+          "text": "À trois heures, d’accord.",
+          "fa": "ساعت سه، باشد."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-20",
+      "title": "روزهای هفته",
+      "teachingFa": "lundi نام روز است؛ lundi matin یعنی صبح دوشنبه.\nتمرین اصلی: فقط روز قرار را عوض کن؛ قالب پرسش ثابت بماند.\nتکمیل درس: با چهار واژهٔ پایانی، نام هر هفت روز هفته کامل می‌شود؛ برای قرار همان قالب On se voit … را نگه دار.",
+      "sentences": [
+        {
+          "id": "fr-pre20-s1",
+          "text": "On se voit lundi ?",
+          "fa": "دوشنبه همدیگر را ببینیم؟"
+        },
+        {
+          "id": "fr-pre20-s2",
+          "text": "Oui, lundi.",
+          "fa": "بله، دوشنبه."
+        },
+        {
+          "id": "fr-pre20-s3",
+          "text": "Le matin ?",
+          "fa": "صبح؟"
+        },
+        {
+          "id": "fr-pre20-s4",
+          "text": "Oui, à lundi matin !",
+          "fa": "بله، تا صبح دوشنبه!"
+        },
+        {
+          "id": "fr-pre20-s5",
+          "text": "On se voit mardi ?",
+          "fa": "سه‌شنبه همدیگر را ببینیم؟"
+        },
+        {
+          "id": "fr-pre20-s6",
+          "text": "Oui, mardi matin.",
+          "fa": "بله، سه‌شنبه صبح."
+        },
+        {
+          "id": "fr-pre20-s7",
+          "text": "À vendredi !",
+          "fa": "تا جمعه!"
+        },
+        {
+          "id": "fr-pre20-s8",
+          "text": "À lundi !",
+          "fa": "تا دوشنبه!"
+        },
+        {
+          "id": "fr-pre-20-balance-01",
+          "text": "Mercredi.",
+          "fa": "چهارشنبه."
+        },
+        {
+          "id": "fr-pre-20-balance-02",
+          "text": "Jeudi.",
+          "fa": "پنجشنبه."
+        },
+        {
+          "id": "fr-pre-20-balance-03",
+          "text": "Samedi.",
+          "fa": "شنبه."
+        },
+        {
+          "id": "fr-pre-20-balance-04",
+          "text": "Dimanche.",
+          "fa": "یکشنبه."
+        }
+      ]
+    },
+    {
+      "id": "fr-pre-21",
+      "title": "مرور پایانی",
+      "teachingFa": "معرفی و درخواست تکرار را با هم تمرین کن؛ واژهٔ تازه برای طولانی‌کردن گفت‌وگو لازم نیست.\nتمرین اصلی: فقط نام طرفین را با نام‌های تازه عوض کن.",
+      "sentences": [
+        {
+          "id": "fr-pre21-s1",
+          "text": "Bonjour, moi, c’est Darya.",
+          "fa": "سلام، من دریا هستم."
+        },
+        {
+          "id": "fr-pre21-s2",
+          "text": "Bonjour, moi, c’est Amir.",
+          "fa": "سلام، من امیر هستم."
+        },
+        {
+          "id": "fr-pre21-s3",
+          "text": "Encore une fois : Amir ?",
+          "fa": "یک بار دیگر: امیر؟"
+        },
+        {
+          "id": "fr-pre21-s4",
+          "text": "Oui, Amir. Et toi, Darya.",
+          "fa": "بله، امیر. و تو، دریا."
+        },
+        {
+          "id": "fr-pre21-s5",
+          "text": "Tu viens d’Iran ?",
+          "fa": "اهل ایران هستی؟"
+        },
+        {
+          "id": "fr-pre21-s6",
+          "text": "Oui, je viens d’Iran.",
+          "fa": "بله، اهل ایران هستم."
+        },
+        {
+          "id": "fr-pre21-s7",
+          "text": "Tu parles un peu français.",
+          "fa": "کمی فرانسوی صحبت می‌کنی."
+        },
+        {
+          "id": "fr-pre21-s8",
+          "text": "Oui, un peu. À demain !",
+          "fa": "بله، کمی. تا فردا!"
+        },
+        {
+          "id": "fr-pre-21-balance-01",
+          "text": "Comment tu vas aujourd’hui ?",
+          "fa": "امروز حالت چطور است؟"
+        },
+        {
+          "id": "fr-pre-21-balance-02",
+          "text": "Bien, merci.",
+          "fa": "خوبم، ممنون."
+        },
+        {
+          "id": "fr-pre-21-balance-03",
+          "text": "Tu veux du thé ?",
+          "fa": "چای می‌خواهی؟"
+        },
+        {
+          "id": "fr-pre-21-balance-04",
+          "text": "Oui, s’il te plaît.",
+          "fa": "بله، لطفاً. (دوستانه)"
+        }
+      ]
+    }
+  ]
+}

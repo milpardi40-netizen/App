@@ -1,3 +1,4 @@
+import { englishA1SupportForUnit, englishA1SupportTiming, ENGLISH_A1_SUPPORT_LABELS } from '@/lib/englishA1SupplementMap';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/components/LocalizedText';
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
@@ -129,7 +130,7 @@ export default function EnglishSupplementScreen() {
       {!selected && <View style={s.tabRow}>{([['units', 'واحدهای دوره'], ['writing', 'نوشتن و مکالمه'], ['report', 'گزارش و سنجش']] as const).map(([key, label]) => <Pressable key={key} accessibilityRole="button" accessibilityState={{ selected: tab === key }} style={[s.tab, tab === key && s.tabActive]} onPress={() => { setTab(key); void load(); }}><Text style={[s.tabText, tab === key && s.tabTextActive]}>{label}</Text></Pressable>)}</View>}
 
       {!selected && tab === 'units' && <>
-        <Text style={s.text}>۲۴ واحد: چهار واحد Foundation و بیست واحد A1.</Text>
+        <Text style={s.text}>۲۴ واحد: چهار واحد Foundation و بیست واحد A1. این مسیر مکمل، از ۲۹ درس اصلی A1 جداست.</Text>
         {!assessmentPassed('Foundation', p) && <View style={s.card}>
           <Text style={s.heading}>پیش‌نیاز مسیر A1</Text>
           <Text style={s.text}>برای بازشدن واحدهای ناآموختهٔ A1، چهار واحد Foundation را کامل کنید و سنجش ۱۲پرسشی آن را بگذرانید.</Text>
@@ -160,6 +161,7 @@ export default function EnglishSupplementScreen() {
                   </View>
                 </View>
                 <Text style={s.text}>{item.goal}</Text>
+                {englishA1SupportForUnit(item.id) && <Text style={s.text}>{ENGLISH_A1_SUPPORT_LABELS[englishA1SupportForUnit(item.id)!.role]} · {englishA1SupportTiming(englishA1SupportForUnit(item.id)!)}</Text>}
               </Pressable>;
             })}
           </View>;
@@ -169,6 +171,13 @@ export default function EnglishSupplementScreen() {
       {selected && <>
         <Text style={s.text}>{selected.level} · واحد {trackPosition} از {selectedTrack.length} · ترتیب کلی {ENGLISH_SUPPLEMENT.findIndex(item => item.id === selected.id) + 1} از {ENGLISH_SUPPLEMENT.length}</Text>
         <Text style={s.heading}>{selected.title}</Text><Text style={s.text}>{selected.goal}</Text>
+        {englishA1SupportForUnit(selected.id) && <View style={s.card}>
+          <Text style={s.heading}>ارتباط با مسیر اصلی A1</Text>
+          <Text style={s.text}>{englishA1SupportTiming(englishA1SupportForUnit(selected.id)!)}</Text>
+          <Text style={s.text}>{englishA1SupportForUnit(selected.id)!.reasonFa}</Text>
+          <Text style={s.text}>این پیشنهاد شرط جدید تکمیل درس نیست؛ قفل‌ها و سنجش‌های قبلی مسیر مکمل تغییر نکرده‌اند.</Text>
+          <Pressable accessibilityRole="button" style={s.button} onPress={() => router.push({ pathname: '/lang/a1-support', params: { unit: selected.id } } as never)}><Text style={s.buttonText}>مرور آموزش و پیوند به درس اصلی</Text></Pressable>
+        </View>}
         {!testing && <>{selected.teaching.map(section => <View style={s.card} key={section.title}>
           <Text style={s.heading}>{section.title}</Text><Text style={s.text}>{section.text}</Text><Text style={s.english}>{section.example}</Text>
           <Pressable accessibilityRole="button" style={s.button} onPress={() => { void Speech.stop(); Speech.speak(section.audio ?? section.example.replace(/\/[^/]+\//g, ''), { language: speechTagFor('en-US'), rate: 0.72, onError: () => setError('صدای انگلیسی پخش نشد؛ تنظیمات صدای دستگاه را بررسی کنید.') }); }}><Text style={s.buttonText}>شنیدن الگو و تکرار</Text></Pressable>
@@ -182,6 +191,7 @@ export default function EnglishSupplementScreen() {
       {!selected && tab === 'report' && <>
         <View style={s.card}><Text style={s.heading}>Foundation</Text><Text style={s.text}>واحدهای کامل: {ENGLISH_FOUNDATION_UNITS.filter(item => unitPassed(item.id, p)).length} از {ENGLISH_FOUNDATION_UNITS.length}</Text><Text style={s.text}>سنجش پایانی: {foundationScore ? `${foundationScore.correct} از ${foundationScore.total} (${foundationScore.percent}٪) · ${assessmentPassed('Foundation', p) ? 'حداقل یک تلاش معیار داخلی را گذرانده' : 'هنوز تلاش موفق ثبت نشده'}` : 'هنوز انجام نشده'}</Text><Pressable accessibilityRole="button" accessibilityState={{ disabled: !canStartAssessment('Foundation', p) }} disabled={!canStartAssessment('Foundation', p)} style={[s.button, !canStartAssessment('Foundation', p) && s.disabled]} onPress={() => router.push({ pathname: '/lang/final-assessment', params: { level: 'Foundation' } } as never)}><Text style={s.buttonText}>{canStartAssessment('Foundation', p) ? 'شروع / ادامهٔ سنجش Foundation' : 'ابتدا همهٔ واحدهای Foundation را کامل کنید'}</Text></Pressable></View>
         <View style={s.card}><Text style={s.heading}>A1</Text><Text style={s.text}>واحدهای کامل: {ENGLISH_A1_COURSE_UNITS.filter(item => unitPassed(item.id, p)).length} از {ENGLISH_A1_COURSE_UNITS.length}</Text><Text style={s.text}>سنجش پایانی: {a1Score ? `${a1Score.correct} از ${a1Score.total} (${a1Score.percent}٪) · ${assessmentPassed('A1', p) ? 'حداقل یک تلاش معیار داخلی را گذرانده' : 'هنوز تلاش موفق ثبت نشده'}` : 'هنوز انجام نشده'}</Text><Pressable accessibilityRole="button" accessibilityState={{ disabled: !canStartAssessment('A1', p) }} disabled={!canStartAssessment('A1', p)} style={[s.button, !canStartAssessment('A1', p) && s.disabled]} onPress={() => router.push({ pathname: '/lang/final-assessment', params: { level: 'A1' } } as never)}><Text style={s.buttonText}>{canStartAssessment('A1', p) ? 'شروع / ادامهٔ سنجش A1' : 'ابتدا Foundation، سنجش آن و همهٔ واحدهای A1 را کامل کنید'}</Text></Pressable></View>
+        <Text style={s.text}>در فعالیت‌های A1، سؤال‌های گزینه‌ای تکمیل جمله در «دستور و واژگان» گزارش می‌شوند، نه نوشتن. نوشتن هدایت‌شده نیز با نوشتن مستقل فرق دارد؛ خودسنجیِ نوشته و مکالمه نمرهٔ تسلط نیست. پاسخ‌های نسخهٔ قدیمی محفوظ‌اند؛ سؤال‌های اصلاح‌شده باید دوباره تمرین شوند.</Text>
         {(Object.keys(SKILLS) as Skill[]).map(skill => { const report = skillReport(p, skill); return <View style={s.card} key={skill}><Text style={s.heading}>{SKILLS[skill]}</Text><Text style={s.text}>{report.answered ? `${report.correct} پاسخ درست از ${report.answered} سؤال پاسخ‌داده‌شده · ${report.attempts} تلاش` : 'هنوز سنجیده نشده'}</Text></View>; })}
         <Text style={s.text}>واحدهای تکمیل‌شده: {ENGLISH_SUPPLEMENT.filter(item => unitPassed(item.id, p)).length} از {ENGLISH_SUPPLEMENT.length}.</Text>
       </>}

@@ -114,6 +114,8 @@ export function EnglishSupplementTask({
   deferFeedback = false,
   showExplanationOnCorrect = false,
   centered = false,
+  audioRate = 0.78,
+  slowAudioRate,
 }: {
   task: Task;
   onResult?: (progress: SupplementProgress, correct: boolean) => void;
@@ -123,6 +125,9 @@ export function EnglishSupplementTask({
   showExplanationOnCorrect?: boolean;
   /** Assessment layout: centred copy, equal-height options, buttons that fill the card. */
   centered?: boolean;
+  /** Optional practice may offer two rates; existing supplement/assessment defaults stay unchanged. */
+  audioRate?: number;
+  slowAudioRate?: number;
 }) {
   const [answer, setAnswer] = useState('');
   const [heard, setHeard] = useState(false);
@@ -140,7 +145,7 @@ export function EnglishSupplementTask({
     void Speech.stop();
   }, []);
 
-  async function listen() {
+  async function listen(rate = audioRate) {
     const token = ++run.current;
     setError('');
     setPlaying(true);
@@ -156,7 +161,7 @@ export function EnglishSupplementTask({
       await Speech.stop();
       if (token !== run.current) return;
       timer.current = setTimeout(() => { finish(false); run.current++; void Speech.stop(); }, 60000);
-      Speech.speak(task.audio!, { language: speechTagFor('en-US'), rate: 0.78, onDone: () => finish(true), onError: () => finish(false), onStopped: () => finish(false) });
+      Speech.speak(task.audio!, { language: speechTagFor('en-US'), rate, onDone: () => finish(true), onError: () => finish(false), onStopped: () => finish(false) });
     } catch { finish(false); }
   }
 
@@ -190,6 +195,7 @@ export function EnglishSupplementTask({
     {task.source ? <View style={{ backgroundColor: EnglishPalette.surfaceMuted, borderRadius: 12, padding: 12 }}><Text style={[s.english, contentDirection(task.source), centered && assessment.center]}>{task.source}</Text></View> : null}
     <Text style={[s.heading, centered && assessment.centerPrompt]}>{task.prompt}</Text>
     {task.audio ? <Pressable accessibilityRole="button" accessibilityLabel={playing ? 'در حال پخش فایل شنیداری' : heard ? 'پخش دوبارهٔ فایل شنیداری' : 'شنیدن فایل شنیداری سؤال'} accessibilityState={{ disabled: playing || busy }} disabled={playing || busy} style={[s.secondaryButton, (playing || busy) && s.disabled]} onPress={() => void listen()}><Text style={s.secondaryButtonText}>{playing ? 'در حال پخش…' : heard ? 'پخش دوباره' : 'شنیدن سؤال'}</Text></Pressable> : null}
+    {task.audio && slowAudioRate !== undefined ? <Pressable accessibilityRole="button" accessibilityState={{ disabled: playing || busy }} disabled={playing || busy} style={[s.secondaryButton, (playing || busy) && s.disabled]} onPress={() => void listen(slowAudioRate)}><Text style={s.secondaryButtonText}>شنیدن آهسته</Text></Pressable> : null}
     {task.options
       ? task.options.map(option => <Pressable key={option} accessibilityRole="radio" accessibilityState={{ checked: answer === option, disabled: locked }} aria-checked={answer === option} disabled={locked} style={[s.input, { minHeight: 48, justifyContent: 'center', backgroundColor: answer === option ? EnglishPalette.primarySoft : EnglishPalette.surfaceMuted, borderColor: answer === option ? EnglishPalette.primary : EnglishPalette.border }, centered && assessment.option]} onPress={() => { setAnswer(option); setResult(null); }}><View style={[assessment.choiceIndicator, answer === option && assessment.choiceIndicatorActive]}><Text style={assessment.choiceIndicatorText}>{answer === option ? '✓' : ''}</Text></View><Text style={[s.english, contentDirection(option), centered && assessment.center, centered && assessment.choiceLabel]}>{option}</Text></Pressable>)
       : <TextInput accessibilityLabel={task.prompt} editable={!locked} style={[s.input, contentDirection(task.answers[0] ?? ""), centered && assessment.center]} value={answer} onChangeText={value => { setAnswer(value); setResult(null); }} placeholder="پاسخ خود را بنویسید" placeholderTextColor={EnglishPalette.muted} autoCapitalize="none" autoCorrect={false} maxLength={500} />}

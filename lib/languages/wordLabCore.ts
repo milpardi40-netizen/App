@@ -16,7 +16,7 @@
  * A target that cannot satisfy these rules is dropped rather than shown half-correct, and
  * `scripts/verify-word-lab-core.mjs` prints both the accepted words and the dropped targets.
  */
-import { SENTENCE_LESSONS } from '../courseContent';
+import { ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS } from '../courseContent';
 import { NEW_COURSES } from './newCourses';
 import { RUSSIAN_LESSONS } from './russian';
 
@@ -50,23 +50,23 @@ const DE_TARGETS: readonly string[] = [
   // خودم و مخاطبم
   'Ich', 'Du', 'Sie', 'bin', 'ist', 'mein', 'dein', 'Name', 'heiße', 'komme', 'wohne', 'wohnt',
   // عدد
-  'eins', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'zehn', 'zwölf',
+  'eins', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn', 'elf', 'zwölf',
   // کافه و غذا
   'Wasser', 'Tee', 'Kaffee', 'Milch', 'Brot', 'Kuchen', 'Frühstück', 'essen', 'trinken', 'möchte', 'möchten', 'Rechnung', 'Euro',
   // خانواده و افراد
-  'Familie', 'Mutter', 'Vater', 'Schwester', 'Kind', 'Kinder', 'Sohn', 'Eltern', 'Freundin',
+  'Familie', 'Mutter', 'Vater', 'Schwester', 'Kind', 'Kinder', 'Sohn', 'Tochter', 'Bruder', 'Eltern', 'Freundin',
   // خانه و وسایل
   'Haus', 'Hause', 'Wohnung', 'Zimmer', 'Küche', 'Bad', 'Tisch', 'Bett', 'Fenster', 'Tür', 'Buch', 'Telefon', 'Handy', 'Tasche', 'Schlüssel',
   // زمان
   'Zeit', 'Tag', 'heute', 'morgen', 'Abend', 'Woche', 'Wochenende', 'Montag', 'Samstag', 'Sonntag', 'Uhr', 'Monat', 'wann', 'früh', 'spät', 'jetzt', 'gestern',
   // مکان و پرسش
-  'wo', 'Wo', 'Woher', 'hier', 'dort', 'weit', 'nah', 'Zentrum', 'Straße', 'Toilette', 'Platz',
+  'wo', 'Wo', 'Woher', 'hier', 'dort', 'weit', 'nah', 'links', 'rechts', 'Zentrum', 'Straße', 'Toilette', 'Platz',
   // رفت‌وآمد
   'Bahnhof', 'Zug', 'Bus', 'Flughafen', 'Auto', 'Fahrkarte', 'gehe', 'gehen',
   // کار، درس و پول
-  'arbeiten', 'arbeite', 'Arbeit', 'Büro', 'Schule', 'Unterricht', 'Lehrer', 'Lehrerin', 'Frage', 'Satz', 'Deutsch', 'sprechen', 'verstehe', 'schreiben', 'lernt', 'Geld', 'kostet', 'teuer', 'bezahlen',
+  'arbeiten', 'arbeite', 'Arbeit', 'Büro', 'Schule', 'Unterricht', 'Lehrer', 'Lehrerin', 'Frage', 'Satz', 'Deutsch', 'sprechen', 'verstehe', 'schreiben', 'lernen', 'lernt', 'Geld', 'kostet', 'teuer', 'bezahlen',
   // توصیف
-  'gut', 'schön', 'neu', 'alt', 'groß', 'klein', 'lang', 'kalt', 'warm', 'müde', 'froh', 'krank', 'frei', 'Farbe', 'rot', 'blau', 'grün', 'gelb', 'schwarz', 'braun', 'hell',
+  'gut', 'schön', 'neu', 'alt', 'groß', 'klein', 'lang', 'kalt', 'warm', 'heiß', 'müde', 'froh', 'krank', 'frei', 'Farbe', 'rot', 'blau', 'grün', 'gelb', 'schwarz', 'braun', 'hell',
   // پرسش‌های پرکاربرد
   'was', 'Was', 'Wie', 'Warum', 'Welcher', 'Wer', 'viel', 'viele',
   // نیاز و توانایی
@@ -82,7 +82,7 @@ const RU_TARGETS: readonly string[] = [
   // خودم و مخاطبم
   'я', 'ты', 'вы', 'мы', 'он', 'она́', 'они́', 'мой', 'и́мя', 'живу́',
   // عدد
-  'оди́н', 'три', 'пять', 'семь', 'де́вять', 'де́сять', 'два́дцать',
+  'оди́н', 'два', 'три', 'четы́ре', 'пять', 'шесть', 'семь', 'во́семь', 'де́вять', 'де́сять', 'два́дцать',
   // کافه و غذا
   'вода́', 'чай', 'ко́фе', 'хлеб', 'молоко́', 'сыр', 'суп', 'мя́со', 'горя́чий', 'есть', 'хочу́', 'вку́сный', 'люблю́',
   // خانواده و دوست
@@ -110,11 +110,11 @@ const EN_TARGETS: readonly string[] = [
   // سلام، ادب و پاسخ کوتاه
   'hello', 'hi', 'good morning', 'goodbye', 'bye', 'please', 'thank', 'sorry', 'yes', 'no',
   // خودم و مخاطبم
-  'I', 'you', 'he', 'she', 'we', 'they', 'my', 'your', 'our', 'name', 'live',
+  'I', 'you', 'he', 'she', 'we', 'they', 'my', 'your', 'our', 'name', 'first name', 'last name', 'spell', 'address', 'live',
   // عدد
-  'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'twenty',
+  'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'twenty',
   // کافه و غذا
-  'water', 'tea', 'coffee', 'milk', 'bread', 'rice', 'meat', 'fruit', 'breakfast', 'lunch', 'dinner', 'cup', 'eat', 'want', 'like', 'fresh',
+  'water', 'tea', 'coffee', 'milk', 'bread', 'rice', 'meat', 'fruit', 'breakfast', 'lunch', 'dinner', 'cup', 'sandwich', 'sugar', 'eat', 'want', 'like', 'fresh',
   // خانواده و افراد
   'family', 'mother', 'son', 'daughter', 'brother', 'sister', 'friend', 'parents', 'baby', 'dog',
   // خانه و وسایل
@@ -124,7 +124,7 @@ const EN_TARGETS: readonly string[] = [
   // مکان و پرسش
   'where', 'who', 'how', 'street', 'city', 'station', 'park', 'store', 'shop', 'market', 'library', 'restroom', 'near', 'far', 'here',
   // رفت‌وآمد
-  'bus', 'train', 'taxi', 'car', 'ticket', 'map', 'walk', 'go',
+  'bus', 'train', 'taxi', 'car', 'ticket', 'map', 'walk', 'go', 'turn left', 'turn right',
   // کار، درس و پول
   'work', 'job', 'office', 'school', 'class', 'lesson', 'teacher', 'student', 'question', 'answer', 'word', 'sentence', 'read', 'write', 'speak', 'understand', 'learn', 'study', 'computer', 'cost', 'pay', 'cash', 'card', 'price',
   // توصیف
@@ -191,6 +191,17 @@ const RU_NOTES: Record<string, string> = {
  * to be shown; a gloss alone never creates a card.
  */
 const DE_CORE_GLOSS: Record<string, string> = {
+  // Current German A1 annotates many of these inside chunks (e.g. der Zug / am Wochenende).
+  // Supply the standalone meaning, but still require an exact, usable beginner course example.
+  bin: 'هستم',
+  kuchen: 'کیک',
+  telefon: 'تلفن',
+  abend: 'عصر؛ شامگاه',
+  wochenende: 'آخر هفته',
+  nah: 'نزدیک',
+  platz: 'جا؛ جای نشستن',
+  zug: 'قطار',
+  bruder: 'برادر',
   tag: 'روز',
   nacht: 'شب',
   stunde: 'ساعت (یک ساعت زمان)',
@@ -208,6 +219,14 @@ const DE_CORE_GLOSS: Record<string, string> = {
 };
 
 const RU_CORE_GLOSS: Record<string, string> = {
+  // Exact forms used by the current beginner course, but not separate vocabulary headwords.
+  мясо: 'گوشت',
+  сын: 'پسر (فرزند)',
+  воскресенье: 'یکشنبه',
+  час: 'ساعت (مدت زمان)',
+  поезд: 'قطار',
+  дорого: 'گران',
+  очень: 'بسیار؛ خیلی',
   четыре: 'چهار',
   восемь: 'هشت',
   сыр: 'پنیر',
@@ -267,6 +286,9 @@ const EN_NOTES: Record<string, string> = {
 };
 
 const EN_CORE_GLOSS: Record<string, string> = {
+  // Taught in chunks (per month / pay by card); keep the exact beginner examples.
+  month: 'ماه',
+  card: 'کارت بانکی',
   i: 'من',
   'good morning': 'صبح بخیر',
   thank: 'تشکر کردن',

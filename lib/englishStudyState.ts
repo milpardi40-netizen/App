@@ -1,3 +1,6 @@
+import {englishA1SentenceRevision, resumeEnglishA1Samples} from './englishA1Scope';
+import { balancedSampleRevision, resumeBalancedSamples } from './languages/preA1Practical/balanceRevision';
+import { assessmentRevisionFor as practicalAssessmentRevision, reviseExpandedEvidence as revisePracticalEvidence } from './lessonAssessment';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -14,6 +17,8 @@ export interface LessonAttempt {
 }
 
 export interface LessonSession {
+  sampleRevision?: string;
+  checksRevision?: string;
   stage: number;
   updatedAt?: string;
   /** 2 = the current ladder without the removed blitz round; absent on legacy saves. */
@@ -82,7 +87,7 @@ export function parseStudy(raw: string | null): StudyState {
   for (const [id, value] of Object.entries(parsed.sessions as Record<string, LessonSession>)) {
     const stage = resumeStage(value.stage, value.stageVersion, ENGLISH_ENGINE_STEPS.length);
     if (stage === null) continue;
-    sessions[id] = { ...value, stage, stageVersion: LESSON_STAGE_VERSION };
+    sessions[id] = resumeEnglishA1Samples(id, resumeBalancedSamples(id, revisePracticalEvidence('en', id, { ...value, stage, stageVersion: LESSON_STAGE_VERSION })));
     if (typeof value.updatedAt !== 'string' || !Number.isFinite(Date.parse(value.updatedAt))) delete sessions[id].updatedAt;
   }
   return {
@@ -141,19 +146,26 @@ export function saveLessonSession(id: string, value: LessonSession) {
     if (compareLessonAttempts(value.attempt, state.sessions[id]?.attempt) !== 0) {
       throw Error('این جلسه تغییر کرده است؛ درس را دوباره باز کنید.');
     }
-    state.sessions[id] = { ...value, updatedAt: positionTimestamp() };
+    state.sessions[id] = { ...value, ...((englishA1SentenceRevision(id) ?? balancedSampleRevision(id)) ? { sampleRevision: (englishA1SentenceRevision(id) ?? balancedSampleRevision(id)) } : {}), checksRevision: practicalAssessmentRevision('en', id), updatedAt: positionTimestamp() };
   });
 }
 
 /** Replace only the current attempt, after reading and validating the latest local state. */
 export function resetLessonSession(id: string): Promise<StudyState> {
-  if (!id.trim()) return Promise.reject(Error('درس معتبر نیست.'));
+  return resetLessonSessions([id]);
+}
+
+/** Reset a selected band with one validated read/write, not one per lesson. */
+export function resetLessonSessions(ids: readonly string[]): Promise<StudyState> {
+  if (ids.some(id=>!id.trim())) return Promise.reject(Error('درس معتبر نیست.'));
   return update(state => {
-    const generation = (state.sessions[id]?.attempt?.generation ?? 0) + 1;
-    if (!Number.isSafeInteger(generation)) throw Error('شروع مجدد این جلسه ممکن نیست.');
-    // A unique tie-breaker lets independently restarted devices converge without wall-clock ordering.
-    const attempt = { generation, id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}` };
-    state.sessions[id] = { ...freshSession(), attempt, attemptEvidence: {}, updatedAt: positionTimestamp() };
+    for (const id of new Set(ids)) {
+      const generation = (state.sessions[id]?.attempt?.generation ?? 0) + 1;
+      if (!Number.isSafeInteger(generation)) throw Error('شروع مجدد این جلسه ممکن نیست.');
+      // A unique tie-breaker lets independently restarted devices converge without wall-clock ordering.
+      const attempt = { generation, id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}` };
+      state.sessions[id] = { ...freshSession(), ...((englishA1SentenceRevision(id) ?? balancedSampleRevision(id)) ? { sampleRevision: (englishA1SentenceRevision(id) ?? balancedSampleRevision(id)) } : {}), checksRevision: practicalAssessmentRevision('en', id), attempt, attemptEvidence: {}, updatedAt: positionTimestamp() };
+    }
   });
 }
 

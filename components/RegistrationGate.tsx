@@ -2,7 +2,7 @@ import { LocalizedText as Text } from '@/components/LocalizedText';
 import { type PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, AppState, Platform, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 import { LoginCodeScreen, LoginProfileScreen, LoginScreen, type LoginMode } from '@/components/LoginScreen';
 import { completeLearnerProfile, getRegisteredSession, normalizeOtpDigits, registrationError, requestLearnerOtp, touchLearnerActivity, verifyLearnerOtp, type LearnerOtpType } from '@/lib/userRegistration';
@@ -36,6 +36,7 @@ type AuthStep = 'request' | 'verify' | 'profile';
 
 export function RegistrationGate({ children }: PropsWithChildren) {
   const router = useRouter();
+  const pathname = usePathname();
   const routingAfterAuth = useRef(false);
   const [checking, setChecking] = useState(!BYPASS_GATE);
   const [ready, setReady] = useState(BYPASS_GATE);
@@ -182,7 +183,8 @@ export function RegistrationGate({ children }: PropsWithChildren) {
     }
   };
 
-  if (BYPASS_GATE || ready) return <>{children}</>;
+  // Public, read-only guide; feature routes and server authorization remain gated.
+  if (pathname === '/help' || BYPASS_GATE || ready) return <>{children}</>;
   if (checking) return <View style={styles.loading}><ActivityIndicator size="large" color="#31533B" /><Text style={styles.loadingText}>در حال بررسی حساب…</Text></View>;
 
   if (step === 'verify') {

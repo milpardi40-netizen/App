@@ -1,0 +1,3344 @@
+{
+  "status": "proposal-not-runtime-content",
+  "date": "2026-11-26",
+  "lessons": [
+    {
+      "proposedIndex": 1,
+      "id": "foundation-introducing-yourself",
+      "titleFa": "معرفی خود و آشنایی",
+      "module": 1,
+      "outcomeFa": "نام، کشور و شهر محل زندگی را بگویم و همین اطلاعات را از دیگری بپرسم.",
+      "preA1Ids": [
+        "prea1-01-hello",
+        "prea1-04-i-am",
+        "prea1-10-review"
+      ],
+      "prerequisiteIds": [],
+      "retrievalFa": "سلام، I am و Nice to meet you را از Pre-A1 بدون متن بازیابی کن.",
+      "vocabularyFa": "name=نام؛ country=کشور؛ city=شهر؛ live=زندگی‌کردن؛ from=اهلِ / از",
+      "grammarFa": "My name is / I am؛ پرسش What is your name?؛ I am from؛ I live in به‌صورت قالب آمادهٔ معرفی. تحلیل حال ساده و نظام پرسش با do در درس روزمره می‌آید؛ در این درس همهٔ صرف فعل live امتحان نمی‌شود.",
+      "outOfScopeFa": "شغل و مهارت کاری، همهٔ ضمیرها، خانوادهٔ گسترده و معرفی طولانی در همین درس تدریس نشود.",
+      "examples": [
+        {
+          "en": "Hello, my name is Sara.",
+          "fa": "سلام، اسم من سارا است."
+        },
+        {
+          "en": "What is your name?",
+          "fa": "اسم شما چیست؟"
+        },
+        {
+          "en": "Nice to meet you.",
+          "fa": "از آشنایی با شما خوشحالم."
+        },
+        {
+          "en": "I am from Iran.",
+          "fa": "من اهل ایران هستم."
+        },
+        {
+          "en": "Where are you from?",
+          "fa": "شما اهل کجا هستید؟"
+        },
+        {
+          "en": "I live in Tehran.",
+          "fa": "من در تهران زندگی می‌کنم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Hello! My name is Ben. What is your name?",
+          "fa": "سلام! اسم من بن است. اسم شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "en": "My name is Sara. Nice to meet you.",
+          "fa": "اسم من سارا است. از آشنایی با شما خوشحالم."
+        },
+        {
+          "role": "partner",
+          "en": "Nice to meet you too. Where are you from?",
+          "fa": "من هم از آشنایی با شما خوشحالم. اهل کجا هستید؟"
+        },
+        {
+          "role": "learner",
+          "en": "I am from Iran. I live in Tehran.",
+          "fa": "من اهل ایران هستم. در تهران زندگی می‌کنم."
+        }
+      ],
+      "listening": {
+        "passage": "Hello, my name is Anna. I am from Spain. I live in London.",
+        "questionFa": "آنا اهل کدام کشور است؟",
+        "answer": "Spain"
+      },
+      "reading": {
+        "passage": "My name is Reza. I am from Iran. I live in Leeds.",
+        "questionFa": "رضا در چه شهری زندگی می‌کند؟",
+        "answer": "Leeds"
+      },
+      "writingFa": "کارت خیالی: نام Emma، کشور Italy، شهر Rome. از زبان این شخصیت سه جمله برای آشنایی با هم‌کلاسی بنویس؛ بعد نام او را بپرس.",
+      "speakingFa": "کارت را بخوان، سپس کنار بگذار. خودت را با همین هویت خیالی معرفی کن و نام مخاطب را بپرس.",
+      "commonErrorFa": "I from به جای I am from؛ یکی‌گرفتن کشور مبدأ با شهر محل زندگی.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "Hello, my name is Sara.",
+          "choices": [
+            "سلام، اسم من سارا است.",
+            "اسم شما چیست؟",
+            "از آشنایی با شما خوشحالم."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "سلام، اسم من سارا است."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "I ___ from Iran.",
+          "choices": [
+            "am",
+            "is",
+            "are"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "با I در معرفی از am استفاده می‌شود."
+        }
+      ],
+      "pronunciationFa": "پیوند my name is و تمایز نام/کشور؛ مدل صوتی کوتاه و طبیعی، بدون اجبار به تقلید لهجه.",
+      "transferToIds": [
+        "foundation-alphabet-and-spelling",
+        "foundation-asking-for-help",
+        "foundation-pronouns-and-be"
+      ],
+      "productionSelfCheckFa": [
+        "نام Emma و کشور Italy را از هم جدا و درست معرفی کرده‌ام.",
+        "برای شهر Rome از I live in استفاده کرده‌ام.",
+        "یک پرسش دربارهٔ نام مخاطب نوشته‌ام؛ همهٔ اطلاعات خیالی‌اند."
+      ]
+    },
+    {
+      "proposedIndex": 2,
+      "id": "foundation-alphabet-and-spelling",
+      "titleFa": "نام و هجی‌کردن",
+      "module": 1,
+      "outcomeFa": "نام کوتاهی را هجی کنم و هجی نام مخاطب را بفهمم.",
+      "preA1Ids": [
+        "prea1-01-hello",
+        "prea1-08-please-thankyou"
+      ],
+      "prerequisiteIds": [
+        "foundation-introducing-yourself"
+      ],
+      "retrievalFa": "نام خودت را بگو و نام هم‌کلاسی را بپرس.",
+      "vocabularyFa": "spell=هجی‌کردن؛ letter=حرف؛ again=دوباره؛ slowly=آهسته؛ first name=نام کوچک؛ last name=نام خانوادگی",
+      "grammarFa": "How do you spell ...? و Can you spell ...? فعلاً دو قالب آماده‌اند. نام حروف A–Z در گروه‌های کوتاه و تقابل A/E/I و G/J؛ انگلیسی حرف‌به‌حرف خوانده نمی‌شود.",
+      "outOfScopeFa": "فهرست الفبا یک جملهٔ اجباری طولانی نباشد؛ نوشتن ایمیل، نشانی و صرف کامل do/can وارد نشود.",
+      "examples": [
+        {
+          "en": "My first name is Sara.",
+          "fa": "نام کوچک من سارا است."
+        },
+        {
+          "en": "My last name is Ali.",
+          "fa": "نام خانوادگی من علی است."
+        },
+        {
+          "en": "How do you spell Sara?",
+          "fa": "سارا را چطور هجی می‌کنید؟"
+        },
+        {
+          "en": "S-A-R-A.",
+          "fa": "اس، اِی، آر، اِی."
+        },
+        {
+          "en": "Please spell it again.",
+          "fa": "لطفاً دوباره آن را هجی کنید."
+        },
+        {
+          "en": "A, not E.",
+          "fa": "اِی، نه ای."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What is your first name?",
+          "fa": "نام کوچک شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "en": "My first name is Sara.",
+          "fa": "نام کوچک من سارا است."
+        },
+        {
+          "role": "partner",
+          "en": "How do you spell Sara?",
+          "fa": "سارا را چطور هجی می‌کنید؟"
+        },
+        {
+          "role": "learner",
+          "en": "S-A-R-A.",
+          "fa": "اس، اِی، آر، اِی."
+        }
+      ],
+      "listening": {
+        "passage": "T. I. M.",
+        "questionFa": "کدام نام هجی شد؟",
+        "answer": "Tim"
+      },
+      "reading": {
+        "passage": "First name: Sara. Last name: Ali.",
+        "questionFa": "نام خانوادگی چیست؟",
+        "answer": "Ali"
+      },
+      "writingFa": "فرم خیالی: First name = Ben؛ Last name = Lee. دو فیلد را بنویس و نام خانوادگی را با حروف جدا هجی کن. جملهٔ بلند لازم نیست.",
+      "speakingFa": "دوستت فقط نام کوچک Ben را شنیده است. نام خانوادگی Lee را بگو و هجی کن؛ اگر نشنید دوباره بگو.",
+      "commonErrorFa": "نام حرف با صدای آن در کلمه یکی نیست؛ هجی نام با تلفظ خود نام فرق دارد.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "My first name is Sara.",
+          "choices": [
+            "نام خانوادگی من علی است.",
+            "سارا را چطور هجی می‌کنید؟",
+            "نام کوچک من سارا است."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "نام کوچک من سارا است."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "برای فهمیدن املای نام کدام درخواست درست است؟",
+          "choices": [
+            "How old are you?",
+            "How do you spell Sara?",
+            "Where are you from?"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "spell دربارهٔ هجی است، نه سن یا کشور."
+        }
+      ],
+      "pronunciationFa": "نام حروف A/E/I و G/J را با دو نام کوتاه مقایسه کن؛ هجی و تلفظ کلمه جدا تمرین شوند.",
+      "transferToIds": [
+        "foundation-asking-for-help",
+        "foundation-numbers-and-contact",
+        "survival-personal-information"
+      ],
+      "productionSelfCheckFa": [
+        "Ben را در فیلد نام کوچک و Lee را در نام خانوادگی گذاشته‌ام.",
+        "Lee را با L-E-E هجی کرده‌ام، نه نام کوچک را.",
+        "حرف اول هر نام بزرگ است؛ این تمرین فرم و هجی است، نه انشانویسی."
+      ]
+    },
+    {
+      "proposedIndex": 3,
+      "id": "foundation-asking-for-help",
+      "titleFa": "درخواست کمک و روشن‌کردن معنی",
+      "module": 1,
+      "outcomeFa": "در کلاس یا گفت‌وگوی ساده کمک، تکرار و آهسته‌گویی بخواهم.",
+      "preA1Ids": [
+        "prea1-03-yes-no",
+        "prea1-08-please-thankyou",
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-introducing-yourself",
+        "foundation-alphabet-and-spelling"
+      ],
+      "retrievalFa": "لطفاً، ممنون و درخواست هجی نام را بازیابی کن.",
+      "vocabularyFa": "help=کمک؛ understand=فهمیدن؛ repeat=تکرارکردن؛ say=گفتن؛ slowly=آهسته؛ word=واژه",
+      "grammarFa": "Can you help me?؛ Please + فعل؛ I do not understand به‌صورت قالب؛ this word از اشارهٔ آشنا. تعمیم do در درس روزمره خواهد آمد.",
+      "outOfScopeFa": "عددهای ۱ تا ۱۰۰، همهٔ ماه‌ها، تقویم و مسیریابی از هدف این درس خارج‌اند و به درس‌های اختصاصی منتقل می‌شوند.",
+      "examples": [
+        {
+          "en": "Excuse me.",
+          "fa": "ببخشید. (برای جلب توجه)"
+        },
+        {
+          "en": "Can you help me, please?",
+          "fa": "می‌توانید لطفاً به من کمک کنید؟"
+        },
+        {
+          "en": "I do not understand.",
+          "fa": "متوجه نمی‌شوم."
+        },
+        {
+          "en": "Please speak slowly.",
+          "fa": "لطفاً آهسته صحبت کنید."
+        },
+        {
+          "en": "Please say that again.",
+          "fa": "لطفاً آن را دوباره بگویید."
+        },
+        {
+          "en": "Thank you. I understand now.",
+          "fa": "ممنون. الان متوجه می‌شوم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Hello. My name is Ben.",
+          "fa": "سلام. اسم من بن است."
+        },
+        {
+          "role": "learner",
+          "en": "Please say that again, slowly.",
+          "fa": "لطفاً آن را دوباره و آهسته بگویید."
+        },
+        {
+          "role": "partner",
+          "en": "My name is Ben. B-E-N.",
+          "fa": "اسم من بن است. بی، ای، اِن."
+        },
+        {
+          "role": "learner",
+          "en": "Thank you. I understand now.",
+          "fa": "ممنون. الان متوجه می‌شوم."
+        }
+      ],
+      "listening": {
+        "passage": "Please speak slowly. I do not understand.",
+        "questionFa": "گوینده از مخاطب چه می‌خواهد؟",
+        "answer": "Speak slowly."
+      },
+      "reading": {
+        "passage": "New word: city. City means شهر. Please say city again.",
+        "questionFa": "کدام واژه باید تکرار شود؟",
+        "answer": "city"
+      },
+      "writingFa": "موقعیت خیالی: هم‌کلاسی نامش را گفته ولی نفهمیده‌ای. دو درخواست کوتاه متفاوت بنویس: اول تکرار آهسته، بعد هجی نام. نام را حدس نزن.",
+      "speakingFa": "از یک همراه بخواه یک نام خیالی بگوید. اگر روشن نبود درخواست تکرار و سپس هجی کن؛ در تمرین انفرادی هر دو نوبت را خودت بگو.",
+      "commonErrorFa": "استفاده از Sorry بدون درخواست روشن؛ حذف please در بافت مؤدبانه به‌عنوان خطای دستوری نمره‌گذاری نشود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "Excuse me.",
+          "choices": [
+            "متوجه نمی‌شوم.",
+            "ببخشید. (برای جلب توجه)",
+            "می‌توانید لطفاً به من کمک کنید؟"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "ببخشید. (برای جلب توجه)"
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "برای درخواست آهسته‌گویی کدام جمله مناسب است؟",
+          "choices": [
+            "Thank you.",
+            "I am Sara.",
+            "Please speak slowly."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "درخواست باید دقیقاً عمل مورد نیاز را روشن کند."
+        }
+      ],
+      "pronunciationFa": "تکیهٔ slowly و again؛ عبارت Please say that again با مکث طبیعی و بدون بلندگویی اجباری.",
+      "transferToIds": [
+        "foundation-pronouns-and-be",
+        "survival-directions-and-neighborhood",
+        "survival-school-and-learning",
+        "survival-health-and-pharmacy"
+      ],
+      "productionSelfCheckFa": [
+        "درخواست اول مشخصاً تکرار آهسته می‌خواهد.",
+        "درخواست دوم دربارهٔ هجی است، نه سن یا کشور.",
+        "از please استفاده کرده‌ام و اطلاعات نشنیده را حدس نزده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 4,
+      "id": "foundation-pronouns-and-be",
+      "titleFa": "اشخاص و جمله‌های کوتاه با be",
+      "module": 1,
+      "outcomeFa": "خودم و افراد آشنا را با ضمیر درست معرفی یا توصیف کنم و سؤال ساده با be بسازم.",
+      "preA1Ids": [
+        "prea1-04-i-am",
+        "prea1-11-at-home",
+        "prea1-12-people"
+      ],
+      "prerequisiteIds": [
+        "foundation-introducing-yourself",
+        "foundation-asking-for-help"
+      ],
+      "retrievalFa": "I am، He is و They are آشنای Pre-A1 را با نام‌های خیالی تطبیق بده.",
+      "vocabularyFa": "I/you/he/she/it/we/they=ضمیرهای فاعلی؛ student=دانش‌آموز/دانشجو؛ teacher=معلم؛ ready=آماده",
+      "grammarFa": "am/is/are؛ جایگزینی اسم با ضمیر؛ be + not؛ جابه‌جایی be در سؤال؛ صورت کوتاه I’m/isn’t/aren’t کنار صورت کامل، نه هدف املایی جداگانه.",
+      "outOfScopeFa": "همهٔ انواع فعل، زمان‌های گذشته و استمراری و ضمیرهای مفعولی تدریس نشوند.",
+      "examples": [
+        {
+          "en": "I am a student.",
+          "fa": "من دانشجو هستم."
+        },
+        {
+          "en": "She is my teacher.",
+          "fa": "او معلم من است. (زن)"
+        },
+        {
+          "en": "We are ready.",
+          "fa": "ما آماده هستیم."
+        },
+        {
+          "en": "He is not tired.",
+          "fa": "او خسته نیست. (مرد)"
+        },
+        {
+          "en": "Are you a student?",
+          "fa": "آیا شما دانشجو هستید؟"
+        },
+        {
+          "en": "Yes, I am.",
+          "fa": "بله، هستم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Are you a student?",
+          "fa": "آیا شما دانشجو هستید؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, I am. I am Sara.",
+          "fa": "بله، هستم. من سارا هستم."
+        },
+        {
+          "role": "partner",
+          "en": "Is Ben your teacher?",
+          "fa": "آیا بن معلم شماست؟"
+        },
+        {
+          "role": "learner",
+          "en": "No, he is not. He is a student too.",
+          "fa": "نه، نیست. او هم دانشجو است."
+        }
+      ],
+      "listening": {
+        "passage": "Anna is a teacher. Ben and Tim are students.",
+        "questionFa": "چه کسی معلم است؟",
+        "answer": "Anna"
+      },
+      "reading": {
+        "passage": "I am Sara. This is Anna. She is my teacher. We are ready.",
+        "questionFa": "She به چه کسی اشاره می‌کند؟",
+        "answer": "Anna"
+      },
+      "writingFa": "دو کارت خیالی: Anna معلم است و Ben دانش‌آموز است. چهار جمله بنویس: هرکدام را معرفی کن؛ سپس با she و he به آن‌ها اشاره کن. یک جمله می‌تواند منفی باشد.",
+      "speakingFa": "دو کارت را معرفی کن؛ سپس بدون گفتن دوبارهٔ نام‌ها، با ضمیر بگو هرکدام معلم یا دانش‌آموز است.",
+      "commonErrorFa": "I is / They is؛ حذف a پیش از شغل مفرد؛ برای he/she جنسیت فرد فرض نشود و در کارت معرفی مشخص باشد.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I am a student.",
+          "choices": [
+            "من دانشجو هستم.",
+            "او معلم من است. (زن)",
+            "ما آماده هستیم."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "من دانشجو هستم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "They ___ ready.",
+          "choices": [
+            "am",
+            "is",
+            "are"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "با they از are استفاده می‌شود."
+        }
+      ],
+      "pronunciationFa": "am/is/are کامل و صورت کوتاه؛ تلفظ ضعیف are پذیرفته شود؛ he/she با کارت فرد مشخص تمرین شوند.",
+      "transferToIds": [
+        "foundation-numbers-and-contact",
+        "foundation-family-and-possessions",
+        "foundation-time-and-calendar"
+      ],
+      "productionSelfCheckFa": [
+        "Anna و Ben را در معرفی‌ها جابه‌جا نکرده‌ام.",
+        "برای Anna از she و برای Ben از he استفاده کرده‌ام.",
+        "am/is/are را با همان فاعل هماهنگ کرده‌ام؛ اگر منفی نوشته‌ام، معنی با کارت سازگار است."
+      ]
+    },
+    {
+      "proposedIndex": 5,
+      "id": "foundation-numbers-and-contact",
+      "titleFa": "عدد، سن و شمارهٔ تماس",
+      "module": 2,
+      "outcomeFa": "سن و شمارهٔ تماس خیالی را بگویم و تفاوت عدد کامل با رقم‌های شماره را بفهمم.",
+      "preA1Ids": [
+        "prea1-05-numbers",
+        "prea1-07-i-have"
+      ],
+      "prerequisiteIds": [
+        "foundation-alphabet-and-spelling",
+        "foundation-pronouns-and-be"
+      ],
+      "retrievalFa": "اعداد ۱ تا ۱۰ و هجی نام را بازیابی کن.",
+      "vocabularyFa": "zero=صفر؛ eleven–nineteen=۱۱ تا ۱۹؛ twenty/thirty/forty/fifty/sixty/seventy/eighty/ninety=دهگان؛ hundred=صد؛ number=شماره؛ age=سن",
+      "grammarFa": "ترکیب دهگان و یکان تا ۱۰۰؛ How old are you? / I am ...؛ What is your phone number?؛ صفر به‌صورت zero و آشنایی شنیداری با oh. phone number رقم‌به‌رقم.",
+      "outOfScopeFa": "تقویم، تاریخ تولد کامل، قیمت اعشاری و ایمیل در این درس جمع نشوند.",
+      "examples": [
+        {
+          "en": "I am twenty-one.",
+          "fa": "من بیست‌ویک سال دارم."
+        },
+        {
+          "en": "How old are you?",
+          "fa": "چند سال دارید؟"
+        },
+        {
+          "en": "She is thirty.",
+          "fa": "او سی سال دارد. (زن)"
+        },
+        {
+          "en": "Thirteen, not thirty.",
+          "fa": "سیزده، نه سی."
+        },
+        {
+          "en": "What is your phone number?",
+          "fa": "شمارهٔ تلفن شما چیست؟"
+        },
+        {
+          "en": "My number is zero seven one two.",
+          "fa": "شمارهٔ من صفر، هفت، یک، دو است."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What is your name?",
+          "fa": "اسم شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "en": "My name is Tim.",
+          "fa": "اسم من تیم است."
+        },
+        {
+          "role": "partner",
+          "en": "How old are you, Tim?",
+          "fa": "تیم، چند سال داری؟"
+        },
+        {
+          "role": "learner",
+          "en": "I am twenty-one.",
+          "fa": "من بیست‌ویک سال دارم."
+        }
+      ],
+      "listening": {
+        "passage": "My number is zero seven two four.",
+        "questionFa": "کد چهاررقمی چیست؟",
+        "answer": "0724"
+      },
+      "reading": {
+        "passage": "Name: Anna. Age: 30. Contact code: 0712.",
+        "questionFa": "آنا چند سال دارد؟",
+        "answer": "30"
+      },
+      "writingFa": "فرم تمرینی و غیرواقعی: نام Tim؛ سن ۲۶؛ کد تماس ۲۰۴۶. دو جمله برای سن و کد تماس بنویس؛ سپس رقم‌های کد را جداگانه به انگلیسی بنویس. این کد شمارهٔ واقعی نیست.",
+      "speakingFa": "با همین کارت تمرینی سن را بگو؛ کد تماس را رقم‌به‌رقم بگو و یک‌بار برای تأیید تکرار کن.",
+      "commonErrorFa": "thirteen/thirty و fifteen/fifty؛ شماره به عدد چندرقمی تبدیل نشود. نمونهٔ چهاررقمی کد تمرینی است، نه طول معمول شمارهٔ تلفن.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I am twenty-one.",
+          "choices": [
+            "چند سال دارید؟",
+            "او سی سال دارد. (زن)",
+            "من بیست‌ویک سال دارم."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "من بیست‌ویک سال دارم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "عدد ۳۰ کدام است؟",
+          "choices": [
+            "thirty",
+            "thirteen",
+            "three"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "thirteen برابر ۱۳ است؛ thirty برابر ۳۰."
+        }
+      ],
+      "pronunciationFa": "تکیه و کشش thirteen/thirty و fifteen/fifty؛ رقم‌های کد با مکث کوتاه خوانده شوند.",
+      "transferToIds": [
+        "foundation-family-and-possessions",
+        "foundation-time-and-calendar",
+        "foundation-buying-something",
+        "survival-personal-information"
+      ],
+      "productionSelfCheckFa": [
+        "سن ۲۶ را با کد ۲۰۴۶ اشتباه نگرفته‌ام.",
+        "چهار رقم کد را به ترتیب two, zero, four, six آورده‌ام.",
+        "از اطلاعات واقعی خودم یا دیگری استفاده نکرده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 6,
+      "id": "foundation-family-and-possessions",
+      "titleFa": "خانواده و مالکیت ساده",
+      "module": 2,
+      "outcomeFa": "دو عضو خانوادهٔ خیالی را معرفی کنم و بگویم یک وسیله مال چه کسی است.",
+      "preA1Ids": [
+        "prea1-07-i-have",
+        "prea1-09-this-is",
+        "prea1-11-at-home",
+        "prea1-12-people"
+      ],
+      "prerequisiteIds": [
+        "foundation-pronouns-and-be",
+        "foundation-numbers-and-contact"
+      ],
+      "retrievalFa": "This is my ... و his/her name و I have را یادآوری کن.",
+      "vocabularyFa": "mother=مادر؛ father=پدر؛ sister=خواهر؛ brother=برادر؛ family=خانواده؛ bag=کیف",
+      "grammarFa": "my/your/his/her/our/their پیش از اسم؛ I have / Do you have از قبل؛ مالکیت اسم + ’s برای یک مالک؛ جمع معمولی -s بدون فهرست استثناها.",
+      "outOfScopeFa": "خویشاوندان دور، گذشتهٔ زندگی‌نامه و have got در کنار have یک‌جا تدریس نشوند؛ s مالکیت از is کوتاه‌شده جدا شود.",
+      "examples": [
+        {
+          "en": "This is my sister, Anna.",
+          "fa": "این خواهر من، آنا است."
+        },
+        {
+          "en": "Her name is Anna.",
+          "fa": "اسم او آنا است."
+        },
+        {
+          "en": "I have two brothers.",
+          "fa": "من دو برادر دارم."
+        },
+        {
+          "en": "This is Ben’s bag.",
+          "fa": "این کیف بن است."
+        },
+        {
+          "en": "Is this your book?",
+          "fa": "این کتاب شماست؟"
+        },
+        {
+          "en": "No, it is my brother’s book.",
+          "fa": "نه، کتاب برادرم است."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Who is this?",
+          "fa": "این شخص کیست؟"
+        },
+        {
+          "role": "learner",
+          "en": "This is my sister, Anna.",
+          "fa": "این خواهر من، آنا است."
+        },
+        {
+          "role": "partner",
+          "en": "Is this her bag?",
+          "fa": "آیا این کیف اوست؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, it is.",
+          "fa": "بله، همین‌طور است."
+        }
+      ],
+      "listening": {
+        "passage": "This is my brother, Tim. His bag is here.",
+        "questionFa": "کیف متعلق به چه کسی است؟",
+        "answer": "Tim"
+      },
+      "reading": {
+        "passage": "Ben has a sister. Her name is Anna. This is Anna’s book.",
+        "questionFa": "کتاب مال چه کسی است؟",
+        "answer": "Anna"
+      },
+      "writingFa": "خانوادهٔ خیالی: Sara خواهر تو و Tim برادر توست. کتاب برای Sara و کیف برای Tim است. چهار جملهٔ کوتاه برای معرفی این دو نفر و مالکیت وسایلشان بنویس.",
+      "speakingFa": "این دو نفر و وسایلشان را معرفی کن. همراهت بپرسد کتاب مال چه کسی است؛ جواب بده. تنها هستی؟ هر دو نقش را بگو.",
+      "commonErrorFa": "انتخاب his/her به مالک مربوط است نه جنس دستوری وسیله؛ Ben’s bag با Ben is اشتباه نشود. has در خواندن همراه توضیح کوتاه و در روزمره تثبیت شود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "This is my sister, Anna.",
+          "choices": [
+            "من دو برادر دارم.",
+            "این خواهر من، آنا است.",
+            "اسم او آنا است."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "این خواهر من، آنا است."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "Anna is my sister. ___ name is Anna.",
+          "choices": [
+            "His",
+            "Her",
+            "Their"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "در این کارت آنا خواهر معرفی شده است؛ her به مالک برمی‌گردد."
+        }
+      ],
+      "pronunciationFa": "آشنایی شنیداری با پایان brothers و Ben’s؛ از نوشتن فارسی به‌عنوان تلفظ دقیق استفاده نشود.",
+      "transferToIds": [
+        "foundation-objects-and-places",
+        "foundation-everyday-routine"
+      ],
+      "productionSelfCheckFa": [
+        "نسبت Sara و Tim را درست گفته‌ام.",
+        "کتاب را به Sara و کیف را به Tim نسبت داده‌ام.",
+        "برای مالکیت از my/her/his یا نام + s مالکیت به‌درستی استفاده کرده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 7,
+      "id": "foundation-objects-and-places",
+      "titleFa": "وسایل و جای آن‌ها",
+      "module": 2,
+      "outcomeFa": "نام و جای چند وسیلهٔ آشنا را بپرسم و بگویم.",
+      "preA1Ids": [
+        "prea1-09-this-is",
+        "prea1-11-at-home"
+      ],
+      "prerequisiteIds": [
+        "foundation-family-and-possessions"
+      ],
+      "retrievalFa": "This/that و These are my books را از قبل بازیابی کن.",
+      "vocabularyFa": "key=کلید؛ table=میز؛ chair=صندلی؛ room=اتاق؛ in=داخل؛ on=روی؛ under=زیر؛ next to=کنار",
+      "grammarFa": "this/that/these/those؛ is/are برای مفرد/جمع؛ Where is/are؛ there is/are برای وجود؛ a/an برحسب صدای آغاز، نه صرفاً حرف.",
+      "outOfScopeFa": "جهت حرکت، کل شبکهٔ شهر و حروف اضافهٔ انتزاعی وارد نشوند.",
+      "examples": [
+        {
+          "en": "Where is my book?",
+          "fa": "کتاب من کجاست؟"
+        },
+        {
+          "en": "It is on the table.",
+          "fa": "روی میز است."
+        },
+        {
+          "en": "The bag is under the chair.",
+          "fa": "کیف زیر صندلی است."
+        },
+        {
+          "en": "There is a key in the bag.",
+          "fa": "یک کلید داخل کیف است."
+        },
+        {
+          "en": "These are my books.",
+          "fa": "این‌ها کتاب‌های من هستند."
+        },
+        {
+          "en": "There are two chairs in the room.",
+          "fa": "دو صندلی در اتاق هست."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Where is my phone?",
+          "fa": "گوشی من کجاست؟"
+        },
+        {
+          "role": "learner",
+          "en": "It is on the table.",
+          "fa": "روی میز است."
+        },
+        {
+          "role": "partner",
+          "en": "Is my bag there too?",
+          "fa": "آیا کیفم هم آنجاست؟"
+        },
+        {
+          "role": "learner",
+          "en": "No, it is under the chair.",
+          "fa": "نه، زیر صندلی است."
+        }
+      ],
+      "listening": {
+        "passage": "The book is on the table. The key is in the bag.",
+        "questionFa": "کلید کجاست؟",
+        "answer": "In the bag."
+      },
+      "reading": {
+        "passage": "There is a table in the room. Two books are on the table. A bag is under it.",
+        "questionFa": "چند کتاب روی میز است؟",
+        "answer": "Two."
+      },
+      "writingFa": "چیدمان خیالی: گوشی روی صندلی است؛ کیف زیر میز است؛ کلید داخل کیف است. سه جمله برای راهنمایی دوستی که دنبال وسایل می‌گردد بنویس.",
+      "speakingFa": "همراهت جای کلید را بپرسد. جای کلید و سپس جای کیف را بگو تا بتواند آن را پیدا کند. در تمرین انفرادی هر دو نقش را بگو.",
+      "commonErrorFa": "There is two؛ خلط there is با it is؛ از تصویر یا اشارهٔ بیرونیِ موجودنبودن استفاده نشود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "Where is my book?",
+          "choices": [
+            "کتاب من کجاست؟",
+            "روی میز است.",
+            "کیف زیر صندلی است."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "کتاب من کجاست؟"
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "There ___ two chairs in the room.",
+          "choices": [
+            "is",
+            "am",
+            "are"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "با دو صندلی از there are استفاده می‌کنیم."
+        }
+      ],
+      "pronunciationFa": "مقایسهٔ this/these و /ð/ در نمونه‌های آشنا؛ فهم‌پذیری مهم‌تر از لهجهٔ بومی است.",
+      "transferToIds": [
+        "survival-current-activities",
+        "foundation-buying-something",
+        "survival-shopping-and-clothing",
+        "survival-directions-and-neighborhood",
+        "survival-renting-a-home"
+      ],
+      "productionSelfCheckFa": [
+        "برای گوشی on the chair و برای کیف under the table را به‌کار برده‌ام.",
+        "گفته‌ام کلید داخل کیف است، نه روی میز.",
+        "ارجاع my/your/it را بدون عوض‌شدن صاحب یا شیء ادامه داده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 8,
+      "id": "foundation-time-and-calendar",
+      "titleFa": "ساعت و تقویم کاربردی",
+      "module": 3,
+      "outcomeFa": "زمان کلاس را با روز و ساعت بگویم و یک تاریخ کوتاه را بخوانم.",
+      "preA1Ids": [
+        "prea1-02-bye",
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-numbers-and-contact",
+        "foundation-pronouns-and-be"
+      ],
+      "retrievalFa": "عددها، tomorrow و See you tomorrow را یادآوری کن.",
+      "vocabularyFa": "today=امروز؛ tomorrow=فردا؛ Monday–Sunday=روزهای هفته؛ January–December=ماه‌ها؛ morning=صبح؛ afternoon=بعدازظهر؛ o’clock=سر ساعت",
+      "grammarFa": "What time / What day؛ at + ساعت، on + روز/تاریخ، in + ماه؛ ساعت دیجیتال سپس half past/quarter past/to؛ تاریخ نوشتاری بی‌ابهام 3 May و خواندن May third یا the third of May با پذیرش هر دو.",
+      "outOfScopeFa": "کل روزها و ماه‌ها در یک هدف گفتاری طولانی امتحان نشوند؛ سال‌های پیچیده و منطقهٔ زمانی هدف نیستند.",
+      "examples": [
+        {
+          "en": "What time is it?",
+          "fa": "ساعت چند است؟"
+        },
+        {
+          "en": "It is nine thirty.",
+          "fa": "ساعت نه و نیم است."
+        },
+        {
+          "en": "The class is on Monday.",
+          "fa": "کلاس دوشنبه است."
+        },
+        {
+          "en": "It starts at ten.",
+          "fa": "ساعت ده شروع می‌شود."
+        },
+        {
+          "en": "Today is the third of May.",
+          "fa": "امروز سوم ماه مه است."
+        },
+        {
+          "en": "My class is in June.",
+          "fa": "کلاس من در ماه ژوئن است."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What day is the class?",
+          "fa": "کلاس چه روزی است؟"
+        },
+        {
+          "role": "learner",
+          "en": "It is on Monday.",
+          "fa": "دوشنبه است."
+        },
+        {
+          "role": "partner",
+          "en": "What time does it start?",
+          "fa": "ساعت چند شروع می‌شود؟"
+        },
+        {
+          "role": "learner",
+          "en": "At ten in the morning.",
+          "fa": "ساعت ده صبح."
+        }
+      ],
+      "listening": {
+        "passage": "The class is on Tuesday at nine thirty in the morning.",
+        "questionFa": "کلاس چه ساعتی است؟",
+        "answer": "9:30 a.m."
+      },
+      "reading": {
+        "passage": "English class: Monday, 3 May, 10:00 a.m. Room 2.",
+        "questionFa": "کلاس در کدام اتاق است؟",
+        "answer": "Room 2."
+      },
+      "writingFa": "اعلان خیالی: کلاس انگلیسی روز Friday ساعت ۱۰ صبح، تاریخ 12 June است. یک اعلان کوتاه به انگلیسی بنویس که روز، ساعت و تاریخ را روشن برساند. شکل فهرستی هم پذیرفتنی است.",
+      "speakingFa": "اعلان را به دوستت بگو؛ او ساعت را دوباره بپرسد و تو تأیید کن. اگر تنها هستی دو نقش را تمرین کن.",
+      "commonErrorFa": "on Monday نه in Monday؛ What time does it start فعلاً قالب آماده است و does در درس بعد توضیح داده می‌شود؛ در نمونه starts هم s معرفی کوتاه دارد.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "What time is it?",
+          "choices": [
+            "ساعت نه و نیم است.",
+            "کلاس دوشنبه است.",
+            "ساعت چند است؟"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "ساعت چند است؟"
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "The class is ___ Monday.",
+          "choices": [
+            "on",
+            "in",
+            "at"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "برای روز هفته on به کار می‌رود."
+        }
+      ],
+      "pronunciationFa": "تمایز شنیداری nine/nineteen و quarter/half؛ ساعت را نخست دیجیتال تمرین کن.",
+      "transferToIds": [
+        "foundation-everyday-routine",
+        "survival-public-transport",
+        "survival-appointments-and-time",
+        "survival-school-and-learning"
+      ],
+      "productionSelfCheckFa": [
+        "روز Friday و تاریخ 12 June را روشن نوشته‌ام.",
+        "ساعت را ten a.m. یا 10:00 a.m. نوشته‌ام تا صبح و شب مبهم نباشد.",
+        "در جملهٔ کامل از on با روز و at با ساعت استفاده کرده‌ام؛ اگر فهرست نوشته‌ام، برچسب‌ها روشن‌اند."
+      ]
+    },
+    {
+      "proposedIndex": 9,
+      "id": "foundation-everyday-routine",
+      "titleFa": "کارهای روزمره",
+      "module": 3,
+      "outcomeFa": "برنامهٔ معمول خودم و یک فرد خیالی را با زمان ساده شرح بدهم.",
+      "preA1Ids": [
+        "prea1-13-every-day",
+        "prea1-14-i-like"
+      ],
+      "prerequisiteIds": [
+        "foundation-time-and-calendar",
+        "foundation-family-and-possessions"
+      ],
+      "retrievalFa": "I go to work و ساعت و روز را بازیابی کن.",
+      "vocabularyFa": "get up=بیدارشدن/بلندشدن؛ work=کارکردن؛ study=درس‌خواندن؛ eat=خوردن؛ breakfast=صبحانه؛ every day=هر روز",
+      "grammarFa": "چهار گام جدا: ۱) عادت با I/you؛ ۲) جملهٔ مثبت با he/she و s؛ ۳) پرسش با do/does و فعل ساده؛ ۴) منفی با do not/does not و فعل ساده. هر گام را با یک نمونه و بازیابی کوتاه تمام کن؛ بعد سراغ بعدی برو.",
+      "outOfScopeFa": "حال استمراری در همین درس تدریس نشود؛ همهٔ قیدهای بسامد و تمام تغییرات املایی s حفظ نشوند.",
+      "examples": [
+        {
+          "en": "I get up at seven.",
+          "fa": "من ساعت هفت بیدار می‌شوم."
+        },
+        {
+          "en": "I eat breakfast at home.",
+          "fa": "من در خانه صبحانه می‌خورم."
+        },
+        {
+          "en": "She works on Monday.",
+          "fa": "او دوشنبه کار می‌کند. (زن)"
+        },
+        {
+          "en": "Do you study every day?",
+          "fa": "آیا هر روز درس می‌خوانید؟"
+        },
+        {
+          "en": "He does not work on Sunday.",
+          "fa": "او یکشنبه کار نمی‌کند. (مرد)"
+        },
+        {
+          "en": "What time does she get up?",
+          "fa": "او چه ساعتی بیدار می‌شود؟ (زن)"
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What time do you get up?",
+          "fa": "چه ساعتی بیدار می‌شوی؟"
+        },
+        {
+          "role": "learner",
+          "en": "I get up at seven.",
+          "fa": "ساعت هفت بیدار می‌شوم."
+        },
+        {
+          "role": "partner",
+          "en": "Do you work on Sunday?",
+          "fa": "یکشنبه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "en": "No, I do not. I study at home.",
+          "fa": "نه. در خانه درس می‌خوانم."
+        }
+      ],
+      "listening": {
+        "passage": "Anna gets up at seven. She starts work at nine.",
+        "questionFa": "آنا کار را چه ساعتی شروع می‌کند؟",
+        "answer": "At nine."
+      },
+      "reading": {
+        "passage": "Ben studies on Monday and Tuesday. He does not study on Sunday.",
+        "questionFa": "بن چه روزی درس نمی‌خواند؟",
+        "answer": "Sunday."
+      },
+      "writingFa": "برنامهٔ خیالی Ben: ساعت ۷ بیدار می‌شود؛ ساعت ۹ کار را شروع می‌کند؛ یکشنبه کار نمی‌کند. اول دو جملهٔ مثبت دربارهٔ روز معمول او بنویس؛ بعد یک جملهٔ منفی دربارهٔ یکشنبه. در پایان از او بپرس آیا دوشنبه کار می‌کند. هر بخش را جدا انجام بده.",
+      "speakingFa": "با همین برنامه، همراهت نقش Ben را بگیرد. ساعت بیدارشدن و روز کار را از او بپرس؛ سپس برنامه‌اش را با he برای نفر سوم بگو. تنها هستی؟ دو نقش را بگو.",
+      "commonErrorFa": "Does she works / She don’t؛ حذف s سوم‌شخص؛ پاسخ تمرین با معیار معنی و الگوی هدف بررسی شود، نه اجبار به جملهٔ حفظی.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I get up at seven.",
+          "choices": [
+            "او دوشنبه کار می‌کند. (زن)",
+            "من ساعت هفت بیدار می‌شوم.",
+            "من در خانه صبحانه می‌خورم."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "من ساعت هفت بیدار می‌شوم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "Does she ___ on Sunday?",
+          "choices": [
+            "works",
+            "work",
+            "working"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "بعد از does بن فعل بدون s می‌آید."
+        }
+      ],
+      "pronunciationFa": "سه تلفظ s سوم‌شخص با نمونه‌های works/reads/watches در تألیف نهایی معرفی شوند، نه حفظ جدول.",
+      "transferToIds": [
+        "survival-current-activities",
+        "survival-hobbies-and-free-time",
+        "survival-school-and-learning",
+        "survival-past-and-future-plans",
+        "survival-job-interview"
+      ],
+      "productionSelfCheckFa": [
+        "۷ زمان بیدارشدن و ۹ زمان شروع کار است؛ این دو را جابه‌جا نکرده‌ام.",
+        "در جمله‌های مثبت با he، gets up / starts را نوشته‌ام.",
+        "برای یکشنبه از does not work و در پرسش از Do you work استفاده کرده‌ام، نه does not works."
+      ]
+    },
+    {
+      "proposedIndex": 10,
+      "id": "survival-current-activities",
+      "titleFa": "الان چه کاری انجام می‌دهیم؟",
+      "module": 3,
+      "outcomeFa": "فعالیت جاری را توصیف کنم و آن را از عادت روزانه جدا کنم.",
+      "preA1Ids": [
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-everyday-routine",
+        "foundation-objects-and-places"
+      ],
+      "retrievalFa": "I work every day را در برابر now مقایسه کن و am/is/are را بازیابی کن.",
+      "vocabularyFa": "now=الان؛ read=خواندن؛ write=نوشتن؛ wait=منتظربودن؛ cook=آشپزی‌کردن؛ listen=گوش‌دادن",
+      "grammarFa": "am/is/are + ing، نفی و سؤال؛ چند فعل آشنا؛ تفاوت I work every day / I am working now؛ بدون فهرست افعال حالت و استثناها.",
+      "outOfScopeFa": "اسم مفعول، حال کامل و برنامهٔ قطعی آینده با استمراری هدف این درس نیستند.",
+      "examples": [
+        {
+          "en": "I am reading now.",
+          "fa": "من الان دارم مطالعه می‌کنم."
+        },
+        {
+          "en": "She is writing a message.",
+          "fa": "او دارد یک پیام می‌نویسد. (زن)"
+        },
+        {
+          "en": "We are waiting for Ben.",
+          "fa": "ما منتظر بن هستیم."
+        },
+        {
+          "en": "Are you cooking?",
+          "fa": "آیا داری آشپزی می‌کنی؟"
+        },
+        {
+          "en": "No, I am not.",
+          "fa": "نه."
+        },
+        {
+          "en": "I work every day, but I am not working now.",
+          "fa": "من هر روز کار می‌کنم، اما الان کار نمی‌کنم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What are you doing now?",
+          "fa": "الان چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "en": "I am reading.",
+          "fa": "دارم مطالعه می‌کنم."
+        },
+        {
+          "role": "partner",
+          "en": "Is Ben reading too?",
+          "fa": "آیا بن هم دارد مطالعه می‌کند؟"
+        },
+        {
+          "role": "learner",
+          "en": "No, he is writing a message.",
+          "fa": "نه، او دارد یک پیام می‌نویسد."
+        }
+      ],
+      "listening": {
+        "passage": "Anna is cooking. Ben is reading in the room.",
+        "questionFa": "بن الان چه کار می‌کند؟",
+        "answer": "He is reading."
+      },
+      "reading": {
+        "passage": "I study every day. Today I am at home. I am writing a message now.",
+        "questionFa": "کدام کار همین الان در حال انجام است؟",
+        "answer": "Writing a message."
+      },
+      "writingFa": "کارت خیالی Sara: معمولاً با اتوبوس به محل کار می‌رود؛ الان در خانه کتاب می‌خواند. یک جمله دربارهٔ عادت و دو جمله دربارهٔ الان بنویس؛ جملهٔ سوم بگوید الان کار نمی‌کند.",
+      "speakingFa": "بدون نگاه به متن نوشته‌شده بگو Sara معمولاً چه می‌کند و الان چه می‌کند؛ همراهت بپرسد آیا الان کار می‌کند و تو جواب بده.",
+      "commonErrorFa": "I reading؛ I am read؛ تعمیم حال استمراری به I am liking tea در هدف این درس پذیرفته نشود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I am reading now.",
+          "choices": [
+            "من الان دارم مطالعه می‌کنم.",
+            "او دارد یک پیام می‌نویسد. (زن)",
+            "ما منتظر بن هستیم."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "من الان دارم مطالعه می‌کنم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "I ___ reading now.",
+          "choices": [
+            "do",
+            "is",
+            "am"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "حال استمراری با I am + ing ساخته می‌شود."
+        }
+      ],
+      "pronunciationFa": "پایان ing و شنیدن am/is پیش از آن؛ read و reading کنار هم شنیده شوند.",
+      "transferToIds": [
+        "survival-hobbies-and-free-time",
+        "survival-weather-and-seasons",
+        "survival-past-and-future-plans",
+        "survival-phone-and-messages"
+      ],
+      "productionSelfCheckFa": [
+        "عادت رفت‌وآمد را با حال ساده بیان کرده‌ام.",
+        "برای خواندن فعلی از is reading استفاده کرده‌ام.",
+        "جملهٔ منفیِ الان با is not working با بقیهٔ پیام تناقض ندارد."
+      ]
+    },
+    {
+      "proposedIndex": 11,
+      "id": "survival-hobbies-and-free-time",
+      "titleFa": "علاقه‌ها و اوقات فراغت",
+      "module": 4,
+      "outcomeFa": "دو علاقه و یک بی‌علاقگی را بیان کنم و دربارهٔ علاقهٔ دیگری بپرسم.",
+      "preA1Ids": [
+        "prea1-14-i-like"
+      ],
+      "prerequisiteIds": [
+        "foundation-everyday-routine",
+        "survival-current-activities"
+      ],
+      "retrievalFa": "I like tea و Do you like ... و خواندن را بازیابی کن.",
+      "vocabularyFa": "music=موسیقی؛ book=کتاب؛ football=فوتبال؛ walk=پیاده‌روی‌کردن؛ weekend=آخر هفته؛ often=اغلب",
+      "grammarFa": "like + اسم / ing؛ do/does؛ often و sometimes در چند جایگاه نمونه؛ and/but برای پیوند دو جمله. like reading با am reading مقایسه شود.",
+      "outOfScopeFa": "مقایسهٔ پیشرفته، would rather، همهٔ فعل‌های دو ساختاری و اصطلاحات ورزش وارد نشوند.",
+      "examples": [
+        {
+          "en": "I like music.",
+          "fa": "من موسیقی دوست دارم."
+        },
+        {
+          "en": "I like reading books.",
+          "fa": "من کتاب‌خواندن را دوست دارم."
+        },
+        {
+          "en": "I do not like football.",
+          "fa": "من فوتبال دوست ندارم."
+        },
+        {
+          "en": "Do you like cooking?",
+          "fa": "آشپزی را دوست داری؟"
+        },
+        {
+          "en": "She often walks at the weekend.",
+          "fa": "او اغلب آخر هفته پیاده‌روی می‌کند. (زن)"
+        },
+        {
+          "en": "I like tea, but I do not like coffee.",
+          "fa": "من چای دوست دارم، اما قهوه دوست ندارم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What do you do at the weekend?",
+          "fa": "آخر هفته چه کار می‌کنی؟"
+        },
+        {
+          "role": "learner",
+          "en": "I read books. I like reading.",
+          "fa": "کتاب می‌خوانم. مطالعه را دوست دارم."
+        },
+        {
+          "role": "partner",
+          "en": "Do you like music too?",
+          "fa": "موسیقی را هم دوست داری؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, I do.",
+          "fa": "بله."
+        }
+      ],
+      "listening": {
+        "passage": "I like music and reading. I do not like football.",
+        "questionFa": "گوینده چه چیزی را دوست ندارد؟",
+        "answer": "Football."
+      },
+      "reading": {
+        "passage": "Anna reads at the weekend. Ben often cooks. They both like music.",
+        "questionFa": "چه کسی اغلب آشپزی می‌کند؟",
+        "answer": "Ben."
+      },
+      "writingFa": "دوست خیالی تو موسیقی را دوست دارد ولی فوتبال را دوست ندارد. سه جمله برای معرفی علاقه‌های او بنویس؛ یک جمله با but و یک پرسش دربارهٔ کتاب‌خواندن اضافه کن.",
+      "speakingFa": "از همراهت دربارهٔ دو فعالیت بپرس و با یک جملهٔ کوتاه پاسخ او را به نفر سوم بگو؛ اگر تنهایی از کارت خیالی استفاده کن.",
+      "commonErrorFa": "I like read؛ مخلوط‌کردن like reading و am reading؛ استفادهٔ درست از like to read هم رد نشود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I like music.",
+          "choices": [
+            "من کتاب‌خواندن را دوست دارم.",
+            "من فوتبال دوست ندارم.",
+            "من موسیقی دوست دارم."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "من موسیقی دوست دارم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "برای بیان علاقهٔ کلی کدام درست است؟",
+          "choices": [
+            "I like reading.",
+            "I am like read.",
+            "I likes reading."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "like reading علاقه را بیان می‌کند، نه لزوماً فعالیت همین الان."
+        }
+      ],
+      "pronunciationFa": "گروه‌بندی like reading و do you like؛ do you در گفتار طبیعی هم شنیده شود.",
+      "transferToIds": [
+        "survival-weather-and-seasons",
+        "survival-cafe-and-food",
+        "survival-invitations-and-plans"
+      ],
+      "productionSelfCheckFa": [
+        "علاقه به موسیقی و بی‌علاقگی به فوتبال را جابه‌جا نکرده‌ام.",
+        "but دو بخشِ دارای تفاوت را پیوند می‌دهد.",
+        "پرسش دربارهٔ کتاب‌خواندن است و بعد از does، فعل s ندارد."
+      ]
+    },
+    {
+      "proposedIndex": 12,
+      "id": "survival-weather-and-seasons",
+      "titleFa": "آب‌وهوا و فصل‌ها",
+      "module": 4,
+      "outcomeFa": "وضع فعلی هوا و فصل مورد علاقه را ساده بیان کنم.",
+      "preA1Ids": [
+        "prea1-04-i-am",
+        "prea1-14-i-like"
+      ],
+      "prerequisiteIds": [
+        "survival-current-activities",
+        "survival-hobbies-and-free-time"
+      ],
+      "retrievalFa": "It is و I like و now را بازیابی کن.",
+      "vocabularyFa": "weather=آب‌وهوا؛ sunny=آفتابی؛ cold=سرد؛ hot=گرم؛ rain=باریدن باران؛ spring/summer/autumn/winter=فصل‌ها",
+      "grammarFa": "It is + صفت برای هوا؛ It is raining؛ in + فصل؛ because برای یک علت ساده با واژه‌های آشنا؛ یک it غیرارجاعی، نه ضمیر برای جسم مشخص.",
+      "outOfScopeFa": "پیش‌بینی با will، داده‌های هواشناسی، sunrise/sunset و گزارش بلند هدف نیستند.",
+      "examples": [
+        {
+          "en": "It is sunny today.",
+          "fa": "امروز هوا آفتابی است."
+        },
+        {
+          "en": "It is cold in winter.",
+          "fa": "در زمستان هوا سرد است."
+        },
+        {
+          "en": "It is raining now.",
+          "fa": "الان باران می‌بارد."
+        },
+        {
+          "en": "What is the weather like?",
+          "fa": "هوا چطور است؟"
+        },
+        {
+          "en": "I like spring.",
+          "fa": "من بهار را دوست دارم."
+        },
+        {
+          "en": "I like summer because it is hot.",
+          "fa": "تابستان را دوست دارم، چون هوا گرم است."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What is the weather like today?",
+          "fa": "امروز هوا چطور است؟"
+        },
+        {
+          "role": "learner",
+          "en": "It is sunny, but it is cold.",
+          "fa": "آفتابی است، اما سرد است."
+        },
+        {
+          "role": "partner",
+          "en": "Do you like cold weather?",
+          "fa": "هوای سرد را دوست داری؟"
+        },
+        {
+          "role": "learner",
+          "en": "No, I do not. I like summer.",
+          "fa": "نه. من تابستان را دوست دارم."
+        }
+      ],
+      "listening": {
+        "passage": "It is not sunny today. It is cold and it is raining.",
+        "questionFa": "آیا امروز هوا آفتابی است؟",
+        "answer": "No."
+      },
+      "reading": {
+        "passage": "Spring: warm. Summer: hot. Winter: cold. Anna likes spring.",
+        "questionFa": "آنا کدام فصل را دوست دارد؟",
+        "answer": "Spring."
+      },
+      "writingFa": "گزارش خیالی امروز: هوا آفتابی ولی سرد است. سه جمله بنویس: دو ویژگی هوای امروز را با but بگو؛ بعد فصل دلخواهت را انتخاب کن و بگو هوای سرد را دوست داری یا نه. از باران‌بودن، نبود آفتاب را حدس نزن.",
+      "speakingFa": "بدون خواندن نوشته، هوای کارت را توصیف کن و به پرسش دوستت دربارهٔ هوای دلخواه جواب بده.",
+      "commonErrorFa": "Is cold بدون it؛ I am cold دربارهٔ احساس فرد است و با It is cold دربارهٔ هوا فرق دارد.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "It is sunny today.",
+          "choices": [
+            "الان باران می‌بارد.",
+            "امروز هوا آفتابی است.",
+            "در زمستان هوا سرد است."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "امروز هوا آفتابی است."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "___ is cold today.",
+          "choices": [
+            "I",
+            "It",
+            "They"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "برای بیان وضعیت هوا از it استفاده می‌کنیم."
+        }
+      ],
+      "pronunciationFa": "تمایز weather/whether در املا موضوع نیست؛ cold/hot و raining با صدای روشن و عادی تمرین شوند.",
+      "transferToIds": [],
+      "productionSelfCheckFa": [
+        "آفتابی و سردبودن را هم‌زمان ممکن دانسته‌ام.",
+        "ویژگی‌های امروز را با It is ... بیان کرده‌ام.",
+        "فصل و علاقهٔ انتخابی من با جملهٔ مثبت یا منفیِ بعدی سازگارند."
+      ]
+    },
+    {
+      "proposedIndex": 13,
+      "id": "foundation-buying-something",
+      "titleFa": "خرید ساده و قیمت",
+      "module": 5,
+      "outcomeFa": "یک کالای ساده بخواهم، قیمت را بپرسم و روش پرداخت را بگویم.",
+      "preA1Ids": [
+        "prea1-08-please-thankyou",
+        "prea1-09-this-is"
+      ],
+      "prerequisiteIds": [
+        "foundation-numbers-and-contact",
+        "foundation-objects-and-places"
+      ],
+      "retrievalFa": "This/that، please، عددهای ۱ تا ۱۰۰ و I want را بازیابی کن.",
+      "vocabularyFa": "price=قیمت؛ cost=قیمت‌داشتن؛ pound=پوند؛ cash=پول نقد؛ card=کارت؛ buy=خریدن",
+      "grammarFa": "How much is ...? / How much are ...?؛ I would like به‌صورت درخواست مؤدبانهٔ آماده؛ Can I pay by card?؛ a/one/two + اسم.",
+      "outOfScopeFa": "تخفیف، مرجوعی، شرطی، مذاکره و همهٔ پول‌های جهان هدف نیستند؛ قیمت اعشاری پیچیده به این مرحله تحمیل نشود.",
+      "examples": [
+        {
+          "en": "I would like this book, please.",
+          "fa": "این کتاب را می‌خواهم، لطفاً."
+        },
+        {
+          "en": "How much is it?",
+          "fa": "قیمتش چقدر است؟"
+        },
+        {
+          "en": "It is ten pounds.",
+          "fa": "ده پوند است."
+        },
+        {
+          "en": "How much are these pens?",
+          "fa": "قیمت این خودکارها چقدر است؟"
+        },
+        {
+          "en": "Can I pay by card?",
+          "fa": "می‌توانم با کارت پرداخت کنم؟"
+        },
+        {
+          "en": "Yes. Here you are.",
+          "fa": "بله. بفرمایید."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Hello. Can I help you?",
+          "fa": "سلام. می‌توانم کمکتان کنم؟"
+        },
+        {
+          "role": "learner",
+          "en": "I would like this book. How much is it?",
+          "fa": "این کتاب را می‌خواهم. قیمتش چقدر است؟"
+        },
+        {
+          "role": "partner",
+          "en": "It is ten pounds.",
+          "fa": "ده پوند است."
+        },
+        {
+          "role": "learner",
+          "en": "Here you are. Thank you.",
+          "fa": "بفرمایید. ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "The book is twelve pounds. The pen is two pounds.",
+        "questionFa": "قیمت کتاب چقدر است؟",
+        "answer": "Twelve pounds."
+      },
+      "reading": {
+        "passage": "Book: £10. Pen: £2. Pay by cash or card.",
+        "questionFa": "آیا پرداخت با کارت ممکن است؟",
+        "answer": "Yes."
+      },
+      "writingFa": "در فروشگاه خیالی یک کیف می‌خواهی. قیمت کیف روی برچسب نیست و نمی‌دانی کارت قبول می‌کنند یا نه. یک درخواست خرید، یک پرسش قیمت و یک پرسش دربارهٔ پرداخت با کارت بنویس؛ قیمت اختراع نکن.",
+      "speakingFa": "همراهت فروشنده باشد: کیف بخواه، قیمت را بپرس و روش پرداخت را روشن کن؛ در تمرین انفرادی نقش فروشنده را هم با قیمت خیالی بازی کن.",
+      "commonErrorFa": "How many برای قیمت؛ How much is these؛ پول و قیمت در کل صحنه ثابت بماند.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I would like this book, please.",
+          "choices": [
+            "این کتاب را می‌خواهم، لطفاً.",
+            "قیمتش چقدر است؟",
+            "ده پوند است."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "این کتاب را می‌خواهم، لطفاً."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "How much ___ these pens?",
+          "choices": [
+            "am",
+            "is",
+            "are"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "pens جمع است؛ are می‌خواهد."
+        }
+      ],
+      "pronunciationFa": "پایان pounds و تفاوت قیمت کامل با رقم‌های تماس؛ I’d like فقط کنار I would like معرفی شود.",
+      "transferToIds": [
+        "survival-shopping-and-clothing",
+        "survival-cafe-and-food",
+        "survival-public-transport",
+        "survival-renting-a-home",
+        "survival-services-and-post-office"
+      ],
+      "productionSelfCheckFa": [
+        "خرید کیف را مؤدبانه درخواست کرده‌ام.",
+        "قیمت نامعلوم را پرسیده‌ام، نه اینکه قیمت کالای دیگری را جای آن بگذارم.",
+        "یک پرسش روشن دربارهٔ پرداخت با کارت نوشته‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 14,
+      "id": "survival-shopping-and-clothing",
+      "titleFa": "خرید لباس با رنگ و اندازه",
+      "module": 5,
+      "outcomeFa": "لباسی با رنگ و اندازهٔ مشخص بخواهم و دربارهٔ اندازه‌بودن آن بگویم.",
+      "preA1Ids": [
+        "prea1-09-this-is"
+      ],
+      "prerequisiteIds": [
+        "foundation-buying-something",
+        "foundation-objects-and-places"
+      ],
+      "retrievalFa": "قیمت‌پرسیدن و this/these را بازیابی کن.",
+      "vocabularyFa": "shirt=پیراهن؛ coat=پالتو/کت؛ shoes=کفش؛ blue=آبی؛ red=قرمز؛ small/medium/large=کوچک/متوسط/بزرگ؛ size=اندازه",
+      "grammarFa": "رنگ پیش از اسم؛ a blue shirt؛ these shoes؛ too + صفت برای too small؛ Can I try it on? به‌صورت قالب. it/them در همین دو نمونه معرفی شوند.",
+      "outOfScopeFa": "مقایسهٔ تفضیلی، جنس پارچه، سیاست مرجوعی و شکایت چندمرحله‌ای وارد نشوند.",
+      "examples": [
+        {
+          "en": "I would like a blue shirt.",
+          "fa": "یک پیراهن آبی می‌خواهم."
+        },
+        {
+          "en": "Do you have a medium?",
+          "fa": "اندازهٔ متوسط دارید؟"
+        },
+        {
+          "en": "Can I try it on?",
+          "fa": "می‌توانم آن را امتحان کنم؟"
+        },
+        {
+          "en": "It is too small.",
+          "fa": "بیش از حد کوچک است."
+        },
+        {
+          "en": "These shoes are red.",
+          "fa": "این کفش‌ها قرمز هستند."
+        },
+        {
+          "en": "How much is the large shirt?",
+          "fa": "قیمت پیراهن اندازهٔ بزرگ چقدر است؟"
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What colour would you like?",
+          "fa": "چه رنگی می‌خواهید؟"
+        },
+        {
+          "role": "learner",
+          "en": "Blue, please. Do you have a medium?",
+          "fa": "آبی، لطفاً. اندازهٔ متوسط دارید؟"
+        },
+        {
+          "role": "partner",
+          "en": "Yes. Here you are.",
+          "fa": "بله. بفرمایید."
+        },
+        {
+          "role": "learner",
+          "en": "Thank you. Can I try it on?",
+          "fa": "ممنون. می‌توانم آن را امتحان کنم؟"
+        }
+      ],
+      "listening": {
+        "passage": "I would like a red shirt, size small.",
+        "questionFa": "مشتری چه رنگی می‌خواهد؟",
+        "answer": "Red."
+      },
+      "reading": {
+        "passage": "Blue shirt: medium, £20. Red shirt: small, £15.",
+        "questionFa": "قیمت پیراهن آبی چقدر است؟",
+        "answer": "£20."
+      },
+      "writingFa": "در فروشگاه خیالی پیراهن قرمزِ small می‌خواهی. رنگ و اندازه را در درخواستت بگو و اجازهٔ امتحان‌کردن بخواه؛ بعد از امتحان فرض کن کوچک است و اندازهٔ medium درخواست کن.",
+      "speakingFa": "همراهت فروشنده باشد؛ رنگ و اندازه را روشن کن، اجازهٔ امتحان بگیر و سپس یک اندازهٔ دیگر بخواه. تنها هستی؟ هر دو نقش را بگو.",
+      "commonErrorFa": "shirt blue به جای blue shirt؛ It are؛ colour/color هر دو پذیرفته شوند.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I would like a blue shirt.",
+          "choices": [
+            "اندازهٔ متوسط دارید؟",
+            "می‌توانم آن را امتحان کنم؟",
+            "یک پیراهن آبی می‌خواهم."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "یک پیراهن آبی می‌خواهم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "کدام عبارت یک پیراهن آبی را بیان می‌کند؟",
+          "choices": [
+            "a blue shirt",
+            "a shirt blue",
+            "blue a shirt"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "رنگ پیش از اسم می‌آید."
+        }
+      ],
+      "pronunciationFa": "رنگ و اندازه با تکیهٔ معنایی؛ shoes و shirt در شنیدن اشتباه نشوند.",
+      "transferToIds": [],
+      "productionSelfCheckFa": [
+        "در درخواست اول red و small را روشن کرده‌ام.",
+        "اجازهٔ امتحان‌کردن خواسته‌ام.",
+        "پس از گفتن too small، اندازهٔ medium خواسته‌ام؛ درخواست تازه با مشکل سازگار است."
+      ]
+    },
+    {
+      "proposedIndex": 15,
+      "id": "survival-cafe-and-food",
+      "titleFa": "سفارش در کافه",
+      "module": 5,
+      "outcomeFa": "یک نوشیدنی و خوراکی سفارش بدهم، ترجیح ساده بگویم و صورت‌حساب بخواهم.",
+      "preA1Ids": [
+        "prea1-08-please-thankyou",
+        "prea1-14-i-like"
+      ],
+      "prerequisiteIds": [
+        "foundation-buying-something",
+        "survival-hobbies-and-free-time"
+      ],
+      "retrievalFa": "Tea, please و I would like و قیمت را بازیابی کن.",
+      "vocabularyFa": "coffee=قهوه؛ tea=چای؛ sandwich=ساندویچ؛ milk=شیر؛ sugar=شکر؛ bill=صورت‌حساب؛ with/without=با/بدون",
+      "grammarFa": "a cup of / a glass of در مقدارهای ساده؛ a sandwich و some water؛ with/without؛ I’d like کنار I would like؛ bill please. برای نوشیدنی a tea در بافت سفارش هم درست است.",
+      "outOfScopeFa": "همهٔ قواعد شمارش‌پذیری، رژیم غذایی تخصصی، دستور پخت و ادعای رفع حساسیت هدف نیستند.",
+      "examples": [
+        {
+          "en": "I would like a cup of tea, please.",
+          "fa": "یک فنجان چای می‌خواهم، لطفاً."
+        },
+        {
+          "en": "With milk, please.",
+          "fa": "با شیر، لطفاً."
+        },
+        {
+          "en": "No sugar, thank you.",
+          "fa": "شکر نه، ممنون."
+        },
+        {
+          "en": "A sandwich too, please.",
+          "fa": "یک ساندویچ هم لطفاً."
+        },
+        {
+          "en": "How much is the sandwich?",
+          "fa": "قیمت ساندویچ چقدر است؟"
+        },
+        {
+          "en": "The bill, please.",
+          "fa": "صورت‌حساب، لطفاً."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What would you like?",
+          "fa": "چه میل دارید؟"
+        },
+        {
+          "role": "learner",
+          "en": "A cup of tea and a sandwich, please.",
+          "fa": "یک فنجان چای و یک ساندویچ، لطفاً."
+        },
+        {
+          "role": "partner",
+          "en": "Tea with milk?",
+          "fa": "چای با شیر؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, please. No sugar.",
+          "fa": "بله، لطفاً. بدون شکر."
+        }
+      ],
+      "listening": {
+        "passage": "A coffee with milk, please. No sugar.",
+        "questionFa": "قهوه با چه چیزی سفارش داده شده است؟",
+        "answer": "Milk, no sugar."
+      },
+      "reading": {
+        "passage": "Tea £2. Coffee £3. Sandwich £5. Milk is available.",
+        "questionFa": "قیمت ساندویچ چقدر است؟",
+        "answer": "£5."
+      },
+      "writingFa": "در کافهٔ خیالی یک چای بدون شکر و یک ساندویچ پنیر می‌خواهی. سفارش کوتاه بنویس. پیشخدمت اشتباهاً قهوه را تکرار می‌کند؛ در یک پاسخ مؤدبانه نوشیدنی را اصلاح کن.",
+      "speakingFa": "همراهت سفارش را یک‌بار اشتباه تکرار کند و تو فقط بخش اشتباه را روشن و مؤدبانه اصلاح کن؛ تنها هستی؟ هر دو نقش را تمرین کن.",
+      "commonErrorFa": "ردکردن a tea به‌عنوان همیشه غلط؛ استفاده از with no sugar هم درست است؛ ضمیرهای صحنه با نقش مشتری/فروشنده ثابت بمانند.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I would like a cup of tea, please.",
+          "choices": [
+            "شکر نه، ممنون.",
+            "یک فنجان چای می‌خواهم، لطفاً.",
+            "با شیر، لطفاً."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "یک فنجان چای می‌خواهم، لطفاً."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "برای درخواست مؤدبانهٔ چای کدام جمله درست است؟",
+          "choices": [
+            "I would tea.",
+            "I would like a cup of tea, please.",
+            "I like would tea."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "would like در اینجا درخواست است؛ like به‌تنهایی می‌تواند علاقه را بیان کند."
+        }
+      ],
+      "pronunciationFa": "گروه‌های a cup of و with milk را یک‌جا بشنو؛ صورت‌های کوتاه درخواست را کنار صورت کامل نگه دار.",
+      "transferToIds": [
+        "survival-invitations-and-plans"
+      ],
+      "productionSelfCheckFa": [
+        "نوشیدنی tea و خوراکی cheese sandwich در سفارش آمده‌اند.",
+        "ترجیح without sugar را گفته‌ام.",
+        "در پاسخ به اشتباه، خواستهٔ اصلی را عوض نکرده‌ام و از please استفاده کرده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 16,
+      "id": "survival-directions-and-neighborhood",
+      "titleFa": "پرسیدن مسیر کوتاه",
+      "module": 6,
+      "outcomeFa": "جای یک مکان عمومی را بپرسم و مسیر دو یا سه‌مرحله‌ای ساده بفهمم.",
+      "preA1Ids": [
+        "prea1-03-yes-no",
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-objects-and-places",
+        "foundation-asking-for-help"
+      ],
+      "retrievalFa": "Where is، next to و درخواست آهسته‌گویی را بازیابی کن.",
+      "vocabularyFa": "station=ایستگاه؛ bank=بانک؛ street=خیابان؛ left=چپ؛ right=راست؛ straight=مستقیم؛ near=نزدیک",
+      "grammarFa": "Where is ...?؛ امر Go/Turn؛ next to/opposite؛ first/then برای ترتیب؛ Is it near? با be. مسیر با متن خودبسنده، بدون نقشهٔ غایب.",
+      "outOfScopeFa": "توصیف شبکهٔ پیچیده، فاصلهٔ دقیق، شرطی مسیر و عبارت‌های چندمعنایی طولانی وارد نشوند.",
+      "examples": [
+        {
+          "en": "Excuse me, where is the station?",
+          "fa": "ببخشید، ایستگاه کجاست؟"
+        },
+        {
+          "en": "Go straight.",
+          "fa": "مستقیم بروید."
+        },
+        {
+          "en": "Turn left at the bank.",
+          "fa": "کنار بانک به چپ بپیچید."
+        },
+        {
+          "en": "The station is next to the café.",
+          "fa": "ایستگاه کنار کافه است."
+        },
+        {
+          "en": "Is it near here?",
+          "fa": "به اینجا نزدیک است؟"
+        },
+        {
+          "en": "Yes, it is.",
+          "fa": "بله، نزدیک است."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Can I help you?",
+          "fa": "می‌توانم کمکتان کنم؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, please. Where is the station?",
+          "fa": "بله، لطفاً. ایستگاه کجاست؟"
+        },
+        {
+          "role": "partner",
+          "en": "Go straight, then turn left at the bank.",
+          "fa": "مستقیم بروید، بعد کنار بانک به چپ بپیچید."
+        },
+        {
+          "role": "learner",
+          "en": "Straight, then left. Thank you.",
+          "fa": "مستقیم، بعد چپ. ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Go straight. Turn right at the café. The bank is there.",
+        "questionFa": "کنار کافه به کدام سمت باید پیچید؟",
+        "answer": "Right."
+      },
+      "reading": {
+        "passage": "The café is next to the bank. The station is opposite the bank.",
+        "questionFa": "چه مکانی روبه‌روی بانک است؟",
+        "answer": "The station."
+      },
+      "writingFa": "مسیر خیالی: شروع کنار بانک؛ مستقیم برو؛ کنار پارک به چپ بپیچ؛ ایستگاه کنار کافه است. سه راهنمای کوتاه برای رسیدن به ایستگاه بنویس؛ به نقشهٔ بیرون این تمرین نیازی نیست.",
+      "speakingFa": "همراهت دنبال ایستگاه باشد و تو همین مسیر را بگو؛ او دربارهٔ چپ یا راست سؤال کند و تو روشن کن. در تمرین انفرادی دو نقش را بگو.",
+      "commonErrorFa": "مخلوط‌شدن left و right؛ حرکت مسیر نباید به مکان یا نقشهٔ معرفی‌نشده وابسته باشد.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "Excuse me, where is the station?",
+          "choices": [
+            "ببخشید، ایستگاه کجاست؟",
+            "مستقیم بروید.",
+            "کنار بانک به چپ بپیچید."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "ببخشید، ایستگاه کجاست؟"
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "Turn ___ at the bank. (به چپ)",
+          "choices": [
+            "straight",
+            "right",
+            "left"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "left یعنی چپ؛ go straight یعنی مستقیم برو."
+        }
+      ],
+      "pronunciationFa": "کلمات جهت با تکیهٔ واضح؛ left/right در دستور دو مرحله‌ای با یک مکث تمرین شوند.",
+      "transferToIds": [
+        "survival-public-transport",
+        "survival-services-and-post-office"
+      ],
+      "productionSelfCheckFa": [
+        "ابتدا مستقیم‌رفتن و بعد پیچیدن به چپ را آورده‌ام.",
+        "پارک نشانهٔ پیچیدن است و ایستگاه کنار کافه است.",
+        "دستورهای کوتاه با فعل ساده شروع می‌شوند؛ راست را به جای چپ نگفته‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 17,
+      "id": "survival-public-transport",
+      "titleFa": "اتوبوس و قطار شهری",
+      "module": 6,
+      "outcomeFa": "بلیت شهری بخواهم و شماره، مقصد و زمان حرکت را بفهمم.",
+      "preA1Ids": [
+        "prea1-05-numbers"
+      ],
+      "prerequisiteIds": [
+        "survival-directions-and-neighborhood",
+        "foundation-time-and-calendar",
+        "foundation-buying-something"
+      ],
+      "retrievalFa": "عدد، ساعت، قیمت و Where is ... را بازیابی کن.",
+      "vocabularyFa": "bus=اتوبوس؛ train=قطار؛ ticket=بلیت؛ stop=ایستگاه اتوبوس؛ platform=سکو؛ leave=حرکت‌کردن؛ centre=مرکز",
+      "grammarFa": "One ticket to ...؛ Which bus ...?؛ Does this bus go to ...?؛ leaves at از حال ساده؛ platform + عدد؛ پرسش مقصد پیش از سوارشدن.",
+      "outOfScopeFa": "پرواز، بار، قوانین تعویض و تغییر مسیر چنداتصالی به درس سفر مربوط‌اند و اینجا لازم نیستند.",
+      "examples": [
+        {
+          "en": "One ticket to the city centre, please.",
+          "fa": "یک بلیت به مرکز شهر، لطفاً."
+        },
+        {
+          "en": "Does this bus go to the station?",
+          "fa": "آیا این اتوبوس به ایستگاه می‌رود؟"
+        },
+        {
+          "en": "Which bus goes to the centre?",
+          "fa": "کدام اتوبوس به مرکز شهر می‌رود؟"
+        },
+        {
+          "en": "Bus number ten.",
+          "fa": "اتوبوس شمارهٔ ده."
+        },
+        {
+          "en": "The train leaves at nine.",
+          "fa": "قطار ساعت نه حرکت می‌کند."
+        },
+        {
+          "en": "It leaves from platform two.",
+          "fa": "از سکوی دو حرکت می‌کند."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Where would you like to go?",
+          "fa": "می‌خواهید کجا بروید؟"
+        },
+        {
+          "role": "learner",
+          "en": "To the city centre, please.",
+          "fa": "به مرکز شهر، لطفاً."
+        },
+        {
+          "role": "partner",
+          "en": "Take bus number ten.",
+          "fa": "اتوبوس شمارهٔ ده را سوار شوید."
+        },
+        {
+          "role": "learner",
+          "en": "Number ten. Thank you.",
+          "fa": "شمارهٔ ده. ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "The train to Leeds leaves at ten from platform three.",
+        "questionFa": "سکو چند است؟",
+        "answer": "Three."
+      },
+      "reading": {
+        "passage": "Bus 10: City Centre, 09:00. Bus 12: Station, 09:30.",
+        "questionFa": "کدام اتوبوس ساعت نه‌ونیم به ایستگاه می‌رود؟",
+        "answer": "Bus 12."
+      },
+      "writingFa": "در ایستگاه خیالی اتوبوس شمارهٔ ۶ را می‌بینی اما مقصدش را نمی‌دانی. یک بلیت برای مرکز شهر بخواه، بپرس این اتوبوس به مرکز می‌رود یا نه، و زمان حرکت را بپرس. مقصد یا زمان را حدس نزن.",
+      "speakingFa": "همراهت مسئول ایستگاه باشد. سه اطلاعات بلیت، مقصد و زمان را بگیر و در پایان زمان گفته‌شده را برای تأیید تکرار کن.",
+      "commonErrorFa": "Does this bus goes؛ خلط شمارهٔ اتوبوس، ساعت و شمارهٔ سکو؛ centre/center هر دو پذیرفته شوند.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "One ticket to the city centre, please.",
+          "choices": [
+            "آیا این اتوبوس به ایستگاه می‌رود؟",
+            "کدام اتوبوس به مرکز شهر می‌رود؟",
+            "یک بلیت به مرکز شهر، لطفاً."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "یک بلیت به مرکز شهر، لطفاً."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "Does this bus ___ to the station?",
+          "choices": [
+            "go",
+            "goes",
+            "going"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "پس از does از go استفاده می‌شود."
+        }
+      ],
+      "pronunciationFa": "عدد اتوبوس، زمان و سکو جدا شنیده شوند؛ bus و buses فقط با واژهٔ معرفی‌شده.",
+      "transferToIds": [
+        "survival-appointments-and-time",
+        "survival-travel-and-tickets"
+      ],
+      "productionSelfCheckFa": [
+        "درخواست بلیت برای town centre روشن است.",
+        "دربارهٔ مقصد همین اتوبوس سؤال کرده‌ام، نه اینکه شماره را معادل مقصد بگیرم.",
+        "زمان حرکت را پرسیده‌ام؛ زمانِ تأییدی در گفت‌وگو با پاسخ همراه سازگار است."
+      ]
+    },
+    {
+      "proposedIndex": 18,
+      "id": "survival-appointments-and-time",
+      "titleFa": "گرفتن و تغییر قرار",
+      "module": 6,
+      "outcomeFa": "برای یک خدمت ساده زمان قرار بخواهم و یک زمان جایگزین پیشنهاد کنم.",
+      "preA1Ids": [
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-time-and-calendar",
+        "survival-public-transport"
+      ],
+      "retrievalFa": "روز، ساعت و Do you have time ... را بازیابی کن.",
+      "vocabularyFa": "appointment=قرار؛ free=وقت‌آزادداشتن؛ available=در دسترس؛ morning=صبح؛ afternoon=بعدازظهر؛ change=تغییردادن",
+      "grammarFa": "I would like an appointment؛ Are you free on ...?؛ Can I come at ...?؛ on/at؛ دو انتخاب زمانی با or. هدف قرار اداری/کلاس است نه شرح درمان.",
+      "outOfScopeFa": "شرطی پیچیده، cancel/reschedule رسمی و درخواست علت پزشکی لازم نیستند.",
+      "examples": [
+        {
+          "en": "I would like an appointment, please.",
+          "fa": "یک وقت ملاقات می‌خواهم، لطفاً."
+        },
+        {
+          "en": "Are you free on Tuesday?",
+          "fa": "سه‌شنبه وقت آزاد دارید؟"
+        },
+        {
+          "en": "Can I come at ten?",
+          "fa": "می‌توانم ساعت ده بیایم؟"
+        },
+        {
+          "en": "Ten is not available.",
+          "fa": "ساعت ده وقت خالی نیست."
+        },
+        {
+          "en": "Is eleven OK?",
+          "fa": "ساعت یازده مناسب است؟"
+        },
+        {
+          "en": "Yes, Tuesday at eleven.",
+          "fa": "بله، سه‌شنبه ساعت یازده."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Can you come on Tuesday at ten?",
+          "fa": "می‌توانید سه‌شنبه ساعت ده بیایید؟"
+        },
+        {
+          "role": "learner",
+          "en": "Sorry, I work at ten. Is eleven OK?",
+          "fa": "ببخشید، ساعت ده کار می‌کنم. یازده مناسب است؟"
+        },
+        {
+          "role": "partner",
+          "en": "Yes. Tuesday at eleven.",
+          "fa": "بله. سه‌شنبه ساعت یازده."
+        },
+        {
+          "role": "learner",
+          "en": "Thank you. See you then.",
+          "fa": "ممنون. آن موقع می‌بینمتان."
+        }
+      ],
+      "listening": {
+        "passage": "Your appointment is on Friday at two in the afternoon.",
+        "questionFa": "قرار چه روزی است؟",
+        "answer": "Friday."
+      },
+      "reading": {
+        "passage": "Appointment: Anna, Tuesday, 11:00 a.m. Please come to room 2.",
+        "questionFa": "آنا چه ساعتی باید بیاید؟",
+        "answer": "11:00 a.m."
+      },
+      "writingFa": "قرار خیالی قبلی دوشنبه ساعت ۱۰ است. پیام تازه می‌گوید سه‌شنبه ساعت ۱۱ وقت آزاد هست. یک درخواست تغییر قرار و یک پیام تأیید برای زمان تازه بنویس؛ روز و ساعت هر دو روشن باشند.",
+      "speakingFa": "همراهت زمان تازه را پیشنهاد کند؛ تو روز و ساعت را یک‌جا تکرار و تأیید کن. در تمرین انفرادی هر دو نقش را بگو.",
+      "commonErrorFa": "تأیید ساعت ردشده در پایان مکالمه؛ همهٔ نوبت‌ها باید یک زمان نهایی مشترک داشته باشند.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I would like an appointment, please.",
+          "choices": [
+            "می‌توانم ساعت ده بیایم؟",
+            "یک وقت ملاقات می‌خواهم، لطفاً.",
+            "سه‌شنبه وقت آزاد دارید؟"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "یک وقت ملاقات می‌خواهم، لطفاً."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "قرار سه‌شنبه ساعت ۱۱ است. کدام تأیید درست است؟",
+          "choices": [
+            "Tuesday at ten.",
+            "Tuesday at eleven.",
+            "Friday at eleven."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "در تأیید قرار هم روز و هم ساعت باید یکسان باشند."
+        }
+      ],
+      "pronunciationFa": "روز و ساعت نهایی با تکیهٔ اصلاحی تکرار شوند؛ Tuesday/Thursday پیش از آزمون مقایسه شوند.",
+      "transferToIds": [
+        "survival-invitations-and-plans",
+        "survival-job-interview",
+        "survival-renting-a-home",
+        "survival-health-and-pharmacy"
+      ],
+      "productionSelfCheckFa": [
+        "درخواست تغییر قرار را از تأییدِ قرار تازه جدا کرده‌ام.",
+        "زمان نهایی Tuesday at eleven است، نه ترکیب روز تازه با ساعت قبلی.",
+        "در تأیید، روز و ساعت هر دو آمده‌اند."
+      ]
+    },
+    {
+      "proposedIndex": 19,
+      "id": "survival-school-and-learning",
+      "titleFa": "کاربرد زبان در کلاس",
+      "module": 7,
+      "outcomeFa": "دربارهٔ شروع کلاس و تکلیف سؤال کنم و دستور کوتاه معلم را بفهمم.",
+      "preA1Ids": [
+        "prea1-11-at-home"
+      ],
+      "prerequisiteIds": [
+        "foundation-asking-for-help",
+        "foundation-time-and-calendar",
+        "foundation-everyday-routine"
+      ],
+      "retrievalFa": "Please say that again و هجی‌کردن و زمان کلاس را بازیابی کن.",
+      "vocabularyFa": "lesson=درس؛ homework=تکلیف؛ page=صفحه؛ question=پرسش؛ answer=پاسخ؛ open=بازکردن",
+      "grammarFa": "امر مثبت/منفی Open/Don’t ...؛ When does ... start?؛ What does ... mean? به‌صورت قالب سؤال دربارهٔ واژه؛ Can I ask ...?؛ a/an در مثال‌های آشنا.",
+      "outOfScopeFa": "اصطلاحات مدرسه و نظام آموزشی کشورها یا دستور زبان انتزاعی کامل وارد نشوند.",
+      "examples": [
+        {
+          "en": "Open your book at page ten.",
+          "fa": "کتابتان را در صفحهٔ ده باز کنید."
+        },
+        {
+          "en": "Please read the question.",
+          "fa": "لطفاً سؤال را بخوانید."
+        },
+        {
+          "en": "Do not write the answer yet.",
+          "fa": "هنوز پاسخ را ننویسید."
+        },
+        {
+          "en": "What does “city” mean?",
+          "fa": "«city» چه معنی می‌دهد؟"
+        },
+        {
+          "en": "Can I ask a question?",
+          "fa": "می‌توانم یک سؤال بپرسم؟"
+        },
+        {
+          "en": "When does the class start?",
+          "fa": "کلاس چه زمانی شروع می‌شود؟"
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Please open your book at page ten.",
+          "fa": "لطفاً کتابتان را در صفحهٔ ده باز کنید."
+        },
+        {
+          "role": "learner",
+          "en": "Page ten?",
+          "fa": "صفحهٔ ده؟"
+        },
+        {
+          "role": "partner",
+          "en": "Yes. Read the question, please.",
+          "fa": "بله. لطفاً سؤال را بخوانید."
+        },
+        {
+          "role": "learner",
+          "en": "What does “city” mean?",
+          "fa": "«city» چه معنی می‌دهد؟"
+        }
+      ],
+      "listening": {
+        "passage": "Open your book at page twelve. Read question two.",
+        "questionFa": "کدام سؤال باید خوانده شود؟",
+        "answer": "Question two."
+      },
+      "reading": {
+        "passage": "Homework: Read page 10. Write answers to questions 1 and 2. Class: Monday at 10.",
+        "questionFa": "برای تکلیف چه صفحه‌ای باید خوانده شود؟",
+        "answer": "Page 10."
+      },
+      "writingFa": "اعلان خیالی کلاس: تکلیف صفحهٔ ۸ است، اما واژهٔ city را نمی‌فهمی. پیام کوتاهی به معلم بنویس: صفحهٔ تکلیف را برای تأیید بپرس و معنی city را هم بخواه.",
+      "speakingFa": "همراهت معلم باشد؛ دو سؤال بپرس و پس از توضیح معنی، تشکر کن. تنها هستی؟ هر دو نقش را بگو.",
+      "commonErrorFa": "What means city؛ homework در این کاربرد جمع s نمی‌گیرد؛ متن خودبسنده جای صفحهٔ کتاب بیرونی را بگیرد.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "Open your book at page ten.",
+          "choices": [
+            "کتابتان را در صفحهٔ ده باز کنید.",
+            "لطفاً سؤال را بخوانید.",
+            "هنوز پاسخ را ننویسید."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "کتابتان را در صفحهٔ ده باز کنید."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "برای پرسیدن معنی city کدام درست است؟",
+          "choices": [
+            "What means city?",
+            "What city does mean?",
+            "What does city mean?"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "در این قالب پرسشی does پیش از city می‌آید."
+        }
+      ],
+      "pronunciationFa": "شمارهٔ page و question جدا شنیده شوند؛ واژهٔ city در سؤال معنی و هجی یکسان بماند.",
+      "transferToIds": [
+        "survival-job-interview"
+      ],
+      "productionSelfCheckFa": [
+        "تأیید صفحهٔ eight را خواسته‌ام.",
+        "پرسش معنی city را با پرسش زمان یا صفحه اشتباه نگرفته‌ام.",
+        "دو درخواست مشخص و لحن مؤدبانه دارم."
+      ]
+    },
+    {
+      "proposedIndex": 20,
+      "id": "survival-invitations-and-plans",
+      "titleFa": "دعوت و توافق روی برنامه",
+      "module": 7,
+      "outcomeFa": "دعوت ساده کنم، آن را قبول یا مؤدبانه رد کنم و روی زمان توافق کنم.",
+      "preA1Ids": [
+        "prea1-02-bye",
+        "prea1-14-i-like"
+      ],
+      "prerequisiteIds": [
+        "survival-appointments-and-time",
+        "survival-hobbies-and-free-time",
+        "survival-cafe-and-food"
+      ],
+      "retrievalFa": "روز/ساعت، Do you like و قهوه‌خواستن را بازیابی کن.",
+      "vocabularyFa": "invite=دعوت‌کردن؛ meet=دیدن/ملاقات‌کردن؛ together=با هم؛ busy=گرفتار؛ tomorrow=فردا؛ great=عالی",
+      "grammarFa": "Would you like to ...? به‌صورت دعوت؛ Let’s + فعل؛ I’d love to به‌صورت پذیرش آماده؛ Sorry, I can’t؛ Are you free ...?؛ توافق روز/ساعت.",
+      "outOfScopeFa": "کل شرطی would، آیندهٔ will و وعدهٔ قطعی استمراری در این درس تدریس نشوند.",
+      "examples": [
+        {
+          "en": "Would you like to have coffee tomorrow?",
+          "fa": "دوست داری فردا قهوه بخوریم؟"
+        },
+        {
+          "en": "Yes, I would love to.",
+          "fa": "بله، خیلی دوست دارم."
+        },
+        {
+          "en": "Sorry, I am busy on Friday.",
+          "fa": "ببخشید، جمعه گرفتارم."
+        },
+        {
+          "en": "Are you free on Saturday?",
+          "fa": "شنبه وقت آزاد داری؟"
+        },
+        {
+          "en": "Let us meet at ten.",
+          "fa": "بیا ساعت ده همدیگر را ببینیم."
+        },
+        {
+          "en": "Great. See you on Saturday.",
+          "fa": "عالی است. شنبه می‌بینمت."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Would you like to have coffee on Friday?",
+          "fa": "دوست داری جمعه قهوه بخوریم؟"
+        },
+        {
+          "role": "learner",
+          "en": "Sorry, I am busy on Friday. Are you free on Saturday?",
+          "fa": "ببخشید، جمعه گرفتارم. شنبه وقت آزاد داری؟"
+        },
+        {
+          "role": "partner",
+          "en": "Yes. Let us meet at ten on Saturday.",
+          "fa": "بله. بیا شنبه ساعت ده همدیگر را ببینیم."
+        },
+        {
+          "role": "learner",
+          "en": "Great. See you then.",
+          "fa": "عالی است. آن موقع می‌بینمت."
+        }
+      ],
+      "listening": {
+        "passage": "I am busy on Tuesday. Let us meet on Wednesday at ten.",
+        "questionFa": "روز پیشنهادی نهایی کدام است؟",
+        "answer": "Wednesday."
+      },
+      "reading": {
+        "passage": "Hi Anna. Coffee on Saturday at ten? At the café next to the station. — Ben",
+        "questionFa": "کافه کجاست؟",
+        "answer": "Next to the station."
+      },
+      "writingFa": "دوست خیالی تو برای سه‌شنبه دعوتت کرده است ولی وقت نداری. دعوت را مؤدبانه رد کن، چهارشنبه ساعت ۵ در کافه را پیشنهاد بده و تأیید بخواه. از طرف دوستت قبول‌کردن را فرض نکن.",
+      "speakingFa": "همراهت پیشنهاد تازه را قبول یا رد کند؛ اگر قبول کرد، زمان و مکان را تأیید کن. تنها هستی؟ دو پاسخ ممکن را جدا تمرین کن.",
+      "commonErrorFa": "Let’s to meet؛ رد دعوت و سپس تأیید همان روز بدون رفع تعارض.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "Would you like to have coffee tomorrow?",
+          "choices": [
+            "بله، خیلی دوست دارم.",
+            "ببخشید، جمعه گرفتارم.",
+            "دوست داری فردا قهوه بخوریم؟"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "دوست داری فردا قهوه بخوریم؟"
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "Let us ___ at ten.",
+          "choices": [
+            "meet",
+            "to meet",
+            "meeting"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "بعد از let us بن فعل می‌آید."
+        }
+      ],
+      "pronunciationFa": "پذیرش و رد دعوت با لحن محترمانه؛ can/can’t فقط به یک تمایز صوتی شکننده وابسته نباشند.",
+      "transferToIds": [
+        "survival-past-and-future-plans",
+        "survival-phone-and-messages"
+      ],
+      "productionSelfCheckFa": [
+        "رد دعوت با تشکر یا عذرخواهی کوتاه همراه است.",
+        "پیشنهاد جایگزین Wednesday at five در کافه روشن است.",
+        "پیشنهاد را توافق قطعی ننامیده‌ام مگر مخاطب آن را پذیرفته باشد."
+      ]
+    },
+    {
+      "proposedIndex": 21,
+      "id": "survival-past-and-future-plans",
+      "titleFa": "دیروز و برنامهٔ فردا",
+      "module": 7,
+      "outcomeFa": "یک کار سادهٔ دیروز و یک برنامهٔ فردا را با نشانهٔ زمانی روشن بگویم.",
+      "preA1Ids": [
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-everyday-routine",
+        "survival-current-activities",
+        "survival-invitations-and-plans"
+      ],
+      "retrievalFa": "I work every day / I am working now را با yesterday و tomorrow مقایسه کن.",
+      "vocabularyFa": "yesterday=دیروز؛ tomorrow=فردا؛ last night=دیشب؛ next week=هفتهٔ بعد؛ was/were=گذشتهٔ be؛ went=گذشتهٔ go",
+      "grammarFa": "پنج گام جدا: ۱) دیروز با was/were؛ ۲) کار گذشتهٔ باقاعده با worked/studied؛ ۳) یک صورت پرتکرار went؛ ۴) پرسش/منفی گذشته با did و فعل ساده؛ ۵) برنامهٔ فردا با am/is/are going to + فعل ساده. نخست دیروز را تثبیت کن، سپس با مکث و نشانهٔ tomorrow به برنامهٔ آینده برو؛ افعال نامنظم بیشتر هدف این درس نیستند.",
+      "outOfScopeFa": "فهرست افعال بی‌قاعده، حال کامل، تفاوت‌های ظریف will/going to و داستان بلند خارج از دامنه‌اند.",
+      "examples": [
+        {
+          "en": "I was at home yesterday.",
+          "fa": "من دیروز در خانه بودم."
+        },
+        {
+          "en": "I worked yesterday.",
+          "fa": "من دیروز کار کردم."
+        },
+        {
+          "en": "She went to the café.",
+          "fa": "او به کافه رفت. (زن)"
+        },
+        {
+          "en": "Did you study yesterday?",
+          "fa": "آیا دیروز درس خواندی؟"
+        },
+        {
+          "en": "I did not work yesterday.",
+          "fa": "من دیروز کار نکردم."
+        },
+        {
+          "en": "I am going to study tomorrow.",
+          "fa": "من قصد دارم فردا درس بخوانم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Were you at home yesterday?",
+          "fa": "دیروز در خانه بودی؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, I was. I studied at home.",
+          "fa": "بله. در خانه درس خواندم."
+        },
+        {
+          "role": "partner",
+          "en": "What are you going to do tomorrow?",
+          "fa": "قصد داری فردا چه کار کنی؟"
+        },
+        {
+          "role": "learner",
+          "en": "I am going to meet Anna at the café.",
+          "fa": "قصد دارم آنا را در کافه ببینم."
+        }
+      ],
+      "listening": {
+        "passage": "I worked yesterday. Tomorrow I am going to study at home.",
+        "questionFa": "برنامهٔ فردا چیست؟",
+        "answer": "Study at home."
+      },
+      "reading": {
+        "passage": "Yesterday Ben was at home. Tomorrow he is going to meet Anna at ten.",
+        "questionFa": "بن دیروز کجا بود؟",
+        "answer": "At home."
+      },
+      "writingFa": "کارت خیالی: دیروز در خانه بودی و انگلیسی خواندی؛ فردا قصد داری آنا را ببینی. ابتدا دو جمله دربارهٔ دیروز بنویس و مکث کن؛ سپس یک جمله با going to دربارهٔ فردا بنویس. استفاده از فعل گذشتهٔ تازه لازم نیست.",
+      "speakingFa": "همراهت یک‌بار دربارهٔ دیروز و یک‌بار دربارهٔ فردا بپرسد. کوتاه پاسخ بده؛ سپس بپرس آیا او دیروز کار کرده است. در تمرین انفرادی دو نقش را بگو.",
+      "commonErrorFa": "Did you went / I did not worked؛ I going to؛ در تألیف نهایی واژه‌های زمان پیش از تغییر فعل تمرین شوند.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I was at home yesterday.",
+          "choices": [
+            "او به کافه رفت. (زن)",
+            "من دیروز در خانه بودم.",
+            "من دیروز کار کردم."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "من دیروز در خانه بودم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "Did you ___ yesterday?",
+          "choices": [
+            "worked",
+            "work",
+            "working"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "بعد از did از بن فعل استفاده می‌کنیم."
+        }
+      ],
+      "pronunciationFa": "worked /t/ و studied /d/ در نمونه‌ها؛ تفاوت went با go به‌صورت واژهٔ کامل، نه قاعدهٔ ساختگی.",
+      "transferToIds": [
+        "survival-travel-and-tickets"
+      ],
+      "productionSelfCheckFa": [
+        "دو جملهٔ دیروز شامل was at home و studied هستند.",
+        "برای برنامهٔ فردا از am going to + فعل ساده استفاده کرده‌ام، نه گذشته.",
+        "yesterday و tomorrow را روشن آورده‌ام؛ پس از did در پرسش شفاهی، فعل ساده آمده است."
+      ]
+    },
+    {
+      "proposedIndex": 22,
+      "id": "survival-job-interview",
+      "titleFa": "معرفی توانایی کاری ساده",
+      "module": 8,
+      "outcomeFa": "شغل، توانایی ساده و زمان در دسترس بودن را در یک آشنایی کاری بگویم.",
+      "preA1Ids": [
+        "prea1-04-i-am",
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-everyday-routine",
+        "survival-appointments-and-time",
+        "survival-school-and-learning"
+      ],
+      "retrievalFa": "شغل‌های آشنا، I work و روزهای هفته را بازیابی کن.",
+      "vocabularyFa": "job=شغل؛ shop=فروشگاه؛ computer=رایانه؛ use=استفاده‌کردن؛ speak=صحبت‌کردن؛ start=شروع‌کردن",
+      "grammarFa": "can/can’t + بن فعل برای توانایی؛ Can you ...?؛ I work in ...؛ available on ...؛ a + شغل. can درخواست در درس کمک اکنون با توانایی مقایسه شود.",
+      "outOfScopeFa": "مصاحبهٔ حرفه‌ای، رزومه، دستمزد/قرارداد، سابقه با present perfect و استدلال اقناعی هدف A1 نیستند.",
+      "examples": [
+        {
+          "en": "I work in a shop.",
+          "fa": "من در فروشگاه کار می‌کنم."
+        },
+        {
+          "en": "I can use a computer.",
+          "fa": "من می‌توانم از رایانه استفاده کنم."
+        },
+        {
+          "en": "Can you speak English?",
+          "fa": "می‌توانید انگلیسی صحبت کنید؟"
+        },
+        {
+          "en": "I can speak a little English.",
+          "fa": "من کمی انگلیسی صحبت می‌کنم."
+        },
+        {
+          "en": "I am available on Monday.",
+          "fa": "من دوشنبه وقت آزاد دارم."
+        },
+        {
+          "en": "I can start at nine.",
+          "fa": "می‌توانم ساعت نه شروع کنم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Can you use a computer?",
+          "fa": "می‌توانید از رایانه استفاده کنید؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, I can.",
+          "fa": "بله، می‌توانم."
+        },
+        {
+          "role": "partner",
+          "en": "Can you work on Monday?",
+          "fa": "می‌توانید دوشنبه کار کنید؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes. I can start at nine.",
+          "fa": "بله. می‌توانم ساعت نه شروع کنم."
+        }
+      ],
+      "listening": {
+        "passage": "I can use a computer. I can work on Tuesday, but not Monday.",
+        "questionFa": "چه روزی می‌تواند کار کند؟",
+        "answer": "Tuesday."
+      },
+      "reading": {
+        "passage": "Name: Sara. Job: shop assistant. Available: Monday morning. Languages: Persian, a little English.",
+        "questionFa": "سارا چه زمانی وقت آزاد دارد؟",
+        "answer": "Monday morning."
+      },
+      "writingFa": "برای یک آشنایی کاری خیالی سه جمله بنویس: آشپزی بلدی، دوشنبه صبح می‌توانی کار کنی، یکشنبه نمی‌توانی. لازم نیست سابقهٔ کاری یا پاسخ مصاحبهٔ تخصصی بسازی.",
+      "speakingFa": "همراهت فقط دربارهٔ توانایی و روز کار بپرسد؛ جواب کوتاه بده و زمان شروع را از او بپرس. در تمرین انفرادی دو نقش را بگو.",
+      "commonErrorFa": "can to use / can uses؛ عنوان قدیمی job-interview نباید به وعدهٔ آمادگی مصاحبهٔ واقعی تعبیر شود. shop assistant با ترجمهٔ فروشنده معرفی شود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I work in a shop.",
+          "choices": [
+            "من در فروشگاه کار می‌کنم.",
+            "من می‌توانم از رایانه استفاده کنم.",
+            "می‌توانید انگلیسی صحبت کنید؟"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "من در فروشگاه کار می‌کنم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "I can ___ a computer.",
+          "choices": [
+            "uses",
+            "to use",
+            "use"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "بعد از can بن فعل بدون to و s می‌آید."
+        }
+      ],
+      "pronunciationFa": "can در جملهٔ خبری ممکن است ضعیف شود؛ در سنجش can’t برای رفع ابهام متن/بافت کافی داده شود.",
+      "transferToIds": [
+        "survival-personal-information"
+      ],
+      "productionSelfCheckFa": [
+        "توانایی را با can cook نوشته‌ام، نه can cooks.",
+        "دوشنبه صبح را زمانِ امکان کار گفته‌ام.",
+        "منفیِ یکشنبه با برنامهٔ دوشنبه تناقض ندارد؛ اطلاعات شغلی خصوصی لازم نیست."
+      ]
+    },
+    {
+      "proposedIndex": 23,
+      "id": "survival-personal-information",
+      "titleFa": "اطلاعات خیالی و فرم ساده",
+      "module": 8,
+      "outcomeFa": "یک فرم ساده را با نام، شهر، نشانی و راه تماس خیالی کامل کنم.",
+      "preA1Ids": [
+        "prea1-07-i-have"
+      ],
+      "prerequisiteIds": [
+        "foundation-alphabet-and-spelling",
+        "foundation-numbers-and-contact",
+        "survival-job-interview"
+      ],
+      "retrievalFa": "نام، هجی، عدد، سن و شغل را بازیابی کن.",
+      "vocabularyFa": "address=نشانی؛ email=ایمیل؛ street=خیابان؛ form=فرم؛ first name=نام کوچک؛ last name=نام خانوادگی؛ dot=نقطه؛ at=ات‌ساین در ایمیل",
+      "grammarFa": "What is your ...?؛ My ... is ...؛ حرف‌به‌حرف‌گویی و رقم‌ها؛ نشانی 12 Park Street؛ ایمیل نمونه با example.com. فرم الزاماً جملهٔ کامل نمی‌خواهد.",
+      "outOfScopeFa": "مدرک هویتی، گذرواژه، اطلاعات بانکی، تاریخ تولد واقعی یا بارگذاری سند درخواست نشود.",
+      "examples": [
+        {
+          "en": "My first name is Sara.",
+          "fa": "نام کوچک من سارا است."
+        },
+        {
+          "en": "My last name is Ali.",
+          "fa": "نام خانوادگی من علی است."
+        },
+        {
+          "en": "What is your address?",
+          "fa": "نشانی شما چیست؟"
+        },
+        {
+          "en": "My address is 12 Park Street.",
+          "fa": "نشانی من پلاک ۱۲، خیابان پارک است."
+        },
+        {
+          "en": "My email is sara@example.com.",
+          "fa": "ایمیل من sara@example.com است."
+        },
+        {
+          "en": "Please check your name.",
+          "fa": "لطفاً نامتان را بررسی کنید."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "What is your first name?",
+          "fa": "نام کوچک شما چیست؟"
+        },
+        {
+          "role": "learner",
+          "en": "Sara. S-A-R-A.",
+          "fa": "سارا. اس، اِی، آر، اِی."
+        },
+        {
+          "role": "partner",
+          "en": "And your address?",
+          "fa": "و نشانی شما؟"
+        },
+        {
+          "role": "learner",
+          "en": "12 Park Street.",
+          "fa": "پلاک ۱۲، خیابان پارک."
+        }
+      ],
+      "listening": {
+        "passage": "My address is fourteen Park Street. One four.",
+        "questionFa": "شمارهٔ پلاک چیست؟",
+        "answer": "14"
+      },
+      "reading": {
+        "passage": "First name: Ben. Last name: Lee. Address: 12 Park Street. Email: ben@example.com.",
+        "questionFa": "نام خانوادگی چیست؟",
+        "answer": "Lee"
+      },
+      "writingFa": "اطلاعات کاملاً خیالی: نام Anna، نام خانوادگی Green، نشانی پلاک ۱۴ خیابان Park، ایمیل anna@example.com. فرم چهارخانه‌ای First name / Last name / Address / Email را کامل کن؛ جملهٔ کامل لازم نیست.",
+      "speakingFa": "همراهت مسئول فرم باشد؛ نام و نشانی خیالی را از تو بپرسد و تو یک مورد را برای روشن‌کردن هجی کن. در تمرین انفرادی دو نقش را بگو.",
+      "commonErrorFa": "جابجایی first/last name؛ اطلاعات واقعی ضروری نیست؛ نام‌گذاری فضای ذخیره باید lessonId و sentenceId را با هم در نظر بگیرد.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "My first name is Sara.",
+          "choices": [
+            "نام خانوادگی من علی است.",
+            "نشانی شما چیست؟",
+            "نام کوچک من سارا است."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "نام کوچک من سارا است."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "در فرم First name به کدام اطلاعات نیاز دارد؟",
+          "choices": [
+            "نام کوچک",
+            "نام خانوادگی",
+            "نشانی"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "First name نام کوچک است و Last name نام خانوادگی."
+        }
+      ],
+      "pronunciationFa": "dot و at در خواندن ایمیل؛ نشانی نوشتاری با خواندن رقم‌ها تطبیق داده شود.",
+      "transferToIds": [
+        "survival-renting-a-home",
+        "survival-travel-and-tickets",
+        "survival-phone-and-messages",
+        "survival-services-and-post-office"
+      ],
+      "productionSelfCheckFa": [
+        "Anna و Green را در فیلدهای درست گذاشته‌ام.",
+        "نشانی شامل شمارهٔ 14 و Park Street است.",
+        "ایمیل anna@example.com بدون فاصله است؛ از هویت یا ایمیل واقعی استفاده نکرده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 24,
+      "id": "survival-renting-a-home",
+      "titleFa": "پرس‌وجوی ساده برای اتاق",
+      "module": 8,
+      "outcomeFa": "یک آگهی کوتاه اتاق را بفهمم و دربارهٔ قیمت، امکانات و زمان دیدن آن سؤال کنم.",
+      "preA1Ids": [
+        "prea1-11-at-home"
+      ],
+      "prerequisiteIds": [
+        "foundation-objects-and-places",
+        "foundation-buying-something",
+        "survival-appointments-and-time",
+        "survival-personal-information"
+      ],
+      "retrievalFa": "there is/are، قیمت، جای مکان و زمان قرار را بازیابی کن.",
+      "vocabularyFa": "room=اتاق؛ rent=اجاره؛ month=ماه؛ kitchen=آشپزخانه؛ bathroom=حمام/دستشویی؛ internet=اینترنت؛ included=شامل‌شده",
+      "grammarFa": "Is there ...?؛ How much is the rent?؛ per month به‌صورت واحد قیمت؛ Can I see ...?؛ Is ... included? قالب آماده. واحد پول در آگهی/صحنه یکسان بماند.",
+      "outOfScopeFa": "قرارداد، حقوق مستأجر، ضمانت، مذاکرهٔ شرایط و شکایت حقوقی هدف نیستند.",
+      "examples": [
+        {
+          "en": "I am looking for a room.",
+          "fa": "من دنبال یک اتاق هستم."
+        },
+        {
+          "en": "How much is the rent?",
+          "fa": "اجاره چقدر است؟"
+        },
+        {
+          "en": "It is five hundred pounds per month.",
+          "fa": "ماهی پانصد پوند است."
+        },
+        {
+          "en": "Is there a kitchen?",
+          "fa": "آیا آشپزخانه دارد؟"
+        },
+        {
+          "en": "Is internet included?",
+          "fa": "آیا اینترنت در قیمت اجاره حساب شده است؟"
+        },
+        {
+          "en": "Can I see the room on Tuesday?",
+          "fa": "می‌توانم سه‌شنبه اتاق را ببینم؟"
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Hello. Are you looking for a room?",
+          "fa": "سلام. دنبال اتاق هستید؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes. How much is the rent?",
+          "fa": "بله. اجاره چقدر است؟"
+        },
+        {
+          "role": "partner",
+          "en": "Five hundred pounds per month.",
+          "fa": "ماهی پانصد پوند."
+        },
+        {
+          "role": "learner",
+          "en": "Thank you. Can I see it on Tuesday?",
+          "fa": "ممنون. می‌توانم سه‌شنبه آن را ببینم؟"
+        }
+      ],
+      "listening": {
+        "passage": "The room is six hundred pounds per month. Internet is included.",
+        "questionFa": "اجارهٔ ماهانه چقدر است؟",
+        "answer": "Six hundred pounds."
+      },
+      "reading": {
+        "passage": "Room: £500 per month. Shared kitchen. Near the station. Internet included.",
+        "questionFa": "آیا اتاق نزدیک ایستگاه است؟",
+        "answer": "Yes."
+      },
+      "writingFa": "آگهی خیالی: یک اتاق نزدیک ایستگاه؛ آشپزخانه دارد؛ حمام مشترک است. اجاره و ساعت بازدید نوشته نشده‌اند. یک پیام کوتاه بنویس: اجارهٔ ماهانه و زمان بازدید را بپرس؛ دوباره دربارهٔ داشتن آشپزخانه سؤال نکن.",
+      "speakingFa": "همراهت صاحب آگهی باشد. دو اطلاعاتِ گمشده را بپرس و پاسخ‌ها را کوتاه تکرار کن؛ در تمرین انفرادی از پاسخ خیالی استفاده کن.",
+      "commonErrorFa": "۵۰۰ و ۶۰۰ نیاز به گسترش عددهای آشنا با hundred پیش از شنیدن دارند؛ وعدهٔ آموزش قرارداد از عنوان حذف شود؛ shared=مشترک پیش از متن معرفی شود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I am looking for a room.",
+          "choices": [
+            "ماهی پانصد پوند است.",
+            "من دنبال یک اتاق هستم.",
+            "اجاره چقدر است؟"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "من دنبال یک اتاق هستم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "£500 per month یعنی چه؟",
+          "choices": [
+            "پانصد پوند در روز",
+            "پانصد پوند در ماه",
+            "پنجاه پوند در ماه"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "per month یعنی در ماه؛ five hundred یعنی پانصد."
+        }
+      ],
+      "pronunciationFa": "five hundred با fifty مقایسه شود؛ per month یک واحد معنایی و صوتی باشد.",
+      "transferToIds": [
+        "survival-hotel-and-stay"
+      ],
+      "productionSelfCheckFa": [
+        "اجاره را برای هر ماه پرسیده‌ام، نه اینکه عددی حدس بزنم.",
+        "زمان بازدید را پرسیده‌ام.",
+        "اطلاعات روشنِ آگهی مانند داشتن آشپزخانه را نادیده نگرفته‌ام؛ موضوع قرارداد تخصصی نیست."
+      ]
+    },
+    {
+      "proposedIndex": 25,
+      "id": "survival-travel-and-tickets",
+      "titleFa": "سفر و بلیت بین‌شهری",
+      "module": 9,
+      "outcomeFa": "بلیت بین‌شهری با مقصد و روز مشخص بخواهم و زمان رفت‌وبرگشت را بررسی کنم.",
+      "preA1Ids": [
+        "prea1-05-numbers"
+      ],
+      "prerequisiteIds": [
+        "survival-public-transport",
+        "survival-past-and-future-plans",
+        "survival-personal-information"
+      ],
+      "retrievalFa": "بلیت شهری، روز/ساعت و برنامهٔ tomorrow را بازیابی کن.",
+      "vocabularyFa": "single=یک‌طرفه؛ return=رفت‌وبرگشت؛ journey=سفر؛ arrive=رسیدن؛ leave=حرکت‌کردن؛ tomorrow=فردا",
+      "grammarFa": "A single/return to ...؛ on/at؛ What time does ... arrive?؛ I am going to travel ...؛ ترجیح واژگانی British single/return همراه یادداشت one-way/round-trip فقط برای تشخیص.",
+      "outOfScopeFa": "قوانین ویزا، بار مجاز، تعویض/استرداد و مشکل اتصال پرواز هدف این درس نیستند.",
+      "examples": [
+        {
+          "en": "A return ticket to Leeds, please.",
+          "fa": "یک بلیت رفت‌وبرگشت به لیدز، لطفاً."
+        },
+        {
+          "en": "For tomorrow, please.",
+          "fa": "برای فردا، لطفاً."
+        },
+        {
+          "en": "What time does the train leave?",
+          "fa": "قطار چه ساعتی حرکت می‌کند؟"
+        },
+        {
+          "en": "It leaves at ten.",
+          "fa": "ساعت ده حرکت می‌کند."
+        },
+        {
+          "en": "What time does it arrive?",
+          "fa": "چه ساعتی می‌رسد؟"
+        },
+        {
+          "en": "I am going to return on Friday.",
+          "fa": "قصد دارم جمعه برگردم."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "A single or a return?",
+          "fa": "یک‌طرفه یا رفت‌وبرگشت؟"
+        },
+        {
+          "role": "learner",
+          "en": "A return to Leeds, please.",
+          "fa": "رفت‌وبرگشت به لیدز، لطفاً."
+        },
+        {
+          "role": "partner",
+          "en": "When are you going to return?",
+          "fa": "قصد دارید چه زمانی برگردید؟"
+        },
+        {
+          "role": "learner",
+          "en": "On Friday.",
+          "fa": "جمعه."
+        }
+      ],
+      "listening": {
+        "passage": "The train leaves at ten and arrives at twelve.",
+        "questionFa": "قطار چه ساعتی می‌رسد؟",
+        "answer": "At twelve."
+      },
+      "reading": {
+        "passage": "London → Leeds. Departure: 10:00. Arrival: 12:00. Return: Friday, 15:00.",
+        "questionFa": "قطار برگشت چه روزی است؟",
+        "answer": "Friday."
+      },
+      "writingFa": "سفر خیالی: رفت از لندن به Leeds روز Monday؛ برگشت روز Tuesday. درخواست بلیت رفت‌وبرگشت با مقصد و هر دو روز بنویس؛ سپس ساعت حرکت قطار رفت را بپرس چون روی کارت نیست.",
+      "speakingFa": "همراهت مسئول بلیت باشد؛ مقصد، رفت‌وبرگشت و روزها را روشن کن و زمان حرکت را بگیر. تنها هستی؟ دو نقش را تمرین کن.",
+      "commonErrorFa": "خلط arrive/leave؛ departure=حرکت و arrival=رسیدن پیش از خواندن آموزش داده شوند؛ مقصد و روز برگشت در صحنه ناسازگار نشوند.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "A return ticket to Leeds, please.",
+          "choices": [
+            "یک بلیت رفت‌وبرگشت به لیدز، لطفاً.",
+            "برای فردا، لطفاً.",
+            "قطار چه ساعتی حرکت می‌کند؟"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "یک بلیت رفت‌وبرگشت به لیدز، لطفاً."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "برای بلیت رفت‌وبرگشت کدام را می‌خواهیم؟",
+          "choices": [
+            "A room.",
+            "A single ticket.",
+            "A return ticket."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "در نمونهٔ بریتانیایی return ticket رفت‌وبرگشت است."
+        }
+      ],
+      "pronunciationFa": "single/return و leave/arrive در جمله؛ مدل صوتی مقصدهای Leeds/London قبل از شنیدن.",
+      "transferToIds": [
+        "survival-hotel-and-stay"
+      ],
+      "productionSelfCheckFa": [
+        "از return ticket برای رفت‌وبرگشت استفاده کرده‌ام.",
+        "مقصد Leeds و روزهای Monday و Tuesday را جابه‌جا نکرده‌ام.",
+        "ساعت حرکت نامعلوم را پرسیده‌ام؛ عددِ نداده را حدس نزده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 26,
+      "id": "survival-hotel-and-stay",
+      "titleFa": "ورود و درخواست ساده در هتل",
+      "module": 9,
+      "outcomeFa": "رزرو خیالی را معرفی کنم، شمارهٔ اتاق و ساعت صبحانه را بپرسم و درخواست کوتاه بگویم.",
+      "preA1Ids": [
+        "prea1-08-please-thankyou"
+      ],
+      "prerequisiteIds": [
+        "survival-renting-a-home",
+        "survival-travel-and-tickets"
+      ],
+      "retrievalFa": "نام، عدد اتاق، امکانات و ساعت را بازیابی کن.",
+      "vocabularyFa": "booking=رزرو؛ night=شب؛ key=کلید؛ breakfast=صبحانه؛ towel=حوله؛ reception=پذیرش",
+      "grammarFa": "I have a booking؛ for two nights؛ What time is ...?؛ Can I have ...? درخواست مؤدبانه؛ there is/isn’t برای یک مشکل ساده، نه شکایت تفصیلی.",
+      "outOfScopeFa": "پرداخت شرکتی، جریمه، مذاکرهٔ جبران خسارت و پیش‌پرداخت حقوقی لازم نیستند.",
+      "examples": [
+        {
+          "en": "I have a booking. My name is Sara Ali.",
+          "fa": "رزرو دارم. اسم من سارا علی است."
+        },
+        {
+          "en": "A room for two nights, please.",
+          "fa": "یک اتاق برای دو شب، لطفاً."
+        },
+        {
+          "en": "What is my room number?",
+          "fa": "شمارهٔ اتاق من چیست؟"
+        },
+        {
+          "en": "Your room is number twelve.",
+          "fa": "شمارهٔ اتاق شما دوازده است."
+        },
+        {
+          "en": "What time is breakfast?",
+          "fa": "صبحانه چه ساعتی است؟"
+        },
+        {
+          "en": "Can I have a towel, please?",
+          "fa": "می‌توانم یک حوله داشته باشم، لطفاً؟"
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Good evening. What is your name?",
+          "fa": "عصر بخیر. اسمتان چیست؟"
+        },
+        {
+          "role": "learner",
+          "en": "Sara Ali. I have a booking for two nights.",
+          "fa": "سارا علی. برای دو شب رزرو دارم."
+        },
+        {
+          "role": "partner",
+          "en": "Yes. Room twelve. Here is your key.",
+          "fa": "بله. اتاق دوازده. این هم کلیدتان."
+        },
+        {
+          "role": "learner",
+          "en": "Thank you. What time is breakfast?",
+          "fa": "ممنون. صبحانه چه ساعتی است؟"
+        }
+      ],
+      "listening": {
+        "passage": "Your room is fourteen. Breakfast is at seven thirty.",
+        "questionFa": "صبحانه چه ساعتی است؟",
+        "answer": "7:30."
+      },
+      "reading": {
+        "passage": "Hotel Park. Breakfast: 7:30–9:00. Reception: ground floor. Room 12: Sara Ali.",
+        "questionFa": "شمارهٔ اتاق سارا چیست؟",
+        "answer": "12"
+      },
+      "writingFa": "رزرو خیالی تو به نام Ben Lee، اتاق ۱۲ است. در اتاق حوله نیست. پیام کوتاهی برای پذیرش بنویس: خودت و اتاق را مشخص کن، مشکل حوله را بگو و مؤدبانه حوله بخواه.",
+      "speakingFa": "همراهت پذیرش هتل باشد؛ شمارهٔ اتاق را بپرسد، تو بگو و درخواست حوله کن. تنها هستی؟ هر دو نقش را بگو.",
+      "commonErrorFa": "عدم تمایز two nights/two rooms؛ ground floor=طبقهٔ همکف پیش از خواندن معرفی شود؛ نوبت چهارم صحنه سؤال باز طبیعی است، نه پاسخ‌گیری اجباری خارج از متن.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I have a booking. My name is Sara Ali.",
+          "choices": [
+            "یک اتاق برای دو شب، لطفاً.",
+            "شمارهٔ اتاق من چیست؟",
+            "رزرو دارم. اسم من سارا علی است."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "رزرو دارم. اسم من سارا علی است."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "A room for two ___ . (دو شب)",
+          "choices": [
+            "nights",
+            "rooms",
+            "keys"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "مدت اقامت با nights بیان شده است، نه تعداد اتاق."
+        }
+      ],
+      "pronunciationFa": "booking و breakfast با تکیهٔ درست؛ room twelve با room twenty اشتباه نشود.",
+      "transferToIds": [],
+      "productionSelfCheckFa": [
+        "نام Ben Lee و room twelve برای پذیرش روشن است.",
+        "نبودن حوله را با There is no towel بیان کرده‌ام.",
+        "درخواست حوله مؤدبانه است و شمارهٔ اتاق در نوبت‌های بعدی عوض نشده است."
+      ]
+    },
+    {
+      "proposedIndex": 27,
+      "id": "survival-phone-and-messages",
+      "titleFa": "تماس و پیام کوتاه",
+      "module": 9,
+      "outcomeFa": "خودم را در تماس معرفی کنم و پیامی کوتاه با زمان تماس مجدد بنویسم.",
+      "preA1Ids": [
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "survival-current-activities",
+        "survival-invitations-and-plans",
+        "survival-personal-information"
+      ],
+      "retrievalFa": "Can you call me? و ساعت و درخواست تکرار را بازیابی کن.",
+      "vocabularyFa": "call=تماس‌گرفتن؛ message=پیام؛ later=بعداً؛ busy=گرفتار؛ number=شماره؛ leave=گذاشتن در leave a message",
+      "grammarFa": "This is ... speaking به‌صورت قالب تماس؛ Can I speak to ...?؛ Can I leave a message?؛ Please call me at ...؛ is working now برای علت در دسترس نبودن.",
+      "outOfScopeFa": "نقل‌قول غیرمستقیم، تماس اداری پیچیده و ضبط/ارسال اطلاعات واقعی هدف نیستند.",
+      "examples": [
+        {
+          "en": "Hello, this is Sara speaking.",
+          "fa": "سلام، سارا هستم. (در تماس)"
+        },
+        {
+          "en": "Can I speak to Ben, please?",
+          "fa": "می‌توانم با بن صحبت کنم، لطفاً؟"
+        },
+        {
+          "en": "He is working now.",
+          "fa": "او الان مشغول کار است. (مرد)"
+        },
+        {
+          "en": "Can I leave a message?",
+          "fa": "می‌توانم پیغام بگذارم؟"
+        },
+        {
+          "en": "Please call me at five.",
+          "fa": "لطفاً ساعت پنج به من زنگ بزن."
+        },
+        {
+          "en": "Thank you. Goodbye.",
+          "fa": "ممنون. خداحافظ."
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Hello, this is Anna.",
+          "fa": "سلام، آنا هستم."
+        },
+        {
+          "role": "learner",
+          "en": "Hello. Can I speak to Ben, please?",
+          "fa": "سلام. می‌توانم با بن صحبت کنم، لطفاً؟"
+        },
+        {
+          "role": "partner",
+          "en": "Sorry, he is working now.",
+          "fa": "ببخشید، او الان مشغول کار است."
+        },
+        {
+          "role": "learner",
+          "en": "Please ask him to call Sara at five. Thank you.",
+          "fa": "لطفاً به او بگویید ساعت پنج به سارا زنگ بزند. ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Hi Ben. This is Sara. Please call me at six, not five.",
+        "questionFa": "تماس باید چه ساعتی باشد؟",
+        "answer": "At six."
+      },
+      "reading": {
+        "passage": "Hi Anna. I am at the station. Please call me at four. Thanks, Ben.",
+        "questionFa": "چه کسی پیام را نوشته است؟",
+        "answer": "Ben."
+      },
+      "writingFa": "در تماس خیالی Sara حاضر نیست. تو Tim هستی، الان در ایستگاه هستی و می‌خواهی Sara بعد از ساعت ۶ با تو تماس بگیرد. یک پیام کوتاه برای منتقل‌شدن به Sara بنویس؛ شمارهٔ واقعی لازم نیست.",
+      "speakingFa": "همراهت پاسخ‌گوی تلفن باشد؛ پیام را برای Sara بگذار. او نام یا زمان را دوباره بپرسد و تو روشن کن؛ تنها هستی؟ هر دو نقش را بگو.",
+      "commonErrorFa": "I am Sara به‌عنوان تنها شکل درست تحمیل نشود؛ در شنیدن/پاسخ نقش تماس‌گیرنده و گیرنده ثابت بماند؛ ask him to یک قالب محدود پایانی است.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "Hello, this is Sara speaking.",
+          "choices": [
+            "او الان مشغول کار است. (مرد)",
+            "سلام، سارا هستم. (در تماس)",
+            "می‌توانم با بن صحبت کنم، لطفاً؟"
+          ],
+          "correctIndex": 1,
+          "explanationFa": "سلام، سارا هستم. (در تماس)"
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "Ben is working now. کدام پیام مناسب است؟",
+          "choices": [
+            "Ben is free now.",
+            "Please ask Ben to call Sara at five.",
+            "The train leaves at five."
+          ],
+          "correctIndex": 1,
+          "explanationFa": "پیام تماس باید گیرنده، نام تماس‌گیرنده و زمان را روشن کند."
+        }
+      ],
+      "pronunciationFa": "This is ... speaking به‌صورت گروه؛ نام و ساعت در پیام واضح باشند، نه وابسته به کیفیت واقعی خط تلفن.",
+      "transferToIds": [
+        "survival-health-and-pharmacy"
+      ],
+      "productionSelfCheckFa": [
+        "گیرنده Sara و فرستنده Tim مشخص‌اند.",
+        "مکان فعلی station را گفته‌ام.",
+        "درخواست تماس after six روشن است؛ این زمان را به before six تبدیل نکرده‌ام."
+      ]
+    },
+    {
+      "proposedIndex": 28,
+      "id": "survival-services-and-post-office",
+      "titleFa": "خدمات ساده و ادارهٔ پست",
+      "module": 9,
+      "outcomeFa": "برای ارسال یک نامه کمک بخواهم، مقصد و قیمت را بفهمم و یک فرم ساده را بخوانم.",
+      "preA1Ids": [
+        "prea1-08-please-thankyou"
+      ],
+      "prerequisiteIds": [
+        "foundation-buying-something",
+        "survival-personal-information",
+        "survival-directions-and-neighborhood"
+      ],
+      "retrievalFa": "نشانی، قیمت، Please و Where is را بازیابی کن.",
+      "vocabularyFa": "letter=نامه؛ stamp=تمبر؛ post office=ادارهٔ پست؛ send=فرستادن؛ parcel=بسته؛ form=فرم",
+      "grammarFa": "I would like to send ...؛ to + مقصد؛ How much is ...?؛ Do I need ...?؛ Please write ...؛ مرور can برای کمک. stamp=تمبر با price اشتباه نشود.",
+      "outOfScopeFa": "بانکداری، بیمه، ترخیص گمرکی، ردیابی حقوقی و همهٔ خدمات شهر در یک درس جمع نشوند.",
+      "examples": [
+        {
+          "en": "I would like to send this letter.",
+          "fa": "می‌خواهم این نامه را بفرستم."
+        },
+        {
+          "en": "To London, please.",
+          "fa": "به لندن، لطفاً."
+        },
+        {
+          "en": "How much is a stamp?",
+          "fa": "قیمت یک تمبر چقدر است؟"
+        },
+        {
+          "en": "Do I need a form?",
+          "fa": "آیا به فرم نیاز دارم؟"
+        },
+        {
+          "en": "Please write the address here.",
+          "fa": "لطفاً نشانی را اینجا بنویسید."
+        },
+        {
+          "en": "Can you help me with this form?",
+          "fa": "می‌توانید برای این فرم به من کمک کنید؟"
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Hello. Can I help you?",
+          "fa": "سلام. می‌توانم کمکتان کنم؟"
+        },
+        {
+          "role": "learner",
+          "en": "I would like to send this letter to London.",
+          "fa": "می‌خواهم این نامه را به لندن بفرستم."
+        },
+        {
+          "role": "partner",
+          "en": "A stamp is two pounds.",
+          "fa": "قیمت یک تمبر دو پوند است."
+        },
+        {
+          "role": "learner",
+          "en": "One stamp, please. Thank you.",
+          "fa": "یک تمبر، لطفاً. ممنون."
+        }
+      ],
+      "listening": {
+        "passage": "Please write the name and address on the form.",
+        "questionFa": "چه دو اطلاعاتی باید نوشته شود؟",
+        "answer": "Name and address."
+      },
+      "reading": {
+        "passage": "To: Anna Lee. Address: 12 Park Street, London. Stamp: £2.",
+        "questionFa": "شهر مقصد کدام است؟",
+        "answer": "London."
+      },
+      "writingFa": "نامهٔ خیالی برای Anna Green در ۱۲ Park Street در شهر York است. نشانی گیرنده را بنویس و در ادارهٔ پست هزینهٔ فرستادن همین نامه را بپرس؛ نشانی واقعی لازم نیست.",
+      "speakingFa": "همراهت مسئول پست باشد. مقصد نامه را بگو و دربارهٔ هزینه و نیاز به تمبر سؤال کن؛ تنها هستی؟ دو نقش را تمرین کن.",
+      "commonErrorFa": "send to با جهت from اشتباه نشود؛ here در متن به خانهٔ فرم نمایش‌داده‌شده اشاره کند، نه تصویر غایب.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I would like to send this letter.",
+          "choices": [
+            "می‌خواهم این نامه را بفرستم.",
+            "به لندن، لطفاً.",
+            "قیمت یک تمبر چقدر است؟"
+          ],
+          "correctIndex": 0,
+          "explanationFa": "می‌خواهم این نامه را بفرستم."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "I would like to send this letter ___ London.",
+          "choices": [
+            "from",
+            "at",
+            "to"
+          ],
+          "correctIndex": 2,
+          "explanationFa": "to مقصد ارسال را معرفی می‌کند."
+        }
+      ],
+      "pronunciationFa": "letter و later در بافت خود؛ مقصد پس از to روشن شنیده شود.",
+      "transferToIds": [],
+      "productionSelfCheckFa": [
+        "نام Anna Green و نشانی 12 Park Street, York در بخش گیرنده آمده‌اند.",
+        "پرسش هزینه دربارهٔ فرستادن همین نامه است، نه قیمت یک کالای دیگر.",
+        "در گفت‌وگو دربارهٔ نیاز به stamp سؤال کرده‌ام؛ اطلاعات گیرنده خیالی است."
+      ]
+    },
+    {
+      "proposedIndex": 29,
+      "id": "survival-health-and-pharmacy",
+      "titleFa": "بیان حال و درخواست کمک در داروخانه",
+      "module": 9,
+      "outcomeFa": "یک علامت ساده را بگویم و درخواست کمک زبانی کنم، بدون تشخیص یا توصیهٔ درمانی.",
+      "preA1Ids": [
+        "prea1-04-i-am",
+        "prea1-06-how-are-you",
+        "prea1-13-every-day"
+      ],
+      "prerequisiteIds": [
+        "foundation-asking-for-help",
+        "survival-appointments-and-time",
+        "survival-phone-and-messages"
+      ],
+      "retrievalFa": "I am tired، I need help و وقت ملاقات و تماس را بازیابی کن.",
+      "vocabularyFa": "headache=سردرد؛ pain=درد؛ ill=بیمار؛ doctor=پزشک؛ pharmacy=داروخانه؛ help=کمک؛ water=آب",
+      "grammarFa": "I have a headache؛ My ... hurts به‌صورت قالب محدود؛ I feel ...؛ Can you help me?؛ Where is ...?؛ نیاز فوری با I need help now. تولید جملهٔ علائم خیالی، نه دادهٔ حساس واقعی.",
+      "outOfScopeFa": "تشخیص، دوز، نام دارو، تضمین درمان و توصیهٔ ایمنی پزشکی نوشته نشود؛ درس جای خدمات درمانی نیست.",
+      "examples": [
+        {
+          "en": "I do not feel well.",
+          "fa": "حالم خوب نیست."
+        },
+        {
+          "en": "I have a headache.",
+          "fa": "سردرد دارم."
+        },
+        {
+          "en": "My stomach hurts.",
+          "fa": "شکمم درد می‌کند."
+        },
+        {
+          "en": "I need a doctor.",
+          "fa": "به پزشک نیاز دارم."
+        },
+        {
+          "en": "Where is the pharmacy?",
+          "fa": "داروخانه کجاست؟"
+        },
+        {
+          "en": "Can you help me, please?",
+          "fa": "می‌توانید لطفاً به من کمک کنید؟"
+        }
+      ],
+      "scene": [
+        {
+          "role": "partner",
+          "en": "Hello. How can I help you?",
+          "fa": "سلام. چطور می‌توانم کمکتان کنم؟"
+        },
+        {
+          "role": "learner",
+          "en": "I do not feel well. I have a headache.",
+          "fa": "حالم خوب نیست. سردرد دارم."
+        },
+        {
+          "role": "partner",
+          "en": "Would you like to speak to the pharmacist?",
+          "fa": "می‌خواهید با داروساز صحبت کنید؟"
+        },
+        {
+          "role": "learner",
+          "en": "Yes, please.",
+          "fa": "بله، لطفاً."
+        }
+      ],
+      "listening": {
+        "passage": "I have a headache. I need to speak to the pharmacist.",
+        "questionFa": "علامت گفته‌شده چیست؟",
+        "answer": "A headache."
+      },
+      "reading": {
+        "passage": "Park Pharmacy. Open Monday to Friday, 9:00–17:00. Closed Sunday.",
+        "questionFa": "آیا داروخانه یکشنبه باز است؟",
+        "answer": "No."
+      },
+      "writingFa": "موقعیت کاملاً خیالی: سردرد داری و توضیح مخاطب را خوب نمی‌فهمی. سه عبارت کوتاه بنویس: علامت را بگو، بگو متوجه نمی‌شوی و درخواست آهسته‌گویی کن. تشخیص، نام دارو یا مقدار مصرف ننویس.",
+      "speakingFa": "همراهت نقش مسئول داروخانه را بازی کند. علامت خیالی را بگو و از او بخواه آهسته‌تر صحبت کند؛ تنها هستی؟ دو نقش را بگو. این تمرین توصیهٔ درمانی نیست.",
+      "commonErrorFa": "I have headache بدون a در مدل هدف؛ stomach=شکم و pharmacist=داروساز پیش از نمونه/صحنه معرفی شوند؛ پاسخ زبانی هرگز نمرهٔ سلامت تلقی نشود.",
+      "checks": [
+        {
+          "kind": "meaning",
+          "promptFa": "معنی این نمونه در همین بافت چیست؟",
+          "source": "I do not feel well.",
+          "choices": [
+            "سردرد دارم.",
+            "شکمم درد می‌کند.",
+            "حالم خوب نیست."
+          ],
+          "correctIndex": 2,
+          "explanationFa": "حالم خوب نیست."
+        },
+        {
+          "kind": "form-or-function",
+          "promptFa": "کدام جمله سردرد را بیان می‌کند؟",
+          "choices": [
+            "I have a headache.",
+            "I have a ticket.",
+            "I am at home."
+          ],
+          "correctIndex": 0,
+          "explanationFa": "headache یعنی سردرد؛ تشخیص و دارو جزو سنجش نیستند."
+        }
+      ],
+      "pronunciationFa": "headache و pharmacy/pharmacist پیش از سنجش شنیده شوند؛ فهم علامت هدف است، نه ارزیابی پزشکی.",
+      "transferToIds": [],
+      "productionSelfCheckFa": [
+        "فقط علامت خیالی headache را بیان کرده‌ام، نه تشخیص بیماری.",
+        "نفهمیدن توضیح را روشن گفته‌ام.",
+        "درخواست آهسته‌گویی مؤدبانه دارم؛ دارو یا مقدار مصرف پیشنهاد نکرده‌ام."
+      ]
+    }
+  ]
+}

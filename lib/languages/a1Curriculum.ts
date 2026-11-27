@@ -1,3 +1,6 @@
+import {SPANISH_A1_IDS} from './spanishA1Scope';
+import {FRENCH_A1_IDS} from './frenchA1Scope';
+import {GERMAN_A1_IDS} from './germanA1Scope';
 import type { NewLanguageId } from './newCourses';
 
 /** The requested A1 syllabus. A topic is not a published or complete lesson. */
@@ -54,8 +57,35 @@ const linked: Record<NewLanguageId, {foundation:Partial<Record<number,string[]>>
 };
 export function getA1Curriculum(id:NewLanguageId): readonly A1Section[] {
   const index={fr:0,de:1,es:2}[id];
-  return [
+  const sections: A1Section[] = [
     {id:'foundation',title:'بخش اول: Foundation',topics:foundation.map((titles,i)=>({number:i+1,title:titles[index],relatedLessonIds:linked[id].foundation[i+1] ?? []}))},
     {id:'survival',title:'بخش دوم: Survival',topics:commonSurvival.map((baseTitle,i)=>{ const title = id === 'es' && i === 17 ? 'صحبت دربارهٔ کارهای امروز' : baseTitle; return {number:i+1,title:localized[id][i+1] ? `${title} (${localized[id][i+1]})` : title,relatedLessonIds:linked[id].survival[i+1] ?? []};})},
   ];
+  if (id === 'es') {
+    const titles = new Map(sections.flatMap(section=>section.topics.flatMap(topic=>topic.relatedLessonIds.map(id=>[id,topic.title] as const))));
+    // Preserve 25 + 30 cards and all 56 links; the consecutive directions lessons share one card.
+    const topics = SPANISH_A1_IDS.filter(id=>id!=='es-a1-metro-directions').map(lessonId=>({
+      number:0, title:lessonId==='es-a1-directions' ? 'مسیریابی و راه تا مترو' : titles.get(lessonId)!,
+      relatedLessonIds:lessonId==='es-a1-directions' ? [lessonId,'es-a1-metro-directions'] : [lessonId],
+    }));
+    return sections.map((section,i)=>({...section,topics:(i===0?topics.slice(0,25):topics.slice(25)).map((topic,index)=>({...topic,number:index+1}))}));
+  }
+  if (id === 'fr') {
+    const titles = new Map(sections.flatMap(section=>section.topics.flatMap(topic=>topic.relatedLessonIds.map(id=>[id,topic.title] as const))));
+    // One topic links the consecutive time/date + appointment lessons; retain 25 + 30 cards.
+    const topics = FRENCH_A1_IDS.filter(id=>id!=='fr-a1-appointment-time').map(lessonId=>({
+      number:0, title:lessonId==='fr-a1-dates-and-time' ? 'ساعت، تاریخ و تعیین قرار' : titles.get(lessonId)!,
+      relatedLessonIds:lessonId==='fr-a1-dates-and-time' ? [lessonId,'fr-a1-appointment-time'] : [lessonId],
+    }));
+    return sections.map((section,i)=>({...section,topics:(i===0?topics.slice(0,25):topics.slice(25)).map((topic,index)=>({...topic,number:index+1}))}));
+  }
+  if (id !== 'de') return sections;
+  const titles = new Map(sections.flatMap(section=>section.topics.flatMap(topic=>topic.relatedLessonIds.map(id=>[id,topic.title] as const))));
+  // Keep the existing two groups / 25 + 30 topic cards / 56 linked lessons. Only German order changes.
+  const topics = GERMAN_A1_IDS.filter(id=>id!=='de-a1-room-search').map((lessonId,index)=>({
+    number:index+1,
+    title:lessonId==='de-a1-home-furniture' ? 'خانه و پیدا کردن اتاق' : lessonId==='de-a1-reasons' ? 'بیان دلیل ساده با denn' : titles.get(lessonId)!,
+    relatedLessonIds:lessonId==='de-a1-home-furniture' ? [lessonId,'de-a1-room-search'] : [lessonId],
+  }));
+  return sections.map((section,i)=>({...section,topics:(i===0?topics.slice(0,25):topics.slice(25)).map((topic,index)=>({...topic,number:index+1}))}));
 }

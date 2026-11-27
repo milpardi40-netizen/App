@@ -2,9 +2,10 @@ import { LocalizedText as Text, LocalizedTextInput as TextInput } from '@/compon
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Check, Volume2 } from 'lucide-react-native';
-import { ARABIC_LESSONS, type ArabicCheck, type ArabicLesson } from '@/lib/arabic/content';
+import { type ArabicCheck, type ArabicLesson } from '@/lib/arabic/content';
 import { playArabicSpeech } from '@/lib/arabic/speech';
 import { loadArabicStudy, recordArabicLessonEvidence } from '@/lib/arabic/studyState';
+import { arabicEvidenceFor } from '@/lib/lessonEvidenceBank';
 import { normalizeArabic } from '@/lib/arabic/text';
 import { ASSESSMENT_MAX_WIDTH } from '@/components/assessmentLayout';
 import { Typography } from '@/lib/theme';
@@ -15,35 +16,6 @@ function skillLabel(skill: ArabicCheck['skill']): string {
   if (skill === 'writing') return 'نوشتاری';
   if (skill === 'reading') return 'درک مطلب';
   return 'واژگان و دستور';
-}
-
-function buildFallbackChecks(lesson: ArabicLesson): ArabicCheck[] {
-  const first = lesson.sentences[0];
-  const second = lesson.sentences[1] ?? first;
-  if (!first) return [];
-  const distractors = [...new Set(ARABIC_LESSONS.flatMap(item => item.sentences.map(s => s.fa)))]
-    .filter(fa => fa !== first.fa)
-    .slice(0, 2);
-  const options = [first.fa, ...distractors];
-  return [
-    {
-      id: `${lesson.id}-listening`,
-      skill: 'listening',
-      prompt: 'جملهٔ عربی را بشنوید و معنی درست آن را انتخاب کنید.',
-      audio: first.ar,
-      options,
-      answers: [first.fa],
-      explanation: 'به واژه‌ها و صدای جمله در بخش جمله‌های اصلی برگردید.',
-    },
-    {
-      id: `${lesson.id}-writing`,
-      skill: 'writing',
-      prompt: 'جملهٔ عربیِ متناظر با این معنی را بنویسید (بدون اعراب هم پذیرفته می‌شود).',
-      source: second.fa,
-      answers: [second.ar, second.arPlain ?? second.ar],
-      explanation: `الگوی درس: ${second.ar}`,
-    },
-  ];
 }
 
 export function ArabicLessonEvidence({
@@ -58,7 +30,7 @@ export function ArabicLessonEvidence({
   onAttemptResult?: (taskId: string, correct: boolean) => void;
 }) {
   const tasks = useMemo(
-    () => (lesson.checks?.length ? lesson.checks : buildFallbackChecks(lesson)),
+    () => arabicEvidenceFor(lesson),
     [lesson],
   );
 
@@ -131,7 +103,8 @@ export function ArabicLessonEvidence({
       return;
     }
 
-    await recordArabicLessonEvidence(lesson.id, task.id, task.skill, isCorrect, heard).catch(() => undefined);
+    try { await recordArabicLessonEvidence(lesson.id, task.id, task.skill, isCorrect, heard); }
+    catch { setNotes(prev => ({ ...prev, [task.id]: 'پاسخ ذخیره نشد؛ دوباره تلاش کن.' })); return; }
     if (!activeRef.current) return;
 
     if (!isCorrect) {

@@ -96,3 +96,9 @@ export async function playFallbackRecording(text: string, rate: number, language
   await ensureIndexFor(text, language);
   return stillCurrent && !stillCurrent() ? false : tryPlayRecorded(text, rate, onDone);
 }
+
+/** Operator-only fallback: never reads or changes the learner's general recorded-voice preference. */
+export async function playOperatorFallback(text: string, rate: number, language: CourseLanguage | undefined, onDone: () => void, stillCurrent: () => boolean): Promise<boolean> {
+  await ensureIndexFor(text, language);
+  return stillCurrent() ? tryPlayRecorded(text, rate, onDone) : false;
+}

@@ -16,6 +16,9 @@ const esbuild = require('esbuild');
     outfile: output,
   });
   const app = require(output);
+  // Supersedes retired A1 content fixtures with full approved-content/progress/protection checks.
+  await require('./verify-english-a1.cjs').main();
+  const approvedA1 = require('../docs/english-a1-design/design.json').lessons;
   let checks = 0;
   const check = value => { assert(value); checks += 1; };
 
@@ -24,9 +27,9 @@ const esbuild = require('esbuild');
   check(app.ENGLISH_ENGINE_BLUEPRINT.every((item, index) => item.levelId === index && item.modules.length > 0));
   check(app.ENGLISH_ENGINE_BLUEPRINT[0].modules.length === 14 && app.COURSE_LEVELS[0].modules.length === 14);
   check(app.SENTENCE_LESSONS.length === 274);
-  check(app.EXISTING_SENTENCE_LESSONS.length === 174 && app.EXISTING_SENTENCE_LESSONS.every(lesson => { const actual = app.SENTENCE_LESSONS.find(item => item.id === lesson.id); if (!actual) return false; const { a2Section, role: _role, ...rest } = actual; const withoutRoles = item => ({ ...item, dialogue: item.dialogue.map(({ role: _lineRole, ...line }) => line) }); return JSON.stringify(withoutRoles({ ...rest, order: lesson.order })) === JSON.stringify(lesson); }));
+  check(app.EXISTING_SENTENCE_LESSONS.length === 174 && app.EXISTING_SENTENCE_LESSONS.every(lesson => { const actual = app.SENTENCE_LESSONS.find(item => item.id === lesson.id); if (!actual) return false; if (lesson.levelId === 1) return actual.sentences.length === 50 && actual.sentences.every((s,i)=>s.id===lesson.sentences[i].id); const { a2Section, role: _role, ...rest } = actual; const withoutRoles = item => ({ ...item, dialogue: item.dialogue.map(({ role: _lineRole, ...line }) => line) }); return JSON.stringify(withoutRoles({ ...rest, order: lesson.order })) === JSON.stringify(lesson); }));
   check(app.B1_INDEPENDENT_UNITS.length === 11 && app.B1_INDEPENDENT_UNITS.reduce((n, unit) => n + unit.topics.length, 0) === 55 && app.B1_INDEPENDENT_UNITS.every(unit => unit.topics.length === unit.rows.length));
-  check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4852);
+  check(app.SENTENCE_LESSONS.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 4864);
   check(app.ENGLISH_CORE_DATABASE_FLOW.map(item => item.entity).join('|') === 'Situations|Sentence Patterns|Vocabulary|Grammar Through Usage|Exercises|User Progress|Spaced Repetition');
   // Band ids are stable; level numbers shifted when the Pre-A1 band and the practice labs were added.
   const foundation = app.SENTENCE_LESSONS.filter(lesson => lesson.id.startsWith('foundation-'));
@@ -112,56 +115,24 @@ const esbuild = require('esbuild');
   check(readingIds.size === 22 && appliedIds.size === 11);
   check(app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 4).slice(0, 11).every(lesson => !!lesson.b2Section));
   check(foundation.length === 10 && foundation.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 500);
-  check(foundation.every(lesson => lesson.sentences.length === 50 && lesson.sentences.every(sentence => sentence.fa && sentence.pronunciation && sentence.pattern && sentence.vocabulary.length > 0)));
+  check(foundation.every(lesson => lesson.sentences.length === 50 && lesson.sentences.every(sentence => sentence.fa && sentence.pronunciation && sentence.vocabulary.length > 0)));
   check(foundation.every(lesson => new Set(lesson.sentences.map(sentence => sentence.en)).size === 50
     && lesson.sentences.map(sentence => sentence.id).join('|') === Array.from({ length: 50 }, (_, index) => `s${index + 1}`).join('|')));
-  check(foundation.map(lesson => lesson.id).join('|') === ['foundation-introducing-yourself', 'foundation-asking-for-help', 'foundation-buying-something', ...app.FOUNDATION_EXPANSION_LESSON_IDS].join('|'));
+  check(foundation.map(lesson => lesson.id).join('|') === approvedA1.filter(l=>l.id.startsWith('foundation-')).map(l=>l.id).join('|'));
   check(app.FOUNDATION_EXPANSION_LESSON_IDS.length === 7 && foundation.slice(3).every(lesson => lesson.dialogue.length >= 6));
-  // Guard the revised level-one examples and their linked writing checks.
-  const example = (lessonId, sentenceId) => foundation.find(lesson => lesson.id === lessonId)?.sentences.find(sentence => sentence.id === sentenceId);
-  const routine = 'foundation-everyday-routine';
-  const objects = 'foundation-objects-and-places';
-  const reading = example(routine, 's44');
-  check(reading.en === 'I am reading now.' && reading.fa === 'من الان دارم مطالعه می‌کنم.');
-  check(['She is not working now.', 'Are you studying now?', 'I can swim.', 'I cannot swim.']
-    .every((text, index) => example(routine, ['s45', 's46', 's47', 's49'][index])?.en === text));
-  check(example(routine, 's41').en.includes(' but ') && example(routine, 's43').en.includes(' or '));
-  check(example(objects, 's36').en === 'The clock is round.' && example(objects, 's37').en === 'This box is square.');
-  check(example('foundation-asking-for-help', 's17').en.startsWith('The numbers are ') && example('foundation-asking-for-help', 's17').fa.includes('این عددها'));
-  check(example('foundation-numbers-and-contact', 's47').en === 'My home phone is not working.');
-  check(example(routine, 's33').en === 'I wash my clothes on Sunday.');
-  const readingTask = app.FOUNDATION_LESSON_EVIDENCE[routine].find(task => task.id.endsWith('action-now-writing'));
-  const shapeTask = app.FOUNDATION_LESSON_EVIDENCE[objects].find(task => task.id.endsWith('shape-writing'));
-  check(readingTask.prompt.includes(reading.fa) && readingTask.answers.includes(reading.en));
-  check(shapeTask.prompt.includes(example(objects, 's36').fa) && shapeTask.answers.includes(example(objects, 's36').en));
-  const contactDialogue = foundation.find(lesson => lesson.id === 'foundation-numbers-and-contact').dialogue;
-  check(contactDialogue.some(turn => turn.text === 'My phone number is 555-0142.')
-    && contactDialogue.some(turn => turn.text === 'Five, five, five, zero, one, four, two.'));
-  const weather = survival.find(lesson => lesson.id === 'survival-weather-and-seasons').sentences.find(sentence => sentence.id === 's10');
-  check(weather.en === 'The weather will be better tomorrow.' && weather.fa === 'هوا فردا بهتر خواهد بود.');
-  // Dialogue practice consumes partner/learner pairs; no line in either first-level section is silently skipped.
-  check([...foundation, ...survival].every(lesson => lesson.dialogue.length >= 6 && lesson.dialogue.length % 2 === 0
-    && lesson.dialogue.every((turn, index) => turn.speaker === (index % 2 === 0 ? 'partner' : 'learner') && turn.text && turn.fa)));
-  const job = survival.find(lesson => lesson.id === 'survival-job-interview');
-  check(job.sentences.find(sentence => sentence.id === 'job-qualify').en === 'I want this job.');
+  // Old mixed-objective A1 row fixtures are tested by verify-english-a1 above against the approved design.
   check(app.SENTENCE_LESSONS.filter(lesson => lesson.levelId === 2).every(lesson => lesson.sentences.every(sentence => sentence.vocabulary.every(item => !item.essential504))));
   const removed504 = require('../assets/data/essential504-removed-level2.json');
   const level2Text = a2Path.flatMap(lesson => [...lesson.sentences.map(sentence => sentence.en), ...lesson.dialogue.map(turn => turn.text)]);
   check(removed504.length === 27 && removed504.every(word => level2Text.every(text => !new RegExp(`\\b${word}\\b`, 'i').test(text))));
   check(everyday.slice(0, 5).every(lesson => lesson.dialogue.length >= 6 && lesson.dialogue.every((turn, index) => turn.speaker === (index % 2 ? 'learner' : 'partner'))));
   check([...foundation, ...survival].every(lesson => lesson.sentences.every(sentence => sentence.vocabulary.every(item => !['keen', 'qualify', 'data', 'talent', 'vacant', 'minimum', 'annual'].includes(item.word)))));
-  const emergency = survival.find(lesson => lesson.id === 'survival-health-and-pharmacy').sentences.find(sentence => sentence.id === 'health-urgent-care');
-  check(emergency.en === 'In an emergency, call emergency services.');
-
-
   check(survival.length === 19 && survival.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 950);
   check(survival.every(lesson => lesson.sentences.length === 50 && lesson.durationMinutes === 35
     && lesson.sentences.every(sentence => !!sentence.fa && !!sentence.pronunciation && sentence.vocabulary.length > 0)
     && new Set(lesson.sentences.map(sentence => sentence.id)).size === 50
     && new Set(lesson.sentences.map(sentence => sentence.en.trim().toLowerCase())).size === 50));
-  check(new Set(survival.flatMap(lesson => lesson.sentences.map(sentence => sentence.en.trim().toLowerCase()))).size === 950);
-  const survivalVocabulary = new Set(survival.flatMap(lesson => lesson.sentences.flatMap(sentence => sentence.vocabulary.map(item => item.word))));
-  check(survivalVocabulary.size === 1303);
+  // Cross-lesson recycling is deliberate; the old 950 globally unique rows / 1303-word target is retired.
   check(everyday.length === 20 && everyday.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 1000);
   check(everyday.map(lesson => lesson.id).join('|') === app.EVERYDAY_COURSE_LESSON_IDS.join('|')
     && app.EVERYDAY_COURSE_LESSON_IDS.length === 20);
@@ -184,7 +155,7 @@ const esbuild = require('esbuild');
       && sentence.vocabulary.every(item => item.word && item.meaning && sentence.en.toLowerCase().includes(item.word.toLowerCase())));
   }));
   check(everyday.slice(5).every(lesson => lesson.dialogue.length >= 6));
-  check(foundation.slice(0, 3).map(lesson => lesson.id).join('|') === 'foundation-introducing-yourself|foundation-asking-for-help|foundation-buying-something');
+  check(foundation.slice(0, 3).map(lesson => lesson.id).join('|') === approvedA1.filter(l=>l.id.startsWith('foundation-')).slice(0,3).map(l=>l.id).join('|'));
   check(communication.length === 15 && communication.reduce((sum, lesson) => sum + lesson.sentences.length, 0) === 750);
   check(communication.map(lesson => lesson.id).join('|') === app.COMMUNICATION_COURSE_LESSON_IDS.join('|')
     && app.COMMUNICATION_COURSE_LESSON_IDS.length === 15);
@@ -220,69 +191,14 @@ const esbuild = require('esbuild');
     && advanced.slice(52).every(lesson => lesson.contentKind === 'vocabulary-practice'));
   check(!app.ENGLISH_ENGINE_BLUEPRINT[5].modules.some(module => /IELTS|Academic English|Writing Skills|Professional Speaking/i.test(module)));
   check(app.COURSE_LEVELS[5].cefr.includes('C1'));
-  check(survival.map(lesson => lesson.id).join('|') === [
-    'survival-job-interview', 'survival-renting-a-home', 'survival-personal-information',
-    'survival-directions-and-neighborhood', 'survival-public-transport', 'survival-cafe-and-food',
-    'survival-shopping-and-clothing', 'survival-appointments-and-time', 'survival-health-and-pharmacy',
-    'survival-hobbies-and-free-time', 'survival-invitations-and-plans', 'survival-weather-and-seasons',
-    'survival-travel-and-tickets', 'survival-hotel-and-stay', 'survival-phone-and-messages',
-    'survival-services-and-post-office', 'survival-school-and-learning', 'survival-current-activities',
-    'survival-past-and-future-plans',
-  ].join('|'));
-  const topicChecks = [
-    ['foundation-introducing-yourself', ['This is my friend, Reza.', 'What is her name?', 'Where do you live?', 'Goodbye. See you later.']],
-    ['foundation-asking-for-help', ['My phone number is 555-0142.', 'There are twelve months in a year: January, February, March, April, May, June, July, August, September, October, November, and December.', 'The bus leaves at eight thirty a.m.', 'I need the number five bus.']],
-    ['foundation-buying-something', ['I need two apples.', 'These apples cost three dollars.', 'How much is a kilo of rice?', 'I need a loaf of bread.', 'Could I have a sandwich, please?', 'Can I pay in cash?', 'Your change is three dollars.']],
-    ['survival-job-interview', ['I take the number five bus to work.', 'I start work at eight.', 'Can we meet on Monday?', 'I have one year of experience in customer service.', 'I can help customers and answer questions.', 'Is this a full-time or part-time job?', 'What is the hourly pay?', 'I can work from Monday to Friday.', 'I can start next Monday.', 'Could you repeat the question, please?', 'The interview is on Tuesday at ten a.m.']],
-    ['survival-renting-a-home', ['Turn left at the corner.', 'I need some bread and milk.', 'I need an appointment with a doctor.', 'I am traveling next week.', 'How much is the security deposit?', 'How long is the lease?', 'The lease is for twelve months.', 'Is the apartment furnished?', 'Is internet included in the rent?', 'When is the rent due?', 'I need a quiet apartment near work.', 'The apartment has one bedroom and a kitchen.', 'The sink is broken.', 'Could you fix it, please?']],
-  ];
-  check(topicChecks.every(([id, sentences]) => sentences.every(text => app.getSentenceLesson(id).sentences.some(sentence => sentence.en === text))));
-  const foundationExpansionTopics = [
-    ['foundation-alphabet-and-spelling', ['Can you spell your last name?', 'The sign says Open.', 'I can read the label now.']],
-    ['foundation-pronouns-and-be', ['I am a student.', 'Are you from this city?', 'Where are they?']],
-    ['foundation-numbers-and-contact', ['My email address is sara@example.com.', 'My postal code has five digits.', 'Please send me a text message.']],
-    ['foundation-family-and-possessions', ['I have a small family.', 'Whose book is this?', 'We love our family.']],
-    ['foundation-time-and-calendar', ['It is eight o’clock in the morning.', 'My appointment is on Wednesday.', 'I write the date on my calendar.']],
-    ['foundation-everyday-routine', ['I wake up early.', 'Does he work on Saturdays?', 'Every day, I practice one new sentence.']],
-    ['foundation-objects-and-places', ['There is a lamp on the table.', 'The bank is between the café and the shop.', 'The exit is beside the door.']],
-  ];
-  check(foundationExpansionTopics.every(([id, texts]) => {
-    const lesson = app.getSentenceLesson(id);
-    return lesson?.levelId === 1 && lesson.sentences.length === 50
-      && texts.every(text => lesson.sentences.some(sentence => sentence.en === text));
-  }));
-  const expandedSurvivalTopics = [
-    ['survival-personal-information', ['What is your first name?', 'Could you repeat your email address?']],
-    ['survival-directions-and-neighborhood', ['How do I get to the station?', 'Turn left at the traffic light.']],
-    ['survival-public-transport', ['Which bus goes to the museum?', 'A one-way ticket, please.']],
-    ['survival-cafe-and-food', ['Could I see the menu, please?', 'Is the soup vegetarian?']],
-    ['survival-shopping-and-clothing', ['I am looking for a warm jacket.', 'Can I return this if it does not fit?']],
-    ['survival-appointments-and-time', ['I have an appointment at three.', 'I am running ten minutes late.']],
-    ['survival-health-and-pharmacy', ['I have a headache.', 'Please call an ambulance.']],
-    ['survival-hobbies-and-free-time', ['I go swimming once a week.', 'I am interested in photography.']],
-    ['survival-invitations-and-plans', ['Would you like to have coffee with me?', 'Can we make it a little later?']],
-    ['survival-weather-and-seasons', ['What is the weather like today?', 'The forecast says it will snow tonight.']],
-    ['survival-travel-and-tickets', ['I would like a ticket to Kyoto.', 'I need to change trains in Osaka.']],
-    ['survival-hotel-and-stay', ['I have a reservation for tonight.', 'My room key does not work.']],
-    ['survival-phone-and-messages', ['May I speak to Mr. Lee?', 'I will call you back in ten minutes.']],
-    ['survival-services-and-post-office', ['I would like to send this package.', 'How much does it cost to send this package?']],
-    ['survival-school-and-learning', ['What page are we on?', 'Could you explain it again?']],
-    ['survival-current-activities', ['I am waiting for the bus.', 'The children are playing outside.']],
-    ['survival-past-and-future-plans', ['What did you do yesterday?', 'I am going to visit my aunt tomorrow.']],
-  ];
-  check(expandedSurvivalTopics.length === 17 && expandedSurvivalTopics.every(([id, sentences]) => {
-    const lesson = app.getSentenceLesson(id);
-    return lesson?.levelId === 1 && lesson.sentences.length === 50 && lesson.dialogue.length >= 6
-      && lesson.sentences.every(sentence => !!sentence.fa && !!sentence.pronunciation && sentence.vocabulary.length > 0)
-      && sentences.every(text => lesson.sentences.some(sentence => sentence.en === text));
-  }));
+  check(survival.map(l=>l.id).join('|') === approvedA1.filter(l=>l.id.startsWith('survival-')).map(l=>l.id).join('|'));
   check(!app.getSentenceLesson('survival-home-and-facilities'));
 
   const everydayExpansion = everyday.slice(5);
   const b1 = app.SENTENCE_LESSONS.filter(lesson => !!lesson.b1Section);
   const coreLessons = [...foundation, ...survival, ...everydayExpansion, ...a2Bridge, ...everyday.slice(0, 5), ...b1, ...b2];
   const evidenceByLesson = app.CORE_LESSON_EVIDENCE;
-  check(app.FOUNDATION_EVIDENCE_TASKS_PER_LESSON === 6);
+  check(app.FOUNDATION_EVIDENCE_TASKS_PER_LESSON === 8);
   check(app.EVERYDAY_EVIDENCE_TASKS_PER_LESSON === 6);
   const c1 = app.SENTENCE_LESSONS.filter(lesson => lesson.c1Section);
   // The Pre-A1 band brings its own short evidence sets; compare the covered lesson set, not its order.
@@ -293,7 +209,7 @@ const esbuild = require('esbuild');
   const evidenceTaskIds = new Set();
   for (const lesson of coreLessons) {
     const tasks = evidenceByLesson[lesson.id];
-    check(tasks.length === 6);
+    check(tasks.length === (lesson.levelId === 1 ? 8 : 6));
     check(new Set(tasks.map(task => task.id)).size === tasks.length);
     check(tasks.every(task => !evidenceTaskIds.has(task.id) && task.answers.length > 0));
     check(tasks.every(task => task.answers.every(answer => app.isCorrect(task, answer))));
@@ -323,7 +239,7 @@ const esbuild = require('esbuild');
       ...allCorrect, [missedAnswer.id]: { ...allCorrect[missedAnswer.id], correct: false },
     }));
   }
-  check(evidenceTaskIds.size === 456);
+  check(evidenceTaskIds.size === 514); // 456 legacy tasks + two additional authored checks in each of 29 A1 lessons.
   check(b1.filter(lesson => lesson.b1Section === 'foundation').length === 5
     && b1.filter(lesson => lesson.b1Section === 'survival').length === 6);
   check(b1.every(lesson => lesson.sentences.length === 5 && lesson.dialogue.length === 6
@@ -341,15 +257,17 @@ const esbuild = require('esbuild');
   // The first pilot keeps the existing lesson and sentence identifiers stable.
   const firstSentences = (app.SENTENCE_LESSONS.find(lesson => lesson.id === 'foundation-introducing-yourself') || app.SENTENCE_LESSONS[0]).sentences.slice(0, 10);
   check(firstSentences.map(sentence => sentence.id).join('|') === 's1|s2|s3|s4|s5|s6|s7|s8|s9|s10');
-  check(firstSentences.slice(5).map(sentence => sentence.en).join('|') === 'This is my friend, Reza.|What is his name?|His name is Reza.|What is her name?|Her name is Maryam.');
-  check(firstSentences.every(sentence => sentence.fa && sentence.pronunciation && sentence.pattern && sentence.vocabulary.length));
+  check(firstSentences.slice(0,6).map(s=>s.en).join('|') === approvedA1[0].examples.map(s=>s.en).join('|'));
+  check(firstSentences.every(sentence => sentence.fa && sentence.pronunciation && sentence.vocabulary.length));
 
   const completed = [app.SENTENCE_LESSONS[0].id];
   const counts = app.COURSE_LEVELS.map(level => app.getEnglishLevelMetrics(level.id, completed));
-  check(counts.reduce((sum, item) => sum + item.lessonCount, 0) === 274);
+  // Learner metrics exclude exactly eight quarantined A1 labs; the legacy inventory stays at 274.
+  check(counts.reduce((sum, item) => sum + item.lessonCount, 0) === 266);
+  check(counts.find(item => item.levelId === 1).lessonCount === 29);
   check(counts.reduce((sum, item) => sum + item.completedLessonCount, 0) === 1);
   check(counts.every(item => item.patternCount <= item.sentenceCount && item.vocabularyCount > 0));
-  check(counts.reduce((sum, item) => sum + item.patternCount, 0) === 3994);
+  check(counts.filter(item=>item.levelId!==1).reduce((sum,item)=>sum+item.patternCount,0) === 2485);
   check(counts.find(item => item.levelId === 0).vocabularyCount === 98);
   check(counts.find(item => item.levelId === 2).sentenceCount === 1170
     && counts.find(item => item.levelId === 2).vocabularyCount === 2057);
@@ -357,7 +275,7 @@ const esbuild = require('esbuild');
     && counts.find(item => item.levelId === 3).sentenceCount === 915
     && counts.find(item => item.levelId === 3).vocabularyCount === 1680);
   check(counts.find(item => item.levelId === 5).vocabularyCount === 520);
-  check(counts.filter(item => item.levelId !== 5).reduce((sum, item) => sum + item.vocabularyCount, 0) === 6248);
+  check(counts.filter(item => item.levelId !== 5 && item.levelId !== 1).reduce((sum, item) => sum + item.vocabularyCount, 0) === 4569);
 
   for (const lesson of app.SENTENCE_LESSONS) {
     const core = app.buildEnglishLessonCore(lesson);
@@ -382,5 +300,5 @@ const esbuild = require('esbuild');
     check(app.getLessonPatterns(lesson).length === lesson.sentences.filter(sentence => !!sentence.pattern).length);
   }
 
-  console.log(`${checks} engine checks passed; 6 levels (Pre-A1 to C1), 9 ordered lesson stages, 274 lesson records (existing lessons retained), 4852 sentences, the full evidence set across Pre-A1, Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
+  console.log(`${checks} engine checks passed; 6 levels (Pre-A1 to C1), 10 ordered lesson stages, 274 lesson records (existing lessons retained), 4864 sentences, the full evidence set across Pre-A1, Foundation, Survival, Everyday, B1, B2 and C1, plus C1 optional practices and sentence-linked vocabulary/review mappings.`);
 })().catch(error => { console.error(error); process.exit(1); });

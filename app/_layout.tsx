@@ -1,3 +1,5 @@
+import { startUpdateUsageReporting } from '@/lib/updateReporting';
+import { useForegroundKeepAwake } from '@/hooks/useForegroundKeepAwake';
 import { useEffect, useState } from 'react';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -30,6 +32,7 @@ import { AppPopupPrompt } from '@/components/AppPopupPrompt';
 import { AndroidBackHistory } from '@/components/AndroidBackHistory';
 import { WebStatusBarSpacer } from '@/components/WebStatusBarSpacer';
 import { initAnalytics, watchAppStateForAbandonment } from '@/lib/analyticsSession';
+import { StudyReminderBridge } from '@/components/StudyReminderBridge';
 import { ChatNotificationBridge } from '@/components/ChatNotificationBridge';
 import { disableBackgroundChatChecks, reconcileBackgroundChatChecks } from '@/lib/backgroundChatChecks';
 import * as Notifications from 'expo-notifications';
@@ -111,6 +114,8 @@ function CompanionRuntime() {
  */
 export default function RootLayout() {
   useFrameworkReady();
+  useEffect(() => startUpdateUsageReporting(), []);
+  useForegroundKeepAwake();
   useEffect(() => {
     // Use the media output for lessons even before the first microphone exercise.
     if (Platform.OS === 'ios') {
@@ -225,6 +230,7 @@ export default function RootLayout() {
               {IS_ADMIN_APP && <AdminRouteGuard />}
               <AndroidBackHistory />
               {IS_ADMIN_APP && <ChatNotificationBridge />}
+              {!IS_ADMIN_APP && <StudyReminderBridge />}
               <AppUpdatePrompt />
               <AppUpdatedSheet />
               {!IS_ADMIN_APP && <AppPopupPrompt />}

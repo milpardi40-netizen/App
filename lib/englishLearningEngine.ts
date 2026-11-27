@@ -1,7 +1,7 @@
 import {
   COMMUNICATION_MODULES,
   COURSE_LEVELS,
-  SENTENCE_LESSONS,
+  ENGLISH_LEARNER_LESSONS as SENTENCE_LESSONS,
   type CourseLevelId,
   type CourseSentence,
   type SentenceLesson,

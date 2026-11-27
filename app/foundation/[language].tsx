@@ -20,6 +20,7 @@ export default function FoundationA1Route() {
   const [error, setError] = useState('');
   useEffect(()=>()=>{void stopStarterSpeech();},[]);
   if (!isFoundationLanguage(language) || !isLanguageEnabled(language)) return <Redirect href={'/languages' as never}/>;
+  if (language === 'tr') return <Redirect href={'/learn/tr/library?level=1' as never}/>;
   if (isNewLanguage(language)) return <Redirect href={`/learn/${language}/library?level=1` as never}/>;
   const course = FOUNDATION_LANGUAGES[language];
   const sentences = getFoundationGreetings(language);

@@ -1,4 +1,6 @@
-import { withMergedRatings } from './reviewHistory';
+import {withMergedRatings} from './reviewHistory';
+import { mergedResume } from './courseResume';
+import {mergeEnglishReviewCards, reviseEnglishA1ReviewCard, isEnglishA1Core} from './englishA1Scope';
 import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -141,24 +143,26 @@ function latestTimestamp(left?: string, right?: string): string | undefined {
   return candidates.sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1);
 }
 
-function reviewedAt(card: CourseProgress['reviewCards'][number]): number {
-  return Date.parse(card.lastReviewedAt ?? '1970-01-01') || 0;
-}
-
 export function mergeEnglishCourseProgress(current: CourseProgress, incoming: CourseProgress, now = new Date()): CourseProgress {
   const currentIsNewer = Date.parse(current.updatedAt) >= Date.parse(incoming.updatedAt);
   const latest = currentIsNewer ? current : incoming;
-  const cards = new Map(current.reviewCards.map(card => [card.id, card]));
+  const cards = new Map(current.reviewCards.map(card => [card.id, reviseEnglishA1ReviewCard(card)]));
   for (const candidate of incoming.reviewCards) {
     const existing = cards.get(candidate.id);
-    if (!existing || reviewedAt(candidate) > reviewedAt(existing)
-      || (reviewedAt(candidate) === reviewedAt(existing) && candidate.repetitions > existing.repetitions)) {
-      cards.set(candidate.id, existing ? withMergedRatings(candidate, existing) : candidate);
-    } else cards.set(candidate.id, withMergedRatings(existing, candidate));
+    if (isEnglishA1Core(candidate.lessonId)) {
+      cards.set(candidate.id, existing ? mergeEnglishReviewCards(existing, candidate) : reviseEnglishA1ReviewCard(candidate));
+    } else {
+      // Preserve the pre-existing merge policy for every non-target band and vocabulary lab.
+      const at = (card: CourseProgress['reviewCards'][number]) => Date.parse(card.lastReviewedAt ?? '1970-01-01') || 0;
+      if (!existing || at(candidate) > at(existing) || (at(candidate) === at(existing) && candidate.repetitions > existing.repetitions)) {
+        cards.set(candidate.id, existing ? withMergedRatings(candidate, existing) : candidate);
+      } else cards.set(candidate.id, withMergedRatings(existing, candidate));
+    }
   }
   const activityDate = latest.activityDate;
   return parseCourseProgressBackup({
     ...latest,
+    ...mergedResume(latest, latest === current ? incoming : current),
     completedLessonIds: [...new Set([...current.completedLessonIds, ...incoming.completedLessonIds])],
     reviewSentenceIds: [...new Set([...current.reviewSentenceIds, ...incoming.reviewSentenceIds])],
     reviewCards: [...cards.values()],

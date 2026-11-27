@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { GrammarLink } from '@/components/RussianWorkshopUI';
 import { useCourseHome } from '@/hooks/useCourseHome';
 import { progressLabel, formatPercent } from '@/lib/levelProgress';
@@ -103,8 +104,6 @@ export default function RussianHome() {
   // The level card answers the tap at once; its library loads on the next frame.
   const openLevel = (levelId: RussianLevelId) => open(`/learn/ru/library?level=${levelId}`);
 
-  // Level replay is temporary; only the same-lesson reset replaces a saved attempt.
-  const replayBeginnerLevel = () => router.push({ pathname: '/learn/ru/lesson', params: { id: RUSSIAN_LESSONS[0].id, levelReplay: '1' } } as never);
   const openNextLesson = () => {
     if (resumeLesson) open(`/learn/ru/lesson?id=${encodeURIComponent(resumeLesson.id)}`);
     else openLevel(2);
@@ -311,24 +310,7 @@ export default function RussianHome() {
                 <Text style={styles.lessonCountLabel}>جمله</Text>
               </View>
             </View>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="شروع از ابتدای این درس"
-              style={({ pressed }) => [styles.startFromBeginningButton, pressed && styles.buttonPressed]}
-              onPress={() => router.push({ pathname: '/learn/ru/lesson', params: { id: heroLesson.id, fromStart: '1' } } as never)}
-            >
-              <Volume2 size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>شروع از ابتدا</Text>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="مرور از ابتدای سطح روسی"
-              style={({ pressed }) => [styles.startFromBeginningButton, pressed && styles.buttonPressed]}
-              onPress={replayBeginnerLevel}
-            >
-              <RotateCcw size={17} color={HomeColors.accent} />
-              <Text style={styles.startFromBeginningText}>مرور از ابتدای سطح</Text>
-            </Pressable>
+            <LessonRestartActions lessonPath="/learn/ru/lesson" firstLessonId={levelLessons[0]?.id} lessonId={heroLesson.id} />
           </View>
 
           <View style={styles.sectionHeader}>

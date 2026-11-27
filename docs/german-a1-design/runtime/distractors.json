@@ -1,0 +1,562 @@
+{
+  "greetings": [
+    [
+      "morgen",
+      "heute Morgen"
+    ],
+    [
+      "دوستانه",
+      "فقط برای کودکان"
+    ]
+  ],
+  "profile": [
+    [
+      "Bonn",
+      "Berlin"
+    ],
+    [
+      "Ben",
+      "Sara"
+    ]
+  ],
+  "asking-help": [
+    [
+      "L–I–I",
+      "I–E–E"
+    ],
+    [
+      "schnell",
+      "laut"
+    ]
+  ],
+  "nationalities": [
+    [
+      "Deutsch",
+      "Englisch"
+    ],
+    [
+      "Berlin",
+      "Köln"
+    ]
+  ],
+  "numbers-age": [
+    [
+      "42",
+      "34"
+    ],
+    [
+      "23",
+      "24"
+    ]
+  ],
+  "nouns-gender-plural": [
+    [
+      "zwei",
+      "vier"
+    ],
+    [
+      "die Tasche",
+      "das Taschen"
+    ]
+  ],
+  "articles": [
+    [
+      "neu",
+      "klein"
+    ],
+    [
+      "ein",
+      "die"
+    ]
+  ],
+  "subject-pronouns": [
+    [
+      "Ben",
+      "Sara"
+    ],
+    [
+      "Anna und Ben",
+      "Ben und ich"
+    ]
+  ],
+  "verb-to-be": [
+    [
+      "Lehrerin",
+      "Schülerin"
+    ],
+    [
+      "seid",
+      "bist"
+    ]
+  ],
+  "family": [
+    [
+      "zwanzig",
+      "zwei"
+    ],
+    [
+      "Ben",
+      "Anna"
+    ]
+  ],
+  "possessives": [
+    [
+      "Ben",
+      "Sara"
+    ],
+    [
+      "Anna",
+      "Sara"
+    ]
+  ],
+  "demonstratives": [
+    [
+      "Stift und Heft",
+      "Tisch und Stuhl"
+    ],
+    [
+      "dieser Stift",
+      "diese Tasche"
+    ]
+  ],
+  "descriptions": [
+    [
+      "klein",
+      "alt"
+    ],
+    [
+      "die Tasche",
+      "der Tisch"
+    ]
+  ],
+  "colors": [
+    [
+      "blau",
+      "rot"
+    ],
+    [
+      "weiß",
+      "rot"
+    ]
+  ],
+  "feelings": [
+    [
+      "Durst",
+      "Schlaf"
+    ],
+    [
+      "Lena",
+      "Anna"
+    ]
+  ],
+  "simple-verbs": [
+    [
+      "ein Buch",
+      "einen Stift"
+    ],
+    [
+      "ein Buch",
+      "einen Stift"
+    ]
+  ],
+  "verb-conjugation": [
+    [
+      "Anna",
+      "Lena"
+    ],
+    [
+      "wohnst",
+      "wohnen"
+    ]
+  ],
+  "present-tense": [
+    [
+      "Ben",
+      "Sara"
+    ],
+    [
+      "Sara",
+      "Lena"
+    ]
+  ],
+  "positive-negative-questions": [
+    [
+      "ein Buch",
+      "eine Tasche"
+    ],
+    [
+      "Geld",
+      "Hunger"
+    ]
+  ],
+  "question-words": [
+    [
+      "neun Uhr",
+      "elf Uhr"
+    ],
+    [
+      "Bonn",
+      "sie"
+    ]
+  ],
+  "wants-needs": [
+    [
+      "Tee",
+      "Wasser"
+    ],
+    [
+      "Kaffee",
+      "Wasser"
+    ]
+  ],
+  "ability": [
+    [
+      "Anna",
+      "Sara"
+    ],
+    [
+      "Anna",
+      "Sara"
+    ]
+  ],
+  "dates-and-time": [
+    [
+      "Montag",
+      "Freitag"
+    ],
+    [
+      "09:00",
+      "11:00"
+    ]
+  ],
+  "forms-information": [
+    [
+      "Anna",
+      "Sara"
+    ],
+    [
+      "Ben",
+      "Bonn"
+    ]
+  ],
+  "daily-routine": [
+    [
+      "06:00",
+      "07:30"
+    ],
+    [
+      "morgens",
+      "mittags"
+    ]
+  ],
+  "weekly-schedule": [
+    [
+      "Montag",
+      "Samstag"
+    ],
+    [
+      "09:00",
+      "10:00"
+    ]
+  ],
+  "work-study": [
+    [
+      "neun Uhr",
+      "zehn Uhr"
+    ],
+    [
+      "arbeiten",
+      "einkaufen"
+    ]
+  ],
+  "instructions": [
+    [
+      "zwölf",
+      "zwei"
+    ],
+    [
+      "نشانی",
+      "شمارهٔ تلفن"
+    ]
+  ],
+  "location": [
+    [
+      "im Zimmer",
+      "im Bad"
+    ],
+    [
+      "im Zimmer",
+      "im Bad"
+    ]
+  ],
+  "prepositions": [
+    [
+      "auf dem Tisch",
+      "neben dem Tisch"
+    ],
+    [
+      "dem Tisch",
+      "der Tasche"
+    ]
+  ],
+  "home-furniture": [
+    [
+      "drei",
+      "vier"
+    ],
+    [
+      "Stühle",
+      "Lampe"
+    ]
+  ],
+  "room-search": [
+    [
+      "300 Euro",
+      "400 Euro"
+    ],
+    [
+      "400 Euro",
+      "500 Euro"
+    ]
+  ],
+  "ordering-food": [
+    [
+      "Zucker",
+      "Eis"
+    ],
+    [
+      "2 Euro",
+      "7 Euro"
+    ]
+  ],
+  "cafe": [
+    [
+      "einen Kaffee",
+      "ein Wasser"
+    ],
+    [
+      "Kaffee",
+      "Tee"
+    ]
+  ],
+  "shopping-payment": [
+    [
+      "2 Euro",
+      "3 Euro"
+    ],
+    [
+      "mit Karte",
+      "nur online"
+    ]
+  ],
+  "supermarket": [
+    [
+      "2 Euro",
+      "4 Euro"
+    ],
+    [
+      "zwei",
+      "vier"
+    ]
+  ],
+  "clothes-shopping": [
+    [
+      "M",
+      "S"
+    ],
+    [
+      "rot",
+      "grün"
+    ]
+  ],
+  "preferences": [
+    [
+      "Tee",
+      "Wasser"
+    ],
+    [
+      "Brot",
+      "Suppe"
+    ]
+  ],
+  "comparisons": [
+    [
+      "die Jacke",
+      "beide gleich teuer"
+    ],
+    [
+      "das Zimmer in Berlin",
+      "beide gleich groß"
+    ]
+  ],
+  "leisure": [
+    [
+      "Musik hören",
+      "schwimmen"
+    ],
+    [
+      "Lena",
+      "Anna"
+    ]
+  ],
+  "weather": [
+    [
+      "kalt",
+      "kühl"
+    ],
+    [
+      "Dienstag",
+      "Mittwoch"
+    ]
+  ],
+  "connectors": [
+    [
+      "heute",
+      "am Sonntag"
+    ],
+    [
+      "Geld",
+      "Hunger"
+    ]
+  ],
+  "future-plans": [
+    [
+      "Anna",
+      "Lena"
+    ],
+    [
+      "Sonntag",
+      "Montag"
+    ]
+  ],
+  "invitations": [
+    [
+      "Freitag",
+      "Samstag"
+    ],
+    [
+      "14:00 / zwei Uhr",
+      "16:00 / vier Uhr"
+    ]
+  ],
+  "suggestions": [
+    [
+      "ins Kino",
+      "ins Café"
+    ],
+    [
+      "zusammen essen",
+      "zusammen arbeiten"
+    ]
+  ],
+  "social-chat": [
+    [
+      "Bonn",
+      "Berlin"
+    ],
+    [
+      "schwimmen",
+      "einkaufen"
+    ]
+  ],
+  "directions": [
+    [
+      "links",
+      "geradeaus"
+    ],
+    [
+      "links neben der Post",
+      "hinter der Post"
+    ]
+  ],
+  "public-transport": [
+    [
+      "am Bahnhof",
+      "an der letzten Haltestelle"
+    ],
+    [
+      "08:00",
+      "08:30"
+    ]
+  ],
+  "travel-tickets": [
+    [
+      "Gleis zwei",
+      "Gleis vier"
+    ],
+    [
+      "Köln",
+      "Berlin"
+    ]
+  ],
+  "hotel-stay": [
+    [
+      "zwei Nächte",
+      "vier Nächte"
+    ],
+    [
+      "08:00",
+      "10:00"
+    ]
+  ],
+  "polite-requests": [
+    [
+      "das Fenster öffnen",
+      "eine Frage stellen"
+    ],
+    [
+      "بلند صحبت کردن",
+      "نام نوشتن"
+    ]
+  ],
+  "phone-messages": [
+    [
+      "neun Uhr",
+      "elf Uhr"
+    ],
+    [
+      "vier Uhr",
+      "sechs Uhr"
+    ]
+  ],
+  "doctor-symptoms": [
+    [
+      "Kopfschmerzen",
+      "Bauchschmerzen"
+    ],
+    [
+      "Kopfschmerzen",
+      "Zahnschmerzen"
+    ]
+  ],
+  "past-events": [
+    [
+      "gearbeitet",
+      "eingekauft"
+    ],
+    [
+      "Nein",
+      "steht nicht im Text"
+    ]
+  ],
+  "reasons": [
+    [
+      "Hunger",
+      "Durst"
+    ],
+    [
+      "Arbeit",
+      "Regen"
+    ]
+  ],
+  "connected-conversation": [
+    [
+      "zehn Uhr",
+      "zwölf Uhr"
+    ],
+    [
+      "neun Uhr",
+      "elf Uhr"
+    ]
+  ]
+}

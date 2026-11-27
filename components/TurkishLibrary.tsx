@@ -1,3 +1,4 @@
+import { LessonRestartActions } from '@/components/LessonRestartActions';
 import { useCourseSnapshot } from '@/hooks/useCourseSnapshot';
 import { progressLabel, type PositionMap } from '@/lib/levelProgress';
 import { MiloGlobeHeadphoneMark } from '@/components/MiloBrandMark';
@@ -53,10 +54,7 @@ export default function TurkishLibrary() {
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
 
   const completedIds = progress?.completedLessonIds ?? [];
-  const levelStartLesson = selectedLessons.find(item => item.id === snapshot?.current?.id && !!sessions[item.id])
-    ?? selectedLessons.find(item => !completedIds.includes(item.id) && !!sessions[item.id])
-    ?? selectedLessons.find(item => !completedIds.includes(item.id))
-    ?? selectedLessons[0];
+  const levelStartLesson = selectedLessons.find(item => item.id === (selected ? snapshot?.resumeForLevel(selected.id)?.id : undefined)) ?? selectedLessons[0];
   const levelFullyCompleted = selectedLessons.length > 0 && selectedLessons.every(item => completedIds.includes(item.id));
   const levelStartLabel = levelFullyCompleted ? 'بازبینی این سطح' : levelStartLesson && sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
   const firstUnfinished = TURKISH_LESSONS.find(item => !completedIds.includes(item.id)) ?? TURKISH_LESSONS[TURKISH_LESSONS.length - 1];
@@ -143,11 +141,7 @@ export default function TurkishLibrary() {
                 <Text style={styles.levelStartButtonText}>{levelStartLabel}</Text>
                 <ChevronLeft size={18} color={selected.color} />
               </Pressable>
-              <Pressable accessibilityRole="button" accessibilityLabel={`شروع از ابتدای سطح: ${selected.title}`} accessibilityState={{ disabled: !selectedLessons[0] }} disabled={!selectedLessons[0]} style={({ pressed }) => [styles.levelStartBeginningButton, pressed && { opacity: .85 }, !selectedLessons[0] && styles.levelStartButtonDisabled]} onPress={() => { if (selectedLessons[0]) openLesson(selectedLessons[0].id, true); }}>
-                <Play size={16} color={selected.color} fill={selected.color} />
-                <Text style={styles.levelStartButtonText}>شروع از ابتدا</Text>
-                <ChevronLeft size={18} color={selected.color} />
-              </Pressable>
+              <LessonRestartActions lessonPath="/learn/tr/lesson" firstLessonId={selectedLessons[0]?.id} lessonId={levelStartLesson?.id} color={selected.color} />
             </LinearGradient>
 
             <View style={styles.focusCard}>

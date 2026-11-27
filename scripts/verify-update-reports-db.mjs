@@ -1,0 +1,62 @@
+import {PGlite} from '@electric-sql/pglite';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const db=new PGlite();
+const admin='10000000-0000-4000-8000-000000000001',alice='10000000-0000-4000-8000-000000000002',bob='10000000-0000-4000-8000-000000000003';
+const pkg='com.devicecontrol.milofive',other='com.devicecontrol.companion';
+await db.exec(`CREATE ROLE anon;CREATE ROLE authenticated;CREATE SCHEMA auth;
+ CREATE TABLE auth.users(id uuid PRIMARY KEY);
+ CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS $$SELECT nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
+ CREATE FUNCTION public.is_education_admin() RETURNS boolean LANGUAGE sql STABLE AS $$SELECT auth.uid()='${admin}'::uuid$$;
+ GRANT USAGE ON SCHEMA auth,public TO anon,authenticated;
+ INSERT INTO auth.users VALUES('${admin}'),('${alice}'),('${bob}');
+ CREATE TABLE public.app_user_profiles(user_id uuid PRIMARY KEY REFERENCES auth.users(id),full_name text,email text,account_kind text,platform text,app_version text,last_seen_at timestamptz);
+ INSERT INTO public.app_user_profiles VALUES('${alice}','Alice','alice@test.example','device','android','1.0.182',now()),('${bob}','Bob','bob@test.example','email','android','1.0.180',now());
+ CREATE TABLE public.app_releases(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),package_name text,version_code integer,version_name text,release_notes text,published boolean,created_at timestamptz DEFAULT now());
+ INSERT INTO public.app_releases(package_name,version_code,version_name,published) VALUES('${pkg}',182,'1.0.182',true);`);
+const sql=readFileSync('supabase/migrations/202611260001_update_reports.sql','utf8');
+assert.equal(sql,readFileSync('supabase/SETUP-UPDATE-REPORTS-ONCE.sql','utf8'));
+await db.exec(sql);await db.exec(sql);
+assert.equal((await db.query('select count(*)::int n from app_release_history')).rows[0].n,1,'idempotent history backfill');
+let currentUser=null;
+async function as(id,role='authenticated'){currentUser=id;await db.exec('reset role');await db.query("select set_config('request.jwt.claim.sub',$1,false)",[id??'']);await db.exec(`set role ${role}`);}
+const rejected=async(query,args=[])=>assert.rejects(db.query(query,args));
+const rpc=async(name,args=[])=> (await db.query(`select public.${name}(${args.map((_,i)=>'$'+(i+1)).join(',')}) result`,args)).rows[0].result;
+let seq=0;const eventId=()=>`20000000-0000-4000-8000-${String(++seq).padStart(12,'0')}`;
+const send=(kind='session',code=182,app=pkg,id=eventId(),previous=null)=>rpc('report_app_update_event',[currentUser,id,app,code,`1.0.${code}`,kind,new Date().toISOString(),previous]);
+for(const role of ['anon','authenticated']){
+ await as(role==='anon'?null:alice,role);
+ for(const name of ['admin_update_versions','admin_update_legacy_users'])await rejected(`select public.${name}()`);
+ await rejected('select public.admin_update_version_users($1,182)',[pkg]);
+ await rejected('select public.admin_update_user_events($1,182,$2)',[pkg,alice]);
+ await rejected('select * from public.app_update_events');await rejected('select * from public.app_release_history');
+ await rejected("insert into public.app_update_events(event_id,user_id) values(gen_random_uuid(),$1)",[alice]);
+}
+await as(null,'anon');await assert.rejects(send());
+await as(alice);const id=eventId();await send('session',182,pkg,id);await send('session',182,pkg,id);await send('download_verified');await send('installer_requested');await send('upgrade_observed',182,pkg,undefined,180);
+await send('session',182,other);
+await assert.rejects(send('installed'));await assert.rejects(send('session',182,'evil.package'));await assert.rejects(send('upgrade_observed',182,pkg,undefined,182));
+await assert.rejects(rpc('report_app_update_event',[alice,eventId(),pkg,182,'1.0.182','session','2099-01-01',null]));
+await as(bob);await assert.rejects(rpc('report_app_update_event',[alice,eventId(),pkg,182,'1.0.182','session',new Date().toISOString(),null]),'auth changed while offline request was queued');await send('session');await send('session',183); // separate users and a release not yet registered
+await as(admin);
+let versions=await rpc('admin_update_versions');
+assert.equal(versions.total,3);assert.ok(versions.started_at);
+const v=versions.rows.find(r=>r.package_name===pkg&&r.version_code===182);
+assert.equal(v.sessions,2);assert.equal(v.users,2);assert.equal(v.downloads,1);assert.equal(v.installers,1);assert.equal(v.upgrades,1);
+assert.equal(versions.rows.find(r=>r.package_name===other).sessions,1,'same version, different package isolated');
+assert.equal(versions.rows.find(r=>r.version_code===183).source,'observed');
+let users=await rpc('admin_update_version_users',[pkg,182,0,'Alice']);assert.equal(users.total,1);assert.equal(users.rows[0].user_id,alice);assert.equal(users.rows[0].sessions,1);
+users=await rpc('admin_update_version_users',[pkg,182,0,'']);assert.equal(users.total,2);assert.equal(users.rows.find(r=>r.user_id===bob).latest_observed_code,183);
+const events=await rpc('admin_update_user_events',[pkg,182,alice,0]);assert.equal(events.total,4);assert.ok(events.rows.every(e=>e.occurred_at&&e.received_at));
+const legacy=await rpc('admin_update_legacy_users',[0,'Bob']);assert.equal(legacy.rows[0].app_version,'1.0.180');assert.ok(!('sessions' in legacy.rows[0]),'no invented historical count');
+await db.exec('reset role');await db.exec(`UPDATE app_releases SET published=false;DELETE FROM app_releases;`);
+await as(admin);versions=await rpc('admin_update_versions');assert.equal(versions.rows.find(r=>r.package_name===pkg&&r.version_code===182).source,'archived','deleting release preserves report');
+await db.exec('reset role');
+await db.exec(`INSERT INTO public.app_releases(package_name,version_code,version_name,published) SELECT '${pkg}',n,'1.0.'||n,true FROM generate_series(200,254) n;`);
+await as(admin);const page=await rpc('admin_update_versions',[0]),page2=await rpc('admin_update_versions',[50]);assert.equal(page.total,58);assert.equal(page.rows.length,50);assert.equal(page2.rows.length,8);assert.equal(new Set([...page.rows,...page2.rows].map(r=>r.package_name+':'+r.version_code)).size,58);
+await db.exec('reset role');await db.exec(`INSERT INTO app_update_events(event_id,user_id,package_name,version_code,version_name,event_kind,occurred_at) SELECT gen_random_uuid(),'${alice}','${pkg}',182,'1.0.182','session',now() FROM generate_series(1,125)`);
+await as(alice);await assert.rejects(send(),'per-account write limit');await send('session',182,pkg,id); // idempotent retries survive a full rate window
+await as(admin);const eventPage=await rpc('admin_update_user_events',[pkg,182,alice,0]),eventPage2=await rpc('admin_update_user_events',[pkg,182,alice,50]);assert.equal(eventPage.total,129);assert.equal(eventPage.rows.length,50);assert.equal(eventPage2.rows.length,50);assert.equal(new Set([...eventPage.rows,...eventPage2.rows].map(e=>e.event_id)).size,100);
+await db.exec('reset role');await db.exec(`DELETE FROM app_user_profiles WHERE user_id='${bob}';DELETE FROM auth.users WHERE id='${bob}';`);
+await as(admin);users=await rpc('admin_update_version_users',[pkg,182,0,'']);assert.equal(users.total,1,'account deletion cascades identifying events');
+await db.close();console.log('PASS update reporting SQL: replay-safe events, authorization/RLS, package isolation, aggregates, search, pagination, legacy honesty, archive and deletion privacy.');

@@ -70,7 +70,7 @@ const units:Omit<Unit,'id'|'level'>[]=[
  checkpoint:[t('grammar','کدام واژه تضاد را نشان می‌دهد؟','but','but یعنی اما.',{options:['because','but','then']}),t('reading','نویسنده عصر چه می‌کند؟','انگلیسی می‌خواند','In the evening زمان مطالعه را نشان می‌دهد.',{source:'I live in York. I work at home in the morning. In the evening, I study English because I enjoy it.',options:['کار می‌کند','انگلیسی می‌خواند','می‌خوابد']}),t('listening','قرار چه ساعتی است؟','11:00','eleven یعنی یازده.',{audio:'Hi Tom. Let us meet at the park at eleven. Please reply.',options:['10:00','11:00','12:00']}),t('writing','مرتب کنید: at ten / meet / Let’s','Let’s meet at ten.','Let’s برای پیشنهاد کار مشترک است.')]}
 ];
 const originalUnits:Unit[]=units.map((u,i)=>({...u,id:`foundation-${i+1}`,level:i<4?'Foundation':'A1',practice:u.practice.map((x,j)=>({...x,id:`foundation-${i+1}-practice-${j+1}`})),checkpoint:u.checkpoint.map((x,j)=>({...x,id:`foundation-${i+1}-check-${j+1}`}))}));
-const stableA1Units:Unit[]=ENGLISH_A1_UNITS.map(u=>({...u,practice:u.practice.map((x,j)=>({...x,id:`${u.id}-practice-${j+1}`})),checkpoint:u.checkpoint.map((x,j)=>({...x,id:`${u.id}-check-${j+1}`}))}));
+const stableA1Units:Unit[]=ENGLISH_A1_UNITS.map(u=>({...u,practice:u.practice.map((x,j)=>({...x,id:x.id || `${u.id}-practice-${j+1}`})),checkpoint:u.checkpoint.map((x,j)=>({...x,id:x.id || `${u.id}-check-${j+1}`}))}));
 /**
  * Pre-A1 goal checks. They never ask a beginner to type an English sentence: every task is a
  * choice or a single-word gap fill, and each one is tied to a sentence the lesson already taught.
@@ -152,10 +152,10 @@ export const PRE_A1_EVIDENCE: Readonly<Record<string,readonly Task[]>> = {
     preA1('13','read-notime','reading','«I have no time.» یعنی چه؟','من وقت ندارم.','no یعنی هیچ.',{ source:'I have no time.', options:['من وقت دارم.','من وقت ندارم.','من کار ندارم.'] }),
   ],
   'prea1-14-i-like': [
-    preA1('14','listen-like','listening','گوینده چه چیزی را دوست دارد؟','چای','I like tea یعنی چای دوست دارم.',{ audio:'I like tea.', options:['آب','چای','کتاب'] }),
-    preA1('14','pick-where','grammar','«گوشی من کجاست؟» کدام است؟','Where is my phone?','where یعنی کجا.',{ options:['Who is my phone?','Where is my phone?','Is it good?'] }),
-    preA1('14','gap-for','grammar','جای خالی را کامل کنید: It is ___ you.','for','for یعنی برای.',{ source:'It is for you.', options:['for','to','at'] }),
-    preA1('14','read-who','reading','«Who is this?» یعنی چه؟','این کیست؟','who یعنی چه کسی.',{ source:'Who is this?', options:['این چیست؟','این کیست؟','این کجاست؟'] }),
+    preA1('14','listen-like-practical-v1','listening','گوینده چه چیزی را دوست دارد؟','چای','I like tea یعنی چای دوست دارم.',{ audio:'I like tea.', options:['آب','چای','قهوه'] }),
+    preA1('14','pick-like-practical-v1','grammar','برای پرسیدن علاقه به قهوه کدام درست است؟','Do you like coffee?','Do you like … دربارهٔ علاقه می‌پرسد.',{ options:['Do you like coffee?','I like coffee.','Here you are.'] }),
+    preA1('14','gap-like-practical-v1','grammar','جای خالی را کامل کنید: I ___ tea.','like','I like یعنی دوست دارم.',{ source:'I like tea.', options:['do','like','not'] }),
+    preA1('14','read-refusal-practical-v1','reading','در پاسخ به Do you like coffee?، عبارت No, I do not. یعنی چه؟','نه، قهوه دوست ندارم.','پاسخ کوتاه به علاقه دربارهٔ قهوه مربوط است.',{ source:'Do you like coffee? No, I do not.', options:['بله، قهوه دوست دارم.','نه، قهوه دوست ندارم.','یک قهوه، لطفاً.'] }),
   ],
   'prea1-10-review': [
     preA1('10','listen-greeting','listening','گوینده چه گفت؟','Good morning, Ali.','Good morning سلام صبح است.',{ audio:'Good morning, Ali.', options:['Good night, Ali.','Good morning, Ali.','See you, Ali.'] }),
