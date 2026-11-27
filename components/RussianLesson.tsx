@@ -1,5 +1,8 @@
+import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import { speakOperator } from '@/lib/operatorSpeech';
+import { expandedChoiceChecks } from '@/lib/lessonAssessment';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
-import { RUSSIAN_HELLO_LESSON_ID, PRE_A1_CONTENT_REVISION, russianRoomLines, russianListeningItems } from '@/lib/languages/russianPreA1';
+import { RUSSIAN_HELLO_LESSON_ID, PRE_A1_CONTENT_REVISION, russianListeningItems } from '@/lib/languages/russianPreA1';
 import {LessonGenderCard, SentenceGenderLabel} from './LessonGenderCard';
 import { useStudyTimer } from '@/components/useEnglishStudyTimer';
 import { LESSON_STAGE_VERSION } from '@/lib/lessonStages';
@@ -123,7 +126,7 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
   const restartPromise = useRef<Promise<RussianLessonSession> | null>(null);
   const saveGeneration = useRef(0);
   const current = lesson.sentences[sentenceIndex];
-  const checks = useMemo(() => shuffleChecks(lesson.id, lesson.checks), [lesson]);
+  const checks = useMemo(() => shuffleChecks(lesson.id, expandedChoiceChecks({ ...lesson, checks: lesson.checks })), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [doneChunks, setDoneChunks] = useState<number[]>([]);
   useEffect(() => {
@@ -708,11 +711,11 @@ export default function RussianLesson({ lesson, fromStart = false }: { lesson: R
           lessonTitle={lesson.title}
           levelId={lesson.levelId}
           situation={lesson.situation}
-          lines={russianRoomLines(lesson)}
+          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
           contentRevision={lesson.id.startsWith('ru-pre-') ? PRE_A1_CONTENT_REVISION : undefined}
           locale="ru-RU"
           onSpeak={(text, onDone) => void playRussianSpeech(text, pace('normal'), onDone, onDone)}
-          onSpeakOperator={(text, onDone) => void playRussianSpeech(text, pace('normal'), onDone, onDone, { pitch: 0.82 })}
+          onSpeakOperator={(text, onDone) => speakOperator(text, 'ru-RU', 'ru', onDone)}
           onSpeakSlow={(text, onDone) => void playRussianSpeech(text, pace('slow'), onDone, onDone)}
         />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}

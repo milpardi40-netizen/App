@@ -20,6 +20,7 @@ class MiloStudyReminderModule : Module() {
     AsyncFunction("reconcile") { run("reconcile") { StudyReminderScheduler.reconcile(it) } }
     AsyncFunction("markStudied") { day: String -> run("study") { StudyReminderScheduler.markStudied(it, day) } }
     AsyncFunction("test") { run("test") { StudyReminderScheduler.test(it) } }
+    AsyncFunction("getDiagnostics") { run("diagnostics") { StudyReminderScheduler.diagnostics(it) } }
     AsyncFunction("getLastError") { run("diagnostics") { StudyReminderScheduler.lastError(it) } }
   }
 }

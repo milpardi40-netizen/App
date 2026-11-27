@@ -1,3 +1,6 @@
+import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import { speakOperator } from '@/lib/operatorSpeech';
+import { expandedChoiceChecks } from '@/lib/lessonAssessment';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { useStudyTimer } from '@/components/useEnglishStudyTimer';
@@ -121,7 +124,7 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
   const coreStageLabel = lesson.learningMode === 'words' ? 'واژه‌های اصلی' : lesson.learningMode === 'chunks' ? 'ترکیب‌های اصلی' : 'جمله‌های اصلی';
   const stageLabelFa = stage === 1 ? coreStageLabel : stage === 4 && lesson.learningMode === 'words' ? 'یادآوری واژه' : stage === 4 && lesson.learningMode === 'chunks' ? 'ساخت ترکیب کوتاه' : stage === 5 && lesson.learningMode === 'words' ? 'مرور واژگان' : stages[stage].labelFa;
   const stageLabelEn = stage === 1 && lesson.learningMode === 'words' ? 'Core Words' : stage === 1 && lesson.learningMode === 'chunks' ? 'Core Chunks' : stage === 4 && lesson.learningMode === 'words' ? 'Word Recall' : stage === 4 && lesson.learningMode === 'chunks' ? 'Chunk Building' : stage === 5 && lesson.learningMode === 'words' ? 'Vocabulary Review' : stages[stage].labelEn;
-  const checks = useMemo(() => shuffleChecks(lesson.id, lesson.checks), [lesson]);
+  const checks = useMemo(() => shuffleChecks(lesson.id, expandedChoiceChecks({ ...lesson, checks: lesson.checks })), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
@@ -654,10 +657,10 @@ export default function TurkishLesson({ lesson, fromStart = false }: { lesson: T
           levelId={lesson.levelId}
           situation={lesson.situation}
           contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          lines={lesson.levelId === 0 && lesson.dialogue.length > 0 ? lesson.dialogue.map(line => ({ text: line.text, fa: line.fa })) : lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
           locale="tr-TR"
           onSpeak={(text, onDone) => void playTurkishSpeech(text, NORMAL_SPEECH_RATE, onDone, onDone)}
-          onSpeakOperator={(text, onDone) => void playTurkishSpeech(text, NORMAL_SPEECH_RATE, onDone, onDone, { pitch: 0.82 })}
+          onSpeakOperator={(text, onDone) => speakOperator(text, 'tr-TR', 'tr', onDone)}
           onSpeakSlow={(text, onDone) => void playTurkishSpeech(text, SLOW_SPEECH_RATE, onDone, onDone)}
         />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}

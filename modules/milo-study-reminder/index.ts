@@ -8,6 +8,7 @@ export interface NativeStudyReminder {
   markStudied(day: string): Promise<void>;
   test(): Promise<string>;
   getLastError(): Promise<string>;
+  getDiagnostics?(): Promise<string>;
 }
 
 /** No fallback to the broken Android Expo scheduler in an older binary. */

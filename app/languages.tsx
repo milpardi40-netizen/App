@@ -321,18 +321,6 @@ export default function LanguagesHome() {
             </View>
           </ImageBackground>
 
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="راهنمای استفاده از اپ"
-            accessibilityHint="شروع سریع و آموزش امکانات؛ بدون نیاز به ورود"
-            onPress={() => router.push('/help' as never)}
-            style={({ pressed }) => [styles.guideLink, pressed && styles.pressed]}
-          >
-            <CircleHelp size={18} color={palette.forest} strokeWidth={1.9} />
-            <Text style={styles.guideLinkText}>راهنمای استفاده از اپ</Text>
-            <ArrowLeft size={15} color={palette.forest} />
-          </Pressable>
-
           {(resumeBanner || dueReviewCount > 0) && (
             <View style={[styles.quickActions, compact && styles.quickActionsCompact]}>
               {resumeBanner && (
@@ -403,6 +391,18 @@ export default function LanguagesHome() {
               );
             })}
           </View>
+
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="راهنمای استفاده از اپ"
+            accessibilityHint="شروع سریع و آموزش امکانات؛ بدون نیاز به ورود"
+            onPress={() => router.push('/help' as never)}
+            style={({ pressed }) => [styles.guideLink, pressed && styles.pressed]}
+          >
+            <CircleHelp size={18} color={palette.forest} strokeWidth={1.9} />
+            <Text style={styles.guideLinkText}>راهنمای استفاده از اپ</Text>
+            <ArrowLeft size={15} color={palette.forest} />
+          </Pressable>
 
         </View>
       </ScrollView>

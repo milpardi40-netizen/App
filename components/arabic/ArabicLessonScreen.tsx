@@ -1,3 +1,5 @@
+import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import { speakOperator } from '@/lib/operatorSpeech';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { LocalizedText as Text, PERSIAN_TRANSLATION_COLOR } from '@/components/LocalizedText';
@@ -1048,10 +1050,10 @@ export default function ArabicLessonScreen() {
               levelId={lesson.levelId}
               situation={lesson.situation}
               contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          lines={lesson.levelId === 0 && lesson.dialogue.length > 0 ? lesson.dialogue.map(line => ({ text: line.ar, fa: line.fa })) : lesson.sentences.map(sentence => ({ text: sentence.ar, fa: sentence.fa }))}
+          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue.map(line => ({ text: line.ar, fa: line.fa })))}
               locale="ar-SA"
               onSpeak={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, onDone, onError: onDone })}
-              onSpeakOperator={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_NORMAL_SPEECH_RATE, pitch: 0.82, onDone, onError: onDone })}
+              onSpeakOperator={(text, onDone) => speakOperator(text, 'ar-SA', 'ar', onDone)}
               onSpeakSlow={(text, onDone) => playArabicSpeech(text, { rate: ARABIC_SLOW_SPEECH_RATE, onDone, onError: onDone })}
             />
           )}

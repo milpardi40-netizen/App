@@ -140,10 +140,7 @@ export default function StarterLibrary({course}: {course: StarterCourse}) {
     }
     return { words: words.size, sentences };
   }, [lessons]);
-  const levelStartLesson = selectedLessons.find(item => item.id === snapshot?.current?.id && !!sessions[item.id])
-    ?? selectedLessons.find(item => !completedSet.has(item.id) && !!sessions[item.id])
-    ?? selectedLessons.find(item => !completedSet.has(item.id))
-    ?? selectedLessons[0];
+  const levelStartLesson = selectedLessons.find(item => item.id === (selected ? snapshot?.resumeForLevel(selected.id)?.id : undefined)) ?? selectedLessons[0];
   const levelFullyCompleted = selectedLessons.length > 0 && selectedLessons.every(item => completedSet.has(item.id));
   const levelStartLabel = levelFullyCompleted ? (selected?.id === 1 || selected?.id === 2 || selected?.id === 3 || selected?.id === 4 ? 'بازبینی درس‌های موجود' : 'بازبینی این سطح') : levelStartLesson && sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
   const firstUnfinished = lessons.find(item => !completedSet.has(item.id)) ?? lessons[lessons.length - 1];

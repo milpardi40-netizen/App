@@ -62,6 +62,9 @@
     "validate:six-prea1-practical": "node scripts/verify-six-prea1-practical.cjs",
     "validate:prea1-balance": "node scripts/verify-prea1-balance.cjs",
     "validate:study-reminder": "node scripts/verify-study-reminder.cjs",
+    "validate:lesson-assessment": "node scripts/verify-lesson-assessment.cjs",
+    "validate:level-resume": "node scripts/verify-level-resume.cjs",
+    "validate:operator-speech": "node scripts/verify-operator-speech.cjs",
     "validate:app-guide": "node scripts/verify-app-guide.cjs"
   },
   "dependencies": {

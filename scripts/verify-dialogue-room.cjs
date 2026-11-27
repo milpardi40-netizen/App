@@ -16,6 +16,7 @@ const mocks = {
   '@/components/SpeakCheck': `import React from 'react'; export default function Check(props){return React.createElement('SpeakCheck',props)}`,
   '@/components/EnglishSupplementTask': `export const EnglishPalette=new Proxy({},{get:()=> '#5146E5'});`,
   '@/lib/courseSpeech': `export const stop=async()=>{};`,
+  '@/lib/operatorSpeech': `export const stopOperatorSpeech=async()=>{};`,
   '@/lib/theme': `export const Radius={},Shadows={},Spacing={},Typography={sizes:{}};`,
   '@/lib/format': `export const toPersianDigits=String;`,
   '@/lib/dialogueRoomHistory': `export const loadRuns=async(key)=>{globalThis.__roomLoadKey=key;return [...globalThis.__roomHistory]}; export const saveRun=async(key,run)=>{globalThis.__roomSaveKey=key;globalThis.__roomHistory.push(run);return [...globalThis.__roomHistory]};export const uniqueMissedWords=x=>x;`,
@@ -130,6 +131,38 @@ const mocks = {
       assert.ok(outerNext, 'outer review navigation retained');
       await act(async () => { outerNext.props.onPress(); });
       assert.equal(tree.root.findAllByType('SpeakCheck').length, 0, 'outer action actually exits review');
+    }
+    // Full-lesson pairs: both starters must practise all learner targets, no parity loss.
+    for (const starter of ['operator', 'me']) {
+      await act(async () => { tree.unmount(); });
+      const pairs = Array.from({ length: 12 }, (_, i) => ({ sentenceId: String(i), kind: 'echo', operator: { text: `Sentence ${i}`, fa: `معنی ${i}` }, learner: { text: `Sentence ${i}`, fa: `معنی ${i}` } }));
+      const operator = [];
+      const learner = [];
+      await act(async () => { tree = create(React.createElement(Room, { ...props, pairs, onSpeakOperator: (text, done) => operator.push({ text, done }) })); });
+      assert.equal(globalThis.__roomLoadKey, 'test-lesson:full-lesson-pairs-v1:original');
+      if (starter === 'me') await act(async () => { button('من شروع می‌کنم').props.onPress(); });
+      await act(async () => { button('شروع گفت‌وگو').props.onPress(); });
+      for (let i = 0; i < 24; i++) {
+        const isOperator = (i % 2 === 0) === (starter === 'operator');
+        if (isOperator) {
+          assert.equal(tree.root.findAllByType('SpeakCheck').length, 0, 'mic absent during operator turn');
+          const previous = operator.at(-1);
+          // Parent rerender recreates props, but must not replay an operator turn.
+          const count = operator.length;
+          await act(async () => { tree.update(React.createElement(Room, { ...props, pairs: pairs.map(p => ({ ...p })), onSpeakOperator: (text, done) => operator.push({ text, done }) })); });
+          assert.equal(operator.length, count);
+          await act(async () => { previous.done(); previous.done(); });
+        } else {
+          const check = tree.root.findByType('SpeakCheck');
+          learner.push(check.props.text);
+          await act(async () => { check.props.onResult({ score: 100, heard: check.props.text, words: [] }); });
+        }
+      }
+      assert.deepEqual(learner, pairs.map(pair => pair.learner.text));
+      assert.equal(operator.length, 12);
+      assert.equal(history.at(-1).total, 12);
+      assert.equal(history.at(-1).attempted, 12);
+      assert.equal(globalThis.__roomSaveKey, 'test-lesson:full-lesson-pairs-v1:original');
     }
     console.log('Dialogue-room checks passed: guided/cued/exam, help, safe sample playback, silent attempts, matching-only feedback, mode-specific trends, restart and seven-language UI deduplication.');
   } finally {

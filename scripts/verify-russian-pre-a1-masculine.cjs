@@ -23,6 +23,7 @@ const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)
 (async () => {
   const { outputFiles } = await esbuild.build({
     stdin: { contents: `
+      export { LESSON_ASSESSMENT_REVISION } from './lib/lessonAssessment';
       export * from './lib/languages/russian';
       export * from './lib/languages/russianPreA1';
       export * from './lib/languages/russianStudyState';
@@ -124,7 +125,7 @@ const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)
   const preserved = await app.loadRussianLessonSession(a1.id);
   assert.deepEqual(preserved.answers, fields.answers, 'A1 saved answers are not invalidated');
   await app.saveRussianLessonSession(pre[0].id, fields);
-  assert.equal(JSON.parse(memory.get(app.RUSSIAN_STUDY_STORAGE_KEY)).sessions[pre[0].id].checksRevision, app.RUSSIAN_HELLO_CONTENT_REVISION);
+  assert.equal(JSON.parse(memory.get(app.RUSSIAN_STUDY_STORAGE_KEY)).sessions[pre[0].id].checksRevision, app.LESSON_ASSESSMENT_REVISION);
   // Retired experimental metadata must not block resuming the restored ten-page path.
   const rollbackState = JSON.parse(memory.get(app.RUSSIAN_STUDY_STORAGE_KEY));
   rollbackState.sessions[pre[0].id].sixTaskIndex = 8;

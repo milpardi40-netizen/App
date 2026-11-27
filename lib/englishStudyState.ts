@@ -1,5 +1,5 @@
 import { balancedSampleRevision, resumeBalancedSamples } from './languages/preA1Practical/balanceRevision';
-import { practicalAssessmentRevision, revisePracticalEvidence } from './languages/preA1Practical/revisions';
+import { assessmentRevisionFor as practicalAssessmentRevision, reviseExpandedEvidence as revisePracticalEvidence } from './lessonAssessment';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';

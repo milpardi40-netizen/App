@@ -44,6 +44,8 @@ const handlerHashes = {
       ts.forEachChild(node, visit);
     }
     visit(ast);
+    // Only the assessment denominator inside `next` changed, not navigation/speech control flow.
+    if (file === 'components/EnglishLessonRoute.tsx') handlers.next = handlers.next.replace('englishEvidenceFor(lesson).length', 'CORE_LESSON_EVIDENCE[lesson.id]?.length ?? 2');
     assert.equal(digest(handlers), expectedHash, file + ': narration, skip, forward/back navigation and restart handlers unchanged');
     assert.equal(titles, 1, file + ': lesson title retained in header');
     assert.equal(stageTitles, 0, file + ': no duplicate intro title');

@@ -1,3 +1,4 @@
+import { resumeAt, validResumePoints, mergedResume } from './courseResume';
 import { withMergedRatings, addRating, validHistory, type RatingHistory } from './reviewHistory';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,6 +27,7 @@ export interface CourseProgress {
   completedLessonIds: string[];
   currentLessonId: string;
   resumeUpdatedAt?: string;
+  resumePoints?: Record<string, string>;
   /** Kept for backward compatibility with early preview installs. */
   reviewSentenceIds: string[];
   reviewCards: SentenceReviewCard[];
@@ -120,6 +122,7 @@ function normalizeProgress(value: Partial<CourseProgress>): CourseProgress {
     ...base,
     dailyGoalMinutes: Number.isFinite(value.dailyGoalMinutes)&&value.dailyGoalMinutes!>0?Math.min(1440,value.dailyGoalMinutes!):base.dailyGoalMinutes,
     ...(typeof value.resumeUpdatedAt === 'string' && Number.isFinite(Date.parse(value.resumeUpdatedAt)) ? { resumeUpdatedAt: value.resumeUpdatedAt } : {}),
+    resumePoints: validResumePoints(value.resumePoints, SENTENCE_LESSONS),
     currentLessonId: SENTENCE_LESSONS.some(l=>l.id===value.currentLessonId)?value.currentLessonId!:base.currentLessonId,
     updatedAt: typeof value.updatedAt==='string'&&Number.isFinite(Date.parse(value.updatedAt))?value.updatedAt:base.updatedAt,
     completedLessonIds,
@@ -267,8 +270,7 @@ async function completeSentenceLesson(lessonId: string, nextLessonId?: string): 
         ...(options.markVocabularyOnCompletion===false?[]:getEssential504WordsForLesson(lessonId)),
       ]),
     ),
-    ...(nextLessonId && nextLessonId !== current.currentLessonId ? { resumeUpdatedAt: positionTimestamp() } : {}),
-    currentLessonId: nextLessonId ?? current.currentLessonId,
+    ...(nextLessonId ? resumeAt(current, nextLessonId, positionTimestamp()) : {}),
   }, 8);
   return saveProgress(next);
 }
@@ -422,7 +424,7 @@ async function mergeRemoteProgress(value: unknown): Promise<CourseProgress> {
 }
 
 return { getCourseProgress, syncCourseProgress, mergeRemoteProgress,
- setCurrentLesson:async(id:string)=>{ if(!SENTENCE_LESSONS.some(l=>l.id===id)) throw new Error('Unknown lesson for this language'); return serial(async()=>saveProgress({...await getCourseProgress(),currentLessonId:id,resumeUpdatedAt:positionTimestamp(),updatedAt:new Date().toISOString()})); },
+ setCurrentLesson:async(id:string)=>{ if(!SENTENCE_LESSONS.some(l=>l.id===id)) throw new Error('Unknown lesson for this language'); return serial(async()=>{const current=await getCourseProgress();return saveProgress({...current,...resumeAt(current,id,positionTimestamp()),updatedAt:new Date().toISOString()});}); },
  completeSentenceLesson:(id:string,next?:string)=>serial(()=>completeSentenceLesson(id,next)),
  getDueReviewCards, rateReviewCard:(id:string,rating:ReviewRating,now?:Date)=>serial(()=>rateReviewCard(id,rating,now)),
  addSentenceToReview:(id:string,lesson?:string)=>serial(()=>addSentenceToReview(id,lesson)),
@@ -442,5 +444,5 @@ export function mergeCourseProgress(a:CourseProgress,b:CourseProgress):CoursePro
   const latest = time(card) > time(prev) || (time(card) === time(prev) && JSON.stringify(card) > JSON.stringify(prev));
   cards.set(card.id, latest ? withMergedRatings(card, prev) : withMergedRatings(prev, card));
  }
- return {...newer,completedLessonIds:[...new Set([...a.completedLessonIds,...b.completedLessonIds])].sort(),reviewSentenceIds:[...new Set([...a.reviewSentenceIds,...b.reviewSentenceIds])].sort(),learnedEssential504Words:[...new Set([...a.learnedEssential504Words,...b.learnedEssential504Words])].sort(),reviewCards:[...cards.values()].sort((x,y)=>x.id.localeCompare(y.id)),totalMinutes:Math.max(a.totalMinutes,b.totalMinutes),longestStreak:Math.max(a.longestStreak,b.longestStreak)};
+ return {...newer,...mergedResume(newer,newer===a?b:a),completedLessonIds:[...new Set([...a.completedLessonIds,...b.completedLessonIds])].sort(),reviewSentenceIds:[...new Set([...a.reviewSentenceIds,...b.reviewSentenceIds])].sort(),learnedEssential504Words:[...new Set([...a.learnedEssential504Words,...b.learnedEssential504Words])].sort(),reviewCards:[...cards.values()].sort((x,y)=>x.id.localeCompare(y.id)),totalMinutes:Math.max(a.totalMinutes,b.totalMinutes),longestStreak:Math.max(a.longestStreak,b.longestStreak)};
 }

@@ -68,10 +68,7 @@ export default function EnglishLessonList() {
   const lessons = useMemo(() => selected ? SENTENCE_LESSONS.filter(item => item.levelId === selected.id) : [], [selected?.id]);
   const completedIds = progress?.completedLessonIds ?? [];
   const completed = lessons.filter(item => completedIds.includes(item.id)).length;
-  const levelStartLesson = lessons.find(item => item.id === snapshot?.current?.id && !!study?.sessions[item.id])
-    ?? lessons.find(item => !completedIds.includes(item.id) && !!study?.sessions[item.id])
-    ?? lessons.find(item => !completedIds.includes(item.id))
-    ?? lessons[0];
+  const levelStartLesson = lessons.find(item => item.id === (selected ? snapshot?.resumeForLevel(selected.id)?.id : undefined)) ?? lessons[0];
   const levelFullyCompleted = lessons.length > 0 && completed === lessons.length;
   const levelStartLabel = levelFullyCompleted ? 'بازبینی این سطح' : levelStartLesson && study?.sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
   const metrics = selected ? getEnglishLevelMetrics(selected.id, completedIds) : null;

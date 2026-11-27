@@ -121,6 +121,7 @@ function routeExists(href) {
   equal(currentHeader, originalHeader.header, 'original released header restored byte-for-byte: same three actions, order and logo');
   for (const line of originalHeader.styles) check(home.includes(line), 'original header layout/style unchanged: ' + line.split(':')[0].trim());
   check(helpLabel > home.indexOf('</ImageBackground>') && !currentHeader.includes("'/help'"), 'guide placed below hero, outside restored header');
+  check(helpLabel > home.indexOf('<View style={[styles.learningStrip'), 'guide is at the bottom after learning steps');
   check(!home.includes('headerStacked') && !home.includes('headerActionsStacked'), 'no guide-induced mobile header stacking');
   check(read('components/RegistrationGate.tsx').includes("pathname === '/help' || BYPASS_GATE || ready"), 'only read-only help is public in login builds');
   check(!read('app/help.tsx').includes('AsyncStorage') && !read('lib/appGuide.ts').includes('AsyncStorage'), 'reading help writes no learning/preferences data');

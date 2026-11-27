@@ -30,7 +30,8 @@ async function harness(os = 'android') {
       if (state.native) state.native.lastStudiedDay = day;
     },
     async reconcile() { state.calls.push('reconcile'); return state.channelBlocked ? 'channel-blocked' : state.granted ? 'scheduled' : 'permission-denied'; },
-    async test() { state.calls.push('test'); return state.channelBlocked ? 'channel-blocked' : 'test-scheduled'; },
+    async test() { state.calls.push('test'); return state.channelBlocked ? 'channel-blocked' : 'test-posted'; },
+    async getDiagnostics() { if (state.fail === 'diagnostics') throw Error('diagnostics failed'); return JSON.stringify({ nextScheduledAt: 1900000000000, lastPostedAt: 1800000000000, lastTestPostedAt: 1800000000001, notificationsEnabled: !state.channelBlocked && state.granted, channelImportance: 3, channelSilent: false, ringerSilent: false, doNotDisturb: false, batteryOptimized: true, lastDeliveryError: '' }); },
     async getLastError() { return state.lastError; },
   };
   global.__studyHarness = state;
@@ -49,7 +50,7 @@ async function harness(os = 'android') {
       async removeItem(key) { state.storage.delete(key); },
     } };
     if (name === 'expo-notifications') return {
-      AndroidImportance: { DEFAULT: 3 }, SchedulableTriggerInputTypes: { DATE: 'date', TIME_INTERVAL: 'timeInterval' },
+      AndroidImportance: { DEFAULT: 3, HIGH: 4 }, SchedulableTriggerInputTypes: { DATE: 'date', TIME_INTERVAL: 'timeInterval' },
       async setNotificationChannelAsync(id) { state.calls.push(`channel:${id}`); if (state.fail === 'channel') throw Error('channel failed'); },
       async getPermissionsAsync() { state.calls.push('permission'); if (state.fail === 'permission') throw Error('permission failed'); return { granted: state.granted, canAskAgain: state.canAskAgain }; },
       async requestPermissionsAsync() { state.prompts++; return { granted: state.allowRequest }; },
@@ -84,7 +85,7 @@ async function harness(os = 'android') {
   equal(state.native.lastStudiedDay, '2026-11-26', 'concurrent stale card cannot erase lesson completion');
   equal(state.native.hour, 17, 'serialized time change retained');
   equal(await api.studiedToday(date), true, 'study marker readable');
-  equal(await api.testStudyReminder(), 'test-scheduled', 'test uses independent native alarm');
+  equal(await api.testStudyReminder(), 'test-posted', 'test posts independently of daily alarm');
   equal(state.native.hour, 17, 'test does not alter daily time');
   state.fail = 'native-study';
   await api.noteStudyToday(new Date(2026, 10, 27, 12));
@@ -193,6 +194,20 @@ async function harness(os = 'android') {
   await assert.rejects(rewardsModule.exports.finishLessonRewards(), /medal storage/);
   check(markedOnMedalFailure, 'medal failure cannot prevent completed-day recording');
 
+  // Diagnostics report scheduler state separately from successful notification posting.
+  const device = await harness();
+  equal((await device.api.studyReminderDiagnostics()).nextScheduledAt, 1900000000000, 'native next scheduled time exposed');
+  equal((await device.api.studyReminderDiagnostics()).lastTestPostedAt, 1800000000001, 'actual test post time exposed separately');
+  device.state.fail = 'diagnostics';
+  equal(await device.api.studyReminderDiagnostics(), null, 'diagnostic failure does not pretend delivery or break settings');
+  device.state.bridge.getDiagnostics = undefined;
+  equal(await device.api.studyReminderDiagnostics(), null, 'older binaries without diagnostics remain readable');
+  device.state.fail = '';
+  await device.api.scheduleStudyReminder({ ...off, enabled: true });
+  await device.api.noteStudyToday();
+  check((await device.api.studyReminderSummary()).includes('عمداً پخش نمی‌شود'), 'today suppression is explicit rather than a seemingly broken toggle');
+  equal(await device.api.testStudyReminder(), 'test-posted', 'Android immediate test bypasses daily suppression');
+
   const read = path => fs.readFileSync(path, 'utf8');
   const root = 'modules/milo-study-reminder';
   const kotlin = read(`${root}/android/src/main/java/expo/modules/milostudyreminder/StudyReminderScheduler.kt`);
@@ -208,11 +223,17 @@ async function harness(os = 'android') {
   check(kotlin.includes('NotificationManagerCompat.from(c).areNotificationsEnabled()') && kotlin.includes('IMPORTANCE_NONE'), 'both app permission and channel block checked natively');
   check(kotlin.includes('getLaunchIntentForPackage') && !kotlin.includes('https://'), 'tap opens normally, delivery requires no network');
   check(kotlin.includes('Log.e(') && kotlin.includes('lastError'), 'native failures retained and logged');
+  const reconcileSource = kotlin.slice(kotlin.indexOf('@Synchronized fun reconcile'), kotlin.indexOf('@Synchronized fun markStudied'));
+  check(reconcileSource.includes('due <= System.currentTimeMillis()') && reconcileSource.includes('receive(c, Intent(ALARM_ACTION)'), 'resume recovers a due same-day alarm instead of dropping it to tomorrow');
+  const testSource = kotlin.slice(kotlin.indexOf('@Synchronized fun test'), kotlin.indexOf('@Synchronized fun receive'));
+  check(testSource.includes('show(c, true)') && !testSource.includes('setAlarm('), 'Android test posts immediately and does not promise ten seconds from an inexact alarm');
+  check(kotlin.includes('IMPORTANCE_HIGH') && kotlin.includes('setOnlyAlertOnce(false)'), 'new channels alert visibly and repeated tests are not silently updated');
+  check(kotlin.includes('lastTestPostedAt') && kotlin.includes('lastDeliveryError') && kotlin.includes('isIgnoringBatteryOptimizations'), 'native diagnostics distinguish schedule, post, errors and battery restrictions');
   check(read(`${root}/expo-module.config.json`).includes('MiloStudyReminderModule'), 'Expo autolink metadata registered');
   const bridge = read('components/StudyReminderBridge.tsx');
   check(bridge.includes('reconcileStudyReminder') && bridge.includes("state === 'active'") && bridge.includes('clearInterval'), 'lifecycle repair and cleanup wired');
   check(read('app/_layout.tsx').includes('<StudyReminderBridge />'), 'bridge mounted in learner root');
   const card = read('components/StudyReminderCard.tsx');
-  check(card.includes('testStudyReminder') && card.includes('Linking.openSettings') && card.includes('studyReminderError'), 'device test, recovery settings and diagnostic UI present');
+  check(card.includes('testStudyReminder') && card.includes('Linking.openSettings') && card.includes('studyReminderError') && card.includes('diagnostics.nextScheduledAt') && card.includes('تنظیمات باتری'), 'device test, recovery settings and diagnostic UI present');
   console.log(`Study reminder: ${checks} bridge/behavior/wiring checks passed (mocked native; physical Android test still required).`);
 })().catch(error => { console.error(error); process.exitCode = 1; });

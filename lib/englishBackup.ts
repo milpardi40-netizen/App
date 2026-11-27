@@ -1,3 +1,4 @@
+import { mergedResume } from './courseResume';
 import { withMergedRatings } from './reviewHistory';
 import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -159,6 +160,7 @@ export function mergeEnglishCourseProgress(current: CourseProgress, incoming: Co
   const activityDate = latest.activityDate;
   return parseCourseProgressBackup({
     ...latest,
+    ...mergedResume(latest, latest === current ? incoming : current),
     completedLessonIds: [...new Set([...current.completedLessonIds, ...incoming.completedLessonIds])],
     reviewSentenceIds: [...new Set([...current.reviewSentenceIds, ...incoming.reviewSentenceIds])],
     reviewCards: [...cards.values()],

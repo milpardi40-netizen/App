@@ -94,11 +94,7 @@ export default function ArabicLibraryScreen() {
   );
   const completedIds = progress?.completedLessonIds ?? [];
   const completed = lessons.filter(item => completedIds.includes(item.id)).length;
-  const levelStartLesson =
-    lessons.find(item => item.id === snapshot?.current?.id && !!sessions[item.id]) ??
-    lessons.find(item => !completedIds.includes(item.id) && !!sessions[item.id]) ??
-    lessons.find(item => !completedIds.includes(item.id)) ??
-    lessons[0];
+  const levelStartLesson = lessons.find(item => item.id === (selected ? snapshot?.resumeForLevel(selected.id)?.id : undefined)) ?? lessons[0];
   const levelFullyCompleted = lessons.length > 0 && completed === lessons.length;
   const levelStartLabel = levelFullyCompleted
     ? 'بازبینی این سطح'

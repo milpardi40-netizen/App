@@ -29,12 +29,21 @@ No educational content, chat service, push credentials or exact-alarm permission
   moves the pending alarm to the next day. The receiver independently checks the day
   again, suppresses duplicate delivery and discards yesterday's delayed alarm.
 - Reschedules after boot, app update, system clock/timezone change and app resume.
+  A same-day overdue alarm is delivered (unless already studied/notified), not silently
+  moved to tomorrow when the app is reopened while Android has delayed it.
 - A fixed notification ID and `lastNotifiedDay` prevent multiple daily nudges if the
   time is edited after a reminder has already appeared.
 - Application-level denial and channel-level blocking have separate recovery messages.
 - Disabling cancels the daily and test alarms and their visible notifications.
-- The explicit test uses a separate alarm/notification ID, due in approximately 10 seconds;
-  it does not change the daily opt-in/time or count as a daily reminder.
+- The explicit Android test posts immediately using a separate notification ID; it
+  does not change daily opt-in/time or count as a daily reminder. The previous ten-second
+  inexact-alarm test could be delayed substantially by Android and was not a valid timer promise.
+- New notification channels use HIGH importance. Existing channel preferences remain
+  under system/user control: the app does not bypass a blocked/muted channel. Repeated
+  tests alert again instead of silently updating an existing notification.
+- The settings card shows the next native alarm time, last daily/test post time, app/channel
+  blocking, sound/DND and battery restrictions, with notification/battery settings links.
+  A successful notify call means submitted to Android, not proof the person heard/saw it.
 - Tapping opens the app normally, preserving app-lock, registration and saved-page guards.
 - Native errors are kept in preferences and logcat (`MiloStudyReminder`); bridge errors
   have a separate local diagnostic key and appear in the settings card.
@@ -71,10 +80,13 @@ as well as online. Keep logcat filtered to `MiloStudyReminder` for failures.
 
 1. Fresh install: reminder off; no unsolicited permission prompt.
 2. Turn on; grant POST_NOTIFICATIONS. Verify enabled survives leaving/reopening settings.
-3. Press test; check the notification shade after roughly 10 seconds, first with the app
-   foregrounded, then backgrounded. Verify the channel is **یادآور مطالعه**, not chat.
-4. Repeat test offline, with the app swiped out of Recents. Tap the result; app-lock and
-   saved-page behavior must remain intact. Swiping away is not Settings → Force stop.
+3. Press test; immediately check the notification shade while foregrounded and compare
+   the last-test-post timestamp. Repeat while an earlier test notification is still visible;
+   it should alert again unless system sound/DND/channel settings prevent it. Verify the
+   channel is **یادآور مطالعه**, not chat.
+4. Repeat the immediate test offline. Test the **daily scheduled reminder** with the app
+   backgrounded/swiped out of Recents. Tap the result; app-lock and saved-page behavior
+   must remain intact. Swiping away is not Settings → Force stop.
 5. Disable the channel in the provided system settings link; return and verify the
    channel-specific warning. Re-enable it and verify recovery without reinstalling.
 6. Deny app notification permission; enabling/testing must explain permission denial,
@@ -84,7 +96,9 @@ as well as online. Keep logcat filtered to `MiloStudyReminder` for failures.
 8. Before that time, complete a real lesson; verify today's pending alarm moves to
    tomorrow and no daily nudge appears today. On the following day without study, it should.
 9. After delivery, change the selected hour to a later hour today; no second daily nudge.
-10. Schedule a test, then disable the reminder before it fires: no test or daily alert.
+10. Post a test, then disable the reminder: visible test/daily notifications and pending
+    daily/legacy test alarms are cancelled. Reopen after a delayed same-day daily alarm
+    was due: it appears once if no lesson was completed, rather than being skipped.
 11. Re-enable, reboot, unlock, and verify the next reminder without opening the app.
 12. Change timezone and clock (including a DST boundary); verify local wall-clock time
     and that a stale previous-day alarm is not delivered as today's nudge.

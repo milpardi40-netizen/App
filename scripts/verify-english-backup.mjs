@@ -9,6 +9,7 @@ const cache = path.join(root, 'node_modules', '.cache', 'english-backup-test');
 mkdirSync(cache, { recursive: true });
 const entry = path.join(cache, 'entry.ts');
 writeFileSync(entry, `
+export { LESSON_ASSESSMENT_REVISION as assessmentRevision } from '${path.join(root, 'lib/lessonAssessment.ts')}';
 export * as backup from '${path.join(root, 'lib/englishBackup.ts')}';
 export * as course from '${path.join(root, 'lib/courseProgress.ts')}';
 export * as content from '${path.join(root, 'lib/courseContent.ts')}';
@@ -74,7 +75,7 @@ source.values.set(keys[0], JSON.stringify(app.course.parseCourseProgressBackup({
 })));
 source.values.set(keys[1], JSON.stringify({
   version: 1,
-  sessions: { [lesson1.id]: { stage: 2, sentenceIndex: 6, revealed: true, evidencePassed: false } },
+  sessions: { [lesson1.id]: { stage: 2, sentenceIndex: 6, revealed: true, evidencePassed: false, checksRevision: app.assessmentRevision } },
   days: { '2026-10-10': 3000 },
   lessonEvidence: { [lesson1.id]: { 'task-imported': { skill: 'reading', correct: true, attempts: 2, heard: false } } },
 }));
@@ -111,7 +112,7 @@ target.values.set(keys[0], JSON.stringify(app.course.parseCourseProgressBackup({
 })));
 target.values.set(keys[1], JSON.stringify({
   version: 1,
-  sessions: { [lesson1.id]: { stage: 3, sentenceIndex: 9, revealed: false, evidencePassed: true } },
+  sessions: { [lesson1.id]: { stage: 3, sentenceIndex: 9, revealed: false, evidencePassed: true, checksRevision: app.assessmentRevision } },
   days: { '2026-10-10': 9000 },
   lessonEvidence: { [lesson1.id]: { 'task-local': { skill: 'grammar', correct: true, attempts: 4, heard: false } } },
 }));
@@ -130,6 +131,9 @@ const mergedSupplement = JSON.parse(target.values.get(keys[2]));
 check(mergedCourse.completedLessonIds.includes(lesson1.id) && mergedCourse.completedLessonIds.includes(lesson2.id), 'restore unions completed lessons without deleting local work');
 check(mergedCourse.reviewSentenceIds.includes('legacy-review-id') && mergedCourse.reviewSentenceIds.includes('local-review-id'), 'legacy review IDs are merged');
 check(mergedCourse.learnedEssential504Words.includes('practice') && mergedCourse.learnedEssential504Words.includes('local-word'), 'historical word markers are merged');
+const replayCursor = { ...mergedCourse, currentLessonId: lesson1.id, resumeUpdatedAt: '2026-11-26T10:00:00.000Z', resumePoints: { [lesson1.id]: '2026-11-26T10:00:00.000Z' } };
+const olderCursorNewerActivity = { ...mergedCourse, currentLessonId: lesson2.id, resumeUpdatedAt: '2026-11-25T10:00:00.000Z', updatedAt: '2099-01-01T00:00:00.000Z' };
+check(app.backup.mergeEnglishCourseProgress(replayCursor, olderCursorNewerActivity).currentLessonId === lesson1.id, 'backup restore keeps the newer explicit replay cursor despite older historical completion/newer unrelated activity');
 check(mergedCourse.totalMinutes === 80 && mergedCourse.longestStreak === 5, 'maximum course totals are preserved');
 check(mergedStudy.sessions[lesson1.id].stage === 3 && mergedStudy.sessions[lesson1.id].evidencePassed && mergedStudy.sessions[lesson1.id].revealed, 'most advanced study position retains both positive flags');
 check(mergedStudy.days['2026-10-10'] === 9000, 'study time is merged without reducing existing totals');

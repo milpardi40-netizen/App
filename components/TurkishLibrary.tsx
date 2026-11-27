@@ -54,10 +54,7 @@ export default function TurkishLibrary() {
   useEffect(() => { setExpandedGroup(0); }, [selected?.id]);
 
   const completedIds = progress?.completedLessonIds ?? [];
-  const levelStartLesson = selectedLessons.find(item => item.id === snapshot?.current?.id && !!sessions[item.id])
-    ?? selectedLessons.find(item => !completedIds.includes(item.id) && !!sessions[item.id])
-    ?? selectedLessons.find(item => !completedIds.includes(item.id))
-    ?? selectedLessons[0];
+  const levelStartLesson = selectedLessons.find(item => item.id === (selected ? snapshot?.resumeForLevel(selected.id)?.id : undefined)) ?? selectedLessons[0];
   const levelFullyCompleted = selectedLessons.length > 0 && selectedLessons.every(item => completedIds.includes(item.id));
   const levelStartLabel = levelFullyCompleted ? 'بازبینی این سطح' : levelStartLesson && sessions[levelStartLesson.id] ? 'ادامهٔ درس این سطح' : 'شروع یادگیری از این سطح';
   const firstUnfinished = TURKISH_LESSONS.find(item => !completedIds.includes(item.id)) ?? TURKISH_LESSONS[TURKISH_LESSONS.length - 1];

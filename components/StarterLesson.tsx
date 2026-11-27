@@ -1,3 +1,6 @@
+import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import { speakOperator } from '@/lib/operatorSpeech';
+import { expandedChoiceChecks } from '@/lib/lessonAssessment';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
 import { useStudyTimer } from '@/components/useEnglishStudyTimer';
@@ -152,7 +155,7 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
   const current = lesson.sentences[sentenceIndex];
   const bridgeLanguage = isStarterBridgeLanguage(course.id) ? course.id : null;
   const bridgeRules = useMemo(() => bridgeLanguage ? starterBridgeRulesForLesson(bridgeLanguage, lesson.sentences) : [], [bridgeLanguage, lesson.sentences]);
-  const checks = useMemo(() => shuffleChecks(lesson.id, starterDisplayChecks(lesson)), [lesson]);
+  const checks = useMemo(() => shuffleChecks(lesson.id, expandedChoiceChecks({ ...lesson, checks: starterDisplayChecks(lesson) })), [lesson]);
   const speakResult = useRef<SpeakDrillResult | null>(null);
   const [celebration, setCelebration] = useState<{ stats: CelebrationStats; next: (() => void); dueReviews: number; review: () => void; levelFinished?: { title: string; lessons: number; onStart?: () => void; readiness?: number };
     newAchievements?: ReadonlyArray<{ id: string; title: string; description: string }> } | null>(null);
@@ -727,10 +730,10 @@ export default function StarterLessonView({ course, lesson, fromStart }: { cours
           levelId={lesson.levelId}
           situation={lesson.situation}
           contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          lines={lesson.levelId === 0 && lesson.dialogue.length > 0 ? lesson.dialogue.map(line => ({ text: line.text, fa: line.fa })) : lesson.sentences.map(sentence => ({ text: sentence.text, fa: sentence.fa }))}
+          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
           locale={course.locale}
           onSpeak={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone)}
-          onSpeakOperator={(text, onDone) => void playStarterSpeech(course.locale, text, pace('normal'), onDone, undefined, onDone, { pitch: 0.82 })}
+          onSpeakOperator={(text, onDone) => speakOperator(text, course.locale, course.id, onDone)}
           onSpeakSlow={(text, onDone) => void playStarterSpeech(course.locale, text, pace('slow'), onDone, undefined, onDone)}
         />}
         {!!(sessionError || completionError) && <Text accessibilityRole="alert" style={styles.error}>{sessionError || completionError}</Text>}

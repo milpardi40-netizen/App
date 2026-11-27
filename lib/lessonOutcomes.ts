@@ -1,4 +1,5 @@
-import { practicalAssessmentRevision, practicalSentenceRevision } from './languages/preA1Practical/revisions';
+import { assessmentRevisionFor as practicalAssessmentRevision } from './lessonAssessment';
+import { practicalSentenceRevision } from './languages/preA1Practical/revisions';
 import { notifyLearningChange } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';

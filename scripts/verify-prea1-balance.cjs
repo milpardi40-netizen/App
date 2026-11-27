@@ -72,8 +72,8 @@ const expected = {
         assert.equal(globalThis.__practicalMemory.get(key), raw, 'read is non-destructive');
         if (app.balanceRevision.balancedAssessmentRevision(lang, id)) {
           if (starter || lang === 'tr') { assert.deepEqual(restored.answers, {}); assert.equal(restored.showCheckAnswers, false); }
-          else { assert.equal(restored.evidencePassed, false); assert.deepEqual(restored.attemptEvidence, {}); }
-        } else if (lang === 'en') assert.equal(restored.evidencePassed, true, 'unchanged English checks keep valid evidence');
+          else { assert.equal(restored.evidencePassed, false); assert.deepEqual(restored.attemptEvidence, saved.attemptEvidence, "old task results are retained, but cannot answer the added tasks"); }
+        } else if (lang === 'en') { assert.equal(restored.evidencePassed, false, 'expanded denominator cannot inherit a legacy passed flag'); assert.deepEqual(restored.attemptEvidence, saved.attemptEvidence, 'existing task results retained'); }
         await save(restored); const reloaded = await load();
         assert.equal(reloaded.sentenceIndex, restored.sentenceIndex, 'mapping is applied once, not on every reload');
         assert.equal(globalThis.__practicalMemory.get('balance-progress-sentinel'), 'historical-completion-is-not-reset');

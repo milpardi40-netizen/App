@@ -1,3 +1,4 @@
+import { resumeAt, validResumePoints, courseResumeLesson } from './courseResume';
 import { addRating, validHistory, type RatingHistory } from './reviewHistory';
 import { notifyLearningChange, positionTimestamp } from './learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,6 +31,7 @@ export interface CourseProgress {
   completedLessonIds: string[];
   currentLessonId: string;
   resumeUpdatedAt?: string;
+  resumePoints?: Record<string, string>;
   /** Kept for backward compatibility with early preview installs. */
   reviewSentenceIds: string[];
   reviewCards: SentenceReviewCard[];
@@ -141,6 +143,7 @@ function normalizeProgress(value: Partial<CourseProgress>): CourseProgress {
     ...base,
     ...value,
     completedLessonIds,
+    resumePoints: validResumePoints(value.resumePoints, SENTENCE_LESSONS),
     currentLessonId: currentLessonAfterCurriculumExpansion(value, completedLessonIds, base),
     reviewSentenceIds: Array.isArray(value.reviewSentenceIds) ? value.reviewSentenceIds : [],
     reviewCards: Array.from(cardMap.values()),
@@ -352,7 +355,7 @@ export async function setCurrentLesson(lessonId: string): Promise<CourseProgress
   return withCourseProgressLock(async () => {
     if (!SENTENCE_LESSONS.some(lesson => lesson.id === lessonId)) throw new Error('Unknown lesson for this course');
     const current = await readLocalProgress();
-    return saveProgress({ ...current, currentLessonId: lessonId, resumeUpdatedAt: positionTimestamp(), updatedAt: new Date().toISOString() });
+    return saveProgress({ ...current, ...resumeAt(current, lessonId, positionTimestamp()), updatedAt: new Date().toISOString() });
   });
 }
 
@@ -368,8 +371,11 @@ export async function completeSentenceLesson(lessonId: string, nextLessonId?: st
     const completedSet = new Set(completedLessonIds);
     const currentIndex = SENTENCE_LESSONS.findIndex(lesson => lesson.id === current.currentLessonId);
     const requestedNextIndex = nextLessonId ? SENTENCE_LESSONS.findIndex(lesson => lesson.id === nextLessonId) : -1;
-    const advancesPath = requestedNextIndex > currentIndex;
-    const nextUncompletedLesson = advancesPath
+    const levelId = SENTENCE_LESSONS.find(lesson => lesson.id === lessonId)!.levelId;
+    const replaying = current.completedLessonIds.includes(lessonId)
+      && courseResumeLesson(SENTENCE_LESSONS.filter(lesson => lesson.levelId === levelId), current, {})?.id === lessonId;
+    const advancesPath = requestedNextIndex >= 0 && (requestedNextIndex > currentIndex || replaying);
+    const nextUncompletedLesson = advancesPath && !replaying
       ? SENTENCE_LESSONS.slice(requestedNextIndex).find(lesson => !completedSet.has(lesson.id))
       : undefined;
     const next = addDailyActivity({
@@ -378,8 +384,7 @@ export async function completeSentenceLesson(lessonId: string, nextLessonId?: st
       reviewCards: Array.from(cardMap.values()),
       // Historical coverage is retained, but page completion is not evidence of word mastery.
       learnedEssential504Words: current.learnedEssential504Words,
-      ...(advancesPath ? { resumeUpdatedAt: positionTimestamp() } : {}),
-      currentLessonId: advancesPath ? nextUncompletedLesson?.id ?? nextLessonId! : current.currentLessonId,
+      ...(advancesPath ? resumeAt(current, nextUncompletedLesson?.id ?? nextLessonId!, positionTimestamp()) : {}),
     }, 0);
     return saveProgress(next);
   });

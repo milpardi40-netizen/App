@@ -1,3 +1,5 @@
+import { lessonDialoguePairs } from '@/lib/lessonDialoguePairs';
+import { speakOperator } from '@/lib/operatorSpeech';
 import { practicalRoomRevision } from '@/lib/languages/preA1Practical/balanceRevision';
 import { resetLessonChunks } from '@/lib/lessonChunks';
 import { prepareLessonRestart } from '@/lib/lessonRestart';
@@ -61,7 +63,7 @@ import { PageNavigation } from '@/components/PageNavigation';
 
 import { loadStudy, saveLessonSession, resetLessonSession, freshSession, withStudyStorageLock, type LessonAttempt } from '@/lib/englishStudyState';
 import { loadSupplement } from '@/lib/englishSupplement/progress';
-import { CORE_LESSON_EVIDENCE, isCoreLessonEvidenceComplete } from '@/lib/englishFoundationEvidence';
+import { englishEvidenceFor, currentEnglishEvidenceComplete } from '@/lib/lessonEvidenceBank';
 import { useEnglishStudyTimer } from '@/components/useEnglishStudyTimer';
 import { PAID_AI_ENABLED, PAID_AI_DISABLED_MESSAGE } from '@/lib/paidAI';
 import { ENGLISH_NATURAL_SPEECH_RATE, ENGLISH_NORMAL_SPEECH_RATE, ENGLISH_SLOW_SPEECH_RATE, playResponsiveSpeech, stopResponsiveSpeech, warmSpeech } from '@/lib/responsiveSpeech';
@@ -181,15 +183,9 @@ export default function SentenceLessonScreen() {
       if (saved.attempt) {
         // A new attempt does not inherit completion flags from historical evidence.
         passed = saved.evidencePassed;
-      } else if (CORE_LESSON_EVIDENCE[lesson.id]) {
-        passed = isCoreLessonEvidenceComplete(lesson.id, state.lessonEvidence[lesson.id] ?? {});
       } else {
-        const proof = await loadSupplement();
-        if (!alive) return;
-        passed = saved.evidencePassed
-          && !!proof.evidence[`legacy-${lesson.id}-listening`]?.correct
-          && !!proof.evidence[`legacy-${lesson.id}-listening`]?.heard
-          && !!proof.evidence[`legacy-${lesson.id}-writing`]?.correct;
+        const supplement = await loadSupplement();
+        passed = currentEnglishEvidenceComplete(lesson, { ...supplement.evidence, ...state.lessonEvidence[lesson.id] });
       }
       if (!alive || screenRun.current !== run) return;
       attempt.current = saved.attempt;
@@ -504,7 +500,7 @@ export default function SentenceLessonScreen() {
     await completeSentenceLesson(lesson.id, nextLesson?.id);
       const weak = weakSpokenSentences(speakResult.current ? { ...speakResult.current, at: '' } : null);
       for (const sentenceId of weak) await addSentenceToReview(sentenceId, lesson.id).catch(() => undefined);
-      const fallbackAssessmentTotal = CORE_LESSON_EVIDENCE[lesson.id]?.length ?? 2;
+      const fallbackAssessmentTotal = englishEvidenceFor(lesson).length;
       const assessmentTotal = assessmentResult.current?.total ?? (evidencePassed ? fallbackAssessmentTotal : 0);
       const assessmentCorrect = assessmentResult.current?.correct ?? (evidencePassed ? fallbackAssessmentTotal : 0);
       if (assessmentTotal) {
@@ -791,9 +787,7 @@ export default function SentenceLessonScreen() {
             { id: 'speak', title: 'آزمون گفتاری', subtitle: `${toPersianDigits(lesson.sentences.length)} جمله؛ هر کدام را بلند بگو و امتیاز بگیر.`, render: () => <><SpeakDrill key={`${lesson.id}-drill`} items={lesson.sentences.map(sentence => ({ id: sentence.id, text: sentence.en, fa: sentence.fa }))} locale="en-US" accent={Colors.success[400]} onSpeak={(text, onDone) => speak(text, undefined, onDone)} onFinish={result => { speakResult.current = result; void saveLessonOutcome('en', lesson.id, { speaking: { ...result, at: new Date().toISOString() } }); }} /></> },
               { id: 'checks', title: 'سنجش کوتاه', subtitle: 'چند سؤال کوتاه برای مرور همین درس.', render: () => <>
             {evidencePassed
-              ? CORE_LESSON_EVIDENCE[lesson.id]
-                ? <Text style={styles.stageDesc}>همهٔ {toPersianDigits(CORE_LESSON_EVIDENCE[lesson.id].length)} سنجشِ این درس با پاسخ درست ثبت شد ✓</Text>
-                : <View><Text style={styles.stageDesc}>شنیداری: ثبت شد ✓</Text><Text style={styles.stageDesc}>نوشتاری: ثبت شد ✓</Text></View>
+              ? <Text style={styles.stageDesc}>همهٔ {toPersianDigits(englishEvidenceFor(lesson).length)} سنجشِ این درس با پاسخ درست ثبت شد ✓</Text>
               : <EnglishLessonEvidence key={`${lesson.id}-${attempt.current?.id ?? 'legacy'}`} lesson={lesson} attemptEvidence={attemptEvidence} onAttemptResult={(taskId, correct) => { if (!resettingRef.current) setAttemptEvidence(previous => previous ? { ...previous, [taskId]: correct } : previous); }} onProgress={(correct, total) => { if (!resettingRef.current) assessmentResult.current = { correct, total }; }} onPassed={() => { if (!resettingRef.current) setEvidencePassed(true); }} />}
               </> },
             ]; return <>{stage === 7 ? <LessonFinalHub only="checks" sections={finalSections} /> : null}{stage === 8 ? <LessonFinalHub only="speak" sections={finalSections} /> : null}</>; })()}
@@ -818,10 +812,10 @@ export default function SentenceLessonScreen() {
           levelId={lesson.levelId}
           situation={lesson.situation}
           contentRevision={lesson.levelId === 0 ? practicalRoomRevision(lesson.id) : undefined}
-          lines={lesson.levelId === 0 && lesson.dialogue.length > 0 ? lesson.dialogue.map(line => ({ text: line.text, fa: line.fa })) : lesson.sentences.map(sentence => ({ text: sentence.en, fa: sentence.fa }))}
+          pairs={lessonDialoguePairs(lesson.sentences, lesson.dialogue)}
           locale="en-US"
           onSpeak={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', onDone, onError: onDone })}
-          onSpeakOperator={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', pitch: 0.82, onDone, onError: onDone })}
+          onSpeakOperator={(text, onDone) => speakOperator(text, 'en-US', 'en', onDone)}
           onSpeakSlow={(text, onDone) => playResponsiveSpeech({ text, locale: 'en-US', rate: ENGLISH_SLOW_SPEECH_RATE, onDone, onError: onDone })}
         />}
         {!!completionError && <Text style={styles.stageDesc}>{completionError}</Text>}

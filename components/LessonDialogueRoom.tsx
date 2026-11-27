@@ -6,23 +6,14 @@ import Svg, { Circle } from 'react-native-svg';
 import { Bot, ChevronLeft, EyeOff, Headphones, MessageCircle, Mic, RefreshCw, UserRound, Volume2 } from 'lucide-react-native';
 import SpeakCheck, { type SpeakCheckResult } from '@/components/SpeakCheck';
 import { EnglishPalette as Palette } from '@/components/EnglishSupplementTask';
-import { stop as stopCourseSpeech } from '@/lib/courseSpeech';
+import { stopOperatorSpeech as stopCourseSpeech } from '@/lib/operatorSpeech';
+import { dialoguePairLines, LESSON_DIALOGUE_REVISION, type LessonDialoguePair } from '@/lib/lessonDialoguePairs';
 import { Radius, Shadows, Spacing, Typography } from '@/lib/theme';
 import { toPersianDigits as fa } from '@/lib/format';
 import { comparableRoomRuns, firstWordCue, roomNextStep, type RoomPracticeMode } from '@/lib/dialogueRoomCoach';
 import { loadRuns, saveRun, uniqueMissedWords, type DialogueRun } from '@/lib/dialogueRoomHistory';
 
-/**
- * «اتاق گفت‌وگو» — the friendly closing room of every lesson.
- * No new content is invented here: Pre-A1 uses its authored exchange when
- * available; word/sound lessons keep their own repetition list. Higher levels
- * keep their existing sentence feed. The operator reads half of
- * them with their own distinct voice and the learner says the other half,
- * one pass, no retries; each learner line is scored by the device recogniser
- * and the room ends with a real error report, a progress trend against the
- * previous run and a working restart. A hidden exam mode runs the same
- * dialogue without showing the text: listen and answer from memory.
- */
+/** One operator turn and one learner turn for every taught sentence. */
 export type DialogueLine = { text: string; fa: string };
 
 type Props = {
@@ -33,10 +24,11 @@ type Props = {
   lessonTitle: string;
   levelId: number;
   situation: string;
-  lines: readonly DialogueLine[];
+  lines?: readonly DialogueLine[];
+  pairs?: readonly LessonDialoguePair[];
   locale: string;
   onSpeak: (text: string, onDone: () => void) => void;
-  /** The operator's own voice (distinct pitch/voice). Defaults to the lesson voice. */
+  /** Device-default operator speech, with recording fallback only on failure. */
   onSpeakOperator?: (text: string, onDone: () => void) => void;
   onSpeakSlow?: (text: string, onDone: () => void) => void;
   accent?: string;
@@ -115,11 +107,13 @@ function OperatorPresence({ speaking, accent }: { speaking: boolean; accent: str
   );
 }
 
-export default function LessonDialogueRoom({ language, lessonId, contentRevision, lessonTitle, levelId, situation, lines, locale, onSpeak, onSpeakOperator, onSpeakSlow, accent = Palette.primary }: Props) {
+export default function LessonDialogueRoom({ language, lessonId, contentRevision, lessonTitle, levelId, situation, lines: legacyLines = [], pairs, locale, onSpeak, onSpeakOperator, onSpeakSlow, accent = Palette.primary }: Props) {
   const router = useRouter();
-  const historyKey = contentRevision ? `${lessonId}:${contentRevision}` : lessonId;
+  const revision = pairs ? `${LESSON_DIALOGUE_REVISION}:${contentRevision ?? "original"}` : contentRevision;
+  const historyKey = revision ? `${lessonId}:${revision}` : lessonId;
   const [phase, setPhase] = useState<'choose' | 'run' | 'done'>('choose');
   const [starter, setStarter] = useState<Speaker>('operator');
+  const lines = useMemo(() => pairs ? dialoguePairLines(pairs, starter) : legacyLines, [pairs, starter, legacyLines]);
   const [practicePath, setPracticePath] = useState<'guided' | 'cued'>('guided');
   const [helpVisible, setHelpVisible] = useState(false);
   const [hintKind, setHintKind] = useState<'none' | 'cue' | 'sample'>('none');
@@ -185,7 +179,10 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
       // recogniser never returns anything at all, move on and mark it skipped.
       watchdog = setTimeout(() => advanceFor(turn), Math.max(30000, 12000 + line.text.length * 200));
     }
-    return () => { if (watchdog) clearTimeout(watchdog); };
+    return () => {
+      if (watchdog) clearTimeout(watchdog);
+      if (speakerOf(turn) === 'operator') void stopCourseSpeech();
+    };
   }, [phase, turn, starter, speakerOf, advanceFor, samplePlaying]);
 
   useEffect(() => {
@@ -368,11 +365,11 @@ export default function LessonDialogueRoom({ language, lessonId, contentRevision
         </View>
         <Text style={styles.headerSituation}>{situation}</Text>
         <View style={styles.roomMeta}>
-          <View style={styles.metaItem}><MessageCircle size={14} color={Palette.primaryDark} /><Text style={styles.metaText}>{fa(lines.length)} جمله</Text></View>
+          <View style={styles.metaItem}><MessageCircle size={14} color={Palette.primaryDark} /><Text style={styles.metaText}>{fa(lines.length)} نوبت</Text></View>
           <View style={styles.metaItem}><Mic size={14} color={Palette.primaryDark} /><Text style={styles.metaText}>تمرین نوبتی</Text></View>
           <View style={styles.metaItem}><Headphones size={14} color={Palette.primaryDark} /><Text style={styles.metaText}>گوش کن و پاسخ بده</Text></View>
         </View>
-        <Text style={styles.headerNote}>نیمی از جمله‌ها را اپراتور می‌گوید و نیمی را شما؛ هر جمله یک‌بار.</Text>
+        <Text style={styles.headerNote}>{pairs ? `برای هر یک از ${fa(pairs.length)} جملهٔ درس، یک نوبت اپراتور و یک نوبت شماست؛ همهٔ جمله‌ها را تمرین می‌کنی. در موارد بدون پرسشِ مرتبط، نمونه را بشنو و تکرار کن.` : 'نوبت اپراتور و شما به‌ترتیب است؛ هر نوبت یک‌بار.'}</Text>
       </View>
 
       {phase === 'choose' ? (

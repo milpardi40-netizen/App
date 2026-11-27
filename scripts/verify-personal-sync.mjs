@@ -216,7 +216,7 @@ function renderGate(loginEnabled, admin = false) {
     react: { useCallback: fn => fn, useEffect: fn => { fn(); }, useRef: value => ({ current: value }), useState: value => [value, () => {}] },
     'react-native': { StyleSheet: { create: styles => styles }, Platform: { OS: 'android' }, AppState: { addEventListener: () => ({ remove() {} }) } },
     'expo-constants': { default: { expoConfig: { extra: { appRole: admin ? 'admin' : 'learner' } } } },
-    'expo-router': { useRouter: () => ({ replace() {} }) },
+    'expo-router': { useRouter: () => ({ replace() {} }), usePathname: () => '/languages' },
     '@/lib/features': { FEATURES: { learnerLogin: loginEnabled } },
     '@/lib/theme': { Typography: {} },
     '@/lib/supabase': { supabase: { auth: {

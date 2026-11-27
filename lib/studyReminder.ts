@@ -20,7 +20,7 @@ export interface StudyReminderSettings {
 }
 
 export type StudyReminderStatus = 'scheduled' | 'disabled' | 'unsupported' | 'permission-denied'
-  | 'channel-blocked' | 'update-required' | 'test-scheduled' | 'error';
+  | 'channel-blocked' | 'update-required' | 'test-scheduled' | 'test-posted' | 'error';
 export const DEFAULT_REMINDER_HOUR = 20;
 export const REMINDER_OPTIONS: ReadonlyArray<{ hour: number; label: string }> = [
   { hour: 8, label: '۸ صبح' },
@@ -159,7 +159,7 @@ async function apply(settings: StudyReminderSettings, prompt: boolean): Promise<
       // Android 13 requires a channel before requesting POST_NOTIFICATIONS.
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync(STUDY_REMINDER_CHANNEL, {
-          name: 'یادآور مطالعه', importance: Notifications.AndroidImportance.DEFAULT,
+          name: 'یادآور مطالعه', importance: Notifications.AndroidImportance.HIGH,
           description: 'یک یادآوری روزانه برای ادامهٔ درس', sound: 'default',
           vibrationPattern: [0, 90], enableVibrate: true,
         });
@@ -240,7 +240,7 @@ export function testStudyReminder(): Promise<StudyReminderStatus> {
       const native = nativeStudyReminder();
       if (Platform.OS === 'android' && !native) return 'update-required';
       if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync(STUDY_REMINDER_CHANNEL, { name: 'یادآور مطالعه', importance: Notifications.AndroidImportance.DEFAULT, sound: 'default' });
+        await Notifications.setNotificationChannelAsync(STUDY_REMINDER_CHANNEL, { name: 'یادآور مطالعه', importance: Notifications.AndroidImportance.HIGH, sound: 'default' });
       }
       if (!await permission(true)) return 'permission-denied';
       let result: StudyReminderStatus;
@@ -264,5 +264,28 @@ export async function studyReminderSummary(): Promise<string> {
   const settings = await loadStudyReminder();
   if (!settings.enabled) return 'خاموش — هیچ یادآوری روزانه‌ای نمی‌فرستیم.';
   const label = REMINDER_OPTIONS.find(item => item.hour === settings.hour)?.label ?? `${String(settings.hour).padStart(2, '0')}:${String(settings.minute).padStart(2, '0')}`;
-  return `هر روز حدود ${label}؛ اگر آن روز درسی کامل نکرده باشی.${Platform.OS === 'ios' ? ' برنامهٔ ۳۰ روز آینده با هر بار بازکردن اپ تمدید می‌شود.' : ''}`;
+  const todayNote = settings.lastStudiedDay === localDayKey() ? ' امروز درسی کامل کرده‌ای؛ یادآور روزانهٔ امروز عمداً پخش نمی‌شود. برای بررسی صدا از آزمایش اعلان استفاده کن.' : '';
+  return `هر روز حدود ${label}؛ اگر آن روز درسی کامل نکرده باشی.${todayNote}${Platform.OS === 'ios' ? ' برنامهٔ ۳۰ روز آینده با هر بار بازکردن اپ تمدید می‌شود.' : ''}`;
+}
+
+
+export interface StudyReminderDiagnostics {
+  nextScheduledAt: number;
+  lastPostedAt: number;
+  lastTestPostedAt: number;
+  notificationsEnabled: boolean;
+  channelImportance: number;
+  channelSilent: boolean;
+  ringerSilent: boolean;
+  doNotDisturb: boolean;
+  batteryOptimized: boolean;
+  lastDeliveryError: string;
+}
+/** Scheduling is not proof of delivery: expose the native scheduler and last actual notify call. */
+export async function studyReminderDiagnostics(): Promise<StudyReminderDiagnostics | null> {
+  try {
+    const native = nativeStudyReminder();
+    if (!native?.getDiagnostics) return null;
+    return JSON.parse(await native.getDiagnostics()) as StudyReminderDiagnostics;
+  } catch (cause) { await recordError('diagnostics', cause); return null; }
 }

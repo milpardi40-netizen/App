@@ -2,7 +2,9 @@ import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { LESSON_STAGE_VERSION, resumeStage } from '../lessonStages';
-import { russianChecksRevisionFor } from './russianPreA1';
+import { assessmentRevisionFor, expandedChoiceChecks } from '../lessonAssessment';
+import { russianChecksRevisionFor as previousChecksRevisionFor } from './russianPreA1';
+const russianChecksRevisionFor = (id: string) => assessmentRevisionFor('ru', id);
 import { RUSSIAN_LESSONS, RUSSIAN_LESSON_STAGES } from './russian';
 
 export const RUSSIAN_STUDY_STORAGE_KEY = 'russian_lesson_sessions_v1';
@@ -63,24 +65,26 @@ function validateSession(lessonId: string, value: unknown): RussianLessonSession
     throw new Error('وضعیت ذخیره‌شدهٔ درس روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   // Validate the stored shape even for retired questions, but never grade a previous meaning.
-  const retiredChecks = lesson.levelId <= 1 && session.checksRevision !== russianChecksRevisionFor(lessonId);
+  const expanded = session.checksRevision !== russianChecksRevisionFor(lessonId);
+  const retiredChecks = expanded && session.checksRevision !== previousChecksRevisionFor(lessonId) && !(lesson.levelId > 1 && !session.checksRevision);
   const answers: Record<string, number> = {};
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
-    const check = lesson.checks?.[checkIndex];
+    const check = expandedChoiceChecks(lesson)[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= (retiredChecks ? 4 : check.choices.length)) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین روسی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
-    if (!retiredChecks) answers[key] = answer!;
+    if (!retiredChecks && (!expanded || checkIndex < (lesson.checks?.length ?? 0))) answers[key] = answer!;
   }
   return {
+    checksRevision: russianChecksRevisionFor(lessonId),
     stage,
     ...(typeof session.updatedAt === 'string' && Number.isFinite(Date.parse(session.updatedAt)) ? { updatedAt: session.updatedAt } : {}),
     stageVersion: LESSON_STAGE_VERSION,
     sentenceIndex: session.sentenceIndex!,
     revealed: session.revealed,
     answers,
-    showCheckAnswers: !retiredChecks && session.showCheckAnswers,
+    showCheckAnswers: !expanded && session.showCheckAnswers,
   };
 }
 

@@ -1,5 +1,6 @@
+import { practicalAssessmentRevision as previousAssessmentRevision } from './preA1Practical/revisions';
 import { balancedSampleRevision, resumeBalancedSamples } from './preA1Practical/balanceRevision';
-import { practicalAssessmentRevision } from './preA1Practical/revisions';
+import { assessmentRevisionFor as practicalAssessmentRevision, expandedChoiceChecks } from '../lessonAssessment';
 import { notifyLearningChange, positionTimestamp } from '../learningChanges';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -71,15 +72,16 @@ function validateSession(lessonId: string, value: unknown, restoring = false): T
     throw new Error('وضعیت ذخیره‌شدهٔ درس ترکی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
   }
   const checksRevision = practicalAssessmentRevision('tr', lessonId);
-  const retired = restoring && !!checksRevision && session.checksRevision !== checksRevision;
+  const expanded = restoring && session.checksRevision !== checksRevision;
+  const retired = expanded && session.checksRevision !== previousAssessmentRevision('tr', lessonId);
   const answers: Record<string, number> = {};
   for (const [key, answer] of Object.entries(session.answers)) {
     const checkIndex = Number(key);
-    const check = lesson.checks?.[checkIndex];
+    const check = expandedChoiceChecks(lesson)[checkIndex];
     if (!Number.isInteger(checkIndex) || !check || !Number.isInteger(answer) || answer! < 0 || answer! >= check.choices.length) {
       throw new Error('پاسخ ذخیره‌شدهٔ تمرین ترکی معتبر نیست؛ دادهٔ اصلی تغییر نکرده است.');
     }
-    if (!retired) answers[key] = answer!;
+    if (!retired && (!expanded || checkIndex < (lesson.checks?.length ?? 0))) answers[key] = answer!;
   }
   const safe = {
     ...(restoring && session.sampleRevision ? { sampleRevision: session.sampleRevision } : {}),
@@ -91,7 +93,7 @@ function validateSession(lessonId: string, value: unknown, restoring = false): T
     sentenceIndex: session.sentenceIndex!,
     revealed: session.revealed,
     answers,
-    showCheckAnswers: !retired && session.showCheckAnswers,
+    showCheckAnswers: !expanded && session.showCheckAnswers,
   };
   return restoring ? resumeBalancedSamples(lessonId, safe) : safe;
 }

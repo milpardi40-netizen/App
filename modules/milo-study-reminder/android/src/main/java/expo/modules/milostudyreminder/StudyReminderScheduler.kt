@@ -6,6 +6,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.PowerManager
+import android.media.AudioManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -43,7 +45,7 @@ internal object StudyReminderScheduler {
   fun channel(c: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // Recreating an existing channel preserves the user's system preferences.
-      manager(c).createNotificationChannel(NotificationChannel(CHANNEL, "یادآور مطالعه", NotificationManager.IMPORTANCE_DEFAULT).apply {
+      manager(c).createNotificationChannel(NotificationChannel(CHANNEL, "یادآور مطالعه", NotificationManager.IMPORTANCE_HIGH).apply {
         description = "یک یادآوری روزانه برای ادامهٔ درس"
         enableVibration(true)
         vibrationPattern = longArrayOf(0, 90)
@@ -135,7 +137,11 @@ internal object StudyReminderScheduler {
     channel(c)
     // Keep renewing while blocked too, so enabling system notifications can recover
     // without waiting for another app launch (including after a reboot).
-    next(c)
+    val due = prefs(c).getLong("nextAt", 0)
+    // Foreground/boot repair must not move a delayed, already-due reminder to tomorrow.
+    if (due > 0 && due <= System.currentTimeMillis() && day(Date(due)) == day()) {
+      receive(c, Intent(ALARM_ACTION).putExtra("at", due))
+    } else next(c)
     val status = permissionStatus(c) ?: "scheduled"
     if (status == "scheduled") clearError(c)
     return status
@@ -154,11 +160,12 @@ internal object StudyReminderScheduler {
   @Synchronized fun test(c: Context): String {
     channel(c)
     permissionStatus(c)?.let { return it }
-    val at = System.currentTimeMillis() + 10_000
-    setAlarm(c, at, true)
-    commit(prefs(c).edit().putLong("testAt", at).commit())
+    // An inexact Android alarm cannot promise a ten-second test (Android 12+/Doze
+    // may defer it substantially). Test the real notification path immediately.
+    cancel(c, true)
+    show(c, true)
     clearError(c)
-    return "test-scheduled"
+    return "test-posted"
   }
 
   @Synchronized fun receive(c: Context, incoming: Intent) {
@@ -203,16 +210,39 @@ internal object StudyReminderScheduler {
     val notification = NotificationCompat.Builder(c, CHANNEL)
       .setSmallIcon(icon).setContentTitle(if (test) "آزمایش یادآور مطالعه" else "وقت یک درس کوتاه")
       .setContentText(if (test) "یادآور روی این گوشی کار می‌کند." else "اگر امروز درس نخوانده‌ای، چند دقیقه تمرین کن.")
-      .setContentIntent(tap).setAutoCancel(true).setOnlyAlertOnce(true)
-      .setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
+      .setContentIntent(tap).setAutoCancel(true).setOnlyAlertOnce(false)
+      .setCategory(NotificationCompat.CATEGORY_REMINDER).setDefaults(NotificationCompat.DEFAULT_ALL)
+      .setPriority(NotificationCompat.PRIORITY_HIGH).build()
     NotificationManagerCompat.from(c).notify(if (test) TEST_ID else ALARM_ID, notification)
+    commit(prefs(c).edit().putLong(if (test) "lastTestPostedAt" else "lastPostedAt", System.currentTimeMillis()).remove("lastDeliveryError").commit())
+  }
+
+  @Synchronized fun diagnostics(c: Context): String {
+    val p = prefs(c)
+    val channel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) manager(c).getNotificationChannel(CHANNEL) else null
+    val audio = c.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val power = c.getSystemService(Context.POWER_SERVICE) as PowerManager
+    return JSONObject()
+      .put("nextScheduledAt", if (p.getBoolean("enabled", false)) p.getLong("nextAt", 0) else 0)
+      .put("lastPostedAt", p.getLong("lastPostedAt", 0))
+      .put("lastTestPostedAt", p.getLong("lastTestPostedAt", 0))
+      .put("notificationsEnabled", permissionStatus(c) == null)
+      .put("channelImportance", channel?.importance ?: -1)
+      .put("channelSilent", channel != null && channel.sound == null)
+      .put("ringerSilent", audio.ringerMode != AudioManager.RINGER_MODE_NORMAL || audio.getStreamVolume(AudioManager.STREAM_NOTIFICATION) == 0)
+      .put("doNotDisturb", manager(c).currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL && manager(c).currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_UNKNOWN)
+      .put("batteryOptimized", !power.isIgnoringBatteryOptimizations(c.packageName))
+      .put("lastDeliveryError", p.getString("lastDeliveryError", ""))
+      .toString()
   }
 
   fun lastError(c: Context): String = prefs(c).getString("lastError", "") ?: ""
   private fun clearError(c: Context) { prefs(c).edit().remove("lastError").apply() }
   fun recordError(c: Context, stage: String, e: Exception) {
     val detail = "$stage: ${e.javaClass.simpleName}: ${e.message ?: "unknown"}".take(600)
-    prefs(c).edit().putString("lastError", detail).apply()
+    val edit = prefs(c).edit().putString("lastError", detail)
+    if (stage.startsWith("receiver:")) edit.putString("lastDeliveryError", detail)
+    edit.apply()
     Log.e("MiloStudyReminder", detail, e)
   }
 }
